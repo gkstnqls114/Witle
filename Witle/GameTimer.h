@@ -27,7 +27,7 @@ public:
 	float GetTotalTime();
 
 	// 프레임 레이트를 반환한다.
-	unsigned long GetFrameRate(LPTSTR lpszString = NULL, int nCharacters = 0);
+	unsigned long GetFrameRate();
 	// 프레임의 평균 경과 시간을 반환한다.
 	float GetTimeElapsed();
 

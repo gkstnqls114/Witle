@@ -35,8 +35,7 @@ void CGameFramework::Render()
 }
 
 CGameFramework::CGameFramework()
-{
-	// _tcscpy_s(m_pszFrameRate, _T("LapProject ("));
+{ 
 }
 
 CGameFramework::~CGameFramework()

@@ -71,14 +71,8 @@ void CGameTimer::Tick(float fLockFPS)
 	if (m_nSampleCount > 0) m_fTimeElapsed /= m_nSampleCount;
 }
 
-unsigned long CGameTimer::GetFrameRate(LPTSTR lpszString, int nCharacters)
-{
-	if (lpszString)
-	{
-		_itow_s(m_nCurrentFrameRate, lpszString, nCharacters, 10);
-		wcscat_s(lpszString, nCharacters, _T(" FPS)"));
-	}
-
+unsigned long CGameTimer::GetFrameRate()
+{ 
 	return(m_nCurrentFrameRate);
 }
 
