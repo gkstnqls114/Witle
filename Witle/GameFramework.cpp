@@ -16,8 +16,8 @@ void CGameFramework::Render()
 	hResult = m_CommandList->Reset(m_CommandAllocator.Get(), NULL);
 	 
 
-	RenderGBuffers();
-	Blur();
+	//RenderGBuffers();
+	//Blur();
 	RenderSwapChain();
 
 
@@ -31,17 +31,12 @@ void CGameFramework::Render()
 
 	MoveToNextFrame();
 
-#ifdef _TEXT_DRAW
-	m_graphicsMemory->Commit(m_CommandQueue.Get());
-#endif
-	CGameTimer::GetInstance()->GetFrameRate(m_pszFrameRate + 12, 37);
-	::SetWindowText(m_hWnd, m_pszFrameRate);
 
 }
 
 CGameFramework::CGameFramework()
 {
-	_tcscpy_s(m_pszFrameRate, _T("LapProject ("));
+	// _tcscpy_s(m_pszFrameRate, _T("LapProject ("));
 }
 
 CGameFramework::~CGameFramework()
@@ -58,12 +53,12 @@ bool CGameFramework::OnCreate(HINSTANCE hInstance, HWND hMainWnd)
 	CreateCommandQueueAndList();
 	CreateRtvAndDsvDescriptorHeaps();
 	CreateSwapChain();
-	CreateGBufferView();
+	//CreateGBufferView();
 	
-	CreateComputePipelineState();
-	CreateRWResourceViews();
+	//CreateComputePipelineState();
+	// CreateRWResourceViews();
 
-	CreateMRTComputeShader();
+	//CreateMRTComputeShader();
 
 #ifdef _TEXT_DRAW
 	m_graphicsMemory = std::make_unique<GraphicsMemory>(m_d3dDevice.Get());
@@ -567,8 +562,6 @@ void CGameFramework::ReleaseObjects()
 
 void CGameFramework::Update()
 {
-	CGameTimer::GetInstance()->Tick(0.0f);
-
 	ProcessInput();
 	AnimateObjects();
 	OnprepareRender();

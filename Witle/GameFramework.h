@@ -39,12 +39,6 @@ private:
 	D3D12_CPU_DESCRIPTOR_HANDLE m_DepthStencilCPUHandle;
 	UINT m_DsvDescriptorSize;
 	 
-	static const UINT m_GBuffersCount{ 3 }; // 컬러 . 노말. 
-
-	ID3D12Resource* m_GBuffers[m_GBuffersCount];
-	D3D12_CPU_DESCRIPTOR_HANDLE m_GBufferCPUHandle[m_GBuffersCount];
-	ID3D12DescriptorHeap* m_GBufferHeap;
-	UINT m_GBufferDescriptorSize;
 
 	ComPtr<ID3D12CommandQueue> m_CommandQueue;
 	ComPtr<ID3D12CommandAllocator> m_CommandAllocator;
@@ -59,13 +53,21 @@ private:
 	ComPtr<ID3D12DebugDevice> m_pd3dDebugDevice;
 #endif
 	
-	_TCHAR m_pszFrameRate[50];	//다음은 프레임 레이트를 주 윈도우의 캡션에 출력하기 위한 문자열이다.
+	// _TCHAR m_pszFrameRate[50];	//다음은 프레임 레이트를 주 윈도우의 캡션에 출력하기 위한 문자열이다.
 	CScene *m_pScene			{ nullptr };
 
 	POINT m_ptOldCursorPos;
 	short m_MouseWheelData		{ 0 }; // 120: 휠을 올렸을때, -120: 휠을 내렸을때, 한번 휠을 올리거나 내리면 그 상태로 계속 저장되므로 0으로 다시 만들어줘야함
 
 
+
+	//// GBuffer
+	static const UINT m_GBuffersCount{ 0 }; // 컬러 . 노말. 
+
+	//ID3D12Resource* m_GBuffers[m_GBuffersCount];
+	//D3D12_CPU_DESCRIPTOR_HANDLE m_GBufferCPUHandle[m_GBuffersCount];
+	//ID3D12DescriptorHeap* m_GBufferHeap;
+	//UINT m_GBufferDescriptorSize;
 
 	//CTriangleShader m_RedShader;
 	//CGreenShader m_GreenShader;
