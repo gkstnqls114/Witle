@@ -5,163 +5,39 @@
 //#include "CTexture.h"
 
 #include "GameTimer.h"
-//#include "TestScene.h"
+// #include "TestScene.h"
 
 #include "GameFramework.h"
 
-//
-//void CGameFramework::Render()
-//{
-//	HRESULT hResult = m_CommandAllocator->Reset();
-//	hResult = m_CommandList->Reset(m_CommandAllocator.Get(), NULL);
-//
-//	////////////////////////////////////////////////////////// GBuffer 
-//	for (int i = 0; i < m_GBuffersCount; i++) { 
-//		d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_GBuffers[i], D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_RENDER_TARGET);
-//	}
-//	 
-//	for (int i = 0; i < m_GBuffersCount; i++) { 
-//		m_CommandList->ClearRenderTargetView(m_GBufferCPUHandle[i], m_GBufferClearValue[i], 0, NULL);
-//	}
-//	 
-//	m_CommandList->ClearRenderTargetView(m_GBufferCPUHandle[m_SwapChainBufferIndex], m_GBufferClearValue[m_SwapChainBufferIndex], 0, NULL);
-//	m_CommandList->ClearDepthStencilView(m_DepthStencilCPUHandle, D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, NULL);
-//	m_CommandList->OMSetRenderTargets(m_GBuffersCount, m_GBufferCPUHandle, TRUE, &m_DepthStencilCPUHandle);
-//	
-//	//// 장면 렌더한다...
-//	//// 픽셀쉐이더에 참고하여 렌더타겟에 그린다...
-//	//// RenderTarget0 : 컬러
-//	//// RenderTarget1 : 노말
-//	//// RenderTarget2 : 오브젝트
-//	//// 실제로 그리는 것이 아니라... 정보를 저장한다...
-//
-//	// 장면을 렌더합니다.
-//	if (m_pScene) {
-//		m_pScene->Render(m_CommandList.Get());
-//	}
-//	 
-//	for (int i = 0; i < m_GBuffersCount; i++) { 
-//		d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_GBuffers[i], D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_GENERIC_READ);
-//	}
-//	////////////////////////////////////////////////////////// GBuffer
-//
-//
-//	////////////////////////////////////////////////////////// 계산쉐이더
-//	//d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_ComputeRWResource, D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
-//
-//	int BlurCount = 1;
-//	for (int i = 0; i < BlurCount; ++i) {
-//		m_CommandList->SetPipelineState(m_HorzComputePipelineState.Get());
-//		m_CommandList->SetComputeRootSignature(m_ComputeRootSignature.Get());
-//
-//		m_RedShader.SetDescriptorHeaps(m_CommandList.Get());
-//
-//		m_pGBufferTexture->ComputeUpdateShaderVariables(m_CommandList.Get());
-//		m_CommandList->SetComputeRootDescriptorTable(1, m_UAVGPUDescriptorHandle);
-//
-//		UINT groupX = (UINT)ceilf(FRAME_BUFFER_WIDTH / 256.F);
-//		// UINT groupY = (UINT)ceilf(FRAME_BUFFER_HEIGHT / 32.F);
-//		m_CommandList->Dispatch(groupX, FRAME_BUFFER_HEIGHT, 1);
-//
-//		m_CommandList->SetPipelineState(m_VertComputePipelineState.Get());
-//		m_CommandList->SetComputeRootSignature(m_ComputeRootSignature.Get());
-//
-//		m_RedShader.SetDescriptorHeaps(m_CommandList.Get());
-//
-//		m_pGBufferTexture->ComputeUpdateShaderVariables(m_CommandList.Get());
-//		m_CommandList->SetComputeRootDescriptorTable(1, m_UAVGPUDescriptorHandle);
-//
-//		UINT groupY = (UINT)ceilf(FRAME_BUFFER_HEIGHT / 256.F);
-//		m_CommandList->Dispatch(FRAME_BUFFER_WIDTH, groupY, 1);
-//	}
-//
-//	// d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_ComputeRWResource, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_COMMON);
-//	
-//	////////////////////////////////////////////////////////// 계산쉐이더
-//
-//
-//	////////////////////////////////////////////////////// SwapChain
-//	d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_RenderTargetBuffers[m_SwapChainBufferIndex].Get(), D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
-//	
-//	m_CommandList->ClearRenderTargetView(m_SwapChainCPUHandle[m_SwapChainBufferIndex], /*pfClearColor*/Colors::Gray, 0, NULL);
-//	m_CommandList->ClearDepthStencilView(m_DepthStencilCPUHandle, D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, NULL);
-//	m_CommandList->OMSetRenderTargets(1, &m_SwapChainCPUHandle[m_SwapChainBufferIndex], TRUE, &m_DepthStencilCPUHandle);
-//
-//	// 장면을 렌더합니다.
-//	if (m_pScene) { 
-//		D3D12_VIEWPORT GBuffer_Viewport = D3D12_VIEWPORT{ 0, 0, FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT };
-//		D3D12_RECT ScissorRect = D3D12_RECT{ 0, 0, FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT };
-//
-//		m_RedShader.SetGraphicsRootSignature(m_CommandList.Get());
-//		m_CommandList->RSSetViewports(1, &GBuffer_Viewport);
-//		m_CommandList->RSSetScissorRects(1, &ScissorRect);
-//
-//		m_RenderComputeShader.OnPrepareRender(m_CommandList.Get());
-//
-//
-//		m_RedShader.SetDescriptorHeaps(m_CommandList.Get());
-//		m_pGBufferTexture->UpdateShaderVariables(m_CommandList.Get());
-//
-//
-//		m_CommandList->IASetVertexBuffers(0, 0, nullptr);
-//		m_CommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-//		m_CommandList->DrawInstanced(6, 1, 0, 0);
-//
-//		//m_pScene->Render(m_CommandList.Get());
-//	}
-//
-//	
-//#ifdef SHOW_G_BUFFERS
-//	for (int i = 0; i < m_GBuffersCount; ++i) {
-//		D3D12_VIEWPORT	GBuffer_Viewport{ 0 + G_BUFFER_WINDOW_WIDTH * i, FRAME_BUFFER_HEIGHT, G_BUFFER_WINDOW_WIDTH , G_BUFFER_WINDOW_HEIGHT, 0.0f, 1.0f };
-//		D3D12_RECT		ScissorRect{ 0 + G_BUFFER_WINDOW_WIDTH * i, FRAME_BUFFER_HEIGHT, FRAME_BUFFER_WIDTH , FRAME_BUFFER_HEIGHT + G_BUFFER_WINDOW_HEIGHT };
-//
-//
-//		m_RedShader.SetGraphicsRootSignature(m_CommandList.Get());
-//		m_CommandList->RSSetViewports(1, &GBuffer_Viewport);
-//		m_CommandList->RSSetScissorRects(1, &ScissorRect);
-//
-//		// 픽셀 쉐이더만 바꾼다...
-//		if (i == 0) m_RedShader.OnPrepareRender(m_CommandList.Get());
-//		if (i == 1) m_GreenShader.OnPrepareRender(m_CommandList.Get());
-//		if (i == 2) m_BlueShader.OnPrepareRender(m_CommandList.Get()); 
-//		// 픽셀 쉐이더만 바꾼다...
-//
-//		m_RedShader.SetDescriptorHeaps(m_CommandList.Get());
-//		m_pGBufferTexture->UpdateShaderVariables(m_CommandList.Get());
-//		// m_CommandList->SetGraphicsRootDescriptorTable(1, m_UAVGPUDescriptorHandle);
-//
-//		m_CommandList->IASetVertexBuffers(0, 0, nullptr);
-//		m_CommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-//		m_CommandList->DrawInstanced(6, 1, 0, 0);
-//	}
-//#endif
-//
-//#ifdef _TEXT_DRAW
-//	if(m_Testfont) m_Testfont->Render(m_CommandList.Get());
-//#endif
-//
-//	d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_RenderTargetBuffers[m_SwapChainBufferIndex].Get(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
-//	//////////////////////////////////////////////////////// SwapChain
-//
-//
-//	hResult = m_CommandList->Close();
-//	ID3D12CommandList *ppd3dCommandLists[] = { m_CommandList.Get() };
-//	m_CommandQueue->ExecuteCommandLists(1, ppd3dCommandLists);
-//
-//	WaitForGpuComplete();
-//
-//	m_SwapChain->Present(0, 0);
-//
-//	MoveToNextFrame();
-//
-//#ifdef _TEXT_DRAW
-//	m_graphicsMemory->Commit(m_CommandQueue.Get());
-//#endif
-//	CGameTimer::GetInstance()->GetFrameRate(m_pszFrameRate + 12, 37);
-//	::SetWindowText(m_hWnd, m_pszFrameRate);
-//
-//}
+
+void CGameFramework::Render()
+{
+	HRESULT hResult = m_CommandAllocator->Reset();
+	hResult = m_CommandList->Reset(m_CommandAllocator.Get(), NULL);
+	 
+
+	RenderGBuffers();
+	Blur();
+	RenderSwapChain();
+
+
+	hResult = m_CommandList->Close();
+	ID3D12CommandList *ppd3dCommandLists[] = { m_CommandList.Get() };
+	m_CommandQueue->ExecuteCommandLists(1, ppd3dCommandLists);
+
+	WaitForGpuComplete();
+
+	m_SwapChain->Present(0, 0);
+
+	MoveToNextFrame();
+
+#ifdef _TEXT_DRAW
+	m_graphicsMemory->Commit(m_CommandQueue.Get());
+#endif
+	CGameTimer::GetInstance()->GetFrameRate(m_pszFrameRate + 12, 37);
+	::SetWindowText(m_hWnd, m_pszFrameRate);
+
+}
 
 CGameFramework::CGameFramework()
 {
@@ -693,24 +569,10 @@ void CGameFramework::Update()
 {
 	CGameTimer::GetInstance()->Tick(0.0f);
 
-	// 키보드 값을 통해 플레이어 이동
-//	if (m_pScene) {
-//		m_pScene->ProcessInput(m_hWnd, m_ptOldCursorPos, CGameTimer::GetInstance()->GetTimeElapsed());
-//		m_pScene->ProcessMouseWheel(m_hWnd, m_MouseWheelData, CGameTimer::GetInstance()->GetTimeElapsed());
-//	}
-//	m_MouseWheelData = MOUSE_WHEEL_STOP;
-//
-//#ifdef _TEXT_DRAW
-//	if (m_Testfont) m_Testfont->Update(CGameTimer::GetInstance()->GetTimeElapsed());
-//#endif // _DRAW_TEXT
-//
-//	if (m_pScene) {
-//		m_pScene->AnimateObjects(CGameTimer::GetInstance()->GetTimeElapsed());
-//	}
-//
-//	if (m_pScene) {
-//		m_pScene->OnprepareRender();
-//	}
+	ProcessInput();
+	AnimateObjects();
+	OnprepareRender();
+
 }
 
 void CGameFramework::WaitForGpuComplete()
@@ -879,4 +741,169 @@ void CGameFramework::OnResizeBackBuffers()
 	m_CommandQueue->ExecuteCommandLists(1, ppd3dCommandLists);
 	
 	WaitForGpuComplete();
+}
+
+void CGameFramework::ProcessInput()
+{
+	// 키보드 값을 통해 플레이어 이동
+//	if (m_pScene) {
+//		m_pScene->ProcessInput(m_hWnd, m_ptOldCursorPos, CGameTimer::GetInstance()->GetTimeElapsed());
+//		m_pScene->ProcessMouseWheel(m_hWnd, m_MouseWheelData, CGameTimer::GetInstance()->GetTimeElapsed());
+//	}
+//	m_MouseWheelData = MOUSE_WHEEL_STOP;
+// 
+}
+
+void CGameFramework::AnimateObjects()
+{ 
+	//	if (m_pScene) {
+	//		m_pScene->AnimateObjects(CGameTimer::GetInstance()->GetTimeElapsed());
+	//	}
+	//
+}
+
+void CGameFramework::OnprepareRender()
+{
+
+	//	if (m_pScene) {
+	//		m_pScene->OnprepareRender();
+	//	}
+}
+
+void CGameFramework::RenderGBuffers()
+{
+
+	////////////////////////////////////////////////////////// GBuffer 
+	//for (int i = 0; i < m_GBuffersCount; i++) { 
+	//	d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_GBuffers[i], D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_RENDER_TARGET);
+	//}
+	// 
+	//for (int i = 0; i < m_GBuffersCount; i++) { 
+	//	m_CommandList->ClearRenderTargetView(m_GBufferCPUHandle[i], m_GBufferClearValue[i], 0, NULL);
+	//}
+	// 
+	//m_CommandList->ClearRenderTargetView(m_GBufferCPUHandle[m_SwapChainBufferIndex], m_GBufferClearValue[m_SwapChainBufferIndex], 0, NULL);
+	//m_CommandList->ClearDepthStencilView(m_DepthStencilCPUHandle, D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, NULL);
+	//m_CommandList->OMSetRenderTargets(m_GBuffersCount, m_GBufferCPUHandle, TRUE, &m_DepthStencilCPUHandle);
+	//
+	////// 장면 렌더한다...
+	////// 픽셀쉐이더에 참고하여 렌더타겟에 그린다...
+	////// RenderTarget0 : 컬러
+	////// RenderTarget1 : 노말
+	////// RenderTarget2 : 오브젝트
+	////// 실제로 그리는 것이 아니라... 정보를 저장한다...
+
+	//// 장면을 렌더합니다.
+	//if (m_pScene) {
+	//	m_pScene->Render(m_CommandList.Get());
+	//}
+	// 
+	//for (int i = 0; i < m_GBuffersCount; i++) { 
+	//	d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_GBuffers[i], D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_GENERIC_READ);
+	//}
+	////////////////////////////////////////////////////////// GBuffer
+}
+
+void CGameFramework::Blur()
+{
+	////////////////////////////////////////////////////////// 계산쉐이더
+	//d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_ComputeRWResource, D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
+
+	int BlurCount = 1;
+	for (int i = 0; i < BlurCount; ++i) {
+		//m_CommandList->SetPipelineState(m_HorzComputePipelineState.Get());
+		//m_CommandList->SetComputeRootSignature(m_ComputeRootSignature.Get());
+
+		//m_RedShader.SetDescriptorHeaps(m_CommandList.Get());
+
+		//m_pGBufferTexture->ComputeUpdateShaderVariables(m_CommandList.Get());
+		//m_CommandList->SetComputeRootDescriptorTable(1, m_UAVGPUDescriptorHandle);
+
+		//UINT groupX = (UINT)ceilf(FRAME_BUFFER_WIDTH / 256.F);
+		//// UINT groupY = (UINT)ceilf(FRAME_BUFFER_HEIGHT / 32.F);
+		//m_CommandList->Dispatch(groupX, FRAME_BUFFER_HEIGHT, 1);
+
+		//m_CommandList->SetPipelineState(m_VertComputePipelineState.Get());
+		//m_CommandList->SetComputeRootSignature(m_ComputeRootSignature.Get());
+
+		//m_RedShader.SetDescriptorHeaps(m_CommandList.Get());
+
+		//m_pGBufferTexture->ComputeUpdateShaderVariables(m_CommandList.Get());
+		//m_CommandList->SetComputeRootDescriptorTable(1, m_UAVGPUDescriptorHandle);
+
+		//UINT groupY = (UINT)ceilf(FRAME_BUFFER_HEIGHT / 256.F);
+		//m_CommandList->Dispatch(FRAME_BUFFER_WIDTH, groupY, 1);
+	}
+
+	// d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_ComputeRWResource, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_COMMON);
+
+	////////////////////////////////////////////////////////// 계산쉐이더
+}
+
+void CGameFramework::RenderSwapChain()
+{
+
+	////////////////////////////////////////////////////// SwapChain
+	d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_RenderTargetBuffers[m_SwapChainBufferIndex].Get(), D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
+
+	m_CommandList->ClearRenderTargetView(m_SwapChainCPUHandle[m_SwapChainBufferIndex], /*pfClearColor*/Colors::Gray, 0, NULL);
+	m_CommandList->ClearDepthStencilView(m_DepthStencilCPUHandle, D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, NULL);
+	m_CommandList->OMSetRenderTargets(1, &m_SwapChainCPUHandle[m_SwapChainBufferIndex], TRUE, &m_DepthStencilCPUHandle);
+
+	// 장면을 렌더합니다.
+	if (m_pScene) {
+		/*D3D12_VIEWPORT GBuffer_Viewport = D3D12_VIEWPORT{ 0, 0, FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT };
+		D3D12_RECT ScissorRect = D3D12_RECT{ 0, 0, FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT };
+
+		m_RedShader.SetGraphicsRootSignature(m_CommandList.Get());
+		m_CommandList->RSSetViewports(1, &GBuffer_Viewport);
+		m_CommandList->RSSetScissorRects(1, &ScissorRect);
+
+		m_RenderComputeShader.OnPrepareRender(m_CommandList.Get());
+
+
+		m_RedShader.SetDescriptorHeaps(m_CommandList.Get());
+		m_pGBufferTexture->UpdateShaderVariables(m_CommandList.Get());
+
+
+		m_CommandList->IASetVertexBuffers(0, 0, nullptr);
+		m_CommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+		m_CommandList->DrawInstanced(6, 1, 0, 0);*/
+
+		// m_pScene->Render(m_CommandList.Get());
+	}
+
+
+#ifdef SHOW_G_BUFFERS
+	for (int i = 0; i < m_GBuffersCount; ++i) {
+		D3D12_VIEWPORT	GBuffer_Viewport{ 0 + G_BUFFER_WINDOW_WIDTH * i, FRAME_BUFFER_HEIGHT, G_BUFFER_WINDOW_WIDTH , G_BUFFER_WINDOW_HEIGHT, 0.0f, 1.0f };
+		D3D12_RECT		ScissorRect{ 0 + G_BUFFER_WINDOW_WIDTH * i, FRAME_BUFFER_HEIGHT, FRAME_BUFFER_WIDTH , FRAME_BUFFER_HEIGHT + G_BUFFER_WINDOW_HEIGHT };
+
+
+		m_RedShader.SetGraphicsRootSignature(m_CommandList.Get());
+		m_CommandList->RSSetViewports(1, &GBuffer_Viewport);
+		m_CommandList->RSSetScissorRects(1, &ScissorRect);
+
+		// 픽셀 쉐이더만 바꾼다...
+		if (i == 0) m_RedShader.OnPrepareRender(m_CommandList.Get());
+		if (i == 1) m_GreenShader.OnPrepareRender(m_CommandList.Get());
+		if (i == 2) m_BlueShader.OnPrepareRender(m_CommandList.Get());
+		// 픽셀 쉐이더만 바꾼다...
+
+		m_RedShader.SetDescriptorHeaps(m_CommandList.Get());
+		m_pGBufferTexture->UpdateShaderVariables(m_CommandList.Get());
+		// m_CommandList->SetGraphicsRootDescriptorTable(1, m_UAVGPUDescriptorHandle);
+
+		m_CommandList->IASetVertexBuffers(0, 0, nullptr);
+		m_CommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+		m_CommandList->DrawInstanced(6, 1, 0, 0);
+	}
+#endif
+
+#ifdef _TEXT_DRAW
+	if (m_Testfont) m_Testfont->Render(m_CommandList.Get());
+#endif
+
+	d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_RenderTargetBuffers[m_SwapChainBufferIndex].Get(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
+	//////////////////////////////////////////////////////// SwapChain
 }

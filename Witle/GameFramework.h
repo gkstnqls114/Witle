@@ -93,13 +93,15 @@ private:
 	//D3D12_GPU_DESCRIPTOR_HANDLE m_UAVGPUDescriptorHandle;
 
 private: 
+	
+	//스왑 체인, 디바이스, 서술자 힙, 명령 큐/할당자/리스트를 생성하는 함수이다.
+	// OnCreate() 내부에서 사용한다.
 	D3D12_SHADER_BYTECODE CreateComputeShader(ID3DBlob **ppd3dShaderBlob, LPCSTR pszShaderName);
 	ID3D12RootSignature* CreateComputeRootSignature() {}; // 원래 기존 루트 시그니처와 똑같지만 보기 편하게 하기 위해 분리
 	void CreateComputePipelineState() {};
 	void CreateRWResourceViews() {};
 	void CreateMRTComputeShader() {};
-
-	//스왑 체인, 디바이스, 서술자 힙, 명령 큐/할당자/리스트를 생성하는 함수이다.
+	
 	void CreateSwapChain();
 	void CreateDirect3DDevice();
 	void CreateRtvAndDsvDescriptorHeaps();
@@ -119,6 +121,20 @@ private:
 	//윈도우 클라이언트 영역의 크기가 바뀌면 실행하는 함수.
 	void OnResizeBackBuffers();
 
+	// Update() 내부에서 사용하는 함수들이다.
+	void ProcessInput();
+	void AnimateObjects();
+	void OnprepareRender();
+
+	// Render() 내부에서 사용하는 함수들이다.	
+	void RenderGBuffers(); // GBuffer에 Render
+	void Blur(); // 계산쉐이더를 통해 블러링한다.
+	void RenderSwapChain(); // SwapChain에 Render
+
+	// 키보드와 마우스 메시지를 처리하는 부분이다.
+	void OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam);
+	void OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam);
+
 public:
 	CGameFramework();
 	~CGameFramework();
@@ -127,14 +143,12 @@ public:
 	bool OnCreate(HINSTANCE hInstance, HWND hMainWnd);
 	void OnDestroy();
 
-	//프레임워크의 핵심(사용자 입력, 애니메이션, 렌더링)을 구성하는 함수이다.
-	//프레임워크의 핵심(사용자 입력, 애니메이션, 렌더링)을 구성하는 함수이다.
+	//프레임워크의 핵심(사용자 입력, 애니메이션)을 구성하는 함수이다. 
 	void Update();
-	void Render() {};
+	// 렌더링을 처리하는 함수이다.
+	void Render();
 
 	//윈도우의 메시지(키보드, 마우스 입력)를 처리하는 함수이다.
-	void OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam);
-	void OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam);
 	LRESULT CALLBACK OnProcessingWindowMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam);
 	
 };
