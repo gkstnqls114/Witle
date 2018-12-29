@@ -18,6 +18,13 @@ public:
 		}
 		return m_TimerInstance;
 	}
+	static void ReleaseInstance()
+	{
+		if (m_TimerInstance) {
+			delete m_TimerInstance;
+			m_TimerInstance = nullptr;
+		}
+	}
 
 	// 타이머의 시간을 갱신한다.
 	void Tick(float fLockFPS = 0.0f);
