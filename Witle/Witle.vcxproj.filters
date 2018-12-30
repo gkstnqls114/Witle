@@ -13,6 +13,30 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="소스 파일\Scene">
+      <UniqueIdentifier>{9f95aa9a-57da-4bd1-911f-75c7dc20268e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Scene">
+      <UniqueIdentifier>{80300995-075e-4ddb-a158-043ca29735fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Scene\Manager">
+      <UniqueIdentifier>{97760a9f-082f-4c47-aa91-1c58fac4ba94}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Scene\Inherit">
+      <UniqueIdentifier>{c180d064-7e4e-4469-87b4-f89798c06e9c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Scene\Inherit">
+      <UniqueIdentifier>{b8e09b48-fcb6-4886-9d64-94f111716138}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Scene\Manager">
+      <UniqueIdentifier>{497bac28-c517-4a07-9732-ad499eed101e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\GameBase">
+      <UniqueIdentifier>{b90eec66-3e71-40ea-b9fb-5dc4e771ad9f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\GameBase">
+      <UniqueIdentifier>{3c0016c5-e131-4ec0-a958-b825b4b42693}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -27,12 +51,6 @@
     <ClInclude Include="Witle.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="GameTimer.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="GameFramework.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="DDSTextureLoader12.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -45,6 +63,21 @@
     <ClInclude Include="constant.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>헤더 파일\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="TestScene.h">
+      <Filter>헤더 파일\Scene\Inherit</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneManager.h">
+      <Filter>헤더 파일\Scene\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="GameFramework.h">
+      <Filter>헤더 파일\GameBase</Filter>
+    </ClInclude>
+    <ClInclude Include="GameTimer.h">
+      <Filter>헤더 파일\GameBase</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -53,17 +86,26 @@
     <ClCompile Include="Witle.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="GameFramework.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="d3dUtil.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="GameTimer.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="DDSTextureLoader12.cpp">
       <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>소스 파일\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="TestScene.cpp">
+      <Filter>소스 파일\Scene\Inherit</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneManager.cpp">
+      <Filter>소스 파일\Scene\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="GameFramework.cpp">
+      <Filter>소스 파일\GameBase</Filter>
+    </ClCompile>
+    <ClCompile Include="GameTimer.cpp">
+      <Filter>소스 파일\GameBase</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
