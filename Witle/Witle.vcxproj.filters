@@ -37,6 +37,24 @@
     <Filter Include="헤더 파일\GameBase">
       <UniqueIdentifier>{3c0016c5-e131-4ec0-a958-b825b4b42693}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Component">
+      <UniqueIdentifier>{e0d43984-5afe-4a2c-bd8b-a0ca9b54aaca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Component\Renderer">
+      <UniqueIdentifier>{3173eb9f-8d38-40a1-b848-5fcb8f1eeeef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Component">
+      <UniqueIdentifier>{e31d6a27-4aaa-47f2-8207-5b4dbe33d03d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Component\Renderer">
+      <UniqueIdentifier>{242b90da-b85e-4f7a-a9da-e53f34641889}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\GameObject">
+      <UniqueIdentifier>{721a251d-9193-4eb9-ae89-55c959b5611e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\GameObject">
+      <UniqueIdentifier>{3e158b96-2473-4283-a784-6d864d72fe05}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -78,6 +96,15 @@
     <ClInclude Include="GameTimer.h">
       <Filter>헤더 파일\GameBase</Filter>
     </ClInclude>
+    <ClInclude Include="ComponentBase.h">
+      <Filter>헤더 파일\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>헤더 파일\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="ID.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -106,6 +133,12 @@
     </ClCompile>
     <ClCompile Include="GameTimer.cpp">
       <Filter>소스 파일\GameBase</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentBase.cpp">
+      <Filter>소스 파일\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>소스 파일\GameObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
