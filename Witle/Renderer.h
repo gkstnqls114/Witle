@@ -7,14 +7,16 @@ public:
 	Renderer();
 	virtual ~Renderer();
 
-	virtual const ComponenetID& GetComponentID() const { return m_ComponenetID; };
-	virtual const ComponenetID& GetFamillyID() const { return m_FamillyID; };
+	virtual const std::string& GetComponentID() const { return m_ComponenetID; };
+	virtual std::string& GetComponentID() { return m_ComponenetID; }; 
+	virtual const std::string& GetFamillyID() const { return m_FamillyID; };
+	virtual std::string& GetFamillyID() { return m_FamillyID; };
 
 	virtual void Update();
-	void Render();
+	virtual void Render();
 
 private:
-	ComponenetID m_ComponenetID{""};
-	ComponenetID m_FamillyID{"Renderer"};
+	std::string m_ComponenetID{""};
+	std::string m_FamillyID{"Renderer"};
 };
 

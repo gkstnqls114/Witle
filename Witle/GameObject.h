@@ -1,20 +1,21 @@
-#pragma once
-#include "ID.h"
+#pragma once 
 
 class ComponentBase;
+
 class GameObject
 {
 public:
-	GameObject(EntityID entityID);
+	GameObject(std::string entityID) : m_EntityID(entityID) {};
 	virtual ~GameObject();
 
 	void Update() {};
 	
-	bool InsertComponent(ComponentBase* pComponentBase);
-	ComponentBase* GetComponent(const ComponenetID& id);
-	const ComponentBase* GetComponent(const ComponenetID& id) const;
+	bool InsertComponent(const std::string& ComponenetID, ComponentBase* pComponentBase);
+	ComponentBase* GetComponent(const std::string& id);
+	const ComponentBase* GetComponent(const  std::string& id) const;
 
 private:
-	std::map<ComponenetID, ComponentBase*> m_Components;
+	std::map< std::string, ComponentBase*> m_Components;
+	std::string m_EntityID;
 };
 

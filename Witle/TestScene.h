@@ -8,17 +8,9 @@ struct CB_OBJECT_INFO // b1
 	XMFLOAT4 fColor{1.F , 1.F, 1.F, 1.F};
 };
 
-class CShader;
-class CPlayer;
-class MyCamera;
-class SkyBox;
+class GameObject;
 
-class CMesh;
-class CAlphaQuadMesh;
-class CGameObject;
-class HeightMapTerrain;
-
-class TestScene
+class GameScene
 	: public CScene
 {
 	POINT m_ptOldCursorPos;
@@ -33,8 +25,8 @@ protected:
 
 
 public:
-	TestScene();
-	virtual ~TestScene();
+	GameScene();
+	virtual ~GameScene();
 
 	virtual bool OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam) override;
 	virtual bool OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam, float ElapsedTime) override;
@@ -52,6 +44,7 @@ public:
 	virtual void ReleaseUploadBuffers() override;
 
 protected:
+	GameObject* m_GameObject;
 	//MyCamera *m_Camera{ nullptr };
 
 	//CPlayer	*m_Player{ nullptr };

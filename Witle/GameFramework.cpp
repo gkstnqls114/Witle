@@ -1,11 +1,11 @@
 #include "stdafx.h"
- 
+#include "GameTimer.h"
 #include "d3dUtil.h"
+ 
 //#include "CameraStorage.h"
 //#include "CTexture.h"
 
-#include "GameTimer.h"
-// #include "TestScene.h"
+#include "TestScene.h"
 
 #include "GameFramework.h"
 
@@ -520,17 +520,9 @@ void CGameFramework::BuildObjects()
 	m_CommandList->Reset(m_CommandAllocator.Get(), NULL);
 	
 	///////////////////////////////////////////////////////////////////////////// 府家胶 积己
-	//m_pScene = new TestScene();
-	//if (m_pScene) m_pScene->BuildObjects(m_d3dDevice.Get(), m_CommandList.Get());
-
-
-#ifdef _TEXT_DRAW
-	m_Testfont = new CameraInfoFont(CameraStorage::GetInstance()->GetCamera());
-	if (m_Testfont) {
-		m_Testfont->SetScale(0.5f);
-		m_Testfont->CreatResource(m_d3dDevice.Get(), m_CommandQueue.Get());
-	}
-#endif
+	m_pScene = new GameScene();
+	if (m_pScene) m_pScene->BuildObjects(m_d3dDevice.Get(), m_CommandList.Get());
+	 
 	///////////////////////////////////////////////////////////////////////////// 府家胶 积己
 
 	hResult = m_CommandList->Close();
@@ -541,10 +533,7 @@ void CGameFramework::BuildObjects()
 	WaitForGpuComplete();
 
 	///////////////////////////////////////////////////////////////////////////// 诀肺靛 赛 副府令
-	// if (m_pScene) m_pScene->ReleaseUploadBuffers();
-#ifdef _TEXT_DRAW
-	if (m_Testfont) m_Testfont->ReleaseUploadBuffer();
-#endif
+	if (m_pScene) m_pScene->ReleaseUploadBuffers(); 
 	///////////////////////////////////////////////////////////////////////////// 诀肺靛 赛 副府令
 
 	CGameTimer::GetInstance()->Reset();

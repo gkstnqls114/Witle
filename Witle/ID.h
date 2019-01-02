@@ -5,6 +5,11 @@
 class EntityID : public std::string { 
 public:
 	EntityID(std::string s) : std::string(s) {};
+	EntityID(const char *s) : std::string(s) {
+#ifdef CONSOLE_TEST
+		std::cout << s << std::endl; 
+#endif // CONSOLE_TEST 
+	};
 
 };
 

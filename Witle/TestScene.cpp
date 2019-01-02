@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "d3dUtil.h"
+#include "MeshRenderer.h"
+#include "GameObject.h"
 //
 //#include "Vertex.h"
 //
@@ -19,22 +21,22 @@
 
 #define _WITH_PLAYER_TOP
 
-TestScene::TestScene()
+GameScene::GameScene()
 {
 
 }
 
-TestScene::~TestScene()
+GameScene::~GameScene()
 {
 
 }
 
-bool TestScene::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam)
+bool GameScene::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam)
 {
 	return false;
 }
 
-bool TestScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam, float ElapsedTime)
+bool GameScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam, float ElapsedTime)
 {
 	switch (nMessageID)
 	{
@@ -90,7 +92,7 @@ bool TestScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM w
 	return false;
 }
 
-void TestScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList)
+void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList)
 {
 	//뷰포트를 주 윈도우의 클라이언트 영역 전체로 설정한다.
 	m_Viewport.TopLeftX = 0;
@@ -105,7 +107,11 @@ void TestScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 
 	//루트 시그너쳐를 생성한다.
 	m_pd3dGraphicsRootSignature = CreateGraphicsRootSignature(pd3dDevice);
+	 
+	extern MeshRenderer gMeshRenderer;
 
+	m_GameObject = new GameObject("Player");
+	m_GameObject->InsertComponent(gMeshRenderer.GetFamillyID(), &gMeshRenderer);
 
 	//// 스카이 박스 생성
 	//m_SkyBox = new SkyBox(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature.Get());
@@ -154,8 +160,12 @@ void TestScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 //	CameraStorage::GetInstance()->SetCamera(m_Camera);
 }
 
-void TestScene::ReleaseObjects()
+void GameScene::ReleaseObjects()
 { 
+	if (m_GameObject) {
+		delete m_GameObject;
+		m_GameObject = nullptr;
+	}
 	//if (m_Player) {
 	//	delete m_Player;
 	//	m_Player = nullptr;
@@ -174,7 +184,7 @@ void TestScene::ReleaseObjects()
 	//} 
 }
 
-bool TestScene::ProcessInput(HWND hWnd, POINT OldCursor, float ElapsedTime)
+bool GameScene::ProcessInput(HWND hWnd, POINT OldCursor, float ElapsedTime)
 {
 	static UCHAR pKeyBuffer[256];
 
@@ -244,7 +254,7 @@ bool TestScene::ProcessInput(HWND hWnd, POINT OldCursor, float ElapsedTime)
 	return true;
 }
 
-bool TestScene::ProcessMouseWheel(HWND hWnd, short WheelData, float ElapsedTime)
+bool GameScene::ProcessMouseWheel(HWND hWnd, short WheelData, float ElapsedTime)
 {
 	//if (WheelData == MOUSE_WHEEL_STOP) return false;
 
@@ -260,18 +270,18 @@ bool TestScene::ProcessMouseWheel(HWND hWnd, short WheelData, float ElapsedTime)
 	return false;
 }
 
-void TestScene::OnprepareRender()
+void GameScene::OnprepareRender()
 {
 
 }
 
-void TestScene::AnimateObjects(float fTimeElapsed)
+void GameScene::AnimateObjects(float fTimeElapsed)
 {
 	//if (m_pHeightMapTerrain) m_pHeightMapTerrain->Animate(fTimeElapsed);
 	//if (m_Player) m_Player->OnPrepareRender();
 }
 
-void TestScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
+void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 {
 	// 그래픽 루트 시그니처 설정
 	pd3dCommandList->SetGraphicsRootSignature(m_pd3dGraphicsRootSignature.Get());
@@ -290,7 +300,7 @@ void TestScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 
 }
 
-void TestScene::ReleaseUploadBuffers()
+void GameScene::ReleaseUploadBuffers()
 { 
 	//if (m_Mesh) m_Mesh->ReleaseUploadBuffers();
 	//if (m_pHeightMapTerrain) m_pHeightMapTerrain->ReleaseUploadBuffers();
@@ -299,7 +309,7 @@ void TestScene::ReleaseUploadBuffers()
 	//m_Player->SetMesh(0, m_Mesh);
 }
 
-bool TestScene::SaveData()
+bool GameScene::SaveData()
 {
 	/*std::ofstream out("Data.txt");
 
@@ -325,7 +335,7 @@ bool TestScene::SaveData()
 	return true;
 }
 
-ComPtr<ID3D12RootSignature> TestScene::CreateGraphicsRootSignature(ID3D12Device *pd3dDevice)
+ComPtr<ID3D12RootSignature> GameScene::CreateGraphicsRootSignature(ID3D12Device *pd3dDevice)
 {
 	HRESULT hResult = S_FALSE;
 	ComPtr<ID3D12RootSignature> pd3dGraphicsRootSignature = nullptr;
@@ -483,7 +493,7 @@ ComPtr<ID3D12RootSignature> TestScene::CreateGraphicsRootSignature(ID3D12Device 
 	return (pd3dGraphicsRootSignature);
 }
 
-//void TestScene::BuildConstantBuffer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList)
+//void GameScene::BuildConstantBuffer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList)
 //{
 //	// PPT 파이프라인 02 - 68p
 //	HRESULT hResult = S_FALSE;
@@ -565,7 +575,7 @@ ComPtr<ID3D12RootSignature> TestScene::CreateGraphicsRootSignature(ID3D12Device 
 //	);
 //}
 
-void TestScene::Update(float ElapsedTime)
+void GameScene::Update(float ElapsedTime)
 {
 	//if (m_Player) {
 	//	m_Player->Update(ElapsedTime);

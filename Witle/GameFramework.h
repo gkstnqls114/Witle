@@ -1,5 +1,5 @@
 #pragma once
-// #include"InheritShader.h"
+#include "MeshRenderer.h"
 #define _WITH_PLAYER_TOP
 
 class CScene;
@@ -7,6 +7,7 @@ class CameraInfoFont;
 
 class CGameFramework
 {
+
 private:
 	HINSTANCE m_hInstance;
 	HWND m_hWnd;
@@ -52,12 +53,12 @@ private:
 	ComPtr<ID3D12Debug> m_pd3dDebugController;
 	ComPtr<ID3D12DebugDevice> m_pd3dDebugDevice;
 #endif
-	 
-	CScene *m_pScene			{ nullptr };
-
+	
 	POINT m_ptOldCursorPos;
 	short m_MouseWheelData		{ 0 }; // 120: 휠을 올렸을때, -120: 휠을 내렸을때, 한번 휠을 올리거나 내리면 그 상태로 계속 저장되므로 0으로 다시 만들어줘야함
 
+
+	CScene *m_pScene{ nullptr };
 
 
 	//// GBuffer
@@ -93,8 +94,7 @@ private:
 	//const UINT m_UAVParameterIndex = 0;
 	//D3D12_GPU_DESCRIPTOR_HANDLE m_UAVGPUDescriptorHandle;
 
-private: 
-	
+private:  
 	//스왑 체인, 디바이스, 서술자 힙, 명령 큐/할당자/리스트를 생성하는 함수이다.
 	// OnCreate() 내부에서 사용한다.
 	D3D12_SHADER_BYTECODE CreateComputeShader(ID3DBlob **ppd3dShaderBlob, LPCSTR pszShaderName);
