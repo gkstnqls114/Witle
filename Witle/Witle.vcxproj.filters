@@ -111,6 +111,9 @@
     <ClInclude Include="MeshRenderer.h">
       <Filter>헤더 파일\Component\Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="PSOManager.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -151,6 +154,9 @@
     </ClCompile>
     <ClCompile Include="MeshRenderer.cpp">
       <Filter>소스 파일\Component\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="PSOManager.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

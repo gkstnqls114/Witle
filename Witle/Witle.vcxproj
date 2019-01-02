@@ -157,6 +157,7 @@
     <ClInclude Include="GameTimer.h" />
     <ClInclude Include="ID.h" />
     <ClInclude Include="MeshRenderer.h" />
+    <ClInclude Include="PSOManager.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Scene.h" />
@@ -174,6 +175,7 @@
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameTimer.cpp" />
     <ClCompile Include="MeshRenderer.cpp" />
+    <ClCompile Include="PSOManager.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
