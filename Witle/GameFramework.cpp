@@ -541,11 +541,11 @@ void CGameFramework::BuildObjects()
 
 void CGameFramework::ReleaseObjects()
 {
-	//if (m_pScene) {
-	//	m_pScene->ReleaseObjects();
-	//	delete m_pScene;
-	//}
-	//m_pScene = nullptr;
+	if (m_pScene) {
+		m_pScene->ReleaseObjects();
+		delete m_pScene;
+		m_pScene = nullptr;
+	}
 }
 
 void CGameFramework::Update()
