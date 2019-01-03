@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "ShaderManager.h"
 #include "GameTimer.h"
 #include "d3dUtil.h"
  
@@ -58,12 +59,7 @@ bool CGameFramework::OnCreate(HINSTANCE hInstance, HWND hMainWnd)
 	// CreateRWResourceViews();
 
 	//CreateMRTComputeShader();
-
-#ifdef _TEXT_DRAW
-	m_graphicsMemory = std::make_unique<GraphicsMemory>(m_d3dDevice.Get());
-
-#endif
-
+	 
 	BuildObjects();
 	 
 
@@ -80,7 +76,7 @@ void CGameFramework::OnDestroy()
 
 D3D12_SHADER_BYTECODE CGameFramework::CreateComputeShader(ID3DBlob ** ppd3dShaderBlob, LPCSTR pszShaderName)
 {
-	//  CShader::CompileShaderFromFile 와 같다.
+	//  Shader::CompileShaderFromFile 와 같다.
 
 	UINT nCompileFlags = 0;
 #if defined(_DEBUG)
@@ -308,21 +304,7 @@ void CGameFramework::CreateDirect3DDevice()
 		hResult = D3D12CreateDevice(pAdapter, D3D_FEATURE_LEVEL_11_0, IID_PPV_ARGS(&m_d3dDevice));
 		assert(hResult == S_OK);
 	}
-
-
-#if defined(_DEBUG)
-	HRESULT hr = m_d3dDevice->QueryInterface(IID_PPV_ARGS(&m_pd3dDebugDevice));
-	assert(hr == S_OK);
-
-	if (m_pd3dDebugDevice)
-	{
-		hr = m_pd3dDebugDevice->ReportLiveDeviceObjects(D3D12_RLDO_DETAIL);
-		assert(hr == S_OK);
-		m_pd3dDebugDevice = nullptr;
-		OutputDebugString(L"...ReportLiveDeviceObjects\n");
-	}
-#endif
-	
+	 
 	// MSAA 품질 수준 지원 여부 확인
 	// 디바이스가 지원하는 다중 샘플의 품질 수준을 확인한다.
 	D3D12_FEATURE_DATA_MULTISAMPLE_QUALITY_LEVELS MsaaQualityLevels;
@@ -522,7 +504,9 @@ void CGameFramework::BuildObjects()
 	///////////////////////////////////////////////////////////////////////////// 리소스 생성
 	m_pScene = new GameScene();
 	if (m_pScene) m_pScene->BuildObjects(m_d3dDevice.Get(), m_CommandList.Get());
-	 
+	
+
+	// ShaderManager::GetInstance()->InsertPSO();
 	///////////////////////////////////////////////////////////////////////////// 리소스 생성
 
 	hResult = m_CommandList->Close();

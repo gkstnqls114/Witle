@@ -54,13 +54,6 @@ private:
 	ComPtr<ID3D12DebugDevice> m_pd3dDebugDevice;
 #endif
 	
-	POINT m_ptOldCursorPos;
-	short m_MouseWheelData		{ 0 }; // 120: 휠을 올렸을때, -120: 휠을 내렸을때, 한번 휠을 올리거나 내리면 그 상태로 계속 저장되므로 0으로 다시 만들어줘야함
-
-
-	CScene *m_pScene{ nullptr };
-
-
 	//// GBuffer
 	static const UINT m_GBuffersCount{ 0 }; // 컬러 . 노말. 
 
@@ -151,6 +144,13 @@ public:
 
 	//윈도우의 메시지(키보드, 마우스 입력)를 처리하는 함수이다.
 	LRESULT CALLBACK OnProcessingWindowMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam);
+	
+private: 
+	POINT m_ptOldCursorPos;
+	short m_MouseWheelData{ 0 }; // 120: 휠을 올렸을때, -120: 휠을 내렸을때, 한번 휠을 올리거나 내리면 그 상태로 계속 저장되므로 0으로 다시 만들어줘야함
+	 
+	CScene *m_pScene{ nullptr };
+	
 	
 };
 

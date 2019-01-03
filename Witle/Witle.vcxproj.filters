@@ -55,6 +55,15 @@
     <Filter Include="헤더 파일\GameObject">
       <UniqueIdentifier>{3e158b96-2473-4283-a784-6d864d72fe05}</UniqueIdentifier>
     </Filter>
+    <Filter Include="리소스 파일\Shader">
+      <UniqueIdentifier>{db89ae39-7d4f-4275-9206-40edcd5d4780}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Shader">
+      <UniqueIdentifier>{c71c2a0d-b962-4d5c-ac07-4c3b249dbebf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Shader">
+      <UniqueIdentifier>{98573e7e-bdf5-4c28-bcab-6fa43786c978}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -111,8 +120,11 @@
     <ClInclude Include="MeshRenderer.h">
       <Filter>헤더 파일\Component\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="PSOManager.h">
-      <Filter>헤더 파일</Filter>
+    <ClInclude Include="Shader.h">
+      <Filter>헤더 파일\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderManager.h">
+      <Filter>헤더 파일\Shader</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -155,8 +167,11 @@
     <ClCompile Include="MeshRenderer.cpp">
       <Filter>소스 파일\Component\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="PSOManager.cpp">
-      <Filter>소스 파일</Filter>
+    <ClCompile Include="Shader.cpp">
+      <Filter>소스 파일\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderManager.cpp">
+      <Filter>소스 파일\Shader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
