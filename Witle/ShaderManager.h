@@ -15,26 +15,8 @@ private:
 	std::map<std::string, Shader*> m_Shaders;
 
 public:
-	static ShaderManager* GetInstance()
-	{
-		if (!m_ShaderManagerInstance) {
-			m_ShaderManagerInstance = new ShaderManager;
-		}
-		return m_ShaderManagerInstance;
-	}
-	static void ReleaseInstance()
-	{
-		// 순회하며 메모리 할당 제거.
-		for (auto& pso : m_ShaderManagerInstance->m_Shaders) {
-			delete pso.second;
-			pso.second = nullptr;
-		}
-
-		if (m_ShaderManagerInstance) {
-			delete m_ShaderManagerInstance;
-			m_ShaderManagerInstance = nullptr;
-		}
-	}
+	static ShaderManager* GetInstance();
+	static void ReleaseInstance();
 
 	bool InsertShader(const std::string& s, Shader* pso);
 	Shader * GetShader(const std::string & s) const;

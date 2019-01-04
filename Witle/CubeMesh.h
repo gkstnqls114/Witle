@@ -4,7 +4,7 @@ class CubeMesh :
 	public Mesh
 {
 public:
-	CubeMesh();
+	CubeMesh(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
 	virtual ~CubeMesh();
 	 
 	virtual void Create();

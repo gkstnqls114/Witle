@@ -13,6 +13,28 @@ ShaderManager::~ShaderManager()
 {
 }
 
+ShaderManager * ShaderManager::GetInstance()
+{
+	if (!m_ShaderManagerInstance) {
+		m_ShaderManagerInstance = new ShaderManager;
+	}
+	return m_ShaderManagerInstance;
+}
+
+void ShaderManager::ReleaseInstance()
+{
+	// 순회하며 메모리 할당 제거.
+	for (auto& pso : m_ShaderManagerInstance->m_Shaders) {
+		delete pso.second;
+		pso.second = nullptr;
+	}
+
+	if (m_ShaderManagerInstance) {
+		delete m_ShaderManagerInstance;
+		m_ShaderManagerInstance = nullptr;
+	}
+}
+
 bool ShaderManager::InsertShader(const std::string& s, Shader * pso)
 {
 	auto pair = m_Shaders.insert(std::pair<std::string, Shader*>(s, pso));

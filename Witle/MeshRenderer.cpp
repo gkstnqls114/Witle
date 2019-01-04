@@ -2,19 +2,18 @@
 #include "MeshRenderer.h"
 
 
+MeshRenderer::MeshRenderer() 
+{
+}
+
+MeshRenderer::~MeshRenderer()
+{
+}
+
 void MeshRenderer::Update()
 {
 }
 
 void MeshRenderer::Render()
-{
-}
-
-MeshRenderer::MeshRenderer()
-{
-}
-
-
-MeshRenderer::~MeshRenderer()
 {
 }

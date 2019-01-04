@@ -19,9 +19,7 @@ public:
 private:
 	GameObject* m_pOwner{ nullptr };
 
-protected:
-	ComponentBase(std::string componentID, std::string famillyID) : m_ComponenetID(componentID), m_FamillyID(famillyID) {};
-
+protected: 
 	std::string m_ComponenetID{ "ComponentBase" };
 	std::string m_FamillyID{ "ComponentBase" };
 };
