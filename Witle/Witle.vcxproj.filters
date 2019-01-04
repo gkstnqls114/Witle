@@ -64,6 +64,9 @@
     <Filter Include="헤더 파일\Shader">
       <UniqueIdentifier>{98573e7e-bdf5-4c28-bcab-6fa43786c978}</UniqueIdentifier>
     </Filter>
+    <Filter Include="헤더 파일\Component\Mesh">
+      <UniqueIdentifier>{81fae25a-e21c-45c9-b23d-858ddeee87b8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -129,6 +132,12 @@
     <ClInclude Include="MyDescriptorHeap.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>헤더 파일\Component\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="CubeMesh.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -177,6 +186,12 @@
       <Filter>소스 파일\Shader</Filter>
     </ClCompile>
     <ClCompile Include="MyDescriptorHeap.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="CubeMesh.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

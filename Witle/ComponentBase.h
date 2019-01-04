@@ -5,11 +5,11 @@ class GameObject;
 class ComponentBase
 {
 public:
-	ComponentBase() ;
+	ComponentBase();
 	virtual ~ComponentBase();
 	 
-	virtual const  std::string& GetComponentID() const = 0;
-	virtual const  std::string& GetFamillyID() const = 0;
+	const std::string& GetComponentID() const { return m_ComponenetID; };
+	const std::string& GetFamillyID() const { return m_FamillyID; };
 
 	virtual void Update() = 0;
 	
@@ -18,6 +18,11 @@ public:
 
 private:
 	GameObject* m_pOwner{ nullptr };
-	
+
+protected:
+	ComponentBase(std::string componentID, std::string famillyID) : m_ComponenetID(componentID), m_FamillyID(famillyID) {};
+
+	std::string m_ComponenetID{ "ComponentBase" };
+	std::string m_FamillyID{ "ComponentBase" };
 };
 
