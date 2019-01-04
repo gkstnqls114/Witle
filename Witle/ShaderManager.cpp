@@ -2,7 +2,7 @@
 #include "Shader.h"
 #include "ShaderManager.h"
 
-ShaderManager* ShaderManager::m_PSOManagerInstance{ nullptr };
+ShaderManager* ShaderManager::m_ShaderManagerInstance{ nullptr };
 
 ShaderManager::ShaderManager()
 {

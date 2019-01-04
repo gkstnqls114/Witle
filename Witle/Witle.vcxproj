@@ -157,6 +157,7 @@
     <ClInclude Include="GameTimer.h" />
     <ClInclude Include="ID.h" />
     <ClInclude Include="MeshRenderer.h" />
+    <ClInclude Include="MyDescriptorHeap.h" />
     <ClInclude Include="ShaderManager.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Resource.h" />
@@ -176,6 +177,7 @@
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameTimer.cpp" />
     <ClCompile Include="MeshRenderer.cpp" />
+    <ClCompile Include="MyDescriptorHeap.cpp" />
     <ClCompile Include="ShaderManager.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Scene.cpp" />
