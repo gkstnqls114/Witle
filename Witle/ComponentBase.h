@@ -8,7 +8,7 @@ public:
 	ComponentBase();
 	virtual ~ComponentBase();
 	 
-	const std::string& GetComponentID() const { return m_ComponenetID; };
+	int GetComponentID() const { return m_ComponenetID; };
 	const std::string& GetFamillyID() const { return m_FamillyID; };
 
 	virtual void Update() = 0;
@@ -20,7 +20,7 @@ private:
 	GameObject* m_pOwner{ nullptr };
 
 protected: 
-	std::string m_ComponenetID{ "ComponentBase" };
+	UINT m_ComponenetID{ 0 };
 	std::string m_FamillyID{ "ComponentBase" };
 };
 

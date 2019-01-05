@@ -6,6 +6,11 @@
 #define CONSOLE_TEST
 /////////////////////////////////////////////// 전처리문을 위한 정의
 
+enum MESH_TYPE_ID
+{
+	CUBE_MESH
+};
+
 #define EPSILON				1.0e-10f
 
 #define G_BUFFER_ROOT_PARMATER 0

@@ -13,5 +13,7 @@ public:
 	virtual void Create() = 0;
 	virtual void Init() = 0;
 	
+protected:
+	
 };
 
