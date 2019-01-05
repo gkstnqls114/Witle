@@ -6,13 +6,15 @@ class Mesh;
 class MeshRenderer :
 	public Renderer
 { 
+private:
+	void RenderCubeMesh(ID3D12GraphicsCommandList * pd3dCommandList, Mesh* mesh);
 
 public:
 	MeshRenderer();
 	virtual ~MeshRenderer();
 	 
 	virtual void Update();
-	virtual void Render(ID3D12GraphicsCommandList * pd3dCommandList, Mesh* mesh);
+	virtual void Render(ID3D12GraphicsCommandList * pCommandList, Mesh* mesh);
 
 };
 
