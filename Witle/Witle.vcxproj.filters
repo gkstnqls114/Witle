@@ -99,9 +99,6 @@
     <ClInclude Include="Scene.h">
       <Filter>헤더 파일\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="TestScene.h">
-      <Filter>헤더 파일\Scene\Inherit</Filter>
-    </ClInclude>
     <ClInclude Include="SceneManager.h">
       <Filter>헤더 파일\Scene\Manager</Filter>
     </ClInclude>
@@ -141,6 +138,9 @@
     <ClInclude Include="CubeMesh.h">
       <Filter>헤더 파일\Component\Mesh</Filter>
     </ClInclude>
+    <ClInclude Include="GameScene.h">
+      <Filter>헤더 파일\Scene\Inherit</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -157,9 +157,6 @@
     </ClCompile>
     <ClCompile Include="Scene.cpp">
       <Filter>소스 파일\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="TestScene.cpp">
-      <Filter>소스 파일\Scene\Inherit</Filter>
     </ClCompile>
     <ClCompile Include="SceneManager.cpp">
       <Filter>소스 파일\Scene\Manager</Filter>
@@ -196,6 +193,9 @@
     </ClCompile>
     <ClCompile Include="Mesh.cpp">
       <Filter>소스 파일\Component\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="GameScene.cpp">
+      <Filter>소스 파일\Scene\Inherit</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

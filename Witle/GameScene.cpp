@@ -17,7 +17,7 @@
 //
 //#include "CameraStorage.h"
 
-#include "TestScene.h"
+#include "GameScene.h"
 
 #define _WITH_PLAYER_TOP
 
@@ -286,6 +286,7 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	// 그래픽 루트 시그니처 설정
 	pd3dCommandList->SetGraphicsRootSignature(m_pd3dGraphicsRootSignature.Get());
 
+	
 	//m_Camera->SetViewportsAndScissorRects(pd3dCommandList); 
 	//m_Camera->UpdateShaderVariables(pd3dCommandList);
 

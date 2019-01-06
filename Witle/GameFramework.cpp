@@ -6,7 +6,7 @@
 //#include "CameraStorage.h"
 //#include "CTexture.h"
 
-#include "TestScene.h"
+#include "GameScene.h"
 
 #include "GameFramework.h"
 
