@@ -7,7 +7,7 @@ struct CB_OBJECT_INFO // b1
 {
 	XMFLOAT4 fColor{1.F , 1.F, 1.F, 1.F};
 };
-
+ 
 class GameObject;
 
 class GameScene
@@ -44,7 +44,8 @@ public:
 	virtual void ReleaseUploadBuffers() override;
 
 protected:
-	GameObject* m_GameObject;
+	GameObject* m_GameObject; 
+
 	//MyCamera *m_Camera{ nullptr };
 
 	//CPlayer	*m_Player{ nullptr };

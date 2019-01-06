@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "d3dUtil.h"
+#include "CubeMesh.h" 
 #include "MeshRenderer.h"
 #include "GameObject.h"
 //
@@ -110,8 +111,11 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	 
 	extern MeshRenderer gMeshRenderer;
 
+	ComponentBase* cubemesh = new CubeMesh(pd3dDevice, pd3dCommandList, 1, 1, 1);
+	std::cout << cubemesh->GetFamillyID() << " " << cubemesh->GetComponentID() << std::endl;
 	m_GameObject = new GameObject("Player");
 	m_GameObject->InsertComponent(gMeshRenderer.GetFamillyID(), &gMeshRenderer);
+	m_GameObject->InsertComponent(cubemesh->GetFamillyID(), cubemesh);
 
 	//// 스카이 박스 생성
 	//m_SkyBox = new SkyBox(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature.Get());
@@ -286,13 +290,16 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	// 그래픽 루트 시그니처 설정
 	pd3dCommandList->SetGraphicsRootSignature(m_pd3dGraphicsRootSignature.Get());
 
-	
+	extern MeshRenderer gMeshRenderer;
+
+	Mesh* mesh = static_cast<Mesh *>(m_GameObject->GetComponent("Mesh"));
+	gMeshRenderer.Render(pd3dCommandList, mesh);
+
 	//m_Camera->SetViewportsAndScissorRects(pd3dCommandList); 
 	//m_Camera->UpdateShaderVariables(pd3dCommandList);
 
 	//if (m_SkyBox) m_SkyBox->Render(pd3dCommandList, m_Camera);
 
-	////if (m_TestShader) m_TestShader->Render(pd3dCommandList, nullptr);
 	////if (m_Player) m_Player->Render(pd3dCommandList, m_Camera);
 
 	//if (m_pHeightMapTerrain) m_pHeightMapTerrain->Render(pd3dCommandList, m_Camera);

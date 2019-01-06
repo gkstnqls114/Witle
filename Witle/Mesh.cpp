@@ -4,6 +4,7 @@
 
 Mesh::Mesh()
 {
+	m_FamillyID = "Mesh";
 }
 
 

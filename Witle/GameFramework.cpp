@@ -835,7 +835,7 @@ void CGameFramework::RenderSwapChain()
 		m_CommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 		m_CommandList->DrawInstanced(6, 1, 0, 0);*/
 
-		// m_pScene->Render(m_CommandList.Get());
+		m_pScene->Render(m_CommandList.Get());
 	}
 
 

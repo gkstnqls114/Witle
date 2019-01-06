@@ -14,9 +14,9 @@ d3dUtil::~d3dUtil()
 {
 }
 
-ComPtr<ID3D12Resource> d3dUtil::CreateBufferResource(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, void *pData, UINT nBytes, D3D12_HEAP_TYPE d3dHeapType, D3D12_RESOURCE_STATES d3dResourceStates, ID3D12Resource **ppd3dUploadBuffer)
+ID3D12Resource* d3dUtil::CreateBufferResource(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, void *pData, UINT nBytes, D3D12_HEAP_TYPE d3dHeapType, D3D12_RESOURCE_STATES d3dResourceStates, ID3D12Resource **ppd3dUploadBuffer)
 {
-	ComPtr<ID3D12Resource> pd3dBuffer = nullptr;
+	 ID3D12Resource *pd3dBuffer = nullptr;
 
 	D3D12_HEAP_PROPERTIES d3dHeapPropertiesDesc;
 	::ZeroMemory(&d3dHeapPropertiesDesc, sizeof(D3D12_HEAP_PROPERTIES));
@@ -63,13 +63,13 @@ ComPtr<ID3D12Resource> d3dUtil::CreateBufferResource(ID3D12Device *pd3dDevice, I
 				memcpy(pBufferDataBegin, pData, nBytes);
 				(*ppd3dUploadBuffer)->Unmap(0, NULL);
 
-				pd3dCommandList->CopyResource(pd3dBuffer.Get(), *ppd3dUploadBuffer);
+				pd3dCommandList->CopyResource(pd3dBuffer, *ppd3dUploadBuffer);
 
 				D3D12_RESOURCE_BARRIER d3dResourceBarrier;
 				::ZeroMemory(&d3dResourceBarrier, sizeof(D3D12_RESOURCE_BARRIER));
 				d3dResourceBarrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
 				d3dResourceBarrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
-				d3dResourceBarrier.Transition.pResource = pd3dBuffer.Get();
+				d3dResourceBarrier.Transition.pResource = pd3dBuffer;
 				d3dResourceBarrier.Transition.StateBefore = D3D12_RESOURCE_STATE_COPY_DEST;
 				d3dResourceBarrier.Transition.StateAfter = d3dResourceStates;
 				d3dResourceBarrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
