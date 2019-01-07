@@ -141,6 +141,9 @@
     <ClInclude Include="GameScene.h">
       <Filter>헤더 파일\Scene\Inherit</Filter>
     </ClInclude>
+    <ClInclude Include="CubeShader.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -197,6 +200,9 @@
     <ClCompile Include="GameScene.cpp">
       <Filter>소스 파일\Scene\Inherit</Filter>
     </ClCompile>
+    <ClCompile Include="CubeShader.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Witle.rc">
@@ -210,5 +216,10 @@
     <Image Include="Witle.ico">
       <Filter>리소스 파일</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="CubeShader.hlsl">
+      <Filter>리소스 파일\Shader</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

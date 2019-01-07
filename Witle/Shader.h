@@ -9,10 +9,7 @@ class Shader
 public:
 	Shader();
 	virtual ~Shader();
-
-private:
-	int m_nReferences = 0;
-
+	 
 protected:
 	D3D12_SHADER_BYTECODE				CompileShaderFromFile(const WCHAR *pszFileName, LPCSTR pszShaderName, LPCSTR pszShaderProfile, ID3DBlob **ppd3dShaderBlob);
 	void								CreatePipelineState(ID3D12Device *pd3dDevice, ID3D12RootSignature*pd3dGraphicsRootSignature);
@@ -28,40 +25,22 @@ protected:
 	virtual D3D12_SHADER_BYTECODE		CreatePixelShader(ID3DBlob **ppd3dShaderBlob) ;
 	virtual D3D12_SHADER_BYTECODE		CreateGeometryShader(ID3DBlob **ppd3dShaderBlob) ; 
 
-public:
-	void AddRef() { m_nReferences++; }
-	void Release() { if (--m_nReferences <= 0) delete this; }
-
-	virtual void						BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList*pd3dCommandList) = 0;
-	virtual void						AnimateObjects(float fTimeElapsed) = 0;
-	virtual void						ReleaseObjects() = 0;
-	virtual void						ReleaseUploadBuffers() = 0;
-
+public:  
 	virtual void						CreateShader(ID3D12Device *pd3dDevice, ID3D12RootSignature*pd3dGraphicsRootSignature) = 0;
 	virtual void						SetDescriptorHeaps(ID3D12GraphicsCommandList * pd3dCommandList);
 	virtual void						SetGraphicsRootSignature(ID3D12GraphicsCommandList * pd3dCommandList);
 
 	virtual void						CreateGraphicsRootSignature(ID3D12Device *pd3dDevice);
-	ID3D12RootSignature*	GetGraphicsRootSignature() const {
-		return m_pd3dGraphicsRootSignature;
-	}
+	const ID3D12RootSignature*			GetGraphicsRootSignature() const { return m_pd3dGraphicsRootSignature; }
+	 
+	virtual void						OnPrepareRender(ID3D12GraphicsCommandList *pd3dCommandList); 
 
-	virtual void						CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList) = 0;
-	// virtual void						UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList, MyCamera* pCamera = nullptr) = 0;
-	virtual void						ReleaseShaderVariables() = 0;
-	
-	virtual void						UpdateShaderVariable(ID3D12GraphicsCommandList *pd3dCommandList, XMFLOAT4X4 *pxmf4x4World);
-	
-	virtual void						OnPrepareRender(ID3D12GraphicsCommandList *pd3dCommandList);
-	// virtual void						Render(ID3D12GraphicsCommandList *pd3dCommandList, MyCamera *pCamera) = 0;
-	
 	virtual void						Update(float ElapsedTime) = 0;
+	ID3D12PipelineState*  GetPSO() const { return m_pd3dPipelineState; }
 
 protected:
-	ComPtr<ID3D12PipelineState>		m_pd3dPipelineState{ nullptr };
+	ID3D12PipelineState*			m_pd3dPipelineState{ nullptr };
 
-	ID3D12DescriptorHeap			*m_pd3dDescriptorHeap = NULL;
-	ID3D12RootSignature				*m_pd3dGraphicsRootSignature = NULL;
-
-
+	ID3D12DescriptorHeap			*m_pd3dDescriptorHeap{ nullptr };
+	ID3D12RootSignature				*m_pd3dGraphicsRootSignature{ nullptr };
 };

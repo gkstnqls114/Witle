@@ -177,7 +177,7 @@ void Shader::CreatePipelineState(ID3D12Device * pd3dDevice, ID3D12RootSignature 
 	d3dPipelineStateDesc.SampleDesc.Quality = 0; //추가
 	d3dPipelineStateDesc.Flags = D3D12_PIPELINE_STATE_FLAG_NONE;
 
-	HRESULT hResult = pd3dDevice->CreateGraphicsPipelineState(&d3dPipelineStateDesc, IID_PPV_ARGS(m_pd3dPipelineState.GetAddressOf()));
+	HRESULT hResult = pd3dDevice->CreateGraphicsPipelineState(&d3dPipelineStateDesc, IID_PPV_ARGS(&m_pd3dPipelineState));
 	assert(hResult == S_OK);
 #if defined(_DEBUG)
 	std::cout << "PSO 생성 완료" << std::endl;
@@ -190,22 +190,15 @@ void Shader::CreatePipelineState(ID3D12Device * pd3dDevice, ID3D12RootSignature 
 	if (d3dPipelineStateDesc.InputLayout.pInputElementDescs) delete[] d3dPipelineStateDesc.InputLayout.pInputElementDescs;
 }
 
-void Shader::UpdateShaderVariable(ID3D12GraphicsCommandList * pd3dCommandList, XMFLOAT4X4 * pxmf4x4World)
-{
-
-}
-
 void Shader::OnPrepareRender(ID3D12GraphicsCommandList *pd3dCommandList)
 {
 	//파이프라인에 그래픽스 상태 객체를 설정한다.
-	pd3dCommandList->SetPipelineState(m_pd3dPipelineState.Get());
+	pd3dCommandList->SetPipelineState(m_pd3dPipelineState);
 }
-
 
 void Shader::SetDescriptorHeaps(ID3D12GraphicsCommandList * pd3dCommandList)
 {
-	if(m_pd3dDescriptorHeap)
-		pd3dCommandList->SetDescriptorHeaps(1, &m_pd3dDescriptorHeap);
+	if(m_pd3dDescriptorHeap) pd3dCommandList->SetDescriptorHeaps(1, &m_pd3dDescriptorHeap);
 }
 
 void Shader::SetGraphicsRootSignature(ID3D12GraphicsCommandList * pd3dCommandList)

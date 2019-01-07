@@ -2,6 +2,8 @@
 #include "d3dUtil.h"
 #include "CubeMesh.h" 
 #include "MeshRenderer.h"
+#include "ShaderManager.h"
+#include "Shader.h"
 #include "GameObject.h"
 //
 //#include "Vertex.h"
@@ -290,8 +292,9 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	// 그래픽 루트 시그니처 설정
 	pd3dCommandList->SetGraphicsRootSignature(m_pd3dGraphicsRootSignature.Get());
 
-	extern MeshRenderer gMeshRenderer;
+	//pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Cube")->GetPSO());
 
+	extern MeshRenderer gMeshRenderer;
 	Mesh* mesh = static_cast<Mesh *>(m_GameObject->GetComponent("Mesh"));
 	gMeshRenderer.Render(pd3dCommandList, mesh);
 
@@ -304,8 +307,7 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 
 	//if (m_pHeightMapTerrain) m_pHeightMapTerrain->Render(pd3dCommandList, m_Camera);
 
-	//if (m_TEST_BlendObject) m_TEST_BlendObject->Render(pd3dCommandList, m_Camera);
-
+	//if (m_TEST_BlendObject) m_TEST_BlendObject->Render(pd3dCommandList, m_Camera); 
 }
 
 void GameScene::ReleaseUploadBuffers()

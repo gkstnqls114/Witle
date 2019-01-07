@@ -2,7 +2,7 @@
 #include "ShaderManager.h"
 #include "GameTimer.h"
 #include "d3dUtil.h"
- 
+#include "CubeShader.h"
 //#include "CameraStorage.h"
 //#include "CTexture.h"
 
@@ -505,8 +505,10 @@ void CGameFramework::BuildObjects()
 	m_pScene = new GameScene();
 	if (m_pScene) m_pScene->BuildObjects(m_d3dDevice.Get(), m_CommandList.Get());
 	
-
-	// ShaderManager::GetInstance()->InsertPSO();
+	//Shader* pShader = new CubeShader();
+	//pShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
+	//ShaderManager::GetInstance()->InsertShader("Cube", pShader);
+	
 	///////////////////////////////////////////////////////////////////////////// 府家胶 积己
 
 	hResult = m_CommandList->Close();
