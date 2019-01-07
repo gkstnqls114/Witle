@@ -105,12 +105,12 @@ D3D12_PRIMITIVE_TOPOLOGY_TYPE CubeShader::CreatePrimitiveTopologyType()
 
 D3D12_SHADER_BYTECODE CubeShader::CreateVertexShader(ID3DBlob ** ppd3dShaderBlob)
 {
-	return Shader::CompileShaderFromFile(L"AllShader.hlsl", "VSObject", "vs_5_1", ppd3dShaderBlob);
+	return Shader::CompileShaderFromFile(L"CubeShader.hlsl", "VS", "vs_5_1", ppd3dShaderBlob);
 }
 
 D3D12_SHADER_BYTECODE CubeShader::CreatePixelShader(ID3DBlob ** ppd3dShaderBlob)
 {
-	return Shader::CompileShaderFromFile(L"AllShader.hlsl", "VSObject", "vs_5_1", ppd3dShaderBlob);
+	return Shader::CompileShaderFromFile(L"CubeShader.hlsl", "PS", "ps_5_1", ppd3dShaderBlob);
 }
 
 D3D12_SHADER_BYTECODE CubeShader::CreateGeometryShader(ID3DBlob ** ppd3dShaderBlob)
