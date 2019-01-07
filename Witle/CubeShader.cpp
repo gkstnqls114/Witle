@@ -42,7 +42,7 @@ D3D12_RASTERIZER_DESC CubeShader::CreateRasterizerState()
 	D3D12_RASTERIZER_DESC d3dRasterizerDesc;
 	::ZeroMemory(&d3dRasterizerDesc, sizeof(D3D12_RASTERIZER_DESC));
 	d3dRasterizerDesc.FillMode = D3D12_FILL_MODE_SOLID; 
-	d3dRasterizerDesc.CullMode = D3D12_CULL_MODE_BACK; 
+	d3dRasterizerDesc.CullMode = D3D12_CULL_MODE_NONE; 
 	d3dRasterizerDesc.FrontCounterClockwise = FALSE;
 	d3dRasterizerDesc.DepthBias = 0;
 	d3dRasterizerDesc.DepthBiasClamp = 0.0f;
@@ -80,7 +80,7 @@ D3D12_DEPTH_STENCIL_DESC CubeShader::CreateDepthStencilState()
 {
 	D3D12_DEPTH_STENCIL_DESC d3dDepthStencilDesc;
 	::ZeroMemory(&d3dDepthStencilDesc, sizeof(D3D12_DEPTH_STENCIL_DESC)); 
-	d3dDepthStencilDesc.DepthEnable = TRUE;
+	d3dDepthStencilDesc.DepthEnable = FALSE;
 	d3dDepthStencilDesc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;
 	d3dDepthStencilDesc.DepthFunc = D3D12_COMPARISON_FUNC_LESS;
 	d3dDepthStencilDesc.StencilEnable = FALSE;

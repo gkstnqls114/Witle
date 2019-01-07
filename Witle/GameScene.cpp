@@ -113,7 +113,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	 
 	extern MeshRenderer gMeshRenderer;
 
-	ComponentBase* cubemesh = new CubeMesh(pd3dDevice, pd3dCommandList, 1, 1, 1);
+	ComponentBase* cubemesh = new CubeMesh(pd3dDevice, pd3dCommandList, 0.5, 0.5, 0.5);
 	std::cout << cubemesh->GetFamillyID() << " " << cubemesh->GetComponentID() << std::endl;
 	m_GameObject = new GameObject("Player");
 	m_GameObject->InsertComponent(gMeshRenderer.GetFamillyID(), &gMeshRenderer);
@@ -289,8 +289,13 @@ void GameScene::AnimateObjects(float fTimeElapsed)
 
 void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 {
+	D3D12_VIEWPORT GBuffer_Viewport = D3D12_VIEWPORT{ 0, 0, FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT };
+	D3D12_RECT ScissorRect = D3D12_RECT{ 0, 0, FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT };
+
 	// 그래픽 루트 시그니처 설정
 	pd3dCommandList->SetGraphicsRootSignature(m_pd3dGraphicsRootSignature.Get());
+	pd3dCommandList->RSSetViewports(1, &GBuffer_Viewport);
+	pd3dCommandList->RSSetScissorRects(1, &ScissorRect);
 
 	pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Cube")->GetPSO());
 	XMFLOAT4X4 matrix = Matrix4x4::Identity(); 
@@ -298,13 +303,16 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	pd3dCommandList->SetGraphicsRoot32BitConstants(0, 16, &matrix, 16);
 	pd3dCommandList->SetGraphicsRoot32BitConstants(0, 16, &matrix, 32);
 
+	//m_Camera->SetViewportsAndScissorRects(pd3dCommandList); 
+	//m_Camera->UpdateShaderVariables(pd3dCommandList);
+
+	// pd3dCommandList->DrawInstanced(3, 1, 0, 0);
+
 	extern MeshRenderer gMeshRenderer;
 	Mesh* mesh = static_cast<Mesh *>(m_GameObject->GetComponent("Mesh"));
 	gMeshRenderer.Render(pd3dCommandList, mesh);
 
-	//m_Camera->SetViewportsAndScissorRects(pd3dCommandList); 
-	//m_Camera->UpdateShaderVariables(pd3dCommandList);
-
+	
 	//if (m_SkyBox) m_SkyBox->Render(pd3dCommandList, m_Camera);
 
 	////if (m_Player) m_Player->Render(pd3dCommandList, m_Camera);
