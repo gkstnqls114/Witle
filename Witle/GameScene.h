@@ -46,7 +46,7 @@ public:
 protected:
 	GameObject* m_GameObject; 
 
-	//MyCamera *m_Camera{ nullptr };
+	//Camera *m_Camera{ nullptr };
 
 	//CPlayer	*m_Player{ nullptr };
 	//

@@ -1,13 +1,13 @@
 #include "stdafx.h"
 #include "d3dUtil.h" 
 #include "GameObject.h"
-#include "MyCamera.h"
+#include "Camera.h"
 
-MyCamera::MyCamera()
+Camera::Camera()
 {
 }
 
-MyCamera::MyCamera(MyCamera *pCamera)
+Camera::Camera(Camera *pCamera)
 {
 	if (pCamera)
 	{
@@ -16,12 +16,12 @@ MyCamera::MyCamera(MyCamera *pCamera)
 	}
 }
 
-MyCamera::~MyCamera()
+Camera::~Camera()
 {
 
 }
 
-void MyCamera::Move(const XMFLOAT3 & Shift)
+void Camera::Move(const XMFLOAT3 & Shift)
 {
 	if (m_pLookingObject) {
 		MoveAroundLookingobject(Shift);
@@ -31,7 +31,7 @@ void MyCamera::Move(const XMFLOAT3 & Shift)
 	}
 }
 
-void MyCamera::Rotate(float x, float y, float z)
+void Camera::Rotate(float x, float y, float z)
 {
 	if (m_pLookingObject) {
 		RotateOnLookingobject(x, y, z);
@@ -41,11 +41,11 @@ void MyCamera::Rotate(float x, float y, float z)
 	}
 }
 
-void MyCamera::RegenerateAt()
+void Camera::RegenerateAt()
 {
 }
 
-void MyCamera::Update(float fTimeElapsed)
+void Camera::Update(float fTimeElapsed)
 {
 	// 물리 계산
 	// 벽과의 충돌 등...
@@ -60,18 +60,18 @@ void MyCamera::Update(float fTimeElapsed)
 	GenerateFrustum();
 }
 
-void MyCamera::ZoomIn(float val)
+void Camera::ZoomIn(float val)
 {
 	m_Offset = Vector3::ScalarProduct(m_Offset, Vector3::Length(m_Offset) * val);
 }
 
-void MyCamera::ZoomOut(float val)
+void Camera::ZoomOut(float val)
 {
 	m_Offset = Vector3::ScalarProduct(m_Offset, Vector3::Length(m_Offset) * val);
  
 }
 
-void MyCamera::GenerateFrustum()
+void Camera::GenerateFrustum()
 {
 	//원근 투영 변환 행렬에서 절두체를 생성한다(절두체는 카메라 좌표계로 표현된다).
 	m_xmFrustum.CreateFromMatrix(m_xmFrustum, XMLoadFloat4x4(&m_xmf4x4Projection));
@@ -83,21 +83,21 @@ void MyCamera::GenerateFrustum()
 
 }
 
-void MyCamera::MoveAroundLookingobject(const XMFLOAT3& Shift)
+void Camera::MoveAroundLookingobject(const XMFLOAT3& Shift)
 {
 	m_At.x += Shift.x;
 	m_At.y += Shift.y;
 	m_At.z += Shift.z;
 }
 
-void MyCamera::MoveAroundCamera(const XMFLOAT3& Shift)
+void Camera::MoveAroundCamera(const XMFLOAT3& Shift)
 {
 	m_At.x += Shift.x;
 	m_At.y += Shift.y;
 	m_At.z += Shift.z;
 }
 
-void MyCamera::RotateOnCamera(float x, float y, float z)
+void Camera::RotateOnCamera(float x, float y, float z)
 {
 	if ((x != 0.0f))
 	{
@@ -157,7 +157,7 @@ void MyCamera::RotateOnCamera(float x, float y, float z)
 	m_Up = Vector3::CrossProduct(m_Look, m_Right, true);
 }
 
-void MyCamera::RotateOnLookingobject(float x, float y, float z)
+void Camera::RotateOnLookingobject(float x, float y, float z)
 {
 	//DWORD nCameraMode = m_pCamera->GetMode();
 	////1인칭 카메라 또는 3인칭 카메라의 경우 플레이어의 회전은 약간의 제약이 따른다.
@@ -262,43 +262,43 @@ void MyCamera::RotateOnLookingobject(float x, float y, float z)
 	//m_Up = Vector3::CrossProduct(m_Look, m_Right, true);
 }
 
-bool MyCamera::IsInFrustum(const BoundingOrientedBox & xmBoundingBox) const
+bool Camera::IsInFrustum(const BoundingOrientedBox & xmBoundingBox) const
 {
 	return (m_xmFrustum.Intersects(xmBoundingBox));
 }
 
-bool MyCamera::IsInFrustum(const BoundingBox & xmBoundingBox) const
+bool Camera::IsInFrustum(const BoundingBox & xmBoundingBox) const
 {
 	return (m_xmFrustum.Intersects(xmBoundingBox));
 }
 
-bool MyCamera::IsInBoudingBox(const BoundingOrientedBox & xmBoundingBox) const
+bool Camera::IsInBoudingBox(const BoundingOrientedBox & xmBoundingBox) const
 {
 	return m_xmBoundingBox.Intersects(xmBoundingBox);
 }
 
-bool MyCamera::IsInBoudingBox(const BoundingBox & xmBoundingBox) const
+bool Camera::IsInBoudingBox(const BoundingBox & xmBoundingBox) const
 {
 	return m_xmBoundingBox.Intersects(xmBoundingBox);
 }
 
-bool MyCamera::IsInSphere(const BoundingOrientedBox & xmBoundingBox) const
+bool Camera::IsInSphere(const BoundingOrientedBox & xmBoundingBox) const
 {
 	return m_xmSphere.Intersects(xmBoundingBox);
 }
 
-bool MyCamera::IsInSphere(const BoundingBox & xmBoundingBox) const
+bool Camera::IsInSphere(const BoundingBox & xmBoundingBox) const
 {
 	return m_xmSphere.Intersects(xmBoundingBox);
 }
 
-bool MyCamera::IsInSphere(const BoundingSphere & xmBoundingBox) const
+bool Camera::IsInSphere(const BoundingSphere & xmBoundingBox) const
 {
 	return m_xmSphere.Intersects(xmBoundingBox);
 }
 
 
-void MyCamera::SetViewport(int xTopLeft, int yTopLeft, int nWidth, int nHeight, float
+void Camera::SetViewport(int xTopLeft, int yTopLeft, int nWidth, int nHeight, float
 	fMinZ, float fMaxZ)
 {
 	m_d3dViewport.TopLeftX = float(xTopLeft);
@@ -309,7 +309,7 @@ void MyCamera::SetViewport(int xTopLeft, int yTopLeft, int nWidth, int nHeight, 
 	m_d3dViewport.MaxDepth = fMaxZ;
 }
 
-void MyCamera::SetScissorRect(LONG xLeft, LONG yTop, LONG xRight, LONG yBottom)
+void Camera::SetScissorRect(LONG xLeft, LONG yTop, LONG xRight, LONG yBottom)
 {
 	m_d3dScissorRect.left = xLeft;
 	m_d3dScissorRect.top = yTop;
@@ -317,7 +317,7 @@ void MyCamera::SetScissorRect(LONG xLeft, LONG yTop, LONG xRight, LONG yBottom)
 	m_d3dScissorRect.bottom = yBottom;
 }
 
-void MyCamera::RegenerateViewMatrix()
+void Camera::RegenerateViewMatrix()
 {
 	m_xmf4x4View = Matrix4x4::LookAtLH(m_Position, m_At, m_Up);
 
@@ -327,19 +327,19 @@ void MyCamera::RegenerateViewMatrix()
 
 }
 
-void MyCamera::GenerateProjectionMatrix(float fNearPlaneDistance, float fFarPlaneDistance, float fAspectRatio, float fFOVAngle)
+void Camera::GenerateProjectionMatrix(float fNearPlaneDistance, float fFarPlaneDistance, float fAspectRatio, float fFOVAngle)
 {
 	m_xmf4x4Projection = Matrix4x4::PerspectiveFovLH(XMConvertToRadians(fFOVAngle), fAspectRatio, fNearPlaneDistance, fFarPlaneDistance);
 }
 
 /*카메라 변환 행렬을 생성한다. 카메라의 위치 벡터, 카메라가 바라보는 지점, 카메라의 Up 벡터(로컬 y-축 벡터)를
 파라메터로 사용하는 XMMatrixLookAtLH() 함수를 사용한다.*/
-void MyCamera::GenerateViewMatrix()
+void Camera::GenerateViewMatrix()
 {
 	m_xmf4x4View = Matrix4x4::LookAtLH(m_Position, m_At, m_Up);
 }
 
-void MyCamera::GenerateViewMatrix(XMFLOAT3 xmf3Position, XMFLOAT3 xmf3LookAt, XMFLOAT3 xmf3Up)
+void Camera::GenerateViewMatrix(XMFLOAT3 xmf3Position, XMFLOAT3 xmf3LookAt, XMFLOAT3 xmf3Up)
 {
 	m_Position = xmf3Position;
 	m_At = xmf3LookAt;
@@ -348,7 +348,7 @@ void MyCamera::GenerateViewMatrix(XMFLOAT3 xmf3Position, XMFLOAT3 xmf3LookAt, XM
 	GenerateViewMatrix();
 }
 
-void MyCamera::CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList)
+void Camera::CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList)
 {
 	// PPT 파이프라인 02 - 68p
 	HRESULT hResult = S_FALSE;
@@ -429,7 +429,7 @@ void MyCamera::CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCom
 	);
 }
 
-void MyCamera::UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList)
+void Camera::UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList)
 {
 	XMFLOAT4X4 xmf4x4View;
 	XMStoreFloat4x4(&xmf4x4View, XMMatrixTranspose(XMLoadFloat4x4(&m_xmf4x4View)));
@@ -445,18 +445,18 @@ void MyCamera::UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList)
 	pd3dCommandList->SetGraphicsRootConstantBufferView(1, m_d3dCameraCBVUpload->GetGPUVirtualAddress());
 }
 
-void MyCamera::ReleaseShaderVariables()
+void Camera::ReleaseShaderVariables()
 {
 
 }
 
-void MyCamera::SetViewportsAndScissorRects(ID3D12GraphicsCommandList *pd3dCommandList)
+void Camera::SetViewportsAndScissorRects(ID3D12GraphicsCommandList *pd3dCommandList)
 {
 	pd3dCommandList->RSSetViewports(1, &m_d3dViewport);
 	pd3dCommandList->RSSetScissorRects(1, &m_d3dScissorRect);
 }
 
-void MyCamera::ShowData() const noexcept
+void Camera::ShowData() const noexcept
 {
 #if _DEBUG
 	std::cout << "Camera Data..." << std::endl;

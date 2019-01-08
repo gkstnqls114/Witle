@@ -12,7 +12,7 @@ struct VS_CB_MYCAMERA_INFO
 
 class GameObject;
 
-class MyCamera
+class Camera
 {
 protected:
 	XMFLOAT3		m_Position			{ 0.0f, 0.0f, -400.0f }; // Position = At - Offset
@@ -63,9 +63,9 @@ protected:
 	void RotateOnLookingobject(float x, float y, float z);
 
 public:
-	MyCamera();
-	MyCamera(MyCamera *pCamera);
-	virtual ~MyCamera();
+	Camera();
+	Camera(Camera *pCamera);
+	virtual ~Camera();
 
 	virtual void Move(const XMFLOAT3& Shift);
 	virtual void Rotate(float x = 0.0f, float y = 0.0f, float z = 0.0f);

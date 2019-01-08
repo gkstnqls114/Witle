@@ -15,7 +15,7 @@
 //#include "InheritMesh.h"
 //#include "InheritShader.h"
 //#include "AlphaShader.h"
-//#include "MyCamera.h"
+//#include "Camera.h"
 //#include "HeightMapTerrain.h"
 //
 //#include "CameraStorage.h"
@@ -147,7 +147,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 //	m_Player = new CPlayer();
 //	m_Player->SetPosition(XMFLOAT3(nWidth/2.F * xmf3Scale.x, 1000.f, nLength/2.F * xmf3Scale.z));
 //
-//	MyCamera* m_tempCamera = new MyCamera();
+//	Camera* m_tempCamera = new Camera();
 //	
 //	XMFLOAT3 CameraAt = m_Player->GetPosition();
 //	XMFLOAT3 CameraOffset = XMFLOAT3(0.f, 0.f, 500.f);

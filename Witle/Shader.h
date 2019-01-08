@@ -1,6 +1,6 @@
 #pragma once
 //#include "GameObject.h"
-//#include "MyCamera.h"
+//#include "Camera.h"
 
 class CTexture;
 
