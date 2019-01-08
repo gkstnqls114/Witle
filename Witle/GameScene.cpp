@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "d3dUtil.h"
 #include "CubeMesh.h" 
+#include "Camera.h"
 #include "MeshRenderer.h"
 #include "ShaderManager.h"
 #include "Shader.h"
@@ -118,6 +119,22 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	m_GameObject = new GameObject("Player");
 	m_GameObject->InsertComponent(gMeshRenderer.GetFamillyID(), &gMeshRenderer);
 	m_GameObject->InsertComponent(cubemesh->GetFamillyID(), cubemesh);
+
+	Camera* cameraComponent = new Camera();
+	m_Camera = new GameObject("Camera");
+	m_Camera->InsertComponent(cameraComponent->GetFamillyID(), cameraComponent);
+	 
+	XMFLOAT3 CameraAt = XMFLOAT3(0, 0, 0);
+	XMFLOAT3 CameraOffset = XMFLOAT3(0.f, 0.f, 1.f);
+
+	cameraComponent->SetAt(CameraAt);
+	cameraComponent->SetOffset(CameraOffset);
+	cameraComponent->SetPosition(XMFLOAT3(0.f, 0.f, -1.f)); 
+	cameraComponent->SetViewport(0, 0, FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT, 0.0f, 1.0f);
+	cameraComponent->SetScissorRect(0, 0, FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT);
+	cameraComponent->GenerateProjectionMatrix(1.01f, CAMERA_FAR, float(FRAME_BUFFER_WIDTH) / float(FRAME_BUFFER_HEIGHT), 60.0f);
+	cameraComponent->CreateShaderVariables(pd3dDevice, pd3dCommandList);
+	//cameraComponent->SetLookingObject(m_Player);
 
 	//// 스카이 박스 생성
 	//m_SkyBox = new SkyBox(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature.Get());
