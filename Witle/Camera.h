@@ -1,4 +1,5 @@
 #pragma once
+#include "ComponentBase.h"
 
 struct VS_CB_MYCAMERA_INFO
 {
@@ -9,10 +10,10 @@ struct VS_CB_MYCAMERA_INFO
 
 // 가장 기본적인 카메라입니다.
 // 카메라 자신의 Position을 기준으로 이동하고 회전합니다.
-
 class GameObject;
 
 class Camera
+	: public ComponentBase
 {
 protected:
 	XMFLOAT3		m_Position			{ 0.0f, 0.0f, -400.0f }; // Position = At - Offset
@@ -71,7 +72,7 @@ public:
 	virtual void Rotate(float x = 0.0f, float y = 0.0f, float z = 0.0f);
 	virtual void RegenerateAt();
 
-	virtual void Update(float fTimeElapsed);
+	virtual void Update() override;
 	virtual void ZoomIn(float val);
 	virtual void ZoomOut(float val);
 

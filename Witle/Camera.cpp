@@ -5,6 +5,7 @@
 
 Camera::Camera()
 {
+	m_FamillyID = "Camera";
 }
 
 Camera::Camera(Camera *pCamera)
@@ -45,7 +46,7 @@ void Camera::RegenerateAt()
 {
 }
 
-void Camera::Update(float fTimeElapsed)
+void Camera::Update()
 {
 	// 물리 계산
 	// 벽과의 충돌 등...
