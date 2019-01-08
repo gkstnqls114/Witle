@@ -3,8 +3,13 @@
 cbuffer cbGameObjectInfo : register(b0)
 {
 	matrix gmtxWorld : packoffset(c0);
-	matrix gmtxView : packoffset(c4);
-	matrix gmtxProjection : packoffset(c8);
+}
+
+// 상수 버퍼
+cbuffer cbGameObjectInfo : register(b1)
+{
+	matrix gmtxView : packoffset(c0);
+	matrix gmtxProjection : packoffset(c4);
 }
 
 struct VertexIn

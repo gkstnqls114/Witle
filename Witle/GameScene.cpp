@@ -306,25 +306,26 @@ void GameScene::AnimateObjects(float fTimeElapsed)
 
 void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 {
-	D3D12_VIEWPORT GBuffer_Viewport = D3D12_VIEWPORT{ 0, 0, FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT };
-	D3D12_RECT ScissorRect = D3D12_RECT{ 0, 0, FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT };
-
 	// 그래픽 루트 시그니처 설정
 	pd3dCommandList->SetGraphicsRootSignature(m_pd3dGraphicsRootSignature.Get());
+
+	// 클라 화면 설정
+	D3D12_VIEWPORT GBuffer_Viewport = D3D12_VIEWPORT{ 0, 0, FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT };
+	D3D12_RECT ScissorRect = D3D12_RECT{ 0, 0, FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT };
 	pd3dCommandList->RSSetViewports(1, &GBuffer_Viewport);
 	pd3dCommandList->RSSetScissorRects(1, &ScissorRect);
 
+	// PSO 설정
 	pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Cube")->GetPSO());
+	
+	// 쉐이더 변수 설정
 	XMFLOAT4X4 matrix = Matrix4x4::Identity(); 
 	pd3dCommandList->SetGraphicsRoot32BitConstants(0, 16, &matrix, 0);
-	pd3dCommandList->SetGraphicsRoot32BitConstants(0, 16, &matrix, 16);
-	pd3dCommandList->SetGraphicsRoot32BitConstants(0, 16, &matrix, 32);
-
-	//m_Camera->SetViewportsAndScissorRects(pd3dCommandList); 
-	//m_Camera->UpdateShaderVariables(pd3dCommandList);
-
-	// pd3dCommandList->DrawInstanced(3, 1, 0, 0);
-
+	//pd3dCommandList->SetGraphicsRoot32BitConstants(0, 16, &matrix, 16);
+	//pd3dCommandList->SetGraphicsRoot32BitConstants(0, 16, &matrix, 32);
+	(static_cast<Camera *>(m_Camera->GetComponent("Camera")))->UpdateShaderVariables(pd3dCommandList);
+	
+	// 렌더링
 	extern MeshRenderer gMeshRenderer;
 	Mesh* mesh = static_cast<Mesh *>(m_GameObject->GetComponent("Mesh"));
 	gMeshRenderer.Render(pd3dCommandList, mesh);
@@ -379,27 +380,27 @@ ComPtr<ID3D12RootSignature> GameScene::CreateGraphicsRootSignature(ID3D12Device 
 	HRESULT hResult = S_FALSE;
 	ComPtr<ID3D12RootSignature> pd3dGraphicsRootSignature = nullptr;
 
-	D3D12_ROOT_PARAMETER pd3dRootParameters[1];
+	D3D12_ROOT_PARAMETER pd3dRootParameters[2];
 
 	// 루트 상수
 	pd3dRootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_32BIT_CONSTANTS;
-	pd3dRootParameters[0].Constants.Num32BitValues = 16 * 3;
+	pd3dRootParameters[0].Constants.Num32BitValues = 16;
 	pd3dRootParameters[0].Constants.ShaderRegister = 0;
 	pd3dRootParameters[0].Constants.RegisterSpace = 0;
 	pd3dRootParameters[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
-/*
+
 	pd3dRootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_32BIT_CONSTANTS;
-	pd3dRootParameters[1].Constants.Num32BitValues = 16;
-	pd3dRootParameters[1].Constants.ShaderRegister = 0;
+	pd3dRootParameters[1].Constants.Num32BitValues = 32;
+	pd3dRootParameters[1].Constants.ShaderRegister = 1;
 	pd3dRootParameters[1].Constants.RegisterSpace = 0;
-	pd3dRootParameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
-
-	pd3dRootParameters[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_32BIT_CONSTANTS;
-	pd3dRootParameters[2].Constants.Num32BitValues = 16;
-	pd3dRootParameters[2].Constants.ShaderRegister = 0;
-	pd3dRootParameters[2].Constants.RegisterSpace = 0;
-	pd3dRootParameters[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;*/
-
+	pd3dRootParameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
+/*
+	pd3dRootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	pd3dRootParameters[1].Constants.Num32BitValues = 32;
+	pd3dRootParameters[1].Constants.ShaderRegister = 0;
+	pd3dRootParameters[1].Constants.RegisterSpace = 1;
+	pd3dRootParameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;*/
+	 
 	//// 루트 서술자
 	//// 카메라 정보 (뷰, 투영)
 	//pd3dRootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;

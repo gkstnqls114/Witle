@@ -443,7 +443,9 @@ void Camera::UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList)
 	//카메라 위치 복사
 	::memcpy(&m_pMappedCameraInfo->m_xmf3Position, &m_Position, sizeof(XMFLOAT3));
 
-	pd3dCommandList->SetGraphicsRootConstantBufferView(1, m_d3dCameraCBVUpload->GetGPUVirtualAddress());
+	//pd3dCommandList->SetGraphicsRootConstantBufferView(1, m_d3dCameraCBVUpload->GetGPUVirtualAddress());
+	pd3dCommandList->SetGraphicsRoot32BitConstants(1, 16, &xmf4x4View, 0);
+	pd3dCommandList->SetGraphicsRoot32BitConstants(1, 16, &xmf4x4Projection, 16);
 }
 
 void Camera::ReleaseShaderVariables()
