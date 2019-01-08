@@ -16,13 +16,13 @@ class Camera
 	: public ComponentBase
 {
 protected:
-	XMFLOAT3		m_Position			{ 0.0f, 0.0f, -400.0f }; // Position = At - Offset
+	XMFLOAT3		m_Position			{ 0.0f, 0.0f, 0.0f }; // Position = At - Offset
 	XMFLOAT3		m_Right				{ 1.0f, 0.0f, 0.0f };
 	XMFLOAT3		m_Up				{ 0.0f, 1.0f, 0.0f };
 	XMFLOAT3		m_Look				{ 0.0f, 0.0f, 1.0f };
 
-	XMFLOAT3		m_At				{ 0.0f, 0.0f, 0.0f }; // Position + Offset = At
-	XMFLOAT3		m_Offset			{ 0.0f, 0.0f, -400.0f }; // Offset = At - Position
+	XMFLOAT3		m_At				{ 0.0f, 0.0f, 1.0f }; // Position + Offset = At
+	XMFLOAT3		m_Offset			{ 0.0f, 0.0f, 1.0f }; // Offset = At - Position
 
 	GameObject		*m_pTarget	{ nullptr };
 

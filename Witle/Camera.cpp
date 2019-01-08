@@ -58,7 +58,7 @@ void Camera::Update()
 	RegenerateViewMatrix();
 
 	// 카메라 변환 행렬이 바뀔 때마다 카메라 절두체를 다시 생성한다(절두체는 월드 좌표계로 생성한다).
-	GenerateFrustum();
+	GenerateFrustum(); 
 }
 
 void Camera::ZoomIn(float val)

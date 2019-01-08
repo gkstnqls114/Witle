@@ -713,10 +713,10 @@ void CGameFramework::OnResizeBackBuffers()
 void CGameFramework::ProcessInput()
 {
 	// 키보드 값을 통해 플레이어 이동
-//	if (m_pScene) {
-//		m_pScene->ProcessInput(m_hWnd, m_ptOldCursorPos, CGameTimer::GetInstance()->GetTimeElapsed());
-//		m_pScene->ProcessMouseWheel(m_hWnd, m_MouseWheelData, CGameTimer::GetInstance()->GetTimeElapsed());
-//	}
+	if (m_pScene) {
+		m_pScene->ProcessInput(m_hWnd, m_ptOldCursorPos, CGameTimer::GetInstance()->GetTimeElapsed());
+		// m_pScene->ProcessMouseWheel(m_hWnd, m_MouseWheelData, CGameTimer::GetInstance()->GetTimeElapsed());
+	}
 //	m_MouseWheelData = MOUSE_WHEEL_STOP;
 // 
 }

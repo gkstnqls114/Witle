@@ -114,7 +114,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	 
 	extern MeshRenderer gMeshRenderer;
 
-	ComponentBase* cubemesh = new CubeMesh(pd3dDevice, pd3dCommandList, 0.5, 0.5, 0.5);
+	ComponentBase* cubemesh = new CubeMesh(pd3dDevice, pd3dCommandList, 10, 10, 10);
 	std::cout << cubemesh->GetFamillyID() << " " << cubemesh->GetComponentID() << std::endl;
 	m_GameObject = new GameObject("Player");
 	m_GameObject->InsertComponent(gMeshRenderer.GetFamillyID(), &gMeshRenderer);
@@ -123,18 +123,12 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	Camera* cameraComponent = new Camera();
 	m_Camera = new GameObject("Camera");
 	m_Camera->InsertComponent(cameraComponent->GetFamillyID(), cameraComponent);
-	 
-	XMFLOAT3 CameraAt = XMFLOAT3(0, 0, 0);
-	XMFLOAT3 CameraOffset = XMFLOAT3(0.f, 0.f, 1.f);
 
-	cameraComponent->SetAt(CameraAt);
-	cameraComponent->SetOffset(CameraOffset);
-	cameraComponent->SetPosition(XMFLOAT3(0.f, 0.f, -1.f)); 
 	cameraComponent->SetViewport(0, 0, FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT, 0.0f, 1.0f);
 	cameraComponent->SetScissorRect(0, 0, FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT);
 	cameraComponent->GenerateProjectionMatrix(1.01f, CAMERA_FAR, float(FRAME_BUFFER_WIDTH) / float(FRAME_BUFFER_HEIGHT), 60.0f);
 	cameraComponent->CreateShaderVariables(pd3dDevice, pd3dCommandList);
-	//cameraComponent->SetLookingObject(m_Player);
+	// cameraComponent->SetLookingObject(m_Player);
 
 	//// 스카이 박스 생성
 	//m_SkyBox = new SkyBox(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature.Get());
@@ -629,11 +623,8 @@ ComPtr<ID3D12RootSignature> GameScene::CreateGraphicsRootSignature(ID3D12Device 
 
 void GameScene::Update(float ElapsedTime)
 {
-	//if (m_Player) {
-	//	m_Player->Update(ElapsedTime);
-	//}
-	//if (m_Camera) {
-	//	m_Camera->Update(ElapsedTime);
-	//}
+	if (m_Camera) {
+		(static_cast<Camera *>(m_Camera->GetComponent("Camera")))->Update();
+	}
 
 }
