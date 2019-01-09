@@ -21,7 +21,11 @@ Camera::Camera(Camera *pCamera)
 
 Camera::~Camera()
 {
-
+	if (m_ShaderVariables)
+	{
+		delete m_ShaderVariables;
+		m_ShaderVariables = nullptr;
+	}
 }
 
 void Camera::Move(const XMFLOAT3 & Shift)
