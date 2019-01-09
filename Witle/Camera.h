@@ -8,10 +8,10 @@ struct VS_CB_MYCAMERA_INFO
 	XMFLOAT3 m_xmf3Position; // 카메라 위치
 };
 
-// 가장 기본적인 카메라입니다.
-// 카메라 자신의 Position을 기준으로 이동하고 회전합니다.
 class GameObject;
 
+// 가장 기본적인 카메라입니다.
+// 카메라 자신의 Position을 기준으로 이동하고 회전합니다.
 class Camera
 	: public ComponentBase
 {
@@ -23,8 +23,6 @@ protected:
 
 	XMFLOAT3		m_At				{ 0.0f, 0.0f, 1.0f }; // Position + Offset = At
 	XMFLOAT3		m_Offset			{ 0.0f, 0.0f, 1.0f }; // Offset = At - Position
-
-	GameObject		*m_pTarget	{ nullptr };
 
 	float			m_fPitch{ 0.0f };
 	float			m_fRoll{ 0.0f };
@@ -110,7 +108,6 @@ public:
 	void SetMode(DWORD nMode) { m_nMode = nMode; }
 	void SetTimeLag(float fTimeLag) { m_fTimeLag = fTimeLag; }
 	void SetLookAtPosition(XMFLOAT3 xmf3LookAtWorld) { m_At = xmf3LookAtWorld; }
-	void SetLookingObject(GameObject* pLookingObject) { m_pTarget = pLookingObject; }
 
 	void SetAt(XMFLOAT3 at) { m_At = at; };
 	void SetPosition(XMFLOAT3 xmf3Position) { m_Position = xmf3Position; };

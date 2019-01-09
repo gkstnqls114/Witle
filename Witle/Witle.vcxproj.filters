@@ -55,6 +55,9 @@
     <Filter Include="02.Component\Transform">
       <UniqueIdentifier>{c5998ac7-92a4-4244-af25-cb6bdae4a910}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.Component\Camera\FollowCam">
+      <UniqueIdentifier>{30946cd8-6188-4005-beca-1055cfb62f9b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -135,6 +138,9 @@
     <ClInclude Include="Transform.h">
       <Filter>02.Component\Transform</Filter>
     </ClInclude>
+    <ClInclude Include="FollowCam.h">
+      <Filter>02.Component\Camera\FollowCam</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -199,6 +205,9 @@
     </ClCompile>
     <ClCompile Include="Transform.cpp">
       <Filter>02.Component\Transform</Filter>
+    </ClCompile>
+    <ClCompile Include="FollowCam.cpp">
+      <Filter>02.Component\Camera\FollowCam</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
