@@ -270,9 +270,9 @@ bool GameScene::ProcessInput(HWND hWnd, POINT OldCursor, float ElapsedTime)
 
 	return true;
 }
-
-bool GameScene::ProcessMouseWheel(HWND hWnd, short WheelData, float ElapsedTime)
-{
+//
+//bool GameScene::ProcessMouseWheel(HWND hWnd, short WheelData, float ElapsedTime)
+//{
 	//if (WheelData == MOUSE_WHEEL_STOP) return false;
 
 	//bool isUpWheel = WheelData == MOUSE_WHEEL_UP;
@@ -283,11 +283,11 @@ bool GameScene::ProcessMouseWheel(HWND hWnd, short WheelData, float ElapsedTime)
 	//else if (isDownWheel) {
 	//	m_Camera->ZoomOut(1.2f);
 	//} 
+//
+//	return false;
+//}
 
-	return false;
-}
-
-void GameScene::OnprepareRender()
+void GameScene::LastUpdate()
 {
 
 }

@@ -11,3 +11,9 @@ CScene::CScene()
 CScene::~CScene()
 {
 }
+
+void CScene::UpdateGamelogic(float ElapsedTime)
+{
+	Update(ElapsedTime);
+	LastUpdate();
+}

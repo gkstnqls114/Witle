@@ -118,7 +118,7 @@ private:
 	// Update() 내부에서 사용하는 함수들이다.
 	void ProcessInput();
 	void AnimateObjects();
-	void OnprepareRender();
+	void LastUpdate();
 
 	// Render() 내부에서 사용하는 함수들이다.	
 	void RenderGBuffers(); // GBuffer에 Render

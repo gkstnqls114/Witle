@@ -6,7 +6,9 @@ protected:
 	//그래픽 루트 시그너쳐를 생성한다.
 	virtual ComPtr<ID3D12RootSignature> CreateGraphicsRootSignature(ID3D12Device *pd3dDevice) = 0;
 
+	// UpdateGamelogic 내부에서 Update, LastUpdate 순으로 호출되는 함수이다. 
 	virtual void Update(float ElapsedTime) = 0;
+	virtual void LastUpdate() = 0;
 
 public:
 	CScene();
@@ -19,15 +21,16 @@ public:
 	virtual void BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList) = 0;
 	virtual void ReleaseObjects() = 0;
 
-	virtual bool ProcessInput(HWND hWnd, POINT OldCursor, float ElapsedTime) = 0;
-	virtual bool ProcessMouseWheel(HWND hWnd, short WheelData, float ElapsedTime) = 0;
+	virtual bool ProcessInput(HWND hWnd, POINT OldCursor, float ElapsedTime) = 0; 
 	
 	virtual void AnimateObjects(float fTimeElapsed) = 0;
 	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList) = 0;
-	virtual void OnprepareRender() = 0;
 
 	virtual void ReleaseUploadBuffers() = 0;
 	
+
+
+	void UpdateGamelogic(float ElapsedTime);
 	ID3D12RootSignature* GetGraphicsRootSignature() const { return m_pd3dGraphicsRootSignature.Get(); }
 
 protected:

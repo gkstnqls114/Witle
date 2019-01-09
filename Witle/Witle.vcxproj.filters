@@ -33,9 +33,6 @@
     <Filter Include="04.Scene\Manager">
       <UniqueIdentifier>{97760a9f-082f-4c47-aa91-1c58fac4ba94}</UniqueIdentifier>
     </Filter>
-    <Filter Include="04.Scene\Inherit">
-      <UniqueIdentifier>{c180d064-7e4e-4469-87b4-f89798c06e9c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="05.Shader">
       <UniqueIdentifier>{c71c2a0d-b962-4d5c-ac07-4c3b249dbebf}</UniqueIdentifier>
     </Filter>
@@ -46,8 +43,17 @@
     <Filter Include="02.Component\Camera">
       <UniqueIdentifier>{97a51fee-d2d6-4527-a559-c0e182ff3bb1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="05.Shader\Cube">
+    <Filter Include="04.Scene\GameScene">
+      <UniqueIdentifier>{c180d064-7e4e-4469-87b4-f89798c06e9c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Shader\CubeShader">
       <UniqueIdentifier>{2fc3b0e0-6d16-44ac-8746-31fe58dbaf81}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\Mesh\CubeMesh">
+      <UniqueIdentifier>{a77760b1-476a-4e4b-87fc-9d7489d0af01}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\Transform">
+      <UniqueIdentifier>{c5998ac7-92a4-4244-af25-cb6bdae4a910}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -72,9 +78,6 @@
     <ClInclude Include="ID.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="CubeMesh.h">
-      <Filter>02.Component\Mesh</Filter>
-    </ClInclude>
     <ClInclude Include="Mesh.h">
       <Filter>02.Component\Mesh</Filter>
     </ClInclude>
@@ -96,9 +99,6 @@
     <ClInclude Include="GameObject.h">
       <Filter>03.GameObject</Filter>
     </ClInclude>
-    <ClInclude Include="GameScene.h">
-      <Filter>04.Scene</Filter>
-    </ClInclude>
     <ClInclude Include="Scene.h">
       <Filter>04.Scene</Filter>
     </ClInclude>
@@ -111,23 +111,29 @@
     <ClInclude Include="ShaderManager.h">
       <Filter>05.Shader</Filter>
     </ClInclude>
-    <ClInclude Include="Camera.h">
-      <Filter>02.Component</Filter>
-    </ClInclude>
     <ClInclude Include="d3dUtil.h">
       <Filter>06.etc</Filter>
     </ClInclude>
     <ClInclude Include="DDSTextureLoader12.h">
       <Filter>06.etc</Filter>
     </ClInclude>
-    <ClInclude Include="CubeShader.h">
-      <Filter>05.Shader</Filter>
-    </ClInclude>
     <ClInclude Include="MyDescriptorHeap.h">
       <Filter>06.etc</Filter>
     </ClInclude>
+    <ClInclude Include="GameScene.h">
+      <Filter>04.Scene\GameScene</Filter>
+    </ClInclude>
+    <ClInclude Include="CubeShader.h">
+      <Filter>05.Shader\CubeShader</Filter>
+    </ClInclude>
+    <ClInclude Include="CubeMesh.h">
+      <Filter>02.Component\Mesh\CubeMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>02.Component\Camera</Filter>
+    </ClInclude>
     <ClInclude Include="Transform.h">
-      <Filter>02.Component</Filter>
+      <Filter>02.Component\Transform</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -170,14 +176,11 @@
     <ClCompile Include="MyDescriptorHeap.cpp">
       <Filter>06.etc</Filter>
     </ClCompile>
-    <ClCompile Include="CubeMesh.cpp">
-      <Filter>02.Component\Mesh</Filter>
-    </ClCompile>
     <ClCompile Include="Mesh.cpp">
       <Filter>02.Component\Mesh</Filter>
     </ClCompile>
     <ClCompile Include="GameScene.cpp">
-      <Filter>04.Scene\Inherit</Filter>
+      <Filter>04.Scene\GameScene</Filter>
     </ClCompile>
     <ClCompile Include="GameFramework.cpp">
       <Filter>01.GameBase</Filter>
@@ -189,10 +192,13 @@
       <Filter>02.Component\Camera</Filter>
     </ClCompile>
     <ClCompile Include="CubeShader.cpp">
-      <Filter>05.Shader\Cube</Filter>
+      <Filter>05.Shader\CubeShader</Filter>
+    </ClCompile>
+    <ClCompile Include="CubeMesh.cpp">
+      <Filter>02.Component\Mesh\CubeMesh</Filter>
     </ClCompile>
     <ClCompile Include="Transform.cpp">
-      <Filter>02.Component</Filter>
+      <Filter>02.Component\Transform</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

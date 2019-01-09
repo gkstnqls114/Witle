@@ -22,7 +22,7 @@ protected:
 	virtual ComPtr<ID3D12RootSignature> CreateGraphicsRootSignature(ID3D12Device *pd3dDevice) override; 
 
 	virtual void Update(float ElapsedTime) override;
-
+	virtual void LastUpdate() override;
 
 public:
 	GameScene();
@@ -34,10 +34,8 @@ public:
 	virtual void BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList) override;
 	virtual void ReleaseObjects() override;
 
-	virtual bool ProcessInput(HWND hWnd, POINT OldCursor, float ElapsedTime) override;
-	virtual bool ProcessMouseWheel(HWND hWnd, short WheelData, float ElapsedTime) override;
-
-	virtual void OnprepareRender();
+	virtual bool ProcessInput(HWND hWnd, POINT OldCursor, float ElapsedTime) override; 
+	 
 	virtual void AnimateObjects(float fTimeElapsed) override;
 	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList) override;
 

@@ -538,7 +538,7 @@ void CGameFramework::Update()
 {
 	ProcessInput();
 	AnimateObjects();
-	OnprepareRender();
+	LastUpdate();
 
 }
 
@@ -729,11 +729,11 @@ void CGameFramework::AnimateObjects()
 	//
 }
 
-void CGameFramework::OnprepareRender()
+void CGameFramework::LastUpdate()
 {
 
 	//	if (m_pScene) {
-	//		m_pScene->OnprepareRender();
+	//		m_pScene->LastUpdate();
 	//	}
 }
 
