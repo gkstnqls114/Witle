@@ -13,15 +13,15 @@ class RootConstants :
 	UINT *DestOffsets{ nullptr };
 
 public:
-	RootConstants(UINT paraIndex, UINT resourceCount, T* resources, UINT StartOffset);
+	RootConstants(UINT paraIndex, UINT resourceCount, UINT StartOffset = 0);
 	virtual ~RootConstants();
 
-	void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList, T* resources);
+	void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList, const T resources);
 
 };
 
 template<typename T>
-inline RootConstants<T>::RootConstants(UINT paraIndex, UINT resourceCount, T * resource, UINT StartOffset)
+inline RootConstants<T>::RootConstants(UINT paraIndex, UINT resourceCount, UINT StartOffset)
 {
 	m_parameterIndex = paraIndex;
 	m_ResourceCount = resourceCount;
@@ -30,7 +30,8 @@ inline RootConstants<T>::RootConstants(UINT paraIndex, UINT resourceCount, T * r
 	DestOffsets[0] = StartOffset;
 	for (int x = 1; x < m_ResourceCount; ++x)
 	{
-		DestOffsets[x] = StartOffset + sizeof(T);
+		DestOffsets[x] = StartOffset + (sizeof(T) / 4);
+		std::cout << sizeof(T);
 	}
 }
 
@@ -45,10 +46,10 @@ inline RootConstants<T>::~RootConstants()
 }
 
 template<typename T>
-inline void RootConstants<T>::UpdateShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList, T * resources)
+inline void RootConstants<T>::UpdateShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList, const T resources)
 {
 	for (int x = 0; x < m_ResourceCount; ++x)
 	{
-		pd3dCommandList->SetGraphicsRoot32BitConstants(m_parameterIndex, sizeof(T), T[x], DestOffsets[x]);
+		pd3dCommandList->SetGraphicsRoot32BitConstants(m_parameterIndex, sizeof(T) / 4, &resources, DestOffsets[x]);
 	}
 }

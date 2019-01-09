@@ -5,6 +5,7 @@
 
 Camera::Camera()
 {
+	m_ShaderVariables = new RootConstants<XMFLOAT4X4>(1, 2);
 	m_FamillyID = "Camera";
 }
 
@@ -15,6 +16,7 @@ Camera::Camera(Camera *pCamera)
 		//카메라가 이미 있으면 기존 카메라의 정보를 새로운 카메라에 복사한다.
 		*this = *pCamera;
 	}
+
 }
 
 Camera::~Camera()
@@ -226,110 +228,117 @@ void Camera::GenerateViewMatrix(XMFLOAT3 xmf3Position, XMFLOAT3 xmf3LookAt, XMFL
 
 	GenerateViewMatrix();
 }
-
-void Camera::CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList)
-{
-	// PPT 파이프라인 02 - 68p
-	HRESULT hResult = S_FALSE;
-
-	// 자원 생성
-	UINT HardwareSize = d3dUtil::CalcConstantBufferByteSize(sizeof(VS_CB_MYCAMERA_INFO)); // 256의 배수
-
-	// 힙 속성
-	D3D12_HEAP_PROPERTIES HeapProperties;
-	::ZeroMemory(&HeapProperties, sizeof(D3D12_HEAP_PROPERTIES));
-	HeapProperties.Type = D3D12_HEAP_TYPE_UPLOAD;
-	HeapProperties.CreationNodeMask = 1;
-	HeapProperties.VisibleNodeMask = 1;
-
-	D3D12_RESOURCE_DESC ResourceDesc;
-	::ZeroMemory(&ResourceDesc, sizeof(D3D12_RESOURCE_DESC));
-	ResourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
-	ResourceDesc.Width = HardwareSize; // 256의 배수
-	ResourceDesc.Height = ResourceDesc.SampleDesc.Count = 1;
-	ResourceDesc.DepthOrArraySize = ResourceDesc.MipLevels = 1;
-	ResourceDesc.Format = DXGI_FORMAT_UNKNOWN;
-	ResourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR; // 행우선
-
-														  // 자원을 생성한다.
-	hResult = pd3dDevice->CreateCommittedResource(
-		&HeapProperties,
-		D3D12_HEAP_FLAG_NONE,
-		&ResourceDesc,
-		D3D12_RESOURCE_STATE_GENERIC_READ, // 업로드힙의 초기상태
-		nullptr,
-		IID_PPV_ARGS(&m_d3dCameraCBVUpload));
-
-	assert(hResult == S_OK);
-#if defined(_DEBUG)
-	OutputDebugString(L"...CreateCommittedResource\n");
-#endif
-
-	hResult = m_d3dCameraCBVUpload->Map(0, nullptr, (void**)&m_pMappedCameraInfo);
-	assert(hResult == S_OK);
-#if defined(_DEBUG)
-	OutputDebugString(L"...Constant Buffer Map\n");
-#endif
-
-	::memcpy(&m_pMappedCameraInfo->m_xmf4x4View, &m_xmf4x4View, sizeof(XMFLOAT4X4));
-	::memcpy(&m_pMappedCameraInfo->m_xmf4x4Projection, &m_xmf4x4Projection, sizeof(XMFLOAT4X4));
-
-	// 서술자 힙을 생성한다.
-	D3D12_DESCRIPTOR_HEAP_DESC d3dCBVHeap;
-	::ZeroMemory(&d3dCBVHeap, sizeof(D3D12_DESCRIPTOR_HEAP_DESC));
-	d3dCBVHeap.NumDescriptors = 1; // 현재 서술자는 한개만 연결한다.
-	d3dCBVHeap.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV; // 힙타입 CBV , SRV, UAV
-	d3dCBVHeap.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE; //쉐이더가 해당 자원을 볼 수 있다.
-	d3dCBVHeap.NodeMask = 0;
-	hResult = pd3dDevice->CreateDescriptorHeap(&d3dCBVHeap, IID_PPV_ARGS(&m_d3dCameraCBVDescriptorHeap));
-	assert(hResult == S_OK);
-#if defined(_DEBUG)
-	OutputDebugString(L"...Create CBV Descriptor Heap\n");
-#endif
-
-	////////////// 상수버퍼뷰 생성
-	// ppt 파이프라인 02 - 69p
-
-	// 상수버퍼뷰를 생성하는 것은 CPU(응용프로그램), 사용하는 것은 GPU(쉐이더)
-	D3D12_CPU_DESCRIPTOR_HANDLE d3dCPUdescriptorHandle =
-		m_d3dCameraCBVDescriptorHeap->GetCPUDescriptorHandleForHeapStart();
-	D3D12_GPU_VIRTUAL_ADDRESS d3dGPUVirtualAddress =
-		m_d3dCameraCBVUpload->GetGPUVirtualAddress();
-
-	// 상수버퍼 뷰 구조체
-	D3D12_CONSTANT_BUFFER_VIEW_DESC CBVdesc;
-	::ZeroMemory(&CBVdesc, sizeof(D3D12_CONSTANT_BUFFER_VIEW_DESC));
-	CBVdesc.BufferLocation = d3dGPUVirtualAddress;
-	CBVdesc.SizeInBytes = HardwareSize;
-
-	pd3dDevice->CreateConstantBufferView(
-		&CBVdesc,
-		d3dCPUdescriptorHandle // 상수버퍼뷰를 포함하는 서술자 힙의 시작
-	);
-}
+//
+//void Camera::CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList)
+//{
+//	// PPT 파이프라인 02 - 68p
+//	HRESULT hResult = S_FALSE;
+//
+//	// 자원 생성
+//	UINT HardwareSize = d3dUtil::CalcConstantBufferByteSize(sizeof(VS_CB_MYCAMERA_INFO)); // 256의 배수
+//
+//	// 힙 속성
+//	D3D12_HEAP_PROPERTIES HeapProperties;
+//	::ZeroMemory(&HeapProperties, sizeof(D3D12_HEAP_PROPERTIES));
+//	HeapProperties.Type = D3D12_HEAP_TYPE_UPLOAD;
+//	HeapProperties.CreationNodeMask = 1;
+//	HeapProperties.VisibleNodeMask = 1;
+//
+//	D3D12_RESOURCE_DESC ResourceDesc;
+//	::ZeroMemory(&ResourceDesc, sizeof(D3D12_RESOURCE_DESC));
+//	ResourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
+//	ResourceDesc.Width = HardwareSize; // 256의 배수
+//	ResourceDesc.Height = ResourceDesc.SampleDesc.Count = 1;
+//	ResourceDesc.DepthOrArraySize = ResourceDesc.MipLevels = 1;
+//	ResourceDesc.Format = DXGI_FORMAT_UNKNOWN;
+//	ResourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR; // 행우선
+//
+//														  // 자원을 생성한다.
+//	hResult = pd3dDevice->CreateCommittedResource(
+//		&HeapProperties,
+//		D3D12_HEAP_FLAG_NONE,
+//		&ResourceDesc,
+//		D3D12_RESOURCE_STATE_GENERIC_READ, // 업로드힙의 초기상태
+//		nullptr,
+//		IID_PPV_ARGS(&m_d3dCameraCBVUpload));
+//
+//	assert(hResult == S_OK);
+//#if defined(_DEBUG)
+//	OutputDebugString(L"...CreateCommittedResource\n");
+//#endif
+//
+//	hResult = m_d3dCameraCBVUpload->Map(0, nullptr, (void**)&m_pMappedCameraInfo);
+//	assert(hResult == S_OK);
+//#if defined(_DEBUG)
+//	OutputDebugString(L"...Constant Buffer Map\n");
+//#endif
+//
+//	::memcpy(&m_pMappedCameraInfo->m_xmf4x4View, &m_xmf4x4View, sizeof(XMFLOAT4X4));
+//	::memcpy(&m_pMappedCameraInfo->m_xmf4x4Projection, &m_xmf4x4Projection, sizeof(XMFLOAT4X4));
+//
+//	// 서술자 힙을 생성한다.
+//	D3D12_DESCRIPTOR_HEAP_DESC d3dCBVHeap;
+//	::ZeroMemory(&d3dCBVHeap, sizeof(D3D12_DESCRIPTOR_HEAP_DESC));
+//	d3dCBVHeap.NumDescriptors = 1; // 현재 서술자는 한개만 연결한다.
+//	d3dCBVHeap.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV; // 힙타입 CBV , SRV, UAV
+//	d3dCBVHeap.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE; //쉐이더가 해당 자원을 볼 수 있다.
+//	d3dCBVHeap.NodeMask = 0;
+//	hResult = pd3dDevice->CreateDescriptorHeap(&d3dCBVHeap, IID_PPV_ARGS(&m_d3dCameraCBVDescriptorHeap));
+//	assert(hResult == S_OK);
+//#if defined(_DEBUG)
+//	OutputDebugString(L"...Create CBV Descriptor Heap\n");
+//#endif
+//
+//	////////////// 상수버퍼뷰 생성
+//	// ppt 파이프라인 02 - 69p
+//
+//	// 상수버퍼뷰를 생성하는 것은 CPU(응용프로그램), 사용하는 것은 GPU(쉐이더)
+//	D3D12_CPU_DESCRIPTOR_HANDLE d3dCPUdescriptorHandle =
+//		m_d3dCameraCBVDescriptorHeap->GetCPUDescriptorHandleForHeapStart();
+//	D3D12_GPU_VIRTUAL_ADDRESS d3dGPUVirtualAddress =
+//		m_d3dCameraCBVUpload->GetGPUVirtualAddress();
+//
+//	// 상수버퍼 뷰 구조체
+//	D3D12_CONSTANT_BUFFER_VIEW_DESC CBVdesc;
+//	::ZeroMemory(&CBVdesc, sizeof(D3D12_CONSTANT_BUFFER_VIEW_DESC));
+//	CBVdesc.BufferLocation = d3dGPUVirtualAddress;
+//	CBVdesc.SizeInBytes = HardwareSize;
+//
+//	pd3dDevice->CreateConstantBufferView(
+//		&CBVdesc,
+//		d3dCPUdescriptorHandle // 상수버퍼뷰를 포함하는 서술자 힙의 시작
+//	);
+//}
 
 void Camera::UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList)
 {
 	XMFLOAT4X4 xmf4x4View;
 	XMStoreFloat4x4(&xmf4x4View, XMMatrixTranspose(XMLoadFloat4x4(&m_xmf4x4View)));
-	::memcpy(&m_pMappedCameraInfo->m_xmf4x4View, &xmf4x4View, sizeof(XMFLOAT4X4));
+	//::memcpy(&m_pMappedCameraInfo->m_xmf4x4View, &xmf4x4View, sizeof(XMFLOAT4X4));
 
 	XMFLOAT4X4 xmf4x4Projection;
 	XMStoreFloat4x4(&xmf4x4Projection, XMMatrixTranspose(XMLoadFloat4x4(&m_xmf4x4Projection)));
-	::memcpy(&m_pMappedCameraInfo->m_xmf4x4Projection, &xmf4x4Projection, sizeof(XMFLOAT4X4));
+	//::memcpy(&m_pMappedCameraInfo->m_xmf4x4Projection, &xmf4x4Projection, sizeof(XMFLOAT4X4));
 
-	//카메라 위치 복사
-	::memcpy(&m_pMappedCameraInfo->m_xmf3Position, &m_Position, sizeof(XMFLOAT3));
+	////카메라 위치 복사
+	//::memcpy(&m_pMappedCameraInfo->m_xmf3Position, &m_Position, sizeof(XMFLOAT3));
 
 	//pd3dCommandList->SetGraphicsRootConstantBufferView(1, m_d3dCameraCBVUpload->GetGPUVirtualAddress());
-	pd3dCommandList->SetGraphicsRoot32BitConstants(1, 16, &xmf4x4View, 0);
-	pd3dCommandList->SetGraphicsRoot32BitConstants(1, 16, &xmf4x4Projection, 16);
+	// pd3dCommandList->SetGraphicsRoot32BitConstants(1, 16, &xmf4x4View, 0);
+	//pd3dCommandList->SetGraphicsRoot32BitConstants(1, 16, &xmf4x4Projection, 16);
+	XMFLOAT4X4 CameraMatrixs[2] = { m_xmf4x4View , m_xmf4x4Projection };
+
+	if (m_ShaderVariables)
+	{
+		static_cast<RootConstants<XMFLOAT4X4> *>(m_ShaderVariables)->UpdateShaderVariables(pd3dCommandList, m_xmf4x4View);
+		static_cast<RootConstants<XMFLOAT4X4> *>(m_ShaderVariables)->UpdateShaderVariables(pd3dCommandList, m_xmf4x4Projection);
+	}
 }
 
-void Camera::ReleaseShaderVariables()
-{
-
-}
+//void Camera::ReleaseShaderVariables()
+//{
+//
+//}
 
 void Camera::SetViewportsAndScissorRects(ID3D12GraphicsCommandList *pd3dCommandList)
 {

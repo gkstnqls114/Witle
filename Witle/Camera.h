@@ -1,4 +1,5 @@
 #pragma once
+#include "RootConstants.h"
 #include "ComponentBase.h"
 
 struct VS_CB_MYCAMERA_INFO
@@ -41,10 +42,11 @@ protected:
 	D3D12_VIEWPORT	m_d3dViewport{ 0, 0, FRAME_BUFFER_WIDTH , FRAME_BUFFER_HEIGHT, 0.0f, 1.0f };
 	D3D12_RECT		m_d3dScissorRect{ 0, 0, FRAME_BUFFER_WIDTH , FRAME_BUFFER_HEIGHT };
 
-	// 쉐이더
-	VS_CB_MYCAMERA_INFO*				m_pMappedCameraInfo{ nullptr };
-	ComPtr<ID3D12Resource>			m_d3dCameraCBVUpload{ nullptr };
-	ComPtr<ID3D12DescriptorHeap>	m_d3dCameraCBVDescriptorHeap{ nullptr };
+	//// 쉐이더
+	//VS_CB_MYCAMERA_INFO*				m_pMappedCameraInfo{ nullptr };
+	//ComPtr<ID3D12Resource>			m_d3dCameraCBVUpload{ nullptr };
+	//ComPtr<ID3D12DescriptorHeap>	m_d3dCameraCBVDescriptorHeap{ nullptr };
+	ResourceBase	*m_ShaderVariables{ nullptr };
 
 	//절두체(월드 좌표계)
 	BoundingFrustum m_xmFrustum;
@@ -55,8 +57,7 @@ protected:
 	//절두체(월드 좌표계)를 생성한다.
 	void GenerateFrustum();
 	
-	void MoveAroundCamera(const XMFLOAT3& Shift);
-
+	void MoveAroundCamera(const XMFLOAT3& Shift); 
 	void RotateOnCamera(float x, float y, float z);
 
 public:
@@ -72,10 +73,10 @@ public:
 	virtual void ZoomIn(float val);
 	virtual void ZoomOut(float val);
 
-	//카메라의 정보를 셰이더 프로그램에게 전달하기 위한 상수 버퍼를 생성하고 갱신한다.
-	virtual void CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
+	////카메라의 정보를 셰이더 프로그램에게 전달하기 위한 상수 버퍼를 생성하고 갱신한다.
+	//virtual void CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
 	virtual void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList);
-	virtual void ReleaseShaderVariables();
+	//virtual void ReleaseShaderVariables();
 
 	//바운딩 박스(OOBB, 월드 좌표계)가 절두체에 포함되는 가를 검사한다.
 	bool IsInFrustum(const BoundingOrientedBox& xmBoundingBox) const;
