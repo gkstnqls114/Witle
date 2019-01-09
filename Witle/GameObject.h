@@ -11,7 +11,7 @@ public:
 	GameObject(std::string entityID) : m_EntityID(entityID) {};
 	virtual ~GameObject();
 
-	void Update() {};
+	void Update();
 	
 	bool InsertComponent(const std::string& ComponenetID, ComponentBase* pComponentBase);
 	
