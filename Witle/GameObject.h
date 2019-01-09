@@ -5,10 +5,9 @@ class ComponentBase;
 class GameObject
 {
 protected:
-
+	ComponentBase* GetComponent(const std::string& id) const;
 
 public:
-	ComponentBase* GetComponent(const std::string& id) const;
 	GameObject(std::string entityID) : m_EntityID(entityID) {};
 	virtual ~GameObject();
 

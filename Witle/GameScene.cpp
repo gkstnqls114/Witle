@@ -321,11 +321,12 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	pd3dCommandList->SetGraphicsRoot32BitConstants(0, 16, &matrix, 0);
 	//pd3dCommandList->SetGraphicsRoot32BitConstants(0, 16, &matrix, 16);
 	//pd3dCommandList->SetGraphicsRoot32BitConstants(0, 16, &matrix, 32);
-	(static_cast<Camera *>(m_Camera->GetComponent("Camera")))->UpdateShaderVariables(pd3dCommandList);
+
+	m_Camera->GetComponent<Camera>("Camera")->UpdateShaderVariables(pd3dCommandList);
 	
 	// ·»´õ¸µ
 	extern MeshRenderer gMeshRenderer;
-	Mesh* mesh = static_cast<Mesh *>(m_GameObject->GetComponent("Mesh"));
+	Mesh* mesh = m_GameObject->GetComponent<Mesh>("Mesh");
 	gMeshRenderer.Render(pd3dCommandList, mesh);
 
 	
@@ -628,7 +629,7 @@ ComPtr<ID3D12RootSignature> GameScene::CreateGraphicsRootSignature(ID3D12Device 
 void GameScene::Update(float ElapsedTime)
 {
 	if (m_Camera) {
-		(static_cast<Camera *>(m_Camera->GetComponent("Camera")))->Update();
+		m_Camera->GetComponent<Camera>("Camera")->Update(); 
 	}
 
 }
