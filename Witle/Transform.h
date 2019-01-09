@@ -10,6 +10,7 @@ class Transform :
 
 	XMFLOAT4X4 m_transformWorld { Matrix4x4::Identity() };
 
+	void SetTransform(const XMFLOAT3& right, const XMFLOAT3& up, const XMFLOAT3& look, const XMFLOAT3& pos);
 public:
 	Transform();
 	virtual ~Transform();
@@ -17,7 +18,6 @@ public:
 	virtual void Update() override;
 
 	void Rotate(float x, float y, float z);
-
 	
 	//////////////////////////////////////////////// Get
 	XMFLOAT4X4 GetWorldMatrix() const { return m_transformWorld; }

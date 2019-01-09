@@ -1,9 +1,21 @@
 #include "stdafx.h"
+#include "Transform.h"
 #include "ComponentBase.h"
 #include "GameObject.h"
  
+GameObject::GameObject(std::string entityID)
+	: m_EntityID(entityID)
+{
+	m_Transform = new Transform;
+}
+
 GameObject::~GameObject()
 {
+	if (m_Transform)
+	{
+		delete m_Transform;
+		m_Transform = nullptr;
+	}
 }
 
 void GameObject::Update()

@@ -115,7 +115,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	 
 	extern MeshRenderer gMeshRenderer;
 
-	ComponentBase* cubemesh = new CubeMesh(pd3dDevice, pd3dCommandList, 5, 5, 5);
+	ComponentBase* cubemesh = new CubeMesh(pd3dDevice, pd3dCommandList, 0.5, 0.5, 0.5);
 	std::cout << cubemesh->GetFamillyID() << " " << cubemesh->GetComponentID() << std::endl;
 	m_GameObject = new GameObject("Player");
 	m_GameObject->InsertComponent(gMeshRenderer.GetFamillyID(), &gMeshRenderer);
@@ -256,8 +256,9 @@ bool GameScene::ProcessInput(HWND hWnd, POINT OldCursor, float ElapsedTime)
 			cxDelta는 z-축의 회전을 나타낸다.*/
 			if (pKeyBuffer[VK_RBUTTON] & 0xF0) {
 				
+
 				Transform* tr = m_GameObject->GetComponent<Transform>("Transform");
-				if(tr) tr->Rotate(cyDelta, 0.0f, -cxDelta);
+				tr->Rotate(cyDelta, 0.0f, -cxDelta);
 				// m_Camera->Rotate(cyDelta, 0.0f, -cxDelta);
 			}
 			else {
@@ -293,6 +294,8 @@ bool GameScene::ProcessInput(HWND hWnd, POINT OldCursor, float ElapsedTime)
 
 void GameScene::LastUpdate()
 {
+	Transform* tr = m_GameObject->GetComponent<Transform>("Transform");
+	tr->Rotate(1.f, 0.0f, 0.0f);
 
 }
 
@@ -318,7 +321,7 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	
 	// 쉐이더 변수 설정
 	XMFLOAT4X4 matrix = Matrix4x4::Identity(); 
-	pd3dCommandList->SetGraphicsRoot32BitConstants(0, 16, &matrix, 0);
+	pd3dCommandList->SetGraphicsRoot32BitConstants(0, 16, &m_GameObject->GetComponent<Transform>("")->GetWorldMatrix(), 0);
 	//pd3dCommandList->SetGraphicsRoot32BitConstants(0, 16, &matrix, 16);
 	//pd3dCommandList->SetGraphicsRoot32BitConstants(0, 16, &matrix, 32);
 

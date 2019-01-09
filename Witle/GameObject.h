@@ -1,14 +1,15 @@
-#pragma once 
-#include <typeinfo.h>
+#pragma once  
+class Transform;
 class ComponentBase;
 
 class GameObject
 {
 protected:
+	Transform* m_Transform{ nullptr }; //월드변환을 위한 좌표계
 	ComponentBase* GetComponent(const std::string& id) const;
 
 public:
-	GameObject(std::string entityID) : m_EntityID(entityID) {};
+	GameObject(std::string entityID);
 	virtual ~GameObject();
 
 	void Update();
@@ -20,7 +21,8 @@ public:
 	{
 		return static_cast<T *>(GetComponent(id));
 	}
-
+	template <>
+	Transform* GetComponent(const std::string& id) const { return m_Transform; }
 	
 private:
 	std::map< std::string, ComponentBase*> m_Components;
