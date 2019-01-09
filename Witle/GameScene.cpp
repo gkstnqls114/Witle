@@ -255,11 +255,13 @@ bool GameScene::ProcessInput(HWND hWnd, POINT OldCursor, float ElapsedTime)
 			/*cxDelta는 y-축의 회전을 나타내고 cyDelta는 x-축의 회전을 나타낸다. 오른쪽 마우스 버튼이 눌려진 경우
 			cxDelta는 z-축의 회전을 나타낸다.*/
 			if (pKeyBuffer[VK_RBUTTON] & 0xF0) {
-				static_cast<Transform*>(m_GameObject->GetComponent("Transform"))->Rotate(cyDelta, 0.0f, -cxDelta);
+				
+				Transform* tr = m_GameObject->GetComponent<Transform>("Transform");
+				if(tr) tr->Rotate(cyDelta, 0.0f, -cxDelta);
 				// m_Camera->Rotate(cyDelta, 0.0f, -cxDelta);
 			}
 			else {
-				static_cast<Transform*>(m_GameObject->GetComponent("Transform"))->Rotate(cyDelta, cxDelta, 0.0f);
+				// static_cast<Transform*>(m_GameObject->GetComponent("Transform"))->Rotate(cyDelta, cxDelta, 0.0f);
 
 				// m_Camera->Rotate(cyDelta, cxDelta, 0.0f);
 			}

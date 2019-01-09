@@ -23,12 +23,7 @@ bool GameObject::InsertComponent(const std::string & ComponenetID, ComponentBase
 	}
 }
 
-ComponentBase * GameObject::GetComponent(const std::string & id)
-{
-	return (*(m_Components.find(id))).second; 
-}
-
-const ComponentBase * GameObject::GetComponent(const std::string & id) const
+ComponentBase * GameObject::GetComponent(const std::string & id) const
 {
 	return (*(m_Components.find(id))).second;
 }
