@@ -24,22 +24,12 @@ Camera::~Camera()
 
 void Camera::Move(const XMFLOAT3 & Shift)
 {
-	if (m_pTarget) {
-		MoveAroundLookingobject(Shift);
-	}
-	else {
-		MoveAroundCamera(Shift);
-	}
+	MoveAroundCamera(Shift);
 }
 
 void Camera::Rotate(float x, float y, float z)
-{
-	if (m_pTarget) {
-		RotateOnLookingobject(x, y, z);
-	}
-	else {
-		RotateOnCamera(x, y, z);
-	}
+{ 
+	RotateOnCamera(x, y, z);
 }
 
 void Camera::RegenerateAt()

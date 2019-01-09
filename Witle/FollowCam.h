@@ -11,5 +11,8 @@ public:
 
 	void SetLookingObject(GameObject* pLookingObject) { m_pTarget = pLookingObject; }
 
+	virtual void Move(const XMFLOAT3 & Shift) override;
+	virtual void Rotate(float x, float y, float z) override;
+
 };
 
