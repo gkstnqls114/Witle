@@ -534,11 +534,19 @@ void CGameFramework::ReleaseObjects()
 	}
 }
 
-void CGameFramework::Update()
+void CGameFramework::UpdateGamelogic()
 {
-	ProcessInput();
-	AnimateObjects();
-	LastUpdate();
+	
+	if (m_pScene) {
+		m_pScene->ProcessInput(m_hWnd, m_ptOldCursorPos, CGameTimer::GetInstance()->GetTimeElapsed());
+		m_pScene->Update(0);
+		m_pScene->LastUpdate();
+
+		// 현재 애니메이션 어디다가 쓰는지 모르겠다.
+		//m_pScene->AnimateObjects(0);
+
+	}
+	 
 
 }
 
@@ -708,33 +716,6 @@ void CGameFramework::OnResizeBackBuffers()
 	m_CommandQueue->ExecuteCommandLists(1, ppd3dCommandLists);
 	
 	WaitForGpuComplete();
-}
-
-void CGameFramework::ProcessInput()
-{
-	// 키보드 값을 통해 플레이어 이동
-	if (m_pScene) {
-		m_pScene->ProcessInput(m_hWnd, m_ptOldCursorPos, CGameTimer::GetInstance()->GetTimeElapsed());
-		// m_pScene->ProcessMouseWheel(m_hWnd, m_MouseWheelData, CGameTimer::GetInstance()->GetTimeElapsed());
-	}
-//	m_MouseWheelData = MOUSE_WHEEL_STOP;
-// 
-}
-
-void CGameFramework::AnimateObjects()
-{ 
-	//	if (m_pScene) {
-	//		m_pScene->AnimateObjects(CGameTimer::GetInstance()->GetTimeElapsed());
-	//	}
-	//
-}
-
-void CGameFramework::LastUpdate()
-{
-
-	//	if (m_pScene) {
-	//		m_pScene->LastUpdate();
-	//	}
 }
 
 void CGameFramework::RenderGBuffers()

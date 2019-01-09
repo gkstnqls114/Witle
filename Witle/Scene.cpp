@@ -3,17 +3,11 @@
 
 #define _WITH_PLAYER_TOP
 
-CScene::CScene()
+Scene::Scene()
 {
 
 }
 
-CScene::~CScene()
+Scene::~Scene()
 {
-}
-
-void CScene::UpdateGamelogic(float ElapsedTime)
-{
-	Update(ElapsedTime);
-	LastUpdate();
 }

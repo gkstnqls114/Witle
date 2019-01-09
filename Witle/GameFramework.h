@@ -2,7 +2,7 @@
 #include "MeshRenderer.h"
 #define _WITH_PLAYER_TOP
 
-class CScene;
+class Scene;
 class CameraInfoFont;
 
 class CGameFramework
@@ -115,11 +115,6 @@ private:
 	//윈도우 클라이언트 영역의 크기가 바뀌면 실행하는 함수.
 	void OnResizeBackBuffers();
 
-	// Update() 내부에서 사용하는 함수들이다.
-	void ProcessInput();
-	void AnimateObjects();
-	void LastUpdate();
-
 	// Render() 내부에서 사용하는 함수들이다.	
 	void RenderGBuffers(); // GBuffer에 Render
 	void Blur(); // 계산쉐이더를 통해 블러링한다.
@@ -138,7 +133,7 @@ public:
 	void OnDestroy();
 
 	//프레임워크의 핵심(사용자 입력, 애니메이션)을 구성하는 함수이다. 
-	void Update();
+	void UpdateGamelogic();
 	// 렌더링을 처리하는 함수이다.
 	void Render();
 
@@ -149,7 +144,7 @@ private:
 	POINT m_ptOldCursorPos;
 	short m_MouseWheelData{ 0 }; // 120: 휠을 올렸을때, -120: 휠을 내렸을때, 한번 휠을 올리거나 내리면 그 상태로 계속 저장되므로 0으로 다시 만들어줘야함
 	 
-	CScene *m_pScene{ nullptr };
+	Scene *m_pScene{ nullptr };
 	
 	
 };

@@ -1,18 +1,14 @@
 #pragma once 
 
-class CScene
+class Scene
 {
 protected:
 	//그래픽 루트 시그너쳐를 생성한다.
 	virtual ComPtr<ID3D12RootSignature> CreateGraphicsRootSignature(ID3D12Device *pd3dDevice) = 0;
 
-	// UpdateGamelogic 내부에서 Update, LastUpdate 순으로 호출되는 함수이다. 
-	virtual void Update(float ElapsedTime) = 0;
-	virtual void LastUpdate() = 0;
-
 public:
-	CScene();
-	virtual ~CScene();
+	Scene();
+	virtual ~Scene();
 
 	//씬에서 마우스와 키보드 메시지를 처리한다.
 	virtual bool OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam) = 0;
@@ -27,10 +23,12 @@ public:
 	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList) = 0;
 
 	virtual void ReleaseUploadBuffers() = 0;
-	
 
+	// UpdateGamelogic 외부에서 UpdateGamelogic, LastUpdate 순으로 호출되는 함수이다. 
+	virtual void Update(float ElapsedTime) = 0;
+	virtual void LastUpdate() = 0;
 
-	void UpdateGamelogic(float ElapsedTime);
+	 
 	ID3D12RootSignature* GetGraphicsRootSignature() const { return m_pd3dGraphicsRootSignature.Get(); }
 
 protected:

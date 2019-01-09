@@ -1912,7 +1912,7 @@ inline ID3D12CommandList * const * CommandListCast(ID3D12GraphicsCommandList * c
 }
 
 //------------------------------------------------------------------------------------------------
-// D3D12 exports a new method for serializing root signatures in the Windows 10 Anniversary Update.
+// D3D12 exports a new method for serializing root signatures in the Windows 10 Anniversary UpdateGamelogic.
 // To help enable root signature 1.1 features when they are available and not require maintaining
 // two code paths for building root signatures, this helper method reconstructs a 1.0 signature when
 // 1.1 is not supported.

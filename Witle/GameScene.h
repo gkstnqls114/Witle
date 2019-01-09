@@ -11,7 +11,7 @@ struct CB_OBJECT_INFO // b1
 class GameObject;
 
 class GameScene
-	: public CScene
+	: public Scene
 {
 	POINT m_ptOldCursorPos;
 
