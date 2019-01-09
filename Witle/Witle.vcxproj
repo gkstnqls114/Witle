@@ -163,6 +163,8 @@
     <ClInclude Include="MeshRenderer.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="MyDescriptorHeap.h" />
+    <ClInclude Include="ResourceBase.h" />
+    <ClInclude Include="RootConstants.h" />
     <ClInclude Include="ShaderManager.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Resource.h" />
@@ -189,6 +191,8 @@
     <ClCompile Include="MeshRenderer.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="MyDescriptorHeap.cpp" />
+    <ClCompile Include="ResourceBase.cpp" />
+    <ClCompile Include="RootConstants.cpp" />
     <ClCompile Include="ShaderManager.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Scene.cpp" />

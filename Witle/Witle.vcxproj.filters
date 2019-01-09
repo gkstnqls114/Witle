@@ -8,13 +8,6 @@
     <Filter Include="01.GameBase">
       <UniqueIdentifier>{ade4ec6a-59ed-47e5-b507-1a53d83d6f7f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="00.Resource">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
-    <Filter Include="00.Resource\Shader">
-      <UniqueIdentifier>{db89ae39-7d4f-4275-9206-40edcd5d4780}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.Component">
       <UniqueIdentifier>{e0d43984-5afe-4a2c-bd8b-a0ca9b54aaca}</UniqueIdentifier>
     </Filter>
@@ -36,10 +29,6 @@
     <Filter Include="05.Shader">
       <UniqueIdentifier>{c71c2a0d-b962-4d5c-ac07-4c3b249dbebf}</UniqueIdentifier>
     </Filter>
-    <Filter Include="06.etc">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
     <Filter Include="02.Component\Camera">
       <UniqueIdentifier>{97a51fee-d2d6-4527-a559-c0e182ff3bb1}</UniqueIdentifier>
     </Filter>
@@ -57,6 +46,23 @@
     </Filter>
     <Filter Include="02.Component\Camera\FollowCam">
       <UniqueIdentifier>{30946cd8-6188-4005-beca-1055cfb62f9b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="리소스 파일">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="리소스 파일\Shader">
+      <UniqueIdentifier>{db89ae39-7d4f-4275-9206-40edcd5d4780}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.Resource">
+      <UniqueIdentifier>{b509f97f-0204-4199-ab34-2f29f432f6e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="99.etc">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="07.Resource\RootConstants">
+      <UniqueIdentifier>{1d7222fc-cbb4-4cf7-b4ea-c36ed29f4ce2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -115,13 +121,13 @@
       <Filter>05.Shader</Filter>
     </ClInclude>
     <ClInclude Include="d3dUtil.h">
-      <Filter>06.etc</Filter>
+      <Filter>99.etc</Filter>
     </ClInclude>
     <ClInclude Include="DDSTextureLoader12.h">
-      <Filter>06.etc</Filter>
+      <Filter>99.etc</Filter>
     </ClInclude>
     <ClInclude Include="MyDescriptorHeap.h">
-      <Filter>06.etc</Filter>
+      <Filter>99.etc</Filter>
     </ClInclude>
     <ClInclude Include="GameScene.h">
       <Filter>04.Scene\GameScene</Filter>
@@ -141,19 +147,25 @@
     <ClInclude Include="FollowCam.h">
       <Filter>02.Component\Camera\FollowCam</Filter>
     </ClInclude>
+    <ClInclude Include="ResourceBase.h">
+      <Filter>07.Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="RootConstants.h">
+      <Filter>07.Resource\RootConstants</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
-      <Filter>06.etc</Filter>
+      <Filter>99.etc</Filter>
     </ClCompile>
     <ClCompile Include="Witle.cpp">
-      <Filter>06.etc</Filter>
+      <Filter>99.etc</Filter>
     </ClCompile>
     <ClCompile Include="d3dUtil.cpp">
-      <Filter>06.etc</Filter>
+      <Filter>99.etc</Filter>
     </ClCompile>
     <ClCompile Include="DDSTextureLoader12.cpp">
-      <Filter>06.etc</Filter>
+      <Filter>99.etc</Filter>
     </ClCompile>
     <ClCompile Include="Scene.cpp">
       <Filter>04.Scene</Filter>
@@ -180,7 +192,7 @@
       <Filter>05.Shader</Filter>
     </ClCompile>
     <ClCompile Include="MyDescriptorHeap.cpp">
-      <Filter>06.etc</Filter>
+      <Filter>99.etc</Filter>
     </ClCompile>
     <ClCompile Include="Mesh.cpp">
       <Filter>02.Component\Mesh</Filter>
@@ -209,23 +221,29 @@
     <ClCompile Include="FollowCam.cpp">
       <Filter>02.Component\Camera\FollowCam</Filter>
     </ClCompile>
+    <ClCompile Include="ResourceBase.cpp">
+      <Filter>07.Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="RootConstants.cpp">
+      <Filter>07.Resource\RootConstants</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Witle.rc">
-      <Filter>00.Resource</Filter>
+      <Filter>리소스 파일</Filter>
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="small.ico">
-      <Filter>00.Resource</Filter>
+      <Filter>리소스 파일</Filter>
     </Image>
     <Image Include="Witle.ico">
-      <Filter>00.Resource</Filter>
+      <Filter>리소스 파일</Filter>
     </Image>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="CubeShader.hlsl">
-      <Filter>00.Resource\Shader</Filter>
+      <Filter>리소스 파일\Shader</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>
