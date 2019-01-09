@@ -13,6 +13,7 @@ class GameObject;
 class GameScene
 	: public Scene
 {
+
 	POINT m_ptOldCursorPos;
 
 	bool SaveData();
@@ -20,9 +21,6 @@ class GameScene
 protected:
 	//그래픽 루트 시그너쳐를 생성한다.
 	virtual ComPtr<ID3D12RootSignature> CreateGraphicsRootSignature(ID3D12Device *pd3dDevice) override; 
-
-	virtual void Update(float ElapsedTime) override;
-	virtual void LastUpdate() override;
 
 public:
 	GameScene();
@@ -40,6 +38,9 @@ public:
 	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList) override;
 
 	virtual void ReleaseUploadBuffers() override;
+
+	virtual void Update(float ElapsedTime) override;
+	virtual void LastUpdate() override;
 
 protected:
 	GameObject* m_GameObject; 
