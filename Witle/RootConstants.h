@@ -16,7 +16,7 @@ public:
 	RootConstants(UINT paraIndex, UINT resourceCount, UINT StartOffset = 0);
 	virtual ~RootConstants();
 
-	void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList, const T resources);
+	void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList, const XMFLOAT4X4 *resources);
 
 };
 
@@ -46,10 +46,10 @@ inline RootConstants<T>::~RootConstants()
 }
 
 template<typename T>
-inline void RootConstants<T>::UpdateShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList, const T resources)
+inline void RootConstants<T>::UpdateShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList, const XMFLOAT4X4 *resources)
 {
 	for (int x = 0; x < m_ResourceCount; ++x)
 	{
-		pd3dCommandList->SetGraphicsRoot32BitConstants(m_parameterIndex, sizeof(T) / 4, &resources, DestOffsets[x]);
+		pd3dCommandList->SetGraphicsRoot32BitConstants(m_parameterIndex, sizeof(T) / 4, &(resources[x]), DestOffsets[x]);
 	}
 }

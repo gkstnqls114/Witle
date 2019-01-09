@@ -326,12 +326,13 @@ void Camera::UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList)
 	//pd3dCommandList->SetGraphicsRootConstantBufferView(1, m_d3dCameraCBVUpload->GetGPUVirtualAddress());
 	// pd3dCommandList->SetGraphicsRoot32BitConstants(1, 16, &xmf4x4View, 0);
 	//pd3dCommandList->SetGraphicsRoot32BitConstants(1, 16, &xmf4x4Projection, 16);
-	XMFLOAT4X4 CameraMatrixs[2] = { m_xmf4x4View , m_xmf4x4Projection };
+	XMFLOAT4X4 CameraMatrixs[2] = { xmf4x4View , xmf4x4Projection };
+	/*CameraMatrixs[0] = xmf4x4View;
+	CameraMatrixs[1] = xmf4x4Projection;*/
 
 	if (m_ShaderVariables)
 	{
-		static_cast<RootConstants<XMFLOAT4X4> *>(m_ShaderVariables)->UpdateShaderVariables(pd3dCommandList, m_xmf4x4View);
-		static_cast<RootConstants<XMFLOAT4X4> *>(m_ShaderVariables)->UpdateShaderVariables(pd3dCommandList, m_xmf4x4Projection);
+		static_cast<RootConstants<XMFLOAT4X4> *>(m_ShaderVariables)->UpdateShaderVariables(pd3dCommandList, CameraMatrixs);
 	}
 }
 
