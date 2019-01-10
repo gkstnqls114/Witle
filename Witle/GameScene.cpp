@@ -121,8 +121,8 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	m_GameObject->InsertComponent(gMeshRenderer.GetFamillyID(), &gMeshRenderer);
 	m_GameObject->InsertComponent(cubemesh->GetFamillyID(), cubemesh);
 
-	FollowCam* cameraComponent = new FollowCam();
-	cameraComponent->SetTarget(m_GameObject);
+	Camera* cameraComponent = new Camera();
+	// cameraComponent->SetTarget(m_GameObject);
 	m_Camera = new GameObject("Camera");
 	m_Camera->InsertComponent(cameraComponent->GetFamillyID(), cameraComponent);
 
@@ -252,20 +252,19 @@ bool GameScene::ProcessInput(HWND hWnd, POINT OldCursor, float ElapsedTime)
 	{
 		if (cxDelta || cyDelta)
 		{
+			m_Camera->GetComponent<Camera>("Camera")->Rotate(cyDelta, 0.0f, -cxDelta);
+
 			/*cxDelta는 y-축의 회전을 나타내고 cyDelta는 x-축의 회전을 나타낸다. 오른쪽 마우스 버튼이 눌려진 경우
 			cxDelta는 z-축의 회전을 나타낸다.*/
-			if (pKeyBuffer[VK_RBUTTON] & 0xF0) {
-				
+			//if (pKeyBuffer[VK_RBUTTON] & 0xF0) { 
+			//	Transform* tr = m_GameObject->GetComponent<Transform>("Transform");
+			//	tr->Rotate(cyDelta, 0.0f, -cxDelta);
+			//}
+			//else {
+			//	// static_cast<Transform*>(m_GameObject->GetComponent("Transform"))->Rotate(cyDelta, cxDelta, 0.0f);
 
-				Transform* tr = m_GameObject->GetComponent<Transform>("Transform");
-				tr->Rotate(cyDelta, 0.0f, -cxDelta);
-				// m_Camera->Rotate(cyDelta, 0.0f, -cxDelta);
-			}
-			else {
-				// static_cast<Transform*>(m_GameObject->GetComponent("Transform"))->Rotate(cyDelta, cxDelta, 0.0f);
-
-				// m_Camera->Rotate(cyDelta, cxDelta, 0.0f);
-			}
+			//	// m_Camera->Rotate(cyDelta, cxDelta, 0.0f);
+			//}
 		}
 		/*플레이어를 dwDirection 방향으로 이동한다(실제로는 속도 벡터를 변경한다). 이동 거리는 시간에 비례하도록 한다.
 		플레이어의 이동 속력은 (50/초)로 가정한다.*/
@@ -294,8 +293,6 @@ bool GameScene::ProcessInput(HWND hWnd, POINT OldCursor, float ElapsedTime)
 
 void GameScene::LastUpdate()
 {
-	Transform* tr = m_GameObject->GetComponent<Transform>("Transform");
-	tr->Rotate(1.f, 0.0f, 0.0f);
 
 }
 

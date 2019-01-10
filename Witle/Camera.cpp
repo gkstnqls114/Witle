@@ -28,6 +28,14 @@ Camera::~Camera()
 	}
 }
 
+void Camera::Teleport(const XMFLOAT3 & pos)
+{
+	m_Position = pos;
+	m_xmf4x4View._41 = pos.x;
+	m_xmf4x4View._42 = pos.y;
+	m_xmf4x4View._43 = pos.z;
+}
+
 void Camera::Move(const XMFLOAT3 & Shift)
 {
 	MoveAroundCamera(Shift);
@@ -100,12 +108,12 @@ void Camera::RotateOnCamera(float x, float y, float z)
 		m_Look = Vector3::TransformNormal(m_Look, xmmtxRotate);
 
 		// Position에서 At으로 향하는 Offset 을 회전한다.
-		XMFLOAT3 PosToAt_Offset = Vector3::ScalarProduct(m_Offset, -1, false);
-		m_Offset = Vector3::TransformCoord(PosToAt_Offset, xmmtxRotate);
-		m_At = Vector3::Add(m_Position, m_Offset);
+		//XMFLOAT3 PosToAt_Offset = Vector3::ScalarProduct(m_Offset, -1, false);
+		//m_Offset = Vector3::TransformCoord(PosToAt_Offset, xmmtxRotate);
+		//m_At = Vector3::Add(m_Position, m_Offset);
 
 		// 다시 At 에서 Position으로 향하게 만들어준다.
-		m_Offset = Vector3::ScalarProduct(m_Offset, -1, false);
+		//m_Offset = Vector3::ScalarProduct(m_Offset, -1, false);
 	}
 	if ((y != 0.0f))
 	{
@@ -115,13 +123,13 @@ void Camera::RotateOnCamera(float x, float y, float z)
 		m_Up = Vector3::TransformNormal(m_Up, xmmtxRotate);
 		m_Look = Vector3::TransformNormal(m_Look, xmmtxRotate);
 
-		// Position에서 At으로 향하는 Offset 을 회전한다.
-		XMFLOAT3 PosToAt_Offset = Vector3::ScalarProduct(m_Offset, -1, false);
-		m_Offset = Vector3::TransformCoord(PosToAt_Offset, xmmtxRotate);
-		m_At = Vector3::Add(m_Position, m_Offset);
+		//// Position에서 At으로 향하는 Offset 을 회전한다.
+		//XMFLOAT3 PosToAt_Offset = Vector3::ScalarProduct(m_Offset, -1, false);
+		//m_Offset = Vector3::TransformCoord(PosToAt_Offset, xmmtxRotate);
+		//m_At = Vector3::Add(m_Position, m_Offset);
 
-		// 다시 At 에서 Position으로 향하게 만들어준다.
-		m_Offset = Vector3::ScalarProduct(m_Offset, -1, false);
+		//// 다시 At 에서 Position으로 향하게 만들어준다.
+		//m_Offset = Vector3::ScalarProduct(m_Offset, -1, false);
 	}
 	if (z != 0.0f)
 	{
@@ -131,13 +139,13 @@ void Camera::RotateOnCamera(float x, float y, float z)
 		m_Up = Vector3::TransformNormal(m_Up, xmmtxRotate);
 		m_Look = Vector3::TransformNormal(m_Look, xmmtxRotate);
 
-		// Position에서 At으로 향하는 Offset 을 회전한다.
-		XMFLOAT3 PosToAt_Offset = Vector3::ScalarProduct(m_Offset, -1, false);
-		m_Offset = Vector3::TransformCoord(PosToAt_Offset, xmmtxRotate);
-		m_At = Vector3::Add(m_Position, m_Offset);
+		//// Position에서 At으로 향하는 Offset 을 회전한다.
+		//XMFLOAT3 PosToAt_Offset = Vector3::ScalarProduct(m_Offset, -1, false);
+		//m_Offset = Vector3::TransformCoord(PosToAt_Offset, xmmtxRotate);
+		//m_At = Vector3::Add(m_Position, m_Offset);
 
-		// 다시 At 에서 Position으로 향하게 만들어준다.
-		m_Offset = Vector3::ScalarProduct(m_Offset, -1, false);
+		//// 다시 At 에서 Position으로 향하게 만들어준다.
+		//m_Offset = Vector3::ScalarProduct(m_Offset, -1, false);
 	}
 
 	/*회전으로 인해 플레이어의 로컬 x-축, y-축, z-축이 서로 직교하지 않을 수 있으므로 z-축(LookAt 벡터)을 기준으
@@ -204,7 +212,8 @@ void Camera::SetScissorRect(LONG xLeft, LONG yTop, LONG xRight, LONG yBottom)
 
 void Camera::RegenerateViewMatrix()
 {
-	m_xmf4x4View = Matrix4x4::LookAtLH(m_Position, m_At, m_Up);
+	m_xmf4x4View = Matrix4x4::LookAtLH(m_Position, Vector3::Add(m_Position, m_Look), m_Up);
+	//m_xmf4x4View = Matrix4x4::LookAtLH(m_Position, m_At, m_Up);
 
 	m_Right = XMFLOAT3(m_xmf4x4View._11, m_xmf4x4View._21, m_xmf4x4View._31);
 	m_Up = XMFLOAT3(m_xmf4x4View._12, m_xmf4x4View._22, m_xmf4x4View._32);

@@ -65,6 +65,7 @@ public:
 	Camera(Camera *pCamera);
 	virtual ~Camera();
 
+	virtual void Teleport(const XMFLOAT3& pos); // right, up, look을 유지한 상태로 포지션만 이동한다.
 	virtual void Move(const XMFLOAT3& Shift);
 	virtual void Rotate(float x = 0.0f, float y = 0.0f, float z = 0.0f);
 	virtual void RegenerateAt();
