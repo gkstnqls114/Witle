@@ -34,6 +34,8 @@ void Camera::Teleport(const XMFLOAT3 & pos)
 	m_xmf4x4View._41 = pos.x;
 	m_xmf4x4View._42 = pos.y;
 	m_xmf4x4View._43 = pos.z;
+
+	m_At = Vector3::Add(m_Position, m_Offset);
 }
 
 void Camera::Move(const XMFLOAT3 & Shift)
