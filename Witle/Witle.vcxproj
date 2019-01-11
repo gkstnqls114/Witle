@@ -165,6 +165,7 @@
     <ClInclude Include="MyDescriptorHeap.h" />
     <ClInclude Include="ResourceBase.h" />
     <ClInclude Include="RootConstants.h" />
+    <ClInclude Include="RoundCam.h" />
     <ClInclude Include="ShaderManager.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Resource.h" />
@@ -193,6 +194,7 @@
     <ClCompile Include="MyDescriptorHeap.cpp" />
     <ClCompile Include="ResourceBase.cpp" />
     <ClCompile Include="RootConstants.cpp" />
+    <ClCompile Include="RoundCam.cpp" />
     <ClCompile Include="ShaderManager.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Scene.cpp" />

@@ -1,8 +1,8 @@
 #pragma once
 #include "Camera.h"
 
-// target을 뒤에서 따라다니는 카메라입니다.
-class FollowCam :
+// target을 주위에서 둘러 보는 카메라입니다.
+class RoundCam :
 	public Camera
 {
 	const GameObject		*m_pTarget{ nullptr };
@@ -12,10 +12,10 @@ private:
 	void MoveAroundLookingobject(const XMFLOAT3& Shift);
 
 public:
-	FollowCam(GameObject* target); // target을 지정합니다.
-	FollowCam(Camera* camera, GameObject* target); // 부모 camera를 그대로 갖고와 target을 지정합니다.
-	FollowCam(FollowCam* followcam); // followcam을 그대로 가져옵니다.
-	virtual ~FollowCam();
+	RoundCam(GameObject* target); // target을 지정합니다.
+	RoundCam(Camera* camera, GameObject* target); // 부모 camera를 그대로 갖고와 target을 지정합니다.
+	RoundCam(RoundCam* followcam); // followcam을 그대로 가져옵니다.
+	virtual ~RoundCam();
 
 	void SetTarget(GameObject* pLookingObject) { m_pTarget = pLookingObject; }
 
@@ -24,6 +24,5 @@ public:
 
 	virtual void ZoomIn(float val);
 	virtual void ZoomOut(float val);
-
 };
 
