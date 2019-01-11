@@ -149,3 +149,14 @@ void FollowCam::Rotate(float x, float y, float z)
 		RotateOnLookingobject(x, y, z);
 	}
 }
+
+void FollowCam::ZoomIn(float val)
+{
+	m_Offset = Vector3::ScalarProduct(m_Offset, Vector3::Length(m_Offset) * val);
+}
+
+void FollowCam::ZoomOut(float val)
+{
+	m_Offset = Vector3::ScalarProduct(m_Offset, Vector3::Length(m_Offset) * val);
+
+}

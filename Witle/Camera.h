@@ -65,15 +65,12 @@ public:
 	Camera(Camera *pCamera);
 	virtual ~Camera();
 
-	virtual void Teleport(const XMFLOAT3& pos); // right, up, look을 유지한 상태로 포지션만 이동한다.
+	virtual void Teleport(const XMFLOAT3& pos); // right, up, look을 유지한 상태로 position, at만 이동한다.
 	virtual void Move(const XMFLOAT3& Shift);
 	virtual void Rotate(float x = 0.0f, float y = 0.0f, float z = 0.0f);
 	virtual void RegenerateAt();
 
 	virtual void Update() override;
-	virtual void ZoomIn(float val);
-	virtual void ZoomOut(float val);
-
 	////카메라의 정보를 셰이더 프로그램에게 전달하기 위한 상수 버퍼를 생성하고 갱신한다.
 	//virtual void CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
 	virtual void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList);

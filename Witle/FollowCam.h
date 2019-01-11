@@ -20,5 +20,8 @@ public:
 	virtual void Move(const XMFLOAT3 & Shift) override;
 	virtual void Rotate(float x, float y, float z) override;
 
+	virtual void ZoomIn(float val);
+	virtual void ZoomOut(float val);
+
 };
 

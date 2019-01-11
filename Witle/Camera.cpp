@@ -67,17 +67,6 @@ void Camera::Update()
 	GenerateFrustum(); 
 }
 
-void Camera::ZoomIn(float val)
-{
-	m_Offset = Vector3::ScalarProduct(m_Offset, Vector3::Length(m_Offset) * val);
-}
-
-void Camera::ZoomOut(float val)
-{
-	m_Offset = Vector3::ScalarProduct(m_Offset, Vector3::Length(m_Offset) * val);
- 
-}
-
 void Camera::GenerateFrustum()
 {
 	//원근 투영 변환 행렬에서 절두체를 생성한다(절두체는 카메라 좌표계로 표현된다).
