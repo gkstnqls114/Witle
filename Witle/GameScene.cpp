@@ -121,9 +121,8 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	m_GameObject->InsertComponent(gMeshRenderer.GetFamillyID(), &gMeshRenderer);
 	m_GameObject->InsertComponent(cubemesh->GetFamillyID(), cubemesh);
 
-	FollowCam* cameraComponent = new FollowCam();
-	cameraComponent->Teleport(XMFLOAT3(0, 0, -5.f));
-	cameraComponent->SetTarget(m_GameObject);
+	FollowCam* cameraComponent = new FollowCam(m_GameObject);
+	cameraComponent->Teleport(XMFLOAT3(0, 0, -5.f)); 
 	m_Camera = new GameObject("Camera");
 	m_Camera->InsertComponent(cameraComponent->GetFamillyID(), cameraComponent);
 

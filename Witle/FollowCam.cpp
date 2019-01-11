@@ -118,10 +118,19 @@ void FollowCam::MoveAroundLookingobject(const XMFLOAT3 & Shift)
 	m_At.z += Shift.z;
 }
 
-FollowCam::FollowCam()
+FollowCam::FollowCam(Camera * camera, GameObject * target)
+	: m_pTarget(target)
 {
 }
 
+FollowCam::FollowCam(FollowCam * followcam)
+{
+}
+
+FollowCam::FollowCam(GameObject * target)
+	: m_pTarget(target)
+{
+}
 
 FollowCam::~FollowCam()
 {
