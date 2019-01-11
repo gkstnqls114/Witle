@@ -4,8 +4,35 @@
 #include "FollowCam.h"
 
 
-void FollowCam::RotateOnLookingobject(float x, float y, float z)
+
+FollowCam::FollowCam(Camera * camera, GameObject * target)
+	: m_pTarget(target)
 {
+}
+
+FollowCam::FollowCam(FollowCam * followcam)
+{
+}
+
+FollowCam::FollowCam(GameObject * target)
+	: m_pTarget(target)
+{
+}
+
+FollowCam::~FollowCam()
+{
+}
+
+void FollowCam::Move(const XMFLOAT3 & Shift)
+{
+	m_At.x += Shift.x;
+	m_At.y += Shift.y;
+	m_At.z += Shift.z;
+}
+
+void FollowCam::Rotate(float x, float y, float z)
+{
+
 	// DWORD nCameraMode = m_pCamera->GetMode();
 	//1인칭 카메라 또는 3인칭 카메라의 경우 플레이어의 회전은 약간의 제약이 따른다.
 	//if ((nCameraMode == FIRST_PERSON_CAMERA) || (nCameraMode == THIRD_PERSON_CAMERA))
@@ -109,45 +136,6 @@ void FollowCam::RotateOnLookingobject(float x, float y, float z)
 	m_Look = Vector3::Normalize(m_Look);
 	m_Right = Vector3::CrossProduct(m_Up, m_Look, true);
 	m_Up = Vector3::CrossProduct(m_Look, m_Right, true);
-}
-
-void FollowCam::MoveAroundLookingobject(const XMFLOAT3 & Shift)
-{
-	m_At.x += Shift.x;
-	m_At.y += Shift.y;
-	m_At.z += Shift.z;
-}
-
-FollowCam::FollowCam(Camera * camera, GameObject * target)
-	: m_pTarget(target)
-{
-}
-
-FollowCam::FollowCam(FollowCam * followcam)
-{
-}
-
-FollowCam::FollowCam(GameObject * target)
-	: m_pTarget(target)
-{
-}
-
-FollowCam::~FollowCam()
-{
-}
-
-void FollowCam::Move(const XMFLOAT3 & Shift)
-{
-	if (m_pTarget) {
-		MoveAroundLookingobject(Shift);
-	} 
-}
-
-void FollowCam::Rotate(float x, float y, float z)
-{
-	if (m_pTarget) {
-		RotateOnLookingobject(x, y, z);
-	}
 }
 
 void FollowCam::ZoomIn(float val)

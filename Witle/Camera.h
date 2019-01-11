@@ -57,8 +57,6 @@ protected:
 	//절두체(월드 좌표계)를 생성한다.
 	void GenerateFrustum();
 	
-	void MoveAroundCamera(const XMFLOAT3& Shift); 
-	void RotateOnCamera(float x, float y, float z);
 
 public:
 	Camera();

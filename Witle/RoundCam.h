@@ -8,9 +8,7 @@ class RoundCam :
 	const GameObject		*m_pTarget{ nullptr };
 
 private:
-	void RotateOnLookingobject(float x, float y, float z);
-	void MoveAroundLookingobject(const XMFLOAT3& Shift);
-
+	
 public:
 	RoundCam(GameObject* target); // target을 지정합니다.
 	RoundCam(Camera* camera, GameObject* target); // 부모 camera를 그대로 갖고와 target을 지정합니다.

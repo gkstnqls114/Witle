@@ -40,54 +40,13 @@ void Camera::Teleport(const XMFLOAT3 & pos)
 
 void Camera::Move(const XMFLOAT3 & Shift)
 {
-	MoveAroundCamera(Shift);
-}
-
-void Camera::Rotate(float x, float y, float z)
-{ 
-	RotateOnCamera(x, y, z);
-}
-
-void Camera::RegenerateAt()
-{
-}
-
-void Camera::Update()
-{
-	// 물리 계산
-	// 벽과의 충돌 등...
-
-	//Move, Rotate된 At과 카메라 좌표축(Right, Up, Look)을 기준으로 Position 재설정
-	m_Position = Vector3::Subtract(m_At, m_Offset);
-
-	// 카메라 변환 행렬을 재설정한다.
-	RegenerateViewMatrix();
-
-	// 카메라 변환 행렬이 바뀔 때마다 카메라 절두체를 다시 생성한다(절두체는 월드 좌표계로 생성한다).
-	GenerateFrustum(); 
-}
-
-void Camera::GenerateFrustum()
-{
-	//원근 투영 변환 행렬에서 절두체를 생성한다(절두체는 카메라 좌표계로 표현된다).
-	m_xmFrustum.CreateFromMatrix(m_xmFrustum, XMLoadFloat4x4(&m_xmf4x4Projection));
-	//카메라 변환 행렬의 역행렬을 구한다.
-	XMMATRIX xmmtxInversView = XMMatrixInverse(NULL, XMLoadFloat4x4(&m_xmf4x4View));
-	//절두체를 카메라 변환 행렬의 역행렬로 변환한다(이제 절두체는 월드 좌표계로 표현된다).
-	m_xmFrustum.Transform(m_xmFrustum, xmmtxInversView);
-
-
-}
- 
-void Camera::MoveAroundCamera(const XMFLOAT3& Shift)
-{
 	m_At.x += Shift.x;
 	m_At.y += Shift.y;
 	m_At.z += Shift.z;
 }
 
-void Camera::RotateOnCamera(float x, float y, float z)
-{
+void Camera::Rotate(float x, float y, float z)
+{ 
 	if ((x != 0.0f))
 	{
 		//플레이어의 로컬 x-축에 대한 x 각도의 회전 행렬을 계산한다.
@@ -145,6 +104,38 @@ void Camera::RotateOnCamera(float x, float y, float z)
 	m_Right = Vector3::CrossProduct(m_Up, m_Look, true);
 	m_Up = Vector3::CrossProduct(m_Look, m_Right, true);
 }
+
+void Camera::RegenerateAt()
+{
+}
+
+void Camera::Update()
+{
+	// 물리 계산
+	// 벽과의 충돌 등...
+
+	//Move, Rotate된 At과 카메라 좌표축(Right, Up, Look)을 기준으로 Position 재설정
+	m_Position = Vector3::Subtract(m_At, m_Offset);
+
+	// 카메라 변환 행렬을 재설정한다.
+	RegenerateViewMatrix();
+
+	// 카메라 변환 행렬이 바뀔 때마다 카메라 절두체를 다시 생성한다(절두체는 월드 좌표계로 생성한다).
+	GenerateFrustum(); 
+}
+
+void Camera::GenerateFrustum()
+{
+	//원근 투영 변환 행렬에서 절두체를 생성한다(절두체는 카메라 좌표계로 표현된다).
+	m_xmFrustum.CreateFromMatrix(m_xmFrustum, XMLoadFloat4x4(&m_xmf4x4Projection));
+	//카메라 변환 행렬의 역행렬을 구한다.
+	XMMATRIX xmmtxInversView = XMMatrixInverse(NULL, XMLoadFloat4x4(&m_xmf4x4View));
+	//절두체를 카메라 변환 행렬의 역행렬로 변환한다(이제 절두체는 월드 좌표계로 표현된다).
+	m_xmFrustum.Transform(m_xmFrustum, xmmtxInversView);
+
+
+}
+   
 
 bool Camera::IsInFrustum(const BoundingOrientedBox & xmBoundingBox) const
 {

@@ -8,8 +8,6 @@ class FollowCam :
 	const GameObject		*m_pTarget{ nullptr };
 
 private:
-	void RotateOnLookingobject(float x, float y, float z);
-	void MoveAroundLookingobject(const XMFLOAT3& Shift);
 
 public:
 	FollowCam(GameObject* target); // target을 지정합니다.

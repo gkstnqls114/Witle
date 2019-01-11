@@ -2,14 +2,6 @@
 #include "RoundCam.h"
 
 
-void RoundCam::RotateOnLookingobject(float x, float y, float z)
-{
-}
-
-void RoundCam::MoveAroundLookingobject(const XMFLOAT3 & Shift)
-{
-}
-
 RoundCam::RoundCam(GameObject * target)
 {
 }
