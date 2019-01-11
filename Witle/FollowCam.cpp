@@ -1,11 +1,13 @@
 #include "stdafx.h"
+#include "Transform.h"
+#include "GameObject.h"
 #include "FollowCam.h"
 
 
 void FollowCam::RotateOnLookingobject(float x, float y, float z)
 {
-	//DWORD nCameraMode = m_pCamera->GetMode();
-	////1인칭 카메라 또는 3인칭 카메라의 경우 플레이어의 회전은 약간의 제약이 따른다.
+	// DWORD nCameraMode = m_pCamera->GetMode();
+	//1인칭 카메라 또는 3인칭 카메라의 경우 플레이어의 회전은 약간의 제약이 따른다.
 	//if ((nCameraMode == FIRST_PERSON_CAMERA) || (nCameraMode == THIRD_PERSON_CAMERA))
 	//{
 	//	/*로컬 x-축을 중심으로 회전하는 것은 고개를 앞뒤로 숙이는 동작에 해당한다. 그러므로 x-축을 중심으로 회전하는
@@ -48,63 +50,65 @@ void FollowCam::RotateOnLookingobject(float x, float y, float z)
 	//	}
 	//}
 	//	}
+	Transform* tr = m_pTarget->GetComponent<Transform>("");
 
-	//if ((x != 0.0f))
-	//{
-	//	//플레이어의 로컬 x-축에 대한 x 각도의 회전 행렬을 계산한다.
-	//	XMFLOAT3 xmf3Right = m_pTarget->GetRight();
-	//	XMMATRIX xmmtxRotate = XMMatrixRotationAxis(XMLoadFloat3(&xmf3Right), XMConvertToRadians(x));
-	//	//카메라의 로컬 x-축, y-축, z-축을 회전한다.
-	//	m_Right = Vector3::TransformNormal(m_Right, xmmtxRotate);
-	//	m_Up = Vector3::TransformNormal(m_Up, xmmtxRotate);
-	//	m_Look = Vector3::TransformNormal(m_Look, xmmtxRotate);
+	if ((x != 0.0f))
+	{
+		//플레이어의 로컬 x-축에 대한 x 각도의 회전 행렬을 계산한다.
 
-	//	// At Pos도 마찬가지로 회전
-	//	XMFLOAT3 LookObject_To_At = Vector3::Subtract(m_At, m_pTarget->GetPosition());
-	//	LookObject_To_At = Vector3::TransformCoord(LookObject_To_At, xmmtxRotate);
-	//	m_At = Vector3::Add(m_pTarget->GetPosition(), LookObject_To_At);
+		XMFLOAT3 xmf3Right = tr->GetRight();
+		XMMATRIX xmmtxRotate = XMMatrixRotationAxis(XMLoadFloat3(&xmf3Right), XMConvertToRadians(x));
+		//카메라의 로컬 x-축, y-축, z-축을 회전한다.
+		m_Right = Vector3::TransformNormal(m_Right, xmmtxRotate);
+		m_Up = Vector3::TransformNormal(m_Up, xmmtxRotate);
+		m_Look = Vector3::TransformNormal(m_Look, xmmtxRotate);
 
-	//	// Offset 도 마찬가지로 회전
-	//	m_Offset = Vector3::TransformCoord(m_Offset, xmmtxRotate);
-	//}
-	//if ((y != 0.0f))
-	//{
-	//	XMFLOAT3 xmf3Up = m_pTarget->GetUp();
-	//	XMMATRIX xmmtxRotate = XMMatrixRotationAxis(XMLoadFloat3(&xmf3Up), XMConvertToRadians(y));
-	//	m_Right = Vector3::TransformNormal(m_Right, xmmtxRotate);
-	//	m_Up = Vector3::TransformNormal(m_Up, xmmtxRotate);
-	//	m_Look = Vector3::TransformNormal(m_Look, xmmtxRotate);
+		// At Pos도 마찬가지로 회전
+		XMFLOAT3 LookObject_To_At = Vector3::Subtract(m_At, tr->GetPosition());
+		LookObject_To_At = Vector3::TransformCoord(LookObject_To_At, xmmtxRotate);
+		m_At = Vector3::Add(tr->GetPosition(), LookObject_To_At);
 
-	//	// At Pos도 마찬가지로 회전
-	//	XMFLOAT3 LookObject_To_At = Vector3::Subtract(m_At, m_pTarget->GetPosition());
-	//	LookObject_To_At = Vector3::TransformCoord(LookObject_To_At, xmmtxRotate);
-	//	m_At = Vector3::Add(m_pTarget->GetPosition(), LookObject_To_At);
+		// Offset 도 마찬가지로 회전
+		m_Offset = Vector3::TransformCoord(m_Offset, xmmtxRotate);
+	}
+	if ((y != 0.0f))
+	{
+		XMFLOAT3 xmf3Up = tr->GetUp();
+		XMMATRIX xmmtxRotate = XMMatrixRotationAxis(XMLoadFloat3(&xmf3Up), XMConvertToRadians(y));
+		m_Right = Vector3::TransformNormal(m_Right, xmmtxRotate);
+		m_Up = Vector3::TransformNormal(m_Up, xmmtxRotate);
+		m_Look = Vector3::TransformNormal(m_Look, xmmtxRotate);
 
-	//	// Offset 도 마찬가지로 회전
-	//	m_Offset = Vector3::TransformCoord(m_Offset, xmmtxRotate);
-	//}
-	//if (z != 0.0f)
-	//{
-	//	XMFLOAT3 xmf3Look = m_pTarget->GetLook();
-	//	XMMATRIX xmmtxRotate = XMMatrixRotationAxis(XMLoadFloat3(&xmf3Look), XMConvertToRadians(z));
-	//	m_Right = Vector3::TransformNormal(m_Right, xmmtxRotate);
-	//	m_Up = Vector3::TransformNormal(m_Up, xmmtxRotate);
-	//	m_Look = Vector3::TransformNormal(m_Look, xmmtxRotate);
+		// At Pos도 마찬가지로 회전
+		XMFLOAT3 LookObject_To_At = Vector3::Subtract(m_At, tr->GetPosition());
+		LookObject_To_At = Vector3::TransformCoord(LookObject_To_At, xmmtxRotate);
+		m_At = Vector3::Add(tr->GetPosition(), LookObject_To_At);
 
-	//	// At Pos도 마찬가지로 회전
-	//	XMFLOAT3 LookObject_To_At = Vector3::Subtract(m_At, m_pTarget->GetPosition());
-	//	LookObject_To_At = Vector3::TransformCoord(LookObject_To_At, xmmtxRotate);
-	//	m_At = Vector3::Add(m_pTarget->GetPosition(), LookObject_To_At);
+		// Offset 도 마찬가지로 회전
+		m_Offset = Vector3::TransformCoord(m_Offset, xmmtxRotate);
+	}
+	if (z != 0.0f)
+	{
+		XMFLOAT3 xmf3Look = tr->GetLook();
+		XMMATRIX xmmtxRotate = XMMatrixRotationAxis(XMLoadFloat3(&xmf3Look), XMConvertToRadians(z));
+		m_Right = Vector3::TransformNormal(m_Right, xmmtxRotate);
+		m_Up = Vector3::TransformNormal(m_Up, xmmtxRotate);
+		m_Look = Vector3::TransformNormal(m_Look, xmmtxRotate);
 
-	//	// Offset 도 마찬가지로 회전
-	//	m_Offset = Vector3::TransformCoord(m_Offset, xmmtxRotate);
-	//}
+		// At Pos도 마찬가지로 회전
+		XMFLOAT3 LookObject_To_At = Vector3::Subtract(m_At, tr->GetPosition());
+		LookObject_To_At = Vector3::TransformCoord(LookObject_To_At, xmmtxRotate);
+		m_At = Vector3::Add(tr->GetPosition(), LookObject_To_At);
 
-	///*회전으로 인해 플레이어의 로컬 x-축, y-축, z-축이 서로 직교하지 않을 수 있으므로 z-축(LookAt 벡터)을 기준으
-	//로 하여 서로 직교하고 단위벡터가 되도록 한다.*/
-	//m_Look = Vector3::Normalize(m_Look);
-	//m_Right = Vector3::CrossProduct(m_Up, m_Look, true);
-	//m_Up = Vector3::CrossProduct(m_Look, m_Right, true);
+		// Offset 도 마찬가지로 회전
+		m_Offset = Vector3::TransformCoord(m_Offset, xmmtxRotate);
+	}
+
+	/*회전으로 인해 플레이어의 로컬 x-축, y-축, z-축이 서로 직교하지 않을 수 있으므로 z-축(LookAt 벡터)을 기준으
+	로 하여 서로 직교하고 단위벡터가 되도록 한다.*/
+	m_Look = Vector3::Normalize(m_Look);
+	m_Right = Vector3::CrossProduct(m_Up, m_Look, true);
+	m_Up = Vector3::CrossProduct(m_Look, m_Right, true);
 }
 
 void FollowCam::MoveAroundLookingobject(const XMFLOAT3 & Shift)

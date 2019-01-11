@@ -22,7 +22,7 @@ public:
 	//////////////////////////////////////////////// Get
 	XMFLOAT4X4 GetWorldMatrix() const { return m_transformWorld; }
 	XMFLOAT3 GetRight() const { return m_Right; }
-	XMFLOAT3 Getup() const { return m_Up; }
+	XMFLOAT3 GetUp() const { return m_Up; }
 	XMFLOAT3 GetLook() const { return m_Look; }
 	XMFLOAT3 GetPosition() const { return m_Position; }
 	//////////////////////////////////////////////// Get
