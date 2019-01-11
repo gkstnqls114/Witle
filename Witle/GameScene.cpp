@@ -252,7 +252,8 @@ bool GameScene::ProcessInput(HWND hWnd, POINT OldCursor, float ElapsedTime)
 	{
 		if (cxDelta || cyDelta)
 		{
-			m_Camera->GetComponent<Camera>("Camera")->Rotate(cyDelta, cxDelta, 0.0f);
+			m_GameObject->GetComponent<Transform>("")->Rotate(cyDelta, cxDelta, 0.0f);
+			// m_Camera->GetComponent<Camera>("Camera")->Rotate(cyDelta, cxDelta, 0.0f);
 
 			/*cxDelta는 y-축의 회전을 나타내고 cyDelta는 x-축의 회전을 나타낸다. 오른쪽 마우스 버튼이 눌려진 경우
 			cxDelta는 z-축의 회전을 나타낸다.*/
@@ -293,7 +294,10 @@ bool GameScene::ProcessInput(HWND hWnd, POINT OldCursor, float ElapsedTime)
 
 void GameScene::LastUpdate()
 {
-
+	// player update 이후에 camera update
+	if (m_Camera) {
+		m_Camera->GetComponent<Camera>("Camera")->Update();
+	} 
 }
 
 void GameScene::AnimateObjects(float fTimeElapsed)
@@ -628,8 +632,5 @@ ComPtr<ID3D12RootSignature> GameScene::CreateGraphicsRootSignature(ID3D12Device 
 
 void GameScene::Update(float ElapsedTime)
 {
-	if (m_Camera) {
-		m_Camera->GetComponent<Camera>("Camera")->Update(); 
-	}
-
+	
 }
