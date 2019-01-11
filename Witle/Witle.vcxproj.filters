@@ -73,6 +73,9 @@
     <Filter Include="02.Component\Camera\RoundCam">
       <UniqueIdentifier>{721005a7-ef4e-4626-8ef3-58275c96c84c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.Component\Mesh\TerrainMesh">
+      <UniqueIdentifier>{6fbb8228-6540-452a-8c4b-9c6a04f96c25}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -165,6 +168,12 @@
     <ClInclude Include="RoundCam.h">
       <Filter>02.Component\Camera\RoundCam</Filter>
     </ClInclude>
+    <ClInclude Include="TerrainMesh.h">
+      <Filter>02.Component\Mesh\TerrainMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="HeightMapImage.h">
+      <Filter>02.Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -241,6 +250,12 @@
     </ClCompile>
     <ClCompile Include="RoundCam.cpp">
       <Filter>02.Component\Camera\RoundCam</Filter>
+    </ClCompile>
+    <ClCompile Include="TerrainMesh.cpp">
+      <Filter>02.Component\Mesh\TerrainMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="HeightMapImage.cpp">
+      <Filter>02.Component</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -8,7 +8,8 @@
 
 enum MESH_TYPE_ID
 {
-	CUBE_MESH
+	CUBE_MESH,
+	TERRAIN_MESH
 };
 
 #define EPSILON				1.0e-10f
