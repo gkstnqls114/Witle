@@ -340,8 +340,8 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	gMeshRenderer.Render(pd3dCommandList, mesh);
 
 	
-	// Mesh* terrainMesh = m_Terrain->GetComponent<Mesh>("TerrainMesh");
-	// gMeshRenderer.Render(pd3dCommandList, terrainMesh);
+	Mesh* terrainMesh = m_Terrain->GetComponent<Mesh>("TerrainMesh");
+	gMeshRenderer.Render(pd3dCommandList, terrainMesh);
 
 	//if (m_SkyBox) m_SkyBox->Render(pd3dCommandList, m_Camera);
 
