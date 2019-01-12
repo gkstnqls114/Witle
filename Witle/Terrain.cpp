@@ -13,6 +13,7 @@ Terrain::Terrain(const std::string& entityID, ID3D12Device * pd3dDevice, ID3D12G
 #endif
 		return;
 	}
+
 	m_nWidth = nWidth;
 	m_nLength = nLength;
 

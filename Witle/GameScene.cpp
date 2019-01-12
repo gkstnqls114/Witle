@@ -132,7 +132,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	cameraComponent->GenerateProjectionMatrix(0.01f, CAMERA_FAR, float(FRAME_BUFFER_WIDTH) / float(FRAME_BUFFER_HEIGHT), 60.0f);
 	
 	m_Terrain = new Terrain("Terrain", pd3dDevice, pd3dCommandList,
-		nullptr, 100, 100, 
+		L"Image/HeightMap.raw", 100, 100, 
 		10, 10, XMFLOAT3(1.F, 1.F, 1.F), XMFLOAT4(1.F, 1.F, 1.F, 1.F));
 	// cameraComponent->CreateShaderVariables(pd3dDevice, pd3dCommandList);
 	// cameraComponent->SetTarget(m_Player);
