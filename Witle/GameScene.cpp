@@ -392,40 +392,87 @@ ComPtr<ID3D12RootSignature> GameScene::CreateGraphicsRootSignature(ID3D12Device 
 	HRESULT hResult = S_FALSE;
 	ComPtr<ID3D12RootSignature> pd3dGraphicsRootSignature = nullptr;
 
-	D3D12_ROOT_PARAMETER pd3dRootParameters[2];
+	D3D12_ROOT_PARAMETER pRootParameters[6];
 
 	// 루트 상수
-	pd3dRootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_32BIT_CONSTANTS;
-	pd3dRootParameters[0].Constants.Num32BitValues = 16;
-	pd3dRootParameters[0].Constants.ShaderRegister = 0;
-	pd3dRootParameters[0].Constants.RegisterSpace = 0;
-	pd3dRootParameters[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+	pRootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_32BIT_CONSTANTS;
+	pRootParameters[0].Constants.Num32BitValues = 16;
+	pRootParameters[0].Constants.ShaderRegister = 0;
+	pRootParameters[0].Constants.RegisterSpace = 0;
+	pRootParameters[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
 
-	pd3dRootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_32BIT_CONSTANTS;
-	pd3dRootParameters[1].Constants.Num32BitValues = 32;
-	pd3dRootParameters[1].Constants.ShaderRegister = 1;
-	pd3dRootParameters[1].Constants.RegisterSpace = 0;
-	pd3dRootParameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
+	pRootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_32BIT_CONSTANTS;
+	pRootParameters[1].Constants.Num32BitValues = 32;
+	pRootParameters[1].Constants.ShaderRegister = 1;
+	pRootParameters[1].Constants.RegisterSpace = 0;
+	pRootParameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
+
+	D3D12_DESCRIPTOR_RANGE pd3dDescriptorRanges[4];
+
+	pd3dDescriptorRanges[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
+	pd3dDescriptorRanges[0].NumDescriptors = 1;
+	pd3dDescriptorRanges[0].BaseShaderRegister = 2; //GameObject
+	pd3dDescriptorRanges[0].RegisterSpace = 0;
+	pd3dDescriptorRanges[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+
+	pd3dDescriptorRanges[1].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	pd3dDescriptorRanges[1].NumDescriptors = 1;
+	pd3dDescriptorRanges[1].BaseShaderRegister = 0; //t0: gtxtTexture
+	pd3dDescriptorRanges[1].RegisterSpace = 0;
+	pd3dDescriptorRanges[1].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+
+	pd3dDescriptorRanges[2].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	pd3dDescriptorRanges[2].NumDescriptors = 1;
+	pd3dDescriptorRanges[2].BaseShaderRegister = 4; //t4: gtxtTerrainBaseTexture
+	pd3dDescriptorRanges[2].RegisterSpace = 0;
+	pd3dDescriptorRanges[2].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+
+	pd3dDescriptorRanges[3].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	pd3dDescriptorRanges[3].NumDescriptors = 1;
+	pd3dDescriptorRanges[3].BaseShaderRegister = 5; //t5: gtxtTerrainDetailTexture
+	pd3dDescriptorRanges[3].RegisterSpace = 0;
+	pd3dDescriptorRanges[3].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+
+	// 다시 루프 패러미터
+	pRootParameters[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	pRootParameters[2].DescriptorTable.NumDescriptorRanges = 1;
+	pRootParameters[2].DescriptorTable.pDescriptorRanges = &pd3dDescriptorRanges[0]; //gameobject
+	pRootParameters[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
+
+	pRootParameters[3].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	pRootParameters[3].DescriptorTable.NumDescriptorRanges = 1;
+	pRootParameters[3].DescriptorTable.pDescriptorRanges = &pd3dDescriptorRanges[1]; //gtxtexture
+	pRootParameters[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+
+	pRootParameters[4].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	pRootParameters[4].DescriptorTable.NumDescriptorRanges = 1;
+	pRootParameters[4].DescriptorTable.pDescriptorRanges = &pd3dDescriptorRanges[2];//t4: gtxtTerrainBaseTexture
+	pRootParameters[4].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+
+	pRootParameters[5].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	pRootParameters[5].DescriptorTable.NumDescriptorRanges = 1;
+	pRootParameters[5].DescriptorTable.pDescriptorRanges = &pd3dDescriptorRanges[3];
+	pRootParameters[5].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 /*
-	pd3dRootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
-	pd3dRootParameters[1].Constants.Num32BitValues = 32;
-	pd3dRootParameters[1].Constants.ShaderRegister = 0;
-	pd3dRootParameters[1].Constants.RegisterSpace = 1;
-	pd3dRootParameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;*/
+	pRootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	pRootParameters[1].Constants.Num32BitValues = 32;
+	pRootParameters[1].Constants.ShaderRegister = 0;
+	pRootParameters[1].Constants.RegisterSpace = 1;
+	pRootParameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;*/
 	 
 	//// 루트 서술자
 	//// 카메라 정보 (뷰, 투영)
-	//pd3dRootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
-	//pd3dRootParameters[1].Constants.Num32BitValues = 16 * 2;
-	//pd3dRootParameters[1].Constants.ShaderRegister = 1;
-	//pd3dRootParameters[1].Constants.RegisterSpace = 0;
-	//pd3dRootParameters[1].ShaderVisibility =  D3D12_SHADER_VISIBILITY_ALL;
+	//pRootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	//pRootParameters[1].Constants.Num32BitValues = 16 * 2;
+	//pRootParameters[1].Constants.ShaderRegister = 1;
+	//pRootParameters[1].Constants.RegisterSpace = 0;
+	//pRootParameters[1].ShaderVisibility =  D3D12_SHADER_VISIBILITY_ALL;
 
 	//// SRV 쉐이더 리소스 뷰 ( 인스턴싱을 위함 )
-	//pd3dRootParameters[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_SRV;
-	//pd3dRootParameters[2].Descriptor.ShaderRegister = 0; //t0
-	//pd3dRootParameters[2].Descriptor.RegisterSpace = 0;
-	//pd3dRootParameters[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+	//pRootParameters[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_SRV;
+	//pRootParameters[2].Descriptor.ShaderRegister = 0; //t0
+	//pRootParameters[2].Descriptor.RegisterSpace = 0;
+	//pRootParameters[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
 
 	/////////////////////////////////////////////////////////////////////////// 바닥 Terrain
 	//D3D12_DESCRIPTOR_RANGE pd3dDescriptorRanges[5];
@@ -461,30 +508,30 @@ ComPtr<ID3D12RootSignature> GameScene::CreateGraphicsRootSignature(ID3D12Device 
 	//pd3dDescriptorRanges[4].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
 	//// Terrain 텍스쳐를 위한 리소스(텍스쳐 뷰)
-	//pd3dRootParameters[3].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	//pd3dRootParameters[3].DescriptorTable.NumDescriptorRanges = 1;
-	//pd3dRootParameters[3].DescriptorTable.pDescriptorRanges = &pd3dDescriptorRanges[0]; //t1: gtxtTexture
-	//pd3dRootParameters[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	//pRootParameters[3].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	//pRootParameters[3].DescriptorTable.NumDescriptorRanges = 1;
+	//pRootParameters[3].DescriptorTable.pDescriptorRanges = &pd3dDescriptorRanges[0]; //t1: gtxtTexture
+	//pRootParameters[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 
-	//pd3dRootParameters[4].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	//pd3dRootParameters[4].DescriptorTable.NumDescriptorRanges = 1;
-	//pd3dRootParameters[4].DescriptorTable.pDescriptorRanges = &pd3dDescriptorRanges[1]; //t2: gtxtTerrainBaseTexture
-	//pd3dRootParameters[4].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	//pRootParameters[4].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	//pRootParameters[4].DescriptorTable.NumDescriptorRanges = 1;
+	//pRootParameters[4].DescriptorTable.pDescriptorRanges = &pd3dDescriptorRanges[1]; //t2: gtxtTerrainBaseTexture
+	//pRootParameters[4].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 
-	//pd3dRootParameters[5].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	//pd3dRootParameters[5].DescriptorTable.NumDescriptorRanges = 1;
-	//pd3dRootParameters[5].DescriptorTable.pDescriptorRanges = &pd3dDescriptorRanges[2]; //t3: gtxtTerrainDetailTexture
-	//pd3dRootParameters[5].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	//pRootParameters[5].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	//pRootParameters[5].DescriptorTable.NumDescriptorRanges = 1;
+	//pRootParameters[5].DescriptorTable.pDescriptorRanges = &pd3dDescriptorRanges[2]; //t3: gtxtTerrainDetailTexture
+	//pRootParameters[5].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 
-	//pd3dRootParameters[6].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	//pd3dRootParameters[6].DescriptorTable.NumDescriptorRanges = 1;
-	//pd3dRootParameters[6].DescriptorTable.pDescriptorRanges = &pd3dDescriptorRanges[3]; // t4: gtxtTerrainAlphaTexture
-	//pd3dRootParameters[6].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	//pRootParameters[6].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	//pRootParameters[6].DescriptorTable.NumDescriptorRanges = 1;
+	//pRootParameters[6].DescriptorTable.pDescriptorRanges = &pd3dDescriptorRanges[3]; // t4: gtxtTerrainAlphaTexture
+	//pRootParameters[6].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 
-	//pd3dRootParameters[7].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	//pd3dRootParameters[7].DescriptorTable.NumDescriptorRanges = 1;
-	//pd3dRootParameters[7].DescriptorTable.pDescriptorRanges = &pd3dDescriptorRanges[4]; // t5: gtxtTerrainDetailTexture_2
-	//pd3dRootParameters[7].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	//pRootParameters[7].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	//pRootParameters[7].DescriptorTable.NumDescriptorRanges = 1;
+	//pRootParameters[7].DescriptorTable.pDescriptorRanges = &pd3dDescriptorRanges[4]; // t5: gtxtTerrainDetailTexture_2
+	//pRootParameters[7].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 	///////////////////////////////////////////////////////////////////////// 바닥 Terrain
 
 
@@ -497,10 +544,10 @@ ComPtr<ID3D12RootSignature> GameScene::CreateGraphicsRootSignature(ID3D12Device 
 	//DRange[0].RegisterSpace = 0;
 	//DRange[0].OffsetInDescriptorsFromTableStart = 0;
 
-	//pd3dRootParameters[8].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	//pd3dRootParameters[8].DescriptorTable.NumDescriptorRanges = 1;
-	//pd3dRootParameters[8].DescriptorTable.pDescriptorRanges = &DRange[0]; // t6: GBuffer Texture Array
-	//pd3dRootParameters[8].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	//pRootParameters[8].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	//pRootParameters[8].DescriptorTable.NumDescriptorRanges = 1;
+	//pRootParameters[8].DescriptorTable.pDescriptorRanges = &DRange[0]; // t6: GBuffer Texture Array
+	//pRootParameters[8].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 	///////////////////////////////////////////////////////////////////////// G buffer
 
 	///////////////////////////////////////////////////////////////////////// 샘플러
@@ -529,8 +576,8 @@ ComPtr<ID3D12RootSignature> GameScene::CreateGraphicsRootSignature(ID3D12Device 
 
 	D3D12_ROOT_SIGNATURE_DESC d3dRootSignatureDesc;
 	::ZeroMemory(&d3dRootSignatureDesc, sizeof(D3D12_ROOT_SIGNATURE_DESC));
-	d3dRootSignatureDesc.NumParameters = _countof(pd3dRootParameters);
-	d3dRootSignatureDesc.pParameters = pd3dRootParameters;
+	d3dRootSignatureDesc.NumParameters = _countof(pRootParameters);
+	d3dRootSignatureDesc.pParameters = pRootParameters;
 	d3dRootSignatureDesc.NumStaticSamplers = 1;
 	d3dRootSignatureDesc.pStaticSamplers = &d3dSamplerDesc;
 	d3dRootSignatureDesc.Flags = d3dRootSignatureFlags;

@@ -61,9 +61,6 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="07.Resource\RootConstants">
-      <UniqueIdentifier>{1d7222fc-cbb4-4cf7-b4ea-c36ed29f4ce2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="08.Controller">
       <UniqueIdentifier>{3fca08d7-894a-403a-a4f0-a4f2f8d9c1f0}</UniqueIdentifier>
     </Filter>
@@ -84,6 +81,12 @@
     </Filter>
     <Filter Include="02.Component\Renderer\SkinnedMeshRenderer">
       <UniqueIdentifier>{46b1a7bc-5c15-44dd-883d-2897ca51d750}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.Resource\32bitRootConstants">
+      <UniqueIdentifier>{1d7222fc-cbb4-4cf7-b4ea-c36ed29f4ce2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.Resource\DescriptorTable">
+      <UniqueIdentifier>{7448360b-46e0-4cc8-b5c4-ca7f787ce6f6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -168,9 +171,6 @@
     <ClInclude Include="ResourceBase.h">
       <Filter>07.Resource</Filter>
     </ClInclude>
-    <ClInclude Include="RootConstants.h">
-      <Filter>07.Resource\RootConstants</Filter>
-    </ClInclude>
     <ClInclude Include="RoundCam.h">
       <Filter>02.Component\Camera\RoundCam</Filter>
     </ClInclude>
@@ -191,6 +191,12 @@
     </ClInclude>
     <ClInclude Include="vertices.h">
       <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="DescriptorTable.h">
+      <Filter>07.Resource\DescriptorTable</Filter>
+    </ClInclude>
+    <ClInclude Include="32bitRootConstants.h">
+      <Filter>07.Resource\32bitRootConstants</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -260,9 +266,6 @@
     <ClCompile Include="ResourceBase.cpp">
       <Filter>07.Resource</Filter>
     </ClCompile>
-    <ClCompile Include="RootConstants.cpp">
-      <Filter>07.Resource\RootConstants</Filter>
-    </ClCompile>
     <ClCompile Include="RoundCam.cpp">
       <Filter>02.Component\Camera\RoundCam</Filter>
     </ClCompile>
@@ -283,6 +286,12 @@
     </ClCompile>
     <ClCompile Include="vertices.cpp">
       <Filter>헤더 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="DescriptorTable.cpp">
+      <Filter>07.Resource\DescriptorTable</Filter>
+    </ClCompile>
+    <ClCompile Include="32bitRootConstants.cpp">
+      <Filter>07.Resource\32bitRootConstants</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

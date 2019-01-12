@@ -16,7 +16,9 @@ public:
 	RootConstants(UINT paraIndex, UINT resourceCount, UINT StartOffset = 0);
 	virtual ~RootConstants();
 
-	void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList, const T *resources);
+	virtual void CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList) {};
+	virtual void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList, const T *resources) ;
+	virtual void ReleaseShaderVariables() {};
 
 };
 

@@ -58,30 +58,30 @@ Terrain::Terrain(const std::string& entityID, ID3D12Device * pd3dDevice, ID3D12G
 	//	}
 	//}
 
-	CreateShaderVariables(pd3dDevice, pd3dCommandList);
+	//CreateShaderVariables(pd3dDevice, pd3dCommandList);
 
-	CTexture *pTerrainTexture = new CTexture(2, RESOURCE_TEXTURE2D, 0);
+	//CTexture *pTerrainTexture = new CTexture(2, RESOURCE_TEXTURE2D, 0);
 
-	pTerrainTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Image/Base_Texture.dds", 0);
-	pTerrainTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Image/Detail_Texture_7.dds", 1);
+	//pTerrainTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Image/Base_Texture.dds", 0);
+	//pTerrainTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Image/Detail_Texture_7.dds", 1);
 
-	UINT ncbElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255); //256의 배수
+	//UINT ncbElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255); //256의 배수
 
-	CTerrainShader *pTerrainShader = new CTerrainShader();
-	pTerrainShader->CreateShader(pd3dDevice, pd3dGraphicsRootSignature);
-	pTerrainShader->CreateShaderVariables(pd3dDevice, pd3dCommandList);
-	pTerrainShader->CreateCbvSrvDescriptorHeaps(pd3dDevice, pd3dCommandList, 1, 2);
-	pTerrainShader->CreateConstantBufferViews(pd3dDevice, pd3dCommandList, 1, m_pd3dcbGameObject, ncbElementBytes);
-	pTerrainShader->CreateShaderResourceViews(pd3dDevice, pd3dCommandList, pTerrainTexture, 4, true);
+	//CTerrainShader *pTerrainShader = new CTerrainShader();
+	//pTerrainShader->CreateShader(pd3dDevice, pd3dGraphicsRootSignature);
+	//pTerrainShader->CreateShaderVariables(pd3dDevice, pd3dCommandList);
+	//pTerrainShader->CreateCbvSrvDescriptorHeaps(pd3dDevice, pd3dCommandList, 1, 2);
+	//pTerrainShader->CreateConstantBufferViews(pd3dDevice, pd3dCommandList, 1, m_pd3dcbGameObject, ncbElementBytes);
+	//pTerrainShader->CreateShaderResourceViews(pd3dDevice, pd3dCommandList, pTerrainTexture, 4, true);
 
-	CMaterial *pTerrainMaterial = new CMaterial();
-	pTerrainMaterial->SetTexture(pTerrainTexture);
+	//CMaterial *pTerrainMaterial = new CMaterial();
+	//pTerrainMaterial->SetTexture(pTerrainTexture);
 
-	SetMaterial(pTerrainMaterial);
+	//SetMaterial(pTerrainMaterial);
 
-	SetCbvGPUDescriptorHandle(pTerrainShader->GetGPUCbvDescriptorStartHandle());
+	//SetCbvGPUDescriptorHandle(pTerrainShader->GetGPUCbvDescriptorStartHandle());
 
-	SetShader(pTerrainShader);
+	//SetShader(pTerrainShader);
 }
 
 Terrain::~Terrain()

@@ -1,5 +1,5 @@
 #pragma once
-#include "RootConstants.h"
+#include "32bitRootConstants.h"
 #include "ComponentBase.h"
 
 struct VS_CB_MYCAMERA_INFO
