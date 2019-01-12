@@ -1,15 +1,6 @@
 #pragma once
 #include "Mesh.h"
 
-
-struct CDiffusedVertex { 
-	XMFLOAT3 pos;
-	XMFLOAT4 color;
-
-	CDiffusedVertex() {};
-	CDiffusedVertex(XMFLOAT3 p, XMFLOAT4 c) : pos(p), color(c) {};
-};
-
 class CubeMesh :
 	public Mesh
 {

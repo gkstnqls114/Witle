@@ -178,7 +178,9 @@
     <ClInclude Include="GameScene.h" />
     <ClInclude Include="Terrain.h" />
     <ClInclude Include="TerrainMesh.h" />
+    <ClInclude Include="SkinnedMeshRenderer.h" />
     <ClInclude Include="Transform.h" />
+    <ClInclude Include="vertices.h" />
     <ClInclude Include="Witle.h" />
   </ItemGroup>
   <ItemGroup>
@@ -213,7 +215,9 @@
     <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="Terrain.cpp" />
     <ClCompile Include="TerrainMesh.cpp" />
+    <ClCompile Include="SkinnedMeshRenderer.cpp" />
     <ClCompile Include="Transform.cpp" />
+    <ClCompile Include="vertices.cpp" />
     <ClCompile Include="Witle.cpp" />
   </ItemGroup>
   <ItemGroup>

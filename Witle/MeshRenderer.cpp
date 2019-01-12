@@ -1,8 +1,9 @@
 #include "stdafx.h"
 #include "CubeMesh.h"
+#include "TerrainMesh.h"
 #include "MeshRenderer.h"
 
-
+// CubeMesh를 렌더한다.
 void MeshRenderer::RenderCubeMesh(ID3D12GraphicsCommandList * pd3dCommandList, Mesh * mesh)
 {
 	//정점 버퍼 뷰와 인스턴싱 버퍼 뷰를 입력-조립 단계에 설정한다.
@@ -19,6 +20,11 @@ void MeshRenderer::RenderCubeMesh(ID3D12GraphicsCommandList * pd3dCommandList, M
 
 	pd3dCommandList->IASetIndexBuffer(&cubeMesh->GetIndexBufferView());
 	pd3dCommandList->DrawIndexedInstanced(cubeMesh->GetIndexCount(), nInstances, 0, 0, 0);
+}
+
+// TerrainMesh를 렌더한다.
+void MeshRenderer::RenderTerrainMesh(ID3D12GraphicsCommandList * pd3dCommandList, Mesh * mesh)
+{
 }
 
 MeshRenderer::MeshRenderer()
@@ -39,6 +45,10 @@ void MeshRenderer::Render(ID3D12GraphicsCommandList * pCommandList, Mesh * mesh)
 	{
 	case MESH_TYPE_ID::CUBE_MESH:
 		RenderCubeMesh(pCommandList, mesh);
+		break;
+
+	case MESH_TYPE_ID::TERRAIN_MESH:
+		RenderTerrainMesh(pCommandList, mesh);
 		break;
 
 	default:

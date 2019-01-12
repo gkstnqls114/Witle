@@ -18,6 +18,7 @@ GameObject::~GameObject()
 	}
 }
 
+
 void GameObject::Update()
 {
 	for (auto& componenet : m_Components)

@@ -23,6 +23,7 @@ protected:
 
 	XMFLOAT3					m_xmf3Scale;
 
+
 public:
 	float GetHeight(float x, float z, bool bReverseQuad = false);
 	XMFLOAT3 GetNormal(float x, float z); 
@@ -33,4 +34,6 @@ public:
 	XMFLOAT3 GetScale() { return(m_xmf3Scale); }
 	float GetWidth() { return(m_nWidth * m_xmf3Scale.x); }
 	float GetLength() { return(m_nLength * m_xmf3Scale.z); }
+
+
 };

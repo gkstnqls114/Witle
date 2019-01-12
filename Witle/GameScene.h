@@ -9,6 +9,7 @@ struct CB_OBJECT_INFO // b1
 };
  
 class GameObject;
+class Terrain;
 
 class GameScene
 	: public Scene
@@ -43,7 +44,8 @@ public:
 	virtual void LastUpdate() override;
 
 protected:
-	GameObject* m_GameObject; 
+	GameObject* m_GameObject;
+	Terrain* m_Terrain;
 	GameObject* m_Camera;
 
 	//Camera *m_Camera{ nullptr };

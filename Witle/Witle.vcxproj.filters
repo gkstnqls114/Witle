@@ -79,6 +79,12 @@
     <Filter Include="03.GameObject\Terrain">
       <UniqueIdentifier>{a74113fd-ff21-4d9a-8b1d-0bb57750bd0d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.Component\Renderer\MeshRenderer">
+      <UniqueIdentifier>{2faec5fb-2ba0-4730-9e70-8fb653e6274c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\Renderer\SkinnedMeshRenderer">
+      <UniqueIdentifier>{46b1a7bc-5c15-44dd-883d-2897ca51d750}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -104,9 +110,6 @@
     </ClInclude>
     <ClInclude Include="Mesh.h">
       <Filter>02.Component\Mesh</Filter>
-    </ClInclude>
-    <ClInclude Include="MeshRenderer.h">
-      <Filter>02.Component\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="Renderer.h">
       <Filter>02.Component\Renderer</Filter>
@@ -180,6 +183,15 @@
     <ClInclude Include="TerrainMesh.h">
       <Filter>02.Component\Mesh\TerrainMesh</Filter>
     </ClInclude>
+    <ClInclude Include="MeshRenderer.h">
+      <Filter>02.Component\Renderer\MeshRenderer</Filter>
+    </ClInclude>
+    <ClInclude Include="SkinnedMeshRenderer.h">
+      <Filter>02.Component\Renderer\SkinnedMeshRenderer</Filter>
+    </ClInclude>
+    <ClInclude Include="vertices.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -207,9 +219,6 @@
       <Filter>03.GameObject</Filter>
     </ClCompile>
     <ClCompile Include="Renderer.cpp">
-      <Filter>02.Component\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="MeshRenderer.cpp">
       <Filter>02.Component\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="Shader.cpp">
@@ -265,6 +274,15 @@
     </ClCompile>
     <ClCompile Include="TerrainMesh.cpp">
       <Filter>02.Component\Mesh\TerrainMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshRenderer.cpp">
+      <Filter>02.Component\Renderer\MeshRenderer</Filter>
+    </ClCompile>
+    <ClCompile Include="SkinnedMeshRenderer.cpp">
+      <Filter>02.Component\Renderer\SkinnedMeshRenderer</Filter>
+    </ClCompile>
+    <ClCompile Include="vertices.cpp">
+      <Filter>헤더 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -5,6 +5,8 @@
 
 TerrainMesh::TerrainMesh(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, int xStart, int zStart, int nWidth, int nLength, XMFLOAT3 xmf3Scale, XMFLOAT4 xmf4Color, void * pContext)
 {
+	m_ComponenetID = TERRAIN_MESH;
+
 	m_nVertices = nWidth * nLength;
 	//	m_nStride = sizeof(CTexturedVertex);
 	m_nStride = sizeof(CDiffused2TexturedVertex);
