@@ -46,6 +46,10 @@ bool GameObject::InsertComponent(const std::string & ComponenetID, ComponentBase
 
 ComponentBase * GameObject::GetComponent(const std::string & id) const
 {
-	return (*(m_Components.find(id))).second;
+	auto pair = m_Components.find(id);
+	assert(pair != m_Components.end()); // 만약 해당 id의 컴포넌트 존재하지않는다면 경고
+
+	ComponentBase* result = (*(pair)).second;
+	return result;
 }
  

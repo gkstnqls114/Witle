@@ -5,7 +5,6 @@
 class TerrainMesh
 	:public Mesh
 {
-
 	ID3D12Resource					*m_pd3dVertexBuffer = NULL;
 	ID3D12Resource					*m_pd3dVertexUploadBuffer = NULL;
 

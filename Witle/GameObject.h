@@ -4,6 +4,7 @@ class ComponentBase;
 
 class GameObject
 {
+
 protected:
 	Transform* m_Transform{ nullptr }; //월드변환을 위한 좌표계
 	ComponentBase* GetComponent(const std::string& id) const;
