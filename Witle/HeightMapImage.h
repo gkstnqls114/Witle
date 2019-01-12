@@ -2,6 +2,9 @@
 #include "ComponentBase.h"
 
 
+#define _WITH_APPROXIMATE_OPPOSITE_CORNER
+
+// HeightMapImage 클래스는 비트맵 이미지를 받아옵니다.
 class HeightMapImage
 	: public ComponentBase
 {

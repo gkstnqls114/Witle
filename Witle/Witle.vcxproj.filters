@@ -76,6 +76,9 @@
     <Filter Include="02.Component\Mesh\TerrainMesh">
       <UniqueIdentifier>{6fbb8228-6540-452a-8c4b-9c6a04f96c25}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.GameObject\Terrain">
+      <UniqueIdentifier>{a74113fd-ff21-4d9a-8b1d-0bb57750bd0d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -168,11 +171,14 @@
     <ClInclude Include="RoundCam.h">
       <Filter>02.Component\Camera\RoundCam</Filter>
     </ClInclude>
-    <ClInclude Include="TerrainMesh.h">
-      <Filter>02.Component\Mesh\TerrainMesh</Filter>
-    </ClInclude>
     <ClInclude Include="HeightMapImage.h">
       <Filter>02.Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Terrain.h">
+      <Filter>03.GameObject\Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainMesh.h">
+      <Filter>02.Component\Mesh\TerrainMesh</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -251,11 +257,14 @@
     <ClCompile Include="RoundCam.cpp">
       <Filter>02.Component\Camera\RoundCam</Filter>
     </ClCompile>
-    <ClCompile Include="TerrainMesh.cpp">
-      <Filter>02.Component\Mesh\TerrainMesh</Filter>
-    </ClCompile>
     <ClCompile Include="HeightMapImage.cpp">
       <Filter>02.Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Terrain.cpp">
+      <Filter>03.GameObject\Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="TerrainMesh.cpp">
+      <Filter>02.Component\Mesh\TerrainMesh</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

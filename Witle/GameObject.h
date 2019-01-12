@@ -9,7 +9,7 @@ protected:
 	ComponentBase* GetComponent(const std::string& id) const;
 
 public:
-	GameObject(std::string entityID);
+	GameObject(const std::string& entityID);
 	virtual ~GameObject();
 
 	void Update();

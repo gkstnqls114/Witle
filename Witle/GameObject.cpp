@@ -3,7 +3,7 @@
 #include "ComponentBase.h"
 #include "GameObject.h"
  
-GameObject::GameObject(std::string entityID)
+GameObject::GameObject(const std::string & entityID)
 	: m_EntityID(entityID)
 {
 	m_Transform = new Transform;
