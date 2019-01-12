@@ -1,6 +1,7 @@
 #pragma once
 #include "GameObject.h"
 
+class ResourceBase;
 class HeightMapImage;
 
 
@@ -8,6 +9,8 @@ class HeightMapImage;
 class Terrain :
 	public GameObject
 {
+	ResourceBase * m_ResourceBase{ nullptr };
+
 public:
 	Terrain(const std::string& entityID, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, LPCTSTR pFileName, int nWidth, int nLength, int nBlockWidth, int nBlockLength, XMFLOAT3 xmf3Scale, XMFLOAT4 xmf4Color);
 	virtual ~Terrain();
