@@ -132,7 +132,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	cameraComponent->GenerateProjectionMatrix(0.01f, CAMERA_FAR, float(FRAME_BUFFER_WIDTH) / float(FRAME_BUFFER_HEIGHT), 60.0f);
 	
 	m_Terrain = new Terrain("Terrain", pd3dDevice, pd3dCommandList,
-		L"로드할 비트맵파일", 100, 100, 
+		nullptr, 100, 100, 
 		10, 10, XMFLOAT3(1.F, 1.F, 1.F), XMFLOAT4(1.F, 1.F, 1.F, 1.F));
 	// cameraComponent->CreateShaderVariables(pd3dDevice, pd3dCommandList);
 	// cameraComponent->SetTarget(m_Player);
@@ -340,8 +340,8 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	gMeshRenderer.Render(pd3dCommandList, mesh);
 
 	
-	Mesh* terrainMesh = m_Terrain->GetComponent<Mesh>("TerrainMesh");
-	gMeshRenderer.Render(pd3dCommandList, terrainMesh);
+	// Mesh* terrainMesh = m_Terrain->GetComponent<Mesh>("TerrainMesh");
+	// gMeshRenderer.Render(pd3dCommandList, terrainMesh);
 
 	//if (m_SkyBox) m_SkyBox->Render(pd3dCommandList, m_Camera);
 

@@ -5,24 +5,6 @@
 class TerrainMesh
 	:public Mesh
 {
-	ID3D12Resource					*m_pd3dVertexBuffer = NULL;
-	ID3D12Resource					*m_pd3dVertexUploadBuffer = NULL;
-
-	ID3D12Resource					*m_pd3dIndexBuffer = NULL;
-	ID3D12Resource					*m_pd3dIndexUploadBuffer = NULL;
-
-	D3D12_VERTEX_BUFFER_VIEW		m_d3dVertexBufferView;
-	D3D12_INDEX_BUFFER_VIEW			m_d3dIndexBufferView;
-
-	D3D12_PRIMITIVE_TOPOLOGY		m_d3dPrimitiveTopology = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
-	UINT							m_nSlot = 0;
-	UINT							m_nVertices = 0;
-	UINT							m_nStride = 0;
-	UINT							m_nOffset = 0;
-
-	UINT							m_nIndices = 0;
-	UINT							m_nStartIndex = 0;
-	int								m_nBaseVertex = 0;
 
 protected:
 	int							m_nWidth;
@@ -39,4 +21,9 @@ public:
 
 	virtual float OnGetHeight(int x, int z, void *pContext);
 	virtual XMFLOAT4 OnGetColor(int x, int z, void *pContext);
+
+	virtual void Update() override {}
+	virtual void Create() override {}
+	virtual void Init() override {}
+
 };

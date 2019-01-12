@@ -7,7 +7,7 @@ TerrainMesh::TerrainMesh(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * 
 {
 	m_ComponenetID = TERRAIN_MESH;
 
-	m_nVertices = nWidth * nLength;
+	m_VertexCount = nWidth * nLength;
 	//	m_nStride = sizeof(CTexturedVertex);
 	m_nStride = sizeof(CDiffused2TexturedVertex);
 	m_nOffset = 0;
@@ -19,7 +19,7 @@ TerrainMesh::TerrainMesh(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * 
 	m_xmf3Scale = xmf3Scale;
 
 	//	CTexturedVertex *pVertices = new CTexturedVertex[m_nVertices];
-	CDiffused2TexturedVertex *pVertices = new CDiffused2TexturedVertex[m_nVertices];
+	CDiffused2TexturedVertex *pVertices = new CDiffused2TexturedVertex[m_VertexCount];
 
 	HeightMapImage *pHeightMapImage = (HeightMapImage *)pContext;
 	int cxHeightMap = pHeightMapImage->GetHeightMapWidth();
@@ -40,16 +40,19 @@ TerrainMesh::TerrainMesh(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * 
 		}
 	}
 
-	m_pd3dVertexBuffer = d3dUtil::CreateBufferResource(pd3dDevice, pd3dCommandList, pVertices, m_nStride * m_nVertices, D3D12_HEAP_TYPE_DEFAULT, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, &m_pd3dVertexUploadBuffer);
+	m_pPositionBuffer = d3dUtil::CreateBufferResource(pd3dDevice, pd3dCommandList, pVertices, m_nStride * m_VertexCount, D3D12_HEAP_TYPE_DEFAULT, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, &m_pPositionUploadBuffer);
 
-	m_d3dVertexBufferView.BufferLocation = m_pd3dVertexBuffer->GetGPUVirtualAddress();
-	m_d3dVertexBufferView.StrideInBytes = m_nStride;
-	m_d3dVertexBufferView.SizeInBytes = m_nStride * m_nVertices;
+
+	m_pVertexBufferViews = new D3D12_VERTEX_BUFFER_VIEW;
+
+	m_pVertexBufferViews[0].BufferLocation = m_pPositionBuffer->GetGPUVirtualAddress();
+	m_pVertexBufferViews[0].StrideInBytes = m_nStride;
+	m_pVertexBufferViews[0].SizeInBytes = m_nStride * m_VertexCount;
 
 	delete[] pVertices;
 
-	m_nIndices = ((nWidth * 2)*(nLength - 1)) + ((nLength - 1) - 1);
-	UINT *pnIndices = new UINT[m_nIndices];
+	m_IndexCount = ((nWidth * 2)*(nLength - 1)) + ((nLength - 1) - 1);
+	UINT *pnIndices = new UINT[m_IndexCount];
 
 	for (int j = 0, z = 0; z < nLength - 1; z++)
 	{
@@ -73,11 +76,11 @@ TerrainMesh::TerrainMesh(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * 
 		}
 	}
 
-	m_pd3dIndexBuffer = d3dUtil::CreateBufferResource(pd3dDevice, pd3dCommandList, pnIndices, sizeof(UINT) * m_nIndices, D3D12_HEAP_TYPE_DEFAULT, D3D12_RESOURCE_STATE_INDEX_BUFFER, &m_pd3dIndexUploadBuffer);
+	m_pIndexBuffer = d3dUtil::CreateBufferResource(pd3dDevice, pd3dCommandList, pnIndices, sizeof(UINT) * m_IndexCount, D3D12_HEAP_TYPE_DEFAULT, D3D12_RESOURCE_STATE_INDEX_BUFFER, &m_pIndexUploadBuffer);
 
-	m_d3dIndexBufferView.BufferLocation = m_pd3dIndexBuffer->GetGPUVirtualAddress();
-	m_d3dIndexBufferView.Format = DXGI_FORMAT_R32_UINT;
-	m_d3dIndexBufferView.SizeInBytes = sizeof(UINT) * m_nIndices;
+	m_IndexBufferView.BufferLocation = m_pIndexBuffer->GetGPUVirtualAddress();
+	m_IndexBufferView.Format = DXGI_FORMAT_R32_UINT;
+	m_IndexBufferView.SizeInBytes = sizeof(UINT) * m_IndexCount;
 
 	delete[] pnIndices;
 }

@@ -1,11 +1,18 @@
 #include "stdafx.h"
+#include "TerrainMesh.h"
 #include "HeightMapImage.h"
 #include "Terrain.h"
 
 Terrain::Terrain(const std::string& entityID, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, LPCTSTR  pFileName, int nWidth, int nLength, int nBlockWidth, int nBlockLength, XMFLOAT3 xmf3Scale, XMFLOAT4 xmf4Color)
 	:GameObject(entityID)
 {
-
+	if (pFileName == nullptr)
+	{
+#ifdef _DEBUG
+		std::cout << "file name is nullptr";
+#endif
+		return;
+	}
 	m_nWidth = nWidth;
 	m_nLength = nLength;
 
@@ -18,6 +25,21 @@ Terrain::Terrain(const std::string& entityID, ID3D12Device * pd3dDevice, ID3D12G
 
 	long cxBlocks = (m_nWidth - 1) / cxQuadsPerBlock;
 	long czBlocks = (m_nLength - 1) / czQuadsPerBlock;
+
+	TerrainMesh *pterrainMesh = NULL;
+	for (int z = 0, zStart = 0; z < czBlocks; z++)
+	{
+		for (int x = 0, xStart = 0; x < cxBlocks; x++)
+		{
+			xStart = x * (nBlockWidth - 1);
+			zStart = z * (nBlockLength - 1);
+			pterrainMesh = new TerrainMesh(pd3dDevice, pd3dCommandList, xStart, zStart, nBlockWidth, nBlockLength, xmf3Scale, xmf4Color, m_pHeightMapImage);
+			// SetMesh(x + (z*cxBlocks), pHeightMapGridMesh);
+		}
+	}
+
+	InsertComponent("TerrainMesh", pterrainMesh);
+
 
 	//m_nMeshes = cxBlocks * czBlocks;
 	//m_ppMeshes = new CMesh*[m_nMeshes];
