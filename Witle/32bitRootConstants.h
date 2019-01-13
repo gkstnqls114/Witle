@@ -9,7 +9,7 @@ class RootConstants :
 	public ResourceBase
 {
 	UINT m_parameterIndex{ 0 };
-	UINT m_ResourceCount;
+	UINT m_ResourceCount; // 루트상수로 넘겨야할 리소스 개수
 	UINT *DestOffsets{ nullptr };
 
 public:
