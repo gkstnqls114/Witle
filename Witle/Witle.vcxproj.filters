@@ -88,6 +88,9 @@
     <Filter Include="07.Resource\DescriptorTable">
       <UniqueIdentifier>{7448360b-46e0-4cc8-b5c4-ca7f787ce6f6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="07.Resource\Texture">
+      <UniqueIdentifier>{481b02ef-4f34-447d-9ab6-13db15eea9f3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -198,6 +201,9 @@
     <ClInclude Include="32bitRootConstants.h">
       <Filter>07.Resource\32bitRootConstants</Filter>
     </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>07.Resource\Texture</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -292,6 +298,9 @@
     </ClCompile>
     <ClCompile Include="32bitRootConstants.cpp">
       <Filter>07.Resource\32bitRootConstants</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>07.Resource\Texture</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

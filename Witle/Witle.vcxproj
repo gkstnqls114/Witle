@@ -183,6 +183,7 @@
     <ClInclude Include="vertices.h" />
     <ClInclude Include="Witle.h" />
     <ClInclude Include="DescriptorTable.h" />
+    <ClInclude Include="Texture.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ComponentBase.cpp" />
@@ -221,6 +222,7 @@
     <ClCompile Include="vertices.cpp" />
     <ClCompile Include="Witle.cpp" />
     <ClCompile Include="DescriptorTable.cpp" />
+    <ClCompile Include="Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Witle.rc" />
