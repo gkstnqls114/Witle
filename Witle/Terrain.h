@@ -3,17 +3,19 @@
 
 class ResourceBase;
 class HeightMapImage;
-
+class Texture;
 
 // CHeightMapTerrain ¿‘¥œ¥Ÿ.
 class Terrain :
 	public GameObject
 {
-	ResourceBase * m_ResourceBase{ nullptr };
+	Texture * m_ResourceBase{ nullptr };
 
 public:
 	Terrain(const std::string& entityID, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, LPCTSTR pFileName, int nWidth, int nLength, int nBlockWidth, int nBlockLength, XMFLOAT3 xmf3Scale, XMFLOAT4 xmf4Color);
 	virtual ~Terrain();
+
+	void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList);
 
 	virtual void Create();
 	virtual void Init();
@@ -38,4 +40,5 @@ public:
 	float GetWidth() { return(m_nWidth * m_xmf3Scale.x); }
 	float GetLength() { return(m_nLength * m_xmf3Scale.z); }
 
+	Texture* GetTexture() const { return m_ResourceBase; }
 };

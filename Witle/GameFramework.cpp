@@ -503,7 +503,7 @@ void CGameFramework::BuildObjects()
 	m_CommandList->Reset(m_CommandAllocator.Get(), NULL);
 	
 	///////////////////////////////////////////////////////////////////////////// 府家胶 积己
-	m_pScene = new GameScene();
+	m_pScene = new GameScene;
 	if (m_pScene) m_pScene->BuildObjects(m_d3dDevice.Get(), m_CommandList.Get());
 	
 	Shader* pCubeShader = new CubeShader();
@@ -513,7 +513,6 @@ void CGameFramework::BuildObjects()
 	Shader* pTerrainShader = new TerrainShader();
 	pTerrainShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
 	ShaderManager::GetInstance()->InsertShader("Terrain", pTerrainShader);
-
 	///////////////////////////////////////////////////////////////////////////// 府家胶 积己
 
 	hResult = m_CommandList->Close();

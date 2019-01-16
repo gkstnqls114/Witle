@@ -24,7 +24,7 @@ void MeshRenderer::RenderTerrainMesh(ID3D12GraphicsCommandList * pd3dCommandList
 {
 	TerrainMesh *terrainMesh = static_cast<TerrainMesh *>(mesh);
 
-	D3D12_PRIMITIVE_TOPOLOGY m_d3dPrimitiveTopology{ D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST };
+	D3D12_PRIMITIVE_TOPOLOGY m_d3dPrimitiveTopology{ D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP };
 	pd3dCommandList->IASetPrimitiveTopology(m_d3dPrimitiveTopology);
 
 	D3D12_VERTEX_BUFFER_VIEW pVertexBufferViews[] = { terrainMesh->GetVertexBufferView(0) };

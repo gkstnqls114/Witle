@@ -1,4 +1,5 @@
 #pragma once
+#include "MyDescriptorHeap.h"
 #include "Scene.h"
 
 
@@ -46,6 +47,7 @@ public:
 protected:
 	GameObject* m_GameObject;
 	Terrain* m_Terrain;
+	MyDescriptorHeap m_TerrainHeap;
 	GameObject* m_Camera;
 
 	//Camera *m_Camera{ nullptr };

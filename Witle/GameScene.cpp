@@ -114,23 +114,32 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	//루트 시그너쳐를 생성한다.
 	m_pd3dGraphicsRootSignature = CreateGraphicsRootSignature(pd3dDevice);
 	
+	// 큐브메쉬 생성
 	ComponentBase* cubemesh = new CubeMesh(pd3dDevice, pd3dCommandList, 0.5, 0.5, 0.5);
 	std::cout << cubemesh->GetFamillyID() << " " << cubemesh->GetComponentID() << std::endl;
 	m_GameObject = new GameObject("Player");
 	m_GameObject->InsertComponent(cubemesh->GetFamillyID(), cubemesh);
 
-	FollowCam* cameraComponent = new FollowCam(m_GameObject);
-	cameraComponent->Teleport(XMFLOAT3(0, 0, -5.f)); 
+	// 터레인 생성 
+	XMFLOAT3 xmf3Scale(8.0f, 2.0f, 8.0f);
+	XMFLOAT4 xmf4Color(1.f,1.f, 1.f, 0.0f); 
+	m_Terrain = new Terrain("Terrain", pd3dDevice, pd3dCommandList,
+		L"Image/HeightMap.raw", 257, 257, 257, 257, xmf3Scale, xmf4Color);
+
+	m_TerrainHeap.CreateCbvSrvUavDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 2, 0);
+	// m_TerrainHeap.CreateConstantBufferViews(pd3dDevice, pd3dCommandList, 1, m_pd3dcbGameObject, ncbElementBytes);
+	m_TerrainHeap.CreateShaderResourceViews(pd3dDevice, pd3dCommandList, m_Terrain->GetTexture(), 3, true);
+
+	// 카메라
+	Camera* cameraComponent = new FollowCam(m_Terrain);
+	cameraComponent->Teleport(XMFLOAT3(0, 0, -5.f));
 	m_Camera = new GameObject("Camera");
 	m_Camera->InsertComponent(cameraComponent->GetFamillyID(), cameraComponent);
 
 	cameraComponent->SetViewport(0, 0, FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT, 0.0f, 1.0f);
 	cameraComponent->SetScissorRect(0, 0, FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT);
 	cameraComponent->GenerateProjectionMatrix(0.01f, CAMERA_FAR, float(FRAME_BUFFER_WIDTH) / float(FRAME_BUFFER_HEIGHT), 60.0f);
-	
-	m_Terrain = new Terrain("Terrain", pd3dDevice, pd3dCommandList,
-		L"Image/HeightMap.raw", 100, 100, 
-		10, 10, XMFLOAT3(1.F, 1.F, 1.F), XMFLOAT4(1.F, 1.F, 1.F, 1.F));
+
 	// cameraComponent->CreateShaderVariables(pd3dDevice, pd3dCommandList);
 	// cameraComponent->SetTarget(m_Player);
 
@@ -338,9 +347,10 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 
 	
 
-	// Terrain PSO 설정
-	
-
+	// Terrain PSO 설정 
+	pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Terrain")->GetPSO());
+	m_TerrainHeap.FirstUpdate(pd3dCommandList);
+	m_Terrain->UpdateShaderVariables(pd3dCommandList);
 	Mesh* terrainMesh = m_Terrain->GetComponent<Mesh>("TerrainMesh");
 	gMeshRenderer.Render(pd3dCommandList, terrainMesh);
 

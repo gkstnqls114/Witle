@@ -67,6 +67,7 @@ Terrain::Terrain(const std::string& entityID, ID3D12Device * pd3dDevice, ID3D12G
 	pTerrainTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Image/Base_Texture.dds", 0);
 	pTerrainTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Image/Detail_Texture_7.dds", 1);
 
+	m_ResourceBase = pTerrainTexture;
 	//UINT ncbElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255); //256의 배수
 
 	//CTerrainShader *pTerrainShader = new CTerrainShader();
@@ -89,6 +90,14 @@ Terrain::Terrain(const std::string& entityID, ID3D12Device * pd3dDevice, ID3D12G
 Terrain::~Terrain()
 {
 	if (m_pHeightMapImage) delete m_pHeightMapImage;
+}
+
+void Terrain::UpdateShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList)
+{
+	// 힙 설정
+	// pd3dCommandList->SetDescriptorHeaps(1, &m_pd3dCbvSrvDescriptorHeap);
+
+	static_cast<Texture *>(m_ResourceBase)->UpdateShaderVariables(pd3dCommandList);
 }
 
 void Terrain::Create()

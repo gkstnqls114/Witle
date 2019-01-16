@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "d3dUtil.h"
+#include "Texture.h"
 #include "MyDescriptorHeap.h"
 
 
@@ -17,7 +18,7 @@ MyDescriptorHeap::~MyDescriptorHeap()
 }
 
 
-void MyDescriptorHeap::CreateCbvAndSrvDescriptorHeaps(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, int nConstantBufferViews, int nShaderResourceViews, int nUnorderedAcessViews)
+void MyDescriptorHeap::CreateCbvSrvUavDescriptorHeaps(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, int nConstantBufferViews, int nShaderResourceViews, int nUnorderedAcessViews)
 {
 	D3D12_DESCRIPTOR_HEAP_DESC d3dDescriptorHeapDesc;
 	d3dDescriptorHeapDesc.NumDescriptors = nConstantBufferViews + nShaderResourceViews + nUnorderedAcessViews; //CBVs + SRVs + UAVs 
@@ -51,7 +52,7 @@ void MyDescriptorHeap::CreateConstantBufferViews(ID3D12Device * pd3dDevice, ID3D
 	}
 }
 
-void MyDescriptorHeap::CreateShaderResourceViews(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, CTexture * pTexture, UINT nRootParameterStartIndex, bool bAutoIncrement, UINT Start)
+void MyDescriptorHeap::CreateShaderResourceViews(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, Texture * pTexture, UINT nRootParameterStartIndex, bool bAutoIncrement, UINT Start)
 {
 	D3D12_CPU_DESCRIPTOR_HANDLE d3dSrvCPUDescriptorHandle = m_SrvCPUDescriptorStartHandle;
 	D3D12_GPU_DESCRIPTOR_HANDLE d3dSrvGPUDescriptorHandle = m_SrvGPUDescriptorStartHandle;
@@ -59,41 +60,41 @@ void MyDescriptorHeap::CreateShaderResourceViews(ID3D12Device * pd3dDevice, ID3D
 	d3dSrvCPUDescriptorHandle.ptr = d3dSrvCPUDescriptorHandle.ptr + (Start * d3dUtil::gnCbvSrvDescriptorIncrementSize);
 	d3dSrvGPUDescriptorHandle.ptr = d3dSrvGPUDescriptorHandle.ptr + (Start * d3dUtil::gnCbvSrvDescriptorIncrementSize);
 
-	//int nTextures = pTexture->GetTextures();
-	//int nTextureType = pTexture->GetTextureType();
-	//for (int i = 0; i < nTextures; i++)
-	//{
-	//	ID3D12Resource *pShaderResource = pTexture->GetTexture(i);
-	//	D3D12_RESOURCE_DESC d3dResourceDesc = pShaderResource->GetDesc();
-	//	D3D12_SHADER_RESOURCE_VIEW_DESC d3dShaderResourceViewDesc = d3dUtil::GetShaderResourceViewDesc(d3dResourceDesc, nTextureType);
-	//	pd3dDevice->CreateShaderResourceView(pShaderResource, &d3dShaderResourceViewDesc, d3dSrvCPUDescriptorHandle);
-	//	
-	//	d3dSrvCPUDescriptorHandle.ptr += d3dUtil::gnCbvSrvDescriptorIncrementSize;
-	//	
-	//	// 만약 bAutoIncrement가 true라면 nRootParameterStartIndex는 + i, false라면 nRootParameterStartIndex 그대로...
-	//	pTexture->SetRootArgument(i, (bAutoIncrement) ? (nRootParameterStartIndex + i) : nRootParameterStartIndex, d3dSrvGPUDescriptorHandle);
-	//	
-	//	d3dSrvGPUDescriptorHandle.ptr += d3dUtil::gnCbvSrvDescriptorIncrementSize;
-	//}
+	int nTextures = pTexture->GetTextures();
+	int nTextureType = pTexture->GetTextureType();
+	for (int i = 0; i < nTextures; i++)
+	{
+		ID3D12Resource *pShaderResource = pTexture->GetTexture(i);
+		D3D12_RESOURCE_DESC d3dResourceDesc = pShaderResource->GetDesc();
+		D3D12_SHADER_RESOURCE_VIEW_DESC d3dShaderResourceViewDesc = d3dUtil::GetShaderResourceViewDesc(d3dResourceDesc, nTextureType);
+		pd3dDevice->CreateShaderResourceView(pShaderResource, &d3dShaderResourceViewDesc, d3dSrvCPUDescriptorHandle);
+		
+		d3dSrvCPUDescriptorHandle.ptr += d3dUtil::gnCbvSrvDescriptorIncrementSize;
+		
+		// 만약 bAutoIncrement가 true라면 nRootParameterStartIndex는 + i, false라면 nRootParameterStartIndex 그대로...
+		pTexture->SetRootArgument(i, (bAutoIncrement) ? (nRootParameterStartIndex + i) : nRootParameterStartIndex, d3dSrvGPUDescriptorHandle);
+		
+		d3dSrvGPUDescriptorHandle.ptr += d3dUtil::gnCbvSrvDescriptorIncrementSize;
+	}
 }
 
-void MyDescriptorHeap::CreateUnorderedAccessViews(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, CTexture * pTexture, UINT nRootParameterStartIndex, bool bAutoIncrement)
+void MyDescriptorHeap::CreateUnorderedAccessViews(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, Texture * pTexture, UINT nRootParameterStartIndex, bool bAutoIncrement)
 {
 	D3D12_CPU_DESCRIPTOR_HANDLE UAVCPUDescriptorHandle = m_d3dUAVCPUDescriptorStartHandle;
 	D3D12_GPU_DESCRIPTOR_HANDLE UAVGPUDescriptorHandle = m_d3dUAVGPUDescriptorStartHandle;
-	//int nTextures = pTexture->GetTextures();
-	//int nTextureType = pTexture->GetTextureType();
-	//for (int i = 0; i < nTextures; ++i)
-	//{
-	//	ID3D12Resource *pShaderResource = pTexture->GetTexture(i);
-	//	D3D12_RESOURCE_DESC d3dResourceDesc = pShaderResource->GetDesc();
-	//	 
-	//	D3D12_UNORDERED_ACCESS_VIEW_DESC d3dShaderResourceViewDesc = d3dUtil::GetUnorderedAccessViewDesc(d3dResourceDesc, nTextureType);
-	//	pd3dDevice->CreateUnorderedAccessView(pShaderResource, nullptr, &d3dShaderResourceViewDesc, UAVCPUDescriptorHandle);
+	int nTextures = pTexture->GetTextures();
+	int nTextureType = pTexture->GetTextureType();
+	for (int i = 0; i < nTextures; ++i)
+	{
+		ID3D12Resource *pShaderResource = pTexture->GetTexture(i);
+		D3D12_RESOURCE_DESC d3dResourceDesc = pShaderResource->GetDesc();
+		 
+		D3D12_UNORDERED_ACCESS_VIEW_DESC d3dShaderResourceViewDesc = d3dUtil::GetUnorderedAccessViewDesc(d3dResourceDesc, nTextureType);
+		pd3dDevice->CreateUnorderedAccessView(pShaderResource, nullptr, &d3dShaderResourceViewDesc, UAVCPUDescriptorHandle);
 
-	//	// 만약 bAutoIncrement가 true라면 nRootParameterStartIndex는 + i, false라면 nRootParameterStartIndex 그대로...
-	//	// pTexture->SetRootArgument(i, (bAutoIncrement) ? (nRootParameterStartIndex + i) : nRootParameterStartIndex, UAVGPUDescriptorHandle);
-	//	UAVGPUDescriptorHandle.ptr += d3dUtil::gnCbvSrvDescriptorIncrementSize;
-	//	UAVCPUDescriptorHandle.ptr += d3dUtil::gnCbvSrvDescriptorIncrementSize;
-	//}
+		// 만약 bAutoIncrement가 true라면 nRootParameterStartIndex는 + i, false라면 nRootParameterStartIndex 그대로...
+		// pTexture->SetRootArgument(i, (bAutoIncrement) ? (nRootParameterStartIndex + i) : nRootParameterStartIndex, UAVGPUDescriptorHandle);
+		UAVGPUDescriptorHandle.ptr += d3dUtil::gnCbvSrvDescriptorIncrementSize;
+		UAVCPUDescriptorHandle.ptr += d3dUtil::gnCbvSrvDescriptorIncrementSize;
+	}
 }

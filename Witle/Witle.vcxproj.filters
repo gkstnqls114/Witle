@@ -94,6 +94,9 @@
     <Filter Include="05.Shader\TerrainShader">
       <UniqueIdentifier>{aa6b6413-fd8b-46d0-9a8c-ff8f7919a135}</UniqueIdentifier>
     </Filter>
+    <Filter Include="07.Resource\DescriptorHeap">
+      <UniqueIdentifier>{cf4eecd1-5ba8-488b-8766-872ba7df4cfe}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -153,9 +156,6 @@
     <ClInclude Include="DDSTextureLoader12.h">
       <Filter>99.etc</Filter>
     </ClInclude>
-    <ClInclude Include="MyDescriptorHeap.h">
-      <Filter>99.etc</Filter>
-    </ClInclude>
     <ClInclude Include="GameScene.h">
       <Filter>04.Scene\GameScene</Filter>
     </ClInclude>
@@ -210,6 +210,9 @@
     <ClInclude Include="TerrainShader.h">
       <Filter>05.Shader\TerrainShader</Filter>
     </ClInclude>
+    <ClInclude Include="MyDescriptorHeap.h">
+      <Filter>07.Resource\DescriptorHeap</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -244,9 +247,6 @@
     </ClCompile>
     <ClCompile Include="ShaderManager.cpp">
       <Filter>05.Shader</Filter>
-    </ClCompile>
-    <ClCompile Include="MyDescriptorHeap.cpp">
-      <Filter>99.etc</Filter>
     </ClCompile>
     <ClCompile Include="Mesh.cpp">
       <Filter>02.Component\Mesh</Filter>
@@ -310,6 +310,9 @@
     </ClCompile>
     <ClCompile Include="TerrainShader.cpp">
       <Filter>05.Shader\TerrainShader</Filter>
+    </ClCompile>
+    <ClCompile Include="MyDescriptorHeap.cpp">
+      <Filter>07.Resource\DescriptorHeap</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
