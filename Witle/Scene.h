@@ -4,7 +4,7 @@ class Scene
 {
 protected:
 	//그래픽 루트 시그너쳐를 생성한다.
-	virtual ComPtr<ID3D12RootSignature> CreateGraphicsRootSignature(ID3D12Device *pd3dDevice) = 0;
+	virtual ID3D12RootSignature* CreateGraphicsRootSignature(ID3D12Device *pd3dDevice) = 0;
 
 public:
 	Scene();
@@ -29,13 +29,12 @@ public:
 	virtual void LastUpdate() = 0;
 
 	 
-	ID3D12RootSignature* GetGraphicsRootSignature() const { return m_pd3dGraphicsRootSignature.Get(); }
+	ID3D12RootSignature* GetGraphicsRootSignature() const { return m_pd3dGraphicsRootSignature; }
 
 protected:
 
-	ComPtr<ID3D12RootSignature> m_pd3dGraphicsRootSignature{ nullptr }; // 루트 시그니처
-	ComPtr<ID3D12PipelineState> m_pd3dPipelineState{ nullptr }; //PSO
-
+	ID3D12RootSignature* m_pd3dGraphicsRootSignature{ nullptr }; // 루트 시그니처
+	
 	D3D12_VIEWPORT m_Viewport;
 	D3D12_RECT m_ScissorRect;
 };

@@ -91,6 +91,9 @@
     <Filter Include="07.Resource\Texture">
       <UniqueIdentifier>{481b02ef-4f34-447d-9ab6-13db15eea9f3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="05.Shader\TerrainShader">
+      <UniqueIdentifier>{aa6b6413-fd8b-46d0-9a8c-ff8f7919a135}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -204,6 +207,9 @@
     <ClInclude Include="Texture.h">
       <Filter>07.Resource\Texture</Filter>
     </ClInclude>
+    <ClInclude Include="TerrainShader.h">
+      <Filter>05.Shader\TerrainShader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -302,6 +308,9 @@
     <ClCompile Include="Texture.cpp">
       <Filter>07.Resource\Texture</Filter>
     </ClCompile>
+    <ClCompile Include="TerrainShader.cpp">
+      <Filter>05.Shader\TerrainShader</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Witle.rc">
@@ -318,6 +327,9 @@
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="CubeShader.hlsl">
+      <Filter>리소스 파일\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="TerrainShader.hlsl">
       <Filter>리소스 파일\Shader</Filter>
     </FxCompile>
   </ItemGroup>

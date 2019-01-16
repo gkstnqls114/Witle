@@ -21,7 +21,7 @@ class GameScene
 
 protected:
 	//그래픽 루트 시그너쳐를 생성한다.
-	virtual ComPtr<ID3D12RootSignature> CreateGraphicsRootSignature(ID3D12Device *pd3dDevice) override; 
+	virtual ID3D12RootSignature* CreateGraphicsRootSignature(ID3D12Device *pd3dDevice) override; 
 
 public:
 	GameScene();

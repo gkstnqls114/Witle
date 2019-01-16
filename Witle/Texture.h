@@ -10,6 +10,7 @@ struct SRVROOTARGUMENTINFO
 class Texture
 	: public ResourceBase
 { 
+public:
 	Texture(int nTextureResources = 1, UINT nResourceType = RESOURCE_TEXTURE2D, int nSamplers = 0);
 	virtual ~Texture();
 
