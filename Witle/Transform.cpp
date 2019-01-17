@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "stdafx.h" 
 #include "Transform.h"
 
 
@@ -8,6 +8,21 @@ void Transform::SetTransform(const XMFLOAT3 & right, const XMFLOAT3 & up, const 
 	m_transformWorld._12 = right.y;  m_transformWorld._22 = up.y;  m_transformWorld._32 = look.y; m_transformWorld._42 = 0;
 	m_transformWorld._13 = right.z;  m_transformWorld._23 = up.z;  m_transformWorld._33 = look.z; m_transformWorld._43 = 0;
 	m_transformWorld._14 = pos.x;    m_transformWorld._24 = pos.x; m_transformWorld._34 = pos.x;  m_transformWorld._44 = 1;
+}
+
+void Transform::Move(const XMFLOAT3 & xmf3Shift, bool bUpdateVelocity)
+{
+	//bUpdateVelocity가 참이면 플레이어를 이동하지 않고 속도 벡터를 변경한다.
+	if (bUpdateVelocity)
+	{
+		//플레이어의 속도 벡터를 xmf3Shift 벡터만큼 변경한다.
+		// m_xmf3Velocity = Vector3::Add(m_xmf3Velocity, xmf3Shift);
+	}
+	else
+	{
+		//플레이어를 현재 위치 벡터에서 xmf3Shift 벡터만큼 이동한다.
+		m_Position = Vector3::Add(m_Position, xmf3Shift); 
+	}
 }
 
 Transform::Transform()
@@ -52,4 +67,29 @@ void Transform::Rotate(float x, float y, float z)
 	m_Up = Vector3::CrossProduct(m_Look, m_Right, true);
 
 	SetTransform(m_Right, m_Up, m_Look, m_Position);
+}
+
+void Transform::Move(DWORD dwDirection, float fDistance, bool bUpdateVelocity)
+{
+	if (dwDirection)
+	{
+		XMFLOAT3 xmf3Shift = XMFLOAT3(0, 0, 0);
+		//화살표 키 ‘↑’를 누르면 로컬 z-축 방향으로 이동(전진)한다. ‘↓’를 누르면 반대 방향으로 이동한다.
+		if (dwDirection & DIR_FORWARD) xmf3Shift = Vector3::Add(xmf3Shift, m_Look,
+			fDistance);
+		if (dwDirection & DIR_BACKWARD) xmf3Shift = Vector3::Add(xmf3Shift, m_Look,
+			-fDistance);
+		//화살표 키 ‘→’를 누르면 로컬 x-축 방향으로 이동한다. ‘←’를 누르면 반대 방향으로 이동한다.
+		if (dwDirection & DIR_RIGHT) xmf3Shift = Vector3::Add(xmf3Shift, m_Right,
+			fDistance);
+		if (dwDirection & DIR_LEFT) xmf3Shift = Vector3::Add(xmf3Shift, m_Right,
+			-fDistance);
+		//‘Page Up’을 누르면 로컬 y-축 방향으로 이동한다. ‘Page Down’을 누르면 반대 방향으로 이동한다.
+		//if (dwDirection & DIR_UP) xmf3Shift = Vector3::Add(xmf3Shift, m_Up, fDistance);
+		//if (dwDirection & DIR_DOWN) xmf3Shift = Vector3::Add(xmf3Shift, m_Up,
+		//	-fDistance);
+
+		//플레이어를 현재 위치 벡터에서 xmf3Shift 벡터만큼 이동한다.
+		Move(xmf3Shift, bUpdateVelocity);
+	}
 }

@@ -11,6 +11,7 @@ class Transform :
 	XMFLOAT4X4 m_transformWorld { Matrix4x4::Identity() };
 
 	void SetTransform(const XMFLOAT3& right, const XMFLOAT3& up, const XMFLOAT3& look, const XMFLOAT3& pos);
+	void Move(const XMFLOAT3& xmf3Shift, bool bUpdateVelocity);
 public:
 	Transform();
 	virtual ~Transform();
@@ -26,6 +27,8 @@ public:
 	XMFLOAT3 GetLook() const { return m_Look; }
 	XMFLOAT3 GetPosition() const { return m_Position; }
 	//////////////////////////////////////////////// Get
+
+	void Move(DWORD dwDirection, float fDistance, bool bUpdateVelocity);
 
 };
 

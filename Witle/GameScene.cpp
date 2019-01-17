@@ -121,7 +121,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	m_GameObject->InsertComponent(cubemesh->GetFamillyID(), cubemesh);
 
 	// 터레인 생성 
-	XMFLOAT3 xmf3Scale(8.0f, 2.0f, 8.0f);
+	XMFLOAT3 xmf3Scale(8.0f, 1.0f, 8.0f);
 	XMFLOAT4 xmf4Color(1.f,1.f, 1.f, 0.0f); 
 	m_Terrain = new Terrain("Terrain", pd3dDevice, pd3dCommandList,
 		L"Image/HeightMap.raw", 257, 257, 257, 257, xmf3Scale, xmf4Color);
@@ -131,7 +131,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	m_TerrainHeap.CreateShaderResourceViews(pd3dDevice, pd3dCommandList, m_Terrain->GetTexture(), 3, true);
 
 	// 카메라
-	Camera* cameraComponent = new FollowCam(m_Terrain);
+	Camera* cameraComponent = new FollowCam(m_GameObject);
 	cameraComponent->Teleport(XMFLOAT3(0, 0, -5.f));
 	m_Camera = new GameObject("Camera");
 	m_Camera->InsertComponent(cameraComponent->GetFamillyID(), cameraComponent);
@@ -264,6 +264,8 @@ bool GameScene::ProcessInput(HWND hWnd, POINT OldCursor, float ElapsedTime)
 		if (cxDelta || cyDelta)
 		{
 			m_GameObject->GetComponent<Transform>("")->Rotate(cyDelta, cxDelta, 0.0f);
+			m_Camera->GetComponent<Camera>("Camera")->Rotate(cyDelta, cxDelta, 0.0f);
+
 			// m_Camera->GetComponent<Camera>("Camera")->Rotate(cyDelta, cxDelta, 0.0f);
 
 			/*cxDelta는 y-축의 회전을 나타내고 cyDelta는 x-축의 회전을 나타낸다. 오른쪽 마우스 버튼이 눌려진 경우
@@ -280,7 +282,11 @@ bool GameScene::ProcessInput(HWND hWnd, POINT OldCursor, float ElapsedTime)
 		}
 		/*플레이어를 dwDirection 방향으로 이동한다(실제로는 속도 벡터를 변경한다). 이동 거리는 시간에 비례하도록 한다.
 		플레이어의 이동 속력은 (50/초)로 가정한다.*/
-		// if (dwDirection) m_GameObject->Move(dwDirection, 50.0f * ElapsedTime, true);
+		//if (dwDirection) m_GameObject->Move(dwDirection, 50.0f * ElapsedTime, true);
+		if (dwDirection)
+		{
+			m_GameObject->GetComponent<Transform>("")->Move(dwDirection, 50.0f * ElapsedTime, false);
+		}
 	}
 
 	return true;
@@ -332,7 +338,6 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Cube")->GetPSO());
 	
 	// 쉐이더 변수 설정
-	XMFLOAT4X4 matrix = Matrix4x4::Identity(); 
 	pd3dCommandList->SetGraphicsRoot32BitConstants(0, 16, &m_GameObject->GetComponent<Transform>("")->GetWorldMatrix(), 0);
 	//pd3dCommandList->SetGraphicsRoot32BitConstants(0, 16, &matrix, 16);
 	//pd3dCommandList->SetGraphicsRoot32BitConstants(0, 16, &matrix, 32);
@@ -350,7 +355,11 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	// Terrain PSO 설정 
 	pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Terrain")->GetPSO());
 	m_TerrainHeap.FirstUpdate(pd3dCommandList);
+
+	XMFLOAT4X4 matrix = Matrix4x4::Identity();
+	pd3dCommandList->SetGraphicsRoot32BitConstants(0, 16, &matrix, 0);
 	m_Terrain->UpdateShaderVariables(pd3dCommandList);
+
 	Mesh* terrainMesh = m_Terrain->GetComponent<Mesh>("TerrainMesh");
 	gMeshRenderer.Render(pd3dCommandList, terrainMesh);
 
