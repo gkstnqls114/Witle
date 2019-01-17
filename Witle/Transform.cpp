@@ -23,6 +23,7 @@ void Transform::Move(const XMFLOAT3 & xmf3Shift, bool bUpdateVelocity)
 		//플레이어를 현재 위치 벡터에서 xmf3Shift 벡터만큼 이동한다.
 		m_Position = Vector3::Add(m_Position, xmf3Shift); 
 	}
+
 }
 
 Transform::Transform()
@@ -36,7 +37,7 @@ Transform::~Transform()
 
 void Transform::Update()
 {
-	
+	SetTransform(m_Right, m_Up, m_Look, m_Position);
 }
 
 void Transform::Rotate(float x, float y, float z)
@@ -92,4 +93,9 @@ void Transform::Move(DWORD dwDirection, float fDistance, bool bUpdateVelocity)
 		//플레이어를 현재 위치 벡터에서 xmf3Shift 벡터만큼 이동한다.
 		Move(xmf3Shift, bUpdateVelocity);
 	}
+}
+
+void Transform::Move(const XMFLOAT3 & vMove)
+{
+	m_Position = Vector3::Add(m_Position, vMove);
 }

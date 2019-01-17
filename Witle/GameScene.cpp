@@ -284,8 +284,10 @@ bool GameScene::ProcessInput(HWND hWnd, POINT OldCursor, float ElapsedTime)
 		플레이어의 이동 속력은 (50/초)로 가정한다.*/
 		//if (dwDirection) m_GameObject->Move(dwDirection, 50.0f * ElapsedTime, true);
 		if (dwDirection)
-		{
-			m_GameObject->GetComponent<Transform>("")->Move(dwDirection, 50.0f * ElapsedTime, false);
+		{ 
+			AXIS axis = m_GameObject->GetComponent<Transform>("")->GetCoorAxis();
+			m_GameObject->GetComponent<Transform>("")->Move(axis.up);
+			m_Camera->GetComponent<Camera>("")->Move(axis.up);
 		}
 	}
 
