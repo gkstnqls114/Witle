@@ -13,7 +13,7 @@ public:
 	GameObject(const std::string& entityID);
 	virtual ~GameObject();
 
-	void Update();
+	virtual void Update();
 	
 	bool InsertComponent(const std::string& ComponenetID, ComponentBase* pComponentBase);
 	

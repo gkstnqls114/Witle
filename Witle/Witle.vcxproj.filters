@@ -97,6 +97,9 @@
     <Filter Include="07.Resource\DescriptorHeap">
       <UniqueIdentifier>{cf4eecd1-5ba8-488b-8766-872ba7df4cfe}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.GameObject\Player">
+      <UniqueIdentifier>{79d88ce3-72d5-440a-881b-7a9ae6ed8439}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -213,6 +216,9 @@
     <ClInclude Include="MyDescriptorHeap.h">
       <Filter>07.Resource\DescriptorHeap</Filter>
     </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>03.GameObject\Player</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -313,6 +319,9 @@
     </ClCompile>
     <ClCompile Include="MyDescriptorHeap.cpp">
       <Filter>07.Resource\DescriptorHeap</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>03.GameObject\Player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

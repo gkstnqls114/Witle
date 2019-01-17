@@ -264,7 +264,7 @@ bool GameScene::ProcessInput(HWND hWnd, POINT OldCursor, float ElapsedTime)
 		if (cxDelta || cyDelta)
 		{
 			m_GameObject->GetComponent<Transform>("")->Rotate(cyDelta, cxDelta, 0.0f);
-			// m_Camera->GetComponent<Camera>("Camera")->Rotate(cyDelta, cxDelta, 0.0f);
+			m_Camera->GetComponent<FollowCam>("Camera")->Rotate(cyDelta, cxDelta, 0.0f);
 
 			// m_Camera->GetComponent<Camera>("Camera")->Rotate(cyDelta, cxDelta, 0.0f);
 
@@ -359,15 +359,15 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	
 
 	//// Terrain PSO ¼³Á¤ 
-	//pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Terrain")->GetPSO());
-	//m_TerrainHeap.FirstUpdate(pd3dCommandList);
+	pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Terrain")->GetPSO());
+	m_TerrainHeap.FirstUpdate(pd3dCommandList);
 
-	//XMFLOAT4X4 matrix = Matrix4x4::Identity();
-	//pd3dCommandList->SetGraphicsRoot32BitConstants(0, 16, &matrix, 0);
-	//m_Terrain->UpdateShaderVariables(pd3dCommandList);
+	XMFLOAT4X4 matrix = Matrix4x4::Identity();
+	pd3dCommandList->SetGraphicsRoot32BitConstants(0, 16, &matrix, 0);
+	m_Terrain->UpdateShaderVariables(pd3dCommandList);
 
-	//Mesh* terrainMesh = m_Terrain->GetComponent<Mesh>("TerrainMesh");
-	//gMeshRenderer.Render(pd3dCommandList, terrainMesh);
+	Mesh* terrainMesh = m_Terrain->GetComponent<Mesh>("TerrainMesh");
+	gMeshRenderer.Render(pd3dCommandList, terrainMesh);
 
 	//if (m_SkyBox) m_SkyBox->Render(pd3dCommandList, m_Camera);
 
@@ -703,5 +703,5 @@ ID3D12RootSignature* GameScene::CreateGraphicsRootSignature(ID3D12Device *pd3dDe
 
 void GameScene::Update(float ElapsedTime)
 {
-	
+
 }
