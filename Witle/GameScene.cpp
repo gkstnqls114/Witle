@@ -115,7 +115,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	m_pd3dGraphicsRootSignature = CreateGraphicsRootSignature(pd3dDevice);
 	
 	// 큐브메쉬 생성
-	ComponentBase* cubemesh = new CubeMesh(pd3dDevice, pd3dCommandList, 0.5, 0.5, 0.5);
+	ComponentBase* cubemesh = new CubeMesh(pd3dDevice, pd3dCommandList, 1, 1, 1);
 	std::cout << cubemesh->GetFamillyID() << " " << cubemesh->GetComponentID() << std::endl;
 	m_GameObject = new GameObject("Player");
 	m_GameObject->InsertComponent(cubemesh->GetFamillyID(), cubemesh);
@@ -264,7 +264,7 @@ bool GameScene::ProcessInput(HWND hWnd, POINT OldCursor, float ElapsedTime)
 		if (cxDelta || cyDelta)
 		{
 			m_GameObject->GetComponent<Transform>("")->Rotate(cyDelta, cxDelta, 0.0f);
-			m_Camera->GetComponent<Camera>("Camera")->Rotate(cyDelta, cxDelta, 0.0f);
+			// m_Camera->GetComponent<Camera>("Camera")->Rotate(cyDelta, cxDelta, 0.0f);
 
 			// m_Camera->GetComponent<Camera>("Camera")->Rotate(cyDelta, cxDelta, 0.0f);
 
@@ -286,8 +286,9 @@ bool GameScene::ProcessInput(HWND hWnd, POINT OldCursor, float ElapsedTime)
 		if (dwDirection)
 		{ 
 			AXIS axis = m_GameObject->GetComponent<Transform>("")->GetCoorAxis();
-			m_GameObject->GetComponent<Transform>("")->Move(axis.up);
-			m_Camera->GetComponent<Camera>("")->Move(axis.up);
+			std::cout << "Up " << std::endl;
+			Vector3::Show(axis.up);
+			m_GameObject->GetComponent<Transform>("")->Move(XMFLOAT3(0.F , 1.F, 0.F)); 
 		}
 	}
 
@@ -340,7 +341,10 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Cube")->GetPSO());
 	
 	// 쉐이더 변수 설정
-	pd3dCommandList->SetGraphicsRoot32BitConstants(0, 16, &m_GameObject->GetComponent<Transform>("")->GetWorldMatrix(), 0);
+
+	XMFLOAT4X4 xmf4x4World;
+	XMStoreFloat4x4(&xmf4x4World, XMMatrixTranspose(XMLoadFloat4x4(&m_GameObject->GetComponent<Transform>("")->GetWorldMatrix())));
+	pd3dCommandList->SetGraphicsRoot32BitConstants(0, 16, &xmf4x4World, 0);
 	//pd3dCommandList->SetGraphicsRoot32BitConstants(0, 16, &matrix, 16);
 	//pd3dCommandList->SetGraphicsRoot32BitConstants(0, 16, &matrix, 32);
 
@@ -354,16 +358,16 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 
 	
 
-	// Terrain PSO 설정 
-	pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Terrain")->GetPSO());
-	m_TerrainHeap.FirstUpdate(pd3dCommandList);
+	//// Terrain PSO 설정 
+	//pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Terrain")->GetPSO());
+	//m_TerrainHeap.FirstUpdate(pd3dCommandList);
 
-	XMFLOAT4X4 matrix = Matrix4x4::Identity();
-	pd3dCommandList->SetGraphicsRoot32BitConstants(0, 16, &matrix, 0);
-	m_Terrain->UpdateShaderVariables(pd3dCommandList);
+	//XMFLOAT4X4 matrix = Matrix4x4::Identity();
+	//pd3dCommandList->SetGraphicsRoot32BitConstants(0, 16, &matrix, 0);
+	//m_Terrain->UpdateShaderVariables(pd3dCommandList);
 
-	Mesh* terrainMesh = m_Terrain->GetComponent<Mesh>("TerrainMesh");
-	gMeshRenderer.Render(pd3dCommandList, terrainMesh);
+	//Mesh* terrainMesh = m_Terrain->GetComponent<Mesh>("TerrainMesh");
+	//gMeshRenderer.Render(pd3dCommandList, terrainMesh);
 
 	//if (m_SkyBox) m_SkyBox->Render(pd3dCommandList, m_Camera);
 

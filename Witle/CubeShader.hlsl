@@ -28,7 +28,7 @@ VertexOut VS(VertexIn input)
 {
 	VertexOut vout;
 
-	//vout.Pos = mul(float4(input.Pos, 1.0f), gmtxWorld);
+	// vout.Pos = mul(float4(input.Pos, 1.0f), gmtxWorld);
 	vout.Pos = mul(mul(mul(float4(input.Pos, 1.0f), gmtxWorld), gmtxView), gmtxProjection);
 	vout.Color = input.Color; 
 

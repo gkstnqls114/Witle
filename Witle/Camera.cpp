@@ -30,12 +30,9 @@ Camera::~Camera()
 
 void Camera::Teleport(const XMFLOAT3 & pos)
 {
-	m_Position = pos;
-	m_xmf4x4View._41 = pos.x;
-	m_xmf4x4View._42 = pos.y;
-	m_xmf4x4View._43 = pos.z;
-
+	m_Position = pos;  
 	m_At = Vector3::Add(m_Position, m_Offset);
+	m_xmf4x4View = Matrix4x4::LookAtLH(m_Position, m_At, m_Up);
 }
 
 void Camera::Move(const XMFLOAT3 & Shift)
@@ -194,8 +191,8 @@ void Camera::SetScissorRect(LONG xLeft, LONG yTop, LONG xRight, LONG yBottom)
 
 void Camera::RegenerateViewMatrix()
 {
-	m_xmf4x4View = Matrix4x4::LookAtLH(m_Position, Vector3::Add(m_Position, m_Look), m_Up);
-	//m_xmf4x4View = Matrix4x4::LookAtLH(m_Position, m_At, m_Up);
+	// m_xmf4x4View = Matrix4x4::LookAtLH(m_Position, Vector3::Add(m_Position, m_Look), m_Up);
+	m_xmf4x4View = Matrix4x4::LookAtLH(m_Position, m_At, m_Up);
 
 	m_Right = XMFLOAT3(m_xmf4x4View._11, m_xmf4x4View._21, m_xmf4x4View._31);
 	m_Up = XMFLOAT3(m_xmf4x4View._12, m_xmf4x4View._22, m_xmf4x4View._32);
@@ -322,8 +319,6 @@ void Camera::UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList)
 	// pd3dCommandList->SetGraphicsRoot32BitConstants(1, 16, &xmf4x4View, 0);
 	//pd3dCommandList->SetGraphicsRoot32BitConstants(1, 16, &xmf4x4Projection, 16);
 	XMFLOAT4X4 CameraMatrixs[2] = { xmf4x4View , xmf4x4Projection };
-	/*CameraMatrixs[0] = xmf4x4View;
-	CameraMatrixs[1] = xmf4x4Projection;*/
 
 	if (m_ShaderVariables)
 	{

@@ -23,7 +23,7 @@ public:
 		return static_cast<T *>(GetComponent(id));
 	}
 	template <>
-	Transform* GetComponent(const std::string& id) const { return m_Transform; }
+	Transform* GetComponent<Transform>(const std::string& id) const { return m_Transform; }
 	
 private:
 	std::map< std::string, ComponentBase*> m_Components;
