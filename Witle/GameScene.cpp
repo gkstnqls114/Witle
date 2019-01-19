@@ -236,6 +236,14 @@ bool GameScene::ProcessInput(HWND hWnd, float ElapsedTime)
 	{
 		dwDirection |= DIR_RIGHT;
 	}
+	if(GameInput::IsKeydownW())
+	{
+		dwDirection |= DIR_UP;
+	}
+	if (GameInput::IsKeydownS())
+	{
+		dwDirection |= DIR_DOWN;
+	}
 
 	// 만약 키보드 상하좌우 움직인다면...
 	if (dwDirection != 0)
@@ -246,12 +254,16 @@ bool GameScene::ProcessInput(HWND hWnd, float ElapsedTime)
 
 		/*플레이어를 dwDirection 방향으로 이동한다(실제로는 속도 벡터를 변경한다). 이동 거리는 시간에 비례하도록 한다.
 		플레이어의 이동 속력은 (50/초)로 가정한다.*/
-		float fDistance = 10.0f * ElapsedTime;
+		float fDistance = 50.0f * ElapsedTime;
 
 		if (dwDirection & DIR_FORWARD) xmf3Shift = Vector3::Add(xmf3Shift, axis.look, fDistance);
 		if (dwDirection & DIR_BACKWARD) xmf3Shift = Vector3::Add(xmf3Shift, axis.look, -fDistance);
 		if (dwDirection & DIR_RIGHT) xmf3Shift = Vector3::Add(xmf3Shift, axis.right, fDistance);
-		if (dwDirection & DIR_LEFT) xmf3Shift = Vector3::Add(xmf3Shift, axis.right, -fDistance); 
+		if (dwDirection & DIR_LEFT) xmf3Shift = Vector3::Add(xmf3Shift, axis.right, -fDistance);
+		if (dwDirection & DIR_UP) {
+			xmf3Shift = Vector3::Add(xmf3Shift, axis.up, fDistance);
+		}
+		if (dwDirection & DIR_DOWN) xmf3Shift = Vector3::Add(xmf3Shift, axis.up, -fDistance);
 
 		//플레이어의 이동량 벡터를 xmf3Shift 벡터만큼 더한다.
 		m_GameObject->VelocityMove(xmf3Shift);
@@ -308,15 +320,9 @@ void GameScene::Update(float ElapsedTime)
 {
 	if (m_GameObject)
 	{
-		m_GameObject->Update(); //Velocity를 통해 pos 이동
+		m_GameObject->Update(m_Camera->GetComponent<FollowCam>("Camera")); //Velocity를 통해 pos 이동
 	}
-	if (m_Camera)
-	{
-		// GameObject를 따라서 움직인다.
-		m_Camera->GetComponent<FollowCam>("Camera")->Move(m_GameObject->GetVelocity());
-		m_Camera->GetComponent<FollowCam>("Camera")->Update(ElapsedTime, m_GameObject->GetComponent<Transform>("")->GetPosition());
-	}
-
+	
 	if (m_GameObject)
 	{
 		m_GameObject->GetComponent<Transform>("")->Update();

@@ -19,10 +19,14 @@ enum MESH_TYPE_ID
 #define COMPUTE_SRV_ROOT_PARAMETER G_BUFFER_ROOT_PARMATER + 3
 
 /////////////////////////////////////////////// define 정의
+
+
 #define DIR_FORWARD 0x01
 #define DIR_BACKWARD 0x02
 #define DIR_LEFT 0x04
 #define DIR_RIGHT 0x08
+#define DIR_UP						0x10
+#define DIR_DOWN					0x20
 
 #define FRAME_BUFFER_WIDTH	800 //1920 / 2 (기준)
 #define FRAME_BUFFER_HEIGHT 600//1080 /2  (기준)
