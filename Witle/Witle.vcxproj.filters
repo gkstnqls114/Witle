@@ -103,6 +103,9 @@
     <Filter Include="02.Component\MyRigidbody">
       <UniqueIdentifier>{ea387169-77ab-4066-8583-c032c53a4038}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.Component\PlayerMovement">
+      <UniqueIdentifier>{9ec62c01-4c38-4a62-9a19-4ca89e5c286c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">

@@ -246,15 +246,15 @@ bool GameScene::ProcessInput(HWND hWnd, float ElapsedTime)
 
 		/*플레이어를 dwDirection 방향으로 이동한다(실제로는 속도 벡터를 변경한다). 이동 거리는 시간에 비례하도록 한다.
 		플레이어의 이동 속력은 (50/초)로 가정한다.*/
-		float fDistance = 50.0f * ElapsedTime;
+		float fDistance = 10.0f * ElapsedTime;
 
 		if (dwDirection & DIR_FORWARD) xmf3Shift = Vector3::Add(xmf3Shift, axis.look, fDistance);
 		if (dwDirection & DIR_BACKWARD) xmf3Shift = Vector3::Add(xmf3Shift, axis.look, -fDistance);
 		if (dwDirection & DIR_RIGHT) xmf3Shift = Vector3::Add(xmf3Shift, axis.right, fDistance);
 		if (dwDirection & DIR_LEFT) xmf3Shift = Vector3::Add(xmf3Shift, axis.right, -fDistance); 
 
-		//플레이어를 현재 위치 벡터에서 xmf3Shift 벡터만큼 이동한다.
-		m_GameObject->GetComponent<Transform>("")->Move(xmf3Shift, true);
+		//플레이어의 이동량 벡터를 xmf3Shift 벡터만큼 더한다.
+		m_GameObject->VelocityMove(xmf3Shift);
 	}
 	
 	//마우스 또는 키 입력이 있으면 플레이어를 이동하거나(dwDirection) 회전한다(cxDelta 또는 cyDelta).
