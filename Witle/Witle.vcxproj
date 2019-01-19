@@ -156,6 +156,7 @@
     <ClInclude Include="DDSTextureLoader12.h" />
     <ClInclude Include="FollowCam.h" />
     <ClInclude Include="GameFramework.h" />
+    <ClInclude Include="GameInput.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameTimer.h" />
     <ClInclude Include="HeightMapImage.h" />
@@ -195,6 +196,7 @@
     <ClCompile Include="DDSTextureLoader12.cpp" />
     <ClCompile Include="FollowCam.cpp" />
     <ClCompile Include="GameFramework.cpp" />
+    <ClCompile Include="GameInput.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameTimer.cpp" />
     <ClCompile Include="HeightMapImage.cpp" />

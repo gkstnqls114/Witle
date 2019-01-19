@@ -7,7 +7,8 @@
 #include "Transform.h"
 #include "Shader.h"
 #include "Terrain.h"
-#include "GameObject.h"
+#include "GameInput.h"
+#include "Player.h"
 //
 //#include "Vertex.h"
 //
@@ -117,7 +118,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	// 큐브메쉬 생성
 	ComponentBase* cubemesh = new CubeMesh(pd3dDevice, pd3dCommandList, 1, 1, 1);
 	std::cout << cubemesh->GetFamillyID() << " " << cubemesh->GetComponentID() << std::endl;
-	m_GameObject = new GameObject("Player");
+	m_GameObject = new Player("Player");
 	m_GameObject->InsertComponent(cubemesh->GetFamillyID(), cubemesh);
 
 	// 터레인 생성 
@@ -216,26 +217,18 @@ void GameScene::ReleaseObjects()
 
 bool GameScene::ProcessInput(HWND hWnd, POINT OldCursor, float ElapsedTime)
 {
+	// GameInput::Update();
+
 	static UCHAR pKeyBuffer[256]; // 키 input을 위한 변수
 
 	DWORD dwDirection = 0;
-	// 키보드의 상태 정보를 반환한다.
-	// 화살표 키(‘→’, ‘←’, ‘↑’, ‘↓’)를 누르면 플레이어를 오른쪽/왼쪽(로컬 x-축), 앞/
-	// 뒤(로컬 z-축)로 이동한다. ‘Page Up’과 ‘Page Down’ 키를 누르면 플레이어를 위/아래(로컬 y-축)로 이동한다.*/
+	
 	if (::GetKeyboardState(pKeyBuffer))
 	{
 		if (pKeyBuffer[VK_UP] & 0xF0) dwDirection |= DIR_FORWARD;
 		if (pKeyBuffer[VK_DOWN] & 0xF0) dwDirection |= DIR_BACKWARD;
 		if (pKeyBuffer[VK_LEFT] & 0xF0) dwDirection |= DIR_LEFT;
-		if (pKeyBuffer[VK_RIGHT] & 0xF0) dwDirection |= DIR_RIGHT;
-		/*if (pKeyBuffer[VK_RIGHT] & 0xF0) {
-			dwDirection |= DIR_UP;
-		}
-		if (pKeyBuffer[VK_RIGHT] & 0xF0) {
-			dwDirection |= DIR_DOWN;
-		}*/
-		//if (pKeyBuffer[KEY_Z] & 0xF0) dwDirection |= DIR_SPECIALITEM;
-		//if (pKeyBuffer[VK_CONTROL] & 0xF0) dwDirection |= DIR_SHOOT;
+		if (pKeyBuffer[VK_RIGHT] & 0xF0) dwDirection |= DIR_RIGHT; 
 	}
 	
 	float cxDelta = 0.0f, cyDelta = 0.0f;
@@ -311,6 +304,11 @@ bool GameScene::ProcessInput(HWND hWnd, POINT OldCursor, float ElapsedTime)
 //
 //	return false;
 //}
+
+void GameScene::Update(float ElapsedTime)
+{
+
+}
 
 void GameScene::LastUpdate()
 {
@@ -700,8 +698,3 @@ ID3D12RootSignature* GameScene::CreateGraphicsRootSignature(ID3D12Device *pd3dDe
 //		d3dCPUdescriptorHandle // 상수버퍼뷰를 포함하는 서술자 힙의 시작
 //	);
 //}
-
-void GameScene::Update(float ElapsedTime)
-{
-
-}

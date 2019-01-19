@@ -10,6 +10,7 @@ struct CB_OBJECT_INFO // b1
 };
  
 class GameObject;
+class Player;
 class Terrain;
 
 class GameScene
@@ -45,7 +46,7 @@ public:
 	virtual void LastUpdate() override;
 
 protected:
-	GameObject* m_GameObject;
+	Player* m_GameObject;
 	Terrain* m_Terrain;
 	MyDescriptorHeap m_TerrainHeap;
 	GameObject* m_Camera;

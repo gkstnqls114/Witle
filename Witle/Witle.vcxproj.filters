@@ -219,6 +219,9 @@
     <ClInclude Include="Player.h">
       <Filter>03.GameObject\Player</Filter>
     </ClInclude>
+    <ClInclude Include="GameInput.h">
+      <Filter>01.GameBase</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -322,6 +325,9 @@
     </ClCompile>
     <ClCompile Include="Player.cpp">
       <Filter>03.GameObject\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="GameInput.cpp">
+      <Filter>01.GameBase</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

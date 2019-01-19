@@ -21,7 +21,6 @@ class Transform :
 	XMFLOAT4X4 m_transformWorld { Matrix4x4::Identity() };
 
 	void SetTransform(const XMFLOAT3& right, const XMFLOAT3& up, const XMFLOAT3& look, const XMFLOAT3& pos);
-	void Move(const XMFLOAT3& xmf3Shift, bool bUpdateVelocity);
 public:
 	Transform();
 	virtual ~Transform();
@@ -44,6 +43,7 @@ public:
 	AXIS GetCoorAxis() const { return AXIS(m_Right, m_Up, m_Look); }
 	//////////////////////////////////////////////// Get
 
+	void Move(const XMFLOAT3& xmf3Shift, bool bUpdateVelocity);
 	void Move(DWORD dwDirection, float fDistance, bool bUpdateVelocity);
 
 	void Move(const XMFLOAT3& vMove); // vMove만큼 Position 에서 움직인다.
