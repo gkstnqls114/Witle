@@ -13,7 +13,7 @@ class Player :
 	//XMFLOAT3 m_xmf3Look = XMFLOAT3(0.0f, 0.0f, 1.0f);
 
 	XMFLOAT3 m_xmf3Velocity = XMFLOAT3(0.0f, 0.0f, 0.0f);
-	XMFLOAT3 m_xmf3Gravity = XMFLOAT3(0.0f, 0.0f, 0.0f); //현재 중력은 존재하지않는다.
+	XMFLOAT3 m_xmf3Gravity = XMFLOAT3(0.0f, -10.0f, 0.0f); 
 	float m_fMaxVelocityXZ = 300.0f;
 	float m_fMaxVelocityY = 400.0f;
 	float m_fFriction = 25.0f;
@@ -44,6 +44,8 @@ public:
 	/////////////////////// Get
 
 	/////////////////////// Set	
-	void SetPlayerUpdatedContext(LPVOID pContext) { m_pPlayerUpdatedContext = pContext; }
+	void SetPlayerUpdatedContext(LPVOID pContext) { 
+		m_pCameraUpdatedContext = pContext;
+			m_pPlayerUpdatedContext = pContext; }
 	/////////////////////// Set
 };

@@ -379,26 +379,25 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	gMeshRenderer.Render(pd3dCommandList, terrainMesh);
 
 
-	//// PSO 설정
-	//pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Cube")->GetPSO());
-	//
-	//// 쉐이더 변수 설정
+	// PSO 설정
+	pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Cube")->GetPSO());
+	
+	// 쉐이더 변수 설정
 
-	//std::cout << "object 위치: ";
-	//Vector3::Show(m_GameObject->GetComponent<Transform>("")->GetPosition());
-	//std::cout << std::endl;
+	std::cout << "object 위치: ";
+	Vector3::Show(m_GameObject->GetComponent<Transform>("")->GetPosition());
+	std::cout << std::endl;
 
-	//XMFLOAT4X4 xmf4x4World;
-	//XMStoreFloat4x4(&xmf4x4World, XMMatrixTranspose(XMLoadFloat4x4(&m_GameObject->GetComponent<Transform>("")->GetWorldMatrix())));
-	//pd3dCommandList->SetGraphicsRoot32BitConstants(0, 16, &xmf4x4World, 0);
-	////pd3dCommandList->SetGraphicsRoot32BitConstants(0, 16, &matrix, 16);
-	////pd3dCommandList->SetGraphicsRoot32BitConstants(0, 16, &matrix, 32);
+	XMFLOAT4X4 xmf4x4World;
+	XMStoreFloat4x4(&xmf4x4World, XMMatrixTranspose(XMLoadFloat4x4(&m_GameObject->GetComponent<Transform>("")->GetWorldMatrix())));
+	pd3dCommandList->SetGraphicsRoot32BitConstants(0, 16, &xmf4x4World, 0);
+	//pd3dCommandList->SetGraphicsRoot32BitConstants(0, 16, &matrix, 16);
+	//pd3dCommandList->SetGraphicsRoot32BitConstants(0, 16, &matrix, 32);
 
-	//m_Camera->GetComponent<Camera>("Camera")->UpdateShaderVariables(pd3dCommandList);
-	//
-
-	//Mesh* mesh = m_GameObject->GetComponent<Mesh>("Mesh");
-	//gMeshRenderer.Render(pd3dCommandList, mesh);
+	m_Camera->GetComponent<Camera>("Camera")->UpdateShaderVariables(pd3dCommandList);
+	
+	Mesh* mesh = m_GameObject->GetComponent<Mesh>("Mesh");
+	gMeshRenderer.Render(pd3dCommandList, mesh);
 
 	//if (m_SkyBox) m_SkyBox->Render(pd3dCommandList, m_Camera);
 
