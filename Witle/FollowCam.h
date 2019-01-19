@@ -8,6 +8,10 @@ class FollowCam :
 	const GameObject		*m_pTarget{ nullptr };
 
 private:
+	virtual void MoveSmoothly(float fTimeElapsed, const XMFLOAT3& xmf3LookAt) override;
+
+	void SetLookAt(const XMFLOAT3 & xmf3LookAt);
+
 
 public:
 	FollowCam(GameObject* target); // target을 지정합니다.
@@ -16,8 +20,9 @@ public:
 	virtual ~FollowCam();
 
 	void SetTarget(GameObject* pLookingObject) { m_pTarget = pLookingObject; }
+	virtual void Update(float fTimeElapsed, const XMFLOAT3& xmf3LookAt);
 
-	virtual void Move(const XMFLOAT3 & Shift) override;
+
 	virtual void Rotate(float x, float y, float z) override;
 
 	virtual void ZoomIn(float val);

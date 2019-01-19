@@ -262,6 +262,7 @@ bool GameScene::ProcessInput(HWND hWnd, float ElapsedTime)
 	{
 		if (GameInput::GetcDeltaX() || GameInput::GetcDeltaY())
 		{
+			// 플레이어와 카메라 똑같이 rotate...
 			m_GameObject->GetComponent<Transform>("")->Rotate(GameInput::GetcDeltaY(), GameInput::GetcDeltaX(), 0.0f);
 			m_Camera->GetComponent<FollowCam>("Camera")->Rotate(GameInput::GetcDeltaY(), GameInput::GetcDeltaX(), 0.0f);
 
@@ -307,7 +308,13 @@ void GameScene::Update(float ElapsedTime)
 {
 	if (m_GameObject)
 	{
-		m_GameObject->Update();
+		m_GameObject->Update(); //Velocity를 통해 pos 이동
+	}
+	if (m_Camera)
+	{
+		// GameObject를 따라서 움직인다.
+		m_Camera->GetComponent<FollowCam>("Camera")->Move(m_GameObject->GetVelocity());
+		m_Camera->GetComponent<FollowCam>("Camera")->Update(ElapsedTime, m_GameObject->GetComponent<Transform>("")->GetPosition());
 	}
 
 	if (m_GameObject)
@@ -321,7 +328,7 @@ void GameScene::LastUpdate()
 	// player update 이후에 camera update
 	if (m_Camera)
 	{
-		m_Camera->GetComponent<Camera>("Camera")->Update();
+		m_Camera->GetComponent<FollowCam>("Camera")->LastUpdate();
 	} 
 }
 

@@ -14,6 +14,42 @@ FollowCam::FollowCam(FollowCam * followcam)
 {
 }
 
+void FollowCam::MoveSmoothly(float fTimeElapsed, const XMFLOAT3 & xmf3LookAt)
+{ 
+	XMFLOAT4X4 xmf4x4Rotate = Matrix4x4::Identity();
+
+	XMFLOAT3 xmf3Right = m_pTarget->GetComponent<Transform>("")->GetRight();
+	XMFLOAT3 xmf3Up = m_pTarget->GetComponent<Transform>("")->GetUp();
+	XMFLOAT3 xmf3Look = m_pTarget->GetComponent<Transform>("")->GetLook();
+
+	xmf4x4Rotate._11 = xmf3Right.x; xmf4x4Rotate._21 = xmf3Up.x; xmf4x4Rotate._31 = xmf3Look.x;
+	xmf4x4Rotate._12 = xmf3Right.y; xmf4x4Rotate._22 = xmf3Up.y; xmf4x4Rotate._32 = xmf3Look.y;
+	xmf4x4Rotate._13 = xmf3Right.z; xmf4x4Rotate._23 = xmf3Up.z; xmf4x4Rotate._33 = xmf3Look.z;
+
+	XMFLOAT3 xmf3Offset = Vector3::TransformCoord(m_Offset, xmf4x4Rotate);
+	XMFLOAT3 xmf3Position = Vector3::Add(xmf3LookAt, xmf3Offset);
+	XMFLOAT3 xmf3Direction = Vector3::Subtract(xmf3Position, m_Position);
+	float fLength = Vector3::Length(xmf3Direction);
+	xmf3Direction = Vector3::Normalize(xmf3Direction);
+	float fTimeLagScale = (m_fTimeLag) ? fTimeElapsed * (1.0f / m_fTimeLag) : 1.0f;
+	float fDistance = fLength * fTimeLagScale;
+	if (fDistance > fLength) fDistance = fLength;
+	if (fLength < 0.01f) fDistance = fLength;
+	if (fDistance > 0)
+	{
+		m_Position = Vector3::Add(m_Position, xmf3Direction, fDistance);
+		SetLookAt(xmf3LookAt);
+	}
+}
+
+void FollowCam::SetLookAt(const XMFLOAT3 & xmf3LookAt)
+{
+	XMFLOAT4X4 mtxLookAt = Matrix4x4::LookAtLH(m_Position, xmf3LookAt, m_pTarget->GetComponent<Transform>("")->GetUp());
+	m_Right = XMFLOAT3(mtxLookAt._11, mtxLookAt._21, mtxLookAt._31);
+	m_Up = XMFLOAT3(mtxLookAt._12, mtxLookAt._22, mtxLookAt._32);
+	m_Look = XMFLOAT3(mtxLookAt._13, mtxLookAt._23, mtxLookAt._33);
+}
+
 FollowCam::FollowCam(GameObject * target)
 	: m_pTarget(target)
 {
@@ -23,16 +59,14 @@ FollowCam::~FollowCam()
 {
 }
 
-void FollowCam::Move(const XMFLOAT3 & Shift)
+void FollowCam::Update(float fTimeElapsed, const XMFLOAT3 & xmf3LookAt)
 {
-	m_At.x += Shift.x;
-	m_At.y += Shift.y;
-	m_At.z += Shift.z;
+	MoveSmoothly(fTimeElapsed, xmf3LookAt);
+	RegenerateViewMatrix();
 }
 
 void FollowCam::Rotate(float x, float y, float z)
 {
-
 	// DWORD nCameraMode = m_pCamera->GetMode();
 	//1인칭 카메라 또는 3인칭 카메라의 경우 플레이어의 회전은 약간의 제약이 따른다.
 	//if ((nCameraMode == FIRST_PERSON_CAMERA) || (nCameraMode == THIRD_PERSON_CAMERA))
@@ -81,10 +115,10 @@ void FollowCam::Rotate(float x, float y, float z)
 
 	if ((x != 0.0f))
 	{
-		//플레이어의 로컬 x-축에 대한 x 각도의 회전 행렬을 계산한다.
-
+		//플레이어의 로컬 x-축에 대한 x 각도의 회전 행렬을 계산한다. 
 		XMFLOAT3 xmf3Right = tr->GetRight();
 		XMMATRIX xmmtxRotate = XMMatrixRotationAxis(XMLoadFloat3(&xmf3Right), XMConvertToRadians(x));
+
 		//카메라의 로컬 x-축, y-축, z-축을 회전한다.
 		m_Right = Vector3::TransformNormal(m_Right, xmmtxRotate);
 		m_Up = Vector3::TransformNormal(m_Up, xmmtxRotate);

@@ -56,7 +56,7 @@ protected:
 protected:
 	//절두체(월드 좌표계)를 생성한다.
 	void GenerateFrustum();
-	
+	virtual void MoveSmoothly(float fTimeElapsed, const XMFLOAT3& xmf3LookAt) {}; 
 
 public:
 	Camera();
@@ -68,7 +68,9 @@ public:
 	virtual void Rotate(float x = 0.0f, float y = 0.0f, float z = 0.0f);
 	virtual void RegenerateAt();
 
-	virtual void Update() override;
+	virtual void Update() override {};
+	virtual void Update(float fTimeElapsed, const XMFLOAT3& xmf3LookAt) {};
+	void LastUpdate();
 	////카메라의 정보를 셰이더 프로그램에게 전달하기 위한 상수 버퍼를 생성하고 갱신한다.
 	//virtual void CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
 	virtual void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList);

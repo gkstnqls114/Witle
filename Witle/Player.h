@@ -28,4 +28,5 @@ public:
 	virtual void Update() override;
 
 	void VelocityMove(const XMFLOAT3& vMove);
+	XMFLOAT3 GetVelocity() const { return m_xmf3Velocity; };
 };

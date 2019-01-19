@@ -105,8 +105,9 @@ void Camera::Rotate(float x, float y, float z)
 void Camera::RegenerateAt()
 {
 }
-
-void Camera::Update()
+ 
+ 
+void Camera::LastUpdate()
 {
 	// 물리 계산
 	// 벽과의 충돌 등...
@@ -118,9 +119,9 @@ void Camera::Update()
 	RegenerateViewMatrix();
 
 	// 카메라 변환 행렬이 바뀔 때마다 카메라 절두체를 다시 생성한다(절두체는 월드 좌표계로 생성한다).
-	GenerateFrustum(); 
+	GenerateFrustum();
 }
-
+ 
 void Camera::GenerateFrustum()
 {
 	//원근 투영 변환 행렬에서 절두체를 생성한다(절두체는 카메라 좌표계로 표현된다).
@@ -132,7 +133,7 @@ void Camera::GenerateFrustum()
 
 
 }
-   
+
 
 bool Camera::IsInFrustum(const BoundingOrientedBox & xmBoundingBox) const
 {
@@ -198,6 +199,18 @@ void Camera::RegenerateViewMatrix()
 	m_Up = XMFLOAT3(m_xmf4x4View._12, m_xmf4x4View._22, m_xmf4x4View._32);
 	m_Look = XMFLOAT3(m_xmf4x4View._13, m_xmf4x4View._23, m_xmf4x4View._33);
 
+
+	//m_Look = Vector3::Normalize(m_Look);
+	//m_Right = Vector3::CrossProduct(m_Up, m_Look, true);
+	//m_Up = Vector3::CrossProduct(m_Look, m_Right, true);
+
+	//m_xmf4x4View._11 = m_Right.x; m_xmf4x4View._12 = m_Up.x; m_xmf4x4View._13 = m_Look.x;
+	//m_xmf4x4View._21 = m_Right.y; m_xmf4x4View._22 = m_Up.y; m_xmf4x4View._23 = m_Look.y;
+	//m_xmf4x4View._31 = m_Right.z; m_xmf4x4View._32 = m_Up.z; m_xmf4x4View._33 = m_Look.z;
+
+	//m_xmf4x4View._41 = -Vector3::DotProduct(m_Position, m_Right);
+	//m_xmf4x4View._42 = -Vector3::DotProduct(m_Position, m_Up);
+	//m_xmf4x4View._43 = -Vector3::DotProduct(m_Position, m_Look);
 }
 
 void Camera::GenerateProjectionMatrix(float fNearPlaneDistance, float fFarPlaneDistance, float fAspectRatio, float fFOVAngle)
