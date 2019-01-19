@@ -100,6 +100,9 @@
     <Filter Include="03.GameObject\Player">
       <UniqueIdentifier>{79d88ce3-72d5-440a-881b-7a9ae6ed8439}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.Component\MyRigidbody">
+      <UniqueIdentifier>{ea387169-77ab-4066-8583-c032c53a4038}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -222,6 +225,9 @@
     <ClInclude Include="GameInput.h">
       <Filter>01.GameBase</Filter>
     </ClInclude>
+    <ClInclude Include="MyRigidbody.h">
+      <Filter>02.Component\MyRigidbody</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -328,6 +334,9 @@
     </ClCompile>
     <ClCompile Include="GameInput.cpp">
       <Filter>01.GameBase</Filter>
+    </ClCompile>
+    <ClCompile Include="MyRigidbody.cpp">
+      <Filter>02.Component\MyRigidbody</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

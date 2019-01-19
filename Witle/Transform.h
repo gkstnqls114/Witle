@@ -43,8 +43,7 @@ public:
 	AXIS GetCoorAxis() const { return AXIS(m_Right, m_Up, m_Look); }
 	//////////////////////////////////////////////// Get
 
-	void Move(const XMFLOAT3& xmf3Shift, bool bUpdateVelocity);
-	void Move(DWORD dwDirection, float fDistance, bool bUpdateVelocity);
+	void Move(const XMFLOAT3& xmf3Shift, bool bUpdateVelocity); 
 
 	void Move(const XMFLOAT3& vMove); // vMove만큼 Position 에서 움직인다.
 

@@ -165,6 +165,7 @@
     <ClInclude Include="MeshRenderer.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="MyDescriptorHeap.h" />
+    <ClInclude Include="MyRigidbody.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="ResourceBase.h" />
     <ClInclude Include="32bitRootConstants.h" />
@@ -204,6 +205,7 @@
     <ClCompile Include="MeshRenderer.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="MyDescriptorHeap.cpp" />
+    <ClCompile Include="MyRigidbody.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="ResourceBase.cpp" />
     <ClCompile Include="32bitRootConstants.cpp" />

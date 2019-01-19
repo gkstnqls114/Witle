@@ -221,13 +221,11 @@ bool GameScene::ProcessInput(HWND hWnd, float ElapsedTime)
 
 	// 키보드 처리
 	if (GameInput::IsKeydownUP())
-	{
-		std::cout << "Key Up" << std::endl;
+	{ 
 		dwDirection |= DIR_FORWARD;
 	}
 	if (GameInput::IsKeydownDOWN())
-	{
-		std::cout << "Key Down" << std::endl;
+	{ 
 		dwDirection |= DIR_BACKWARD;
 	}
 	if (GameInput::IsKeydownLEFT())
@@ -238,9 +236,29 @@ bool GameScene::ProcessInput(HWND hWnd, float ElapsedTime)
 	{
 		dwDirection |= DIR_RIGHT;
 	}
+
+	// 만약 키보드 상하좌우 움직인다면...
+	if (dwDirection != 0)
+	{
+		AXIS axis = m_GameObject->GetComponent<Transform>("")->GetCoorAxis();
+
+		XMFLOAT3 xmf3Shift = XMFLOAT3(0, 0, 0); // 이동량
+
+		/*플레이어를 dwDirection 방향으로 이동한다(실제로는 속도 벡터를 변경한다). 이동 거리는 시간에 비례하도록 한다.
+		플레이어의 이동 속력은 (50/초)로 가정한다.*/
+		float fDistance = 50.0f * ElapsedTime;
+
+		if (dwDirection & DIR_FORWARD) xmf3Shift = Vector3::Add(xmf3Shift, axis.look, fDistance);
+		if (dwDirection & DIR_BACKWARD) xmf3Shift = Vector3::Add(xmf3Shift, axis.look, -fDistance);
+		if (dwDirection & DIR_RIGHT) xmf3Shift = Vector3::Add(xmf3Shift, axis.right, fDistance);
+		if (dwDirection & DIR_LEFT) xmf3Shift = Vector3::Add(xmf3Shift, axis.right, -fDistance); 
+
+		//플레이어를 현재 위치 벡터에서 xmf3Shift 벡터만큼 이동한다.
+		m_GameObject->GetComponent<Transform>("")->Move(xmf3Shift, true);
+	}
 	
 	//마우스 또는 키 입력이 있으면 플레이어를 이동하거나(dwDirection) 회전한다(cxDelta 또는 cyDelta).
-	if ((dwDirection != 0) || (GameInput::GetcDeltaX() != 0.0f) || (GameInput::GetcDeltaY() != 0.0f))
+	if ((GameInput::GetcDeltaX() != 0.0f) || (GameInput::GetcDeltaY() != 0.0f))
 	{
 		if (GameInput::GetcDeltaX() || GameInput::GetcDeltaY())
 		{
@@ -261,16 +279,7 @@ bool GameScene::ProcessInput(HWND hWnd, float ElapsedTime)
 			//	// m_Camera->Rotate(cyDelta, cxDelta, 0.0f);
 			//}
 		}
-		/*플레이어를 dwDirection 방향으로 이동한다(실제로는 속도 벡터를 변경한다). 이동 거리는 시간에 비례하도록 한다.
-		플레이어의 이동 속력은 (50/초)로 가정한다.*/
-		//if (dwDirection) m_GameObject->Move(dwDirection, 50.0f * ElapsedTime, true);
-	/*	if (dwDirection)
-		{ 
-			AXIS axis = m_GameObject->GetComponent<Transform>("")->GetCoorAxis();
-			std::cout << "Up " << std::endl;
-			Vector3::Show(axis.up);
-			m_GameObject->GetComponent<Transform>("")->Move(XMFLOAT3(0.F , 1.F, 0.F)); 
-		}*/
+		
 	}
 
 	return true;
@@ -293,15 +302,25 @@ bool GameScene::ProcessInput(HWND hWnd, float ElapsedTime)
 //	return false;
 //}
 
+// ProcessInput에 의한 right, up, look, pos 를 월드변환 행렬에 갱신한다.
 void GameScene::Update(float ElapsedTime)
 {
+	if (m_GameObject)
+	{
+		m_GameObject->Update();
+	}
 
+	if (m_GameObject)
+	{
+		m_GameObject->GetComponent<Transform>("")->Update();
+	}
 }
 
 void GameScene::LastUpdate()
 {
 	// player update 이후에 camera update
-	if (m_Camera) {
+	if (m_Camera)
+	{
 		m_Camera->GetComponent<Camera>("Camera")->Update();
 	} 
 }
