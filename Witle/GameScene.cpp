@@ -215,49 +215,37 @@ void GameScene::ReleaseObjects()
 	//} 
 }
 
-bool GameScene::ProcessInput(HWND hWnd, POINT OldCursor, float ElapsedTime)
+bool GameScene::ProcessInput(HWND hWnd, float ElapsedTime)
 {
-	// GameInput::Update();
-
-	static UCHAR pKeyBuffer[256]; // 키 input을 위한 변수
-
 	DWORD dwDirection = 0;
-	
-	if (::GetKeyboardState(pKeyBuffer))
+
+	// 키보드 처리
+	if (GameInput::IsKeydownUP())
 	{
-		if (pKeyBuffer[VK_UP] & 0xF0) dwDirection |= DIR_FORWARD;
-		if (pKeyBuffer[VK_DOWN] & 0xF0) dwDirection |= DIR_BACKWARD;
-		if (pKeyBuffer[VK_LEFT] & 0xF0) dwDirection |= DIR_LEFT;
-		if (pKeyBuffer[VK_RIGHT] & 0xF0) dwDirection |= DIR_RIGHT; 
+		std::cout << "Key Up" << std::endl;
+		dwDirection |= DIR_FORWARD;
+	}
+	if (GameInput::IsKeydownDOWN())
+	{
+		std::cout << "Key Down" << std::endl;
+		dwDirection |= DIR_BACKWARD;
+	}
+	if (GameInput::IsKeydownLEFT())
+	{
+		dwDirection |= DIR_LEFT;
+	}
+	if (GameInput::IsKeydownRIGHT())
+	{
+		dwDirection |= DIR_RIGHT;
 	}
 	
-	float cxDelta = 0.0f, cyDelta = 0.0f;
-	POINT ptCursorPos;
-	/*마우스를 캡쳐했으면 마우스가 얼마만큼 이동하였는 가를 계산한다. 마우스 왼쪽 또는 오른쪽 버튼이 눌러질 때의
-	메시지(WM_LBUTTONDOWN, WM_RBUTTONDOWN)를 처리할 때 마우스를 캡쳐하였다. 그러므로 마우스가 캡쳐된
-	것은 마우스 버튼이 눌려진 상태를 의미한다. 마우스 버튼이 눌려진 상태에서 마우스를 좌우 또는 상하로 움직이면 플
-	레이어를 x-축 또는 y-축으로 회전한다.*/
-	if (::GetCapture() == hWnd)
-	{
-		//마우스 커서를 화면에서 없앤다(보이지 않게 한다).
-		::SetCursor(NULL);
-		//현재 마우스 커서의 위치를 가져온다.
-		::GetCursorPos(&ptCursorPos);
-		//마우스 버튼이 눌린 상태에서 마우스가 움직인 양을 구한다.
-		cxDelta = (float)(ptCursorPos.x - OldCursor.x) / 3.0f;
-		cyDelta = (float)(ptCursorPos.y - OldCursor.y) / 3.0f;
-
-		//마우스 커서의 위치를 마우스가 눌려졌던 위치로 설정한다.
-		::SetCursorPos(OldCursor.x, OldCursor.y);
-	}
-
 	//마우스 또는 키 입력이 있으면 플레이어를 이동하거나(dwDirection) 회전한다(cxDelta 또는 cyDelta).
-	if ((dwDirection != 0) || (cxDelta != 0.0f) || (cyDelta != 0.0f))
+	if ((dwDirection != 0) || (GameInput::GetcDeltaX() != 0.0f) || (GameInput::GetcDeltaY() != 0.0f))
 	{
-		if (cxDelta || cyDelta)
+		if (GameInput::GetcDeltaX() || GameInput::GetcDeltaY())
 		{
-			m_GameObject->GetComponent<Transform>("")->Rotate(cyDelta, cxDelta, 0.0f);
-			m_Camera->GetComponent<FollowCam>("Camera")->Rotate(cyDelta, cxDelta, 0.0f);
+			m_GameObject->GetComponent<Transform>("")->Rotate(GameInput::GetcDeltaY(), GameInput::GetcDeltaX(), 0.0f);
+			m_Camera->GetComponent<FollowCam>("Camera")->Rotate(GameInput::GetcDeltaY(), GameInput::GetcDeltaX(), 0.0f);
 
 			// m_Camera->GetComponent<Camera>("Camera")->Rotate(cyDelta, cxDelta, 0.0f);
 
@@ -276,13 +264,13 @@ bool GameScene::ProcessInput(HWND hWnd, POINT OldCursor, float ElapsedTime)
 		/*플레이어를 dwDirection 방향으로 이동한다(실제로는 속도 벡터를 변경한다). 이동 거리는 시간에 비례하도록 한다.
 		플레이어의 이동 속력은 (50/초)로 가정한다.*/
 		//if (dwDirection) m_GameObject->Move(dwDirection, 50.0f * ElapsedTime, true);
-		if (dwDirection)
+	/*	if (dwDirection)
 		{ 
 			AXIS axis = m_GameObject->GetComponent<Transform>("")->GetCoorAxis();
 			std::cout << "Up " << std::endl;
 			Vector3::Show(axis.up);
 			m_GameObject->GetComponent<Transform>("")->Move(XMFLOAT3(0.F , 1.F, 0.F)); 
-		}
+		}*/
 	}
 
 	return true;

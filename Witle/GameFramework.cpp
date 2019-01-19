@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "ShaderManager.h"
 #include "GameTimer.h"
+#include "GameInput.h"
 #include "d3dUtil.h"
 #include "CubeShader.h"
 #include "TerrainShader.h"
@@ -540,9 +541,9 @@ void CGameFramework::ReleaseObjects()
 
 void CGameFramework::UpdateGamelogic()
 {
-	
 	if (m_pScene) {
-		m_pScene->ProcessInput(m_hWnd, m_ptOldCursorPos, CGameTimer::GetInstance()->GetTimeElapsed());
+		GameInput::Update(m_hWnd);
+		m_pScene->ProcessInput(m_hWnd, CGameTimer::GetInstance()->GetTimeElapsed());
 		m_pScene->Update(0);
 		m_pScene->LastUpdate();
 
@@ -550,8 +551,6 @@ void CGameFramework::UpdateGamelogic()
 		//m_pScene->AnimateObjects(0);
 
 	}
-	 
-
 }
 
 void CGameFramework::WaitForGpuComplete()
@@ -594,15 +593,16 @@ void CGameFramework::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM
 
 		break;
 	case WM_LBUTTONDOWN:
+		//마우스 캡쳐를 하고 현재 마우스 위치를 가져온다. 
+		GameInput::SetCapture(hWnd);
+		break;
 	case WM_RBUTTONDOWN:
-		//마우스 캡쳐를 하고 현재 마우스 위치를 가져온다.
-		::SetCapture(hWnd);
-		::GetCursorPos(&m_ptOldCursorPos);
 		break;
 	case WM_LBUTTONUP:
-	case WM_RBUTTONUP:
 		//마우스 캡쳐를 해제한다.
-		::ReleaseCapture();
+		GameInput::ReleaseCapture();
+		break;
+	case WM_RBUTTONUP:
 		break;
 	case WM_MOUSEMOVE:
 		break;
@@ -614,10 +614,6 @@ void CGameFramework::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM
 
 void CGameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam)
 {
-	//if (m_pScene) {
-	//	m_pScene->OnProcessingKeyboardMessage(hWnd, nMessageID, wParam, lParam, CGameTimer::GetInstance()->GetTimeElapsed());
-	//}
-
 	switch (nMessageID)
 	{
 	case WM_KEYUP:

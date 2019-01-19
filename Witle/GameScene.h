@@ -17,8 +17,6 @@ class GameScene
 	: public Scene
 {
 
-	POINT m_ptOldCursorPos;
-
 	bool SaveData();
 
 protected:
@@ -35,7 +33,7 @@ public:
 	virtual void BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList) override;
 	virtual void ReleaseObjects() override;
 
-	virtual bool ProcessInput(HWND hWnd, POINT OldCursor, float ElapsedTime) override; 
+	virtual bool ProcessInput(HWND hWnd, float ElapsedTime) override; 
 	 
 	virtual void AnimateObjects(float fTimeElapsed) override;
 	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList) override;
