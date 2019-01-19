@@ -36,9 +36,9 @@ public:
 	int GetHeightMapWidth();
 	int GetHeightMapLength();
 
-	XMFLOAT3 GetScale() { return(m_xmf3Scale); }
-	float GetWidth() { return(m_nWidth * m_xmf3Scale.x); }
-	float GetLength() { return(m_nLength * m_xmf3Scale.z); }
+	XMFLOAT3 GetScale() const { return(m_xmf3Scale); }
+	float GetWidth() const { return(m_nWidth * m_xmf3Scale.x); }
+	float GetLength() const { return(m_nLength * m_xmf3Scale.z); }
 
 	Texture* GetTexture() const { return m_ResourceBase; }
 };

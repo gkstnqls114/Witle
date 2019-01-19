@@ -23,6 +23,13 @@ class Player :
 	float m_fRoll = 0.0f;
 	float m_fYaw = 0.0f;
 
+	LPVOID m_pPlayerUpdatedContext{ nullptr };
+	LPVOID m_pCameraUpdatedContext{ nullptr };
+
+private:
+	void OnPlayerUpdateCallback(float fTimeElapsed, Camera* pCamera);
+	void OnCameraUpdateCallback(float fTimeElapsed, Camera* camera);
+
 public:
 	Player(const std::string& entityID);
 	virtual ~Player();
@@ -31,5 +38,12 @@ public:
 	void Update(Camera* camera);
 
 	void VelocityMove(const XMFLOAT3& vMove);
+
+	/////////////////////// Get
 	XMFLOAT3 GetVelocity() const { return m_xmf3Velocity; };
+	/////////////////////// Get
+
+	/////////////////////// Set	
+	void SetPlayerUpdatedContext(LPVOID pContext) { m_pPlayerUpdatedContext = pContext; }
+	/////////////////////// Set
 };

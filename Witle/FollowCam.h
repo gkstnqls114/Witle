@@ -10,7 +10,6 @@ class FollowCam :
 private:
 	virtual void MoveSmoothly(float fTimeElapsed, const XMFLOAT3& xmf3LookAt) override;
 
-	void SetLookAt(const XMFLOAT3 & xmf3LookAt);
 
 
 public:
@@ -20,9 +19,12 @@ public:
 	virtual ~FollowCam();
 
 	void SetTarget(GameObject* pLookingObject) { m_pTarget = pLookingObject; }
+
+	virtual void Teleport(const XMFLOAT3& at) override; // right, up, look을 유지한 상태로 position, at만 이동한다.
 	virtual void Update(float fTimeElapsed, const XMFLOAT3& xmf3LookAt);
 
 
+	void SetLookAt(const XMFLOAT3 & xmf3LookAt);
 	virtual void Rotate(float x, float y, float z) override;
 
 	virtual void ZoomIn(float val);

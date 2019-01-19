@@ -59,10 +59,16 @@ FollowCam::~FollowCam()
 {
 }
 
+void FollowCam::Teleport(const XMFLOAT3 & at)
+{
+	m_At = at;
+	m_Position = Vector3::Subtract(m_At, m_Offset);
+	m_xmf4x4View = Matrix4x4::LookAtLH(m_Position, m_At, m_Up);
+}
+
 void FollowCam::Update(float fTimeElapsed, const XMFLOAT3 & xmf3LookAt)
 {
 	MoveSmoothly(fTimeElapsed, xmf3LookAt);
-	RegenerateViewMatrix();
 }
 
 void FollowCam::Rotate(float x, float y, float z)
