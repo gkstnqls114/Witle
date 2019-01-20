@@ -49,6 +49,8 @@ protected:
 	MyDescriptorHeap m_TerrainHeap;
 	GameObject* m_Camera;
 
+	XMFLOAT4X4 matrix = Matrix4x4::Identity();
+
 	//Camera *m_Camera{ nullptr };
 
 	//CPlayer	*m_Player{ nullptr };

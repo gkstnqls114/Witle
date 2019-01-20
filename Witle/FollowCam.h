@@ -24,7 +24,6 @@ public:
 	virtual void Update(float fTimeElapsed, const XMFLOAT3& xmf3LookAt) override;
 	virtual void LastUpdate() override;
 
-
 	void SetLookAt(const XMFLOAT3 & xmf3LookAt);
 	virtual void Rotate(float x, float y, float z) override;
 

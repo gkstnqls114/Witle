@@ -44,62 +44,7 @@ void Camera::Move(const XMFLOAT3 & Shift)
 
 void Camera::Rotate(float x, float y, float z)
 { 
-	if ((x != 0.0f))
-	{
-		//플레이어의 로컬 x-축에 대한 x 각도의 회전 행렬을 계산한다.
-		XMFLOAT3 xmf3Right = m_Right;
-		XMMATRIX xmmtxRotate = XMMatrixRotationAxis(XMLoadFloat3(&xmf3Right), XMConvertToRadians(x));
-		//카메라의 로컬 x-축, y-축, z-축을 회전한다.
-		m_Right = Vector3::TransformNormal(m_Right, xmmtxRotate);
-		m_Up = Vector3::TransformNormal(m_Up, xmmtxRotate);
-		m_Look = Vector3::TransformNormal(m_Look, xmmtxRotate);
 
-		// Position에서 At으로 향하는 Offset 을 회전한다.
-		//XMFLOAT3 PosToAt_Offset = Vector3::ScalarProduct(m_Offset, -1, false);
-		//m_Offset = Vector3::TransformCoord(PosToAt_Offset, xmmtxRotate);
-		//m_At = Vector3::Add(m_Position, m_Offset);
-
-		// 다시 At 에서 Position으로 향하게 만들어준다.
-		//m_Offset = Vector3::ScalarProduct(m_Offset, -1, false);
-	}
-	if ((y != 0.0f))
-	{
-		XMFLOAT3 xmf3Up = m_Up;
-		XMMATRIX xmmtxRotate = XMMatrixRotationAxis(XMLoadFloat3(&xmf3Up), XMConvertToRadians(y));
-		m_Right = Vector3::TransformNormal(m_Right, xmmtxRotate);
-		m_Up = Vector3::TransformNormal(m_Up, xmmtxRotate);
-		m_Look = Vector3::TransformNormal(m_Look, xmmtxRotate);
-
-		//// Position에서 At으로 향하는 Offset 을 회전한다.
-		//XMFLOAT3 PosToAt_Offset = Vector3::ScalarProduct(m_Offset, -1, false);
-		//m_Offset = Vector3::TransformCoord(PosToAt_Offset, xmmtxRotate);
-		//m_At = Vector3::Add(m_Position, m_Offset);
-
-		//// 다시 At 에서 Position으로 향하게 만들어준다.
-		//m_Offset = Vector3::ScalarProduct(m_Offset, -1, false);
-	}
-	if (z != 0.0f)
-	{
-		XMFLOAT3 xmf3Look = m_Look;
-		XMMATRIX xmmtxRotate = XMMatrixRotationAxis(XMLoadFloat3(&xmf3Look), XMConvertToRadians(z));
-		m_Right = Vector3::TransformNormal(m_Right, xmmtxRotate);
-		m_Up = Vector3::TransformNormal(m_Up, xmmtxRotate);
-		m_Look = Vector3::TransformNormal(m_Look, xmmtxRotate);
-
-		//// Position에서 At으로 향하는 Offset 을 회전한다.
-		//XMFLOAT3 PosToAt_Offset = Vector3::ScalarProduct(m_Offset, -1, false);
-		//m_Offset = Vector3::TransformCoord(PosToAt_Offset, xmmtxRotate);
-		//m_At = Vector3::Add(m_Position, m_Offset);
-
-		//// 다시 At 에서 Position으로 향하게 만들어준다.
-		//m_Offset = Vector3::ScalarProduct(m_Offset, -1, false);
-	}
-
-	/*회전으로 인해 플레이어의 로컬 x-축, y-축, z-축이 서로 직교하지 않을 수 있으므로 z-축(LookAt 벡터)을 기준으
-	로 하여 서로 직교하고 단위벡터가 되도록 한다.*/
-	m_Look = Vector3::Normalize(m_Look);
-	m_Right = Vector3::CrossProduct(m_Up, m_Look, true);
-	m_Up = Vector3::CrossProduct(m_Look, m_Right, true);
 }
 
 void Camera::RegenerateAt()
@@ -125,51 +70,14 @@ void Camera::LastUpdate()
 void Camera::GenerateFrustum()
 {
 	//원근 투영 변환 행렬에서 절두체를 생성한다(절두체는 카메라 좌표계로 표현된다).
-	m_xmFrustum.CreateFromMatrix(m_xmFrustum, XMLoadFloat4x4(&m_xmf4x4Projection));
+	// m_xmFrustum.CreateFromMatrix(m_xmFrustum, XMLoadFloat4x4(&m_xmf4x4Projection));
 	//카메라 변환 행렬의 역행렬을 구한다.
 	XMMATRIX xmmtxInversView = XMMatrixInverse(NULL, XMLoadFloat4x4(&m_xmf4x4View));
 	//절두체를 카메라 변환 행렬의 역행렬로 변환한다(이제 절두체는 월드 좌표계로 표현된다).
-	m_xmFrustum.Transform(m_xmFrustum, xmmtxInversView);
+	// m_xmFrustum.Transform(m_xmFrustum, xmmtxInversView);
 
 
 }
-
-
-bool Camera::IsInFrustum(const BoundingOrientedBox & xmBoundingBox) const
-{
-	return (m_xmFrustum.Intersects(xmBoundingBox));
-}
-
-bool Camera::IsInFrustum(const BoundingBox & xmBoundingBox) const
-{
-	return (m_xmFrustum.Intersects(xmBoundingBox));
-}
-
-bool Camera::IsInBoudingBox(const BoundingOrientedBox & xmBoundingBox) const
-{
-	return m_xmBoundingBox.Intersects(xmBoundingBox);
-}
-
-bool Camera::IsInBoudingBox(const BoundingBox & xmBoundingBox) const
-{
-	return m_xmBoundingBox.Intersects(xmBoundingBox);
-}
-
-bool Camera::IsInSphere(const BoundingOrientedBox & xmBoundingBox) const
-{
-	return m_xmSphere.Intersects(xmBoundingBox);
-}
-
-bool Camera::IsInSphere(const BoundingBox & xmBoundingBox) const
-{
-	return m_xmSphere.Intersects(xmBoundingBox);
-}
-
-bool Camera::IsInSphere(const BoundingSphere & xmBoundingBox) const
-{
-	return m_xmSphere.Intersects(xmBoundingBox);
-}
-
 
 void Camera::SetViewport(int xTopLeft, int yTopLeft, int nWidth, int nHeight, float
 	fMinZ, float fMaxZ)
@@ -192,25 +100,11 @@ void Camera::SetScissorRect(LONG xLeft, LONG yTop, LONG xRight, LONG yBottom)
 
 void Camera::RegenerateViewMatrix()
 {
-	// m_xmf4x4View = Matrix4x4::LookAtLH(m_Position, Vector3::Add(m_Position, m_Look), m_Up);
 	m_xmf4x4View = Matrix4x4::LookAtLH(m_Position, m_At, m_Up);
 
 	m_Right = XMFLOAT3(m_xmf4x4View._11, m_xmf4x4View._21, m_xmf4x4View._31);
 	m_Up = XMFLOAT3(m_xmf4x4View._12, m_xmf4x4View._22, m_xmf4x4View._32);
 	m_Look = XMFLOAT3(m_xmf4x4View._13, m_xmf4x4View._23, m_xmf4x4View._33);
-
-
-	//m_Look = Vector3::Normalize(m_Look);
-	//m_Right = Vector3::CrossProduct(m_Up, m_Look, true);
-	//m_Up = Vector3::CrossProduct(m_Look, m_Right, true);
-
-	//m_xmf4x4View._11 = m_Right.x; m_xmf4x4View._12 = m_Up.x; m_xmf4x4View._13 = m_Look.x;
-	//m_xmf4x4View._21 = m_Right.y; m_xmf4x4View._22 = m_Up.y; m_xmf4x4View._23 = m_Look.y;
-	//m_xmf4x4View._31 = m_Right.z; m_xmf4x4View._32 = m_Up.z; m_xmf4x4View._33 = m_Look.z;
-
-	//m_xmf4x4View._41 = -Vector3::DotProduct(m_Position, m_Right);
-	//m_xmf4x4View._42 = -Vector3::DotProduct(m_Position, m_Up);
-	//m_xmf4x4View._43 = -Vector3::DotProduct(m_Position, m_Look);
 }
 
 void Camera::GenerateProjectionMatrix(float fNearPlaneDistance, float fFarPlaneDistance, float fAspectRatio, float fFOVAngle)
@@ -329,13 +223,13 @@ void Camera::UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList)
 	//::memcpy(&m_pMappedCameraInfo->m_xmf3Position, &m_Position, sizeof(XMFLOAT3));
 
 	//pd3dCommandList->SetGraphicsRootConstantBufferView(1, m_d3dCameraCBVUpload->GetGPUVirtualAddress());
-	// pd3dCommandList->SetGraphicsRoot32BitConstants(1, 16, &xmf4x4View, 0);
-	//pd3dCommandList->SetGraphicsRoot32BitConstants(1, 16, &xmf4x4Projection, 16);
+	pd3dCommandList->SetGraphicsRoot32BitConstants(1, 16, &xmf4x4View, 0);
+	pd3dCommandList->SetGraphicsRoot32BitConstants(1, 16, &xmf4x4Projection, 16);
 	XMFLOAT4X4 CameraMatrixs[2] = { xmf4x4View , xmf4x4Projection };
 
 	if (m_ShaderVariables)
 	{
-		static_cast<RootConstants<XMFLOAT4X4> *>(m_ShaderVariables)->UpdateShaderVariables(pd3dCommandList, CameraMatrixs);
+		// static_cast<RootConstants<XMFLOAT4X4> *>(m_ShaderVariables)->UpdateShaderVariables(pd3dCommandList, CameraMatrixs);
 	}
 }
 

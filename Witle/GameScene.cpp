@@ -122,8 +122,8 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	m_GameObject->InsertComponent(cubemesh->GetFamillyID(), cubemesh);
 
 	// 터레인 생성 
-	XMFLOAT3 xmf3Scale(8.0f, 8.0f, 8.0f);
-	XMFLOAT4 xmf4Color(1.f,1.f, 1.f, 0.0f); 
+	XMFLOAT3 xmf3Scale(8.0f, 2.0f, 8.0f);
+	XMFLOAT4 xmf4Color(0.0f, 0.5f, 0.0f, 0.0f);
 	m_Terrain = new Terrain("Terrain", pd3dDevice, pd3dCommandList,
 		L"Image/HeightMap.raw", 257, 257, 257, 257, xmf3Scale, xmf4Color);
 
@@ -135,9 +135,9 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	m_TerrainHeap.CreateShaderResourceViews(pd3dDevice, pd3dCommandList, m_Terrain->GetTexture(), 3, true);
 
 	// 카메라
-	Camera* cameraComponent = new FollowCam(m_GameObject);
-	cameraComponent->Teleport(XMFLOAT3(0, 0, -5.f));
-	cameraComponent->SetOffset(XMFLOAT3(0, 0, 5.f));
+	Camera* cameraComponent = new FollowCam(m_GameObject); 
+	// cameraComponent->SetOffset(XMFLOAT3(0, -50.f, 50.f));
+	cameraComponent->SetOffset(XMFLOAT3(0, -30.f, 50.f));
 	m_Camera = new GameObject("Camera");
 	m_Camera->InsertComponent(cameraComponent->GetFamillyID(), cameraComponent);
 
@@ -201,22 +201,6 @@ void GameScene::ReleaseObjects()
 		delete m_GameObject;
 		m_GameObject = nullptr;
 	}
-	//if (m_Player) {
-	//	delete m_Player;
-	//	m_Player = nullptr;
-	//}
-	//if (m_Camera) {
-	//	delete m_Camera;
-	//	m_Camera = nullptr;
-	//}
-	//if (m_pHeightMapTerrain) {
-	//	delete m_pHeightMapTerrain;
-	//	m_pHeightMapTerrain = nullptr;
-	//}
-	//if (m_SkyBox) {
-	//	delete m_SkyBox;
-	//	m_SkyBox = nullptr;
-	//} 
 }
 
 bool GameScene::ProcessInput(HWND hWnd, float ElapsedTime)
@@ -352,25 +336,20 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Terrain")->GetPSO());
 	m_TerrainHeap.FirstUpdate(pd3dCommandList);
 
-	XMFLOAT4X4 matrix = Matrix4x4::Identity();
 	pd3dCommandList->SetGraphicsRoot32BitConstants(0, 16, &matrix, 0);
-	m_Terrain->UpdateShaderVariables(pd3dCommandList);
-
+	m_Terrain->UpdateShaderVariables(pd3dCommandList); 
 	m_Camera->GetComponent<Camera>("Camera")->UpdateShaderVariables(pd3dCommandList);
 
 	Mesh* terrainMesh = m_Terrain->GetComponent<Mesh>("TerrainMesh");
 	gMeshRenderer.Render(pd3dCommandList, terrainMesh);
 
-
 	// PSO 설정
 	pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Cube")->GetPSO());
 	
-	// 쉐이더 변수 설정
-
-	std::cout << "object 위치: ";
-	Vector3::Show(m_GameObject->GetComponent<Transform>("")->GetPosition());
+	Matrix4x4::Show(m_GameObject->GetComponent<Transform>("")->GetWorldMatrix());
 	std::cout << std::endl;
 
+	// 쉐이더 변수 설정
 	XMFLOAT4X4 xmf4x4World;
 	XMStoreFloat4x4(&xmf4x4World, XMMatrixTranspose(XMLoadFloat4x4(&m_GameObject->GetComponent<Transform>("")->GetWorldMatrix())));
 	pd3dCommandList->SetGraphicsRoot32BitConstants(0, 16, &xmf4x4World, 0);
@@ -454,13 +433,13 @@ ID3D12RootSignature* GameScene::CreateGraphicsRootSignature(ID3D12Device *pd3dDe
 
 	pd3dDescriptorRanges[1].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
 	pd3dDescriptorRanges[1].NumDescriptors = 1;
-	pd3dDescriptorRanges[1].BaseShaderRegister = 1; //t4: gtxtTerrainBaseTexture
+	pd3dDescriptorRanges[1].BaseShaderRegister = 1; //t1: gtxtTerrainBaseTexture
 	pd3dDescriptorRanges[1].RegisterSpace = 0;
 	pd3dDescriptorRanges[1].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
 	pd3dDescriptorRanges[2].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
 	pd3dDescriptorRanges[2].NumDescriptors = 1;
-	pd3dDescriptorRanges[2].BaseShaderRegister = 2; //t5: gtxtTerrainDetailTexture
+	pd3dDescriptorRanges[2].BaseShaderRegister = 2; //t2: gtxtTerrainDetailTexture
 	pd3dDescriptorRanges[2].RegisterSpace = 0;
 	pd3dDescriptorRanges[2].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 

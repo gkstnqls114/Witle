@@ -48,11 +48,6 @@ protected:
 	//ComPtr<ID3D12DescriptorHeap>	m_d3dCameraCBVDescriptorHeap{ nullptr };
 	ResourceBase	*m_ShaderVariables{ nullptr };
 
-	//절두체(월드 좌표계)
-	BoundingFrustum m_xmFrustum;
-	BoundingBox		m_xmBoundingBox;
-	BoundingSphere	m_xmSphere;
-
 protected:
 	//절두체(월드 좌표계)를 생성한다.
 	void GenerateFrustum();
@@ -76,17 +71,6 @@ public:
 	virtual void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList);
 	//virtual void ReleaseShaderVariables();
 
-	//바운딩 박스(OOBB, 월드 좌표계)가 절두체에 포함되는 가를 검사한다.
-	bool IsInFrustum(const BoundingOrientedBox& xmBoundingBox) const;
-	bool IsInFrustum(const BoundingBox& xmBoundingBox) const;
-
-	bool IsInBoudingBox(const BoundingOrientedBox& xmBoundingBox) const;
-	bool IsInBoudingBox(const BoundingBox& xmBoundingBox) const;
-
-	bool IsInSphere(const BoundingOrientedBox& xmBoundingBox) const;
-	bool IsInSphere(const BoundingBox& xmBoundingBox) const;
-	bool IsInSphere(const BoundingSphere& xmBoundingBox) const;
-
 	//카메라 변환 행렬(뷰행렬) 을 생성한다.
 	void GenerateViewMatrix();
 	void GenerateViewMatrix(XMFLOAT3 xmf3Position, XMFLOAT3 xmf3LookAt, XMFLOAT3 xmf3Up);
@@ -94,7 +78,6 @@ public:
 	void GenerateProjectionMatrix(float fNearPlaneDistance, float fFarPlaneDistance, float fAspectRatio, float fFOVAngle);
 	// GenerateViewMatrix를 했을 경우, 반드시 마지막에 Regenterate를 호출해야한다.
 	void RegenerateViewMatrix();
-
 
 	///////////////////////////////////////////////////////////////////////// Set
 	void SetViewport(int xTopLeft, int yTopLeft, int nWidth, int nHeight, float fMinZ = 0.0f, float fMaxZ = 1.0f);
