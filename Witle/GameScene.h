@@ -45,8 +45,8 @@ public:
 
 protected:
 	Player* m_GameObject;
-	Terrain* m_Terrain;
-	MyDescriptorHeap m_TerrainHeap;
+	// Terrain* m_Terrain;
+	// MyDescriptorHeap m_TerrainHeap;
 	GameObject* m_Camera;
 
 	XMFLOAT4X4 matrix = Matrix4x4::Identity();

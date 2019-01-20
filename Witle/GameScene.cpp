@@ -121,18 +121,18 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	m_GameObject = new Player("Player");
 	m_GameObject->InsertComponent(cubemesh->GetFamillyID(), cubemesh);
 
-	// 터레인 생성 
-	XMFLOAT3 xmf3Scale(8.0f, 2.0f, 8.0f);
-	XMFLOAT4 xmf4Color(0.0f, 0.5f, 0.0f, 0.0f);
-	m_Terrain = new Terrain("Terrain", pd3dDevice, pd3dCommandList,
-		L"Image/HeightMap.raw", 257, 257, 257, 257, xmf3Scale, xmf4Color);
+	//// 터레인 생성 
+	//XMFLOAT3 xmf3Scale(8.0f, 2.0f, 8.0f);
+	//XMFLOAT4 xmf4Color(0.0f, 0.5f, 0.0f, 0.0f);
+	//m_Terrain = new Terrain("Terrain", pd3dDevice, pd3dCommandList,
+	//	L"Image/HeightMap.raw", 257, 257, 257, 257, xmf3Scale, xmf4Color);
 
-	// 해당 터레인을 플레이어 콜백으로 설정
-	m_GameObject->SetPlayerUpdatedContext(m_Terrain);
+	//// 해당 터레인을 플레이어 콜백으로 설정
+	//m_GameObject->SetPlayerUpdatedContext(m_Terrain);
 
-	m_TerrainHeap.CreateCbvSrvUavDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 2, 0);
-	// m_TerrainHeap.CreateConstantBufferViews(pd3dDevice, pd3dCommandList, 1, m_pd3dcbGameObject, ncbElementBytes);
-	m_TerrainHeap.CreateShaderResourceViews(pd3dDevice, pd3dCommandList, m_Terrain->GetTexture(), 3, true);
+	//m_TerrainHeap.CreateCbvSrvUavDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 2, 0);
+	//// m_TerrainHeap.CreateConstantBufferViews(pd3dDevice, pd3dCommandList, 1, m_pd3dcbGameObject, ncbElementBytes);
+	//m_TerrainHeap.CreateShaderResourceViews(pd3dDevice, pd3dCommandList, m_Terrain->GetTexture(), 3, true);
 
 	// 카메라
 	Camera* cameraComponent = new FollowCam(m_GameObject); 
@@ -145,61 +145,16 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	cameraComponent->SetScissorRect(0, 0, FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT);
 	cameraComponent->GenerateProjectionMatrix(0.01f, CAMERA_FAR, float(FRAME_BUFFER_WIDTH) / float(FRAME_BUFFER_HEIGHT), 60.0f);
 
-	// cameraComponent->CreateShaderVariables(pd3dDevice, pd3dCommandList);
-	// cameraComponent->SetTarget(m_Player);
-
-	//// 스카이 박스 생성
-	//m_SkyBox = new SkyBox(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature.Get());
-
-	//// Terrain 바닥 생성
-	////XMFLOAT3 xmf3Scale(8.0f, 2.0f, 8.0f);
-	//XMFLOAT3 xmf3Scale(100.0f, 10.0f, 100.0f);
-	//int nWidth = 257;
-	//int nLength = 257;
-	//int nBlockWidth =  257;
-	//int nBlockLength = 257;
-
-	//XMFLOAT4 xmf4Color(0.0f, 1.f, 0.0f, 1.0f);
-	////XMFLOAT4 xmf4Color(0.0f, 0.5f, 0.0f, 0.0f);
-	//m_pHeightMapTerrain = new HeightMapTerrain(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature.Get(), _T("Image/HeightMap.raw"), 
-	//	nWidth, nLength, nBlockWidth, nBlockLength, xmf3Scale, xmf4Color);
-	
-//  
-//	
-//	// 메쉬 생성
-//#if defined(_WITH_TEXT_MESH) && !defined(_WITH_OBJ_MESH)
-//	m_Mesh = new CCylinderDiffuse(pd3dDevice, pd3dCommandList);
-//#elif !defined(_WITH_TEXT_MESH) && defined(_WITH_OBJ_MESH)
-//	m_Mesh = new CMesh(pd3dDevice, pd3dCommandList, "metric_1M.obj");
-//#endif
-//
-//	m_Player = new CPlayer();
-//	m_Player->SetPosition(XMFLOAT3(nWidth/2.F * xmf3Scale.x, 1000.f, nLength/2.F * xmf3Scale.z));
-//
-//	Camera* m_tempCamera = new Camera();
-//	
-//	XMFLOAT3 CameraAt = m_Player->GetPosition();
-//	XMFLOAT3 CameraOffset = XMFLOAT3(0.f, 0.f, 500.f);
-//	m_tempCamera->SetAt(CameraAt);
-//	m_tempCamera->SetOffset(CameraOffset);
-//	m_tempCamera->SetPosition(XMFLOAT3(0.f, 0.f, -500.f));
-//
-//	m_tempCamera->SetViewport(0, 0, FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT, 0.0f, 1.0f);
-//	m_tempCamera->SetScissorRect(0, 0, FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT);
-//	m_tempCamera->GenerateProjectionMatrix(1.01f, CAMERA_FAR, float(FRAME_BUFFER_WIDTH) / float(FRAME_BUFFER_HEIGHT), 60.0f);
-//	m_tempCamera->CreateShaderVariables(pd3dDevice, pd3dCommandList);
-//	m_tempCamera->SetTarget(m_Player);
-//
-//	m_Camera = m_tempCamera;
-//
-//	CameraStorage::GetInstance()->SetCamera(m_Camera);
 }
 
 void GameScene::ReleaseObjects()
-{ 
+{
 	if (m_GameObject) {
 		delete m_GameObject;
 		m_GameObject = nullptr;
+	}
+	if (m_Camera) {
+
 	}
 }
 
@@ -332,16 +287,16 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	pd3dCommandList->RSSetViewports(1, &GBuffer_Viewport);
 	pd3dCommandList->RSSetScissorRects(1, &ScissorRect);
 
-	//// Terrain PSO 설정 
-	pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Terrain")->GetPSO());
-	m_TerrainHeap.FirstUpdate(pd3dCommandList);
+	////// Terrain PSO 설정 
+	//pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Terrain")->GetPSO());
+	//m_TerrainHeap.FirstUpdate(pd3dCommandList);
 
-	pd3dCommandList->SetGraphicsRoot32BitConstants(0, 16, &matrix, 0);
-	m_Terrain->UpdateShaderVariables(pd3dCommandList); 
-	m_Camera->GetComponent<Camera>("Camera")->UpdateShaderVariables(pd3dCommandList);
+	//pd3dCommandList->SetGraphicsRoot32BitConstants(0, 16, &matrix, 0);
+	//m_Terrain->UpdateShaderVariables(pd3dCommandList); 
+	//m_Camera->GetComponent<Camera>("Camera")->UpdateShaderVariables(pd3dCommandList);
 
-	Mesh* terrainMesh = m_Terrain->GetComponent<Mesh>("TerrainMesh");
-	gMeshRenderer.Render(pd3dCommandList, terrainMesh);
+	//Mesh* terrainMesh = m_Terrain->GetComponent<Mesh>("TerrainMesh");
+	//gMeshRenderer.Render(pd3dCommandList, terrainMesh);
 
 	// PSO 설정
 	pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Cube")->GetPSO());
@@ -358,14 +313,7 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	
 	Mesh* mesh = m_GameObject->GetComponent<Mesh>("Mesh");
 	gMeshRenderer.Render(pd3dCommandList, mesh);
-
-	//if (m_SkyBox) m_SkyBox->Render(pd3dCommandList, m_Camera);
-
-	////if (m_Player) m_Player->Render(pd3dCommandList, m_Camera);
-
-	//if (m_pHeightMapTerrain) m_pHeightMapTerrain->Render(pd3dCommandList, m_Camera);
-
-	//if (m_TEST_BlendObject) m_TEST_BlendObject->Render(pd3dCommandList, m_Camera); 
+	 
 }
 
 void GameScene::ReleaseUploadBuffers()

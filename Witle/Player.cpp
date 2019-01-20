@@ -57,6 +57,8 @@ Player::Player(const std::string& entityID)
 
 Player::~Player()
 {
+	m_pPlayerUpdatedContext = nullptr;
+	m_pCameraUpdatedContext = nullptr;
 }
 
 void Player::Update()

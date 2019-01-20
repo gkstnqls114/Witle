@@ -5,7 +5,7 @@
 
 Camera::Camera()
 {
-	m_ShaderVariables = new RootConstants<XMFLOAT4X4>(1, 2);
+	m_ShaderVariables = new RootConstants(1, 2);
 	m_FamillyID = "Camera";
 }
 
