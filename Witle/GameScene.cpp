@@ -129,7 +129,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 		L"Image/HeightMap.raw", 257, 257, 257, 257, xmf3Scale, xmf4Color);
 
 	//// 해당 터레인을 플레이어 콜백으로 설정
-	//m_GameObject->SetPlayerUpdatedContext(m_Terrain);
+	m_GameObject->SetPlayerUpdatedContext(m_Terrain);
 
 	m_TerrainHeap = new MyDescriptorHeap();
 	m_TerrainHeap->CreateCbvSrvUavDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 2, 0);
@@ -288,17 +288,17 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	D3D12_RECT ScissorRect = D3D12_RECT{ 0, 0, FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT };
 	pd3dCommandList->RSSetViewports(1, &GBuffer_Viewport);
 	pd3dCommandList->RSSetScissorRects(1, &ScissorRect);
+	m_Camera->GetComponent<Camera>("Camera")->UpdateShaderVariables(pd3dCommandList);
 
-	////// Terrain PSO 설정 
-	// pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Terrain")->GetPSO());
-	// m_TerrainHeap.FirstUpdate(pd3dCommandList);
+	//// Terrain PSO 설정 
+	pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Terrain")->GetPSO());
+	m_TerrainHeap->FirstUpdate(pd3dCommandList);
 
-	//pd3dCommandList->SetGraphicsRoot32BitConstants(0, 16, &matrix, 0);
-	//m_Terrain->UpdateShaderVariables(pd3dCommandList); 
-	//m_Camera->GetComponent<Camera>("Camera")->UpdateShaderVariables(pd3dCommandList);
+	pd3dCommandList->SetGraphicsRoot32BitConstants(0, 16, &matrix, 0);
+	m_Terrain->UpdateShaderVariables(pd3dCommandList); 
 
-	//Mesh* terrainMesh = m_Terrain->GetComponent<Mesh>("TerrainMesh");
-	//gMeshRenderer.Render(pd3dCommandList, terrainMesh);
+	Mesh* terrainMesh = m_Terrain->GetComponent<Mesh>("TerrainMesh");
+	gMeshRenderer.Render(pd3dCommandList, terrainMesh);
 
 	// PSO 설정
 	pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Cube")->GetPSO());
@@ -311,8 +311,6 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	XMStoreFloat4x4(&xmf4x4World, XMMatrixTranspose(XMLoadFloat4x4(&m_GameObject->GetComponent<Transform>("")->GetWorldMatrix())));
 	pd3dCommandList->SetGraphicsRoot32BitConstants(0, 16, &xmf4x4World, 0);
 
-	m_Camera->GetComponent<Camera>("Camera")->UpdateShaderVariables(pd3dCommandList);
-	
 	Mesh* mesh = m_GameObject->GetComponent<Mesh>("Mesh");
 	gMeshRenderer.Render(pd3dCommandList, mesh);
 	 

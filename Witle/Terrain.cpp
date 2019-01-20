@@ -58,10 +58,6 @@ Terrain::Terrain(const std::string& entityID, ID3D12Device * pd3dDevice, ID3D12G
 
 	InsertComponent("TerrainMesh", pterrainMesh);
 
-
-	// 자신의 월드 행렬
-	//CreateShaderVariables(pd3dDevice, pd3dCommandList);
-
 	Texture *pTerrainTexture = new Texture(2, RESOURCE_TEXTURE2D, 0);
 
 	pTerrainTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Image/Base_Texture.dds", 0);

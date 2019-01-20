@@ -49,10 +49,6 @@ Player::Player(const std::string& entityID)
 	: GameObject(entityID)
 {  
 	 
-	// m_pCamera = OnChangeCamera(THIRD_PERSON_CAMERA, nCurrentCameraMode);
-	// m_pCamera->SetTimeLag(0.25f);
-	// m_pCamera->SetOffset(XMFLOAT3(0.0f, 20.0f, -50.0f));
-	// m_pCamera->GenerateProjectionMatrix(1.01f, 50000.0f, ASPECT_RATIO, 60.0f);
 }
 
 Player::~Player()
