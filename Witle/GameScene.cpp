@@ -256,7 +256,7 @@ void GameScene::Update(float ElapsedTime)
 	
 	if (m_GameObject)
 	{
-		m_GameObject->GetComponent<Transform>("")->Update();
+		m_GameObject->GetComponent<Transform>("")->Update(); // right, up, look, pos에 맞춰 월드변환행렬 다시 설정
 	}
 }
 
@@ -284,10 +284,15 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	pd3dCommandList->SetGraphicsRootSignature(m_pd3dGraphicsRootSignature);
 
 	// 클라 화면 설정
-	D3D12_VIEWPORT GBuffer_Viewport = D3D12_VIEWPORT{ 0, 0, FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT };
+
+	D3D12_VIEWPORT Viewport = D3D12_VIEWPORT{ 0, 0, FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT };
 	D3D12_RECT ScissorRect = D3D12_RECT{ 0, 0, FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT };
-	pd3dCommandList->RSSetViewports(1, &GBuffer_Viewport);
-	pd3dCommandList->RSSetScissorRects(1, &ScissorRect);
+
+	D3D12_VIEWPORT	m_d3dViewport{ 0, 0, FRAME_BUFFER_WIDTH , FRAME_BUFFER_HEIGHT, 0.0f, 1.0f };
+	D3D12_RECT		m_d3dScissorRect{ 0, 0, FRAME_BUFFER_WIDTH , FRAME_BUFFER_HEIGHT }; 
+
+
+	m_Camera->GetComponent<Camera>("Camera")->SetViewportsAndScissorRects(pd3dCommandList);
 	m_Camera->GetComponent<Camera>("Camera")->UpdateShaderVariables(pd3dCommandList);
 
 	//// Terrain PSO 설정 
@@ -297,20 +302,19 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	pd3dCommandList->SetGraphicsRoot32BitConstants(0, 16, &matrix, 0);
 	m_Terrain->UpdateShaderVariables(pd3dCommandList); 
 
+	// TerrainMesh Render
 	Mesh* terrainMesh = m_Terrain->GetComponent<Mesh>("TerrainMesh");
 	gMeshRenderer.Render(pd3dCommandList, terrainMesh);
 
 	// PSO 설정
 	pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Cube")->GetPSO());
-	
-	Matrix4x4::Show(m_GameObject->GetComponent<Transform>("")->GetWorldMatrix());
-	std::cout << std::endl;
 
 	// 쉐이더 변수 설정
 	XMFLOAT4X4 xmf4x4World;
 	XMStoreFloat4x4(&xmf4x4World, XMMatrixTranspose(XMLoadFloat4x4(&m_GameObject->GetComponent<Transform>("")->GetWorldMatrix())));
 	pd3dCommandList->SetGraphicsRoot32BitConstants(0, 16, &xmf4x4World, 0);
 
+	// CubeMesh Render
 	Mesh* mesh = m_GameObject->GetComponent<Mesh>("Mesh");
 	gMeshRenderer.Render(pd3dCommandList, mesh);
 	 

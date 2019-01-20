@@ -18,11 +18,7 @@ void CGameFramework::Render()
 	HRESULT hResult = m_CommandAllocator->Reset();
 	hResult = m_CommandList->Reset(m_CommandAllocator.Get(), NULL);
 	 
-
-	//RenderGBuffers();
-	//Blur();
 	RenderSwapChain();
-
 
 	hResult = m_CommandList->Close();
 	ID3D12CommandList *ppd3dCommandLists[] = { m_CommandList.Get() };
@@ -33,8 +29,6 @@ void CGameFramework::Render()
 	m_SwapChain->Present(0, 0);
 
 	MoveToNextFrame();
-
-
 }
 
 CGameFramework::CGameFramework()
@@ -791,6 +785,35 @@ void CGameFramework::Blur()
 void CGameFramework::RenderSwapChain()
 {
 
+	D3D12_RESOURCE_BARRIER d3dResourceBarrier;
+	::ZeroMemory(&d3dResourceBarrier, sizeof(D3D12_RESOURCE_BARRIER));
+	d3dResourceBarrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+	d3dResourceBarrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+	d3dResourceBarrier.Transition.pResource = m_RenderTargetBuffers[m_SwapChainBufferIndex].Get();
+	d3dResourceBarrier.Transition.StateBefore = D3D12_RESOURCE_STATE_PRESENT;
+	d3dResourceBarrier.Transition.StateAfter = D3D12_RESOURCE_STATE_RENDER_TARGET;
+	d3dResourceBarrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
+	m_CommandList->ResourceBarrier(1, &d3dResourceBarrier);
+
+	D3D12_CPU_DESCRIPTOR_HANDLE d3dRtvCPUDescriptorHandle = m_RtvHeap->GetCPUDescriptorHandleForHeapStart();
+	d3dRtvCPUDescriptorHandle.ptr += (m_SwapChainBufferIndex * m_RtvDescriptorSize);
+
+	float pfClearColor[4] = { 0.0f, 0.125f, 0.3f, 1.0f };
+	m_CommandList->ClearRenderTargetView(d3dRtvCPUDescriptorHandle, pfClearColor/*Colors::Azure*/, 0, NULL);
+
+	D3D12_CPU_DESCRIPTOR_HANDLE d3dDsvCPUDescriptorHandle = m_DsvHeap->GetCPUDescriptorHandleForHeapStart();
+	m_CommandList->ClearDepthStencilView(d3dDsvCPUDescriptorHandle, D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, NULL);
+
+	m_CommandList->OMSetRenderTargets(1, &d3dRtvCPUDescriptorHandle, TRUE, &d3dDsvCPUDescriptorHandle);
+
+	m_pScene->Render(m_CommandList.Get());
+
+	d3dResourceBarrier.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET;
+	d3dResourceBarrier.Transition.StateAfter = D3D12_RESOURCE_STATE_PRESENT;
+	d3dResourceBarrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
+	m_CommandList->ResourceBarrier(1, &d3dResourceBarrier);
+
+	return;
 	////////////////////////////////////////////////////// SwapChain
 	d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_RenderTargetBuffers[m_SwapChainBufferIndex].Get(), D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
 
@@ -799,25 +822,7 @@ void CGameFramework::RenderSwapChain()
 	m_CommandList->OMSetRenderTargets(1, &m_SwapChainCPUHandle[m_SwapChainBufferIndex], TRUE, &m_DepthStencilCPUHandle);
 
 	// 장면을 렌더합니다.
-	if (m_pScene) {
-		/*D3D12_VIEWPORT GBuffer_Viewport = D3D12_VIEWPORT{ 0, 0, FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT };
-		D3D12_RECT ScissorRect = D3D12_RECT{ 0, 0, FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT };
-
-		m_RedShader.SetGraphicsRootSignature(m_CommandList.Get());
-		m_CommandList->RSSetViewports(1, &GBuffer_Viewport);
-		m_CommandList->RSSetScissorRects(1, &ScissorRect);
-
-		m_RenderComputeShader.OnPrepareRender(m_CommandList.Get());
-
-
-		m_RedShader.SetDescriptorHeaps(m_CommandList.Get());
-		m_pGBufferTexture->UpdateShaderVariables(m_CommandList.Get());
-
-
-		m_CommandList->IASetVertexBuffers(0, 0, nullptr);
-		m_CommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-		m_CommandList->DrawInstanced(6, 1, 0, 0);*/
-
+	if (m_pScene) { 
 		m_pScene->Render(m_CommandList.Get());
 	}
 
