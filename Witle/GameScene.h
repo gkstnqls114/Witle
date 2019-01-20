@@ -1,5 +1,4 @@
 #pragma once
-#include "MyDescriptorHeap.h"
 #include "Scene.h"
 
 
@@ -9,6 +8,7 @@ struct CB_OBJECT_INFO // b1
 	XMFLOAT4 fColor{1.F , 1.F, 1.F, 1.F};
 };
  
+class MyDescriptorHeap;
 class GameObject;
 class Player;
 class Terrain;
@@ -45,8 +45,8 @@ public:
 
 protected:
 	Player* m_GameObject;
-	// Terrain* m_Terrain;
-	// MyDescriptorHeap m_TerrainHeap;
+	Terrain* m_Terrain;
+	MyDescriptorHeap* m_TerrainHeap;
 	GameObject* m_Camera;
 
 	XMFLOAT4X4 matrix = Matrix4x4::Identity();

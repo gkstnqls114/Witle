@@ -9,6 +9,7 @@
 #include "Terrain.h"
 #include "GameInput.h"
 #include "Player.h"
+#include "MyDescriptorHeap.h"
 //
 //#include "Vertex.h"
 //
@@ -121,18 +122,19 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	m_GameObject = new Player("Player");
 	m_GameObject->InsertComponent(cubemesh->GetFamillyID(), cubemesh);
 
-	//// 터레인 생성 
-	//XMFLOAT3 xmf3Scale(8.0f, 2.0f, 8.0f);
-	//XMFLOAT4 xmf4Color(0.0f, 0.5f, 0.0f, 0.0f);
-	//m_Terrain = new Terrain("Terrain", pd3dDevice, pd3dCommandList,
-	//	L"Image/HeightMap.raw", 257, 257, 257, 257, xmf3Scale, xmf4Color);
+	// 터레인 생성 
+	XMFLOAT3 xmf3Scale(8.0f, 2.0f, 8.0f);
+	XMFLOAT4 xmf4Color(0.0f, 0.5f, 0.0f, 0.0f);
+	m_Terrain = new Terrain("Terrain", pd3dDevice, pd3dCommandList,
+		L"Image/HeightMap.raw", 257, 257, 257, 257, xmf3Scale, xmf4Color);
 
 	//// 해당 터레인을 플레이어 콜백으로 설정
 	//m_GameObject->SetPlayerUpdatedContext(m_Terrain);
 
-	//m_TerrainHeap.CreateCbvSrvUavDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 2, 0);
-	//// m_TerrainHeap.CreateConstantBufferViews(pd3dDevice, pd3dCommandList, 1, m_pd3dcbGameObject, ncbElementBytes);
-	//m_TerrainHeap.CreateShaderResourceViews(pd3dDevice, pd3dCommandList, m_Terrain->GetTexture(), 3, true);
+	m_TerrainHeap = new MyDescriptorHeap();
+	m_TerrainHeap->CreateCbvSrvUavDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 2, 0);
+	// m_TerrainHeap.CreateConstantBufferViews(pd3dDevice, pd3dCommandList, 1, m_pd3dcbGameObject, ncbElementBytes);
+	m_TerrainHeap->CreateShaderResourceViews(pd3dDevice, pd3dCommandList, m_Terrain->GetTexture(), 3, true);
 
 	// 카메라
 	Camera* cameraComponent = new FollowCam(m_GameObject); 
@@ -288,8 +290,8 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	pd3dCommandList->RSSetScissorRects(1, &ScissorRect);
 
 	////// Terrain PSO 설정 
-	//pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Terrain")->GetPSO());
-	//m_TerrainHeap.FirstUpdate(pd3dCommandList);
+	// pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Terrain")->GetPSO());
+	// m_TerrainHeap.FirstUpdate(pd3dCommandList);
 
 	//pd3dCommandList->SetGraphicsRoot32BitConstants(0, 16, &matrix, 0);
 	//m_Terrain->UpdateShaderVariables(pd3dCommandList); 
