@@ -21,7 +21,8 @@ public:
 	void SetTarget(GameObject* pLookingObject) { m_pTarget = pLookingObject; }
 
 	virtual void Teleport(const XMFLOAT3& at) override; // right, up, look을 유지한 상태로 position, at만 이동한다.
-	virtual void Update(float fTimeElapsed, const XMFLOAT3& xmf3LookAt);
+	virtual void Update(float fTimeElapsed, const XMFLOAT3& xmf3LookAt) override;
+	virtual void LastUpdate() override;
 
 
 	void SetLookAt(const XMFLOAT3 & xmf3LookAt);

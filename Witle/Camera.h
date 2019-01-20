@@ -70,7 +70,7 @@ public:
 
 	virtual void Update() override {};
 	virtual void Update(float fTimeElapsed, const XMFLOAT3& xmf3LookAt) {};
-	void LastUpdate();
+	virtual void LastUpdate();
 	////카메라의 정보를 셰이더 프로그램에게 전달하기 위한 상수 버퍼를 생성하고 갱신한다.
 	//virtual void CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
 	virtual void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList);

@@ -122,7 +122,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	m_GameObject->InsertComponent(cubemesh->GetFamillyID(), cubemesh);
 
 	// 터레인 생성 
-	XMFLOAT3 xmf3Scale(8.0f, 1.0f, 8.0f);
+	XMFLOAT3 xmf3Scale(8.0f, 8.0f, 8.0f);
 	XMFLOAT4 xmf4Color(1.f,1.f, 1.f, 0.0f); 
 	m_Terrain = new Terrain("Terrain", pd3dDevice, pd3dCommandList,
 		L"Image/HeightMap.raw", 257, 257, 257, 257, xmf3Scale, xmf4Color);
@@ -273,28 +273,14 @@ bool GameScene::ProcessInput(HWND hWnd, float ElapsedTime)
 		m_GameObject->VelocityMove(xmf3Shift);
 	}
 	
-	//마우스 또는 키 입력이 있으면 플레이어를 이동하거나(dwDirection) 회전한다(cxDelta 또는 cyDelta).
+
 	if ((GameInput::GetcDeltaX() != 0.0f) || (GameInput::GetcDeltaY() != 0.0f))
 	{
 		if (GameInput::GetcDeltaX() || GameInput::GetcDeltaY())
 		{
 			// 플레이어와 카메라 똑같이 rotate...
-			m_GameObject->GetComponent<Transform>("")->Rotate(GameInput::GetcDeltaY(), GameInput::GetcDeltaX(), 0.0f);
-			m_Camera->GetComponent<FollowCam>("Camera")->Rotate(GameInput::GetcDeltaY(), GameInput::GetcDeltaX(), 0.0f);
-
-			// m_Camera->GetComponent<Camera>("Camera")->Rotate(cyDelta, cxDelta, 0.0f);
-
-			/*cxDelta는 y-축의 회전을 나타내고 cyDelta는 x-축의 회전을 나타낸다. 오른쪽 마우스 버튼이 눌려진 경우
-			cxDelta는 z-축의 회전을 나타낸다.*/
-			//if (pKeyBuffer[VK_RBUTTON] & 0xF0) { 
-			//	Transform* tr = m_GameObject->GetComponent<Transform>("Transform");
-			//	tr->Rotate(cyDelta, 0.0f, -cxDelta);
-			//}
-			//else {
-			//	// static_cast<Transform*>(m_GameObject->GetComponent("Transform"))->Rotate(cyDelta, cxDelta, 0.0f);
-
-			//	// m_Camera->Rotate(cyDelta, cxDelta, 0.0f);
-			//}
+			m_GameObject->GetComponent<Transform>("")->Rotate(0.0f, GameInput::GetcDeltaX(), 0.0f);
+			m_Camera->GetComponent<FollowCam>("Camera")->Rotate(0.0f, GameInput::GetcDeltaX(), 0.0f);
 		}
 		
 	}
@@ -362,8 +348,6 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	pd3dCommandList->RSSetViewports(1, &GBuffer_Viewport);
 	pd3dCommandList->RSSetScissorRects(1, &ScissorRect);
 
-
-
 	//// Terrain PSO 설정 
 	pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Terrain")->GetPSO());
 	m_TerrainHeap.FirstUpdate(pd3dCommandList);
@@ -373,7 +357,6 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	m_Terrain->UpdateShaderVariables(pd3dCommandList);
 
 	m_Camera->GetComponent<Camera>("Camera")->UpdateShaderVariables(pd3dCommandList);
-
 
 	Mesh* terrainMesh = m_Terrain->GetComponent<Mesh>("TerrainMesh");
 	gMeshRenderer.Render(pd3dCommandList, terrainMesh);
@@ -391,8 +374,6 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	XMFLOAT4X4 xmf4x4World;
 	XMStoreFloat4x4(&xmf4x4World, XMMatrixTranspose(XMLoadFloat4x4(&m_GameObject->GetComponent<Transform>("")->GetWorldMatrix())));
 	pd3dCommandList->SetGraphicsRoot32BitConstants(0, 16, &xmf4x4World, 0);
-	//pd3dCommandList->SetGraphicsRoot32BitConstants(0, 16, &matrix, 16);
-	//pd3dCommandList->SetGraphicsRoot32BitConstants(0, 16, &matrix, 32);
 
 	m_Camera->GetComponent<Camera>("Camera")->UpdateShaderVariables(pd3dCommandList);
 	

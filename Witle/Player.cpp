@@ -9,7 +9,6 @@ void Player::OnPlayerUpdateCallback(float fTimeElapsed, Camera* pCamera)
 {
 	if (!m_pPlayerUpdatedContext) return;
 
-	// Terrain 높이에 맞추어 y를 맞춘다.
 	Terrain *pTerrain = (Terrain *)m_pPlayerUpdatedContext;
 	XMFLOAT3 xmf3Scale = pTerrain->GetScale();
 	XMFLOAT3 xmf3PlayerPosition = m_Transform->GetPosition();
@@ -22,8 +21,7 @@ void Player::OnPlayerUpdateCallback(float fTimeElapsed, Camera* pCamera)
 		xmf3PlayerVelocity.y = 0.0f;
 		m_xmf3Velocity = xmf3PlayerVelocity;
 		xmf3PlayerPosition.y = fHeight;
-		m_Transform->SetPosition(xmf3PlayerPosition);  // 포지션이 움직였다..
-		pCamera->Teleport(xmf3PlayerPosition);
+		m_Transform->SetPosition(xmf3PlayerPosition);
 	}
 }
 
@@ -40,10 +38,8 @@ void Player::OnCameraUpdateCallback(float fTimeElapsed, Camera* pCamera)
 	if (xmf3CameraPosition.y <= fHeight)
 	{
 		xmf3CameraPosition.y = fHeight;
-		pCamera->SetPosition(xmf3CameraPosition);
-		 
+		pCamera->SetPosition(xmf3CameraPosition); 
 		static_cast<FollowCam *>(pCamera)->SetLookAt(m_Transform->GetPosition());
-		
 	}
 }
 
@@ -91,13 +87,13 @@ void Player::Update(Camera * pCamera)
 	// 카메라도 마찬가지로 이동
 	pCamera->Update(fTimeElapsed, m_Transform->GetPosition());
 	static_cast<FollowCam*>(pCamera)->Update(fTimeElapsed, m_Transform->GetPosition());
-	OnCameraUpdateCallback(fTimeElapsed, pCamera);
+	OnCameraUpdateCallback(fTimeElapsed, pCamera); 
 	static_cast<FollowCam*>(pCamera)->RegenerateViewMatrix();
 
+	// 이동량 줄어든다.
 	fLength = Vector3::Length(m_xmf3Velocity);
 	float fDeceleration = (m_fFriction * fTimeElapsed); // 감소량
 	if (fDeceleration > fLength) fDeceleration = fLength;
-	// 이동량 줄어든다.
 	m_xmf3Velocity = Vector3::Add(m_xmf3Velocity, Vector3::ScalarProduct(m_xmf3Velocity, -fDeceleration, true));
 }
 
