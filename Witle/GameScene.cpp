@@ -9,6 +9,7 @@
 #include "Terrain.h"
 #include "GameInput.h"
 #include "Player.h"
+#include "CameraObject.h"
 #include "MyDescriptorHeap.h"
 //
 //#include "Vertex.h"
@@ -140,8 +141,9 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	Camera* cameraComponent = new FollowCam(m_GameObject, m_GameObject);
 	// cameraComponent->SetOffset(XMFLOAT3(0, -50.f, 50.f));
 	cameraComponent->SetOffset(XMFLOAT3(0, -30.f, 50.f));
-	m_Camera = new GameObject("Camera");
-	m_Camera->InsertComponent(cameraComponent->GetFamillyID(), cameraComponent);
+	
+	m_Camera = new CameraObject("Camera");
+	m_Camera->ChangeCamera(cameraComponent);
 
 	cameraComponent->SetViewport(0, 0, FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT, 0.0f, 1.0f);
 	cameraComponent->SetScissorRect(0, 0, FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT);
@@ -221,7 +223,7 @@ bool GameScene::ProcessInput(HWND hWnd, float ElapsedTime)
 		{
 			// 플레이어와 카메라 똑같이 rotate...
 			m_GameObject->GetComponent<Transform>("")->Rotate(0.0f, GameInput::GetcDeltaX(), 0.0f);
-			m_Camera->GetComponent<FollowCam>("Camera")->Rotate(0.0f, GameInput::GetcDeltaX(), 0.0f);
+			m_Camera->GetCamera()->Rotate(0.0f, GameInput::GetcDeltaX(), 0.0f);
 		}
 		
 	}
@@ -266,7 +268,7 @@ void GameScene::LastUpdate(float fElapsedTime)
 	// player update 이후에 camera update
 	if (m_Camera)
 	{
-		m_Camera->GetComponent<FollowCam>("Camera")->LastUpdate(fElapsedTime);
+		m_Camera->LastUpdate(fElapsedTime);
 	} 
 }
 
@@ -285,18 +287,9 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	pd3dCommandList->SetGraphicsRootSignature(m_pd3dGraphicsRootSignature);
 
 	// 클라 화면 설정
-	FollowCam* cam = m_Camera->GetComponent<FollowCam>("Camera");
-	cam->SetViewportsAndScissorRects(pd3dCommandList);
+	m_Camera->SetViewportsAndScissorRects(pd3dCommandList);
+	m_Camera->UpdateShaderVariables(pd3dCommandList);
 
-	// 쉐이더 변수 업데이트
-	XMFLOAT4X4 xmf4x4View;
-	XMStoreFloat4x4(&xmf4x4View, XMMatrixTranspose(XMLoadFloat4x4(&cam->GetViewMatrix())));
-	
-	XMFLOAT4X4 xmf4x4Projection;
-	XMStoreFloat4x4(&xmf4x4Projection, XMMatrixTranspose(XMLoadFloat4x4(&cam->GetProjectionMatrix())));
-	pd3dCommandList->SetGraphicsRoot32BitConstants(1, 16, &xmf4x4View, 0);
-	pd3dCommandList->SetGraphicsRoot32BitConstants(1, 16, &xmf4x4Projection, 16);
-	
 	// Terrain PSO
 	pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Terrain")->GetPSO());
 	m_TerrainHeap->FirstUpdate(pd3dCommandList);

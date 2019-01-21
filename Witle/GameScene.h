@@ -9,7 +9,7 @@ struct CB_OBJECT_INFO // b1
 };
  
 class MyDescriptorHeap;
-class GameObject;
+class CameraObject;
 class Player;
 class Terrain;
 
@@ -47,7 +47,7 @@ protected:
 	Player* m_GameObject;
 	Terrain* m_Terrain;
 	MyDescriptorHeap* m_TerrainHeap;
-	GameObject* m_Camera;
+	CameraObject* m_Camera;
 
 	XMFLOAT4X4 matrix = Matrix4x4::Identity();
 

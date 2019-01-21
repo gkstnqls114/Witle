@@ -42,10 +42,6 @@ protected:
 	D3D12_VIEWPORT	m_d3dViewport{ 0, 0, FRAME_BUFFER_WIDTH , FRAME_BUFFER_HEIGHT, 0.0f, 1.0f };
 	D3D12_RECT		m_d3dScissorRect{ 0, 0, FRAME_BUFFER_WIDTH , FRAME_BUFFER_HEIGHT };
 
-	//// 쉐이더
-	//VS_CB_MYCAMERA_INFO*				m_pMappedCameraInfo{ nullptr };
-	//ComPtr<ID3D12Resource>			m_d3dCameraCBVUpload{ nullptr };
-	//ComPtr<ID3D12DescriptorHeap>	m_d3dCameraCBVDescriptorHeap{ nullptr };
 	ResourceBase	*m_ShaderVariables{ nullptr };
 
 protected:  
@@ -58,14 +54,18 @@ public:
 	Camera(GameObject* pOwner, Camera *pCamera);
 	virtual ~Camera();
 
+	// 하위 클래스에 구현해야하는 순수 가상 함수
+
+	virtual void LastUpdate(float fTimeElapsed) = 0;
+
+	// 하위 클래스에 구현해야하는 순수 가상 함수
+
 	virtual void Teleport(const XMFLOAT3& pos); // right, up, look을 유지한 상태로 position, at만 이동한다.
 	virtual void Move(const XMFLOAT3& Shift);
 	virtual void Rotate(float x = 0.0f, float y = 0.0f, float z = 0.0f);
-	virtual void RegenerateAt();
-
+	
 	virtual void Update(float fTimeElapsed) override { };
 	virtual void Update(float fTimeElapsed, const XMFLOAT3& xmf3LookAt) {};
-	virtual void LastUpdate(float fTimeElapsed) = 0;
 
 	//카메라 변환 행렬(뷰행렬) 을 생성한다.
 	void GenerateViewMatrix();
