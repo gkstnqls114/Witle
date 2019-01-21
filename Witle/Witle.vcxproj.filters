@@ -106,6 +106,9 @@
     <Filter Include="10.Renderer\SkinnedMeshRenderer">
       <UniqueIdentifier>{46b1a7bc-5c15-44dd-883d-2897ca51d750}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.Component\Camera\BasicCam">
+      <UniqueIdentifier>{3e7f290a-f5ed-422b-a7a6-8c66ce8dc478}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -231,6 +234,9 @@
     <ClInclude Include="CameraObject.h">
       <Filter>03.GameObject\Camera</Filter>
     </ClInclude>
+    <ClInclude Include="BasicCam.h">
+      <Filter>02.Component\Camera\BasicCam</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -338,8 +344,11 @@
     <ClCompile Include="MyRigidbody.cpp">
       <Filter>02.Component\MyRigidbody</Filter>
     </ClCompile>
-    <ClCompile Include="CameraObjectcpp.cpp">
+    <ClCompile Include="CameraObject.cpp">
       <Filter>03.GameObject\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="BasicCam.cpp">
+      <Filter>02.Component\Camera\BasicCam</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

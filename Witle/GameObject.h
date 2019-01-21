@@ -24,10 +24,8 @@ public:
 	virtual void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList) {};
 	virtual void ReleaseShaderVariables() {};
 
-
 	bool InsertComponent(const std::string& ComponenetID, ComponentBase* pComponentBase);
 	
-
 	template <typename T>
 	T* GetComponent(const std::string& id = "") const
 	{
@@ -39,6 +37,8 @@ public:
 	{
 		return m_Transform;
 	}
+
+	Transform* GetTransform() const { return m_Transform; }
 	
 };
  

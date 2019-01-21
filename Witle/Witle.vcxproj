@@ -147,6 +147,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="BasicCam.h" />
     <ClInclude Include="CameraObject.h" />
     <ClInclude Include="ComponentBase.h" />
     <ClInclude Include="constant.h" />
@@ -190,7 +191,8 @@
     <ClInclude Include="TerrainShader.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CameraObjectcpp.cpp" />
+    <ClCompile Include="BasicCam.cpp" />
+    <ClCompile Include="CameraObject.cpp" />
     <ClCompile Include="ComponentBase.cpp" />
     <ClCompile Include="CubeMesh.cpp" />
     <ClCompile Include="CubeShader.cpp" />
