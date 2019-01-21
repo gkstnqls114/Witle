@@ -57,45 +57,40 @@ Player::~Player()
 	m_pCameraUpdatedContext = nullptr;
 }
 
-void Player::Update()
+void Player::Update(float fElapsedTime)
 { 
-}
-
-void Player::Update(Camera * pCamera)
-{
-	float fTimeElapsed = CGameTimer::GetInstance()->GetTimeElapsed();
-	 
 	// 이동량을 계산한다.
-	m_xmf3Velocity = Vector3::Add(m_xmf3Velocity, Vector3::ScalarProduct(m_xmf3Gravity, fTimeElapsed, false)); // 중력계산
+	m_xmf3Velocity = Vector3::Add(m_xmf3Velocity, Vector3::ScalarProduct(m_xmf3Gravity, fElapsedTime, false)); // 중력계산
 	float fLength = sqrtf(m_xmf3Velocity.x * m_xmf3Velocity.x + m_xmf3Velocity.y * m_xmf3Velocity.y + m_xmf3Velocity.z * m_xmf3Velocity.z);
-	float fMaxVelocityXZ = m_fMaxVelocityXZ * fTimeElapsed;
+	float fMaxVelocityXZ = m_fMaxVelocityXZ * fElapsedTime;
 	if (fLength > m_fMaxVelocityXZ)
 	{
 		m_xmf3Velocity.x *= (fMaxVelocityXZ / fLength);
 		m_xmf3Velocity.z *= (fMaxVelocityXZ / fLength);
 	}
-	float fMaxVelocityY = m_fMaxVelocityY * fTimeElapsed;
+	float fMaxVelocityY = m_fMaxVelocityY * fElapsedTime;
 	fLength = sqrtf(m_xmf3Velocity.y * m_xmf3Velocity.y);
 	if (fLength > m_fMaxVelocityY) m_xmf3Velocity.y *= (fMaxVelocityY / fLength);
 
 	m_Transform->Move(m_xmf3Velocity); // 이동량만큼 움직인다.
-	pCamera->Move(m_xmf3Velocity);
+	// pCamera->Move(m_xmf3Velocity);
 
 	// 플레이어 콜백
-	OnPlayerUpdateCallback(fTimeElapsed, pCamera);
+	// OnPlayerUpdateCallback(fElapsedTime, pCamera);
 
 	// 카메라도 마찬가지로 이동
-	pCamera->Update(fTimeElapsed, m_Transform->GetPosition());
+	/*pCamera->Update(fElapsedTime, m_Transform->GetPosition());
 	static_cast<FollowCam*>(pCamera)->Update(fTimeElapsed, m_Transform->GetPosition());
-	OnCameraUpdateCallback(fTimeElapsed, pCamera); 
-	static_cast<FollowCam*>(pCamera)->RegenerateViewMatrix();
+	OnCameraUpdateCallback(fTimeElapsed, pCamera);
+	static_cast<FollowCam*>(pCamera)->RegenerateViewMatrix();*/
 
 	// 이동량 줄어든다.
 	fLength = Vector3::Length(m_xmf3Velocity);
-	float fDeceleration = (m_fFriction * fTimeElapsed); // 감소량
+	float fDeceleration = (m_fFriction * fElapsedTime); // 감소량
 	if (fDeceleration > fLength) fDeceleration = fLength;
 	m_xmf3Velocity = Vector3::Add(m_xmf3Velocity, Vector3::ScalarProduct(m_xmf3Velocity, -fDeceleration, true));
 }
+ 
 
 void Player::VelocityMove(const XMFLOAT3 & vMove)
 {

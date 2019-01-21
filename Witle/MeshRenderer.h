@@ -14,8 +14,7 @@ private:
 public:
 	MeshRenderer();
 	virtual ~MeshRenderer();
-	 
-	virtual void Update();
+	
 	virtual void Render(ID3D12GraphicsCommandList * pCommandList, Mesh* mesh);
 
 };

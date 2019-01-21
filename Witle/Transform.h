@@ -22,17 +22,16 @@ class Transform :
 
 	void SetTransform(const XMFLOAT3& right, const XMFLOAT3& up, const XMFLOAT3& look, const XMFLOAT3& pos);
 public:
-	Transform();
+	Transform(GameObject* pOwner);
 	virtual ~Transform();
 
-	virtual void Update() override;
+	virtual void Update(float fTimeElapsed) override;
 
 	void Rotate(float x, float y, float z);
 	
 	//////////////////////////////////////////////// Get
 	void SetPosition(const XMFLOAT3& pos) { m_Position = pos; }
 	//////////////////////////////////////////////// Get
-
 
 	//////////////////////////////////////////////// Get
 	XMFLOAT4X4 GetWorldMatrix() const { return m_transformWorld; }

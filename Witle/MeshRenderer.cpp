@@ -41,11 +41,7 @@ MeshRenderer::MeshRenderer()
 
 MeshRenderer::~MeshRenderer()
 {
-}
-
-void MeshRenderer::Update()
-{
-}
+} 
 
 void MeshRenderer::Render(ID3D12GraphicsCommandList * pCommandList, Mesh * mesh)
 { 

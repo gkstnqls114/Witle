@@ -1,18 +1,15 @@
 #include "stdafx.h"
 #include "MyRigidbody.h"
 
-MyRigidbody::MyRigidbody()
+MyRigidbody::MyRigidbody(GameObject* pOwner)
+	:ComponentBase(pOwner)
 {
 }
 
 MyRigidbody::~MyRigidbody()
 {
 
-}
-
-void MyRigidbody::Update()
-{
-}
+} 
 
 void MyRigidbody::AddForce(const XMFLOAT3 & force)
 {

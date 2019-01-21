@@ -12,7 +12,7 @@ protected:
 	XMFLOAT3					m_xmf3Scale;
 
 public:
-	TerrainMesh(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, int xStart, int zStart, int nWidth, int nLength, XMFLOAT3 xmf3Scale = XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT4 xmf4Color = XMFLOAT4(1.0f, 1.0f, 0.0f, 0.0f), void *pContext = NULL);
+	TerrainMesh(GameObject* pOwner, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, int xStart, int zStart, int nWidth, int nLength, XMFLOAT3 xmf3Scale = XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT4 xmf4Color = XMFLOAT4(1.0f, 1.0f, 0.0f, 0.0f), void *pContext = NULL);
 	virtual ~TerrainMesh();
 
 	XMFLOAT3 GetScale() { return(m_xmf3Scale); }
@@ -22,7 +22,7 @@ public:
 	virtual float OnGetHeight(int x, int z, void *pContext);
 	virtual XMFLOAT4 OnGetColor(int x, int z, void *pContext);
 
-	virtual void Update() override {}
+	virtual void Update(float fTimeElapsed) override {}
 	virtual void Create() override {}
 	virtual void Init() override {}
 

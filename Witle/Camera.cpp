@@ -3,13 +3,15 @@
 #include "GameObject.h"
 #include "Camera.h"
 
-Camera::Camera()
+Camera::Camera(GameObject* pOwner)
+	: ComponentBase(pOwner)
 {
 	m_ShaderVariables = new RootConstants(1, 2);
 	m_FamillyID = "Camera";
 }
 
-Camera::Camera(Camera *pCamera)
+Camera::Camera(GameObject* pOwner, Camera *pCamera)
+	: ComponentBase(pOwner)
 {
 	if (pCamera)
 	{
@@ -49,22 +51,6 @@ void Camera::Rotate(float x, float y, float z)
 
 void Camera::RegenerateAt()
 {
-}
- 
- 
-void Camera::LastUpdate()
-{
-	// 물리 계산
-	// 벽과의 충돌 등...
-
-	//Move, Rotate된 At과 카메라 좌표축(Right, Up, Look)을 기준으로 Position 재설정
-	m_Position = Vector3::Subtract(m_At, m_Offset);
-
-	// 카메라 변환 행렬을 재설정한다.
-	RegenerateViewMatrix();
-
-	// 카메라 변환 행렬이 바뀔 때마다 카메라 절두체를 다시 생성한다(절두체는 월드 좌표계로 생성한다).
-	GenerateFrustum();
 }
  
 void Camera::GenerateFrustum()
@@ -208,30 +194,6 @@ void Camera::GenerateViewMatrix(XMFLOAT3 xmf3Position, XMFLOAT3 xmf3LookAt, XMFL
 //		d3dCPUdescriptorHandle // 상수버퍼뷰를 포함하는 서술자 힙의 시작
 //	);
 //}
-
-void Camera::UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList)
-{
-	XMFLOAT4X4 xmf4x4View;
-	XMStoreFloat4x4(&xmf4x4View, XMMatrixTranspose(XMLoadFloat4x4(&m_xmf4x4View)));
-	//::memcpy(&m_pMappedCameraInfo->m_xmf4x4View, &xmf4x4View, sizeof(XMFLOAT4X4));
-
-	XMFLOAT4X4 xmf4x4Projection;
-	XMStoreFloat4x4(&xmf4x4Projection, XMMatrixTranspose(XMLoadFloat4x4(&m_xmf4x4Projection)));
-	//::memcpy(&m_pMappedCameraInfo->m_xmf4x4Projection, &xmf4x4Projection, sizeof(XMFLOAT4X4));
-
-	////카메라 위치 복사
-	//::memcpy(&m_pMappedCameraInfo->m_xmf3Position, &m_Position, sizeof(XMFLOAT3));
-
-	//pd3dCommandList->SetGraphicsRootConstantBufferView(1, m_d3dCameraCBVUpload->GetGPUVirtualAddress());
-	pd3dCommandList->SetGraphicsRoot32BitConstants(1, 16, &xmf4x4View, 0);
-	pd3dCommandList->SetGraphicsRoot32BitConstants(1, 16, &xmf4x4Projection, 16);
-	XMFLOAT4X4 CameraMatrixs[2] = { xmf4x4View , xmf4x4Projection };
-
-	if (m_ShaderVariables)
-	{
-		// static_cast<RootConstants<XMFLOAT4X4> *>(m_ShaderVariables)->UpdateShaderVariables(pd3dCommandList, CameraMatrixs);
-	}
-}
 
 //void Camera::ReleaseShaderVariables()
 //{

@@ -37,7 +37,7 @@ protected:
 
 
 public:
-	Mesh();
+	Mesh(GameObject* pOwner);
 	virtual ~Mesh();
 
 	virtual void Create() = 0;

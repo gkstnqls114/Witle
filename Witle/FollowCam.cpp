@@ -5,13 +5,25 @@
 
 
 
-FollowCam::FollowCam(Camera * camera, GameObject * target)
-	: m_pTarget(target)
+FollowCam::FollowCam(GameObject * pOwner, GameObject * target)
+	: Camera(pOwner)
 {
+	m_pTarget = target;
+}
+
+FollowCam::FollowCam(GameObject* pOwner, Camera * camera, GameObject * target)
+	: Camera(pOwner)
+{
+	m_pTarget = target;
 }
 
 FollowCam::FollowCam(FollowCam * followcam)
+	:Camera(followcam->GetOwmer())
 {
+	if (followcam)
+	{
+		*this = *followcam;
+	}
 }
 
 void FollowCam::MoveSmoothly(float fTimeElapsed, const XMFLOAT3 & xmf3LookAt)
@@ -50,11 +62,6 @@ void FollowCam::SetLookAt(const XMFLOAT3 & xmf3LookAt)
 	m_Look = XMFLOAT3(mtxLookAt._13, mtxLookAt._23, mtxLookAt._33);
 }
 
-FollowCam::FollowCam(GameObject * target)
-	: m_pTarget(target)
-{
-}
-
 FollowCam::~FollowCam()
 {
 }
@@ -71,7 +78,7 @@ void FollowCam::Update(float fTimeElapsed, const XMFLOAT3 & xmf3LookAt)
 	MoveSmoothly(fTimeElapsed, xmf3LookAt);
 }
 
-void FollowCam::LastUpdate()
+void FollowCam::LastUpdate(float fTimeElapsed)
 {
 	// 물리 계산
 	// 벽과의 충돌 등...

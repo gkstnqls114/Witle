@@ -24,11 +24,10 @@ public:
 
 	virtual void ReleaseUploadBuffers() = 0;
 
-	// UpdateGamelogic 외부에서 UpdateGamelogic, LastUpdate 순으로 호출되는 함수이다. 
+	// GameFramework의 UpdateGamelogic 함수 내부에서 UpdateGamelogic, LastUpdate 순으로 호출되는 함수이다. 
 	virtual void Update(float ElapsedTime) = 0;
-	virtual void LastUpdate() = 0;
+	virtual void LastUpdate(float ElapsedTime) = 0;
 
-	 
 	ID3D12RootSignature* GetGraphicsRootSignature() const { return m_pd3dGraphicsRootSignature; }
 
 protected:

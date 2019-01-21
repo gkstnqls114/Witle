@@ -7,11 +7,6 @@ class Camera;
 class Player :
 	public GameObject
 {
-	//XMFLOAT3 m_xmf3Position = XMFLOAT3(0.0f, 0.0f, 0.0f);
-	//XMFLOAT3 m_xmf3Right = XMFLOAT3(1.0f, 0.0f, 0.0f);
-	//XMFLOAT3 m_xmf3Up = XMFLOAT3(0.0f, 1.0f, 0.0f);
-	//XMFLOAT3 m_xmf3Look = XMFLOAT3(0.0f, 0.0f, 1.0f);
-
 	XMFLOAT3 m_xmf3Velocity = XMFLOAT3(0.0f, 0.0f, 0.0f);
 	XMFLOAT3 m_xmf3Gravity = XMFLOAT3(0.0f, -10.0f, 0.0f); 
 	float m_fMaxVelocityXZ = 300.0f;
@@ -34,8 +29,7 @@ public:
 	Player(const std::string& entityID);
 	virtual ~Player();
 
-	virtual void Update() override;
-	void Update(Camera* camera);
+	virtual void Update(float fElapsedTime) override;
 
 	void VelocityMove(const XMFLOAT3& vMove);
 

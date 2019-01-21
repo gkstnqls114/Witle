@@ -9,10 +9,10 @@ class MyRigidbody
 
 
 public:
-	MyRigidbody();
+	MyRigidbody(GameObject* pOwner);
 	virtual ~MyRigidbody();
 
-	virtual void Update() override;
+	virtual void Update(float ElapsedTime) override {};
 
 	void AddForce(const XMFLOAT3& force);
 	void AddForce(float x, float y, float z);

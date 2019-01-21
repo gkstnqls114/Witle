@@ -6,7 +6,7 @@
 GameObject::GameObject(const std::string & entityID)
 	: m_EntityID(entityID)
 {
-	m_Transform = new Transform;
+	m_Transform = new Transform(this);
 }
 
 GameObject::~GameObject()
@@ -15,15 +15,6 @@ GameObject::~GameObject()
 	{
 		delete m_Transform;
 		m_Transform = nullptr;
-	}
-}
-
-
-void GameObject::Update()
-{
-	for (auto& componenet : m_Components)
-	{
-		componenet.second->Update();
 	}
 }
 
@@ -45,11 +36,10 @@ bool GameObject::InsertComponent(const std::string & ComponenetID, ComponentBase
 }
 
 ComponentBase * GameObject::GetComponent(const std::string & id) const
-{
-	auto pair = m_Components.find(id);
-	assert(pair != m_Components.end()); // 만약 해당 id의 컴포넌트 존재하지않는다면 경고
+{ 
+	assert(m_Components.find(id) != m_Components.end()); // 만약 해당 id의 컴포넌트 존재하지않는다면 경고
 
-	ComponentBase* result = (*(pair)).second;
+	ComponentBase* result = (*(m_Components.find(id))).second;
 	return result;
 }
  

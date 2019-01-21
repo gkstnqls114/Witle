@@ -10,16 +10,17 @@ void Transform::SetTransform(const XMFLOAT3 & right, const XMFLOAT3 & up, const 
 	m_transformWorld._41 = pos.x;    m_transformWorld._42 = pos.y;    m_transformWorld._43 = pos.z;   m_transformWorld._44 = 1;
 }
 
-Transform::Transform()
+Transform::Transform(GameObject * pOwner)
+	:ComponentBase(pOwner)
 {
-	m_FamillyID = "Transform";
+	m_FamillyID = "Transform"; 
 }
 
 Transform::~Transform()
 {
 }
 
-void Transform::Update()
+void Transform::Update(float fTimeElapsed)
 {
 	SetTransform(m_Right, m_Up, m_Look, m_Position);
 }

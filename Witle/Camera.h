@@ -48,14 +48,14 @@ protected:
 	//ComPtr<ID3D12DescriptorHeap>	m_d3dCameraCBVDescriptorHeap{ nullptr };
 	ResourceBase	*m_ShaderVariables{ nullptr };
 
-protected:
+protected:  
 	//절두체(월드 좌표계)를 생성한다.
 	void GenerateFrustum();
 	virtual void MoveSmoothly(float fTimeElapsed, const XMFLOAT3& xmf3LookAt) {}; 
 
 public:
-	Camera();
-	Camera(Camera *pCamera);
+	Camera(GameObject* pOwner);
+	Camera(GameObject* pOwner, Camera *pCamera);
 	virtual ~Camera();
 
 	virtual void Teleport(const XMFLOAT3& pos); // right, up, look을 유지한 상태로 position, at만 이동한다.
@@ -63,21 +63,20 @@ public:
 	virtual void Rotate(float x = 0.0f, float y = 0.0f, float z = 0.0f);
 	virtual void RegenerateAt();
 
-	virtual void Update() override {};
+	virtual void Update(float fTimeElapsed) override { };
 	virtual void Update(float fTimeElapsed, const XMFLOAT3& xmf3LookAt) {};
-	virtual void LastUpdate();
-	////카메라의 정보를 셰이더 프로그램에게 전달하기 위한 상수 버퍼를 생성하고 갱신한다.
-	//virtual void CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
-	virtual void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList);
-	//virtual void ReleaseShaderVariables();
+	virtual void LastUpdate(float fTimeElapsed) = 0;
 
 	//카메라 변환 행렬(뷰행렬) 을 생성한다.
 	void GenerateViewMatrix();
 	void GenerateViewMatrix(XMFLOAT3 xmf3Position, XMFLOAT3 xmf3LookAt, XMFLOAT3 xmf3Up);
-	//투영 변환 행렬을 생성한다.
-	void GenerateProjectionMatrix(float fNearPlaneDistance, float fFarPlaneDistance, float fAspectRatio, float fFOVAngle);
+	
 	// GenerateViewMatrix를 했을 경우, 반드시 마지막에 Regenterate를 호출해야한다.
 	void RegenerateViewMatrix();
+
+	//투영 변환 행렬을 생성한다.
+	void GenerateProjectionMatrix(float fNearPlaneDistance, float fFarPlaneDistance, float fAspectRatio, float fFOVAngle);
+	
 
 	///////////////////////////////////////////////////////////////////////// Set
 	void SetViewport(int xTopLeft, int yTopLeft, int nWidth, int nHeight, float fMinZ = 0.0f, float fMaxZ = 1.0f);

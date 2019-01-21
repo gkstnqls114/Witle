@@ -117,9 +117,9 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	m_pd3dGraphicsRootSignature = CreateGraphicsRootSignature(pd3dDevice);
 	
 	// 큐브메쉬 생성
-	ComponentBase* cubemesh = new CubeMesh(pd3dDevice, pd3dCommandList, 1, 1, 1);
-	std::cout << cubemesh->GetFamillyID() << " " << cubemesh->GetComponentID() << std::endl;
 	m_GameObject = new Player("Player");
+	ComponentBase* cubemesh = new CubeMesh(m_GameObject, pd3dDevice, pd3dCommandList, 1, 1, 1);
+	std::cout << cubemesh->GetFamillyID() << " " << cubemesh->GetComponentID() << std::endl;
 	m_GameObject->InsertComponent(cubemesh->GetFamillyID(), cubemesh);
 
 	// 터레인 생성 
@@ -137,7 +137,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	m_TerrainHeap->CreateShaderResourceViews(pd3dDevice, pd3dCommandList, m_Terrain->GetTexture(), 3, true);
 
 	// 카메라
-	Camera* cameraComponent = new FollowCam(m_GameObject); 
+	Camera* cameraComponent = new FollowCam(m_GameObject, m_GameObject);
 	// cameraComponent->SetOffset(XMFLOAT3(0, -50.f, 50.f));
 	cameraComponent->SetOffset(XMFLOAT3(0, -30.f, 50.f));
 	m_Camera = new GameObject("Camera");
@@ -247,25 +247,26 @@ bool GameScene::ProcessInput(HWND hWnd, float ElapsedTime)
 //}
 
 // ProcessInput에 의한 right, up, look, pos 를 월드변환 행렬에 갱신한다.
-void GameScene::Update(float ElapsedTime)
+void GameScene::Update(float fElapsedTime)
 {
 	if (m_GameObject)
 	{
-		m_GameObject->Update(m_Camera->GetComponent<FollowCam>("Camera")); //Velocity를 통해 pos 이동
+		// m_GameObject->Update(m_Camera->GetComponent<FollowCam>("Camera")); //Velocity를 통해 pos 이동
+		m_GameObject->Update(fElapsedTime); //Velocity를 통해 pos 이동
 	}
 	
 	if (m_GameObject)
 	{
-		m_GameObject->GetComponent<Transform>("")->Update(); // right, up, look, pos에 맞춰 월드변환행렬 다시 설정
+		m_GameObject->GetComponent<Transform>("")->Update(fElapsedTime); // right, up, look, pos에 맞춰 월드변환행렬 다시 설정
 	}
 }
 
-void GameScene::LastUpdate()
+void GameScene::LastUpdate(float fElapsedTime)
 {
 	// player update 이후에 camera update
 	if (m_Camera)
 	{
-		m_Camera->GetComponent<FollowCam>("Camera")->LastUpdate();
+		m_Camera->GetComponent<FollowCam>("Camera")->LastUpdate(fElapsedTime);
 	} 
 }
 
@@ -284,18 +285,19 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	pd3dCommandList->SetGraphicsRootSignature(m_pd3dGraphicsRootSignature);
 
 	// 클라 화면 설정
+	FollowCam* cam = m_Camera->GetComponent<FollowCam>("Camera");
+	cam->SetViewportsAndScissorRects(pd3dCommandList);
 
-	D3D12_VIEWPORT Viewport = D3D12_VIEWPORT{ 0, 0, FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT };
-	D3D12_RECT ScissorRect = D3D12_RECT{ 0, 0, FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT };
-
-	D3D12_VIEWPORT	m_d3dViewport{ 0, 0, FRAME_BUFFER_WIDTH , FRAME_BUFFER_HEIGHT, 0.0f, 1.0f };
-	D3D12_RECT		m_d3dScissorRect{ 0, 0, FRAME_BUFFER_WIDTH , FRAME_BUFFER_HEIGHT }; 
-
-
-	m_Camera->GetComponent<Camera>("Camera")->SetViewportsAndScissorRects(pd3dCommandList);
-	m_Camera->GetComponent<Camera>("Camera")->UpdateShaderVariables(pd3dCommandList);
-
-	//// Terrain PSO 설정 
+	// 쉐이더 변수 업데이트
+	XMFLOAT4X4 xmf4x4View;
+	XMStoreFloat4x4(&xmf4x4View, XMMatrixTranspose(XMLoadFloat4x4(&cam->GetViewMatrix())));
+	
+	XMFLOAT4X4 xmf4x4Projection;
+	XMStoreFloat4x4(&xmf4x4Projection, XMMatrixTranspose(XMLoadFloat4x4(&cam->GetProjectionMatrix())));
+	pd3dCommandList->SetGraphicsRoot32BitConstants(1, 16, &xmf4x4View, 0);
+	pd3dCommandList->SetGraphicsRoot32BitConstants(1, 16, &xmf4x4Projection, 16);
+	
+	// Terrain PSO
 	pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Terrain")->GetPSO());
 	m_TerrainHeap->FirstUpdate(pd3dCommandList);
 

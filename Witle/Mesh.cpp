@@ -2,9 +2,10 @@
 #include "Mesh.h"
 
 
-Mesh::Mesh()
+Mesh::Mesh(GameObject* pOwner)
+	:ComponentBase(pOwner)
 {
-	m_FamillyID = "Mesh";
+	m_FamillyID = "Mesh"; 
 }
 
 

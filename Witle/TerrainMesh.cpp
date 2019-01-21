@@ -3,7 +3,8 @@
 #include "HeightMapImage.h"
 #include "TerrainMesh.h"
 
-TerrainMesh::TerrainMesh(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, int xStart, int zStart, int nWidth, int nLength, XMFLOAT3 xmf3Scale, XMFLOAT4 xmf4Color, void * pContext)
+TerrainMesh::TerrainMesh(GameObject* pOwner, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, int xStart, int zStart, int nWidth, int nLength, XMFLOAT3 xmf3Scale, XMFLOAT4 xmf4Color, void * pContext)
+	:Mesh(pOwner)
 {
 	m_ComponenetID = TERRAIN_MESH;
 

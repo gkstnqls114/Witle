@@ -11,9 +11,6 @@
     <Filter Include="02.Component">
       <UniqueIdentifier>{e0d43984-5afe-4a2c-bd8b-a0ca9b54aaca}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.Component\Renderer">
-      <UniqueIdentifier>{3173eb9f-8d38-40a1-b848-5fcb8f1eeeef}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.Component\Mesh">
       <UniqueIdentifier>{9332b465-1b8d-48b4-95b7-61997aa91ecc}</UniqueIdentifier>
     </Filter>
@@ -67,20 +64,11 @@
     <Filter Include="09.ActionTable">
       <UniqueIdentifier>{1250eaaf-0c68-40e7-9229-4c084354b819}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.Component\Camera\RoundCam">
-      <UniqueIdentifier>{721005a7-ef4e-4626-8ef3-58275c96c84c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.Component\Mesh\TerrainMesh">
       <UniqueIdentifier>{6fbb8228-6540-452a-8c4b-9c6a04f96c25}</UniqueIdentifier>
     </Filter>
     <Filter Include="03.GameObject\Terrain">
       <UniqueIdentifier>{a74113fd-ff21-4d9a-8b1d-0bb57750bd0d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.Component\Renderer\MeshRenderer">
-      <UniqueIdentifier>{2faec5fb-2ba0-4730-9e70-8fb653e6274c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.Component\Renderer\SkinnedMeshRenderer">
-      <UniqueIdentifier>{46b1a7bc-5c15-44dd-883d-2897ca51d750}</UniqueIdentifier>
     </Filter>
     <Filter Include="07.Resource\32bitRootConstants">
       <UniqueIdentifier>{1d7222fc-cbb4-4cf7-b4ea-c36ed29f4ce2}</UniqueIdentifier>
@@ -105,6 +93,18 @@
     </Filter>
     <Filter Include="02.Component\PlayerMovement">
       <UniqueIdentifier>{9ec62c01-4c38-4a62-9a19-4ca89e5c286c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameObject\Camera">
+      <UniqueIdentifier>{c697f733-6c27-408a-a499-af08ff3180ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="10.Renderer">
+      <UniqueIdentifier>{3173eb9f-8d38-40a1-b848-5fcb8f1eeeef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="10.Renderer\MeshRenderer">
+      <UniqueIdentifier>{2faec5fb-2ba0-4730-9e70-8fb653e6274c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="10.Renderer\SkinnedMeshRenderer">
+      <UniqueIdentifier>{46b1a7bc-5c15-44dd-883d-2897ca51d750}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -133,7 +133,7 @@
       <Filter>02.Component\Mesh</Filter>
     </ClInclude>
     <ClInclude Include="Renderer.h">
-      <Filter>02.Component\Renderer</Filter>
+      <Filter>10.Renderer</Filter>
     </ClInclude>
     <ClInclude Include="ComponentBase.h">
       <Filter>02.Component</Filter>
@@ -186,9 +186,6 @@
     <ClInclude Include="ResourceBase.h">
       <Filter>07.Resource</Filter>
     </ClInclude>
-    <ClInclude Include="RoundCam.h">
-      <Filter>02.Component\Camera\RoundCam</Filter>
-    </ClInclude>
     <ClInclude Include="HeightMapImage.h">
       <Filter>02.Component</Filter>
     </ClInclude>
@@ -199,10 +196,10 @@
       <Filter>02.Component\Mesh\TerrainMesh</Filter>
     </ClInclude>
     <ClInclude Include="MeshRenderer.h">
-      <Filter>02.Component\Renderer\MeshRenderer</Filter>
+      <Filter>10.Renderer\MeshRenderer</Filter>
     </ClInclude>
     <ClInclude Include="SkinnedMeshRenderer.h">
-      <Filter>02.Component\Renderer\SkinnedMeshRenderer</Filter>
+      <Filter>10.Renderer\SkinnedMeshRenderer</Filter>
     </ClInclude>
     <ClInclude Include="vertices.h">
       <Filter>헤더 파일</Filter>
@@ -231,6 +228,9 @@
     <ClInclude Include="MyRigidbody.h">
       <Filter>02.Component\MyRigidbody</Filter>
     </ClInclude>
+    <ClInclude Include="CameraObject.h">
+      <Filter>03.GameObject\Camera</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -258,7 +258,7 @@
       <Filter>03.GameObject</Filter>
     </ClCompile>
     <ClCompile Include="Renderer.cpp">
-      <Filter>02.Component\Renderer</Filter>
+      <Filter>10.Renderer</Filter>
     </ClCompile>
     <ClCompile Include="Shader.cpp">
       <Filter>05.Shader</Filter>
@@ -296,9 +296,6 @@
     <ClCompile Include="ResourceBase.cpp">
       <Filter>07.Resource</Filter>
     </ClCompile>
-    <ClCompile Include="RoundCam.cpp">
-      <Filter>02.Component\Camera\RoundCam</Filter>
-    </ClCompile>
     <ClCompile Include="HeightMapImage.cpp">
       <Filter>02.Component</Filter>
     </ClCompile>
@@ -309,10 +306,10 @@
       <Filter>02.Component\Mesh\TerrainMesh</Filter>
     </ClCompile>
     <ClCompile Include="MeshRenderer.cpp">
-      <Filter>02.Component\Renderer\MeshRenderer</Filter>
+      <Filter>10.Renderer\MeshRenderer</Filter>
     </ClCompile>
     <ClCompile Include="SkinnedMeshRenderer.cpp">
-      <Filter>02.Component\Renderer\SkinnedMeshRenderer</Filter>
+      <Filter>10.Renderer\SkinnedMeshRenderer</Filter>
     </ClCompile>
     <ClCompile Include="vertices.cpp">
       <Filter>헤더 파일</Filter>
@@ -340,6 +337,9 @@
     </ClCompile>
     <ClCompile Include="MyRigidbody.cpp">
       <Filter>02.Component\MyRigidbody</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraObjectcpp.cpp">
+      <Filter>03.GameObject\Camera</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

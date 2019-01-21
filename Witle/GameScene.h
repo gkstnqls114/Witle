@@ -41,7 +41,7 @@ public:
 	virtual void ReleaseUploadBuffers() override;
 
 	virtual void Update(float ElapsedTime) override;
-	virtual void LastUpdate() override;
+	virtual void LastUpdate(float ElapsedTime) override;
 
 protected:
 	Player* m_GameObject;

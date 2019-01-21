@@ -3,7 +3,7 @@
 
 Renderer::Renderer() 
 {
-	m_FamillyID = "Renderer";
+
 }
 
 Renderer::~Renderer()
