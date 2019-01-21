@@ -171,6 +171,7 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="ResourceBase.h" />
     <ClInclude Include="32bitRootConstants.h" />
+    <ClInclude Include="RootResource.h" />
     <ClInclude Include="ShaderManager.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Resource.h" />
@@ -212,6 +213,7 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="ResourceBase.cpp" />
     <ClCompile Include="32bitRootConstants.cpp" />
+    <ClCompile Include="RootResource.cpp" />
     <ClCompile Include="ShaderManager.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Scene.cpp" />

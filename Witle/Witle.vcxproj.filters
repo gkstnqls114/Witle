@@ -109,6 +109,9 @@
     <Filter Include="02.Component\Camera\BasicCam">
       <UniqueIdentifier>{3e7f290a-f5ed-422b-a7a6-8c66ce8dc478}</UniqueIdentifier>
     </Filter>
+    <Filter Include="07.Resource\RootResource">
+      <UniqueIdentifier>{f9cc346e-90c1-4bea-8f08-32e231438fd9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -237,6 +240,9 @@
     <ClInclude Include="BasicCam.h">
       <Filter>02.Component\Camera\BasicCam</Filter>
     </ClInclude>
+    <ClInclude Include="RootResource.h">
+      <Filter>07.Resource\RootResource</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -349,6 +355,9 @@
     </ClCompile>
     <ClCompile Include="BasicCam.cpp">
       <Filter>02.Component\Camera\BasicCam</Filter>
+    </ClCompile>
+    <ClCompile Include="RootResource.cpp">
+      <Filter>07.Resource\RootResource</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
