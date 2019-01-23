@@ -8,7 +8,7 @@ RootResource::~RootResource()
 
 void RootResource::Release()
 {
-	for (int x = 0; x < m_resourceVector.size; ++x)
+	for (int x = 0; x < m_resourceVector.size(); ++x)
 	{
 		// 릴리즈
 		// 딜리트
