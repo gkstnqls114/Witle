@@ -21,7 +21,7 @@ void RootResource::Release()
 	} 
 }
 
-void RootResource::InsertResource(int parametersIndex, const D3D12_ROOT_PARAMETER & rootParameter)
+void RootResource::InsertResource(int parametersIndex, const std::string& name, const D3D12_ROOT_PARAMETER & rootParameter)
 {
 	assert(parametersIndex <= m_resourceVector.size()); // 만약 인덱스가 벡터의 크기보다 크다면 경고창을 띄운다.
 	

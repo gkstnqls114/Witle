@@ -19,7 +19,7 @@ enum MESH_TYPE_ID
 #define COMPUTE_SRV_ROOT_PARAMETER G_BUFFER_ROOT_PARMATER + 3
 
 /////////////////////////////////////////////// define Á¤ÀÇ
-
+#define CHECK_ROOT_SIGNATURE
 
 #define DIR_FORWARD 0x01
 #define DIR_BACKWARD 0x02
