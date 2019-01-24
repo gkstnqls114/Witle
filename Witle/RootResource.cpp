@@ -8,7 +8,7 @@ RootResource::~RootResource()
 
 void RootResource::Release()
 {
-	for (int x = 0; x < m_resourceVector.size; ++x)
+	for (int x = 0; x < m_resourceVector.size(); ++x)
 	{
 		// 릴리즈
 		// 딜리트
@@ -18,8 +18,7 @@ void RootResource::Release()
 	for (auto& p : m_resourceMap)
 	{
 		// 널 포인터 설정
-	}
-	
+	} 
 }
 
 void RootResource::InsertResource(int parametersIndex, const D3D12_ROOT_PARAMETER & rootParameter)

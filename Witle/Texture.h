@@ -1,15 +1,12 @@
-#pragma once
-#include "ResourceBase.h"
-
+#pragma once 
 struct SRVROOTARGUMENTINFO
 {
 	UINT							m_nRootParameterIndex = 0;
 	D3D12_GPU_DESCRIPTOR_HANDLE		m_d3dSrvGpuDescriptorHandle;
 };
 
-class Texture
-	: public ResourceBase
-{ 
+class Texture 
+{
 public:
 	Texture(int nTextureResources = 1, UINT nResourceType = RESOURCE_TEXTURE2D, int nSamplers = 0);
 	virtual ~Texture();
