@@ -18,6 +18,8 @@ enum MESH_TYPE_ID
 #define COMPUTE_UAV_ROOT_PARAMETER 0
 #define COMPUTE_SRV_ROOT_PARAMETER G_BUFFER_ROOT_PARMATER + 3
 
+#define NUM32BITTOBYTE 4
+
 /////////////////////////////////////////////// define Á¤ÀÇ
 #define CHECK_ROOT_SIGNATURE
 
