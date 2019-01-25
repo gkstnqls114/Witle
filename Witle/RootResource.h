@@ -2,9 +2,10 @@
 
 class ResourceBase;
 
-// 루트 시그니처, 루트 패러미터를 통해 업데이트 하는 리소스 템플릿
+// 루트 시그니처, 루트 패러미터를 통해 업데이트 해야할 리소스들
+// 
 class RootResource
-{
+{ 
 #ifdef CHECK_ROOT_SIGNATURE
 	ID3D12RootSignature* m_pRootSignature{ nullptr }; // 현재 사용하는 루트 시그니처와 맞는지 체크하기 위해 사용
 #endif // CHECK_ROOT_SIGNATURE
@@ -40,15 +41,5 @@ public:
 	// int parametersInde
 	void InsertResource(int parametersIndex, const std::string& name, const D3D12_ROOT_PARAMETER& rootParameter);
 
-	template<typename T>
-	void UpdateShaderVariables(ID3D12CommandList* commandList, ID3D12RootSignature* CurrentRootsignature, const T& resource)
-	{ 
-#ifdef CHECK_ROOT_SIGNATURE
-		assert(CurrentRootsignature != m_pRootSignature);
-#endif // CHECK_ROOT_SIGNATURE
-
-		//만약 타입 T의 사이즈가 update하는 리소스의 크기보다 클 경우 경고한다.
-		
-		// 업데이트한다.
-	};
+	void UpdateShaderVariables(ID3D12CommandList* commandList, ID3D12RootSignature* CurrentRootsignature, const SourcePtr& resource);
 };

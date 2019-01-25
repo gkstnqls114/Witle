@@ -52,3 +52,14 @@ void RootResource::InsertResource(int parametersIndex, const std::string& name, 
 	m_resourceVector[m_VectorIndex] = value;
 	m_VectorIndex += 1;
 }
+
+void RootResource::UpdateShaderVariables(ID3D12CommandList * commandList, ID3D12RootSignature * CurrentRootsignature, const SourcePtr & resource)
+{
+#ifdef CHECK_ROOT_SIGNATURE
+	assert(CurrentRootsignature != m_pRootSignature);
+#endif // CHECK_ROOT_SIGNATURE
+
+	//만약 타입 T의 사이즈가 update하는 리소스의 크기보다 클 경우 경고한다.
+
+	// 업데이트한다.
+}

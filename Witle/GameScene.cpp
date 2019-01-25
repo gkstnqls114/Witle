@@ -295,6 +295,7 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Terrain")->GetPSO());
 	m_TerrainHeap->FirstUpdate(pd3dCommandList);
 
+	m_RootResource->UpdateShaderVariables(pd3dCommandList, m_pd3dGraphicsRootSignature, SourcePtr(&matrix));
 	pd3dCommandList->SetGraphicsRoot32BitConstants(0, 16, &matrix, 0);
 	m_Terrain->UpdateShaderVariables(pd3dCommandList); 
 

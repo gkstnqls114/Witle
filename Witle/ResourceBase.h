@@ -13,7 +13,7 @@ public:
 	virtual ~ResourceBase();
 
 	virtual void CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList) = 0;
-	virtual void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList) = 0;
+	virtual void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList, void* data) = 0;
 	virtual void ReleaseShaderVariables() = 0;
 };
 

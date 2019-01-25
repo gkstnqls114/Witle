@@ -13,8 +13,7 @@ RootConstants::~RootConstants()
 {
 
 }
-
-void RootConstants::UpdateShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList)
+void RootConstants::UpdateShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList, void * data)
 {
 	pd3dCommandList->SetGraphicsRoot32BitConstants(m_parameterIndex, m_DataSize, m_pData, m_DataSize);
 }

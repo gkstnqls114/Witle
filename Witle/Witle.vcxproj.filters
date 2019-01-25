@@ -243,6 +243,9 @@
     <ClInclude Include="RootResource.h">
       <Filter>07.Resource\RootResource</Filter>
     </ClInclude>
+    <ClInclude Include="SourcePtr.h">
+      <Filter>07.Resource</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -358,6 +361,9 @@
     </ClCompile>
     <ClCompile Include="RootResource.cpp">
       <Filter>07.Resource\RootResource</Filter>
+    </ClCompile>
+    <ClCompile Include="SourcePtr.cpp">
+      <Filter>99.etc</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
