@@ -22,7 +22,13 @@ public:
 	~RootResource();
 
 	void Release();
+	void SetRootSignature(ID3D12RootSignature* rootsignature)
+	{
+		assert(!(m_pRootSignature != nullptr)); // 한번만 설정할 수 있습니다.
 
+		m_pRootSignature = rootsignature;
+	}
+	 
 	ResourceBase* GetResource(int index) const { return m_resourceVector[index]; }
 	ResourceBase* GetResource(const std::string& name) const
 	{
@@ -32,7 +38,7 @@ public:
 
 	// 해당 루트 패러미터에 맞춰서 Resource를 구성한다.
 	// int parametersInde
-	void InsertResource(int parametersIndex, const std::string& name, UINT elementSize, const D3D12_ROOT_PARAMETER& rootParameter);
+	void InsertResource(int parametersIndex, const std::string& name, const D3D12_ROOT_PARAMETER& rootParameter);
 
 	template<typename T>
 	void UpdateShaderVariables(ID3D12CommandList* commandList, ID3D12RootSignature* CurrentRootsignature, const T& resource)

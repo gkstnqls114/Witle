@@ -21,7 +21,7 @@ void RootResource::Release()
 	} 
 }
 
-void RootResource::InsertResource(int parametersIndex, const std::string& name, UINT elementSize, const D3D12_ROOT_PARAMETER & rootParameter)
+void RootResource::InsertResource(int parametersIndex, const std::string& name, const D3D12_ROOT_PARAMETER & rootParameter)
 {
 	assert(!(parametersIndex >= m_resourceVector.size())); // 만약 인덱스가 벡터의 크기보다 크다면 오류를 발생한다.
 	
@@ -29,7 +29,7 @@ void RootResource::InsertResource(int parametersIndex, const std::string& name, 
 	switch (rootParameter.ParameterType)
 	{
 	case D3D12_ROOT_PARAMETER_TYPE_32BIT_CONSTANTS: // 루트 상수
-		value = new RootConstants(parametersIndex, elementSize);
+		value = new RootConstants(parametersIndex, rootParameter.Constants.Num32BitValues);
 		break;
 
 	case D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE: // 서술자 테이블

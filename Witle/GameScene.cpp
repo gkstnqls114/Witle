@@ -11,6 +11,7 @@
 #include "Player.h"
 #include "CameraObject.h"
 #include "MyDescriptorHeap.h"
+#include "RootResource.h"
 //
 //#include "Vertex.h"
 //
@@ -356,6 +357,7 @@ ID3D12RootSignature* GameScene::CreateGraphicsRootSignature(ID3D12Device *pd3dDe
 	ID3D12RootSignature* pd3dGraphicsRootSignature = nullptr;
 
 	D3D12_ROOT_PARAMETER pRootParameters[5];
+	m_RootResource = new RootResource(_countof(pRootParameters));
 
 	// 루트 상수
 	pRootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_32BIT_CONSTANTS;
@@ -363,12 +365,14 @@ ID3D12RootSignature* GameScene::CreateGraphicsRootSignature(ID3D12Device *pd3dDe
 	pRootParameters[0].Constants.ShaderRegister = 0;
 	pRootParameters[0].Constants.RegisterSpace = 0;
 	pRootParameters[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+	m_RootResource->InsertResource(0, "World", pRootParameters[0]);
 
 	pRootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_32BIT_CONSTANTS;
 	pRootParameters[1].Constants.Num32BitValues = 32;
 	pRootParameters[1].Constants.ShaderRegister = 1;
 	pRootParameters[1].Constants.RegisterSpace = 0;
 	pRootParameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
+	m_RootResource->InsertResource(1, "ViewAndProjection", pRootParameters[0]);
 
 	D3D12_DESCRIPTOR_RANGE pd3dDescriptorRanges[3];
 	 
@@ -538,20 +542,19 @@ ID3D12RootSignature* GameScene::CreateGraphicsRootSignature(ID3D12Device *pd3dDe
 	ID3DBlob *pd3dErrorBlob = nullptr;
 	hResult = ::D3D12SerializeRootSignature(&d3dRootSignatureDesc, D3D_ROOT_SIGNATURE_VERSION_1,
 		&pd3dSignatureBlob, &pd3dErrorBlob);
-	assert(hResult == S_OK);
-#if defined(_DEBUG)
-	OutputDebugString(L"...D3D12SerializeRootSignature\n");
-#endif
+	assert(hResult == S_OK); 
 
 	hResult = pd3dDevice->CreateRootSignature(0, pd3dSignatureBlob->GetBufferPointer(),
 		pd3dSignatureBlob->GetBufferSize(), IID_PPV_ARGS(&pd3dGraphicsRootSignature));
-	assert(hResult == S_OK);
-#if defined(_DEBUG)
-	OutputDebugString(L"...CreateRootSignature\n");
-#endif
+	assert(hResult == S_OK); 
 
 	if (pd3dSignatureBlob) pd3dSignatureBlob->Release();
 	if (pd3dErrorBlob) pd3dErrorBlob->Release();
+
+#ifdef CHECK_ROOT_SIGNATURE
+	// 루트 시그니처 셋팅
+	m_RootResource->SetRootSignature(pd3dGraphicsRootSignature);
+#endif // CHECK_ROOT_SIGNATURE
 
 	return (pd3dGraphicsRootSignature);
 }

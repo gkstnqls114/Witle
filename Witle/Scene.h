@@ -1,5 +1,7 @@
 #pragma once 
 
+class RootResource;
+
 class Scene
 {
 protected:

@@ -44,12 +44,14 @@ public:
 	virtual void LastUpdate(float ElapsedTime) override;
 
 protected:
-	Player* m_GameObject;
-	Terrain* m_Terrain;
-	MyDescriptorHeap* m_TerrainHeap;
-	CameraObject* m_Camera;
+	RootResource* m_RootResource{ nullptr };
 
-	XMFLOAT4X4 matrix = Matrix4x4::Identity();
+	Player* m_GameObject{ nullptr };
+	Terrain* m_Terrain{ nullptr };
+	MyDescriptorHeap* m_TerrainHeap{ nullptr };
+	CameraObject* m_Camera{ nullptr };
+
+	XMFLOAT4X4 matrix{ Matrix4x4::Identity() };
 
 	//Camera *m_Camera{ nullptr };
 
