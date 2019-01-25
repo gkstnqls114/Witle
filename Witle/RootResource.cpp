@@ -48,6 +48,7 @@ void RootResource::InsertResource(int parametersIndex, const std::string& name, 
 		break;
 	}
 
+	assert(!(value == nullptr));
 	m_resourceMap.insert(std::pair<std::string, int>(name, m_VectorIndex));
 	m_resourceVector[m_VectorIndex] = value;
 	m_VectorIndex += 1;
