@@ -41,5 +41,6 @@ public:
 	// int parametersInde
 	void InsertResource(int parametersIndex, const std::string& name, const D3D12_ROOT_PARAMETER& rootParameter);
 
-	void UpdateShaderVariables(ID3D12CommandList* commandList, ID3D12RootSignature* CurrentRootsignature, const SourcePtr& resource);
+	void UpdateShaderVariable(ID3D12GraphicsCommandList* commandList, ID3D12RootSignature* CurrentRootsignature, const std::string& name, const SourcePtr& resource);
+	void UpdateShaderVariable(ID3D12GraphicsCommandList* commandList, ID3D12RootSignature* CurrentRootsignature, UINT index, const SourcePtr& resource);
 };

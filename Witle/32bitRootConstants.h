@@ -7,6 +7,7 @@
 class RootConstants :
 	public ResourceBase
 { 
+	UINT m_4ByteSize{ 0 };
 
 public: 
 	RootConstants(UINT paraIndex, UINT elementSize);
