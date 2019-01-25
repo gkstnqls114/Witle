@@ -4,24 +4,16 @@
 
 class SourcePtr
 {
-	void* m_Ptr{ nullptr };
+public:
+	const void* const m_Ptr{ nullptr };
 	UINT m_byteSize{ 0 };
 
-public:
 	template <typename T>
-	SourcePtr(T* ptr);
-
+	SourcePtr(T* ptr) : m_Ptr(static_cast<void *>(ptr)), m_byteSize(sizeof(T)) {};
 	~SourcePtr();
 
-	void* GetPtr() const { return m_Ptr; }
-	UINT GetbyteSize() const { return m_byteSize; }
+	//const void* const GetPtr() const { return m_Ptr; }
+	//const UINT GetbyteSize() const { return m_byteSize; }
 };
 
-
-template<typename T>
-inline SourcePtr::SourcePtr(T * ptr)
-{
-	m_Ptr = static_cast<void *>(ptr);
-	m_byteSize = sizeof(T);
-}
-#endif // !1
+#endif // !TEMPLATE_SOURCE_PTR
