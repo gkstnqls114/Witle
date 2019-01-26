@@ -159,7 +159,8 @@ void GameScene::ReleaseObjects()
 		m_GameObject = nullptr;
 	}
 	if (m_Camera) {
-
+		delete m_Camera;
+		m_Camera = nullptr;
 	}
 }
 
@@ -308,7 +309,7 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	// 쉐이더 변수 설정
 	XMFLOAT4X4 xmf4x4World;
 	XMStoreFloat4x4(&xmf4x4World, XMMatrixTranspose(XMLoadFloat4x4(&m_GameObject->GetComponent<Transform>("")->GetWorldMatrix())));
-	pd3dCommandList->SetGraphicsRoot32BitConstants(0, 16, &xmf4x4World, 0);
+	m_RootResource->UpdateShaderVariable(pd3dCommandList, m_pd3dGraphicsRootSignature, "World", SourcePtr(&xmf4x4World));
 
 	// CubeMesh Render
 	Mesh* mesh = m_GameObject->GetComponent<Mesh>("Mesh");

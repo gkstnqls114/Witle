@@ -85,7 +85,7 @@ Terrain::Terrain(const std::string& entityID, ID3D12Device * pd3dDevice, ID3D12G
 
 Terrain::~Terrain()
 {
-	if (m_pHeightMapImage) delete m_pHeightMapImage;
+	ReleaseMembers();
 }
 
 void Terrain::UpdateShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList)
@@ -102,6 +102,15 @@ void Terrain::Create()
 
 void Terrain::Init()
 {
+}
+
+void Terrain::ReleaseMembers()
+{
+	if (m_pHeightMapImage)
+	{
+		delete m_pHeightMapImage;
+		m_pHeightMapImage = nullptr;
+	}
 }
 
 float Terrain::GetHeight(float x, float z, bool bReverseQuad)

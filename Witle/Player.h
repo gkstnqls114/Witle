@@ -21,6 +21,9 @@ class Player :
 	LPVOID m_pPlayerUpdatedContext{ nullptr };
 	LPVOID m_pCameraUpdatedContext{ nullptr };
 
+protected:
+	virtual void ReleaseMembers() override {};
+
 private:
 	void OnPlayerUpdateCallback(float fTimeElapsed, Camera* pCamera);
 	void OnCameraUpdateCallback(float fTimeElapsed, Camera* camera);
@@ -29,7 +32,7 @@ public:
 	Player(const std::string& entityID);
 	virtual ~Player();
 
-	virtual void Update(float fElapsedTime) override;
+	virtual void Update(float fElapsedTime) override; 
 
 	void VelocityMove(const XMFLOAT3& vMove);
 

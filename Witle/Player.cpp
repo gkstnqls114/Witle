@@ -90,7 +90,6 @@ void Player::Update(float fElapsedTime)
 	if (fDeceleration > fLength) fDeceleration = fLength;
 	m_xmf3Velocity = Vector3::Add(m_xmf3Velocity, Vector3::ScalarProduct(m_xmf3Velocity, -fDeceleration, true));
 }
- 
 
 void Player::VelocityMove(const XMFLOAT3 & vMove)
 {

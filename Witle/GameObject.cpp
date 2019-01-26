@@ -3,6 +3,10 @@
 #include "ComponentBase.h"
 #include "GameObject.h"
  
+void GameObject::ReleaseComponents()
+{
+}
+
 GameObject::GameObject(const std::string & entityID)
 	: m_EntityID(entityID)
 {

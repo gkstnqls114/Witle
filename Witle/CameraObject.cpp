@@ -2,6 +2,15 @@
 #include "BasicCam.h"
 #include "CameraObject.h"
 
+void CameraObject::ReleaseMembers()
+{
+	if (m_pCameraComponent)
+	{
+		delete m_pCameraComponent;
+		m_pCameraComponent = nullptr;
+	}
+}
+
 CameraObject::CameraObject(const std::string & entityID)
 	:GameObject(entityID)
 {

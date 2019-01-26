@@ -15,6 +15,8 @@ public:
 	Terrain(const std::string& entityID, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, LPCTSTR pFileName, int nWidth, int nLength, int nBlockWidth, int nBlockLength, XMFLOAT3 xmf3Scale, XMFLOAT4 xmf4Color);
 	virtual ~Terrain();
 
+	virtual void Update(float fElapsedTime) override {};
+
 	void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList);
 
 	virtual void Create();
@@ -28,6 +30,8 @@ protected:
 
 	XMFLOAT3					m_xmf3Scale;
 
+protected:
+	virtual void ReleaseMembers() override;
 
 public:
 	float GetHeight(float x, float z, bool bReverseQuad = false);
