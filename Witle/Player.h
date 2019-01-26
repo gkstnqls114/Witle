@@ -18,14 +18,14 @@ class Player :
 	float m_fRoll = 0.0f;
 	float m_fYaw = 0.0f;
 
-	LPVOID m_pPlayerUpdatedContext{ nullptr };
-	LPVOID m_pCameraUpdatedContext{ nullptr };
+	LPVOID m_pPlayerUpdatedContext { nullptr };
+	LPVOID m_pCameraUpdatedContext { nullptr };
 
 protected:
 	virtual void ReleaseMembers() override {};
 
 private:
-	void OnPlayerUpdateCallback(float fTimeElapsed, Camera* pCamera);
+	void OnPlayerUpdateCallback(float fTimeElapsed);
 	void OnCameraUpdateCallback(float fTimeElapsed, Camera* camera);
 
 public:

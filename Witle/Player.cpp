@@ -5,7 +5,7 @@
 #include "Terrain.h"
 #include "Player.h"
 
-void Player::OnPlayerUpdateCallback(float fTimeElapsed, Camera* pCamera)
+void Player::OnPlayerUpdateCallback(float fTimeElapsed)
 {
 	if (!m_pPlayerUpdatedContext) return;
 
@@ -76,7 +76,7 @@ void Player::Update(float fElapsedTime)
 	// pCamera->Move(m_xmf3Velocity);
 
 	// 플레이어 콜백
-	// OnPlayerUpdateCallback(fElapsedTime, pCamera);
+	OnPlayerUpdateCallback(fElapsedTime);
 
 	// 카메라도 마찬가지로 이동
 	/*pCamera->Update(fElapsedTime, m_Transform->GetPosition());

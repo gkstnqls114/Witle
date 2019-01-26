@@ -112,6 +112,9 @@
     <Filter Include="07.Resource\RootResource">
       <UniqueIdentifier>{f9cc346e-90c1-4bea-8f08-32e231438fd9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="11.Event">
+      <UniqueIdentifier>{3f9358d8-bf33-46cb-8896-0fad7507622f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -246,6 +249,12 @@
     <ClInclude Include="SourcePtr.h">
       <Filter>07.Resource</Filter>
     </ClInclude>
+    <ClInclude Include="EventHandler.h">
+      <Filter>11.Event</Filter>
+    </ClInclude>
+    <ClInclude Include="Event.h">
+      <Filter>11.Event</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -364,6 +373,12 @@
     </ClCompile>
     <ClCompile Include="SourcePtr.cpp">
       <Filter>99.etc</Filter>
+    </ClCompile>
+    <ClCompile Include="EventHandler.cpp">
+      <Filter>11.Event</Filter>
+    </ClCompile>
+    <ClCompile Include="Event.cpp">
+      <Filter>11.Event</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

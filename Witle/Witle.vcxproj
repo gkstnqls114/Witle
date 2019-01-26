@@ -156,6 +156,8 @@
     <ClInclude Include="d3dUtil.h" />
     <ClInclude Include="d3dx12.h" />
     <ClInclude Include="DDSTextureLoader12.h" />
+    <ClInclude Include="Event.h" />
+    <ClInclude Include="EventHandler.h" />
     <ClInclude Include="FollowCam.h" />
     <ClInclude Include="GameFramework.h" />
     <ClInclude Include="GameInput.h" />
@@ -200,6 +202,8 @@
     <ClCompile Include="CubeShader.cpp" />
     <ClCompile Include="d3dUtil.cpp" />
     <ClCompile Include="DDSTextureLoader12.cpp" />
+    <ClCompile Include="Event.cpp" />
+    <ClCompile Include="EventHandler.cpp" />
     <ClCompile Include="FollowCam.cpp" />
     <ClCompile Include="GameFramework.cpp" />
     <ClCompile Include="GameInput.cpp" />
