@@ -5,6 +5,13 @@
  
 void GameObject::ReleaseComponents()
 {
+	for (auto& component : m_Components)
+	{
+		delete component.second;
+		component.second = nullptr;
+	}
+
+	m_Components.clear();
 }
 
 GameObject::GameObject(const std::string & entityID)

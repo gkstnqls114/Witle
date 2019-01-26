@@ -88,6 +88,11 @@ TerrainMesh::TerrainMesh(GameObject* pOwner, ID3D12Device * pd3dDevice, ID3D12Gr
 
 TerrainMesh::~TerrainMesh()
 {
+	if (m_pVertexBufferViews)
+	{
+		delete[] m_pVertexBufferViews;
+		m_pVertexBufferViews = nullptr;
+	} 
 }
 
 float TerrainMesh::OnGetHeight(int x, int z, void * pContext)

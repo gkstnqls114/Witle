@@ -106,6 +106,11 @@ void Terrain::Init()
 
 void Terrain::ReleaseMembers()
 {
+	if (m_ResourceBase)
+	{
+		delete m_ResourceBase;
+		m_ResourceBase = nullptr;
+	}
 	if (m_pHeightMapImage)
 	{
 		delete m_pHeightMapImage;

@@ -4,7 +4,7 @@ class Texture;
 
 class MyDescriptorHeap
 {
-	ID3D12DescriptorHeap			*m_pd3dCbvSrvUavDescriptorHeap = NULL;
+	ID3D12DescriptorHeap			*m_pd3dCbvSrvUavDescriptorHeap{ nullptr };
 
 	D3D12_CPU_DESCRIPTOR_HANDLE		m_CbvCPUDescriptorStartHandle;
 	D3D12_GPU_DESCRIPTOR_HANDLE		m_CbvGPUDescriptorStartHandle;
@@ -19,6 +19,8 @@ class MyDescriptorHeap
 public:
 	MyDescriptorHeap();
 	~MyDescriptorHeap();
+
+	void ReleaseObjects();
 	 
 	// ▼ 서술자 힙에 대한 함수들 
 	void CreateCbvSrvUavDescriptorHeaps(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, int nConstantBufferViews, int nShaderResourceViews, int nUnorderedAcessViews);

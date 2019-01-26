@@ -19,10 +19,10 @@ private:
 
 public:
 	// 루트 시그니처의 크기 만큼 리소스를 가진다.
-	RootResource(int rootSignatureSize) : m_resourceVector(rootSignatureSize) {};
+	RootResource(int rootSignatureSize) :m_resourceVector(rootSignatureSize, nullptr) {};
 	~RootResource();
 
-	void Release();
+	void ReleaseObjects();
 	void SetRootSignature(ID3D12RootSignature* rootsignature)
 	{
 		assert(!(m_pRootSignature != nullptr)); // 한번만 설정할 수 있습니다.

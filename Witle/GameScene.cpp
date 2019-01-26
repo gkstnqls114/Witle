@@ -154,13 +154,34 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 
 void GameScene::ReleaseObjects()
 {
-	if (m_GameObject) {
+	if (m_RootResource)
+	{
+		m_RootResource->ReleaseObjects();
+		delete m_RootResource;
+		m_RootResource = nullptr;
+	}
+	if (m_GameObject)
+	{
+		m_GameObject->ReleaseObjects();
 		delete m_GameObject;
 		m_GameObject = nullptr;
 	}
-	if (m_Camera) {
+	if (m_Camera)
+	{
+		m_Camera->ReleaseObjects();
 		delete m_Camera;
 		m_Camera = nullptr;
+	}
+	if (m_Terrain)
+	{
+		m_Terrain->ReleaseObjects();
+		delete m_Terrain;
+		m_Terrain = nullptr;
+	}
+	if (m_TerrainHeap)
+	{
+		delete m_TerrainHeap;
+		m_TerrainHeap = nullptr;
 	}
 }
 

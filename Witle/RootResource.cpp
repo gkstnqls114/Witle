@@ -6,19 +6,19 @@ RootResource::~RootResource()
 {
 }
 
-void RootResource::Release()
+void RootResource::ReleaseObjects()
 {
 	for (int x = 0; x < m_resourceVector.size(); ++x)
 	{
-		// 릴리즈
-		// 딜리트
-		// 널포인터 설정
-	}
+		if (!m_resourceVector[x]) continue;
 
-	for (auto& p : m_resourceMap)
-	{
-		// 널 포인터 설정
-	} 
+		// 릴리즈
+		m_resourceVector[x]->ReleaseShaderVariables();
+		// 딜리트
+		delete m_resourceVector[x];
+		// 널포인터 설정
+		m_resourceVector[x] = nullptr;
+	}
 }
 
 void RootResource::InsertResource(int parametersIndex, const std::string& name, const D3D12_ROOT_PARAMETER & rootParameter)
