@@ -21,7 +21,7 @@ void Player::OnPlayerUpdateCallback(float fTimeElapsed)
 		XMFLOAT3 xmf3PlayerVelocity = GetVelocity();
 		xmf3PlayerVelocity.y = 0.0f;
 		m_xmf3Velocity = xmf3PlayerVelocity;
-		xmf3PlayerPosition.y = fHeight;
+		xmf3PlayerPosition.y = fHeight; // y 위치 고정
 		m_Transform->SetPosition(xmf3PlayerPosition);
 	}
 }
@@ -76,7 +76,7 @@ void Player::Update(float fElapsedTime)
 	// pCamera->Move(m_xmf3Velocity);
 
 	// 플레이어 콜백
-	OnPlayerUpdateCallback(fElapsedTime);
+	// OnPlayerUpdateCallback(fElapsedTime);
 
 	// 카메라도 마찬가지로 이동
 	/*pCamera->Update(fElapsedTime, m_Transform->GetPosition());
@@ -89,6 +89,12 @@ void Player::Update(float fElapsedTime)
 	float fDeceleration = (m_fFriction * fElapsedTime); // 감소량
 	if (fDeceleration > fLength) fDeceleration = fLength;
 	m_xmf3Velocity = Vector3::Add(m_xmf3Velocity, Vector3::ScalarProduct(m_xmf3Velocity, -fDeceleration, true));
+
+	//무관한 이벤트들 마지막에 몰아서 이벤트 발생 처리
+	{
+		OnPlayerUpdateCallback(fElapsedTime);
+
+	}
 }
 
 void Player::VelocityMove(const XMFLOAT3 & vMove)

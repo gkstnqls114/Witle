@@ -13,6 +13,7 @@ public:
 	int m_id{ 0 };
 	static int m_Counter;
 
+	EventHandler() : m_id{ 0 } {};
 	EventHandler(const Func& func);
 	void operator()();
 	void operator=(const EventHandler& func);

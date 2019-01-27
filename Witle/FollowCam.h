@@ -7,10 +7,11 @@ class FollowCam :
 {
 	const GameObject		*m_pTarget{ nullptr };
 
+	void* m_pCameraUpdatedContext{ nullptr };
+
 private:
 	virtual void MoveSmoothly(float fTimeElapsed, const XMFLOAT3& xmf3LookAt) override;
-
-
+	void OnCameraUpdateCallback(float fTimeElapsed);
 
 public:
 	FollowCam(GameObject* pOwner, GameObject* target); // target을 지정합니다.

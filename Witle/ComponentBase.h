@@ -14,7 +14,7 @@ public:
 	virtual void Update(float fTimeElapsed) = 0;
 	
 	void SetOwner(GameObject* pOwner) { m_pOwner = pOwner; }
-	GameObject* GetOwmer() const { return m_pOwner; };
+	GameObject* GetOwner() const { return m_pOwner; };
 
 private:
 	GameObject* m_pOwner{ nullptr };
