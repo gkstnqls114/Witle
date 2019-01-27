@@ -1,9 +1,8 @@
 #include "stdafx.h"
 #include "Transform.h"
-#include "CameraObject.h"
 #include "GameObject.h"
-#include "Terrain.h"
 #include "FollowCam.h"
+
 
 
 FollowCam::FollowCam(GameObject * pOwner, GameObject * target)
@@ -19,7 +18,7 @@ FollowCam::FollowCam(GameObject* pOwner, Camera * camera, GameObject * target)
 }
 
 FollowCam::FollowCam(FollowCam * followcam)
-	:Camera(followcam->GetOwner())
+	:Camera(followcam->GetOwmer())
 {
 	if (followcam)
 	{
@@ -55,27 +54,6 @@ void FollowCam::MoveSmoothly(float fTimeElapsed, const XMFLOAT3 & xmf3LookAt)
 	}
 }
 
-void FollowCam::OnCameraUpdateCallback(float fTimeElapsed)
-{
-	if (!m_pCameraUpdatedContext) return;
-
-	CameraObject* myOwnerCam = static_cast<CameraObject*>(GetOwner());
-	
-	Terrain *pTerrain = (Terrain *)m_pCameraUpdatedContext;
-	XMFLOAT3 xmf3Scale = pTerrain->GetScale();
-	XMFLOAT3 xmf3CameraPosition = myOwnerCam->GetTransform()->GetPosition();
-	int z = (int)(xmf3CameraPosition.z / xmf3Scale.z);
-	bool bReverseQuad = ((z % 2) != 0);
-	float fHeight = pTerrain->GetHeight(xmf3CameraPosition.x, xmf3CameraPosition.z, bReverseQuad);
-	fHeight = fHeight + 5.f;
-	if (xmf3CameraPosition.y <= fHeight)
-	{
-		xmf3CameraPosition.y = fHeight;
-		myOwnerCam->GetTransform()->SetPosition(xmf3CameraPosition);
-		SetLookAt(myOwnerCam->GetTransform()->GetPosition());
-	}
-}
-
 void FollowCam::SetLookAt(const XMFLOAT3 & xmf3LookAt)
 {
 	XMFLOAT4X4 mtxLookAt = Matrix4x4::LookAtLH(m_Position, xmf3LookAt, m_pTarget->GetComponent<Transform>("")->GetUp());
@@ -102,10 +80,6 @@ void FollowCam::Update(float fTimeElapsed, const XMFLOAT3 & xmf3LookAt)
 
 void FollowCam::LastUpdate(float fTimeElapsed)
 {
-	Update(fTimeElapsed, m_pTarget->GetTransform()->GetPosition());
-	// static_cast<FollowCam*>(this)->Update(fTimeElapsed, m_pTarget->GetTransform()->GetPosition());
-	OnCameraUpdateCallback(fTimeElapsed); 
-
 	// 물리 계산
 	// 벽과의 충돌 등...
 	
@@ -114,7 +88,18 @@ void FollowCam::LastUpdate(float fTimeElapsed)
 	m_Position = Vector3::Subtract(m_At, m_Offset);
 
 	RegenerateViewMatrix();
+
+	// 카메라 변환 행렬이 바뀔 때마다 카메라 절두체를 다시 생성한다(절두체는 월드 좌표계로 생성한다).
 	GenerateFrustum();
+
+	std::cout << "At: ";
+	Vector3::Show(m_At);
+	std::cout << "Pos: ";
+	Vector3::Show(m_Position);
+	std::cout << "Offset: ";
+	Vector3::Show(m_Offset);
+	std::cout << std::endl;
+	// 카메라 변환 행렬을 재설정한다.
 }
 
 void FollowCam::Rotate(float x, float y, float z)
