@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "BasicCam.h"
+#include "Transform.h"
 #include "CameraObject.h"
 
 void CameraObject::ReleaseMembers()
@@ -24,6 +25,7 @@ CameraObject::~CameraObject()
 void CameraObject::LastUpdate(float fElapsedTime)
 {
 	m_pCameraComponent->LastUpdate(fElapsedTime);
+	m_Transform->Update(fElapsedTime); // Transform 
 }
 
 void CameraObject::SetViewportsAndScissorRects(ID3D12GraphicsCommandList *pd3dCommandList)

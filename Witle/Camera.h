@@ -17,10 +17,10 @@ class Camera
 	: public ComponentBase
 {
 protected:
-	XMFLOAT3		m_Position			{ 0.0f, 0.0f, 0.0f }; // Position = At - Offset
-	XMFLOAT3		m_Right				{ 1.0f, 0.0f, 0.0f };
-	XMFLOAT3		m_Up				{ 0.0f, 1.0f, 0.0f };
-	XMFLOAT3		m_Look				{ 0.0f, 0.0f, 1.0f };
+	//XMFLOAT3		m_Position			{ 0.0f, 0.0f, 0.0f }; // Position = At - Offset
+	//XMFLOAT3		m_Right				{ 1.0f, 0.0f, 0.0f };
+	//XMFLOAT3		m_Up				{ 0.0f, 1.0f, 0.0f };
+	//XMFLOAT3		m_Look				{ 0.0f, 0.0f, 1.0f };
 
 	XMFLOAT3		m_At				{ 0.0f, 0.0f, 1.0f }; // Position + Offset = At
 	XMFLOAT3		m_Offset			{ 0.0f, 0.0f, 1.0f }; // Offset = At - Position
@@ -89,15 +89,15 @@ public:
 	void SetLookAtPosition(XMFLOAT3 xmf3LookAtWorld) { m_At = xmf3LookAtWorld; }
 
 	void SetAt(XMFLOAT3 at) { m_At = at; };
-	void SetPosition(XMFLOAT3 xmf3Position) { m_Position = xmf3Position; };
+//	void SetPosition(XMFLOAT3 xmf3Position) { m_Position = xmf3Position; };
 	///////////////////////////////////////////////////////////////////////// Set
 
 	///////////////////////////////////////////////////////////////////////// Get
 	XMFLOAT3 GetAt()             const noexcept { return (m_At); }
-	XMFLOAT3 GetRightVector()	 const noexcept { return (m_Right); }
-	XMFLOAT3 GetUpVector()		 const noexcept { return (m_Up); }
-	XMFLOAT3 GetLookVector()	 const noexcept { return (m_Look); }
-	XMFLOAT3 GetPosition()		 const noexcept { return (m_Position); }
+	//XMFLOAT3 GetRightVector()	 const noexcept { return (m_Right); }
+	//XMFLOAT3 GetUpVector()		 const noexcept { return (m_Up); }
+	//XMFLOAT3 GetLookVector()	 const noexcept { return (m_Look); }
+	//XMFLOAT3 GetPosition()		 const noexcept { return (m_Position); }
 	XMFLOAT3 GetOffset()         const noexcept { return (m_Offset); }
 
 	DWORD GetMode()  const noexcept { return (m_nMode); }

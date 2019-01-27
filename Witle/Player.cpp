@@ -32,7 +32,7 @@ void Player::OnCameraUpdateCallback(float fTimeElapsed, Camera* pCamera)
 	
 	Terrain *pTerrain = (Terrain *)m_pCameraUpdatedContext;
 	XMFLOAT3 xmf3Scale = pTerrain->GetScale();
-	XMFLOAT3 xmf3CameraPosition = pCamera->GetPosition();
+	XMFLOAT3 xmf3CameraPosition = pCamera->GetOwner()->GetTransform()->GetPosition();
 	int z = (int)(xmf3CameraPosition.z / xmf3Scale.z);
 	bool bReverseQuad = ((z % 2) != 0);
 	float fHeight = pTerrain->GetHeight(xmf3CameraPosition.x, xmf3CameraPosition.z, bReverseQuad);
@@ -40,7 +40,7 @@ void Player::OnCameraUpdateCallback(float fTimeElapsed, Camera* pCamera)
 	if (xmf3CameraPosition.y <= fHeight)
 	{
 		xmf3CameraPosition.y = fHeight;
-		pCamera->SetPosition(xmf3CameraPosition); 
+		pCamera->GetOwner()->GetTransform()->SetPosition(xmf3CameraPosition);
 		static_cast<FollowCam *>(pCamera)->SetLookAt(m_Transform->GetPosition());
 	}
 }

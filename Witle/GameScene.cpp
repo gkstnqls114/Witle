@@ -141,7 +141,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	// Ä«¸Þ¶ó
 	Camera* cameraComponent = new FollowCam(m_GameObject, m_GameObject);
 	// cameraComponent->SetOffset(XMFLOAT3(0, -50.f, 50.f));
-	cameraComponent->SetOffset(XMFLOAT3(0, -30.f, 50.f));
+	// cameraComponent->SetOffset(XMFLOAT3(0, -30.f, 50.f));
 	
 	m_Camera = new CameraObject("Camera");
 	m_Camera->ChangeCamera(cameraComponent);
