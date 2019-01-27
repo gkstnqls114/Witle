@@ -83,7 +83,7 @@ void Camera::SetScissorRect(LONG xLeft, LONG yTop, LONG xRight, LONG yBottom)
 
 void Camera::RegenerateViewMatrix()
 {
-	m_xmf4x4View = Matrix4x4::LookAtLH(GetOwner()->GetTransform()->GetRight(), m_At, GetOwner()->GetTransform()->GetUp());
+	m_xmf4x4View = Matrix4x4::LookAtLH(GetOwner()->GetTransform()->GetPosition(), m_At, GetOwner()->GetTransform()->GetUp());
 
 	GetOwner()->GetTransform()->SetRight(XMFLOAT3(m_xmf4x4View._11, m_xmf4x4View._21, m_xmf4x4View._31)); 
 	GetOwner()->GetTransform()->SetUp(XMFLOAT3(m_xmf4x4View._12, m_xmf4x4View._22, m_xmf4x4View._32));

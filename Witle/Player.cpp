@@ -59,6 +59,7 @@ Player::~Player()
 
 void Player::Update(float fElapsedTime)
 { 
+	return;
 	// 이동량을 계산한다.
 	m_xmf3Velocity = Vector3::Add(m_xmf3Velocity, Vector3::ScalarProduct(m_xmf3Gravity, fElapsedTime, false)); // 중력계산
 	float fLength = sqrtf(m_xmf3Velocity.x * m_xmf3Velocity.x + m_xmf3Velocity.y * m_xmf3Velocity.y + m_xmf3Velocity.z * m_xmf3Velocity.z);
