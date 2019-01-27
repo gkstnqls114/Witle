@@ -34,8 +34,8 @@ Camera::~Camera()
 void Camera::Teleport(const XMFLOAT3 & pos)
 {
 	GetOwner()->GetTransform()->SetPosition(pos);
-	m_At = Vector3::Add(GetOwner()->GetTransform()->GetRight(), m_Offset);
-	m_xmf4x4View = Matrix4x4::LookAtLH(GetOwner()->GetTransform()->GetRight(), m_At, GetOwner()->GetTransform()->GetUp());
+	m_At = Vector3::Add(GetOwner()->GetTransform()->GetPosition(), m_Offset);
+	m_xmf4x4View = Matrix4x4::LookAtLH(GetOwner()->GetTransform()->GetPosition(), m_At, GetOwner()->GetTransform()->GetUp());
 }
 
 void Camera::Move(const XMFLOAT3 & Shift)
