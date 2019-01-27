@@ -139,11 +139,11 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	m_TerrainHeap->CreateShaderResourceViews(pd3dDevice, pd3dCommandList, m_Terrain->GetTexture(), 3, true);
 
 	// Ä«¸Þ¶ó
-	Camera* cameraComponent = new FollowCam(m_GameObject, m_GameObject);
+	m_Camera = new CameraObject("Camera");
+	Camera* cameraComponent = new FollowCam(m_Camera, m_GameObject);
 	// cameraComponent->SetOffset(XMFLOAT3(0, -50.f, 50.f));
 	cameraComponent->SetOffset(XMFLOAT3(0, -30.f, 50.f));
 	
-	m_Camera = new CameraObject("Camera");
 	m_Camera->ChangeCamera(cameraComponent);
 
 	cameraComponent->SetViewport(0, 0, FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT, 0.0f, 1.0f);
