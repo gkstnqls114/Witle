@@ -7,6 +7,7 @@
 class DescriptorTable
 	:public ResourceBase
 {
+	UINT m_DescriptorHeapCount{ 1 };
 	ID3D12DescriptorHeap			*m_pCbvSrvUavDescriptorHeap = NULL;
 
 	int m_ConstantBufferViewsCount{ 0 };
@@ -23,7 +24,8 @@ class DescriptorTable
 	D3D12_GPU_DESCRIPTOR_HANDLE		m_UavGPUDescriptorStartHandle;
 
 public:
-	DescriptorTable(UINT paraIndex, ID3D12GraphicsCommandList *pd3dCommandList, int nConstantBufferViews, int nShaderResourceViews, int nUnorderedAcessViews);
+	DescriptorTable(UINT paraIndex, ID3D12GraphicsCommandList *pd3dCommandList, UINT nDescriptorHeaps, int nConstantBufferViews, int nShaderResourceViews, int nUnorderedAcessViews)
+		: m_DescriptorHeapCount(nDescriptorHeaps), m_ConstantBufferViewsCount(nConstantBufferViews), m_ShaderResourceViewsCount(nShaderResourceViews), m_UnorderedAcessViewsCount(nUnorderedAcessViews) {};
 	virtual ~DescriptorTable() {};
 
 	virtual void CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList) override;
