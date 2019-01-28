@@ -141,7 +141,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	// 카메라
 	m_Camera = new CameraObject("Camera");
 	Camera* cameraComponent = new FollowCam(m_Camera, m_GameObject);
-	cameraComponent->SetOffset(XMFLOAT3(0, -50.f, 50.f));
+	cameraComponent->SetOffset(XMFLOAT3(0, -5.f, 10.f));
 	// cameraComponent->SetOffset(XMFLOAT3(0, -30.f, 50.f));
 	
 	m_Camera->ChangeCamera(cameraComponent);
@@ -245,8 +245,9 @@ bool GameScene::ProcessInput(HWND hWnd, float ElapsedTime)
 		if (GameInput::GetcDeltaX() || GameInput::GetcDeltaY())
 		{
 			// 플레이어와 카메라 똑같이 rotate...
-			m_GameObject->GetComponent<Transform>("")->Rotate(0.0f, GameInput::GetcDeltaX(), 0.0f);
+			// 순서 의존적이므로 변경 금지
 			m_Camera->GetCamera()->Rotate(0.0f, GameInput::GetcDeltaX(), 0.0f);
+			m_GameObject->GetComponent<Transform>("")->Rotate(0.0f, GameInput::GetcDeltaX(), 0.0f);
 		}
 		
 	}

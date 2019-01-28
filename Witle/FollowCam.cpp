@@ -110,36 +110,44 @@ void FollowCam::LastUpdate(float fTimeElapsed)
 
 void FollowCam::Rotate(float x, float y, float z)
 { 
+	XMFLOAT3 right = m_pTarget->GetTransform()->GetRight();
+	XMFLOAT3 up = m_pTarget->GetTransform()->GetUp();
+	XMFLOAT3 look = m_pTarget->GetTransform()->GetLook();
+
+	//XMFLOAT3 right{ 1.f, 0.f, 0.f };
+	//XMFLOAT3 up{0.f, 1.f, 0.f};
+	//XMFLOAT3 look{0.f, 0.f, 1.f};
+
 	if (x != 0.0f)
 	{
-		XMMATRIX xmmtxRotate = XMMatrixRotationAxis(XMLoadFloat3(&GetOwner()->GetTransform()->GetRight()), XMConvertToRadians(x));
-		GetOwner()->GetTransform()->SetLook(Vector3::TransformNormal(GetOwner()->GetTransform()->GetLook(), xmmtxRotate));
-		GetOwner()->GetTransform()->SetUp(Vector3::TransformNormal(GetOwner()->GetTransform()->GetUp(), xmmtxRotate));
+		XMMATRIX xmmtxRotate = XMMatrixRotationAxis(XMLoadFloat3(&right), XMConvertToRadians(x));
+		GetOwner()->GetTransform()->SetLook(Vector3::TransformNormal(m_pTarget->GetTransform()->GetLook(), xmmtxRotate));
+		GetOwner()->GetTransform()->SetUp(Vector3::TransformNormal(m_pTarget->GetTransform()->GetUp(), xmmtxRotate));
 
 		m_Offset = Vector3::TransformCoord(m_Offset, xmmtxRotate);
 	}
 	if (y != 0.0f)
 	{
-		XMMATRIX xmmtxRotate = XMMatrixRotationAxis(XMLoadFloat3(&GetOwner()->GetTransform()->GetUp()), XMConvertToRadians(y));
-		GetOwner()->GetTransform()->SetLook(Vector3::TransformNormal(GetOwner()->GetTransform()->GetLook(), xmmtxRotate));
-		GetOwner()->GetTransform()->SetRight(Vector3::TransformNormal(GetOwner()->GetTransform()->GetRight(), xmmtxRotate));
+		XMMATRIX xmmtxRotate = XMMatrixRotationAxis(XMLoadFloat3(&up), XMConvertToRadians(y));
+		GetOwner()->GetTransform()->SetLook(Vector3::TransformNormal(m_pTarget->GetTransform()->GetLook(), xmmtxRotate));
+		GetOwner()->GetTransform()->SetRight(Vector3::TransformNormal(m_pTarget->GetTransform()->GetRight(), xmmtxRotate));
 
 		m_Offset = Vector3::TransformCoord(m_Offset, xmmtxRotate);
 	}
 	if (z != 0.0f)
 	{
-		XMMATRIX xmmtxRotate = XMMatrixRotationAxis(XMLoadFloat3(&GetOwner()->GetTransform()->GetLook()), XMConvertToRadians(z));
-		GetOwner()->GetTransform()->SetUp(Vector3::TransformNormal(GetOwner()->GetTransform()->GetUp(), xmmtxRotate));
-		GetOwner()->GetTransform()->SetRight(Vector3::TransformNormal(GetOwner()->GetTransform()->GetRight(), xmmtxRotate));
+		XMMATRIX xmmtxRotate = XMMatrixRotationAxis(XMLoadFloat3(&look), XMConvertToRadians(z));
+		GetOwner()->GetTransform()->SetUp(Vector3::TransformNormal(m_pTarget->GetTransform()->GetUp(), xmmtxRotate));
+		GetOwner()->GetTransform()->SetRight(Vector3::TransformNormal(m_pTarget->GetTransform()->GetRight(), xmmtxRotate));
 
 		m_Offset = Vector3::TransformCoord(m_Offset, xmmtxRotate); 
 	}
 
 	/*회전으로 인해 플레이어의 로컬 x-축, y-축, z-축이 서로 직교하지 않을 수 있으므로 z-축(LookAt 벡터)을 기준으
 	로 하여 서로 직교하고 단위벡터가 되도록 한다.*/
-	GetOwner()->GetTransform()->SetLook(Vector3::Normalize(GetOwner()->GetTransform()->GetLook()));
-	GetOwner()->GetTransform()->SetRight(Vector3::CrossProduct(GetOwner()->GetTransform()->GetUp(), GetOwner()->GetTransform()->GetLook(), true));
-	GetOwner()->GetTransform()->SetUp(Vector3::CrossProduct(GetOwner()->GetTransform()->GetLook(), GetOwner()->GetTransform()->GetRight(), true)); 
+	GetOwner()->GetTransform()->SetLook(Vector3::Normalize(m_pTarget->GetTransform()->GetLook()));
+	GetOwner()->GetTransform()->SetRight(Vector3::CrossProduct(m_pTarget->GetTransform()->GetUp(), m_pTarget->GetTransform()->GetLook(), true));
+	GetOwner()->GetTransform()->SetUp(Vector3::CrossProduct(m_pTarget->GetTransform()->GetLook(), m_pTarget->GetTransform()->GetRight(), true));
 }
 
 void FollowCam::ZoomIn(float val)
