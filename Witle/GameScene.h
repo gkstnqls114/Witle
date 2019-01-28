@@ -13,6 +13,8 @@ class CameraObject;
 class Player;
 class Terrain;
 struct LIGHTS;
+struct LIGHT;
+struct MATERIAL;
 struct MATERIALS;
 
 class GameScene
@@ -25,7 +27,7 @@ protected:
 	//그래픽 루트 시그너쳐를 생성한다.
 	virtual ID3D12RootSignature* CreateGraphicsRootSignature(ID3D12Device *pd3dDevice) override; 
 
-	void BuildLightsAndMaterials();
+	void BuildLightsAndMaterials(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList);
 
 public:
 	GameScene();
@@ -57,16 +59,16 @@ protected:
 
 	XMFLOAT4X4 matrix{ Matrix4x4::Identity() };
 
+	//////////////////////////////////////  조명
 	LIGHTS						*m_pLights = NULL;
+
+	ID3D12Resource				*m_pd3dcbLights = NULL;
+	LIGHTS						*m_pcbMappedLights = NULL;
+
 	MATERIALS					*m_pMaterials = NULL;
 
-	//Camera *m_Camera{ nullptr };
+	ID3D12Resource				*m_pd3dcbMaterials = NULL;
+	MATERIAL					*m_pcbMappedMaterials = NULL;
+	//////////////////////////////////////  조명
 
-	//CPlayer	*m_Player{ nullptr };
-	//
-	//CMesh	* m_Mesh{ nullptr };
-	// 
-	///////////////////////////////////////////////////////////////// 지형
-	//HeightMapTerrain *m_pHeightMapTerrain{ nullptr };
-	//SkyBox *m_SkyBox{ nullptr };
 };

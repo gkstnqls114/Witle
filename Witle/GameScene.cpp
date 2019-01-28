@@ -92,7 +92,7 @@ bool GameScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM w
 
 void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList)
 {
-	BuildLightsAndMaterials();
+	BuildLightsAndMaterials(pd3dDevice, pd3dCommandList);
 
 	//뷰포트를 주 윈도우의 클라이언트 영역 전체로 설정한다.
 	m_Viewport.TopLeftX = 0;
@@ -304,6 +304,13 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	m_Camera->SetViewportsAndScissorRects(pd3dCommandList);
 	m_Camera->UpdateShaderVariables(pd3dCommandList);
 
+	// 조명
+	//D3D12_GPU_VIRTUAL_ADDRESS d3dcbLightsGpuVirtualAddress = m_pd3dcbLights->GetGPUVirtualAddress();
+	//pd3dCommandList->SetGraphicsRootConstantBufferView(4, d3dcbLightsGpuVirtualAddress); //Lights
+
+	//D3D12_GPU_VIRTUAL_ADDRESS d3dcbMaterialsGpuVirtualAddress = m_pd3dcbMaterials->GetGPUVirtualAddress();
+	//pd3dCommandList->SetGraphicsRootConstantBufferView(3, d3dcbMaterialsGpuVirtualAddress);
+
 	// Terrain PSO
 	pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Terrain")->GetPSO());
 	m_TerrainHeap->FirstUpdate(pd3dCommandList);
@@ -373,6 +380,11 @@ ID3D12RootSignature* GameScene::CreateGraphicsRootSignature(ID3D12Device *pd3dDe
 	m_RootResource = new RootResource(_countof(pRootParameters));
 
 	// 루트 상수
+	UINT World = 0;
+	UINT Camera = 1;
+	UINT Materials = 2;
+	UINT Lights = 3;
+
 	pRootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_32BIT_CONSTANTS;
 	pRootParameters[0].Constants.Num32BitValues = 16;
 	pRootParameters[0].Constants.ShaderRegister = 0;
@@ -386,6 +398,22 @@ ID3D12RootSignature* GameScene::CreateGraphicsRootSignature(ID3D12Device *pd3dDe
 	pRootParameters[1].Constants.RegisterSpace = 0;
 	pRootParameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
 	m_RootResource->InsertResource(1, "ViewAndProjection", pRootParameters[0]);
+
+	//pRootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	//pRootParameters[1].Descriptor.ShaderRegister = 1; //Camera
+	//pRootParameters[1].Descriptor.RegisterSpace = 0;
+	//pRootParameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+	// 
+	//pRootParameters[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	//pRootParameters[2].Descriptor.ShaderRegister = 3; //Materials
+	//pRootParameters[2].Descriptor.RegisterSpace = 0;
+	//pRootParameters[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+
+	//pRootParameters[3].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	//pRootParameters[3].Descriptor.ShaderRegister = 4; //Lights
+	//pRootParameters[3].Descriptor.RegisterSpace = 0;
+	//pRootParameters[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+
 
 	D3D12_DESCRIPTOR_RANGE pd3dDescriptorRanges[3];
 	 
@@ -422,6 +450,8 @@ ID3D12RootSignature* GameScene::CreateGraphicsRootSignature(ID3D12Device *pd3dDe
 	pRootParameters[4].DescriptorTable.NumDescriptorRanges = 1;
 	pRootParameters[4].DescriptorTable.pDescriptorRanges = &pd3dDescriptorRanges[2];
 	pRootParameters[4].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	 
+
 /*
 	pRootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	pRootParameters[1].Constants.Num32BitValues = 32;
@@ -572,7 +602,7 @@ ID3D12RootSignature* GameScene::CreateGraphicsRootSignature(ID3D12Device *pd3dDe
 	return (pd3dGraphicsRootSignature);
 }
 
-void GameScene::BuildLightsAndMaterials()
+void GameScene::BuildLightsAndMaterials(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList)
 {
 	m_pLights = new LIGHTS;
 	::ZeroMemory(m_pLights, sizeof(LIGHTS));
@@ -630,6 +660,17 @@ void GameScene::BuildLightsAndMaterials()
 	m_pMaterials->m_pReflections[5] = { XMFLOAT4(0.0f, 0.5f, 0.5f, 1.0f), XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 30.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f) };
 	m_pMaterials->m_pReflections[6] = { XMFLOAT4(0.5f, 0.5f, 1.0f, 1.0f), XMFLOAT4(0.5f, 0.5f, 1.0f, 1.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 35.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f) };
 	m_pMaterials->m_pReflections[7] = { XMFLOAT4(1.0f, 0.5f, 1.0f, 1.0f), XMFLOAT4(1.0f, 0.0f, 1.0f, 1.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 40.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f) };
+
+	// 쉐이더 변수 설정
+	UINT ncbElementBytes = ((sizeof(LIGHTS) + 255) & ~255); //256의 배수
+	m_pd3dcbLights = d3dUtil::CreateBufferResource(pd3dDevice, pd3dCommandList, NULL, ncbElementBytes, D3D12_HEAP_TYPE_UPLOAD, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, NULL);
+
+	m_pd3dcbLights->Map(0, NULL, (void **)&m_pcbMappedLights);
+
+	UINT ncbMaterialBytes = ((sizeof(MATERIALS) + 255) & ~255); //256의 배수
+	m_pd3dcbMaterials = d3dUtil::CreateBufferResource(pd3dDevice, pd3dCommandList, NULL, ncbMaterialBytes, D3D12_HEAP_TYPE_UPLOAD, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, NULL);
+
+	m_pd3dcbMaterials->Map(0, NULL, (void **)&m_pcbMappedMaterials);
 }
 
 //void GameScene::BuildConstantBuffer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList)
