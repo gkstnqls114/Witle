@@ -60,7 +60,7 @@ enum MESH_TYPE_ID
 #define RESOURCE_BUFFER				0x05
 
 
-#define CAMERA_FAR			50000.F
+#define CAMERA_FAR			500.F
 
 #define PLAYER_START_POSITION_Z float(-450.F)
 
