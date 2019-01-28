@@ -15,7 +15,7 @@ private:
 public:
 	FollowCam(GameObject* pOwner, GameObject* target); // target을 지정합니다.
 	FollowCam(GameObject* pOwner, Camera* camera, GameObject* target); // 부모 camera를 그대로 갖고와 target을 지정합니다.
-	FollowCam(FollowCam* followcam); // followcam을 그대로 가져옵니다.
+	FollowCam(GameObject* pOwner, FollowCam* followcam); // followcam을 그대로 가져옵니다.
 	virtual ~FollowCam();
 
 	void SetTarget(GameObject* pLookingObject) { m_pTarget = pLookingObject; }

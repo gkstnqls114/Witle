@@ -25,25 +25,25 @@ void Player::OnPlayerUpdateCallback(float fTimeElapsed)
 		m_Transform.SetPosition(xmf3PlayerPosition);
 	}
 }
-
-void Player::OnCameraUpdateCallback(float fTimeElapsed, Camera* pCamera)
-{
-	if (!m_pCameraUpdatedContext) return;
-	
-	Terrain *pTerrain = (Terrain *)m_pCameraUpdatedContext;
-	XMFLOAT3 xmf3Scale = pTerrain->GetScale();
-	XMFLOAT3 xmf3CameraPosition = pCamera->GetOwner()->GetTransform().GetPosition();
-	int z = (int)(xmf3CameraPosition.z / xmf3Scale.z);
-	bool bReverseQuad = ((z % 2) != 0);
-	float fHeight = pTerrain->GetHeight(xmf3CameraPosition.x, xmf3CameraPosition.z, bReverseQuad);
-	fHeight = fHeight + 5.f;
-	if (xmf3CameraPosition.y <= fHeight)
-	{
-		xmf3CameraPosition.y = fHeight;
-		pCamera->GetOwner()->GetTransform().SetPosition(xmf3CameraPosition);
-		static_cast<FollowCam *>(pCamera)->SetLookAt(m_Transform.GetPosition());
-	}
-}
+//
+//void Player::OnCameraUpdateCallback(float fTimeElapsed, Camera* pCamera)
+//{
+//	if (!m_pCameraUpdatedContext) return;
+//	
+//	Terrain *pTerrain = (Terrain *)m_pCameraUpdatedContext;
+//	XMFLOAT3 xmf3Scale = pTerrain->GetScale();
+//	XMFLOAT3 xmf3CameraPosition = pCamera->GetOwner()->GetTransform().GetPosition();
+//	int z = (int)(xmf3CameraPosition.z / xmf3Scale.z);
+//	bool bReverseQuad = ((z % 2) != 0);
+//	float fHeight = pTerrain->GetHeight(xmf3CameraPosition.x, xmf3CameraPosition.z, bReverseQuad);
+//	fHeight = fHeight + 5.f;
+//	if (xmf3CameraPosition.y <= fHeight)
+//	{
+//		xmf3CameraPosition.y = fHeight;
+//		pCamera->GetOwner()->GetTransform().SetPosition(xmf3CameraPosition);
+//		static_cast<FollowCam *>(pCamera)->SetLookAt(m_Transform.GetPosition());
+//	}
+//}
 
 Player::Player(const std::string& entityID)
 	: GameObject(entityID)

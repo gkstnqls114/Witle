@@ -33,9 +33,9 @@ Camera::~Camera()
 
 void Camera::Teleport(const XMFLOAT3 & pos)
 {
-	GetOwner()->GetTransform().SetPosition(pos);
-	m_At = Vector3::Add(GetOwner()->GetTransform().GetPosition(), m_Offset);
-	m_xmf4x4View = Matrix4x4::LookAtLH(GetOwner()->GetTransform().GetPosition(), m_At, GetOwner()->GetTransform().GetUp());
+	m_pOwner->GetTransform().SetPosition(pos);
+	m_At = Vector3::Add(m_pOwner->GetTransform().GetPosition(), m_Offset);
+	m_xmf4x4View = Matrix4x4::LookAtLH(m_pOwner->GetTransform().GetPosition(), m_At, m_pOwner->GetTransform().GetUp());
 }
 
 void Camera::Move(const XMFLOAT3 & Shift)
@@ -83,11 +83,11 @@ void Camera::SetScissorRect(LONG xLeft, LONG yTop, LONG xRight, LONG yBottom)
 
 void Camera::RegenerateViewMatrix()
 {
-	m_xmf4x4View = Matrix4x4::LookAtLH(GetOwner()->GetTransform().GetPosition(), m_At, GetOwner()->GetTransform().GetUp());
+	m_xmf4x4View = Matrix4x4::LookAtLH(m_pOwner->GetTransform().GetPosition(), m_At, m_pOwner->GetTransform().GetUp());
 
-	GetOwner()->GetTransform().SetRight(XMFLOAT3(m_xmf4x4View._11, m_xmf4x4View._21, m_xmf4x4View._31)); 
-	GetOwner()->GetTransform().SetUp(XMFLOAT3(m_xmf4x4View._12, m_xmf4x4View._22, m_xmf4x4View._32));
-	GetOwner()->GetTransform().SetLook(XMFLOAT3(m_xmf4x4View._13, m_xmf4x4View._23, m_xmf4x4View._33));
+	m_pOwner->GetTransform().SetRight(XMFLOAT3(m_xmf4x4View._11, m_xmf4x4View._21, m_xmf4x4View._31)); 
+	m_pOwner->GetTransform().SetUp(XMFLOAT3(m_xmf4x4View._12, m_xmf4x4View._22, m_xmf4x4View._32));
+	m_pOwner->GetTransform().SetLook(XMFLOAT3(m_xmf4x4View._13, m_xmf4x4View._23, m_xmf4x4View._33));
 }
 
 void Camera::GenerateProjectionMatrix(float fNearPlaneDistance, float fFarPlaneDistance, float fAspectRatio, float fFOVAngle)
@@ -99,14 +99,14 @@ void Camera::GenerateProjectionMatrix(float fNearPlaneDistance, float fFarPlaneD
 파라메터로 사용하는 XMMatrixLookAtLH() 함수를 사용한다.*/
 void Camera::GenerateViewMatrix()
 {
-	m_xmf4x4View = Matrix4x4::LookAtLH(GetOwner()->GetTransform().GetPosition(), m_At, GetOwner()->GetTransform().GetUp());
+	m_xmf4x4View = Matrix4x4::LookAtLH(m_pOwner->GetTransform().GetPosition(), m_At, m_pOwner->GetTransform().GetUp());
 }
 
 void Camera::GenerateViewMatrix(XMFLOAT3 xmf3Position, XMFLOAT3 xmf3LookAt, XMFLOAT3 xmf3Up)
 {
-	GetOwner()->GetTransform().SetPosition(xmf3Position);
+	m_pOwner->GetTransform().SetPosition(xmf3Position);
 	m_At = xmf3LookAt;
-	GetOwner()->GetTransform().SetUp(xmf3Up) ;
+	m_pOwner->GetTransform().SetUp(xmf3Up) ;
 
 	GenerateViewMatrix();
 }
@@ -202,15 +202,38 @@ void Camera::SetViewportsAndScissorRects(ID3D12GraphicsCommandList *pd3dCommandL
 	pd3dCommandList->RSSetViewports(1, &m_d3dViewport);
 	pd3dCommandList->RSSetScissorRects(1, &m_d3dScissorRect);
 }
+ 
+Camera & Camera::operator=(const Camera & camera)
+{
+	// TODO: 여기에 반환 구문을 삽입합니다.
+	m_At = camera.m_At;
+	m_Offset = camera.m_Offset;
+
+	m_fPitch = camera.m_fPitch;
+	m_fRoll = camera.m_fRoll;
+	m_fYaw = camera.m_fYaw;
+
+	m_fTimeLag = camera.m_fTimeLag;
+
+	m_xmf4x4View = camera.m_xmf4x4View;
+	m_xmf4x4Projection = camera.m_xmf4x4Projection;
+
+	m_d3dViewport = camera.m_d3dViewport;
+	m_d3dScissorRect = camera.m_d3dScissorRect;
+
+	m_ShaderVariables = camera.m_ShaderVariables;
+
+	return *this;
+}
 
 void Camera::ShowData() const noexcept
 {
 #if _DEBUG
 	std::cout << "Camera Data..." << std::endl;
-	std::cout << "m_xmf3Position: "; Vector3::Show(GetOwner()->GetTransform().GetPosition());
-	std::cout << "m_xmf3Right: "; Vector3::Show(GetOwner()->GetTransform().GetRight());
-	std::cout << "m_xmf3Up: "; Vector3::Show(GetOwner()->GetTransform().GetUp());
-	std::cout << "m_xmf3Look: "; Vector3::Show(GetOwner()->GetTransform().GetLook());
+	std::cout << "m_xmf3Position: "; Vector3::Show(m_pOwner->GetTransform().GetPosition());
+	std::cout << "m_xmf3Right: "; Vector3::Show(m_pOwner->GetTransform().GetRight());
+	std::cout << "m_xmf3Up: "; Vector3::Show(m_pOwner->GetTransform().GetUp());
+	std::cout << "m_xmf3Look: "; Vector3::Show(m_pOwner->GetTransform().GetLook());
 	std::cout << "m_xmf3LookAtWorld: "; Vector3::Show(m_At);
 	std::cout << "m_Offset: "; Vector3::Show(m_Offset);
 	std::cout << "m_xmf4x4View" << std::endl;

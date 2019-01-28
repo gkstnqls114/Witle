@@ -29,11 +29,6 @@ protected:
 	float			m_fRoll{ 0.0f };
 	float			m_fYaw{ 0.0f };
 
-	DWORD			m_nMode{ 0x00 };
-#if _DEBUG
-	DWORD			m_nLastMode{ 0x00 }; // 이전의 카메라 모드 
-#endif
-
 	float			m_fTimeLag{ 0.0f };
 
 	XMFLOAT4X4		m_xmf4x4View{ Matrix4x4::Identity() };
@@ -83,8 +78,7 @@ public:
 	void SetScissorRect(LONG xLeft, LONG yTop, LONG xRight, LONG yBottom);
 	virtual void SetViewportsAndScissorRects(ID3D12GraphicsCommandList *pd3dCommandList);
 
-	void SetOffset(XMFLOAT3 offset) { m_Offset = offset; }
-	void SetMode(DWORD nMode) { m_nMode = nMode; }
+	void SetOffset(XMFLOAT3 offset) { m_Offset = offset; } 
 	void SetTimeLag(float fTimeLag) { m_fTimeLag = fTimeLag; }
 	void SetLookAtPosition(XMFLOAT3 xmf3LookAtWorld) { m_At = xmf3LookAtWorld; }
 
@@ -99,9 +93,7 @@ public:
 	//XMFLOAT3 GetLookVector()	 const noexcept { return (m_Look); }
 	//XMFLOAT3 GetPosition()		 const noexcept { return (m_Position); }
 	XMFLOAT3 GetOffset()         const noexcept { return (m_Offset); }
-
-	DWORD GetMode()  const noexcept { return (m_nMode); }
-
+	 
 	float GetPitch() const noexcept { return (m_fPitch); }
 	float GetRoll()	 const noexcept { return (m_fRoll); }
 	float GetYaw()	 const noexcept { return (m_fYaw); }
@@ -113,6 +105,8 @@ public:
 	D3D12_VIEWPORT GetViewport()	 const noexcept { return (m_d3dViewport); }
 	D3D12_RECT GetScissorRect()		 const noexcept { return (m_d3dScissorRect); }
 	///////////////////////////////////////////////////////////////////////// Get
+
+	Camera& operator= (const Camera&);
 
 	void ShowData() const noexcept;
 };

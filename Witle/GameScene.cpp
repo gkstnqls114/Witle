@@ -66,6 +66,8 @@ bool GameScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM w
 	case WM_KEYDOWN:
 		switch (wParam) {
 //
+		case 'a':
+			break;
 //#ifdef _DEBUG
 //		case KEY_A:
 //			m_Camera->Move(Vector3::ScalarProduct(m_Camera->GetRightVector(), -100));
