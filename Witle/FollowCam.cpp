@@ -90,22 +90,6 @@ void FollowCam::LastUpdate(float fTimeElapsed)
 	RegenerateViewMatrix();
 
 	GenerateFrustum();
-
-	std::cout << "At: ";
-	Vector3::Show(m_At);
-	std::cout << "Pos: ";
-	Vector3::Show(GetOwner()->GetTransform()->GetPosition());
-	std::cout << "Offset: ";
-	Vector3::Show(m_Offset);
-	std::cout << std::endl;
-	 
-	std::cout << "View: ";
-	Matrix4x4::Show(m_xmf4x4View);
-	std::cout << std::endl;
-
-	std::cout << "Projection: ";
-	Matrix4x4::Show(m_xmf4x4Projection);
-	std::cout << std::endl;
 }
 
 void FollowCam::Rotate(float x, float y, float z)

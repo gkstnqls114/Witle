@@ -33,15 +33,19 @@ void RootResource::InsertResource(int parametersIndex, const std::string& name, 
 		break;
 
 	case D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE: // 서술자 테이블
+
 		break;
 
 	case D3D12_ROOT_PARAMETER_TYPE_CBV: // 상수 버퍼 뷰
+
 		break;
 
 	case D3D12_ROOT_PARAMETER_TYPE_SRV:
+
 		break;
 
 	case D3D12_ROOT_PARAMETER_TYPE_UAV:
+
 		break;
 
 	default:

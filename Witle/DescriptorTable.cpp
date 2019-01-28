@@ -42,9 +42,9 @@ void DescriptorTable::CreateShaderVariables(ID3D12Device * pd3dDevice, ID3D12Gra
 void DescriptorTable::UpdateShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList, const SourcePtr & data)
 {
 	pd3dCommandList->SetDescriptorHeaps(1, &m_pCbvSrvUavDescriptorHeap);
-	pd3dCommandList->SetGraphicsRootDescriptorTable();
-	pd3dCommandList->SetGraphicsRootDescriptorTable(); 
-	pd3dCommandList->SetGraphicsRootDescriptorTable();
+	//pd3dCommandList->SetGraphicsRootDescriptorTable();
+	//pd3dCommandList->SetGraphicsRootDescriptorTable(); 
+	//pd3dCommandList->SetGraphicsRootDescriptorTable();
 }
 
 void DescriptorTable::ReleaseShaderVariables()
