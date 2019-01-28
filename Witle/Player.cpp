@@ -11,7 +11,7 @@ void Player::OnPlayerUpdateCallback(float fTimeElapsed)
 
 	Terrain *pTerrain = (Terrain *)m_pPlayerUpdatedContext;
 	XMFLOAT3 xmf3Scale = pTerrain->GetScale();
-	XMFLOAT3 xmf3PlayerPosition = m_Transform->GetPosition();
+	XMFLOAT3 xmf3PlayerPosition = m_Transform.GetPosition();
 	int z = (int)(xmf3PlayerPosition.z / xmf3Scale.z);
 	bool bReverseQuad = ((z % 2) != 0);
 	float fHeight = pTerrain->GetHeight(xmf3PlayerPosition.x, xmf3PlayerPosition.z, bReverseQuad);
@@ -22,7 +22,7 @@ void Player::OnPlayerUpdateCallback(float fTimeElapsed)
 		xmf3PlayerVelocity.y = 0.0f;
 		m_xmf3Velocity = xmf3PlayerVelocity;
 		xmf3PlayerPosition.y = fHeight;
-		m_Transform->SetPosition(xmf3PlayerPosition);
+		m_Transform.SetPosition(xmf3PlayerPosition);
 	}
 }
 
@@ -32,7 +32,7 @@ void Player::OnCameraUpdateCallback(float fTimeElapsed, Camera* pCamera)
 	
 	Terrain *pTerrain = (Terrain *)m_pCameraUpdatedContext;
 	XMFLOAT3 xmf3Scale = pTerrain->GetScale();
-	XMFLOAT3 xmf3CameraPosition = pCamera->GetOwner()->GetTransform()->GetPosition();
+	XMFLOAT3 xmf3CameraPosition = pCamera->GetOwner()->GetTransform().GetPosition();
 	int z = (int)(xmf3CameraPosition.z / xmf3Scale.z);
 	bool bReverseQuad = ((z % 2) != 0);
 	float fHeight = pTerrain->GetHeight(xmf3CameraPosition.x, xmf3CameraPosition.z, bReverseQuad);
@@ -40,8 +40,8 @@ void Player::OnCameraUpdateCallback(float fTimeElapsed, Camera* pCamera)
 	if (xmf3CameraPosition.y <= fHeight)
 	{
 		xmf3CameraPosition.y = fHeight;
-		pCamera->GetOwner()->GetTransform()->SetPosition(xmf3CameraPosition);
-		static_cast<FollowCam *>(pCamera)->SetLookAt(m_Transform->GetPosition());
+		pCamera->GetOwner()->GetTransform().SetPosition(xmf3CameraPosition);
+		static_cast<FollowCam *>(pCamera)->SetLookAt(m_Transform.GetPosition());
 	}
 }
 
@@ -72,15 +72,15 @@ void Player::Update(float fElapsedTime)
 	fLength = sqrtf(m_xmf3Velocity.y * m_xmf3Velocity.y);
 	if (fLength > m_fMaxVelocityY) m_xmf3Velocity.y *= (fMaxVelocityY / fLength);
 
-	m_Transform->Move(m_xmf3Velocity); // 이동량만큼 움직인다.
+	m_Transform.Move(m_xmf3Velocity); // 이동량만큼 움직인다.
 	// pCamera->Move(m_xmf3Velocity);
 
 	// 플레이어 콜백
 	OnPlayerUpdateCallback(fElapsedTime);
 
 	// 카메라도 마찬가지로 이동
-	/*pCamera->Update(fElapsedTime, m_Transform->GetPosition());
-	static_cast<FollowCam*>(pCamera)->Update(fTimeElapsed, m_Transform->GetPosition());
+	/*pCamera->Update(fElapsedTime, m_Transform.GetPosition());
+	static_cast<FollowCam*>(pCamera)->Update(fTimeElapsed, m_Transform.GetPosition());
 	OnCameraUpdateCallback(fTimeElapsed, pCamera);
 	static_cast<FollowCam*>(pCamera)->RegenerateViewMatrix();*/
 

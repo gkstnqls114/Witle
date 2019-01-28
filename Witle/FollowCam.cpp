@@ -40,7 +40,7 @@ void FollowCam::MoveSmoothly(float fTimeElapsed, const XMFLOAT3 & xmf3LookAt)
 
 	XMFLOAT3 xmf3Offset = Vector3::TransformCoord(m_Offset, xmf4x4Rotate);
 	XMFLOAT3 xmf3Position = Vector3::Add(xmf3LookAt, xmf3Offset);
-	XMFLOAT3 xmf3Direction = Vector3::Subtract(xmf3Position, GetOwner()->GetTransform()->GetPosition());
+	XMFLOAT3 xmf3Direction = Vector3::Subtract(xmf3Position, GetOwner()->GetTransform().GetPosition());
 	float fLength = Vector3::Length(xmf3Direction);
 	xmf3Direction = Vector3::Normalize(xmf3Direction);
 	float fTimeLagScale = (m_fTimeLag) ? fTimeElapsed * (1.0f / m_fTimeLag) : 1.0f;
@@ -49,17 +49,17 @@ void FollowCam::MoveSmoothly(float fTimeElapsed, const XMFLOAT3 & xmf3LookAt)
 	if (fLength < 0.01f) fDistance = fLength;
 	if (fDistance > 0)
 	{
-		GetOwner()->GetTransform()->SetPosition(Vector3::Add(GetOwner()->GetTransform()->GetPosition(), xmf3Direction, fDistance));
+		GetOwner()->GetTransform().SetPosition(Vector3::Add(GetOwner()->GetTransform().GetPosition(), xmf3Direction, fDistance));
 		SetLookAt(xmf3LookAt);
 	}
 }
 
 void FollowCam::SetLookAt(const XMFLOAT3 & xmf3LookAt)
 {
-	XMFLOAT4X4 mtxLookAt = Matrix4x4::LookAtLH(GetOwner()->GetTransform()->GetPosition(), xmf3LookAt, m_pTarget->GetComponent<Transform>("")->GetUp());
-	GetOwner()->GetTransform()->SetRight(XMFLOAT3(mtxLookAt._11, mtxLookAt._21, mtxLookAt._31));
-	GetOwner()->GetTransform()->SetUp(XMFLOAT3(mtxLookAt._12, mtxLookAt._22, mtxLookAt._32));
-	GetOwner()->GetTransform()->SetLook(XMFLOAT3(mtxLookAt._13, mtxLookAt._23, mtxLookAt._33));
+	XMFLOAT4X4 mtxLookAt = Matrix4x4::LookAtLH(GetOwner()->GetTransform().GetPosition(), xmf3LookAt, m_pTarget->GetComponent<Transform>("")->GetUp());
+	GetOwner()->GetTransform().SetRight(XMFLOAT3(mtxLookAt._11, mtxLookAt._21, mtxLookAt._31));
+	GetOwner()->GetTransform().SetUp(XMFLOAT3(mtxLookAt._12, mtxLookAt._22, mtxLookAt._32));
+	GetOwner()->GetTransform().SetLook(XMFLOAT3(mtxLookAt._13, mtxLookAt._23, mtxLookAt._33));
 }
 
 FollowCam::~FollowCam()
@@ -69,8 +69,8 @@ FollowCam::~FollowCam()
 void FollowCam::Teleport(const XMFLOAT3 & at)
 {
 	m_At = at;
-	GetOwner()->GetTransform()->SetPosition(Vector3::Subtract(m_At, m_Offset));
-	m_xmf4x4View = Matrix4x4::LookAtLH(GetOwner()->GetTransform()->GetPosition(), m_At, GetOwner()->GetTransform()->GetUp());
+	GetOwner()->GetTransform().SetPosition(Vector3::Subtract(m_At, m_Offset));
+	m_xmf4x4View = Matrix4x4::LookAtLH(GetOwner()->GetTransform().GetPosition(), m_At, GetOwner()->GetTransform().GetUp());
 }
 
 void FollowCam::Update(float fTimeElapsed, const XMFLOAT3 & xmf3LookAt)
@@ -84,8 +84,8 @@ void FollowCam::LastUpdate(float fTimeElapsed)
 	// 벽과의 충돌 등...
 	
 	//Move, Rotate된 At과 카메라 좌표축(Right, Up, Look)을 기준으로 Position 재설정
-	m_At = m_pTarget->GetComponent<Transform>("")->GetPosition();
-	GetOwner()->GetTransform()->SetPosition(Vector3::Subtract(m_At, m_Offset));
+	m_At = m_pTarget->GetTransform().GetPosition();
+	GetOwner()->GetTransform().SetPosition(Vector3::Subtract(m_At, m_Offset));
 
 	RegenerateViewMatrix();
 
@@ -94,9 +94,9 @@ void FollowCam::LastUpdate(float fTimeElapsed)
 
 void FollowCam::Rotate(float x, float y, float z)
 { 
-	XMFLOAT3 right = m_pTarget->GetTransform()->GetRight();
-	XMFLOAT3 up = m_pTarget->GetTransform()->GetUp();
-	XMFLOAT3 look = m_pTarget->GetTransform()->GetLook();
+	XMFLOAT3 right = m_pTarget->GetTransform().GetRight();
+	XMFLOAT3 up = m_pTarget->GetTransform().GetUp();
+	XMFLOAT3 look = m_pTarget->GetTransform().GetLook();
 
 	//XMFLOAT3 right{ 1.f, 0.f, 0.f };
 	//XMFLOAT3 up{0.f, 1.f, 0.f};
@@ -105,33 +105,33 @@ void FollowCam::Rotate(float x, float y, float z)
 	if (x != 0.0f)
 	{
 		XMMATRIX xmmtxRotate = XMMatrixRotationAxis(XMLoadFloat3(&right), XMConvertToRadians(x));
-		GetOwner()->GetTransform()->SetLook(Vector3::TransformNormal(m_pTarget->GetTransform()->GetLook(), xmmtxRotate));
-		GetOwner()->GetTransform()->SetUp(Vector3::TransformNormal(m_pTarget->GetTransform()->GetUp(), xmmtxRotate));
+		GetOwner()->GetTransform().SetLook(Vector3::TransformNormal(m_pTarget->GetTransform().GetLook(), xmmtxRotate));
+		GetOwner()->GetTransform().SetUp(Vector3::TransformNormal(m_pTarget->GetTransform().GetUp(), xmmtxRotate));
 
 		m_Offset = Vector3::TransformCoord(m_Offset, xmmtxRotate);
 	}
 	if (y != 0.0f)
 	{
 		XMMATRIX xmmtxRotate = XMMatrixRotationAxis(XMLoadFloat3(&up), XMConvertToRadians(y));
-		GetOwner()->GetTransform()->SetLook(Vector3::TransformNormal(m_pTarget->GetTransform()->GetLook(), xmmtxRotate));
-		GetOwner()->GetTransform()->SetRight(Vector3::TransformNormal(m_pTarget->GetTransform()->GetRight(), xmmtxRotate));
+		GetOwner()->GetTransform().SetLook(Vector3::TransformNormal(m_pTarget->GetTransform().GetLook(), xmmtxRotate));
+		GetOwner()->GetTransform().SetRight(Vector3::TransformNormal(m_pTarget->GetTransform().GetRight(), xmmtxRotate));
 
 		m_Offset = Vector3::TransformCoord(m_Offset, xmmtxRotate);
 	}
 	if (z != 0.0f)
 	{
 		XMMATRIX xmmtxRotate = XMMatrixRotationAxis(XMLoadFloat3(&look), XMConvertToRadians(z));
-		GetOwner()->GetTransform()->SetUp(Vector3::TransformNormal(m_pTarget->GetTransform()->GetUp(), xmmtxRotate));
-		GetOwner()->GetTransform()->SetRight(Vector3::TransformNormal(m_pTarget->GetTransform()->GetRight(), xmmtxRotate));
+		GetOwner()->GetTransform().SetUp(Vector3::TransformNormal(m_pTarget->GetTransform().GetUp(), xmmtxRotate));
+		GetOwner()->GetTransform().SetRight(Vector3::TransformNormal(m_pTarget->GetTransform().GetRight(), xmmtxRotate));
 
 		m_Offset = Vector3::TransformCoord(m_Offset, xmmtxRotate); 
 	}
 
 	/*회전으로 인해 플레이어의 로컬 x-축, y-축, z-축이 서로 직교하지 않을 수 있으므로 z-축(LookAt 벡터)을 기준으
 	로 하여 서로 직교하고 단위벡터가 되도록 한다.*/
-	GetOwner()->GetTransform()->SetLook(Vector3::Normalize(m_pTarget->GetTransform()->GetLook()));
-	GetOwner()->GetTransform()->SetRight(Vector3::CrossProduct(m_pTarget->GetTransform()->GetUp(), m_pTarget->GetTransform()->GetLook(), true));
-	GetOwner()->GetTransform()->SetUp(Vector3::CrossProduct(m_pTarget->GetTransform()->GetLook(), m_pTarget->GetTransform()->GetRight(), true));
+	GetOwner()->GetTransform().SetLook(Vector3::Normalize(m_pTarget->GetTransform().GetLook()));
+	GetOwner()->GetTransform().SetRight(Vector3::CrossProduct(m_pTarget->GetTransform().GetUp(), m_pTarget->GetTransform().GetLook(), true));
+	GetOwner()->GetTransform().SetUp(Vector3::CrossProduct(m_pTarget->GetTransform().GetLook(), m_pTarget->GetTransform().GetRight(), true));
 }
 
 void FollowCam::ZoomIn(float val)

@@ -25,7 +25,7 @@ CameraObject::~CameraObject()
 void CameraObject::LastUpdate(float fElapsedTime)
 {
 	m_pCameraComponent->LastUpdate(fElapsedTime);
-	m_Transform->Update(fElapsedTime); // Transform 
+	m_Transform.Update(fElapsedTime); // Transform 
 }
 
 void CameraObject::SetViewportsAndScissorRects(ID3D12GraphicsCommandList *pd3dCommandList)

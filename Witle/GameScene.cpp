@@ -218,7 +218,7 @@ bool GameScene::ProcessInput(HWND hWnd, float ElapsedTime)
 	// 만약 키보드 상하좌우 움직인다면...
 	if (dwDirection != 0)
 	{
-		AXIS axis = m_GameObject->GetComponent<Transform>("")->GetCoorAxis();
+		AXIS axis = m_GameObject->GetTransform().GetCoorAxis();
 
 		XMFLOAT3 xmf3Shift = XMFLOAT3(0, 0, 0); // 이동량
 
@@ -247,7 +247,7 @@ bool GameScene::ProcessInput(HWND hWnd, float ElapsedTime)
 			// 플레이어와 카메라 똑같이 rotate...
 			// 순서 의존적이므로 변경 금지
 			m_Camera->GetCamera()->Rotate(0.0f, GameInput::GetcDeltaX(), 0.0f);
-			m_GameObject->GetComponent<Transform>("")->Rotate(0.0f, GameInput::GetcDeltaX(), 0.0f);
+			m_GameObject->GetTransform().Rotate(0.0f, GameInput::GetcDeltaX(), 0.0f);
 		}
 		
 	}
@@ -283,7 +283,7 @@ void GameScene::Update(float fElapsedTime)
 	
 	if (m_GameObject)
 	{
-		m_GameObject->GetComponent<Transform>("")->Update(fElapsedTime); // right, up, look, pos에 맞춰 월드변환행렬 다시 설정
+		m_GameObject->GetTransform().Update(fElapsedTime); // right, up, look, pos에 맞춰 월드변환행렬 다시 설정
 	}
 }
 
@@ -330,7 +330,7 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 
 	// 쉐이더 변수 설정
 	XMFLOAT4X4 xmf4x4World;
-	XMStoreFloat4x4(&xmf4x4World, XMMatrixTranspose(XMLoadFloat4x4(&m_GameObject->GetComponent<Transform>("")->GetWorldMatrix())));
+	XMStoreFloat4x4(&xmf4x4World, XMMatrixTranspose(XMLoadFloat4x4(&m_GameObject->GetTransform().GetWorldMatrix())));
 	m_RootResource->UpdateShaderVariable(pd3dCommandList, m_pd3dGraphicsRootSignature, "World", SourcePtr(&xmf4x4World));
 
 	// CubeMesh Render

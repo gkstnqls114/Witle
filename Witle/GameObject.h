@@ -1,5 +1,5 @@
 #pragma once  
-class Transform;
+#include "Transform.h"
 class ComponentBase;
 
 class IGameObject
@@ -20,12 +20,11 @@ private:
 	std::map< std::string, ComponentBase*> m_Components;
 	std::string m_EntityID;
 
-
 protected:
-	Transform* m_Transform{ nullptr }; //월드변환을 위한 좌표계
+	Transform m_Transform; //월드변환을 위한 좌표계
 	ComponentBase* GetComponent(const std::string& id) const;
 
-protected:
+private:
 	void ReleaseComponents();
 
 public:
@@ -47,13 +46,8 @@ public:
 		assert(id != "");
 		return static_cast<T *>(GetComponent(id));
 	}
-	template <>
-	Transform* GetComponent<Transform>(const std::string& id) const
-	{
-		return m_Transform;
-	}
 
-	Transform* GetTransform() const { return m_Transform; }
-	
+	const Transform& GetTransform() const { return m_Transform; }
+	Transform& GetTransform() { return m_Transform; }
 };
  

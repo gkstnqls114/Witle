@@ -37,12 +37,12 @@ public:
 	//////////////////////////////////////////////// Get
 
 	//////////////////////////////////////////////// Get
-	const XMFLOAT4X4 GetWorldMatrix() const { return m_transformWorld; }
-	const XMFLOAT3 GetRight() const { return m_Right; }
-	const XMFLOAT3 GetUp() const { return m_Up; }
-	const XMFLOAT3 GetLook() const { return m_Look; }
-	const XMFLOAT3 GetPosition() const { return m_Position; }
-	const AXIS GetCoorAxis() const { return AXIS(m_Right, m_Up, m_Look); }
+	const XMFLOAT4X4& GetWorldMatrix() const { return m_transformWorld; }
+	const XMFLOAT3& GetRight() const { return m_Right; }
+	const XMFLOAT3& GetUp() const { return m_Up; }
+	const XMFLOAT3& GetLook() const { return m_Look; }
+	const XMFLOAT3& GetPosition() const { return m_Position; }
+	const AXIS& GetCoorAxis() const { return AXIS(m_Right, m_Up, m_Look); }
 	//////////////////////////////////////////////// Get
 
 	void Move(const XMFLOAT3& xmf3Shift, bool bUpdateVelocity); 

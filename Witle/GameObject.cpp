@@ -1,5 +1,4 @@
-#include "stdafx.h"
-#include "Transform.h"
+#include "stdafx.h" 
 #include "ComponentBase.h"
 #include "GameObject.h"
  
@@ -15,18 +14,14 @@ void GameObject::ReleaseComponents()
 }
 
 GameObject::GameObject(const std::string & entityID)
-	: m_EntityID(entityID)
+	: m_EntityID(entityID), m_Transform(this)
 {
-	m_Transform = new Transform(this);
+
 }
 
 GameObject::~GameObject()
 {
-	if (m_Transform)
-	{
-		delete m_Transform;
-		m_Transform = nullptr;
-	}
+
 }
 
 bool GameObject::InsertComponent(const std::string & ComponenetID, ComponentBase * pComponentBase)
