@@ -150,7 +150,7 @@
     <ClInclude Include="BasicCam.h" />
     <ClInclude Include="CameraObject.h" />
     <ClInclude Include="ComponentBase.h" />
-    <ClInclude Include="constant.h" />
+    <ClInclude Include="MyConstants.h" />
     <ClInclude Include="CubeMesh.h" />
     <ClInclude Include="CubeShader.h" />
     <ClInclude Include="d3dUtil.h" />
@@ -170,6 +170,7 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="MyDescriptorHeap.h" />
     <ClInclude Include="MyRigidbody.h" />
+    <ClInclude Include="MyStructs.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="ResourceBase.h" />
     <ClInclude Include="32bitRootConstants.h" />
@@ -262,6 +263,9 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="Light.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="TerrainShader.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Geometry</ShaderType>

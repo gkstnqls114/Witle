@@ -12,6 +12,8 @@ class MyDescriptorHeap;
 class CameraObject;
 class Player;
 class Terrain;
+struct LIGHTS;
+struct MATERIALS;
 
 class GameScene
 	: public Scene
@@ -22,6 +24,8 @@ class GameScene
 protected:
 	//그래픽 루트 시그너쳐를 생성한다.
 	virtual ID3D12RootSignature* CreateGraphicsRootSignature(ID3D12Device *pd3dDevice) override; 
+
+	void BuildLightsAndMaterials();
 
 public:
 	GameScene();
@@ -52,6 +56,9 @@ protected:
 	CameraObject* m_Camera{ nullptr };
 
 	XMFLOAT4X4 matrix{ Matrix4x4::Identity() };
+
+	LIGHTS						*m_pLights = NULL;
+	MATERIALS					*m_pMaterials = NULL;
 
 	//Camera *m_Camera{ nullptr };
 

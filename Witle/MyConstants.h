@@ -22,6 +22,18 @@ enum MESH_TYPE_ID
 
 /////////////////////////////////////////////// define 정의
 #define CHECK_ROOT_SIGNATURE
+/////////////////////////////////////////////// define 정의
+
+
+/////////////////////////////////////////////// 조명
+#define POINT_LIGHT				1
+#define SPOT_LIGHT				2
+#define DIRECTIONAL_LIGHT		3
+
+#define MAX_LIGHTS 8
+#define MAX_MATERIALS 8
+/////////////////////////////////////////////// 조명
+
 
 #define DIR_FORWARD 0x01
 #define DIR_BACKWARD 0x02

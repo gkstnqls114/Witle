@@ -132,9 +132,6 @@
     <ClInclude Include="d3dx12.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="constant.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="ID.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -254,6 +251,12 @@
     </ClInclude>
     <ClInclude Include="Event.h">
       <Filter>11.Event</Filter>
+    </ClInclude>
+    <ClInclude Include="MyStructs.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="MyConstants.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -399,6 +402,9 @@
       <Filter>리소스 파일\Shader</Filter>
     </FxCompile>
     <FxCompile Include="TerrainShader.hlsl">
+      <Filter>리소스 파일\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Light.hlsl">
       <Filter>리소스 파일\Shader</Filter>
     </FxCompile>
   </ItemGroup>
