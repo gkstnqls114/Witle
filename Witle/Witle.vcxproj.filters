@@ -48,9 +48,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="리소스 파일\Shader">
-      <UniqueIdentifier>{db89ae39-7d4f-4275-9206-40edcd5d4780}</UniqueIdentifier>
-    </Filter>
     <Filter Include="07.Resource">
       <UniqueIdentifier>{b509f97f-0204-4199-ab34-2f29f432f6e2}</UniqueIdentifier>
     </Filter>
@@ -109,14 +106,17 @@
     <Filter Include="02.Component\Camera\BasicCam">
       <UniqueIdentifier>{3e7f290a-f5ed-422b-a7a6-8c66ce8dc478}</UniqueIdentifier>
     </Filter>
-    <Filter Include="07.Resource\RootResource">
-      <UniqueIdentifier>{f9cc346e-90c1-4bea-8f08-32e231438fd9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="11.Event">
       <UniqueIdentifier>{3f9358d8-bf33-46cb-8896-0fad7507622f}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.Component\Mesh\QuadTreeTerrainMesh">
       <UniqueIdentifier>{711330f0-9106-4126-b083-880c2df6277b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.Resource\ParameterForm">
+      <UniqueIdentifier>{f9cc346e-90c1-4bea-8f08-32e231438fd9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HLSL">
+      <UniqueIdentifier>{8071701e-797b-47cb-9dab-2e0e157a4b18}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -262,7 +262,7 @@
       <Filter>02.Component\Mesh\QuadTreeTerrainMesh</Filter>
     </ClInclude>
     <ClInclude Include="ParameterForm.h">
-      <Filter>07.Resource\RootResource</Filter>
+      <Filter>07.Resource\ParameterForm</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -390,7 +390,7 @@
       <Filter>02.Component\Mesh\QuadTreeTerrainMesh</Filter>
     </ClCompile>
     <ClCompile Include="ParameterForm.cpp">
-      <Filter>07.Resource\RootResource</Filter>
+      <Filter>07.Resource\ParameterForm</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -408,13 +408,13 @@
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="CubeShader.hlsl">
-      <Filter>리소스 파일\Shader</Filter>
-    </FxCompile>
-    <FxCompile Include="TerrainShader.hlsl">
-      <Filter>리소스 파일\Shader</Filter>
+      <Filter>HLSL</Filter>
     </FxCompile>
     <FxCompile Include="Light.hlsl">
-      <Filter>리소스 파일\Shader</Filter>
+      <Filter>HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="TerrainShader.hlsl">
+      <Filter>HLSL</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

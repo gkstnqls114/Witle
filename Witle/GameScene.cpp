@@ -126,7 +126,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	m_TerrainHeap = new MyDescriptorHeap();
 	m_TerrainHeap->CreateCbvSrvUavDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 2, 0);
 	// m_TerrainHeap.CreateConstantBufferViews(pd3dDevice, pd3dCommandList, 1, m_pd3dcbGameObject, ncbElementBytes);
-	m_TerrainHeap->CreateShaderResourceViews(pd3dDevice, pd3dCommandList, m_Terrain->GetTexture(), 3, true);
+	m_TerrainHeap->CreateShaderResourceViews(pd3dDevice, pd3dCommandList, m_Terrain->GetTexture(), 5, true);
 
 	// 카메라
 	m_Camera = new CameraObject("Camera");
@@ -144,11 +144,11 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 
 void GameScene::ReleaseObjects()
 {
-	if (m_RootResource)
+	if (m_parameterForm)
 	{
-		m_RootResource->ReleaseObjects();
-		delete m_RootResource;
-		m_RootResource = nullptr;
+		m_parameterForm->ReleaseObjects();
+		delete m_parameterForm;
+		m_parameterForm = nullptr;
 	}
 	if (m_GameObject)
 	{
@@ -315,7 +315,7 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Terrain")->GetPSO());
 	m_TerrainHeap->FirstUpdate(pd3dCommandList);
 
-	m_RootResource->UpdateShaderVariable(pd3dCommandList, m_pd3dGraphicsRootSignature, "World", SourcePtr(&matrix));
+	m_parameterForm->UpdateShaderVariable(pd3dCommandList, m_pd3dGraphicsRootSignature, "World", SourcePtr(&matrix));
 	m_Terrain->UpdateShaderVariables(pd3dCommandList); 
 
 	// TerrainMesh Render
@@ -328,7 +328,7 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	// 쉐이더 변수 설정
 	XMFLOAT4X4 xmf4x4World;
 	XMStoreFloat4x4(&xmf4x4World, XMMatrixTranspose(XMLoadFloat4x4(&m_GameObject->GetTransform().GetWorldMatrix())));
-	m_RootResource->UpdateShaderVariable(pd3dCommandList, m_pd3dGraphicsRootSignature, "World", SourcePtr(&xmf4x4World));
+	m_parameterForm->UpdateShaderVariable(pd3dCommandList, m_pd3dGraphicsRootSignature, "World", SourcePtr(&xmf4x4World));
 
 	// CubeMesh Render
 	Mesh* mesh = m_GameObject->GetComponent<Mesh>("Mesh");
@@ -376,8 +376,8 @@ ID3D12RootSignature* GameScene::CreateGraphicsRootSignature(ID3D12Device *pd3dDe
 	HRESULT hResult = S_FALSE;
 	ID3D12RootSignature* pd3dGraphicsRootSignature = nullptr;
 
-	D3D12_ROOT_PARAMETER pRootParameters[5];
-	m_RootResource = new ParameterForm(_countof(pRootParameters));
+	D3D12_ROOT_PARAMETER pRootParameters[7];
+	m_parameterForm = new ParameterForm(_countof(pRootParameters));
 
 	// 루트 상수
 	UINT World = 0;
@@ -390,29 +390,26 @@ ID3D12RootSignature* GameScene::CreateGraphicsRootSignature(ID3D12Device *pd3dDe
 	pRootParameters[0].Constants.ShaderRegister = 0;
 	pRootParameters[0].Constants.RegisterSpace = 0;
 	pRootParameters[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
-	m_RootResource->InsertResource(0, "World", pRootParameters[0]);
+	m_parameterForm->InsertResource(0, "World", pRootParameters[0]);
 
 	pRootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_32BIT_CONSTANTS;
 	pRootParameters[1].Constants.Num32BitValues = 32;
 	pRootParameters[1].Constants.ShaderRegister = 1;
 	pRootParameters[1].Constants.RegisterSpace = 0;
 	pRootParameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
-	m_RootResource->InsertResource(1, "ViewAndProjection", pRootParameters[0]);
+	m_parameterForm->InsertResource(1, "ViewAndProjection", pRootParameters[0]);
+	 
+	pRootParameters[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	pRootParameters[2].Descriptor.ShaderRegister = 2; //Materials
+	pRootParameters[2].Descriptor.RegisterSpace = 0;
+	pRootParameters[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+	m_parameterForm->InsertResource(2, "Materials", pRootParameters[2]);
 
-	//pRootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
-	//pRootParameters[1].Descriptor.ShaderRegister = 1; //Camera
-	//pRootParameters[1].Descriptor.RegisterSpace = 0;
-	//pRootParameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
-	// 
-	//pRootParameters[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
-	//pRootParameters[2].Descriptor.ShaderRegister = 3; //Materials
-	//pRootParameters[2].Descriptor.RegisterSpace = 0;
-	//pRootParameters[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
-
-	//pRootParameters[3].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
-	//pRootParameters[3].Descriptor.ShaderRegister = 4; //Lights
-	//pRootParameters[3].Descriptor.RegisterSpace = 0;
-	//pRootParameters[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+	pRootParameters[3].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	pRootParameters[3].Descriptor.ShaderRegister = 3; //Lights
+	pRootParameters[3].Descriptor.RegisterSpace = 0;
+	pRootParameters[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+	m_parameterForm->InsertResource(3, "Lights", pRootParameters[3]);
 
 
 	D3D12_DESCRIPTOR_RANGE pd3dDescriptorRanges[3];
@@ -436,21 +433,23 @@ ID3D12RootSignature* GameScene::CreateGraphicsRootSignature(ID3D12Device *pd3dDe
 	pd3dDescriptorRanges[2].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
 	// 다시 루프 패러미터 
-	pRootParameters[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	pRootParameters[2].DescriptorTable.NumDescriptorRanges = 1;
-	pRootParameters[2].DescriptorTable.pDescriptorRanges = &pd3dDescriptorRanges[0]; //gtxtexture
-	pRootParameters[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-
-	pRootParameters[3].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	pRootParameters[3].DescriptorTable.NumDescriptorRanges = 1;
-	pRootParameters[3].DescriptorTable.pDescriptorRanges = &pd3dDescriptorRanges[1];//t4: gtxtTerrainBaseTexture
-	pRootParameters[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-
 	pRootParameters[4].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
 	pRootParameters[4].DescriptorTable.NumDescriptorRanges = 1;
-	pRootParameters[4].DescriptorTable.pDescriptorRanges = &pd3dDescriptorRanges[2];
+	pRootParameters[4].DescriptorTable.pDescriptorRanges = &pd3dDescriptorRanges[0]; //gtxtexture
 	pRootParameters[4].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-	 
+	m_parameterForm->InsertResource(4, "Texture", pRootParameters[4]);
+
+	pRootParameters[5].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	pRootParameters[5].DescriptorTable.NumDescriptorRanges = 1;
+	pRootParameters[5].DescriptorTable.pDescriptorRanges = &pd3dDescriptorRanges[1];//t4: gtxtTerrainBaseTexture
+	pRootParameters[5].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	m_parameterForm->InsertResource(5, "TerrainBase", pRootParameters[5]);
+
+	pRootParameters[6].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	pRootParameters[6].DescriptorTable.NumDescriptorRanges = 1;
+	pRootParameters[6].DescriptorTable.pDescriptorRanges = &pd3dDescriptorRanges[2];
+	pRootParameters[6].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	m_parameterForm->InsertResource(6, "TerrainDetail", pRootParameters[6]);
 
 /*
 	pRootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
@@ -596,7 +595,7 @@ ID3D12RootSignature* GameScene::CreateGraphicsRootSignature(ID3D12Device *pd3dDe
 
 #ifdef CHECK_ROOT_SIGNATURE
 	// 루트 시그니처 셋팅
-	m_RootResource->SetRootSignature(pd3dGraphicsRootSignature);
+	m_parameterForm->SetRootSignature(pd3dGraphicsRootSignature);
 #endif // CHECK_ROOT_SIGNATURE
 
 	return (pd3dGraphicsRootSignature);

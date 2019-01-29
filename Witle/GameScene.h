@@ -50,7 +50,7 @@ public:
 	virtual void LastUpdate(float ElapsedTime) override;
 
 protected:
-	ParameterForm* m_RootResource{ nullptr };
+	ParameterForm* m_parameterForm{ nullptr };
 
 	Player* m_GameObject{ nullptr };
 	Terrain* m_Terrain{ nullptr };

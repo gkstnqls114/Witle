@@ -33,11 +33,11 @@ void ParameterForm::InsertResource(int parametersIndex, const std::string& name,
 		break;
 
 	case D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE: // 서술자 테이블
-
+		
 		break;
 
 	case D3D12_ROOT_PARAMETER_TYPE_CBV: // 상수 버퍼 뷰
-
+		
 		break;
 
 	case D3D12_ROOT_PARAMETER_TYPE_SRV:
@@ -52,7 +52,7 @@ void ParameterForm::InsertResource(int parametersIndex, const std::string& name,
 		break;
 	}
 
-	assert(!(value == nullptr));
+	// assert(!(value == nullptr));
 	m_resourceMap.insert(std::pair<std::string, int>(name, m_VectorIndex));
 	m_resourceVector[m_VectorIndex] = value;
 	m_VectorIndex += 1;
