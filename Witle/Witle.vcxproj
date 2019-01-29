@@ -172,6 +172,7 @@
     <ClInclude Include="MyRigidbody.h" />
     <ClInclude Include="MyStructs.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="QuadTreeTerrainMesh.h" />
     <ClInclude Include="ResourceBase.h" />
     <ClInclude Include="32bitRootConstants.h" />
     <ClInclude Include="RootResource.h" />
@@ -217,6 +218,7 @@
     <ClCompile Include="MyDescriptorHeap.cpp" />
     <ClCompile Include="MyRigidbody.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="QuadTreeTerrainMesh.cpp" />
     <ClCompile Include="ResourceBase.cpp" />
     <ClCompile Include="32bitRootConstants.cpp" />
     <ClCompile Include="RootResource.cpp" />

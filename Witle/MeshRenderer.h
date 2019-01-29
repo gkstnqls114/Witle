@@ -10,6 +10,7 @@ class MeshRenderer :
 private:
 	void RenderCubeMesh(ID3D12GraphicsCommandList * pd3dCommandList, Mesh* mesh);
 	void RenderTerrainMesh(ID3D12GraphicsCommandList * pd3dCommandList, Mesh* mesh);
+	void RenderQuadTreeTerrainMesh(ID3D12GraphicsCommandList * pd3dCommandList, Mesh* mesh);
 
 public:
 	MeshRenderer();

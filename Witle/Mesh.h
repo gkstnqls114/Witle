@@ -8,7 +8,7 @@ class Mesh :
 {
 protected:
 	// 위치 버퍼
-	UINT							m_VertexCount{ 0 }; // 인덱스 버퍼가 없을 경우 사용함
+	UINT							m_vertexCount{ 0 }; // 인덱스 버퍼가 없을 경우 사용함
 	XMFLOAT3						*m_pxmf3Positions{ nullptr };
 	ID3D12Resource					*m_pPositionBuffer{ nullptr };
 	ID3D12Resource					*m_pPositionUploadBuffer{ nullptr };
@@ -45,7 +45,7 @@ public:
 	
 
 	/////////////////////////////////////////////////////////////////////////// Get
-	UINT GetVertexCount() const { return m_VertexCount; }
+	UINT GetVertexCount() const { return m_vertexCount; }
 	ID3D12Resource* GetPositonBuffer() const { m_pPositionBuffer; }
 	ID3D12Resource* GetPositionUploadBuffer() const { m_pPositionUploadBuffer; }
 

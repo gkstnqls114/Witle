@@ -115,6 +115,9 @@
     <Filter Include="11.Event">
       <UniqueIdentifier>{3f9358d8-bf33-46cb-8896-0fad7507622f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.Component\Mesh\QuadTreeTerrainMesh">
+      <UniqueIdentifier>{711330f0-9106-4126-b083-880c2df6277b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -258,6 +261,9 @@
     <ClInclude Include="MyConstants.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="QuadTreeTerrainMesh.h">
+      <Filter>02.Component\Mesh\QuadTreeTerrainMesh</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -382,6 +388,9 @@
     </ClCompile>
     <ClCompile Include="Event.cpp">
       <Filter>11.Event</Filter>
+    </ClCompile>
+    <ClCompile Include="QuadTreeTerrainMesh.cpp">
+      <Filter>02.Component\Mesh\QuadTreeTerrainMesh</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -8,7 +8,7 @@ TerrainMesh::TerrainMesh(GameObject* pOwner, ID3D12Device * pd3dDevice, ID3D12Gr
 {
 	m_ComponenetID = TERRAIN_MESH;
 
-	m_VertexCount = nWidth * nLength;
+	m_vertexCount = nWidth * nLength;
 	//	m_nStride = sizeof(CTexturedVertex);
 	m_nStride = sizeof(CDiffused2TexturedVertex);
 	m_nOffset = 0;
@@ -19,8 +19,8 @@ TerrainMesh::TerrainMesh(GameObject* pOwner, ID3D12Device * pd3dDevice, ID3D12Gr
 	m_nLength = nLength;
 	m_xmf3Scale = xmf3Scale;
 
-	//	CTexturedVertex *pVertices = new CTexturedVertex[m_nVertices];
-	CDiffused2TexturedVertex *pVertices = new CDiffused2TexturedVertex[m_VertexCount];
+	//	CTexturedVertex *m_pVertices = new CTexturedVertex[m_nVertices];
+	m_pVertices = new CDiffused2TexturedVertex[m_vertexCount];
 
 	HeightMapImage *pHeightMapImage = (HeightMapImage *)pContext;
 	int cxHeightMap = pHeightMapImage->GetHeightMapWidth();
@@ -32,25 +32,23 @@ TerrainMesh::TerrainMesh(GameObject* pOwner, ID3D12Device * pd3dDevice, ID3D12Gr
 		for (int x = xStart; x < (xStart + nWidth); x++, i++)
 		{
 			fHeight = OnGetHeight(x, z, pContext);
-			pVertices[i].m_xmf3Position = XMFLOAT3((x*m_xmf3Scale.x), fHeight, (z*m_xmf3Scale.z));
-			pVertices[i].m_xmf4Diffuse = Vector4::Add(OnGetColor(x, z, pContext), xmf4Color);
-			pVertices[i].m_xmf2TexCoord0 = XMFLOAT2(float(x) / float(cxHeightMap - 1), float(czHeightMap - 1 - z) / float(czHeightMap - 1));
-			pVertices[i].m_xmf2TexCoord1 = XMFLOAT2(float(x) / float(m_xmf3Scale.x*0.5f), float(z) / float(m_xmf3Scale.z*0.5f));
+			m_pVertices[i].m_xmf3Position = XMFLOAT3((x*m_xmf3Scale.x), fHeight, (z*m_xmf3Scale.z));
+			m_pVertices[i].m_xmf4Diffuse = Vector4::Add(OnGetColor(x, z, pContext), xmf4Color);
+			m_pVertices[i].m_xmf2TexCoord0 = XMFLOAT2(float(x) / float(cxHeightMap - 1), float(czHeightMap - 1 - z) / float(czHeightMap - 1));
+			m_pVertices[i].m_xmf2TexCoord1 = XMFLOAT2(float(x) / float(m_xmf3Scale.x*0.5f), float(z) / float(m_xmf3Scale.z*0.5f));
 			if (fHeight < fMinHeight) fMinHeight = fHeight;
 			if (fHeight > fMaxHeight) fMaxHeight = fHeight;
 		}
 	}
 
-	m_pPositionBuffer = d3dUtil::CreateBufferResource(pd3dDevice, pd3dCommandList, pVertices, m_nStride * m_VertexCount, D3D12_HEAP_TYPE_DEFAULT, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, &m_pPositionUploadBuffer);
+	m_pPositionBuffer = d3dUtil::CreateBufferResource(pd3dDevice, pd3dCommandList, m_pVertices, m_nStride * m_vertexCount, D3D12_HEAP_TYPE_DEFAULT, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, &m_pPositionUploadBuffer);
 
 
 	m_pVertexBufferViews = new D3D12_VERTEX_BUFFER_VIEW;
 
 	m_pVertexBufferViews[0].BufferLocation = m_pPositionBuffer->GetGPUVirtualAddress();
 	m_pVertexBufferViews[0].StrideInBytes = m_nStride;
-	m_pVertexBufferViews[0].SizeInBytes = m_nStride * m_VertexCount;
-
-	delete[] pVertices;
+	m_pVertexBufferViews[0].SizeInBytes = m_nStride * m_vertexCount;
 
 	m_IndexCount = ((nWidth * 2)*(nLength - 1)) + ((nLength - 1) - 1);
 	UINT *pnIndices = new UINT[m_IndexCount];
@@ -88,6 +86,11 @@ TerrainMesh::TerrainMesh(GameObject* pOwner, ID3D12Device * pd3dDevice, ID3D12Gr
 
 TerrainMesh::~TerrainMesh()
 {
+	if (m_pVertices)
+	{
+		delete[] m_pVertices;
+		m_pVertices = nullptr;
+	}
 	if (m_pVertexBufferViews)
 	{
 		delete[] m_pVertexBufferViews;

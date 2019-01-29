@@ -35,6 +35,11 @@ void MeshRenderer::RenderTerrainMesh(ID3D12GraphicsCommandList * pd3dCommandList
 	
 }
 
+void MeshRenderer::RenderQuadTreeTerrainMesh(ID3D12GraphicsCommandList * pd3dCommandList, Mesh * mesh)
+{
+
+}
+
 MeshRenderer::MeshRenderer()
 {
 }
@@ -55,6 +60,10 @@ void MeshRenderer::Render(ID3D12GraphicsCommandList * pCommandList, Mesh * mesh)
 		RenderTerrainMesh(pCommandList, mesh);
 		break;
 
+	case MESH_TYPE_ID::QUADTREE_TERRAIN_MESH:
+		RenderQuadTreeTerrainMesh(pCommandList, mesh);
+		break;
+	
 	default:
 		break;
 	}
