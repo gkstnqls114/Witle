@@ -2,9 +2,9 @@
 
 class ResourceBase;
 
-// 루트 시그니처, 루트 패러미터를 통해 업데이트 해야할 리소스들
+// 루트 시그니처, 루트 패러미터를 통해 업데이트 해야할 리소스의 틀
 // 
-class RootResource
+class ParameterForm
 { 
 #ifdef CHECK_ROOT_SIGNATURE
 	ID3D12RootSignature* m_pRootSignature{ nullptr }; // 현재 사용하는 루트 시그니처와 맞는지 체크하기 위해 사용
@@ -19,8 +19,8 @@ private:
 
 public:
 	// 루트 시그니처의 크기 만큼 리소스를 가진다.
-	RootResource(int rootSignatureSize) :m_resourceVector(rootSignatureSize, nullptr) {};
-	~RootResource();
+	ParameterForm(int rootSignatureSize) :m_resourceVector(rootSignatureSize, nullptr) {};
+	~ParameterForm();
 
 	void ReleaseObjects();
 	void SetRootSignature(ID3D12RootSignature* rootsignature)

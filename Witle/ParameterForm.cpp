@@ -1,12 +1,12 @@
 #include "stdafx.h"
 #include "32bitRootConstants.h"
-#include "RootResource.h"
+#include "ParameterForm.h"
 
-RootResource::~RootResource()
+ParameterForm::~ParameterForm()
 {
 }
 
-void RootResource::ReleaseObjects()
+void ParameterForm::ReleaseObjects()
 {
 	for (int x = 0; x < m_resourceVector.size(); ++x)
 	{
@@ -21,7 +21,7 @@ void RootResource::ReleaseObjects()
 	}
 }
 
-void RootResource::InsertResource(int parametersIndex, const std::string& name, const D3D12_ROOT_PARAMETER & rootParameter)
+void ParameterForm::InsertResource(int parametersIndex, const std::string& name, const D3D12_ROOT_PARAMETER & rootParameter)
 {
 	assert(!(parametersIndex >= m_resourceVector.size())); // 만약 인덱스가 벡터의 크기보다 크다면 오류를 발생한다.
 	
@@ -58,7 +58,7 @@ void RootResource::InsertResource(int parametersIndex, const std::string& name, 
 	m_VectorIndex += 1;
 }
 
-void RootResource::UpdateShaderVariable(ID3D12GraphicsCommandList * commandList, ID3D12RootSignature * CurrentRootsignature, const std::string & name, const SourcePtr & resource)
+void ParameterForm::UpdateShaderVariable(ID3D12GraphicsCommandList * commandList, ID3D12RootSignature * CurrentRootsignature, const std::string & name, const SourcePtr & resource)
 {
 #ifdef CHECK_ROOT_SIGNATURE
 	assert(!(CurrentRootsignature != m_pRootSignature)); // 만약 같지 않다면 경고창을 띄운다.
@@ -68,7 +68,7 @@ void RootResource::UpdateShaderVariable(ID3D12GraphicsCommandList * commandList,
 	GetResource(name)->UpdateShaderVariables(commandList, resource);
 }
 
-void RootResource::UpdateShaderVariable(ID3D12GraphicsCommandList * commandList, ID3D12RootSignature * CurrentRootsignature, UINT index, const SourcePtr & resource)
+void ParameterForm::UpdateShaderVariable(ID3D12GraphicsCommandList * commandList, ID3D12RootSignature * CurrentRootsignature, UINT index, const SourcePtr & resource)
 {
 #ifdef CHECK_ROOT_SIGNATURE
 	assert(!(CurrentRootsignature != m_pRootSignature)); // 만약 같지 않다면 경고창을 띄운다.

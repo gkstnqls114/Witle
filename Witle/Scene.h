@@ -1,6 +1,6 @@
 #pragma once 
 
-class RootResource;
+class ParameterForm;
 
 class Scene
 {

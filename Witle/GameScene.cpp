@@ -12,7 +12,7 @@
 #include "Player.h"
 #include "CameraObject.h"
 #include "MyDescriptorHeap.h"
-#include "RootResource.h"
+#include "ParameterForm.h"
 #include "GameScene.h"
 
 #define _WITH_PLAYER_TOP
@@ -377,7 +377,7 @@ ID3D12RootSignature* GameScene::CreateGraphicsRootSignature(ID3D12Device *pd3dDe
 	ID3D12RootSignature* pd3dGraphicsRootSignature = nullptr;
 
 	D3D12_ROOT_PARAMETER pRootParameters[5];
-	m_RootResource = new RootResource(_countof(pRootParameters));
+	m_RootResource = new ParameterForm(_countof(pRootParameters));
 
 	// 루트 상수
 	UINT World = 0;

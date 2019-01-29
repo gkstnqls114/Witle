@@ -243,9 +243,6 @@
     <ClInclude Include="BasicCam.h">
       <Filter>02.Component\Camera\BasicCam</Filter>
     </ClInclude>
-    <ClInclude Include="RootResource.h">
-      <Filter>07.Resource\RootResource</Filter>
-    </ClInclude>
     <ClInclude Include="SourcePtr.h">
       <Filter>07.Resource</Filter>
     </ClInclude>
@@ -263,6 +260,9 @@
     </ClInclude>
     <ClInclude Include="QuadTreeTerrainMesh.h">
       <Filter>02.Component\Mesh\QuadTreeTerrainMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="ParameterForm.h">
+      <Filter>07.Resource\RootResource</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -377,9 +377,6 @@
     <ClCompile Include="BasicCam.cpp">
       <Filter>02.Component\Camera\BasicCam</Filter>
     </ClCompile>
-    <ClCompile Include="RootResource.cpp">
-      <Filter>07.Resource\RootResource</Filter>
-    </ClCompile>
     <ClCompile Include="SourcePtr.cpp">
       <Filter>99.etc</Filter>
     </ClCompile>
@@ -391,6 +388,9 @@
     </ClCompile>
     <ClCompile Include="QuadTreeTerrainMesh.cpp">
       <Filter>02.Component\Mesh\QuadTreeTerrainMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="ParameterForm.cpp">
+      <Filter>07.Resource\RootResource</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

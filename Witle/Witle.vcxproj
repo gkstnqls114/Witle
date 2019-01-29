@@ -175,7 +175,7 @@
     <ClInclude Include="QuadTreeTerrainMesh.h" />
     <ClInclude Include="ResourceBase.h" />
     <ClInclude Include="32bitRootConstants.h" />
-    <ClInclude Include="RootResource.h" />
+    <ClInclude Include="ParameterForm.h" />
     <ClInclude Include="ShaderManager.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Resource.h" />
@@ -221,7 +221,7 @@
     <ClCompile Include="QuadTreeTerrainMesh.cpp" />
     <ClCompile Include="ResourceBase.cpp" />
     <ClCompile Include="32bitRootConstants.cpp" />
-    <ClCompile Include="RootResource.cpp" />
+    <ClCompile Include="ParameterForm.cpp" />
     <ClCompile Include="ShaderManager.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Scene.cpp" />
