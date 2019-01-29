@@ -176,6 +176,7 @@
     <ClInclude Include="ResourceBase.h" />
     <ClInclude Include="32bitRootConstants.h" />
     <ClInclude Include="ParameterForm.h" />
+    <ClInclude Include="RootConstantBuffer.h" />
     <ClInclude Include="ShaderManager.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Resource.h" />
@@ -222,6 +223,7 @@
     <ClCompile Include="ResourceBase.cpp" />
     <ClCompile Include="32bitRootConstants.cpp" />
     <ClCompile Include="ParameterForm.cpp" />
+    <ClCompile Include="RootConstantBuffer.cpp" />
     <ClCompile Include="ShaderManager.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Scene.cpp" />

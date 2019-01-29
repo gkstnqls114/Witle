@@ -118,6 +118,9 @@
     <Filter Include="HLSL">
       <UniqueIdentifier>{8071701e-797b-47cb-9dab-2e0e157a4b18}</UniqueIdentifier>
     </Filter>
+    <Filter Include="07.Resource\RootConstantBuffer">
+      <UniqueIdentifier>{20c205d1-00e0-4b84-b74c-bc21a2ca6598}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -264,6 +267,9 @@
     <ClInclude Include="ParameterForm.h">
       <Filter>07.Resource\ParameterForm</Filter>
     </ClInclude>
+    <ClInclude Include="RootConstantBuffer.h">
+      <Filter>07.Resource\RootConstantBuffer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -391,6 +397,9 @@
     </ClCompile>
     <ClCompile Include="ParameterForm.cpp">
       <Filter>07.Resource\ParameterForm</Filter>
+    </ClCompile>
+    <ClCompile Include="RootConstantBuffer.cpp">
+      <Filter>07.Resource\RootConstantBuffer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
