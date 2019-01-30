@@ -1,5 +1,7 @@
 #include "stdafx.h"
+#include "d3dUtil.h"
 #include "TerrainMesh.h" 
+#include "HeightMapImage.h"
 #include "QuadTreeTerrainMesh.h"
 
 UINT QuadTreeTerrainMesh::CalculateTriangles(UINT widthPixel, UINT lengthPixel)
@@ -7,6 +9,42 @@ UINT QuadTreeTerrainMesh::CalculateTriangles(UINT widthPixel, UINT lengthPixel)
 	assert(!(widthPixel != lengthPixel));
 	
 	return (widthPixel - 1) * (lengthPixel -1) * 2;
+}
+
+void QuadTreeTerrainMesh::RecursiveCreateTerrain(QUAD_TREE_NODE * node, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, int xStart, int zStart, int nWidth, int nLength, HeightMapImage * pContext)
+{
+	assert(!(nWidth < 3));
+	assert(!(nWidth / 2 != 0));
+	assert(!(nLength < 3));
+	assert(!(nLength / 2 != 0));
+
+	if (nWidth <= m_widthMin || nLength <= m_lengthMin) // 마지막 리프 노드
+	{
+		// 터레인을 생성한다.
+		node->terrainMesh = new TerrainMesh(m_pOwner, pd3dDevice, pd3dCommandList, xStart, zStart, nWidth, nLength, m_xmf3Scale, m_xmf4Color, pContext);
+	}
+	else
+	{
+		// 자식을 만들어야 한다.
+		for (int z = 0, zStart = 0; z < czBlocks; z++)
+		{
+			for (int x = 0, xStart = 0; x < cxBlocks; x++)
+			{
+				xStart = x * (nBlockWidth - 1);
+				zStart = z * (nBlockLength - 1);
+			}
+		}
+		for (int x = 0; x < QUAD; ++x)
+		{
+			node->nodes[x] = new QUAD_TREE_NODE();
+			RecursiveCreateTerrain(node->nodes[x], pd3dDevice, pd3dCommandList, xStart, zStart, nWidth / 2, nLength / 2, pContext);
+		}
+	}
+}
+
+UINT QuadTreeTerrainMesh::CalculateVertex(UINT widht, UINT length)
+{
+	return (widht* length);
 }
 
 bool QuadTreeTerrainMesh::IsCheckTriangleCount(NODE_TYPE* node, UINT numTriangles)
@@ -33,52 +71,6 @@ bool QuadTreeTerrainMesh::IsCheckTriangleCount(NODE_TYPE* node, UINT numTriangle
 	}
 
 	return false;
-}
- 
-INFO QuadTreeTerrainMesh::CalculateMeshDimensions(int vertexCount)
-{
-	// 메쉬의 중심 위치를 0으로 초기화합니다.
-	float centerX = 0.0f;
-	float centerZ = 0.0f;
-
-	// 메쉬의 모든 정점을 합친다.
-	for (int i = 0; i < vertexCount; i++)
-	{
-		centerX += m_vertexList[i].m_xmf3Position.x;
-		centerZ += m_vertexList[i].m_xmf3Position.z;
-	}
-
-	// 그리고 메쉬의 중간 점을 찾기 위해 정점의 수로 나눕니다.
-	centerX = centerX / (float)vertexCount;
-	centerZ = centerZ / (float)vertexCount;
-
-	// 메쉬의 최대 및 최소 크기를 초기화합니다.
-	float maxWidth = 0.0f;
-	float maxDepth = 0.0f;
-
-	float minWidth = fabsf(m_vertexList[0].m_xmf3Position.x - centerX);
-	float minDepth = fabsf(m_vertexList[0].m_xmf3Position.z - centerZ);
-
-	// 모든 정점을 살펴보고 메쉬의 최대 너비와 최소 너비와 깊이를 찾습니다.
-	for (int i = 0; i < vertexCount; i++)
-	{
-		float width = fabsf(m_vertexList[i].m_xmf3Position.x - centerX);
-		float depth = fabsf(m_vertexList[i].m_xmf3Position.z - centerZ);
-
-		if (width > maxWidth) { maxWidth = width; }
-		if (depth > maxDepth) { maxDepth = depth; }
-		if (width < minWidth) { minWidth = width; }
-		if (depth < minDepth) { minDepth = depth; }
-	}
-
-	// 최소와 최대 깊이와 너비 사이의 절대 최대 값을 찾습니다.
-	float maxX = (float)max(fabs(minWidth), fabs(maxWidth));
-	float maxZ = (float)max(fabs(minDepth), fabs(maxDepth));
-
-	// 메쉬의 최대 직경을 계산합니다.
-	float meshWidth = max(maxX, maxZ) * 2.0f;
-
-	return INFO{ centerX, centerZ, meshWidth };
 }
 
 void QuadTreeTerrainMesh::CreateTreeNode(NODE_TYPE* node, float positionX, float positionZ, float width, float length, ID3D12Device* device)
@@ -201,17 +193,40 @@ void QuadTreeTerrainMesh::ReleaseNode(NODE_TYPE * node)
 	}
 }
 
-QuadTreeTerrainMesh::QuadTreeTerrainMesh(GameObject* pOwner)
-	: Mesh(pOwner)
+QuadTreeTerrainMesh::QuadTreeTerrainMesh(GameObject * pOwner, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, int nWidth, int nLength, XMFLOAT3 xmf3Scale, XMFLOAT4 xmf4Color, HeightMapImage * pContext)
+	: ComponentBase(pOwner)
 {
 	m_ComponenetID = MESH_TYPE_ID::QUADTREE_TERRAIN_MESH;
 
-}
+	m_widthTotal = nWidth;
+	m_lengthTotal = nLength;
+	m_xmf3Scale = xmf3Scale;
+	m_xmf4Color = xmf4Color;
 
-QuadTreeTerrainMesh::QuadTreeTerrainMesh(const QuadTreeTerrainMesh & other)
-	:Mesh(other.m_pOwner)
-{
+	HeightMapImage *pHeightMapImage = (HeightMapImage *)pContext;
+	int cxHeightMap = pHeightMapImage->GetHeightMapWidth();
+	int czHeightMap = pHeightMapImage->GetHeightMapLength();
 
+	// 쿼드 트리의 부모 노드를 만듭니다.
+	m_pRootNode = new QUAD_TREE_NODE;
+
+
+	long cxBlocks = (m_nWidth - 1) / cxQuadsPerBlock;
+	long czBlocks = (m_nLength - 1) / czQuadsPerBlock;
+
+	TerrainMesh *pterrainMesh = NULL;
+	for (int z = 0, zStart = 0; z < czBlocks; z++)
+	{
+		for (int x = 0, xStart = 0; x < cxBlocks; x++)
+		{
+			xStart = x * (nBlockWidth - 1);
+			zStart = z * (nBlockLength - 1);
+			pterrainMesh = new TerrainMesh(m_pOwner, pd3dDevice, pd3dCommandList, xStart, zStart, nBlockWidth, nBlockLength, xmf3Scale, xmf4Color, pHeightMapImage);
+			// SetMesh(x + (z*cxBlocks), pHeightMapGridMesh);
+		}
+	}
+
+	RecursiveCreateTerrain(m_pRootNode, pd3dDevice, pd3dCommandList, 0, 0, m_widthTotal, m_widthTotal, pContext);
 }
 
 QuadTreeTerrainMesh::~QuadTreeTerrainMesh()
@@ -221,38 +236,7 @@ QuadTreeTerrainMesh::~QuadTreeTerrainMesh()
 
 bool QuadTreeTerrainMesh::Initialize(TerrainMesh * pTerrain, ID3D12Device * pd3dDevice)
 {
-	// 지형 정점 배열의 모든 정점 수를 가져옵니다.
-	int vertexCount = pTerrain->GetVertexCount();
-	int terrainWidth = pTerrain->GetWidth();
-	int terrainlength = pTerrain->GetLength();
-	assert(!(terrainWidth != terrainlength)); // width, length 가 같은 경우에만 사용
 
-	// 정점리스트의 총 삼각형 수를 저장합니다.
-	m_triangleCount = CalculateTriangles(terrainWidth - 1, terrainlength - 1); // width - 1 = 픽셀 width
-
-	m_vertexList = new CDiffused2TexturedVertex[vertexCount];
-	if (!m_vertexList) return false;
-	 
-	// 지형 정점을 정점 목록에 복사합니다.
-	pTerrain->CopyVertexArray(SourcePtr(m_vertexList));
-
-	// 중심 x, z와 메쉬의 너비를 계산합니다.
-	INFO value = CalculateMeshDimensions(vertexCount);
-
-	// 쿼드 트리의 부모 노드를 만듭니다.
-	m_parentNode = new NODE_TYPE;
-	if (!m_parentNode) return false;
-
-	// 정점 목록 데이터와 메쉬 차원을 기반으로 쿼드 트리를 재귀 적으로 빌드합니다.
-	CreateTreeNode(m_parentNode, value.centerX, value.centerZ, value.meshWidth, 0.f, pd3dDevice);
-
-	// 쿼드 트리가 각 노드에 정점을 갖기 때문에 정점 목록을 놓습니다.
-	if (m_vertexList)
-	{
-		delete[] m_vertexList;
-		m_vertexList = 0;
-	}
-	return false;
 }
 
 void QuadTreeTerrainMesh::ReleaseUploadBuffers()
