@@ -13,11 +13,20 @@ struct INFO
 	float meshWidth; //매쉬의 최대 직경
 };
 
+struct QUAD_TREE_NODE
+{
+	UINT triangleCount{ 0 };
+	TerrainMesh* terrainMesh{ nullptr };
+	QUAD_TREE_NODE* nodes[QUAD]{ nullptr,  nullptr , nullptr , nullptr };
+};
+
 class QuadTreeTerrainMesh
 	: public Mesh
 {
-private: 
+private:
+	QUAD_TREE_NODE* m_pRootNode{ nullptr };
 
+private: 
 	struct NODE_TYPE
 	{
 		float positionX, positionZ, width, length;
