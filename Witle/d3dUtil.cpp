@@ -4,6 +4,7 @@
 #include "d3dUtil.h"
 
 UINT d3dUtil::gnCbvSrvDescriptorIncrementSize = 0;
+int d3dUtil::gTEST = 0;
 
 d3dUtil::d3dUtil()
 {

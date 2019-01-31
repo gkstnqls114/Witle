@@ -634,6 +634,7 @@ void CGameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPA
 
 LRESULT CGameFramework::OnProcessingWindowMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam)
 {
+
 	switch (nMessageID)
 	{
 	case WM_ACTIVATE:
@@ -665,7 +666,18 @@ LRESULT CGameFramework::OnProcessingWindowMessage(HWND hWnd, UINT nMessageID, WP
 		OnProcessingMouseMessage(hWnd, nMessageID, wParam, lParam);
 		break;
 
-	case WM_KEYDOWN:
+	case WM_KEYDOWN: 
+		switch (wParam) {
+		case 'A':
+		case 'a':
+			d3dUtil::gTEST -= 1;
+			break;
+
+		case 'S':
+		case 's':
+			d3dUtil::gTEST += 1;
+			break;
+		}
 	case WM_KEYUP:
 		OnProcessingKeyboardMessage(hWnd, nMessageID, wParam, lParam);
 		break;

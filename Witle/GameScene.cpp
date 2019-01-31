@@ -14,6 +14,7 @@
 #include "QuadTreeTerrainMesh.h"
 #include "MyDescriptorHeap.h"
 #include "ParameterForm.h"
+#include "d3dUtil.h"
 #include "GameScene.h"
 
 #define _WITH_PLAYER_TOP
@@ -51,10 +52,7 @@ bool GameScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM w
 		}
 		break;
 	case WM_KEYDOWN:
-		switch (wParam) {
-//
-		case 'a':
-			break;
+		switch (wParam) { 
 //#ifdef _DEBUG
 //		case KEY_A:
 //			m_Camera->Move(Vector3::ScalarProduct(m_Camera->GetRightVector(), -100));
@@ -326,10 +324,10 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	//gMeshRenderer.Render(pd3dCommandList, terrainMesh);
 
 	//QuadTreeTerrain test Render
-	gMeshRenderer.Render(pd3dCommandList, (m_TESTQuadTree->GetRootNode()->nodes[0]->terrainMesh));
-	gMeshRenderer.Render(pd3dCommandList, (m_TESTQuadTree->GetRootNode()->nodes[1]->terrainMesh));
-	gMeshRenderer.Render(pd3dCommandList, (m_TESTQuadTree->GetRootNode()->nodes[2]->terrainMesh));
-	gMeshRenderer.Render(pd3dCommandList, (m_TESTQuadTree->GetRootNode()->nodes[3]->terrainMesh));
+	if(d3dUtil::gTEST == 0) gMeshRenderer.Render(pd3dCommandList, (m_TESTQuadTree->GetRootNode()->nodes[0]->terrainMesh));
+	if (d3dUtil::gTEST == 1) gMeshRenderer.Render(pd3dCommandList, (m_TESTQuadTree->GetRootNode()->nodes[1]->terrainMesh));
+	if (d3dUtil::gTEST == 2)gMeshRenderer.Render(pd3dCommandList, (m_TESTQuadTree->GetRootNode()->nodes[2]->terrainMesh));
+	if (d3dUtil::gTEST == 3)gMeshRenderer.Render(pd3dCommandList, (m_TESTQuadTree->GetRootNode()->nodes[3]->terrainMesh));
 
 	// PSO ¼³Á¤
 	pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Cube")->GetPSO());
