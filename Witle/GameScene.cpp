@@ -323,7 +323,13 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 
 	// TerrainMesh Render
 	Mesh* terrainMesh = m_Terrain->GetComponent<Mesh>("TerrainMesh");
-	gMeshRenderer.Render(pd3dCommandList, terrainMesh);
+	//gMeshRenderer.Render(pd3dCommandList, terrainMesh);
+
+	//QuadTreeTerrain test Render
+	gMeshRenderer.Render(pd3dCommandList, (m_TESTQuadTree->GetRootNode()->nodes[0]->terrainMesh));
+	gMeshRenderer.Render(pd3dCommandList, (m_TESTQuadTree->GetRootNode()->nodes[1]->terrainMesh));
+	gMeshRenderer.Render(pd3dCommandList, (m_TESTQuadTree->GetRootNode()->nodes[2]->terrainMesh));
+	gMeshRenderer.Render(pd3dCommandList, (m_TESTQuadTree->GetRootNode()->nodes[3]->terrainMesh));
 
 	// PSO ¼³Á¤
 	pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Cube")->GetPSO());

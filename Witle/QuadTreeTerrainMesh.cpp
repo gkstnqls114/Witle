@@ -42,8 +42,9 @@ void QuadTreeTerrainMesh::RecursiveCreateTerrain(QUAD_TREE_NODE * node, ID3D12De
 				xStart = x * (nBlockWidth - 1);
 				zStart = z * (nBlockLength - 1);
 
-				node->nodes[index++] = new QUAD_TREE_NODE();
-				RecursiveCreateTerrain(node->nodes[x], pd3dDevice, pd3dCommandList, xStart, zStart, nWidth, nLength, cxQuadsPerBlock / 2 + 1, czQuadsPerBlock / 2 + 1, pContext);
+				node->nodes[index] = new QUAD_TREE_NODE();
+				RecursiveCreateTerrain(node->nodes[index], pd3dDevice, pd3dCommandList, xStart, zStart, nWidth, nLength, cxQuadsPerBlock / 2 + 1, czQuadsPerBlock / 2 + 1, pContext);
+				index += 1;
 			}
 		}
 
