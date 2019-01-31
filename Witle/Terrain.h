@@ -45,4 +45,5 @@ public:
 	float GetLength() const { return(m_nLength * m_xmf3Scale.z); }
 
 	Texture* GetTexture() const { return m_ResourceBase; }
+	HeightMapImage* GetHeightMapImage() { return m_pHeightMapImage; }
 };

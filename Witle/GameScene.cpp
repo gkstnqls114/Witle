@@ -11,6 +11,7 @@
 #include "GameInput.h"
 #include "Player.h"
 #include "CameraObject.h"
+#include "QuadTreeTerrainMesh.h"
 #include "MyDescriptorHeap.h"
 #include "ParameterForm.h"
 #include "GameScene.h"
@@ -131,8 +132,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	// 카메라
 	m_Camera = new CameraObject("Camera");
 	Camera* cameraComponent = new FollowCam(m_Camera, m_GameObject);
-	cameraComponent->SetOffset(XMFLOAT3(0, -5.f, 10.f));
-	// cameraComponent->SetOffset(XMFLOAT3(0, -30.f, 50.f));
+	cameraComponent->SetOffset(XMFLOAT3(0, -5.f, 10.f)); 
 	
 	m_Camera->ChangeCamera(cameraComponent);
 
@@ -140,6 +140,9 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	cameraComponent->SetScissorRect(0, 0, FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT);
 	cameraComponent->GenerateProjectionMatrix(0.01f, CAMERA_FAR, float(FRAME_BUFFER_WIDTH) / float(FRAME_BUFFER_HEIGHT), 60.0f);
 
+	//테스트 쿼드트리 터레인 생성
+	m_TESTQuadTree = new QuadTreeTerrainMesh(m_gameobject, pd3dDevice, pd3dCommandList, 257, 257,
+		xmf3Scale, xmf4Color, m_Terrain->GetHeightMapImage());
 }
 
 void GameScene::ReleaseObjects()

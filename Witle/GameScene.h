@@ -12,6 +12,10 @@ class MyDescriptorHeap;
 class CameraObject;
 class Player;
 class Terrain;
+class GameObject;
+
+class QuadTreeTerrainMesh;
+
 struct LIGHTS;
 struct LIGHT;
 struct MATERIAL;
@@ -50,25 +54,27 @@ public:
 	virtual void LastUpdate(float ElapsedTime) override;
 
 protected:
-	ParameterForm* m_parameterForm{ nullptr };
+	ParameterForm*          m_parameterForm{ nullptr };
 
-	Player* m_GameObject{ nullptr };
-	Terrain* m_Terrain{ nullptr };
-	MyDescriptorHeap* m_TerrainHeap{ nullptr };
-	CameraObject* m_Camera{ nullptr };
+	Player*                 m_GameObject{ nullptr };
+	Terrain*                m_Terrain{ nullptr };
+	MyDescriptorHeap*       m_TerrainHeap{ nullptr };
+	CameraObject*           m_Camera{ nullptr };
 
-	XMFLOAT4X4 matrix{ Matrix4x4::Identity() };
+	XMFLOAT4X4              matrix{ Matrix4x4::Identity() };
 
 	//////////////////////////////////////  조명
-	LIGHTS						*m_pLights = NULL;
+	LIGHTS						*m_pLights{ nullptr };
 
-	ID3D12Resource				*m_pd3dcbLights = NULL;
-	LIGHTS						*m_pcbMappedLights = NULL;
+	ID3D12Resource				*m_pd3dcbLights{ nullptr };
+	LIGHTS						*m_pcbMappedLights{ nullptr };
 
-	MATERIALS					*m_pMaterials = NULL;
+	MATERIALS					*m_pMaterials{ nullptr };
 
-	ID3D12Resource				*m_pd3dcbMaterials = NULL;
-	MATERIAL					*m_pcbMappedMaterials = NULL;
+	ID3D12Resource				*m_pd3dcbMaterials{ nullptr };
+	MATERIAL					*m_pcbMappedMaterials{ nullptr };
 	//////////////////////////////////////  조명
 
+	GameObject *m_gameobject;
+	QuadTreeTerrainMesh         *m_TESTQuadTree{ nullptr };
 };

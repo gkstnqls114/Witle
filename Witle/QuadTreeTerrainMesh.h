@@ -36,45 +36,28 @@ private:
 
 	QUAD_TREE_NODE* m_pRootNode{ nullptr };
 
-private: 
-	struct NODE_TYPE
-	{
-		float positionX, positionZ, width, length;
-		int triangleCount;
-		ID3D12Resource * vertexBuffer;
-		ID3D12Resource * indexBuffer; 
-		NODE_TYPE* nodes[QUAD];
-	};
+private:  
 
 	// 해당 함수를 재귀적으로 호출하며 터레인을 생성하는 함수입니다.
-	void RecursiveCreateTerrain(QUAD_TREE_NODE* node, ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, int xStart, int zStart, int nWidth, int nLength, HeightMapImage *pContext = NULL);
+	void RecursiveCreateTerrain(QUAD_TREE_NODE* node, ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, 
+		int xStart, int zStart, int nWidth, int nLength, int nBlockWidth, int nBlockLength,
+		HeightMapImage *pContext = NULL);
 
 	UINT CalculateVertex(UINT widht, UINT length);
 	UINT CalculateTriangles(UINT widthPixel, UINT lengthPixel);
 
-	bool IsCheckTriangleCount(NODE_TYPE* node, UINT numTriangles); 
-	
 private:
-	void CreateTreeNode(NODE_TYPE*, float, float, float, float, ID3D12Device*);
-	void ReleaseNode(NODE_TYPE*);
-	// void RenderNode(NODE_TYPE*, FrustumClass*, ID3D11DeviceContext*, TerrainShaderClass*);
 
 public:
 	QuadTreeTerrainMesh(GameObject* pOwner, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, int nWidth, int nLength, XMFLOAT3 xmf3Scale = XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT4 xmf4Color = XMFLOAT4(1.0f, 1.0f, 0.0f, 0.0f), HeightMapImage *pContext = NULL);
 	virtual ~QuadTreeTerrainMesh();
 
-	virtual void Create() = 0;
-	virtual void Init() = 0;
-
-	bool Initialize(TerrainMesh* pQuadTerrain, ID3D12Device* pd3dDevice);
 	void ReleaseUploadBuffers(); 
 
-	UINT GetDrawCount() const { return m_drawCount; };
+	virtual void Update(float fTimeElapsed) override {};
+
+	const QUAD_TREE_NODE* GetRootNode() const { return m_pRootNode; }
 
 private: 
-	UINT m_triangleCount{ 0 };
-	UINT m_drawCount{ 0 };
-	CDiffused2TexturedVertex* m_vertexList = nullptr;
-	NODE_TYPE* m_parentNode = nullptr;
 
 };
