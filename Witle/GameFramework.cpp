@@ -671,11 +671,13 @@ LRESULT CGameFramework::OnProcessingWindowMessage(HWND hWnd, UINT nMessageID, WP
 		case 'A':
 		case 'a':
 			d3dUtil::gTEST -= 1;
+			std::cout << d3dUtil::gTEST << std::endl;
 			break;
 
 		case 'S':
 		case 's':
 			d3dUtil::gTEST += 1;
+			std::cout << d3dUtil::gTEST << std::endl;
 			break;
 		}
 	case WM_KEYUP:

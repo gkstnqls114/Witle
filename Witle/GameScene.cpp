@@ -328,6 +328,14 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	if (d3dUtil::gTEST == 1) gMeshRenderer.Render(pd3dCommandList, (m_TESTQuadTree->GetRootNode()->nodes[1]->terrainMesh));
 	if (d3dUtil::gTEST == 2)gMeshRenderer.Render(pd3dCommandList, (m_TESTQuadTree->GetRootNode()->nodes[2]->terrainMesh));
 	if (d3dUtil::gTEST == 3)gMeshRenderer.Render(pd3dCommandList, (m_TESTQuadTree->GetRootNode()->nodes[3]->terrainMesh));
+	if (d3dUtil::gTEST == 4)
+	{
+		gMeshRenderer.Render(pd3dCommandList, (m_TESTQuadTree->GetRootNode()->nodes[0]->terrainMesh));
+		gMeshRenderer.Render(pd3dCommandList, (m_TESTQuadTree->GetRootNode()->nodes[1]->terrainMesh));
+		gMeshRenderer.Render(pd3dCommandList, (m_TESTQuadTree->GetRootNode()->nodes[2]->terrainMesh));
+		gMeshRenderer.Render(pd3dCommandList, (m_TESTQuadTree->GetRootNode()->nodes[3]->terrainMesh));
+	}
+
 
 	// PSO ¼³Á¤
 	pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Cube")->GetPSO());
