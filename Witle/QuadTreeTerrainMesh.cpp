@@ -14,7 +14,7 @@ UINT QuadTreeTerrainMesh::CalculateTriangles(UINT widthPixel, UINT lengthPixel)
 }
 
 void QuadTreeTerrainMesh::RecursiveCreateTerrain(QUAD_TREE_NODE * node, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, 
-	int xStart, int zStart, int nWidth, int nLength, int nBlockWidth, int nBlockLength,
+	int xStart, int zStart, int nBlockWidth, int nBlockLength,
 	HeightMapImage * pContext)
 {
 	assert(!(m_widthMin < 3));
@@ -28,9 +28,7 @@ void QuadTreeTerrainMesh::RecursiveCreateTerrain(QUAD_TREE_NODE * node, ID3D12De
 		node->numCreate = num;
 		node->terrainMesh = new TerrainMesh(m_pOwner, pd3dDevice, pd3dCommandList, xStart, zStart, m_widthMin, m_lengthMin, m_xmf3Scale, m_xmf4Color, pContext);
 
-		printf("index: %d (%d , %d , %d , %d , %d , %d)\n", num++, xStart, zStart, nWidth, nLength, nBlockWidth, nBlockLength);
-		printf("생성된 지형 크기: %d , %d\n\n", nBlockWidth, nBlockLength);
-
+		printf("소지형 %d 번째 생성... 생성된 지형크기: %d X %d (%d, %d 에서 시작)\n", num++, nBlockWidth, nBlockLength, xStart, zStart);
 	}
 	else
 	{
@@ -40,7 +38,6 @@ void QuadTreeTerrainMesh::RecursiveCreateTerrain(QUAD_TREE_NODE * node, ID3D12De
 		int Next_BlockWidth = cxQuadsPerBlock / 2 + 1;
 		int Next_BlockLength = czQuadsPerBlock / 2 + 1;
 
-		static int first_num = 0;
 		int index = 0;
 
 		for (int z = 0; z < 2; z++)
@@ -50,14 +47,11 @@ void QuadTreeTerrainMesh::RecursiveCreateTerrain(QUAD_TREE_NODE * node, ID3D12De
 				int New_xStart = xStart + x * (Next_BlockWidth - 1);
 				int New_zStart = zStart + z * (Next_BlockLength - 1);
 
-				printf("\n%d .. %d \n ", first_num, index);
 				node->children[index] = new QUAD_TREE_NODE(); 
-				RecursiveCreateTerrain(node->children[index], pd3dDevice, pd3dCommandList, New_xStart, New_zStart, nWidth, nLength, Next_BlockWidth, Next_BlockLength, pContext);
+				RecursiveCreateTerrain(node->children[index], pd3dDevice, pd3dCommandList, New_xStart, New_zStart, Next_BlockWidth, Next_BlockLength, pContext);
 				index += 1;
 			}
 		}
-
-		first_num += 1;
 	}
 }
 
@@ -83,7 +77,7 @@ QuadTreeTerrainMesh::QuadTreeTerrainMesh(GameObject * pOwner, ID3D12Device * pd3
 	// 쿼드 트리의 부모 노드를 만듭니다.
 	m_pRootNode = new QUAD_TREE_NODE;
 
-	RecursiveCreateTerrain(m_pRootNode, pd3dDevice, pd3dCommandList, 0, 0, m_widthTotal, m_lengthTotal, m_widthTotal, m_lengthTotal, pContext);
+	RecursiveCreateTerrain(m_pRootNode, pd3dDevice, pd3dCommandList, 0, 0, m_widthTotal, m_lengthTotal, pContext);
 }
 
 QuadTreeTerrainMesh::~QuadTreeTerrainMesh()
