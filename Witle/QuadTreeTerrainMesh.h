@@ -16,6 +16,7 @@ struct INFO
 
 struct QUAD_TREE_NODE
 {
+	UINT numCreate{ 0 };
 	UINT triangleCount{ 0 };
 	Mesh* terrainMesh{ nullptr };
 	QUAD_TREE_NODE* nodes[QUAD]{ nullptr,  nullptr , nullptr , nullptr };

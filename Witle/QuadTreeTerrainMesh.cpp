@@ -25,10 +25,12 @@ void QuadTreeTerrainMesh::RecursiveCreateTerrain(QUAD_TREE_NODE * node, ID3D12De
 	{
 		// 터레인을 생성한다.
 		static int num = 0;
+		node->numCreate = num;
+		node->terrainMesh = new TerrainMesh(m_pOwner, pd3dDevice, pd3dCommandList, xStart, zStart, m_widthMin, m_lengthMin, m_xmf3Scale, m_xmf4Color, pContext);
+
 		printf("index: %d (%d , %d , %d , %d , %d , %d)\n", num++, xStart, zStart, nWidth, nLength, nBlockWidth, nBlockLength);
 		printf("생성된 지형 크기: %d , %d\n\n", m_widthMin, m_lengthMin);
 
-		node->terrainMesh = new TerrainMesh(m_pOwner, pd3dDevice, pd3dCommandList, xStart, zStart, m_widthMin, m_lengthMin, m_xmf3Scale, m_xmf4Color, pContext);
 	}
 	else
 	{
@@ -136,7 +138,7 @@ void QuadTreeTerrainMesh::TESTRender(const QUAD_TREE_NODE* node, ID3D12GraphicsC
 
 	if (node->terrainMesh)
 	{
-		gMeshRenderer.Render(pd3dCommandList, node->terrainMesh);
+		if(d3dUtil::gTEST == node->numCreate) gMeshRenderer.Render(pd3dCommandList, node->terrainMesh);
 	}
 	else
 	{
