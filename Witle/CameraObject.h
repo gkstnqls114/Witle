@@ -29,4 +29,5 @@ public:
 	void ChangeCamera(Camera* pNewCamera);
 
 	Camera* GetCamera() const { return m_pCameraComponent; }
+	MyFrustum* GetFrustum() const { return m_pFrustum; }
 };

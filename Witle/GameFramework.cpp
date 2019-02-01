@@ -668,14 +668,14 @@ LRESULT CGameFramework::OnProcessingWindowMessage(HWND hWnd, UINT nMessageID, WP
 
 	case WM_KEYDOWN: 
 		switch (wParam) {
-		case 'A':
-		case 'a':
+		case 'Z':
+		case 'z':
 			d3dUtil::gTEST -= 1;
 			std::cout << d3dUtil::gTEST << std::endl;
 			break;
 
-		case 'S':
-		case 's':
+		case 'X':
+		case 'x':
 			d3dUtil::gTEST += 1;
 			std::cout << d3dUtil::gTEST << std::endl;
 			break;

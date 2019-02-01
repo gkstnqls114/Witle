@@ -6,6 +6,7 @@ const int QUAD = 4;
 
 class TerrainMesh;
 class HeightMapImage;
+class MyFrustum;
 
 struct INFO
 {
@@ -16,10 +17,11 @@ struct INFO
 
 struct QUAD_TREE_NODE
 {
+	BoundingBox boundingBox;
+	bool isRendering{ false };
 	UINT numCreate{ 0 };
-	UINT triangleCount{ 0 };
 	Mesh* terrainMesh{ nullptr };
-	QUAD_TREE_NODE* nodes[QUAD]{ nullptr,  nullptr , nullptr , nullptr };
+	QUAD_TREE_NODE* children[QUAD]{ nullptr,  nullptr , nullptr , nullptr };
 };
 
 class QuadTreeTerrainMesh
@@ -29,8 +31,8 @@ private:
 	UINT m_widthTotal{ 0 };
 	UINT m_lengthTotal{ 0 };
 
-	const UINT m_lengthMin{ 33 };
-	const UINT m_widthMin{ 33 };
+	const UINT m_lengthMin{ 129 };
+	const UINT m_widthMin{ 129 };
 
 	XMFLOAT3 m_xmf3Scale{ 0.f, 0.f, 0.f };
 	XMFLOAT4 m_xmf4Color{ 1.f, 0.f, 0.f , 1.f};
@@ -59,6 +61,7 @@ public:
 
 	const QUAD_TREE_NODE* GetRootNode() const { return m_pRootNode; }
 
+	void CheckRender(QUAD_TREE_NODE* node, const MyFrustum& frustum);
 	void TESTRender(const QUAD_TREE_NODE* node, ID3D12GraphicsCommandList *pd3dCommandList);
 private:
 

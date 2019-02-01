@@ -29,7 +29,7 @@ void CameraObject::LastUpdate(float fElapsedTime)
 	m_pCameraComponent->LastUpdate(fElapsedTime);
 	m_Transform.Update(fElapsedTime); // Transform 
 	
-	m_pFrustum;
+	m_pFrustum->GenerateFrustum(m_pCameraComponent->GetProjectionMatrix(), m_pCameraComponent->GetViewMatrix());
 }
 
 void CameraObject::SetViewportsAndScissorRects(ID3D12GraphicsCommandList *pd3dCommandList)
