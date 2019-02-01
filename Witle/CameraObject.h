@@ -2,11 +2,13 @@
 #include "GameObject.h"
 
 class Camera;
+class MyFrustum;
 
 class CameraObject
 	:public GameObject
 {
-	Camera* m_pCameraComponent{ nullptr };
+	Camera*      m_pCameraComponent{ nullptr };
+	MyFrustum*   m_pFrustum{ nullptr };
 
 protected:
 	// 컴포넌트가 아닌, 게임오브젝트 내에서 동적할당된 멤버변수를 해제한다.

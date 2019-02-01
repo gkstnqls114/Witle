@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "BasicCam.h"
 #include "Transform.h"
+#include "MyFrustum.h"
 #include "CameraObject.h"
 
 void CameraObject::ReleaseMembers()
@@ -16,6 +17,7 @@ CameraObject::CameraObject(const std::string & entityID)
 	:GameObject(entityID)
 {
 	m_pCameraComponent = new BasicCam(this);
+	m_pFrustum = new MyFrustum(this);
 }
 
 CameraObject::~CameraObject()
@@ -26,6 +28,8 @@ void CameraObject::LastUpdate(float fElapsedTime)
 {
 	m_pCameraComponent->LastUpdate(fElapsedTime);
 	m_Transform.Update(fElapsedTime); // Transform 
+	
+	m_pFrustum;
 }
 
 void CameraObject::SetViewportsAndScissorRects(ID3D12GraphicsCommandList *pd3dCommandList)

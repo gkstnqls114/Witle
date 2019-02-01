@@ -285,6 +285,8 @@ void GameScene::LastUpdate(float fElapsedTime)
 	{
 		m_Camera->LastUpdate(fElapsedTime);
 	} 
+
+	// 카메라 프러스텀과 쿼드트리 지형 렌더링 체크
 }
 
 void GameScene::AnimateObjects(float fTimeElapsed)
