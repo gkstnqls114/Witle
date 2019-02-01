@@ -24,7 +24,7 @@ enum MESH_TYPE_ID
 /////////////////////////////////////////////// define 정의
 #define CHECK_ROOT_SIGNATURE
 
-#define CHECK_TERRAIN_MAX_POS
+// #define CHECK_TERRAIN_MAX_POS
 /////////////////////////////////////////////// define 정의
 
 

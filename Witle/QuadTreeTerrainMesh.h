@@ -28,8 +28,8 @@ private:
 	UINT m_widthTotal{ 0 };
 	UINT m_lengthTotal{ 0 };
 
-	const UINT m_lengthMin{ 129 };
-	const UINT m_widthMin{ 129 };
+	const UINT m_lengthMin{ 65 };
+	const UINT m_widthMin{ 65 };
 
 	XMFLOAT3 m_xmf3Scale{ 0.f, 0.f, 0.f };
 	XMFLOAT4 m_xmf4Color{ 1.f, 0.f, 0.f , 1.f};
@@ -58,6 +58,7 @@ public:
 
 	const QUAD_TREE_NODE* GetRootNode() const { return m_pRootNode; }
 
-private: 
+	void TESTRender(const QUAD_TREE_NODE* node, ID3D12GraphicsCommandList *pd3dCommandList);
+private:
 
 };

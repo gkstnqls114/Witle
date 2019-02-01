@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "d3dUtil.h"
 #include "TerrainMesh.h" 
+#include "MeshRenderer.h"
 #include "HeightMapImage.h"
 #include "QuadTreeTerrainMesh.h"
 
@@ -23,6 +24,10 @@ void QuadTreeTerrainMesh::RecursiveCreateTerrain(QUAD_TREE_NODE * node, ID3D12De
 	if (nBlockWidth < m_widthMin || nBlockLength < m_lengthMin) // 마지막 리프 노드
 	{
 		// 터레인을 생성한다.
+		static int num = 0;
+		printf("index: %d (%d , %d , %d , %d , %d , %d)\n", num++, xStart, zStart, nWidth, nLength, nBlockWidth, nBlockLength);
+		printf("생성된 지형 크기: %d , %d\n\n", m_widthMin, m_lengthMin);
+
 		node->terrainMesh = new TerrainMesh(m_pOwner, pd3dDevice, pd3dCommandList, xStart, zStart, m_widthMin, m_lengthMin, m_xmf3Scale, m_xmf4Color, pContext);
 	}
 	else
@@ -30,24 +35,31 @@ void QuadTreeTerrainMesh::RecursiveCreateTerrain(QUAD_TREE_NODE * node, ID3D12De
 		int cxQuadsPerBlock = nBlockWidth - 1;
 		int czQuadsPerBlock = nBlockLength - 1;
 
-		long cxBlocks = (nWidth - 1) / cxQuadsPerBlock;
-		long czBlocks = (nLength - 1) / czQuadsPerBlock;
+		// long cxBlocks = (nWidth - 1) / cxQuadsPerBlock;
+		//long cxBlocks = (nWidth - 1) / cxQuadsPerBlock;
+		long cxBlocks = QUAD / 2;
+		long czBlocks = QUAD / 2;
 
 		TerrainMesh *pterrainMesh = NULL;
+		static int first_num = 0;
 		int index = 0;
-		for (int z = 0, zStart = 0; z < czBlocks; z++)
+		int Next_BlockWidth = cxQuadsPerBlock / 2 + 1;
+		int Next_BlockLength = czQuadsPerBlock / 2 + 1;
+		for (int z = 0; z < czBlocks; z++)
 		{
-			for (int x = 0, xStart = 0; x < cxBlocks; x++)
+			for (int x = 0; x < cxBlocks; x++)
 			{
-				xStart = x * (nBlockWidth - 1);
-				zStart = z * (nBlockLength - 1);
+				int New_xStart = xStart + x * (nBlockWidth - 1);
+				int New_zStart = zStart + z * (nBlockLength - 1);
 
-				node->nodes[index] = new QUAD_TREE_NODE();
-				RecursiveCreateTerrain(node->nodes[index], pd3dDevice, pd3dCommandList, xStart, zStart, nWidth, nLength, cxQuadsPerBlock / 2 + 1, czQuadsPerBlock / 2 + 1, pContext);
+				printf("\n%d .. %d \n ", first_num, index);
+				node->nodes[index] = new QUAD_TREE_NODE(); 
+				RecursiveCreateTerrain(node->nodes[index], pd3dDevice, pd3dCommandList, New_xStart, New_zStart, nWidth, nLength, Next_BlockWidth, Next_BlockLength, pContext);
 				index += 1;
 			}
 		}
 
+		first_num += 1;
 	}
 }
 
@@ -115,4 +127,23 @@ void QuadTreeTerrainMesh::ReleaseUploadBuffers()
 	//		node->nodes[i] = 0;
 	//	}
 	//}
+}
+
+void QuadTreeTerrainMesh::TESTRender(const QUAD_TREE_NODE* node, ID3D12GraphicsCommandList *pd3dCommandList)
+{
+	// 렌더링
+	extern MeshRenderer gMeshRenderer;
+
+	if (node->terrainMesh)
+	{
+		gMeshRenderer.Render(pd3dCommandList, node->terrainMesh);
+	}
+	else
+	{
+		TESTRender(node->nodes[0], pd3dCommandList);
+		TESTRender(node->nodes[1], pd3dCommandList);
+		TESTRender(node->nodes[2], pd3dCommandList);
+		TESTRender(node->nodes[3], pd3dCommandList);
+	}
+
 }
