@@ -27,8 +27,10 @@ void QuadTreeTerrainMesh::RecursiveCreateTerrain(QUAD_TREE_NODE * node, ID3D12De
 		static int num = 0;
 		node->numCreate = num;
 		// 현재 테스트로 centerY = 128, externY = 256 으로 설정
-		node->boundingBox = BoundingBox(XMFLOAT3{ float(xStart + float(nBlockWidth) / 2.0f) * m_xmf3Scale.x, 128.0f* m_xmf3Scale.y, float(zStart) + float(nBlockLength) / 2.0f * m_xmf3Scale.z},
-			XMFLOAT3{float(nBlockWidth) / 2.0f * m_xmf3Scale.x, 256.0f* m_xmf3Scale.y, float(nBlockLength) / 2.0f* m_xmf3Scale.z});
+
+		node->boundingBox = BoundingBox(XMFLOAT3{ float(xStart + float(nBlockWidth) / 2.0f) * m_xmf3Scale.x, 128.0f, float(zStart) + float(nBlockLength) / 2.0f * m_xmf3Scale.z },
+			XMFLOAT3{ float(nBlockWidth) / 2.0f * m_xmf3Scale.x, 512.0f* m_xmf3Scale.y, float(nBlockLength) / 2.0f* m_xmf3Scale.z });
+
 		node->terrainMesh = new TerrainMesh(m_pOwner, pd3dDevice, pd3dCommandList, xStart, zStart, m_widthMin, m_lengthMin, m_xmf3Scale, m_xmf4Color, pContext);
 
 		printf("소지형 %d 번째 생성... 생성된 지형크기: %d X %d (%d, %d 에서 시작)\n", num++, nBlockWidth, nBlockLength, xStart, zStart);
@@ -49,6 +51,9 @@ void QuadTreeTerrainMesh::RecursiveCreateTerrain(QUAD_TREE_NODE * node, ID3D12De
 			{
 				int New_xStart = xStart + x * (Next_BlockWidth - 1);
 				int New_zStart = zStart + z * (Next_BlockLength - 1);
+
+				node->boundingBox = BoundingBox(XMFLOAT3{ float(xStart + float(nBlockWidth) / 2.0f) * m_xmf3Scale.x, 128.0f, float(zStart) + float(nBlockLength) / 2.0f * m_xmf3Scale.z },
+					XMFLOAT3{ float(nBlockWidth) / 2.0f * m_xmf3Scale.x, 512.0f* m_xmf3Scale.y, float(nBlockLength) / 2.0f* m_xmf3Scale.z });
 
 				node->children[index] = new QUAD_TREE_NODE(); 
 				RecursiveCreateTerrain(node->children[index], pd3dDevice, pd3dCommandList, New_xStart, New_zStart, Next_BlockWidth, Next_BlockLength, pContext);

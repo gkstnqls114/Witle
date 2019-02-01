@@ -31,8 +31,8 @@ private:
 	UINT m_widthTotal{ 0 };
 	UINT m_lengthTotal{ 0 };
 
-	const UINT m_lengthMin{ 129 };
-	const UINT m_widthMin{ 129 };
+	const UINT m_lengthMin{ 64 + 1 };
+	const UINT m_widthMin{ 64 + 1 };
 
 	XMFLOAT3 m_xmf3Scale{ 0.f, 0.f, 0.f };
 	XMFLOAT4 m_xmf4Color{ 1.f, 0.f, 0.f , 1.f};
