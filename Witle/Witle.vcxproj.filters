@@ -121,6 +121,9 @@
     <Filter Include="07.Resource\RootConstantBuffer">
       <UniqueIdentifier>{20c205d1-00e0-4b84-b74c-bc21a2ca6598}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.Component\MyFrustum">
+      <UniqueIdentifier>{4b849b20-e341-441f-a863-7a7ded49cad8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -270,6 +273,9 @@
     <ClInclude Include="RootConstantBuffer.h">
       <Filter>07.Resource\RootConstantBuffer</Filter>
     </ClInclude>
+    <ClInclude Include="MyFrustum.h">
+      <Filter>02.Component\MyFrustum</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -400,6 +406,9 @@
     </ClCompile>
     <ClCompile Include="RootConstantBuffer.cpp">
       <Filter>07.Resource\RootConstantBuffer</Filter>
+    </ClCompile>
+    <ClCompile Include="MyFrustum.cpp">
+      <Filter>02.Component\MyFrustum</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
