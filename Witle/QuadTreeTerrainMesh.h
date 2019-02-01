@@ -59,9 +59,8 @@ public:
 
 	virtual void Update(float fTimeElapsed) override {};
 
-	const QUAD_TREE_NODE* GetRootNode() const { return m_pRootNode; }
+	QUAD_TREE_NODE* const GetRootNode() const { return m_pRootNode; }
 
-	void CheckRender(QUAD_TREE_NODE* node, const MyFrustum& frustum);
 	void TESTRender(const QUAD_TREE_NODE* node, ID3D12GraphicsCommandList *pd3dCommandList);
 private:
 

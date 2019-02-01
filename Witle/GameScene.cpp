@@ -8,6 +8,7 @@
 #include "MyStructs.h"
 #include "Shader.h"
 #include "Terrain.h"
+#include "MyFrustum.h"
 #include "GameInput.h"
 #include "Player.h"
 #include "CameraObject.h"
@@ -287,6 +288,7 @@ void GameScene::LastUpdate(float fElapsedTime)
 	} 
 
 	// 카메라 프러스텀과 쿼드트리 지형 렌더링 체크
+	m_Camera->GetFrustum()->TESTCheck(m_TESTQuadTree->GetRootNode());
 }
 
 void GameScene::AnimateObjects(float fTimeElapsed)

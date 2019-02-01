@@ -26,6 +26,9 @@ void QuadTreeTerrainMesh::RecursiveCreateTerrain(QUAD_TREE_NODE * node, ID3D12De
 		// 터레인을 생성한다.
 		static int num = 0;
 		node->numCreate = num;
+		// 현재 테스트로 centerY = 128, externY = 256 으로 설정
+		node->boundingBox = BoundingBox(XMFLOAT3{ float(xStart + float(nBlockWidth) / 2.0f) * m_xmf3Scale.x, 128.0f* m_xmf3Scale.y, float(zStart) + float(nBlockLength) / 2.0f * m_xmf3Scale.z},
+			XMFLOAT3{float(nBlockWidth) / 2.0f * m_xmf3Scale.x, 256.0f* m_xmf3Scale.y, float(nBlockLength) / 2.0f* m_xmf3Scale.z});
 		node->terrainMesh = new TerrainMesh(m_pOwner, pd3dDevice, pd3dCommandList, xStart, zStart, m_widthMin, m_lengthMin, m_xmf3Scale, m_xmf4Color, pContext);
 
 		printf("소지형 %d 번째 생성... 생성된 지형크기: %d X %d (%d, %d 에서 시작)\n", num++, nBlockWidth, nBlockLength, xStart, zStart);
@@ -128,14 +131,14 @@ void QuadTreeTerrainMesh::TESTRender(const QUAD_TREE_NODE* node, ID3D12GraphicsC
 
 	if (node->terrainMesh)
 	{
-		if(d3dUtil::gTEST == node->numCreate) gMeshRenderer.Render(pd3dCommandList, node->terrainMesh);
+		gMeshRenderer.Render(pd3dCommandList, node->terrainMesh);
 	}
 	else
 	{
-		TESTRender(node->children[0], pd3dCommandList);
-		TESTRender(node->children[1], pd3dCommandList);
-		TESTRender(node->children[2], pd3dCommandList);
-		TESTRender(node->children[3], pd3dCommandList);
+		if (node->children[0]->isRendering) TESTRender(node->children[0], pd3dCommandList);
+		if (node->children[1]->isRendering) TESTRender(node->children[1], pd3dCommandList);
+		if (node->children[2]->isRendering) TESTRender(node->children[2], pd3dCommandList);
+		if (node->children[3]->isRendering) TESTRender(node->children[3], pd3dCommandList);
 	}
 
 }
