@@ -53,7 +53,7 @@ void MyFrustum::TESTCheck(QUAD_TREE_NODE* node)
 	if (IsIntersect(node->boundingBox))
 	{
 		node->isRendering = true;
-		if (!node->children[0] || !node->children[1] || !node->children[2] || !node->children[3])
+		if (node->terrainMesh)
 		{
 			return;
 		}
@@ -67,52 +67,32 @@ void MyFrustum::TESTCheck(QUAD_TREE_NODE* node)
 	}
 	else
 	{
-		node->isRendering = false;
-		if (!node->children[0] || !node->children[1] || !node->children[2] || !node->children[3])
-		{
-			return;
-		}
-		else
-		{
-			TESTCheck(node->children[0]);
-			TESTCheck(node->children[1]);
-			TESTCheck(node->children[2]);
-			TESTCheck(node->children[3]);
-		}
+		node->isRendering = false; 
 	}
 }
 
 void MyFrustum::TESTCheckAllTRUE(QUAD_TREE_NODE * node)
 {
+
+	printf("%d - %d Render true\n", node->numInternal, node->numLeaf);
 	if (IsIntersect(node->boundingBox))
 	{
 		node->isRendering = true;
-		if (!node->children[0] || !node->children[1] || !node->children[2] || !node->children[3])
+		if (node->terrainMesh)
 		{
 			return;
 		}
 		else
 		{
-			TESTCheck(node->children[0]);
-			TESTCheck(node->children[1]);
-			TESTCheck(node->children[2]);
-			TESTCheck(node->children[3]);
+			TESTCheckAllTRUE(node->children[0]);
+			TESTCheckAllTRUE(node->children[1]);
+			TESTCheckAllTRUE(node->children[2]);
+			TESTCheckAllTRUE(node->children[3]);
 		}
 	}
 	else
 	{
 		node->isRendering = true;
-		if (!node->children[0] || !node->children[1] || !node->children[2] || !node->children[3])
-		{
-			return;
-		}
-		else
-		{
-			TESTCheck(node->children[0]);
-			TESTCheck(node->children[1]);
-			TESTCheck(node->children[2]);
-			TESTCheck(node->children[3]);
-		}
 	}
 }
 
@@ -121,7 +101,7 @@ void MyFrustum::TESTCheckAllFALSE(QUAD_TREE_NODE * node)
 	if (IsIntersect(node->boundingBox))
 	{
 		node->isRendering = false;
-		if (!node->children[0] || !node->children[1] || !node->children[2] || !node->children[3])
+		if (node->terrainMesh)
 		{
 			return;
 		}
@@ -135,17 +115,6 @@ void MyFrustum::TESTCheckAllFALSE(QUAD_TREE_NODE * node)
 	}
 	else
 	{
-		node->isRendering = false;
-		if (!node->children[0] || !node->children[1] || !node->children[2] || !node->children[3])
-		{
-			return;
-		}
-		else
-		{
-			TESTCheck(node->children[0]);
-			TESTCheck(node->children[1]);
-			TESTCheck(node->children[2]);
-			TESTCheck(node->children[3]);
-		}
+		node->isRendering = false; 
 	}
 }

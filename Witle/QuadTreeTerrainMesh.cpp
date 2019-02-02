@@ -15,7 +15,7 @@ UINT QuadTreeTerrainMesh::CalculateTriangles(UINT widthPixel, UINT lengthPixel)
 
 void QuadTreeTerrainMesh::RecursiveCreateTerrain(QUAD_TREE_NODE * node, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, 
 	int xStart, int zStart, int nBlockWidth, int nBlockLength,
-	HeightMapImage * pContext)
+	int internal, HeightMapImage * pContext)
 {
 	assert(!(m_widthMin < 3));
 	assert(!(m_lengthMin < 3));
@@ -24,8 +24,9 @@ void QuadTreeTerrainMesh::RecursiveCreateTerrain(QUAD_TREE_NODE * node, ID3D12De
 	if (nBlockWidth == m_widthMin || nBlockLength == m_lengthMin) // 마지막 리프 노드
 	{
 		// 터레인을 생성한다.
-		static int num = 0;
-		node->numCreate = num;
+		static int numLeaf = 0;
+		node->numLeaf = numLeaf;
+		node->numInternal = internal;
 		// 현재 테스트로 centerY = 128, externY = 256 으로 설정
 
 		node->boundingBox = BoundingBox(XMFLOAT3{ float(xStart + float(nBlockWidth) / 2.0f) * m_xmf3Scale.x, 128.0f, float(zStart) + float(nBlockLength) / 2.0f * m_xmf3Scale.z },
@@ -33,10 +34,12 @@ void QuadTreeTerrainMesh::RecursiveCreateTerrain(QUAD_TREE_NODE * node, ID3D12De
 
 		node->terrainMesh = new TerrainMesh(m_pOwner, pd3dDevice, pd3dCommandList, xStart, zStart, m_widthMin, m_lengthMin, m_xmf3Scale, m_xmf4Color, pContext);
 
-		printf("소지형 %d 번째 생성... 생성된 지형크기: %d X %d (%d, %d 에서 시작)\n", num++, nBlockWidth, nBlockLength, xStart, zStart);
+		printf("소지형 %d 번째 생성... 생성된 지형크기: %d X %d (%d, %d 에서 시작)\n", numLeaf++, nBlockWidth, nBlockLength, xStart, zStart);
 	}
 	else
 	{
+		static int numInternal = 0;
+
 		int cxQuadsPerBlock = nBlockWidth - 1;
 		int czQuadsPerBlock = nBlockLength - 1;
 
@@ -44,6 +47,8 @@ void QuadTreeTerrainMesh::RecursiveCreateTerrain(QUAD_TREE_NODE * node, ID3D12De
 		int Next_BlockLength = czQuadsPerBlock / 2 + 1;
 
 		int index = 0;
+
+		node->numInternal = numInternal;
 
 		for (int z = 0; z < 2; z++)
 		{
@@ -56,10 +61,11 @@ void QuadTreeTerrainMesh::RecursiveCreateTerrain(QUAD_TREE_NODE * node, ID3D12De
 					XMFLOAT3{ float(nBlockWidth) / 2.0f * m_xmf3Scale.x, 512.0f* m_xmf3Scale.y, float(nBlockLength) / 2.0f* m_xmf3Scale.z });
 
 				node->children[index] = new QUAD_TREE_NODE(); 
-				RecursiveCreateTerrain(node->children[index], pd3dDevice, pd3dCommandList, New_xStart, New_zStart, Next_BlockWidth, Next_BlockLength, pContext);
+				RecursiveCreateTerrain(node->children[index], pd3dDevice, pd3dCommandList, New_xStart, New_zStart, Next_BlockWidth, Next_BlockLength, numInternal, pContext);
 				index += 1;
 			}
 		}
+		numInternal += 1;
 	}
 }
 
@@ -85,7 +91,7 @@ QuadTreeTerrainMesh::QuadTreeTerrainMesh(GameObject * pOwner, ID3D12Device * pd3
 	// 쿼드 트리의 부모 노드를 만듭니다.
 	m_pRootNode = new QUAD_TREE_NODE;
 
-	RecursiveCreateTerrain(m_pRootNode, pd3dDevice, pd3dCommandList, 0, 0, m_widthTotal, m_lengthTotal, pContext);
+	RecursiveCreateTerrain(m_pRootNode, pd3dDevice, pd3dCommandList, 0, 0, m_widthTotal, m_lengthTotal, 0, pContext);
 }
 
 QuadTreeTerrainMesh::~QuadTreeTerrainMesh()
@@ -140,10 +146,27 @@ void QuadTreeTerrainMesh::TESTRender(const QUAD_TREE_NODE* node, ID3D12GraphicsC
 	}
 	else
 	{
-		if (node->children[0]->isRendering) TESTRender(node->children[0], pd3dCommandList);
-		if (node->children[1]->isRendering) TESTRender(node->children[1], pd3dCommandList);
-		if (node->children[2]->isRendering) TESTRender(node->children[2], pd3dCommandList);
-		if (node->children[3]->isRendering) TESTRender(node->children[3], pd3dCommandList);
+		if (node->children[0]->isRendering)
+		{
+			printf("%d - %d Render\n", node->children[0]->numInternal, node->children[0]->numLeaf);
+			TESTRender(node->children[0], pd3dCommandList);
+		}
+		if (node->children[1]->isRendering)
+		{
+			printf("%d - %d Render\n", node->children[1]->numInternal, node->children[1]->numLeaf);
+			TESTRender(node->children[1], pd3dCommandList);
+		}
+		if (node->children[2]->isRendering)
+		{
+			printf("%d - %d Render\n", node->children[2]->numInternal, node->children[2]->numLeaf);
+			TESTRender(node->children[2], pd3dCommandList);
+		}
+		if (node->children[3]->isRendering)
+		{
+			printf("%d - %d Render\n", node->children[3]->numInternal, node->children[3]->numLeaf);
+			TESTRender(node->children[3], pd3dCommandList);
+		}
 	}
 
+	printf("\n");
 }

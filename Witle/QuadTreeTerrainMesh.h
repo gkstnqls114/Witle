@@ -19,7 +19,8 @@ struct QUAD_TREE_NODE
 {
 	BoundingBox boundingBox;
 	bool isRendering{ false };
-	UINT numCreate{ 0 };
+	int numLeaf{ -1 }; // -1이라면 리프노드가 아니다.
+	int numInternal{ -1 }; // 자신이 속하는 내부 노드
 	Mesh* terrainMesh{ nullptr };
 	QUAD_TREE_NODE* children[QUAD]{ nullptr,  nullptr , nullptr , nullptr };
 };
@@ -44,7 +45,7 @@ private:
 	// 해당 함수를 재귀적으로 호출하며 터레인을 생성하는 함수입니다.
 	void RecursiveCreateTerrain(QUAD_TREE_NODE* node, ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, 
 		int xStart, int zStart, int nBlockWidth, int nBlockLength,
-		HeightMapImage *pContext = NULL);
+		int internal, HeightMapImage *pContext = NULL);
 
 	UINT CalculateVertex(UINT widht, UINT length);
 	UINT CalculateTriangles(UINT widthPixel, UINT lengthPixel);
