@@ -94,17 +94,6 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 {
 	BuildLightsAndMaterials(pd3dDevice, pd3dCommandList);
 
-	//뷰포트를 주 윈도우의 클라이언트 영역 전체로 설정한다.
-	m_Viewport.TopLeftX = 0;
-	m_Viewport.TopLeftY = 0;
-	m_Viewport.Width = static_cast<float>(FRAME_BUFFER_WIDTH);
-	m_Viewport.Height = static_cast<float>(FRAME_BUFFER_HEIGHT);
-	m_Viewport.MinDepth = 0.0f;
-	m_Viewport.MaxDepth = 1.0f;
-
-	//씨저 사각형을 주 윈도우의 클라이언트 영역 전체로 설정한다.
-	m_ScissorRect = { 0, 0, FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT };
-
 	//루트 시그너쳐를 생성한다.
 	m_pd3dGraphicsRootSignature = CreateGraphicsRootSignature(pd3dDevice);
 	
@@ -132,8 +121,17 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	m_Camera = new CameraObject("Camera");
 	Camera* cameraComponent = new FollowCam(m_Camera, m_GameObject);
 	cameraComponent->SetOffset(XMFLOAT3(0, -5.f, 10.f)); 
-	
 	m_Camera->ChangeCamera(cameraComponent);
+
+#ifdef CHECK_ANOTHER_CAMERA
+	m_lookAboveCamera = new CameraObject("LookAboveCamera");
+
+	D3D12_VIEWPORT	GBuffer_Viewport{ 0, FRAME_BUFFER_HEIGHT, G_BUFFER_WINDOW_WIDTH , G_BUFFER_WINDOW_HEIGHT, 0.0f, 1.0f };
+	D3D12_RECT		ScissorRect{ 0 , FRAME_BUFFER_HEIGHT, FRAME_BUFFER_WIDTH , FRAME_BUFFER_HEIGHT + G_BUFFER_WINDOW_HEIGHT };
+
+	m_lookAboveCamera->GetCamera()->SetScissorRect(ScissorRect);
+	m_lookAboveCamera->GetCamera()->SetViewport(GBuffer_Viewport);
+#endif
 
 	cameraComponent->SetViewport(0, 0, FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT, 0.0f, 1.0f);
 	cameraComponent->SetScissorRect(0, 0, FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT);
@@ -305,6 +303,7 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	// 그래픽 루트 시그니처 설정
 	pd3dCommandList->SetGraphicsRootSignature(m_pd3dGraphicsRootSignature);
 
+
 	// 클라 화면 설정
 	m_Camera->SetViewportsAndScissorRects(pd3dCommandList);
 	m_Camera->UpdateShaderVariables(pd3dCommandList);
@@ -330,9 +329,17 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	//QuadTreeTerrain test Render
 	m_TESTQuadTree->TESTRender(m_TESTQuadTree->GetRootNode(), pd3dCommandList);
 	
+#ifdef CHECK_ANOTHER_CAMERA
+	m_lookAboveCamera->SetViewportsAndScissorRects(pd3dCommandList);
+
+	m_TESTQuadTree->TESTRender(m_TESTQuadTree->GetRootNode(), pd3dCommandList);
+#endif
 
 	// PSO 설정
 	pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Cube")->GetPSO());
+
+	m_Camera->SetViewportsAndScissorRects(pd3dCommandList);
+	m_Camera->UpdateShaderVariables(pd3dCommandList);
 
 	// 쉐이더 변수 설정
 	XMFLOAT4X4 xmf4x4World;
@@ -342,7 +349,10 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	// CubeMesh Render
 	Mesh* mesh = m_GameObject->GetComponent<Mesh>("Mesh");
 	gMeshRenderer.Render(pd3dCommandList, mesh);
-	 
+
+
+	// 테스트용 ..
+
 }
 
 void GameScene::ReleaseUploadBuffers()

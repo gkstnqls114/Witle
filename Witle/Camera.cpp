@@ -62,8 +62,7 @@ void Camera::GenerateFrustum()
 
 }
 
-void Camera::SetViewport(int xTopLeft, int yTopLeft, int nWidth, int nHeight, float
-	fMinZ, float fMaxZ)
+void Camera::SetViewport(int xTopLeft, int yTopLeft, int nWidth, int nHeight, float fMinZ, float fMaxZ)
 {
 	m_d3dViewport.TopLeftX = float(xTopLeft);
 	m_d3dViewport.TopLeftY = float(yTopLeft);

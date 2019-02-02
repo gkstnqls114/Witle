@@ -36,6 +36,4 @@ protected:
 
 	ID3D12RootSignature* m_pd3dGraphicsRootSignature{ nullptr }; // 루트 시그니처
 	
-	D3D12_VIEWPORT m_Viewport;
-	D3D12_RECT m_ScissorRect;
 };

@@ -61,6 +61,10 @@ protected:
 	MyDescriptorHeap*       m_TerrainHeap{ nullptr };
 	CameraObject*           m_Camera{ nullptr };
 
+#ifdef CHECK_ANOTHER_CAMERA
+	CameraObject*			m_lookAboveCamera{ nullptr };
+#endif
+
 	XMFLOAT4X4              matrix{ Matrix4x4::Identity() };
 
 	//////////////////////////////////////  Α¶Έν

@@ -75,8 +75,10 @@ public:
 
 	///////////////////////////////////////////////////////////////////////// Set
 	void SetViewport(int xTopLeft, int yTopLeft, int nWidth, int nHeight, float fMinZ = 0.0f, float fMaxZ = 1.0f);
+	void SetViewport(const D3D12_VIEWPORT& viewprot) { m_d3dViewport = viewprot; };
 	void SetScissorRect(LONG xLeft, LONG yTop, LONG xRight, LONG yBottom);
-	virtual void SetViewportsAndScissorRects(ID3D12GraphicsCommandList *pd3dCommandList);
+	void SetScissorRect(const D3D12_RECT& scissorRect) { m_d3dScissorRect = scissorRect; };
+	void SetViewportsAndScissorRects(ID3D12GraphicsCommandList *pd3dCommandList);
 
 	void SetOffset(XMFLOAT3 offset) { m_Offset = offset; } 
 	void SetTimeLag(float fTimeLag) { m_fTimeLag = fTimeLag; }
@@ -88,10 +90,6 @@ public:
 
 	///////////////////////////////////////////////////////////////////////// Get
 	XMFLOAT3 GetAt()             const noexcept { return (m_At); }
-	//XMFLOAT3 GetRightVector()	 const noexcept { return (m_Right); }
-	//XMFLOAT3 GetUpVector()		 const noexcept { return (m_Up); }
-	//XMFLOAT3 GetLookVector()	 const noexcept { return (m_Look); }
-	//XMFLOAT3 GetPosition()		 const noexcept { return (m_Position); }
 	XMFLOAT3 GetOffset()         const noexcept { return (m_Offset); }
 	 
 	float GetPitch() const noexcept { return (m_fPitch); }
