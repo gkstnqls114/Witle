@@ -50,10 +50,77 @@ bool MyFrustum::IsIntersect(const BoundingBox & box) const
 
 void MyFrustum::TESTCheck(QUAD_TREE_NODE* node)
 {
-
 	if (IsIntersect(node->boundingBox))
 	{
 		node->isRendering = true;
+		if (!node->children[0] || !node->children[1] || !node->children[2] || !node->children[3])
+		{
+			return;
+		}
+		else
+		{
+			TESTCheck(node->children[0]);
+			TESTCheck(node->children[1]);
+			TESTCheck(node->children[2]);
+			TESTCheck(node->children[3]);
+		}
+	}
+	else
+	{
+		node->isRendering = false;
+		if (!node->children[0] || !node->children[1] || !node->children[2] || !node->children[3])
+		{
+			return;
+		}
+		else
+		{
+			TESTCheck(node->children[0]);
+			TESTCheck(node->children[1]);
+			TESTCheck(node->children[2]);
+			TESTCheck(node->children[3]);
+		}
+	}
+}
+
+void MyFrustum::TESTCheckAllTRUE(QUAD_TREE_NODE * node)
+{
+	if (IsIntersect(node->boundingBox))
+	{
+		node->isRendering = true;
+		if (!node->children[0] || !node->children[1] || !node->children[2] || !node->children[3])
+		{
+			return;
+		}
+		else
+		{
+			TESTCheck(node->children[0]);
+			TESTCheck(node->children[1]);
+			TESTCheck(node->children[2]);
+			TESTCheck(node->children[3]);
+		}
+	}
+	else
+	{
+		node->isRendering = true;
+		if (!node->children[0] || !node->children[1] || !node->children[2] || !node->children[3])
+		{
+			return;
+		}
+		else
+		{
+			TESTCheck(node->children[0]);
+			TESTCheck(node->children[1]);
+			TESTCheck(node->children[2]);
+			TESTCheck(node->children[3]);
+		}
+	}
+}
+
+void MyFrustum::TESTCheckAllFALSE(QUAD_TREE_NODE * node)
+{
+	if (IsIntersect(node->boundingBox))
+	{
+		node->isRendering = false;
 		if (!node->children[0] || !node->children[1] || !node->children[2] || !node->children[3])
 		{
 			return;

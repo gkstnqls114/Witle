@@ -131,6 +131,11 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 
 	m_lookAboveCamera->GetCamera()->SetScissorRect(ScissorRect);
 	m_lookAboveCamera->GetCamera()->SetViewport(GBuffer_Viewport);
+	m_lookAboveCamera->GetCamera()->GenerateProjectionMatrix(0.01f, CAMERA_FAR, float(FRAME_BUFFER_WIDTH) / float(FRAME_BUFFER_HEIGHT), 60.0f);
+	//m_lookAboveCamera->GetCamera()->SetAt(XMFLOAT3(xmf3Scale.x * 257 / 2, 0.f, xmf3Scale.y * 257 / 2)); 
+	m_lookAboveCamera->GetCamera()->SetAt(XMFLOAT3(xmf3Scale.x * 257 / 2, 2500.f, xmf3Scale.z * 257 / 2)); 
+	m_lookAboveCamera->GetCamera()->SetOffset(XMFLOAT3(0.0f, 0.f, 10.f));
+	m_lookAboveCamera->GetCamera()->Rotate(90.f, 0.f, 0.f);
 #endif
 
 	cameraComponent->SetViewport(0, 0, FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT, 0.0f, 1.0f);
@@ -279,6 +284,14 @@ void GameScene::Update(float fElapsedTime)
 
 void GameScene::LastUpdate(float fElapsedTime)
 {
+#ifdef CHECK_ANOTHER_CAMERA
+	if (m_lookAboveCamera)
+	{
+		m_lookAboveCamera->LastUpdate(fElapsedTime);
+	}
+#endif // CHECK_ANOTHER_CAMERA
+
+
 	// player update 이후에 camera update
 	if (m_Camera)
 	{
@@ -286,7 +299,8 @@ void GameScene::LastUpdate(float fElapsedTime)
 	} 
 
 	// 카메라 프러스텀과 쿼드트리 지형 렌더링 체크
-	m_Camera->GetFrustum()->TESTCheck(m_TESTQuadTree->GetRootNode());
+	// m_Camera->GetFrustum()->TESTCheck(m_TESTQuadTree->GetRootNode());
+	m_Camera->GetFrustum()->TESTCheckAllTRUE(m_TESTQuadTree->GetRootNode());
 }
 
 void GameScene::AnimateObjects(float fTimeElapsed)
@@ -330,7 +344,8 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	m_TESTQuadTree->TESTRender(m_TESTQuadTree->GetRootNode(), pd3dCommandList);
 	
 #ifdef CHECK_ANOTHER_CAMERA
-	m_lookAboveCamera->SetViewportsAndScissorRects(pd3dCommandList);
+	m_lookAboveCamera->SetViewportsAndScissorRects(pd3dCommandList); 
+	m_lookAboveCamera->UpdateShaderVariables(pd3dCommandList);
 
 	m_TESTQuadTree->TESTRender(m_TESTQuadTree->GetRootNode(), pd3dCommandList);
 #endif

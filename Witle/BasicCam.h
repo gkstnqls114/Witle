@@ -10,5 +10,6 @@ public:
 	virtual ~BasicCam();
 
 	virtual void LastUpdate(float fTimeElapsed) override;
+	virtual void Rotate(float x = 0.0f, float y = 0.0f, float z = 0.0f) override;
 
 };

@@ -45,11 +45,6 @@ void Camera::Move(const XMFLOAT3 & Shift)
 	m_At.z += Shift.z;
 }
 
-void Camera::Rotate(float x, float y, float z)
-{ 
-
-}
-
 void Camera::GenerateFrustum()
 {
 	//원근 투영 변환 행렬에서 절두체를 생성한다(절두체는 카메라 좌표계로 표현된다).

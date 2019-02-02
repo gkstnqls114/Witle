@@ -57,7 +57,7 @@ public:
 
 	virtual void Teleport(const XMFLOAT3& pos); // right, up, look을 유지한 상태로 position, at만 이동한다.
 	virtual void Move(const XMFLOAT3& Shift);
-	virtual void Rotate(float x = 0.0f, float y = 0.0f, float z = 0.0f);
+	virtual void Rotate(float x = 0.0f, float y = 0.0f, float z = 0.0f) = 0;
 	
 	virtual void Update(float fTimeElapsed) override { };
 	virtual void Update(float fTimeElapsed, const XMFLOAT3& xmf3LookAt) {};
@@ -82,11 +82,9 @@ public:
 
 	void SetOffset(XMFLOAT3 offset) { m_Offset = offset; } 
 	void SetTimeLag(float fTimeLag) { m_fTimeLag = fTimeLag; }
-	void SetLookAtPosition(XMFLOAT3 xmf3LookAtWorld) { m_At = xmf3LookAtWorld; }
-
+	
 	void SetAt(XMFLOAT3 at) { m_At = at; };
-//	void SetPosition(XMFLOAT3 xmf3Position) { m_Position = xmf3Position; };
-	///////////////////////////////////////////////////////////////////////// Set
+    ///////////////////////////////////////////////////////////////////////// Set
 
 	///////////////////////////////////////////////////////////////////////// Get
 	XMFLOAT3 GetAt()             const noexcept { return (m_At); }
