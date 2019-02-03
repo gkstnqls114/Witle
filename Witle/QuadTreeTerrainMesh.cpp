@@ -36,8 +36,6 @@ void QuadTreeTerrainMesh::RecursiveCreateTerrain(QUAD_TREE_NODE * node, ID3D12De
 			XMFLOAT3{ float(nBlockWidth) / 2.0f * m_xmf3Scale.x, 1000.f, float(nBlockLength) / 2.0f* m_xmf3Scale.z });
 
 		node->terrainMesh = new TerrainMesh(m_pOwner, pd3dDevice, pd3dCommandList, xStart, zStart, m_widthMin, m_lengthMin, m_xmf3Scale, m_xmf4Color, pContext);
-
-		printf("소지형 %d 번째 생성... 생성된 지형크기: %d X %d (%d, %d 에서 시작)\n", numLeaf++, nBlockWidth, nBlockLength, xStart, zStart);
 	}
 	else
 	{
