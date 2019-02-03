@@ -534,14 +534,13 @@ void CGameFramework::ReleaseObjects()
 	}
 }
 
-void CGameFramework::UpdateGamelogic()
+void CGameFramework::UpdateGamelogic(float fElapsedTime)
 {
 	if (m_pScene) {
-		float ElapsedTime = CGameTimer::GetInstance()->GetTimeElapsed();
 		GameInput::Update(m_hWnd);
-		m_pScene->ProcessInput(m_hWnd, ElapsedTime);
-		m_pScene->Update(ElapsedTime);
-		m_pScene->LastUpdate(ElapsedTime);
+		m_pScene->ProcessInput(m_hWnd, fElapsedTime);
+		m_pScene->Update(fElapsedTime);
+		m_pScene->LastUpdate(fElapsedTime);
 
 		// 현재 애니메이션 어디다가 쓰는지 모르겠다.
 		//m_pScene->AnimateObjects(0);

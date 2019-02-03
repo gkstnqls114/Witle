@@ -133,7 +133,7 @@ public:
 	void OnDestroy();
 
 	//프레임워크의 핵심(사용자 입력, 애니메이션, 업데이트)을 구성하는 함수이다. 
-	void UpdateGamelogic();
+	void UpdateGamelogic(float );
 
 	// 렌더링을 처리하는 함수이다.
 	void Render();
