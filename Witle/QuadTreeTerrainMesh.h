@@ -41,6 +41,9 @@ private:
 	QUAD_TREE_NODE* m_pRootNode{ nullptr };
 
 private:  
+	void RecursiveReleaseUploadBuffers(QUAD_TREE_NODE* node);
+	void RecursiveReleaseObjects(QUAD_TREE_NODE* node);
+
 	// 해당 함수를 재귀적으로 호출하며 터레인을 생성하는 함수입니다.
 	void RecursiveCreateTerrain(QUAD_TREE_NODE* node, ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, 
 		int xStart, int zStart, int nBlockWidth, int nBlockLength,

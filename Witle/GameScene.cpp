@@ -189,6 +189,12 @@ void GameScene::ReleaseObjects()
 		delete[] m_pLights;
 		m_pLights = nullptr;
 	}
+
+	if (m_TESTQuadTree)
+	{
+		delete m_TESTQuadTree;
+		m_TESTQuadTree = nullptr;
+	}
 }
 
 bool GameScene::ProcessInput(HWND hWnd, float ElapsedTime)

@@ -13,7 +13,48 @@ UINT QuadTreeTerrainMesh::CalculateTriangles(UINT widthPixel, UINT lengthPixel)
 	return (widthPixel - 1) * (lengthPixel -1) * 2;
 }
 
-void QuadTreeTerrainMesh::RecursiveCreateTerrain(QUAD_TREE_NODE * node, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, 
+void QuadTreeTerrainMesh::RecursiveReleaseUploadBuffers(QUAD_TREE_NODE * node)
+{
+	if (node->terrainMesh)
+	{
+		node->terrainMesh->ReleaseUploadBuffers();
+	}
+	else
+	{
+		RecursiveReleaseUploadBuffers(node->children[0]);
+		RecursiveReleaseUploadBuffers(node->children[1]);
+		RecursiveReleaseUploadBuffers(node->children[2]);
+		RecursiveReleaseUploadBuffers(node->children[3]);
+	}
+}
+
+void QuadTreeTerrainMesh::RecursiveReleaseObjects(QUAD_TREE_NODE * node)
+{
+	if (node->terrainMesh)
+	{
+		delete node->terrainMesh;
+		node->terrainMesh = nullptr;
+	}
+	else
+	{
+		RecursiveReleaseObjects(node->children[0]);
+		RecursiveReleaseObjects(node->children[1]);
+		RecursiveReleaseObjects(node->children[2]);
+		RecursiveReleaseObjects(node->children[3]);
+
+		delete node->children[0];
+		delete node->children[1];
+		delete node->children[2];
+		delete node->children[3];
+
+		node->children[0] = nullptr;
+		node->children[1] = nullptr;
+		node->children[2] = nullptr;
+		node->children[3] = nullptr;
+	}
+}
+
+void QuadTreeTerrainMesh::RecursiveCreateTerrain(QUAD_TREE_NODE * node, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList,
 	int xStart, int zStart, int nBlockWidth, int nBlockLength,
 	int internal, HeightMapImage * pContext)
 {
@@ -100,11 +141,17 @@ QuadTreeTerrainMesh::QuadTreeTerrainMesh(GameObject * pOwner, ID3D12Device * pd3
 
 QuadTreeTerrainMesh::~QuadTreeTerrainMesh()
 {
-
+	if (m_pRootNode)
+	{
+		RecursiveReleaseObjects(m_pRootNode);
+		delete m_pRootNode;
+		m_pRootNode = nullptr;
+	}
 }
 
 void QuadTreeTerrainMesh::ReleaseUploadBuffers()
 {
+	RecursiveReleaseUploadBuffers(m_pRootNode);
 	//// 재귀 적으로 트리 아래로 내려와 맨 아래 노드를 먼저 놓습니다.
 	//for (int i = 0; i < 4; i++)
 	//{
