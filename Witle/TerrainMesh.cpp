@@ -109,6 +109,7 @@ TerrainMesh::~TerrainMesh()
 	} 
 }
 
+
 float TerrainMesh::OnGetHeight(int x, int z, void * pContext)
 {
 	HeightMapImage *pHeightMapImage = (HeightMapImage *)pContext;

@@ -7,10 +7,7 @@ class CubeMesh :
 public:
 	CubeMesh(GameObject* pOwner, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, float width, float height, float depth);
 	virtual ~CubeMesh();
-	 
-	virtual void Create();
-	virtual void Init();
-
+	
 	virtual void Update(float ElapsedTime) override {};
 	
 private:

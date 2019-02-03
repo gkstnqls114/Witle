@@ -73,8 +73,6 @@ void MyFrustum::TESTCheck(QUAD_TREE_NODE* node)
 
 void MyFrustum::TESTCheckAllTRUE(QUAD_TREE_NODE * node)
 {
-
-	printf("%d - %d Render true\n", node->numInternal, node->numLeaf);
 	if (IsIntersect(node->boundingBox))
 	{
 		node->isRendering = true;

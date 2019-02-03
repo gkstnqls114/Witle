@@ -12,7 +12,8 @@ class CameraObject
 
 protected:
 	// 컴포넌트가 아닌, 게임오브젝트 내에서 동적할당된 멤버변수를 해제한다.
-	virtual void ReleaseMembers();
+	virtual void ReleaseMembers() override;
+	virtual void ReleaseMemberUploadBuffers() override {};
 
 public:
 	CameraObject(const std::string& entityID);

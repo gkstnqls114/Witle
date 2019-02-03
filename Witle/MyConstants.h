@@ -1,9 +1,6 @@
 #pragma once
 
-/////////////////////////////////////////////// 전처리문을 위한 정의
-// #define SHOW_G_BUFFERS // 정의한경우, G Buffer를 볼 수 있따.
-#define SHOW_FRAMERATE // 정의한경우, 프레임 레이트가 타이틀 화면에 보인다.
-#define CONSOLE_TEST
+/////////////////////////////////////////////// 전처리문을 위한 정의 
 /////////////////////////////////////////////// 전처리문을 위한 정의
 
 enum MESH_TYPE_ID
@@ -22,12 +19,18 @@ enum MESH_TYPE_ID
 #define NUM32BITTOBYTE 4
 
 /////////////////////////////////////////////// define 정의
-#define CHECK_ROOT_SIGNATURE
-
+#define CHECK_ROOT_SIGNATURE 
 #define CHECK_TERRAIN_MAX_POS
-
 #define CHECK_ANOTHER_CAMERA
+#define CHECK_CONSOLE_TEST
+#define CHECK_FRAMERATE // 정의한경우, 프레임 레이트가 타이틀 화면에 보인다.
 /////////////////////////////////////////////// define 정의
+
+/////////////////////////////////////////////// 패밀리 아이디 정의
+#define FAMILLYID_MESH "Mesh"
+
+/////////////////////////////////////////////// 패밀리 아이디 정의
+
 
 
 /////////////////////////////////////////////// 조명
@@ -40,12 +43,15 @@ enum MESH_TYPE_ID
 /////////////////////////////////////////////// 조명
 
 
+/////////////////////////////////////////////// 조작키
 #define DIR_FORWARD 0x01
 #define DIR_BACKWARD 0x02
 #define DIR_LEFT 0x04
 #define DIR_RIGHT 0x08
 #define DIR_UP						0x10
 #define DIR_DOWN					0x20
+/////////////////////////////////////////////// 조작키
+
 
 #define FRAME_BUFFER_WIDTH	800 //1920 / 2 (기준)
 #define FRAME_BUFFER_HEIGHT 600//1080 /2  (기준)
@@ -78,8 +84,6 @@ enum MESH_TYPE_ID
 
 
 #define CAMERA_FAR			50000.F 
-
-#define PLAYER_START_POSITION_Z float(-450.F)
 
 //정점의 색상을 무작위로(Random) 설정하기 위해 사용한다. 각 정점의 색상은 난수(Random Number)를 생성하여 지정한다.
 #define RANDOM_COLOR XMFLOAT4{rand() / float(RAND_MAX), rand() / float(RAND_MAX), rand() / float(RAND_MAX), rand() / float(RAND_MAX)}

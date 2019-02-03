@@ -19,9 +19,9 @@ protected:
 
 	// ÀÎµ¦½º ¹öÆÛ
 	UINT							m_IndexCount{ 0 };
-	UINT							*m_pnIndices{ nullptr };
-	ComPtr<ID3D12Resource>			m_pIndexBuffer{ nullptr };
-	ComPtr<ID3D12Resource>			m_pIndexUploadBuffer{ nullptr };
+	UINT		                    *m_pnIndices{ nullptr };
+	ID3D12Resource                  *m_pIndexBuffer{ nullptr };
+	ID3D12Resource                  *m_pIndexUploadBuffer{ nullptr };
 
 	D3D12_INDEX_BUFFER_VIEW			m_IndexBufferView;
 
@@ -40,21 +40,18 @@ public:
 	Mesh(GameObject* pOwner);
 	virtual ~Mesh();
 
-	virtual void Create() = 0;
-	virtual void Init() = 0;
-	
+	void ReleaseUploadBuffers();
 
 	/////////////////////////////////////////////////////////////////////////// Get
 	UINT GetVertexCount() const { return m_vertexCount; }
-	ID3D12Resource* GetPositonBuffer() const { m_pPositionBuffer; }
-	ID3D12Resource* GetPositionUploadBuffer() const { m_pPositionUploadBuffer; }
+	const ID3D12Resource* GetPositonBuffer() const { m_pPositionBuffer; }
+	const ID3D12Resource* GetPositionUploadBuffer() const { m_pPositionUploadBuffer; }
 
-
-	D3D12_VERTEX_BUFFER_VIEW GetVertexBufferView(int index) const { return m_pVertexBufferViews[index]; }
+	const D3D12_VERTEX_BUFFER_VIEW& GetVertexBufferView(int index) const { return m_pVertexBufferViews[index]; }
 	UINT GetVertexBufferViewCount() const { return m_nVertexBufferViews; }
 
 	UINT GetIndexCount() const { return m_IndexCount; }
-	D3D12_INDEX_BUFFER_VIEW GetIndexBufferView() const { return m_IndexBufferView; }
+	const D3D12_INDEX_BUFFER_VIEW& GetIndexBufferView() const { return m_IndexBufferView; }
 	/////////////////////////////////////////////////////////////////////////// Get
 
 	

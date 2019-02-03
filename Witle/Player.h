@@ -23,6 +23,7 @@ class Player :
 
 protected:
 	virtual void ReleaseMembers() override {};
+	virtual void ReleaseMemberUploadBuffers() override {};
 
 private:
 	void OnPlayerUpdateCallback(float fTimeElapsed);

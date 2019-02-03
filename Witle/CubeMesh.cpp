@@ -83,11 +83,3 @@ CubeMesh::~CubeMesh()
 	}
 
 }
-
-void CubeMesh::Create()
-{
-}
-
-void CubeMesh::Init()
-{
-}

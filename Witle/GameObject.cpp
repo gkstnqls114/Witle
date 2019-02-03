@@ -1,4 +1,5 @@
 #include "stdafx.h" 
+#include "Mesh.h"
 #include "ComponentBase.h"
 #include "GameObject.h"
  
@@ -11,6 +12,17 @@ void GameObject::ReleaseComponents()
 	}
 
 	m_Components.clear();
+}
+
+void GameObject::ReleaseComponentUploadBuffers()
+{
+	for (auto& component : m_Components)
+	{
+		if (component.second->GetFamillyID() == FAMILLYID_MESH)
+		{
+			static_cast<Mesh*>(component.second)->ReleaseUploadBuffers();
+		}
+	}
 }
 
 GameObject::GameObject(const std::string & entityID)
@@ -28,15 +40,15 @@ bool GameObject::InsertComponent(const std::string & ComponenetID, ComponentBase
 {
 	auto pair = m_Components.insert(std::pair< std::string, ComponentBase*>(ComponenetID, pComponentBase));
 	if (pair.second) {
-#ifdef CONSOLE_TEST
+#ifdef CHECK_CONSOLE_TEST
 		std::cout << m_EntityID << " ... " << "( ID: " << ComponenetID << " , " << pComponentBase << " ... Insert Componenet SUCCESS" << std::endl;
-#endif // CONSOLE_TEST 
+#endif // CHECK_CONSOLE_TEST 
 		return true;
 	}
 	else { 
-#ifdef CONSOLE_TEST
+#ifdef CHECK_CONSOLE_TEST
 		std::cout << m_EntityID << " ... " << "( ID: " << ComponenetID << " , " << pComponentBase << " ... Insert Componenet FAIL" << std::endl;
-#endif // CONSOLE_TEST 
+#endif // CHECK_CONSOLE_TEST 
 		return false;
 	}
 }

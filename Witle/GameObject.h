@@ -7,6 +7,8 @@ class IGameObject
 protected:
 	// 컴포넌트가 아닌, 게임오브젝트 내에서 동적할당된 멤버변수를 해제한다.
 	virtual void ReleaseMembers() = 0;
+	// 컴포넌트가 아닌, 게임오브젝트 내에서 동적할당된 업로드 힙을 해제한다.
+	virtual void ReleaseMemberUploadBuffers() = 0;
 
 public: 
 	// GameObject::Update의 모든 구현은 파생된 게임 오브젝트마다 다르다.
@@ -26,6 +28,7 @@ protected:
 
 private:
 	void ReleaseComponents();
+	void ReleaseComponentUploadBuffers();
 
 public:
 	GameObject(const std::string& entityID);
@@ -37,6 +40,12 @@ public:
 		ReleaseComponents();
 		ReleaseMembers();
 	};
+
+	void ReleaseUploadBuffers()
+	{
+		ReleaseComponentUploadBuffers();
+		ReleaseMemberUploadBuffers();
+	}
 
 	bool InsertComponent(const std::string& ComponenetID, ComponentBase* pComponentBase);
 	

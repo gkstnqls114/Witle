@@ -4,6 +4,11 @@
 #include "HeightMapImage.h"
 #include "Terrain.h"
 
+void Terrain::ReleaseMemberUploadBuffers()
+{
+	if(m_ResourceBase) m_ResourceBase->ReleaseUploadBuffers();
+}
+
 Terrain::Terrain(const std::string& entityID, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, LPCTSTR  pFileName, int nWidth, int nLength, int nBlockWidth, int nBlockLength, XMFLOAT3 xmf3Scale, XMFLOAT4 xmf4Color)
 	:GameObject(entityID)
 {
@@ -77,14 +82,6 @@ void Terrain::UpdateShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList)
 	// pd3dCommandList->SetDescriptorHeaps(1, &m_pd3dCbvSrvDescriptorHeap);
 
 	static_cast<Texture *>(m_ResourceBase)->UpdateShaderVariables(pd3dCommandList);
-}
-
-void Terrain::Create()
-{
-}
-
-void Terrain::Init()
-{
 }
 
 void Terrain::ReleaseMembers()

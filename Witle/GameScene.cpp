@@ -104,7 +104,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	m_GameObject->InsertComponent(cubemesh->GetFamillyID(), cubemesh);
 
 	// 터레인 생성 
-	XMFLOAT3 xmf3Scale(8.0f, 2.0f, 8.0f);
+	XMFLOAT3 xmf3Scale(8.0f, 1.0f, 8.0f);
 	XMFLOAT4 xmf4Color(0.0f, 0.5f, 0.0f, 0.0f);
 	m_Terrain = new Terrain("Terrain", pd3dDevice, pd3dCommandList,
 		L"Image/HeightMap.raw", 257, 257, 257, 257, xmf3Scale, xmf4Color);
@@ -377,11 +377,9 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 
 void GameScene::ReleaseUploadBuffers()
 { 
-	//if (m_Mesh) m_Mesh->ReleaseUploadBuffers();
-	//if (m_pHeightMapTerrain) m_pHeightMapTerrain->ReleaseUploadBuffers();
-	//if (m_SkyBox) m_SkyBox->ReleaseUploadBuffers(); 
-
-	//m_Player->SetMesh(0, m_Mesh);
+	if (m_GameObject) m_GameObject->ReleaseUploadBuffers();
+	if (m_Terrain) m_Terrain->ReleaseUploadBuffers();
+	if (m_TESTQuadTree) m_TESTQuadTree->ReleaseUploadBuffers();
 }
 
 bool GameScene::SaveData()

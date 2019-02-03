@@ -154,25 +154,19 @@ void QuadTreeTerrainMesh::TESTRender(const QUAD_TREE_NODE* node, ID3D12GraphicsC
 	{
 		if (node->children[0]->isRendering)
 		{
-			printf("%d - %d Render\n", node->children[0]->numInternal, node->children[0]->numLeaf);
 			TESTRender(node->children[0], pd3dCommandList);
 		}
 		if (node->children[1]->isRendering)
 		{
-			printf("%d - %d Render\n", node->children[1]->numInternal, node->children[1]->numLeaf);
 			TESTRender(node->children[1], pd3dCommandList);
 		}
 		if (node->children[2]->isRendering)
 		{
-			printf("%d - %d Render\n", node->children[2]->numInternal, node->children[2]->numLeaf);
 			TESTRender(node->children[2], pd3dCommandList);
 		}
 		if (node->children[3]->isRendering)
 		{
-			printf("%d - %d Render\n", node->children[3]->numInternal, node->children[3]->numLeaf);
 			TESTRender(node->children[3], pd3dCommandList);
 		}
 	}
-
-	printf("\n");
 }
