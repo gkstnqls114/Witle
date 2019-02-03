@@ -11,6 +11,11 @@ void CameraObject::ReleaseMembers()
 		delete m_pCameraComponent;
 		m_pCameraComponent = nullptr;
 	}
+	if (m_pFrustum)
+	{
+		delete m_pFrustum;
+		m_pFrustum = nullptr;
+	}
 }
 
 CameraObject::CameraObject(const std::string & entityID)
