@@ -23,6 +23,8 @@ ShaderManager * ShaderManager::GetInstance()
 
 void ShaderManager::ReleaseInstance()
 {
+	if (!m_ShaderManagerInstance) return;
+
 	// 순회하며 메모리 할당 제거.
 	for (auto& pso : m_ShaderManagerInstance->m_Shaders) {
 		delete pso.second;

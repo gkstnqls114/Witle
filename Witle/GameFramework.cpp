@@ -498,7 +498,7 @@ void CGameFramework::BuildObjects()
 	m_CommandList->Reset(m_CommandAllocator.Get(), NULL);
 	
 	///////////////////////////////////////////////////////////////////////////// 府家胶 积己
-	m_pScene = new GameScene;
+	/*m_pScene = new GameScene;
 	if (m_pScene) m_pScene->BuildObjects(m_d3dDevice.Get(), m_CommandList.Get());
 	
 	Shader* pCubeShader = new CubeShader();
@@ -508,7 +508,7 @@ void CGameFramework::BuildObjects()
 	Shader* pTerrainShader = new TerrainShader();
 	pTerrainShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
 	ShaderManager::GetInstance()->InsertShader("Terrain", pTerrainShader);
-	///////////////////////////////////////////////////////////////////////////// 府家胶 积己
+	*////////////////////////////////////////////////////////////////////////////// 府家胶 积己
 
 	hResult = m_CommandList->Close();
 	assert(hResult == S_OK);
@@ -799,36 +799,6 @@ void CGameFramework::Blur()
 
 void CGameFramework::RenderSwapChain()
 {
-
-	D3D12_RESOURCE_BARRIER d3dResourceBarrier;
-	::ZeroMemory(&d3dResourceBarrier, sizeof(D3D12_RESOURCE_BARRIER));
-	d3dResourceBarrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
-	d3dResourceBarrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
-	d3dResourceBarrier.Transition.pResource = m_RenderTargetBuffers[m_SwapChainBufferIndex].Get();
-	d3dResourceBarrier.Transition.StateBefore = D3D12_RESOURCE_STATE_PRESENT;
-	d3dResourceBarrier.Transition.StateAfter = D3D12_RESOURCE_STATE_RENDER_TARGET;
-	d3dResourceBarrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
-	m_CommandList->ResourceBarrier(1, &d3dResourceBarrier);
-
-	D3D12_CPU_DESCRIPTOR_HANDLE d3dRtvCPUDescriptorHandle = m_RtvHeap->GetCPUDescriptorHandleForHeapStart();
-	d3dRtvCPUDescriptorHandle.ptr += (m_SwapChainBufferIndex * m_RtvDescriptorSize);
-
-	float pfClearColor[4] = { 0.0f, 0.125f, 0.3f, 1.0f };
-	m_CommandList->ClearRenderTargetView(d3dRtvCPUDescriptorHandle, pfClearColor/*Colors::Azure*/, 0, NULL);
-
-	D3D12_CPU_DESCRIPTOR_HANDLE d3dDsvCPUDescriptorHandle = m_DsvHeap->GetCPUDescriptorHandleForHeapStart();
-	m_CommandList->ClearDepthStencilView(d3dDsvCPUDescriptorHandle, D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, NULL);
-
-	m_CommandList->OMSetRenderTargets(1, &d3dRtvCPUDescriptorHandle, TRUE, &d3dDsvCPUDescriptorHandle);
-
-	m_pScene->Render(m_CommandList.Get());
-
-	d3dResourceBarrier.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET;
-	d3dResourceBarrier.Transition.StateAfter = D3D12_RESOURCE_STATE_PRESENT;
-	d3dResourceBarrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
-	m_CommandList->ResourceBarrier(1, &d3dResourceBarrier);
-
-	return;
 	////////////////////////////////////////////////////// SwapChain
 	d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_RenderTargetBuffers[m_SwapChainBufferIndex].Get(), D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
 
