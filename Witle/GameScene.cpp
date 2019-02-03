@@ -141,8 +141,8 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	cameraComponent->GenerateProjectionMatrix(0.01f, CAMERA_FAR, float(FRAME_BUFFER_WIDTH) / float(FRAME_BUFFER_HEIGHT), 60.0f);
 
 	//테스트 쿼드트리 터레인 생성
-	//m_TESTQuadTree = new QuadTreeTerrainMesh(m_gameobject, pd3dDevice, pd3dCommandList, 257, 257,
-	//	xmf3Scale, xmf4Color, m_Terrain->GetHeightMapImage());
+	m_TESTQuadTree = new QuadTreeTerrainMesh(m_gameobject, pd3dDevice, pd3dCommandList, 257, 257,
+		xmf3Scale, xmf4Color, m_Terrain->GetHeightMapImage());
 }
 
 void GameScene::ReleaseObjects()
@@ -310,7 +310,7 @@ void GameScene::LastUpdate(float fElapsedTime)
 	} 
 
 	// 카메라 프러스텀과 쿼드트리 지형 렌더링 체크
-	// m_Camera->GetFrustum()->TESTCheck(m_TESTQuadTree->GetRootNode());
+	m_Camera->GetFrustum()->TESTCheck(m_TESTQuadTree->GetRootNode());
 	// m_Camera->GetFrustum()->TESTCheckAllTRUE(m_TESTQuadTree->GetRootNode());
 }
 
@@ -352,13 +352,13 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	//gMeshRenderer.Render(pd3dCommandList, terrainMesh);
 
 	//QuadTreeTerrain test Render
-	// m_TESTQuadTree->TESTRender(m_TESTQuadTree->GetRootNode(), pd3dCommandList);
+	m_TESTQuadTree->TESTRender(m_TESTQuadTree->GetRootNode(), pd3dCommandList);
 	
 #ifdef CHECK_ANOTHER_CAMERA
 	m_lookAboveCamera->SetViewportsAndScissorRects(pd3dCommandList); 
 	m_lookAboveCamera->UpdateShaderVariables(pd3dCommandList);
 
-	// m_TESTQuadTree->TESTRender(m_TESTQuadTree->GetRootNode(), pd3dCommandList);
+	m_TESTQuadTree->TESTRender(m_TESTQuadTree->GetRootNode(), pd3dCommandList);
 #endif
 
 	// PSO 설정
