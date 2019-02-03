@@ -22,7 +22,7 @@ public:
 	TerrainShader();
 	virtual ~TerrainShader();
 
-	virtual void						CreateShader(ID3D12Device *pd3dDevice, ID3D12RootSignature*pd3dGraphicsRootSignature) override;
+	virtual void						CreateShader(ID3D12Device *pd3dDevice, ID3D12RootSignature*const pd3dGraphicsRootSignature) override;
 	virtual void						Update(float ElapsedTime) override;
 
 };

@@ -11,7 +11,11 @@ MyDescriptorHeap::MyDescriptorHeap()
 
 MyDescriptorHeap::~MyDescriptorHeap()
 {
-	
+	if (m_pd3dCbvSrvUavDescriptorHeap)
+	{
+		m_pd3dCbvSrvUavDescriptorHeap->Release();
+		m_pd3dCbvSrvUavDescriptorHeap = nullptr;
+	}
 }
 
 

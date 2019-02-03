@@ -26,7 +26,7 @@ protected:
 	virtual D3D12_SHADER_BYTECODE		CreateGeometryShader(ID3DBlob **ppd3dShaderBlob) ; 
 
 public:  
-	virtual void						CreateShader(ID3D12Device *pd3dDevice, ID3D12RootSignature*pd3dGraphicsRootSignature) = 0;
+	virtual void						CreateShader(ID3D12Device *pd3dDevice, ID3D12RootSignature* const pd3dGraphicsRootSignature) = 0;
 	virtual void						SetDescriptorHeaps(ID3D12GraphicsCommandList * pd3dCommandList);
 	virtual void						SetGraphicsRootSignature(ID3D12GraphicsCommandList * pd3dCommandList);
 

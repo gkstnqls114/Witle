@@ -12,7 +12,21 @@ Shader::Shader()
 
 Shader::~Shader()
 {
-
+	if (m_pd3dGraphicsRootSignature)
+	{
+		m_pd3dGraphicsRootSignature->Release();
+		m_pd3dGraphicsRootSignature = nullptr;
+	}
+	if (m_pd3dPipelineState)
+	{
+		m_pd3dPipelineState->Release();
+		m_pd3dPipelineState = nullptr;
+	}
+	if (m_pd3dDescriptorHeap)
+	{
+		m_pd3dDescriptorHeap->Release();
+		m_pd3dDescriptorHeap = nullptr;
+	}
 }
 
 //래스터라이저 상태를 설정하기 위한 구조체를 반환한다.

@@ -14,7 +14,7 @@ TerrainShader::~TerrainShader()
 {
 }
 
-void TerrainShader::CreateShader(ID3D12Device * pd3dDevice, ID3D12RootSignature * pd3dGraphicsRootSignature)
+void TerrainShader::CreateShader(ID3D12Device * pd3dDevice, ID3D12RootSignature * const pd3dGraphicsRootSignature)
 {
 	Shader::CreatePipelineState(pd3dDevice, pd3dGraphicsRootSignature);
 }
