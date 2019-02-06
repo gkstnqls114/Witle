@@ -11,6 +11,24 @@ public:
 	~CVertex() { }
 };
 
+class CTextureVertex : public CVertex
+{
+public:
+	XMFLOAT2						m_xmf2TexCoord;
+
+public:
+	CTextureVertex() { 
+		m_xmf3Position = XMFLOAT3(0.0f, 0.0f, 0.0f);
+		m_xmf2TexCoord = XMFLOAT2(0.0f, 0.0f);
+	}
+	CTextureVertex(XMFLOAT3 xmf3Position, XMFLOAT2 texcoord) 
+	{
+		m_xmf3Position = xmf3Position; 
+		m_xmf2TexCoord = texcoord;
+	}
+	~CTextureVertex() { }
+};
+
 class CDiffusedVertex : public CVertex
 {
 public:
