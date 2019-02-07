@@ -14,14 +14,9 @@ class GameObject;
 // 가장 기본적인 카메라입니다.
 // 카메라 자신의 Position을 기준으로 이동하고 회전합니다.
 class Camera
-	: public ComponentBase
+	: public ResourceComponentBase
 {
-protected:
-	//XMFLOAT3		m_Position			{ 0.0f, 0.0f, 0.0f }; // Position = At - Offset
-	//XMFLOAT3		m_Right				{ 1.0f, 0.0f, 0.0f };
-	//XMFLOAT3		m_Up				{ 0.0f, 1.0f, 0.0f };
-	//XMFLOAT3		m_Look				{ 0.0f, 0.0f, 1.0f };
-
+protected: 
 	XMFLOAT3		m_At				{ 0.0f, 0.0f, 1.0f }; // Position + Offset = At
 	XMFLOAT3		m_Offset			{ 0.0f, 0.0f, 1.0f }; // Offset = At - Position
 
@@ -37,7 +32,6 @@ protected:
 	D3D12_VIEWPORT	m_d3dViewport;
 	D3D12_RECT		m_d3dScissorRect;
 
-	ResourceBase	*m_ShaderVariables{ nullptr };
 
 protected:  
 	//절두체(월드 좌표계)를 생성한다.

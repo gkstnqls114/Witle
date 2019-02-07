@@ -25,19 +25,19 @@ void ParameterForm::InsertResource(int parametersIndex, const std::string& name,
 {
 	assert(!(parametersIndex >= m_resourceVector.size())); // 만약 인덱스가 벡터의 크기보다 크다면 오류를 발생한다.
 	
-	ResourceBase* value = nullptr;
+	Form* value = nullptr;
 	switch (rootParameter.ParameterType)
 	{
 	case D3D12_ROOT_PARAMETER_TYPE_32BIT_CONSTANTS: // 루트 상수
-		value = new RootConstants(parametersIndex, rootParameter.Constants.Num32BitValues);
+		value = new FormConstant(rootParameter.Constants.Num32BitValues);
 		break;
 
 	case D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE: // 서술자 테이블
-		
 		break;
 
 	case D3D12_ROOT_PARAMETER_TYPE_CBV: // 상수 버퍼 뷰
-		
+		value = new FormCBV();
+
 		break;
 
 	case D3D12_ROOT_PARAMETER_TYPE_SRV:
@@ -65,7 +65,8 @@ void ParameterForm::UpdateShaderVariable(ID3D12GraphicsCommandList * commandList
 #endif // CHECK_ROOT_SIGNATURE
 
 	// 업데이트한다.
-	GetResource(name)->UpdateShaderVariables(commandList, resource);
+	int index = 0;
+	GetResource(name, index)->UpdateShaderVariable(commandList, index, resource);
 }
 
 void ParameterForm::UpdateShaderVariable(ID3D12GraphicsCommandList * commandList, ID3D12RootSignature * CurrentRootsignature, UINT index, const SourcePtr & resource)
@@ -75,5 +76,20 @@ void ParameterForm::UpdateShaderVariable(ID3D12GraphicsCommandList * commandList
 #endif // CHECK_ROOT_SIGNATURE
 
 	// 업데이트한다.
-	GetResource(index)->UpdateShaderVariables(commandList, resource);
+	GetResource(index)->UpdateShaderVariable(commandList, index, resource);
+}
+
+void ParameterForm::FormCBV::UpdateShaderVariable(ID3D12GraphicsCommandList * commandList, UINT index, const SourcePtr & resource)
+{
+
+}
+
+void ParameterForm::FormCBV::ReleaseShaderVariables()
+{
+}
+
+void ParameterForm::FormConstant::UpdateShaderVariable(ID3D12GraphicsCommandList * commandList, UINT index, const SourcePtr & resource)
+{
+	assert(!(m_4ByteSize != (resource.m_byteSize / NUM32BITTOBYTE))); // 크기가 맞지 않는다면 경고한다.
+	commandList->SetGraphicsRoot32BitConstants(index, m_4ByteSize, resource.m_Ptr, 0);
 }

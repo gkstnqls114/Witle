@@ -56,6 +56,9 @@ public:
 protected:
 	ParameterForm*          m_parameterForm{ nullptr };
 
+	GameObject**			m_PickingTESTMeshs{ nullptr };
+	int						m_numPickingTESTMeshs{ 100 };
+
 	Player*                 m_GameObject{ nullptr };
 	Terrain*                m_Terrain{ nullptr };
 	MyDescriptorHeap*       m_TerrainHeap{ nullptr };

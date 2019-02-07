@@ -2,6 +2,8 @@
 #include "ID.h"
 
 class GameObject;
+class ResourceBase;
+
 class ComponentBase
 {
 public:
@@ -20,3 +22,14 @@ protected:
 	std::string m_FamillyID{ "ComponentBase" };
 };
 
+class ResourceComponentBase
+	: public ComponentBase
+{
+protected:
+	ResourceBase	*m_ShaderVariables{ nullptr };
+
+public:
+	ResourceComponentBase(GameObject* pOwner) : ComponentBase(pOwner) {}
+	virtual ~ResourceComponentBase();
+
+};

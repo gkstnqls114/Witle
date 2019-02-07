@@ -52,7 +52,9 @@ bool GameScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM w
 		}
 		break;
 	case WM_KEYDOWN:
-		switch (wParam) { 
+		switch (wParam) {
+		case 'A':
+			break;
 //#ifdef _DEBUG
 //		case KEY_A:
 //			m_Camera->Move(Vector3::ScalarProduct(m_Camera->GetRightVector(), -100));
@@ -96,10 +98,17 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	//루트 시그너쳐를 생성한다.
 	m_pd3dGraphicsRootSignature = CreateGraphicsRootSignature(pd3dDevice);
 	
+	// 피킹 테스트할 오브젝트 생성
+	m_PickingTESTMeshs = new GameObject*[m_numPickingTESTMeshs];
+	for (int x = 0; x < m_numPickingTESTMeshs; ++x)
+	{
+		std::string name = "TESTPikcing" + std::to_string(x);
+		m_PickingTESTMeshs[x] = new GameObject(name);
+	}
+
 	// 큐브메쉬 생성
-	m_GameObject = new Player("Player");
 	ComponentBase* cubemesh = new CubeMesh(m_GameObject, pd3dDevice, pd3dCommandList, 1, 1, 1);
-	std::cout << cubemesh->GetFamillyID() << " " << cubemesh->GetComponentID() << std::endl;
+	m_GameObject = new Player("Player");
 	m_GameObject->InsertComponent(cubemesh->GetFamillyID(), cubemesh);
 
 	// 터레인 생성 
@@ -447,12 +456,17 @@ ID3D12RootSignature* GameScene::CreateGraphicsRootSignature(ID3D12Device *pd3dDe
 	pRootParameters[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
 	m_parameterForm->InsertResource(0, "World", pRootParameters[0]);
 
+	//pRootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	//pRootParameters[1].Descriptor.ShaderRegister = 1; //Camera
+	//pRootParameters[1].Descriptor.RegisterSpace = 0;
+	//pRootParameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+
 	pRootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_32BIT_CONSTANTS;
 	pRootParameters[1].Constants.Num32BitValues = 32;
 	pRootParameters[1].Constants.ShaderRegister = 1;
 	pRootParameters[1].Constants.RegisterSpace = 0;
 	pRootParameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
-	m_parameterForm->InsertResource(1, "ViewAndProjection", pRootParameters[0]);
+	m_parameterForm->InsertResource(1, "ViewAndProjection", pRootParameters[1]);
 	 
 	pRootParameters[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	pRootParameters[2].Descriptor.ShaderRegister = 2; //Materials

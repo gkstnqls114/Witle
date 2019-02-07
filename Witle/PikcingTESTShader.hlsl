@@ -3,10 +3,11 @@
 cbuffer cbGameObjectInfo : register(b0)
 {
 	matrix gmtxWorld : packoffset(c0);
+	float fColor : packoffset(c4);
 }
 
 // 상수 버퍼
-cbuffer cbCameraInfo : register(b1)
+cbuffer cbGameObjectInfo : register(b1)
 {
 	matrix gmtxView : packoffset(c0);
 	matrix gmtxProjection : packoffset(c4);
@@ -31,7 +32,7 @@ VertexOut VS(VertexIn input)
 
 	// vout.Pos = mul(float4(input.Pos, 1.0f), gmtxWorld);
 	vout.Pos = mul(mul(mul(float4(input.Pos, 1.0f), gmtxWorld), gmtxView), gmtxProjection);
-	vout.Color = input.Color; 
+	vout.Color = input.Color;
 
 	return vout;
 }

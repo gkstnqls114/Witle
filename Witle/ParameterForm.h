@@ -6,6 +6,29 @@ class ResourceBase;
 // 
 class ParameterForm
 { 
+	class Form
+	{
+	public:
+		virtual void UpdateShaderVariable(ID3D12GraphicsCommandList* commandList, UINT index, const SourcePtr& resource) = 0;
+		virtual void ReleaseShaderVariables() = 0;
+	};
+
+	class FormCBV : public Form
+	{
+	public:
+		virtual void UpdateShaderVariable(ID3D12GraphicsCommandList* commandList, UINT index, const SourcePtr& resource) override;
+		virtual void ReleaseShaderVariables();
+	};
+
+	class FormConstant : public Form
+	{
+		UINT m_4ByteSize{ 0 };
+	public:
+		FormConstant(int num4byte) : m_4ByteSize(num4byte) {};
+		virtual void UpdateShaderVariable(ID3D12GraphicsCommandList* commandList, UINT index, const SourcePtr& resource) override;
+		virtual void ReleaseShaderVariables() {};
+	};
+
 #ifdef CHECK_ROOT_SIGNATURE
 	ID3D12RootSignature* m_pRootSignature{ nullptr }; // 현재 사용하는 루트 시그니처와 맞는지 체크하기 위해 사용
 #endif // CHECK_ROOT_SIGNATURE
@@ -13,7 +36,7 @@ class ParameterForm
 	int m_VectorIndex{ 0 };
 	// 인덱스 값으로도 찾고, 인덱스로도 찾기 위해 두 개의 자료구조 사용
 	std::map<std::string, int> m_resourceMap;
-	std::vector<ResourceBase*> m_resourceVector;
+	std::vector<Form*> m_resourceVector;
 
 private:
 
@@ -30,11 +53,12 @@ public:
 		m_pRootSignature = rootsignature;
 	}
 	 
-	ResourceBase* GetResource(int index) const { return m_resourceVector[index]; }
-	ResourceBase* GetResource(const std::string& name) const
+	Form* GetResource(int index) const { return m_resourceVector[index]; }
+	Form* GetResource(const std::string& name, int& index) const
 	{
 		assert(m_resourceMap.find(name) != m_resourceMap.end());
-		return m_resourceVector[(*m_resourceMap.find(name)).second];
+		index = (*m_resourceMap.find(name)).second;
+		return m_resourceVector[index];
 	}
 
 	// 해당 루트 패러미터에 맞춰서 Resource를 구성한다.

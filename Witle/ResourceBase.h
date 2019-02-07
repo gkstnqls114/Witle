@@ -4,7 +4,6 @@
 class ResourceBase
 {
 protected:
-	UINT m_parameterIndex{ 0 }; 
 
 public:
 	ResourceBase();

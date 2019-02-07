@@ -1,6 +1,7 @@
 #pragma once  
 #include "Transform.h"
 class ComponentBase;
+class ResourceBase;
 
 class IGameObject
 {
@@ -20,13 +21,16 @@ class GameObject
 {
 private:
 	std::map< std::string, ComponentBase*> m_Components;
-	std::string m_EntityID;
+	std::string m_EntityID; 
 
 protected:
 	Transform m_Transform; //월드변환을 위한 좌표계
 	ComponentBase* GetComponent(const std::string& id) const;
 
 private:
+	virtual void ReleaseMembers() override {};
+	virtual void ReleaseMemberUploadBuffers() override {};
+
 	void ReleaseComponents();
 	void ReleaseComponentUploadBuffers();
 
@@ -35,20 +39,12 @@ public:
 	virtual ~GameObject();
 
 	virtual void Update(float fElapsedTime) override {};
-	void ReleaseObjects()
-	{
-		ReleaseComponents();
-		ReleaseMembers();
-	};
 
-	void ReleaseUploadBuffers()
-	{
-		ReleaseComponentUploadBuffers();
-		ReleaseMemberUploadBuffers();
-	}
+	void ReleaseObjects();
+	void ReleaseUploadBuffers();
 
 	bool InsertComponent(const std::string& ComponenetID, ComponentBase* pComponentBase);
-	
+
 	template <typename T>
 	T* GetComponent(const std::string& id = "") const
 	{
@@ -58,5 +54,6 @@ public:
 
 	const Transform& GetTransform() const { return m_Transform; }
 	Transform& GetTransform() { return m_Transform; }
+	const std::string& GetName() const { return m_EntityID; }
 };
  
