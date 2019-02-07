@@ -53,9 +53,8 @@ void ParameterForm::InsertResource(int parametersIndex, const std::string& name,
 	}
 
 	// assert(!(value == nullptr));
-	m_resourceMap.insert(std::pair<std::string, int>(name, m_VectorIndex));
-	m_resourceVector[m_VectorIndex] = value;
-	m_VectorIndex += 1;
+	m_resourceMap.insert(std::pair<std::string, int>(name, parametersIndex));
+	m_resourceVector[parametersIndex] = value; 
 }
 
 void ParameterForm::UpdateShaderVariable(ID3D12GraphicsCommandList * commandList, ID3D12RootSignature * CurrentRootsignature, const std::string & name, const SourcePtr & resource)

@@ -300,6 +300,31 @@ bool GameScene::ProcessInput(HWND hWnd, float ElapsedTime)
 		
 	}
 
+	// 피킹을 테스트한다.
+	Camera* pCamera = m_Camera->GetCamera();
+	RAY pickRay;
+	bool isPick = GameInput::GenerateRayforPicking(m_Camera->GetTransform().GetPosition(), pCamera->GetViewMatrix(), pCamera->GetProjectionMatrix(), pickRay);
+	if (isPick)
+	{
+		if (m_PickingTESTMeshs)
+		{
+			XMFLOAT3* pickColor;
+			float dist;
+			for (int x = 0; x < m_numPickingTESTMeshs; ++x)
+			{
+				auto world = m_PickingTESTMeshs[x]->GetTransform().GetWorldMatrix();
+				BoundingBox box{ XMFLOAT3(0.F, 0.F, 0.F),  XMFLOAT3(0.5F, 0.5F, 0.5F) };
+				box.Transform(box, XMLoadFloat4x4(&world));
+				if (box.Intersects(XMLoadFloat3(&pickRay.origin), XMLoadFloat3(&pickRay.direction), dist))
+				{
+					m_PickingColors[x] = XMFLOAT3(1.F, 0.F, 0.F);
+				}
+			}
+
+
+		}
+	}
+
 	return true;
 }
 
@@ -522,6 +547,12 @@ ID3D12RootSignature* GameScene::CreateGraphicsRootSignature(ID3D12Device *pd3dDe
 	pRootParameters[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
 	m_parameterForm->InsertResource(3, "Lights", pRootParameters[3]);
 
+	pRootParameters[7].ParameterType = D3D12_ROOT_PARAMETER_TYPE_32BIT_CONSTANTS;
+	pRootParameters[7].Constants.Num32BitValues = 3;
+	pRootParameters[7].Constants.ShaderRegister = 4;
+	pRootParameters[7].Constants.RegisterSpace = 0;
+	pRootParameters[7].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+	m_parameterForm->InsertResource(7, "Color", pRootParameters[7]);
 
 	D3D12_DESCRIPTOR_RANGE pd3dDescriptorRanges[3];
 	 
@@ -562,13 +593,6 @@ ID3D12RootSignature* GameScene::CreateGraphicsRootSignature(ID3D12Device *pd3dDe
 	pRootParameters[6].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 	m_parameterForm->InsertResource(6, "TerrainDetail", pRootParameters[6]);
 
-
-	pRootParameters[7].ParameterType = D3D12_ROOT_PARAMETER_TYPE_32BIT_CONSTANTS;
-	pRootParameters[7].Constants.Num32BitValues = 3;
-	pRootParameters[7].Constants.ShaderRegister = 4;
-	pRootParameters[7].Constants.RegisterSpace = 0;
-	pRootParameters[7].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
-	m_parameterForm->InsertResource(7, "Color", pRootParameters[7]);
 
 
 /*

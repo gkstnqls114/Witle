@@ -56,6 +56,8 @@ public:
 protected:
 	ParameterForm*          m_parameterForm{ nullptr };
 	
+
+	float PiekcingDist;
 	XMFLOAT3*				m_PickingColors{ nullptr };
 	GameObject**			m_PickingTESTMeshs{ nullptr };
 	int						m_numPickingTESTMeshs{ 100 };

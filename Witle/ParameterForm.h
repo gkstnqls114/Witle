@@ -33,7 +33,6 @@ class ParameterForm
 	ID3D12RootSignature* m_pRootSignature{ nullptr }; // 현재 사용하는 루트 시그니처와 맞는지 체크하기 위해 사용
 #endif // CHECK_ROOT_SIGNATURE
 
-	int m_VectorIndex{ 0 };
 	// 인덱스 값으로도 찾고, 인덱스로도 찾기 위해 두 개의 자료구조 사용
 	std::map<std::string, int> m_resourceMap;
 	std::vector<Form*> m_resourceVector;

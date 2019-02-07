@@ -53,6 +53,7 @@ private:
 
 public: 
 	static void Update(HWND hWnd);
+	static void Reset();
 
 	// 키가 눌렸는지 확인하는 상태
 	static bool IsKeydownRIGHT() { return (m_pKeyBuffer[VK_RIGHT] & 0xF0); };
@@ -68,6 +69,6 @@ public:
 	static float GetcDeltaX() { return m_cDeltaX; }
 	static float GetcDeltaY() { return m_cDeltaY; }
 
-	static RAY GenerateRayforPicking(const XMFLOAT3& cameraPos, const XMFLOAT4X4& view, const XMFLOAT4X4 & projection);
+	static bool GenerateRayforPicking(const XMFLOAT3& cameraPos, const XMFLOAT4X4 & view, const XMFLOAT4X4 & projection, RAY& ray);
 
 };

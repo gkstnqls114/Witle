@@ -541,7 +541,7 @@ void CGameFramework::UpdateGamelogic(float fElapsedTime)
 
 		// 현재 애니메이션 어디다가 쓰는지 모르겠다.
 		//m_pScene->AnimateObjects(0);
-
+		GameInput::Reset();
 	}
 }
 
