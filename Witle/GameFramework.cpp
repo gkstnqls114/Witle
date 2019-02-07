@@ -584,8 +584,7 @@ void CGameFramework::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM
 	{
 	case WM_MOUSEWHEEL:
 	case WM_MOUSEHWHEEL:
-		m_MouseWheelData = GET_WHEEL_DELTA_WPARAM(wParam);
-
+		GameInput::RotateWheel(wParam);
 		break;
 	case WM_LBUTTONDOWN:
 		//마우스 캡쳐를 하고 현재 마우스 위치를 가져온다. 

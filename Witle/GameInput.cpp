@@ -10,6 +10,9 @@ UCHAR GameInput::m_pKeyBuffer[256];
 float GameInput::m_cDeltaX = 0.0f; // 마우스를 누른 상태로 x축으로 움직인 마우스 이동량  
 float GameInput::m_cDeltaY = 0.0f; // 마우스를 누른 상태로 y축으로 움직인 마우스 이동량
 POINT GameInput::m_oldCursor; // 이전 프레임에서의 마우스 위치
+POINT GameInput::m_clickCursor; // 한번 클릭했을 때 위치
+const float GameInput::m_DeltaValue = 3.0f; // 마우스 이동량 값 
+short GameInput::m_WheelDelta; // 마우스 휠이 움직인 정도
 
 GameInput::GameInput()
 {
@@ -17,6 +20,38 @@ GameInput::GameInput()
 
 GameInput::~GameInput()
 {
+}
+
+RAY GameInput::GenerateRayforPicking(const XMFLOAT3& cameraPos, const XMFLOAT4X4 & view, const XMFLOAT4X4 & projection)
+{
+	RAY pickingRay;
+	pickingRay.origin = cameraPos;
+
+	// 왼쪽 상단이 (0, 0)로 표현되어있는 윈도우 좌표계의 클릭 커서를
+	// 화면 중심이 (0, 0)이며 각 축이 -1~1 로 표현되는, 즉 투영 좌표계로 변경한다.
+	XMFLOAT3 Picking; 
+	Picking.x = (2.0f * m_clickCursor.x / double(FRAME_BUFFER_WIDTH)) - 1;
+	Picking.y =  (-2.0f * m_clickCursor.y / double(FRAME_BUFFER_HEIGHT)) + 1;
+
+	//현재는 투영좌표계의 Direction 좌표
+	//즉 Direction의 x, y좌표는 -1과 1사이이다.
+
+	// 클릭 좌표를 투영좌표계에서 카메라 좌표계로 변경
+	Picking.x = pickingRay.direction.x / projection._11;
+	Picking.y = pickingRay.direction.y / projection._22;
+	Picking.z = 1.0f;
+
+	// 현재 카메라 좌표계...
+
+	// 카메라 좌표계에서 월드 좌표계로 변환
+	XMFLOAT4X4 InverseView = Matrix4x4::Inverse(view);  
+	Picking = Vector3::TransformCoord(Picking, InverseView);
+	
+	// 카메라 위치에서부터 방향 벡터를 구한다
+	pickingRay.direction = Vector3::Normalize(Vector3::Subtract(Picking, pickingRay.origin));
+
+
+	return pickingRay;
 }
 
 void GameInput::Update(HWND hWnd)
@@ -32,22 +67,32 @@ void GameInput::Update(HWND hWnd)
 	if (::GetCapture() == hWnd)
 	{
 		//마우스 커서를 화면에서 없앤다(보이지 않게 한다).
+		std::cout << m_clickCursor.x << " " << m_clickCursor.y << std::endl;
 		::SetCursor(NULL);
 		//현재 마우스 커서의 위치를 가져온다.
 		::GetCursorPos(&ptCursorPos);
 		//마우스 버튼이 눌린 상태에서 마우스가 움직인 양을 구한다.
-		m_cDeltaX = (float)(ptCursorPos.x - m_oldCursor.x) / 3.0f;
-		m_cDeltaY = (float)(ptCursorPos.y - m_oldCursor.y) / 3.0f;
+		m_cDeltaX = (float)(ptCursorPos.x - m_oldCursor.x) / m_DeltaValue;
+		m_cDeltaY = (float)(ptCursorPos.y - m_oldCursor.y) / m_DeltaValue;
 
 		//마우스 커서의 위치를 마우스가 눌려졌던 위치로 설정한다.
 		::SetCursorPos(m_oldCursor.x, m_oldCursor.y);
+
 	}
+	
 }
 
 void GameInput::SetCapture(HWND hWnd)
 {
 	::SetCapture(hWnd);
 	::GetCursorPos(&m_oldCursor);
+	::GetCursorPos(&m_clickCursor);
+	::ScreenToClient(hWnd, &m_clickCursor);
+}
+
+void GameInput::RotateWheel(WPARAM wParam)
+{
+	m_WheelDelta = GET_WHEEL_DELTA_WPARAM(wParam);
 }
 
 void GameInput::ReleaseCapture()

@@ -27,18 +27,29 @@
 #define MYVK_Y 0x59
 #define MYVK_Z 0x5A
 
+struct RAY
+{
+	XMFLOAT3 origin{0.f, 0.f, 0.f};
+	XMFLOAT3 direction{0.f, 0.f, 0.f};
+};
+
 // 싱글톤 패턴
 class GameInput
 {
 private:
 	GameInput();
 	~GameInput();
-	
+
 	static UCHAR m_pKeyBuffer[256]; // 키보드의 input을 위한 멤버 변수
 
+	static RAY m_PickingRay;
+
+	static POINT m_clickCursor; // 한번 클릭했을 때 위치
+	static const float m_DeltaValue; // 마우스 이동량 값
 	static float m_cDeltaX; // 마우스를 누른 상태로 x축으로 움직인 마우스 이동량  
 	static float m_cDeltaY; // 마우스를 누른 상태로 y축으로 움직인 마우스 이동량
-	static POINT m_oldCursor; // 이전 프레임에서의 마우스 위치
+	static POINT m_oldCursor; // 이전 프레임에서의 마우스 위치 
+	static short m_WheelDelta; // 마우스 휠이 움직인 정도
 
 public: 
 	static void Update(HWND hWnd);
@@ -52,8 +63,11 @@ public:
 	static bool IsKeydownS() { return (m_pKeyBuffer[MYVK_S] & 0xF0); };
 
 	static void SetCapture(HWND hWnd);
+	static void RotateWheel(WPARAM wParam);
 	static void ReleaseCapture();
 	static float GetcDeltaX() { return m_cDeltaX; }
 	static float GetcDeltaY() { return m_cDeltaY; }
+
+	static RAY GenerateRayforPicking(const XMFLOAT3& cameraPos, const XMFLOAT4X4& view, const XMFLOAT4X4 & projection);
 
 };

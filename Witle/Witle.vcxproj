@@ -150,7 +150,7 @@
     <ClInclude Include="BasicCam.h" />
     <ClInclude Include="CameraObject.h" />
     <ClInclude Include="ComponentBase.h" />
-    <ClInclude Include="GameAspect.h" />
+    <ClInclude Include="GameScreen.h" />
     <ClInclude Include="MyConstants.h" />
     <ClInclude Include="CubeMesh.h" />
     <ClInclude Include="CubeShader.h" />
@@ -210,7 +210,7 @@
     <ClCompile Include="Event.cpp" />
     <ClCompile Include="EventHandler.cpp" />
     <ClCompile Include="FollowCam.cpp" />
-    <ClCompile Include="GameAspect.cpp" />
+    <ClCompile Include="GameScreen.cpp" />
     <ClCompile Include="GameFramework.cpp" />
     <ClCompile Include="GameInput.cpp" />
     <ClCompile Include="GameObject.cpp" />
