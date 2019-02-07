@@ -117,10 +117,12 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 
 	// 피킹 테스트 오브젝트들
 	m_PickingTESTMeshs = new GameObject*[m_numPickingTESTMeshs];
+	m_PickingColors = new XMFLOAT3[m_numPickingTESTMeshs];
 	for (int x = 0; x < m_numPickingTESTMeshs; ++x)
 	{
 		std::string name = "TESTPikcing" + std::to_string(x);
 		m_PickingTESTMeshs[x] = new GameObject(name);
+		m_PickingColors[x] = XMFLOAT3(1.F, 1.F, 1.F);
 		int rand_x = rand() % int(257);
 		int rand_z = rand() % int(257);
 		m_PickingTESTMeshs[x]->GetTransform().SetPosition(XMFLOAT3(rand_x, m_Terrain->GetHeight(rand_x, rand_z) + 0.5f, rand_z));
@@ -221,8 +223,13 @@ void GameScene::ReleaseObjects()
 			delete m_PickingTESTMeshs[x];
 			m_PickingTESTMeshs[x] = nullptr;
 		}
-		delete m_PickingTESTMeshs;
+		delete[] m_PickingTESTMeshs;
 		m_PickingTESTMeshs = nullptr;
+	}
+	if (m_PickingColors)
+	{
+		delete[] m_PickingColors;
+		m_PickingColors = nullptr;
 	}
 }
 
@@ -408,6 +415,8 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 
 	// 쉐이더 변수 설정 
 	m_parameterForm->UpdateShaderVariable(pd3dCommandList, m_pd3dGraphicsRootSignature, "World", SourcePtr(&XMMatrixTranspose(XMLoadFloat4x4(&m_GameObject->GetTransform().GetWorldMatrix()))));
+	XMFLOAT3 test = XMFLOAT3(0.f, 0.f, 0.f);
+	m_parameterForm->UpdateShaderVariable(pd3dCommandList, m_pd3dGraphicsRootSignature, "Color", SourcePtr(&test));
 
 	// CubeMesh Render
 	Mesh* mesh = m_GameObject->GetComponent<Mesh>("Mesh");
@@ -426,7 +435,7 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	{
 		// 쉐이더 변수 설정 
 		m_parameterForm->UpdateShaderVariable(pd3dCommandList, m_pd3dGraphicsRootSignature, "World", SourcePtr(&XMMatrixTranspose(XMLoadFloat4x4(&m_PickingTESTMeshs[x]->GetTransform().GetWorldMatrix()))));
-
+		m_parameterForm->UpdateShaderVariable(pd3dCommandList, m_pd3dGraphicsRootSignature, "Color", SourcePtr(&m_PickingColors[x]));
 		// CubeMesh Render
 		Mesh* mesh = m_PickingTESTMeshs[x]->GetComponent<Mesh>("Mesh");
 		gMeshRenderer.Render(pd3dCommandList, mesh); 
@@ -501,15 +510,6 @@ ID3D12RootSignature* GameScene::CreateGraphicsRootSignature(ID3D12Device *pd3dDe
 	pRootParameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
 	m_parameterForm->InsertResource(1, "Camera", pRootParameters[1]);
 	
-
-	pRootParameters[7].ParameterType = D3D12_ROOT_PARAMETER_TYPE_32BIT_CONSTANTS; 
-	pRootParameters[7].Constants.Num32BitValues = 3;
-	pRootParameters[7].Constants.ShaderRegister = 4;
-	pRootParameters[7].Constants.RegisterSpace = 0;
-	pRootParameters[7].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
-	m_parameterForm->InsertResource(7, "Color", pRootParameters[7]);
-
-
 	pRootParameters[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	pRootParameters[2].Descriptor.ShaderRegister = 2; //Materials
 	pRootParameters[2].Descriptor.RegisterSpace = 0;
@@ -561,6 +561,15 @@ ID3D12RootSignature* GameScene::CreateGraphicsRootSignature(ID3D12Device *pd3dDe
 	pRootParameters[6].DescriptorTable.pDescriptorRanges = &pd3dDescriptorRanges[2];
 	pRootParameters[6].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 	m_parameterForm->InsertResource(6, "TerrainDetail", pRootParameters[6]);
+
+
+	pRootParameters[7].ParameterType = D3D12_ROOT_PARAMETER_TYPE_32BIT_CONSTANTS;
+	pRootParameters[7].Constants.Num32BitValues = 3;
+	pRootParameters[7].Constants.ShaderRegister = 4;
+	pRootParameters[7].Constants.RegisterSpace = 0;
+	pRootParameters[7].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+	m_parameterForm->InsertResource(7, "Color", pRootParameters[7]);
+
 
 /*
 	pRootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
