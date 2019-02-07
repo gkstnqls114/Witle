@@ -276,6 +276,9 @@
     <ClInclude Include="MyFrustum.h">
       <Filter>02.Component\MyFrustum</Filter>
     </ClInclude>
+    <ClInclude Include="GameAspect.h">
+      <Filter>01.GameBase</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -409,6 +412,9 @@
     </ClCompile>
     <ClCompile Include="MyFrustum.cpp">
       <Filter>02.Component\MyFrustum</Filter>
+    </ClCompile>
+    <ClCompile Include="GameAspect.cpp">
+      <Filter>01.GameBase</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
