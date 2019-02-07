@@ -505,8 +505,7 @@ void CGameFramework::BuildObjects()
 
 	Shader* pTerrainShader = new TerrainShader();
 	pTerrainShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
-	ShaderManager::GetInstance()->InsertShader("Terrain", pTerrainShader);
-	
+	ShaderManager::GetInstance()->InsertShader("Terrain", pTerrainShader); 
 	///////////////////////////////////////////////////////////////////////////// 府家胶 积己
 
 	hResult = m_CommandList->Close();

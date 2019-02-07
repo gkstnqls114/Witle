@@ -13,6 +13,12 @@ cbuffer cbCameraInfo : register(b1)
 	float fPosition : packoffset(c8);
 }
 
+// 루트 상수
+cbuffer cbGameObjectInfo : register(b4)
+{
+	float3 color: packoffset(c0);
+}
+
 struct VertexIn
 {
 	float3 Pos : POSITION;
@@ -38,5 +44,12 @@ VertexOut VS(VertexIn input)
 
 float4 PS(VertexOut input) : SV_TARGET
 {
-	return input.Color;
+	if (color.x == 0.f)
+	{
+		return input.Color;
+	}
+	else
+	{
+		return float4(color, 1.0f);
+	}
 }

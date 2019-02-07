@@ -100,13 +100,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	
 	// 피킹 테스트할 오브젝트 생성
 	ComponentBase* cubemesh = new CubeMesh(m_GameObject, pd3dDevice, pd3dCommandList, 1, 1, 1);
-	m_PickingTESTMeshs = new GameObject*[m_numPickingTESTMeshs];
-	for (int x = 0; x < m_numPickingTESTMeshs; ++x)
-	{
-		std::string name = "TESTPikcing" + std::to_string(x);
-		m_PickingTESTMeshs[x] = new GameObject(name);
-		m_PickingTESTMeshs[x]->InsertComponent(cubemesh->GetFamillyID(), cubemesh);
-	}
+	
 
 	// 큐브메쉬 생성
 	m_GameObject = new Player("Player");
@@ -120,6 +114,18 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 
 	//// 해당 터레인을 플레이어 콜백으로 설정
 	m_GameObject->SetPlayerUpdatedContext(m_Terrain);
+
+	// 피킹 테스트 오브젝트들
+	m_PickingTESTMeshs = new GameObject*[m_numPickingTESTMeshs];
+	for (int x = 0; x < m_numPickingTESTMeshs; ++x)
+	{
+		std::string name = "TESTPikcing" + std::to_string(x);
+		m_PickingTESTMeshs[x] = new GameObject(name);
+		int rand_x = rand() % int(257 * xmf3Scale.x);
+		int rand_z = rand() % int(257 * xmf3Scale.z);
+		m_PickingTESTMeshs[x]->GetTransform().SetPosition(XMFLOAT3(rand_x, m_Terrain->GetHeight(rand_x, rand_z), rand_z));
+		m_PickingTESTMeshs[x]->InsertComponent(cubemesh->GetFamillyID(), cubemesh);
+	}
 
 	m_TerrainHeap = new MyDescriptorHeap();
 	m_TerrainHeap->CreateCbvSrvUavDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 2, 0);
@@ -346,7 +352,6 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	// 그래픽 루트 시그니처 설정
 	pd3dCommandList->SetGraphicsRootSignature(m_pd3dGraphicsRootSignature);
 
-
 	// 클라 화면 설정
 	m_Camera->SetViewportsAndScissorRects(pd3dCommandList); 
 	m_Camera->GetCamera()->UpdateShaderVariables(pd3dCommandList, m_parameterForm->GetIndex("Camera"));
@@ -382,13 +387,8 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	// PSO 설정
 	pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Cube")->GetPSO());
 
-	m_Camera->SetViewportsAndScissorRects(pd3dCommandList);
-	m_Camera->GetCamera()->UpdateShaderVariables(pd3dCommandList, m_parameterForm->GetIndex("Camera"));
-
-	// 쉐이더 변수 설정
-	XMFLOAT4X4 xmf4x4World;
-	XMStoreFloat4x4(&xmf4x4World, XMMatrixTranspose(XMLoadFloat4x4(&m_GameObject->GetTransform().GetWorldMatrix())));
-	m_parameterForm->UpdateShaderVariable(pd3dCommandList, m_pd3dGraphicsRootSignature, "World", SourcePtr(&xmf4x4World));
+	// 쉐이더 변수 설정 
+	m_parameterForm->UpdateShaderVariable(pd3dCommandList, m_pd3dGraphicsRootSignature, "World", SourcePtr(&XMMatrixTranspose(XMLoadFloat4x4(&m_GameObject->GetTransform().GetWorldMatrix()))));
 
 	// CubeMesh Render
 	Mesh* mesh = m_GameObject->GetComponent<Mesh>("Mesh");
@@ -402,6 +402,8 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 
 	gMeshRenderer.Render(pd3dCommandList, mesh);
 #endif
+
+	
 }
 
 void GameScene::ReleaseUploadBuffers()
@@ -442,7 +444,7 @@ ID3D12RootSignature* GameScene::CreateGraphicsRootSignature(ID3D12Device *pd3dDe
 	HRESULT hResult = S_FALSE;
 	ID3D12RootSignature* pd3dGraphicsRootSignature = nullptr;
 
-	D3D12_ROOT_PARAMETER pRootParameters[7];
+	D3D12_ROOT_PARAMETER pRootParameters[8];
 	m_parameterForm = new ParameterForm(_countof(pRootParameters));
 
 	// 루트 상수
@@ -462,14 +464,17 @@ ID3D12RootSignature* GameScene::CreateGraphicsRootSignature(ID3D12Device *pd3dDe
 	pRootParameters[1].Descriptor.ShaderRegister = 1; //Camera
 	pRootParameters[1].Descriptor.RegisterSpace = 0;
 	pRootParameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
-
-	//pRootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_32BIT_CONSTANTS;
-	//pRootParameters[1].Constants.Num32BitValues = 32;
-	//pRootParameters[1].Constants.ShaderRegister = 1;
-	//pRootParameters[1].Constants.RegisterSpace = 0;
-	//pRootParameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
 	m_parameterForm->InsertResource(1, "Camera", pRootParameters[1]);
-	 
+	
+
+	pRootParameters[7].ParameterType = D3D12_ROOT_PARAMETER_TYPE_32BIT_CONSTANTS; 
+	pRootParameters[7].Constants.Num32BitValues = 3;
+	pRootParameters[7].Constants.ShaderRegister = 4;
+	pRootParameters[7].Constants.RegisterSpace = 0;
+	pRootParameters[7].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+	m_parameterForm->InsertResource(7, "Color", pRootParameters[7]);
+
+
 	pRootParameters[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	pRootParameters[2].Descriptor.ShaderRegister = 2; //Materials
 	pRootParameters[2].Descriptor.RegisterSpace = 0;
