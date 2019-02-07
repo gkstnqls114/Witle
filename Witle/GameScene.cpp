@@ -99,15 +99,16 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	m_pd3dGraphicsRootSignature = CreateGraphicsRootSignature(pd3dDevice);
 	
 	// 피킹 테스트할 오브젝트 생성
+	ComponentBase* cubemesh = new CubeMesh(m_GameObject, pd3dDevice, pd3dCommandList, 1, 1, 1);
 	m_PickingTESTMeshs = new GameObject*[m_numPickingTESTMeshs];
 	for (int x = 0; x < m_numPickingTESTMeshs; ++x)
 	{
 		std::string name = "TESTPikcing" + std::to_string(x);
 		m_PickingTESTMeshs[x] = new GameObject(name);
+		m_PickingTESTMeshs[x]->InsertComponent(cubemesh->GetFamillyID(), cubemesh);
 	}
 
 	// 큐브메쉬 생성
-	ComponentBase* cubemesh = new CubeMesh(m_GameObject, pd3dDevice, pd3dCommandList, 1, 1, 1);
 	m_GameObject = new Player("Player");
 	m_GameObject->InsertComponent(cubemesh->GetFamillyID(), cubemesh);
 
@@ -128,6 +129,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	// 카메라
 	m_Camera = new CameraObject("Camera");
 	Camera* cameraComponent = new FollowCam(m_Camera, m_GameObject);
+	cameraComponent->CreateShaderVariables(pd3dDevice, pd3dCommandList);
 	cameraComponent->SetOffset(XMFLOAT3(0, -5.f, 10.f)); 
 	m_Camera->ChangeCamera(cameraComponent);
 
@@ -346,8 +348,8 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 
 
 	// 클라 화면 설정
-	m_Camera->SetViewportsAndScissorRects(pd3dCommandList);
-	m_Camera->UpdateShaderVariables(pd3dCommandList);
+	m_Camera->SetViewportsAndScissorRects(pd3dCommandList); 
+	m_Camera->GetCamera()->UpdateShaderVariables(pd3dCommandList, m_parameterForm->GetIndex("Camera"));
 
 	// 조명
 	//D3D12_GPU_VIRTUAL_ADDRESS d3dcbLightsGpuVirtualAddress = m_pd3dcbLights->GetGPUVirtualAddress();
@@ -381,7 +383,7 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Cube")->GetPSO());
 
 	m_Camera->SetViewportsAndScissorRects(pd3dCommandList);
-	m_Camera->UpdateShaderVariables(pd3dCommandList);
+	m_Camera->GetCamera()->UpdateShaderVariables(pd3dCommandList, m_parameterForm->GetIndex("Camera"));
 
 	// 쉐이더 변수 설정
 	XMFLOAT4X4 xmf4x4World;
@@ -456,17 +458,17 @@ ID3D12RootSignature* GameScene::CreateGraphicsRootSignature(ID3D12Device *pd3dDe
 	pRootParameters[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
 	m_parameterForm->InsertResource(0, "World", pRootParameters[0]);
 
-	//pRootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
-	//pRootParameters[1].Descriptor.ShaderRegister = 1; //Camera
-	//pRootParameters[1].Descriptor.RegisterSpace = 0;
-	//pRootParameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+	pRootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	pRootParameters[1].Descriptor.ShaderRegister = 1; //Camera
+	pRootParameters[1].Descriptor.RegisterSpace = 0;
+	pRootParameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
 
-	pRootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_32BIT_CONSTANTS;
-	pRootParameters[1].Constants.Num32BitValues = 32;
-	pRootParameters[1].Constants.ShaderRegister = 1;
-	pRootParameters[1].Constants.RegisterSpace = 0;
-	pRootParameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
-	m_parameterForm->InsertResource(1, "ViewAndProjection", pRootParameters[1]);
+	//pRootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_32BIT_CONSTANTS;
+	//pRootParameters[1].Constants.Num32BitValues = 32;
+	//pRootParameters[1].Constants.ShaderRegister = 1;
+	//pRootParameters[1].Constants.RegisterSpace = 0;
+	//pRootParameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
+	m_parameterForm->InsertResource(1, "Camera", pRootParameters[1]);
 	 
 	pRootParameters[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	pRootParameters[2].Descriptor.ShaderRegister = 2; //Materials

@@ -16,7 +16,18 @@ class GameObject;
 class Camera
 	: public ResourceComponentBase
 {
-protected: 
+private:
+	struct VS_CB_CAMERA_INFO
+	{
+		XMFLOAT4X4						m_xmf4x4View;
+		XMFLOAT4X4						m_xmf4x4Projection;
+		XMFLOAT3						m_xmf3Position;
+	};
+	ID3D12Resource					*m_pd3dcbCamera{ nullptr };
+	VS_CB_CAMERA_INFO				*m_pcbMappedCamera{ nullptr };
+
+protected:
+
 	XMFLOAT3		m_At				{ 0.0f, 0.0f, 1.0f }; // Position + Offset = At
 	XMFLOAT3		m_Offset			{ 0.0f, 0.0f, 1.0f }; // Offset = At - Position
 
@@ -48,6 +59,10 @@ public:
 	virtual void LastUpdate(float fTimeElapsed) = 0;
 
 	// 하위 클래스에 구현해야하는 순수 가상 함수
+	
+	void CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
+	void UpdateShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList, int parameterIndex);
+	void ReleaseShaderVariables();
 
 	virtual void Teleport(const XMFLOAT3& pos); // right, up, look을 유지한 상태로 position, at만 이동한다.
 	virtual void Move(const XMFLOAT3& Shift);

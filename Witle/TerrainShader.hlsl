@@ -10,6 +10,7 @@ cbuffer cbGameObjectInfo : register(b1)
 {
 	matrix gmtxView : packoffset(c0);
 	matrix gmtxProjection : packoffset(c4);
+	float fPosition : packoffset(c8);
 }
 
 SamplerState gWrapSamplerState : register(s0);

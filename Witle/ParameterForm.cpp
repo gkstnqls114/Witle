@@ -81,7 +81,18 @@ void ParameterForm::UpdateShaderVariable(ID3D12GraphicsCommandList * commandList
 
 void ParameterForm::FormCBV::UpdateShaderVariable(ID3D12GraphicsCommandList * commandList, UINT index, const SourcePtr & resource)
 {
+	//XMFLOAT4X4 xmf4x4View;
+	//XMStoreFloat4x4(&xmf4x4View, XMMatrixTranspose(XMLoadFloat4x4(&m_xmf4x4View)));
+	//::memcpy(&m_MappedResource->m_xmf4x4View, &xmf4x4View, sizeof(XMFLOAT4X4));
 
+	//XMFLOAT4X4 xmf4x4Projection;
+	//XMStoreFloat4x4(&xmf4x4Projection, XMMatrixTranspose(XMLoadFloat4x4(&m_xmf4x4Projection)));
+	//::memcpy(&m_MappedResource->m_xmf4x4Projection, &xmf4x4Projection, sizeof(XMFLOAT4X4));
+
+	//::memcpy(&m_pcbMappedCamera->m_xmf3Position, &m_xmf3Position, sizeof(XMFLOAT3));
+
+	//D3D12_GPU_VIRTUAL_ADDRESS d3dGpuVirtualAddress = m_pResource->GetGPUVirtualAddress();
+	//pd3dCommandList->SetGraphicsRootConstantBufferView(index, d3dGpuVirtualAddress);
 }
 
 void ParameterForm::FormCBV::ReleaseShaderVariables()

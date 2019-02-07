@@ -60,6 +60,11 @@ public:
 		index = (*m_resourceMap.find(name)).second;
 		return m_resourceVector[index];
 	}
+	int GetIndex(const std::string& name) const
+	{ 
+		assert(m_resourceMap.find(name) != m_resourceMap.end());
+		return (*m_resourceMap.find(name)).second;
+	}
 
 	// 해당 루트 패러미터에 맞춰서 Resource를 구성한다.
 	// int parametersInde
