@@ -13,12 +13,6 @@ cbuffer cbGameObjectInfo : register(b1)
 	float fPosition : packoffset(c8);
 }
 
-// 루트 상수
-cbuffer cbGameObjectInfo : register(b4)
-{
-	float3 color: packoffset(c0);
-}
-
 SamplerState gWrapSamplerState : register(s0);
 
 Texture2D gtxtTexture : register(t0);

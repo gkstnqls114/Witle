@@ -4,7 +4,7 @@
 #include "GameObject.h"
  
 void GameObject::ReleaseComponents()
-{
+{ 
 	for (auto& component : m_Components)
 	{
 		delete component.second;
@@ -15,7 +15,7 @@ void GameObject::ReleaseComponents()
 }
 
 void GameObject::ReleaseComponentUploadBuffers()
-{
+{ 
 	for (auto& component : m_Components)
 	{
 		if (component.second->GetFamillyID() == FAMILLYID_MESH)

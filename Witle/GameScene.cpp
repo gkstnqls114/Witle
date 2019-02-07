@@ -121,9 +121,9 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	{
 		std::string name = "TESTPikcing" + std::to_string(x);
 		m_PickingTESTMeshs[x] = new GameObject(name);
-		int rand_x = rand() % int(257 * xmf3Scale.x);
-		int rand_z = rand() % int(257 * xmf3Scale.z);
-		m_PickingTESTMeshs[x]->GetTransform().SetPosition(XMFLOAT3(rand_x, m_Terrain->GetHeight(rand_x, rand_z), rand_z));
+		int rand_x = rand() % int(257);
+		int rand_z = rand() % int(257);
+		m_PickingTESTMeshs[x]->GetTransform().SetPosition(XMFLOAT3(rand_x, m_Terrain->GetHeight(rand_x, rand_z) + 0.5f, rand_z));
 		m_PickingTESTMeshs[x]->InsertComponent(cubemesh->GetFamillyID(), cubemesh);
 	}
 
@@ -212,6 +212,17 @@ void GameScene::ReleaseObjects()
 	{
 		delete m_TESTQuadTree;
 		m_TESTQuadTree = nullptr;
+	}
+	if (m_PickingTESTMeshs)
+	{
+		for (int x = 0; x < m_numPickingTESTMeshs; ++x)
+		{
+			// m_PickingTESTMeshs[x]->ReleaseObjects();
+			delete m_PickingTESTMeshs[x];
+			m_PickingTESTMeshs[x] = nullptr;
+		}
+		delete m_PickingTESTMeshs;
+		m_PickingTESTMeshs = nullptr;
 	}
 }
 
@@ -315,6 +326,14 @@ void GameScene::Update(float fElapsedTime)
 	{
 		m_GameObject->GetTransform().Update(fElapsedTime); // right, up, look, pos에 맞춰 월드변환행렬 다시 설정
 	}
+
+	if (m_PickingTESTMeshs)
+	{
+		for (int x = 0; x < m_numPickingTESTMeshs; ++x)
+		{
+			m_PickingTESTMeshs[x]->GetTransform().Update(fElapsedTime); // right, up, look, pos에 맞춰 월드변환행렬 다시 설정
+		} 
+	}
 }
 
 void GameScene::LastUpdate(float fElapsedTime)
@@ -402,7 +421,16 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 
 	gMeshRenderer.Render(pd3dCommandList, mesh);
 #endif
+	
+	for (int x = 0; x < m_numPickingTESTMeshs; ++x)
+	{
+		// 쉐이더 변수 설정 
+		m_parameterForm->UpdateShaderVariable(pd3dCommandList, m_pd3dGraphicsRootSignature, "World", SourcePtr(&XMMatrixTranspose(XMLoadFloat4x4(&m_PickingTESTMeshs[x]->GetTransform().GetWorldMatrix()))));
 
+		// CubeMesh Render
+		Mesh* mesh = m_PickingTESTMeshs[x]->GetComponent<Mesh>("Mesh");
+		gMeshRenderer.Render(pd3dCommandList, mesh); 
+	}
 	
 }
 
@@ -411,6 +439,13 @@ void GameScene::ReleaseUploadBuffers()
 	if (m_GameObject) m_GameObject->ReleaseUploadBuffers();
 	if (m_Terrain) m_Terrain->ReleaseUploadBuffers();
 	if (m_TESTQuadTree) m_TESTQuadTree->ReleaseUploadBuffers();
+	if (m_PickingTESTMeshs)
+	{
+		for (int x = 0; x < m_numPickingTESTMeshs; ++x)
+		{
+			m_PickingTESTMeshs[x]->ReleaseUploadBuffers();
+		}
+	}
 }
 
 bool GameScene::SaveData()
