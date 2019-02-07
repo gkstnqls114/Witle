@@ -5,9 +5,7 @@
 #include "d3dUtil.h"
 #include "CubeShader.h"
 #include "TerrainShader.h"
-//#include "CameraStorage.h"
-//#include "CTexture.h"
-
+#include "GameScreen.h" 
 #include "GameScene.h"
 
 #include "GameFramework.h"
@@ -225,8 +223,8 @@ D3D12_SHADER_BYTECODE CGameFramework::CreateComputeShader(ID3DBlob ** ppd3dShade
 
 void CGameFramework::CreateSwapChain()
 {
-	m_nWndClientWidth = FRAME_BUFFER_WIDTH;
-	m_nWndClientHeight = FRAME_BUFFER_HEIGHT;
+	m_nWndClientWidth = GameScreen::GetWidth();
+	m_nWndClientHeight = GameScreen::GetHeight();
 
 	DXGI_SWAP_CHAIN_DESC SwapChainDesc;
 	::ZeroMemory(&SwapChainDesc, sizeof(SwapChainDesc));

@@ -10,6 +10,7 @@
 #include "Terrain.h"
 #include "MyFrustum.h"
 #include "GameInput.h"
+#include "GameScreen.h"
 #include "Player.h"
 #include "CameraObject.h"
 #include "QuadTreeTerrainMesh.h"
@@ -124,21 +125,21 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 #ifdef CHECK_ANOTHER_CAMERA
 	m_lookAboveCamera = new CameraObject("LookAboveCamera");
 
-	D3D12_VIEWPORT	GBuffer_Viewport{ 0, FRAME_BUFFER_HEIGHT, G_BUFFER_WINDOW_WIDTH , G_BUFFER_WINDOW_HEIGHT, 0.0f, 1.0f };
-	D3D12_RECT		ScissorRect{ 0 , FRAME_BUFFER_HEIGHT, FRAME_BUFFER_WIDTH , FRAME_BUFFER_HEIGHT + G_BUFFER_WINDOW_HEIGHT };
+	D3D12_VIEWPORT	GBuffer_Viewport{ 0, GameScreen::GetHeight(), G_BUFFER_WINDOW_WIDTH , G_BUFFER_WINDOW_HEIGHT, 0.0f, 1.0f };
+	D3D12_RECT		ScissorRect{ 0 , GameScreen::GetHeight(), GameScreen::GetWidth() , GameScreen::GetHeight() + G_BUFFER_WINDOW_HEIGHT };
 
 	m_lookAboveCamera->GetCamera()->SetScissorRect(ScissorRect);
 	m_lookAboveCamera->GetCamera()->SetViewport(GBuffer_Viewport);
-	m_lookAboveCamera->GetCamera()->GenerateProjectionMatrix(0.01f, CAMERA_FAR, float(FRAME_BUFFER_WIDTH) / float(FRAME_BUFFER_HEIGHT), 60.0f);
+	m_lookAboveCamera->GetCamera()->GenerateProjectionMatrix(0.01f, CAMERA_FAR, float(GameScreen::GetWidth()) / float(GameScreen::GetHeight()), 60.0f);
 	//m_lookAboveCamera->GetCamera()->SetAt(XMFLOAT3(xmf3Scale.x * 257 / 2, 0.f, xmf3Scale.y * 257 / 2)); 
 	m_lookAboveCamera->GetCamera()->SetAt(XMFLOAT3(xmf3Scale.x * 257 / 2, 2000.f, xmf3Scale.z * 257 / 2)); 
 	m_lookAboveCamera->GetCamera()->SetOffset(XMFLOAT3(0.0f, 0.f, 10.f));
 	m_lookAboveCamera->GetCamera()->Rotate(90.f, 0.f, 0.f);
 #endif
 
-	cameraComponent->SetViewport(0, 0, FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT, 0.0f, 1.0f);
-	cameraComponent->SetScissorRect(0, 0, FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT);
-	cameraComponent->GenerateProjectionMatrix(0.01f, CAMERA_FAR, float(FRAME_BUFFER_WIDTH) / float(FRAME_BUFFER_HEIGHT), 60.0f);
+	cameraComponent->SetViewport(0, 0, GameScreen::GetWidth(), GameScreen::GetHeight(), 0.0f, 1.0f);
+	cameraComponent->SetScissorRect(0, 0, GameScreen::GetWidth(), GameScreen::GetHeight());
+	cameraComponent->GenerateProjectionMatrix(0.01f, CAMERA_FAR, float(GameScreen::GetWidth()) / float(GameScreen::GetHeight()), 60.0f);
 
 	//테스트 쿼드트리 터레인 생성
 	m_TESTQuadTree = new QuadTreeTerrainMesh(m_gameobject, pd3dDevice, pd3dCommandList, 257, 257,

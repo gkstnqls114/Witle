@@ -1,12 +1,15 @@
 #include "stdafx.h"
 #include "d3dUtil.h"
 #include "Transform.h"
+#include "GameScreen.h"
 #include "GameObject.h"
 #include "Camera.h"
 
 Camera::Camera(GameObject* pOwner)
 	: ComponentBase(pOwner)
 {
+	m_d3dViewport = D3D12_VIEWPORT{ 0.0f, 0.0f, static_cast<FLOAT>(GameScreen::GetWidth()) , static_cast<FLOAT>(GameScreen::GetHeight()), 0.0f, 1.0f };
+	m_d3dScissorRect = D3D12_RECT{ 0, 0, static_cast<LONG>(GameScreen::GetWidth()) ,static_cast<LONG>(GameScreen::GetHeight()) };
 	m_ShaderVariables = new RootConstants(1, 2);
 	m_FamillyID = "Camera";
 }

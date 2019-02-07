@@ -34,8 +34,8 @@ protected:
 	XMFLOAT4X4		m_xmf4x4View{ Matrix4x4::Identity() };
 	XMFLOAT4X4		m_xmf4x4Projection{ Matrix4x4::Identity() };
 
-	D3D12_VIEWPORT	m_d3dViewport{ 0, 0, FRAME_BUFFER_WIDTH , FRAME_BUFFER_HEIGHT, 0.0f, 1.0f };
-	D3D12_RECT		m_d3dScissorRect{ 0, 0, FRAME_BUFFER_WIDTH , FRAME_BUFFER_HEIGHT };
+	D3D12_VIEWPORT	m_d3dViewport;
+	D3D12_RECT		m_d3dScissorRect;
 
 	ResourceBase	*m_ShaderVariables{ nullptr };
 

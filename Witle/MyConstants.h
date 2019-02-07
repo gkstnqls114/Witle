@@ -52,10 +52,6 @@ enum MESH_TYPE_ID
 #define DIR_DOWN					0x20
 /////////////////////////////////////////////// 조작키
 
-
-#define FRAME_BUFFER_WIDTH	800 //1920 / 2 (기준)
-#define FRAME_BUFFER_HEIGHT 600//1080 /2  (기준)
-
 // G Buffer가 현재 게임에서 보이는 사이즈
 #define G_BUFFER_WINDOW_WIDTH 240 //960 / 4 (기준)
 #define G_BUFFER_WINDOW_HEIGHT 135 //1080 (기준)

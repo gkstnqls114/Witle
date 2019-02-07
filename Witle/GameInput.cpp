@@ -3,6 +3,7 @@
 //-----------------------------------------------------------------------------
 
 #include "stdafx.h"
+#include "GameScreen.h"
 #include "GameInput.h"
 
 UCHAR GameInput::m_pKeyBuffer[256];
@@ -30,8 +31,8 @@ RAY GameInput::GenerateRayforPicking(const XMFLOAT3& cameraPos, const XMFLOAT4X4
 	// 왼쪽 상단이 (0, 0)로 표현되어있는 윈도우 좌표계의 클릭 커서를
 	// 화면 중심이 (0, 0)이며 각 축이 -1~1 로 표현되는, 즉 투영 좌표계로 변경한다.
 	XMFLOAT3 Picking; 
-	Picking.x = (2.0f * m_clickCursor.x / double(FRAME_BUFFER_WIDTH)) - 1;
-	Picking.y =  (-2.0f * m_clickCursor.y / double(FRAME_BUFFER_HEIGHT)) + 1;
+	Picking.x = (2.0f * m_clickCursor.x / double(GameScreen::GetWidth())) - 1;
+	Picking.y =  (-2.0f * m_clickCursor.y / double(GameScreen::GetHeight())) + 1;
 
 	//현재는 투영좌표계의 Direction 좌표
 	//즉 Direction의 x, y좌표는 -1과 1사이이다.
