@@ -33,5 +33,7 @@ public:
 	ResourceComponentBase(GameObject* pOwner) : ComponentBase(pOwner) {}
 	virtual ~ResourceComponentBase();
 
+	virtual void Update(float fTimeElapsed) = 0;
+
 	const ResourceBase* const GetResource() const { return m_ShaderVariables; }
 };
