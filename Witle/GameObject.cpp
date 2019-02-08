@@ -18,7 +18,7 @@ void GameObject::ReleaseComponentUploadBuffers()
 { 
 	for (auto& component : m_Components)
 	{
-		if (component.second->GetFamillyID() == FAMILLYID_MESH)
+		if (component.second->GetFamilyID() == FAMILYID_MESH)
 		{
 			static_cast<Mesh*>(component.second)->ReleaseUploadBuffers();
 		}

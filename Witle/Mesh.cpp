@@ -5,7 +5,7 @@
 Mesh::Mesh(GameObject* pOwner)
 	:ComponentBase(pOwner)
 {
-	m_FamillyID = FAMILLYID_MESH;
+	m_FamilyID = FAMILYID_MESH;
 }
 
 

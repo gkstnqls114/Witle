@@ -13,14 +13,14 @@ public:
 	virtual void Update(float fTimeElapsed) = 0;
 
 	int GetComponentID() const { return m_ComponenetID; };
-	const std::string& GetFamillyID() const { return m_FamillyID; };
+	const std::string& GetFamilyID() const { return m_FamilyID; };
 
 	
 protected: 
 	GameObject* const m_pOwner{ nullptr };
 	
 	UINT m_ComponenetID{ 0 };
-	std::string m_FamillyID{ "ComponentBase" };
+	std::string m_FamilyID{ "ComponentBase" };
 };
 
 class ResourceComponentBase

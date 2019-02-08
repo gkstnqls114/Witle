@@ -104,7 +104,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 
 	// 큐브메쉬 생성
 	m_GameObject = new Player("Player");
-	m_GameObject->InsertComponent(cubemesh->GetFamillyID(), cubemesh);
+	m_GameObject->InsertComponent(cubemesh->GetFamilyID(), cubemesh);
 
 	// 터레인 생성 
 	XMFLOAT3 xmf3Scale(8.0f, 1.0f, 8.0f);
@@ -126,7 +126,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 		int rand_x = rand() % int(257);
 		int rand_z = rand() % int(257);
 		m_PickingTESTMeshs[x]->GetTransform().SetPosition(XMFLOAT3(rand_x, m_Terrain->GetHeight(rand_x, rand_z) + 0.5f, rand_z));
-		m_PickingTESTMeshs[x]->InsertComponent(cubemesh->GetFamillyID(), cubemesh);
+		m_PickingTESTMeshs[x]->InsertComponent(cubemesh->GetFamilyID(), cubemesh);
 	}
 
 	m_TerrainHeap = new MyDescriptorHeap();
