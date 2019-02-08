@@ -5,6 +5,7 @@
 MyFrustum::MyFrustum(GameObject * pOwner)
 	: ComponentBase(pOwner)
 {
+	m_FamilyID.InitFrustum();
 }
 
 MyFrustum::MyFrustum(GameObject * pOwner, const XMFLOAT4X4 & projection, const XMFLOAT4X4 & view)

@@ -5,7 +5,7 @@
 Mesh::Mesh(GameObject* pOwner)
 	:ComponentBase(pOwner)
 {
-	m_FamilyID = FAMILYID_MESH;
+	m_FamilyID.InitMesh();
 }
 
 

@@ -151,6 +151,7 @@
     <ClInclude Include="CameraObject.h" />
     <ClInclude Include="ComponentBase.h" />
     <ClInclude Include="DirectionalLight.h" />
+    <ClInclude Include="FamilyID.h" />
     <ClInclude Include="GameScreen.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="MyConstants.h" />
@@ -167,7 +168,6 @@
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameTimer.h" />
     <ClInclude Include="HeightMapImage.h" />
-    <ClInclude Include="ID.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="MeshRenderer.h" />
     <ClInclude Include="Camera.h" />
@@ -214,6 +214,7 @@
     <ClCompile Include="DirectionalLight.cpp" />
     <ClCompile Include="Event.cpp" />
     <ClCompile Include="EventHandler.cpp" />
+    <ClCompile Include="FamilyID.cpp" />
     <ClCompile Include="FollowCam.cpp" />
     <ClCompile Include="GameScreen.cpp" />
     <ClCompile Include="GameFramework.cpp" />

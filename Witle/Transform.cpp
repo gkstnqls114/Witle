@@ -13,7 +13,7 @@ void Transform::SetTransform(const XMFLOAT3 & right, const XMFLOAT3 & up, const 
 Transform::Transform(GameObject * pOwner)
 	:ComponentBase(pOwner)
 {
-	m_FamilyID = "Transform"; 
+	m_FamilyID.InitTransform();
 }
 
 Transform::~Transform()

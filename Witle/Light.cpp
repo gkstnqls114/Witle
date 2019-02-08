@@ -4,7 +4,7 @@
 Light::Light(GameObject * pOwner) 
 	: ResourceComponentBase(pOwner)
 {
-	m_FamilyID = FAMILYID_LIGHT;
+	m_FamilyID.InitLight();
 }
 
 Light::~Light()

@@ -1,5 +1,5 @@
 #pragma once
-#include "ID.h"
+#include "FamilyID.h"
 
 class GameObject;
 class ResourceBase;
@@ -11,16 +11,16 @@ public:
 	virtual ~ComponentBase();
 	 
 	virtual void Update(float fTimeElapsed) = 0;
-
+	 
 	int GetComponentID() const { return m_ComponenetID; };
-	const std::string& GetFamilyID() const { return m_FamilyID; };
+	const FamilyID& GetFamilyID() const { return m_FamilyID; };
 
 	
 protected: 
 	GameObject* const m_pOwner{ nullptr };
 	
 	UINT m_ComponenetID{ 0 };
-	std::string m_FamilyID{ "ComponentBase" };
+	FamilyID m_FamilyID;
 };
 
 class ResourceComponentBase

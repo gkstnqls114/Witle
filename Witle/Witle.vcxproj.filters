@@ -136,6 +136,9 @@
     <Filter Include="02.Component\Lighting\DirectionalLight">
       <UniqueIdentifier>{4990c85f-c2dd-4d41-a492-85b7886490ef}</UniqueIdentifier>
     </Filter>
+    <Filter Include="99.etc\ID">
+      <UniqueIdentifier>{61995b09-dbe4-4501-a127-f71ad8ed4da6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -151,9 +154,6 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="d3dx12.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="ID.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Mesh.h">
@@ -303,6 +303,9 @@
     <ClInclude Include="PointLight.h">
       <Filter>02.Component\Lighting\PointLight</Filter>
     </ClInclude>
+    <ClInclude Include="FamilyID.h">
+      <Filter>99.etc\ID</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -451,6 +454,9 @@
     </ClCompile>
     <ClCompile Include="PointLight.cpp">
       <Filter>02.Component\Lighting\PointLight</Filter>
+    </ClCompile>
+    <ClCompile Include="FamilyID.cpp">
+      <Filter>99.etc\ID</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
