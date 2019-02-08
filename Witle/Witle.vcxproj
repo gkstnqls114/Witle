@@ -150,7 +150,9 @@
     <ClInclude Include="BasicCam.h" />
     <ClInclude Include="CameraObject.h" />
     <ClInclude Include="ComponentBase.h" />
+    <ClInclude Include="DirectionalLight.h" />
     <ClInclude Include="GameScreen.h" />
+    <ClInclude Include="Light.h" />
     <ClInclude Include="MyConstants.h" />
     <ClInclude Include="CubeMesh.h" />
     <ClInclude Include="CubeShader.h" />
@@ -174,6 +176,7 @@
     <ClInclude Include="MyRigidbody.h" />
     <ClInclude Include="MyStructs.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="PointLight.h" />
     <ClInclude Include="QuadTreeTerrainMesh.h" />
     <ClInclude Include="ResourceBase.h" />
     <ClInclude Include="32bitRootConstants.h" />
@@ -186,6 +189,7 @@
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="SourcePtr.h" />
+    <ClInclude Include="SpotLight.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="GameScene.h" />
@@ -207,6 +211,7 @@
     <ClCompile Include="CubeShader.cpp" />
     <ClCompile Include="d3dUtil.cpp" />
     <ClCompile Include="DDSTextureLoader12.cpp" />
+    <ClCompile Include="DirectionalLight.cpp" />
     <ClCompile Include="Event.cpp" />
     <ClCompile Include="EventHandler.cpp" />
     <ClCompile Include="FollowCam.cpp" />
@@ -216,6 +221,7 @@
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameTimer.cpp" />
     <ClCompile Include="HeightMapImage.cpp" />
+    <ClCompile Include="Light.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="MeshRenderer.cpp" />
     <ClCompile Include="Camera.cpp" />
@@ -223,6 +229,7 @@
     <ClCompile Include="MyFrustum.cpp" />
     <ClCompile Include="MyRigidbody.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PointLight.cpp" />
     <ClCompile Include="QuadTreeTerrainMesh.cpp" />
     <ClCompile Include="ResourceBase.cpp" />
     <ClCompile Include="32bitRootConstants.cpp" />
@@ -234,6 +241,7 @@
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="SourcePtr.cpp" />
+    <ClCompile Include="SpotLight.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

@@ -124,6 +124,18 @@
     <Filter Include="02.Component\MyFrustum">
       <UniqueIdentifier>{4b849b20-e341-441f-a863-7a7ded49cad8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.Component\Lighting">
+      <UniqueIdentifier>{eecf9577-b11f-4ed6-abb0-4e8cd321fe0e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\Lighting\PointLight">
+      <UniqueIdentifier>{78a1d41b-06aa-48f8-b26a-942911a81391}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\Lighting\SpotLight">
+      <UniqueIdentifier>{e4301115-bb6e-482d-be6c-3f01c500f886}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\Lighting\DirectionalLight">
+      <UniqueIdentifier>{4990c85f-c2dd-4d41-a492-85b7886490ef}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -279,6 +291,18 @@
     <ClInclude Include="GameScreen.h">
       <Filter>01.GameBase</Filter>
     </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>02.Component\Lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="SpotLight.h">
+      <Filter>02.Component\Lighting\SpotLight</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectionalLight.h">
+      <Filter>02.Component\Lighting\DirectionalLight</Filter>
+    </ClInclude>
+    <ClInclude Include="PointLight.h">
+      <Filter>02.Component\Lighting\PointLight</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -415,6 +439,18 @@
     </ClCompile>
     <ClCompile Include="GameScreen.cpp">
       <Filter>01.GameBase</Filter>
+    </ClCompile>
+    <ClCompile Include="Light.cpp">
+      <Filter>02.Component\Lighting</Filter>
+    </ClCompile>
+    <ClCompile Include="SpotLight.cpp">
+      <Filter>02.Component\Lighting\SpotLight</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectionalLight.cpp">
+      <Filter>02.Component\Lighting\DirectionalLight</Filter>
+    </ClCompile>
+    <ClCompile Include="PointLight.cpp">
+      <Filter>02.Component\Lighting\PointLight</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
