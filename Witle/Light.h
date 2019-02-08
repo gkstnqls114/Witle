@@ -1,21 +1,20 @@
 #pragma once
+#include "MyStructs.h"
 #include "ComponentBase.h"
 
-class Light
-	: public ComponentBase
-{
-protected:
-	// 공통적으로 들어감
-	XMFLOAT4				m_xmf4Ambient;
-	XMFLOAT4				m_xmf4Diffuse;
-	XMFLOAT4				m_xmf4Specular;
+struct LIGHT;
 
-	bool					m_bEnable;
+class Light
+	: public ResourceComponentBase
+{
+
+protected:
+	LIGHT m_Light;
 
 public:
 	Light(GameObject* pOwner);
 	virtual ~Light();
 
-	virtual void Update(float fTimeElapsed) override;
+	virtual void Update(float fTimeElapsed) = 0;
 
 };

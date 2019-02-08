@@ -10,6 +10,13 @@ enum MESH_TYPE_ID
 	QUADTREE_TERRAIN_MESH
 };
 
+enum LIGHT_TYPE
+{
+	POINT_LIGHT,
+	SPOT_LIGHT,
+	DIRECTIONAL_LIGHT
+};
+
 #define EPSILON				1.0e-10f
 
 #define G_BUFFER_ROOT_PARMATER 0
@@ -33,10 +40,7 @@ enum MESH_TYPE_ID
 
 
 
-/////////////////////////////////////////////// 조명
-#define POINT_LIGHT				1
-#define SPOT_LIGHT				2
-#define DIRECTIONAL_LIGHT		3
+/////////////////////////////////////////////// 조명 
 
 #define MAX_LIGHTS 8
 #define MAX_MATERIALS 8

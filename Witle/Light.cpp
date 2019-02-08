@@ -2,15 +2,12 @@
 #include "Light.h"
 
 Light::Light(GameObject * pOwner) 
-	: ComponentBase(pOwner)
+	: ResourceComponentBase(pOwner)
 {
+	m_FamillyID = "Light";
 }
 
 Light::~Light()
 {
 
-}
-
-void Light::Update(float fTimeElapsed)
-{
 }

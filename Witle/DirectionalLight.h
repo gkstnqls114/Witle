@@ -4,10 +4,12 @@
 class DirectionalLight
 	: public Light
 {
-private:
-	XMFLOAT3				m_xmf3Direction; 
+private: 
 
 public:
 	DirectionalLight(GameObject * pOwner);
 	virtual ~DirectionalLight();
+
+	virtual void Update(float fTimeElapsed) override;
+
 };

@@ -1,23 +1,23 @@
 #pragma once
 #include "stdafx.h"
 
-
 struct LIGHT
 {
-	XMFLOAT4				m_xmf4Ambient;
-	XMFLOAT4				m_xmf4Diffuse;
-	XMFLOAT4				m_xmf4Specular;
-	XMFLOAT3				m_xmf3Position;
-	float 					m_fFalloff;
-	XMFLOAT3				m_xmf3Direction;
-	float 					m_fTheta; //cos(m_fTheta)
-	XMFLOAT3				m_xmf3Attenuation;
-	float					m_fPhi; //cos(m_fPhi)
-	bool					m_bEnable;
-	int						m_nType;
-	float					m_fRange;
+	XMFLOAT4				Ambient;
+	XMFLOAT4				Diffuse;
+	XMFLOAT4				Specular;
+	XMFLOAT3				Position;
+	float 					fFalloff;
+	XMFLOAT3				Direction;
+	float 					fTheta; //cos(m_fTheta)
+	XMFLOAT3				Attenuation;
+	float					fPhi; //cos(m_fPhi)
+	bool					bEnable;
+	int						nType;
+	float					fRange;
 	float					padding;
 };
+
 
 struct LIGHTS
 {
