@@ -31,11 +31,11 @@ private:
 	D3D12_CPU_DESCRIPTOR_HANDLE m_SwapChainCPUHandle[m_SwapChainBuffersCount];
 	UINT m_SwapChainBufferIndex{ 0 };
 
-	ComPtr<ID3D12Resource> m_RenderTargetBuffers[m_SwapChainBuffersCount];
+	ID3D12Resource *m_RenderTargetBuffers[m_SwapChainBuffersCount];
 	ComPtr<ID3D12DescriptorHeap> m_RtvHeap;
 	UINT m_RtvDescriptorSize;
 	
-	ComPtr<ID3D12Resource> m_DepthStencilBuffer;
+	ID3D12Resource *m_DepthStencilBuffer;
 	ComPtr<ID3D12DescriptorHeap> m_DsvHeap;
 	D3D12_CPU_DESCRIPTOR_HANDLE m_DepthStencilCPUHandle;
 	UINT m_DsvDescriptorSize;

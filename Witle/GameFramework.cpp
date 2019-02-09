@@ -66,6 +66,18 @@ void CGameFramework::OnDestroy()
 
 	::CloseHandle(m_hFenceEvent);
 
+	if (m_RenderTargetBuffers)
+	{
+		for (int x = 0; x < m_SwapChainBuffersCount; ++x)
+		{
+			m_RenderTargetBuffers[x]->Release();
+		}
+	}
+
+	if (m_DepthStencilBuffer)
+	{
+		m_DepthStencilBuffer->Release();
+	}
 }
 
 D3D12_SHADER_BYTECODE CGameFramework::CreateComputeShader(ID3DBlob ** ppd3dShaderBlob, LPCSTR pszShaderName)
@@ -405,7 +417,7 @@ void CGameFramework::CreateRenderTargetView()
 		m_SwapChainCPUHandle[i] = d3dRtvCPUDescriptorHandle;
 		HRESULT hResult = m_SwapChain->GetBuffer(i, IID_PPV_ARGS(&m_RenderTargetBuffers[i]));
 
-		m_d3dDevice->CreateRenderTargetView(m_RenderTargetBuffers[i].Get(), &d3dRenderTargetViewDesc, d3dRtvCPUDescriptorHandle);
+		m_d3dDevice->CreateRenderTargetView(m_RenderTargetBuffers[i], &d3dRenderTargetViewDesc, d3dRtvCPUDescriptorHandle);
 		d3dRtvCPUDescriptorHandle.ptr += m_RtvDescriptorSize;
 	}
 }
@@ -442,7 +454,7 @@ void CGameFramework::CreateDepthStencilView()
 
 	//깊이-스텐실 버퍼를 생성한다.
 	m_DepthStencilCPUHandle = m_DsvHeap->GetCPUDescriptorHandleForHeapStart();
-	m_d3dDevice->CreateDepthStencilView(m_DepthStencilBuffer.Get(), NULL, m_DepthStencilCPUHandle); 
+	m_d3dDevice->CreateDepthStencilView(m_DepthStencilBuffer, NULL, m_DepthStencilCPUHandle); 
 }
 
 //void CGameFramework::CreateGBufferView()
@@ -704,12 +716,12 @@ void CGameFramework::OnResizeBackBuffers()
 	
 	for (int i = 0; i < m_SwapChainBuffersCount; i++) {
 		if (m_RenderTargetBuffers[i]) {
-			m_RenderTargetBuffers[i].Reset();
+			m_RenderTargetBuffers[i]->Release();
 		}
 	}
 
 	if (m_DepthStencilBuffer) {
-		m_DepthStencilBuffer.Reset();
+		m_DepthStencilBuffer->Release();
 	}
 
 #ifdef _WITH_ONLY_RESIZE_BACKBUFFERS
@@ -809,7 +821,7 @@ void CGameFramework::Blur()
 void CGameFramework::RenderSwapChain()
 {
 	////////////////////////////////////////////////////// SwapChain
-	d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_RenderTargetBuffers[m_SwapChainBufferIndex].Get(), D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
+	d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_RenderTargetBuffers[m_SwapChainBufferIndex], D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
 
 	m_CommandList->ClearRenderTargetView(m_SwapChainCPUHandle[m_SwapChainBufferIndex], /*pfClearColor*/Colors::Gray, 0, NULL);
 	m_CommandList->ClearDepthStencilView(m_DepthStencilCPUHandle, D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, NULL);
@@ -851,6 +863,6 @@ void CGameFramework::RenderSwapChain()
 	if (m_Testfont) m_Testfont->Render(m_CommandList.Get());
 #endif
 
-	d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_RenderTargetBuffers[m_SwapChainBufferIndex].Get(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
+	d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_RenderTargetBuffers[m_SwapChainBufferIndex], D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
 	//////////////////////////////////////////////////////// SwapChain
 }
