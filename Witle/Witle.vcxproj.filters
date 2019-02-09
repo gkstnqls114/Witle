@@ -142,6 +142,9 @@
     <Filter Include="02.Component\Material">
       <UniqueIdentifier>{45556834-d31a-470b-8819-1c89e3a59b31}</UniqueIdentifier>
     </Filter>
+    <Filter Include="05.Shader\TESTShader">
+      <UniqueIdentifier>{fbd787c7-444a-4e68-98f3-306d0a71a446}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -312,6 +315,12 @@
     <ClInclude Include="Material.h">
       <Filter>02.Component\Material</Filter>
     </ClInclude>
+    <ClInclude Include="SkyPlane.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="TESTShader.h">
+      <Filter>05.Shader\TESTShader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -467,6 +476,12 @@
     <ClCompile Include="Material.cpp">
       <Filter>02.Component\Material</Filter>
     </ClCompile>
+    <ClCompile Include="SkyPlane.cpp">
+      <Filter>99.etc</Filter>
+    </ClCompile>
+    <ClCompile Include="TESTShader.cpp">
+      <Filter>05.Shader\TESTShader</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Witle.rc">
@@ -492,6 +507,9 @@
       <Filter>HLSL</Filter>
     </FxCompile>
     <FxCompile Include="PikcingTESTShader.hlsl">
+      <Filter>HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="TESTShader.hlsl">
       <Filter>HLSL</Filter>
     </FxCompile>
   </ItemGroup>

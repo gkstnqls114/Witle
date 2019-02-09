@@ -2,6 +2,7 @@
 #include "MeshRenderer.h"
 #define _WITH_PLAYER_TOP
 
+class TESTShader;
 class Scene;
 class CameraInfoFont;
 
@@ -140,6 +141,6 @@ private:
 	 
 	Scene *m_pScene{ nullptr };
 	
-	
+	TESTShader* m_TESTShader{ nullptr };
 };
 

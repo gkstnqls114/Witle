@@ -4,6 +4,7 @@
 #include "GameInput.h"
 #include "d3dUtil.h"
 #include "CubeShader.h"
+#include "TESTShader.h"
 #include "TerrainShader.h"
 #include "GameScreen.h" 
 #include "GameScene.h"
@@ -25,9 +26,24 @@ void CGameFramework::Render()
 
 	WaitForGpuComplete();
 
+#ifdef _WITH_PRESENT_PARAMETERS
+	DXGI_PRESENT_PARAMETERS dxgiPresentParameters;
+	dxgiPresentParameters.DirtyRectsCount = 0;
+	dxgiPresentParameters.pDirtyRects = NULL;
+	dxgiPresentParameters.pScrollRect = NULL;
+	dxgiPresentParameters.pScrollOffset = NULL;
+	m_pdxgiSwapChain->Present1(1, 0, &dxgiPresentParameters);
+#else
+#ifdef _WITH_SYNCH_SWAPCHAIN
+	m_pdxgiSwapChain->Present(1, 0);
+#else
 	m_pdxgiSwapChain->Present(0, 0);
+#endif
+#endif
 
+	//	m_nSwapChainBufferIndex = m_pdxgiSwapChain->GetCurrentBackBufferIndex();
 	MoveToNextFrame();
+
 }
 
 CGameFramework::CGameFramework()
@@ -516,6 +532,9 @@ void CGameFramework::BuildObjects()
 	Shader* pTerrainShader = new TerrainShader();
 	pTerrainShader->CreateShader(m_pd3dDevice, m_pScene->GetGraphicsRootSignature());
 	ShaderManager::GetInstance()->InsertShader("Terrain", pTerrainShader); 
+
+	m_TESTShader = new TESTShader();
+	m_TESTShader->CreateShader(m_pd3dDevice, m_pScene->GetGraphicsRootSignature());
 	///////////////////////////////////////////////////////////////////////////// 리소스 생성
 
 	m_pd3dCommandList->Close();
@@ -689,20 +708,7 @@ LRESULT CGameFramework::OnProcessingWindowMessage(HWND hWnd, UINT nMessageID, WP
 		OnProcessingMouseMessage(hWnd, nMessageID, wParam, lParam);
 		break;
 
-	case WM_KEYDOWN: 
-		switch (wParam) {
-		case 'Z':
-		case 'z':
-			d3dUtil::gTEST -= 1;
-			std::cout << d3dUtil::gTEST << std::endl;
-			break;
-
-		case 'X':
-		case 'x':
-			d3dUtil::gTEST += 1;
-			std::cout << d3dUtil::gTEST << std::endl;
-			break;
-		}
+	case WM_KEYDOWN:
 	case WM_KEYUP:
 		OnProcessingKeyboardMessage(hWnd, nMessageID, wParam, lParam);
 		break;
@@ -815,16 +821,17 @@ void CGameFramework::Blur()
 void CGameFramework::RenderSwapChain()
 {
 	////////////////////////////////////////////////////// SwapChain
-	d3dUtil::SynchronizeResourceTransition(m_pd3dCommandList, m_ppd3dSwapChainBackBuffers[m_nSwapChainBufferIndex], D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
+	//d3dUtil::SynchronizeResourceTransition(m_pd3dCommandList, m_ppd3dSwapChainBackBuffers[m_nSwapChainBufferIndex], D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
 
-
-	//D3D12_CPU_DESCRIPTOR_HANDLE d3dRtvCPUDescriptorHandle = m_RtvHeap->GetCPUDescriptorHandleForHeapStart();
-	//d3dRtvCPUDescriptorHandle.ptr += (m_SwapChainBufferIndex * m_RtvDescriptorSize);
-
-	//m_CommandList->ClearRenderTargetView(d3dRtvCPUDescriptorHandle, /*pfClearColor*/Colors::Gray, 0, NULL);
-	//m_CommandList->ClearDepthStencilView(m_DepthStencilCPUHandle, D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, NULL);
-	//m_CommandList->OMSetRenderTargets(1, &d3dRtvCPUDescriptorHandle, TRUE, &m_DepthStencilCPUHandle);
-
+	D3D12_RESOURCE_BARRIER d3dResourceBarrier;
+	::ZeroMemory(&d3dResourceBarrier, sizeof(D3D12_RESOURCE_BARRIER));
+	d3dResourceBarrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+	d3dResourceBarrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+	d3dResourceBarrier.Transition.pResource = m_ppd3dSwapChainBackBuffers[m_nSwapChainBufferIndex];
+	d3dResourceBarrier.Transition.StateBefore = D3D12_RESOURCE_STATE_PRESENT;
+	d3dResourceBarrier.Transition.StateAfter = D3D12_RESOURCE_STATE_RENDER_TARGET;
+	d3dResourceBarrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
+	m_pd3dCommandList->ResourceBarrier(1, &d3dResourceBarrier);
 
 	D3D12_CPU_DESCRIPTOR_HANDLE d3dRtvCPUDescriptorHandle = m_pd3dRtvDescriptorHeap->GetCPUDescriptorHandleForHeapStart();
 	d3dRtvCPUDescriptorHandle.ptr += (m_nSwapChainBufferIndex * m_nRtvDescriptorIncrementSize);
@@ -837,10 +844,33 @@ void CGameFramework::RenderSwapChain()
 
 	m_pd3dCommandList->OMSetRenderTargets(1, &d3dRtvCPUDescriptorHandle, TRUE, &d3dDsvCPUDescriptorHandle);
 
-	// 장면을 렌더합니다.
-	if (m_pScene) { 
-		m_pScene->Render(m_pd3dCommandList);
-	}
+	//// 장면을 렌더합니다.
+	//if (m_pScene) { 
+	//	m_pScene->Render(m_pd3dCommandList);
+	//}
+	D3D12_VIEWPORT m_d3dViewport;
+	D3D12_RECT m_d3dScissorRect;
+
+	m_d3dViewport.TopLeftX = 0;
+	m_d3dViewport.TopLeftY = 0;
+	m_d3dViewport.Width = static_cast<float>(m_nWndClientWidth);
+	m_d3dViewport.Height = static_cast<float>(m_nWndClientHeight);
+	m_d3dViewport.MinDepth = 0.0f;
+	m_d3dViewport.MaxDepth = 1.0f;
+	m_d3dScissorRect = { 0, 0, m_nWndClientWidth, m_nWndClientHeight };
+
+	m_pd3dCommandList->RSSetViewports(1, &m_d3dViewport);
+	m_pd3dCommandList->RSSetScissorRects(1, &m_d3dScissorRect);
+
+
+	//그래픽 루트 시그너쳐를 설정한다.
+	m_pd3dCommandList->SetGraphicsRootSignature(m_pScene->GetGraphicsRootSignature());
+	//파이프라인 상태를 설정한다.
+	m_pd3dCommandList->SetPipelineState(m_TESTShader->GetPSO());
+	//프리미티브 토폴로지(삼각형 리스트)를 설정한다.
+	m_pd3dCommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	//정점 3개를 사용하여 렌더링한다.
+	m_pd3dCommandList->DrawInstanced(3, 1, 0, 0);
 
 
 #ifdef SHOW_G_BUFFERS
@@ -869,10 +899,12 @@ void CGameFramework::RenderSwapChain()
 	}
 #endif
 
-#ifdef _TEXT_DRAW
-	if (m_Testfont) m_Testfont->Render(m_CommandList.Get());
-#endif
+	d3dResourceBarrier.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET;
+	d3dResourceBarrier.Transition.StateAfter = D3D12_RESOURCE_STATE_PRESENT;
+	d3dResourceBarrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
+	m_pd3dCommandList->ResourceBarrier(1, &d3dResourceBarrier);
 
-	d3dUtil::SynchronizeResourceTransition(m_pd3dCommandList, m_ppd3dSwapChainBackBuffers[m_nSwapChainBufferIndex], D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
+
+	//d3dUtil::SynchronizeResourceTransition(m_pd3dCommandList, m_ppd3dSwapChainBackBuffers[m_nSwapChainBufferIndex], D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
 	//////////////////////////////////////////////////////// SwapChain
 }
