@@ -198,6 +198,7 @@
     <ClInclude Include="Terrain.h" />
     <ClInclude Include="TerrainMesh.h" />
     <ClInclude Include="SkinnedMeshRenderer.h" />
+    <ClInclude Include="TESTShader.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="vertices.h" />
     <ClInclude Include="Witle.h" />
@@ -256,6 +257,7 @@
     <ClCompile Include="Terrain.cpp" />
     <ClCompile Include="TerrainMesh.cpp" />
     <ClCompile Include="SkinnedMeshRenderer.cpp" />
+    <ClCompile Include="TESTShader.cpp" />
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="vertices.cpp" />
     <ClCompile Include="Witle.cpp" />
@@ -311,6 +313,17 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="TESTShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Geometry</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Geometry</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Geometry</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Geometry</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
