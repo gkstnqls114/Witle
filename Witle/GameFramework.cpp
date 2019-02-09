@@ -24,7 +24,7 @@ void CGameFramework::Render()
 
 	WaitForGpuComplete();
 
-	m_dxgiSwapChain->Present(0, 0);
+	m_SwapChain->Present(0, 0);
 
 	MoveToNextFrame();
 }
@@ -66,19 +66,6 @@ void CGameFramework::OnDestroy()
 
 	::CloseHandle(m_hFenceEvent);
 
-	m_dxgiSwapChain->SetFullscreenState(FALSE, NULL);
-
-	if (m_RenderTargetBuffers)
-	{
-		for (int x = 0; x < m_SwapChainBuffersCount; ++x)
-		{
-			m_RenderTargetBuffers[x]->Release();
-		}
-	}
-	if (m_DepthStencilBuffer)
-	{
-		m_DepthStencilBuffer->Release();
-	}
 }
 
 D3D12_SHADER_BYTECODE CGameFramework::CreateComputeShader(ID3DBlob ** ppd3dShaderBlob, LPCSTR pszShaderName)
@@ -266,14 +253,14 @@ void CGameFramework::CreateSwapChain()
 	HRESULT hResult = m_dxgiFactory->CreateSwapChain(
 		m_CommandQueue.Get(),
 		&SwapChainDesc, 
-		(IDXGISwapChain **)m_dxgiSwapChain.GetAddressOf());
+		(IDXGISwapChain **)m_SwapChain.GetAddressOf());
 	assert(hResult == S_OK);
 
 	//“Alt+Enter” 키의 동작을 비활성화한다.
 	m_dxgiFactory->MakeWindowAssociation(m_hWnd, DXGI_MWA_NO_ALT_ENTER);
 
 	//스왑체인의 현재 후면버퍼 인덱스를 저장한다.
-	m_SwapChainBufferIndex = m_dxgiSwapChain->GetCurrentBackBufferIndex();
+	m_SwapChainBufferIndex = m_SwapChain->GetCurrentBackBufferIndex();
 }
 
 void CGameFramework::CreateDirect3DDevice()
@@ -416,9 +403,9 @@ void CGameFramework::CreateRenderTargetView()
 	for (UINT i = 0; i < m_SwapChainBuffersCount; i++)
 	{
 		m_SwapChainCPUHandle[i] = d3dRtvCPUDescriptorHandle;
-		HRESULT hResult = m_dxgiSwapChain->GetBuffer(i, IID_PPV_ARGS(&m_RenderTargetBuffers[i]));
+		HRESULT hResult = m_SwapChain->GetBuffer(i, IID_PPV_ARGS(&m_RenderTargetBuffers[i]));
 
-		m_d3dDevice->CreateRenderTargetView(m_RenderTargetBuffers[i], &d3dRenderTargetViewDesc, d3dRtvCPUDescriptorHandle);
+		m_d3dDevice->CreateRenderTargetView(m_RenderTargetBuffers[i].Get(), &d3dRenderTargetViewDesc, d3dRtvCPUDescriptorHandle);
 		d3dRtvCPUDescriptorHandle.ptr += m_RtvDescriptorSize;
 	}
 }
@@ -455,7 +442,7 @@ void CGameFramework::CreateDepthStencilView()
 
 	//깊이-스텐실 버퍼를 생성한다.
 	m_DepthStencilCPUHandle = m_DsvHeap->GetCPUDescriptorHandleForHeapStart();
-	m_d3dDevice->CreateDepthStencilView(m_DepthStencilBuffer, NULL, m_DepthStencilCPUHandle); 
+	m_d3dDevice->CreateDepthStencilView(m_DepthStencilBuffer.Get(), NULL, m_DepthStencilCPUHandle); 
 }
 
 //void CGameFramework::CreateGBufferView()
@@ -537,13 +524,12 @@ void CGameFramework::BuildObjects()
 
 void CGameFramework::ReleaseObjects()
 {
-	if (m_pScene) {
+	if (m_pScene) { 
 		m_pScene->ReleaseObjects();
 		delete m_pScene;
 		m_pScene = nullptr;
 	}
 }
-
 
 void CGameFramework::UpdateGamelogic(float fElapsedTime)
 {
@@ -573,7 +559,7 @@ void CGameFramework::WaitForGpuComplete()
 
 void CGameFramework::MoveToNextFrame()
 {
-	m_SwapChainBufferIndex = m_dxgiSwapChain->GetCurrentBackBufferIndex();
+	m_SwapChainBufferIndex = m_SwapChain->GetCurrentBackBufferIndex();
 
 	UINT64 nFenceValue = ++m_nFenceValues[m_SwapChainBufferIndex];
 	HRESULT hResult = m_CommandQueue->Signal(m_Fence.Get(), nFenceValue);
@@ -630,11 +616,9 @@ void CGameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPA
 		
 		case VK_F1:
 		{
-
 			BOOL bFullScreenState = FALSE;
-			/*m_dxgiSwapChain->GetFullscreenState(&bFullScreenState, NULL);
-			m_dxgiSwapChain->SetFullscreenState(!bFullScreenState, NULL);
-*/
+			m_SwapChain->GetFullscreenState(&bFullScreenState, NULL);
+			m_SwapChain->SetFullscreenState(!bFullScreenState, NULL);
 			DXGI_MODE_DESC dxgiTargetParameters;
 			dxgiTargetParameters.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 			dxgiTargetParameters.Width = m_nWndClientWidth;
@@ -642,11 +626,10 @@ void CGameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPA
 			dxgiTargetParameters.RefreshRate.Numerator = 60;
 			dxgiTargetParameters.RefreshRate.Denominator = 1;
 			dxgiTargetParameters.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
-			dxgiTargetParameters.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
-			//m_dxgiSwapChain->ResizeTarget(&dxgiTargetParameters);
-
-			//OnResizeBackBuffers();
-
+			dxgiTargetParameters.ScanlineOrdering =
+				DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
+			m_SwapChain->ResizeTarget(&dxgiTargetParameters);
+			OnResizeBackBuffers();
 			break;
 		}
 		default:
@@ -719,7 +702,7 @@ void CGameFramework::OnResizeBackBuffers()
 
 	m_CommandList->Reset(m_CommandAllocator.Get(), NULL);
 	
-	/*for (int i = 0; i < m_SwapChainBuffersCount; i++) {
+	for (int i = 0; i < m_SwapChainBuffersCount; i++) {
 		if (m_RenderTargetBuffers[i]) {
 			m_RenderTargetBuffers[i].Reset();
 		}
@@ -727,20 +710,17 @@ void CGameFramework::OnResizeBackBuffers()
 
 	if (m_DepthStencilBuffer) {
 		m_DepthStencilBuffer.Reset();
-	}*/
-
-	for (int i = 0; i < m_SwapChainBuffersCount; i++) if (m_RenderTargetBuffers[i]) m_RenderTargetBuffers[i]->Release();
-	if (m_DepthStencilBuffer) m_DepthStencilBuffer->Release();
+	}
 
 #ifdef _WITH_ONLY_RESIZE_BACKBUFFERS
 	DXGI_SWAP_CHAIN_DESC SwapChainDesc;
-	m_dxgiSwapChain->GetDesc(&SwapChainDesc);
-	m_dxgiSwapChain->ResizeBuffers(0, 0, 0, DXGI_FORMAT_UNKNOWN, 0);
+	m_SwapChain->GetDesc(&SwapChainDesc);
+	m_SwapChain->ResizeBuffers(0, 0, 0, DXGI_FORMAT_UNKNOWN, 0);
 	m_SwapChainBufferIndex = 0;
 #else
 	DXGI_SWAP_CHAIN_DESC dxgiSwapChainDesc;
-	m_dxgiSwapChain->GetDesc(&dxgiSwapChainDesc);
-	m_dxgiSwapChain->ResizeBuffers(m_SwapChainBuffersCount, m_nWndClientWidth,
+	m_SwapChain->GetDesc(&dxgiSwapChainDesc);
+	m_SwapChain->ResizeBuffers(m_SwapChainBuffersCount, m_nWndClientWidth,
 		m_nWndClientHeight, dxgiSwapChainDesc.BufferDesc.Format, dxgiSwapChainDesc.Flags);
 	m_SwapChainBufferIndex = 0;
 #endif
@@ -829,7 +809,7 @@ void CGameFramework::Blur()
 void CGameFramework::RenderSwapChain()
 {
 	////////////////////////////////////////////////////// SwapChain
-	d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_RenderTargetBuffers[m_SwapChainBufferIndex], D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
+	d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_RenderTargetBuffers[m_SwapChainBufferIndex].Get(), D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
 
 	m_CommandList->ClearRenderTargetView(m_SwapChainCPUHandle[m_SwapChainBufferIndex], /*pfClearColor*/Colors::Gray, 0, NULL);
 	m_CommandList->ClearDepthStencilView(m_DepthStencilCPUHandle, D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, NULL);
@@ -871,6 +851,6 @@ void CGameFramework::RenderSwapChain()
 	if (m_Testfont) m_Testfont->Render(m_CommandList.Get());
 #endif
 
-	d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_RenderTargetBuffers[m_SwapChainBufferIndex], D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
+	d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_RenderTargetBuffers[m_SwapChainBufferIndex].Get(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
 	//////////////////////////////////////////////////////// SwapChain
 }
