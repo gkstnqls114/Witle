@@ -26,16 +26,16 @@ private:
 
 	ComPtr<IDXGIFactory4> m_dxgiFactory;
 
-	ComPtr<IDXGISwapChain3> m_SwapChain;
+	ComPtr<IDXGISwapChain3> m_dxgiSwapChain;
 	static const UINT m_SwapChainBuffersCount{ 2 };
 	D3D12_CPU_DESCRIPTOR_HANDLE m_SwapChainCPUHandle[m_SwapChainBuffersCount];
 	UINT m_SwapChainBufferIndex{ 0 };
 
-	ComPtr<ID3D12Resource> m_RenderTargetBuffers[m_SwapChainBuffersCount];
+	ID3D12Resource *m_RenderTargetBuffers[m_SwapChainBuffersCount];
 	ComPtr<ID3D12DescriptorHeap> m_RtvHeap;
 	UINT m_RtvDescriptorSize;
 	
-	ComPtr<ID3D12Resource> m_DepthStencilBuffer;
+	ID3D12Resource *m_DepthStencilBuffer;
 	ComPtr<ID3D12DescriptorHeap> m_DsvHeap;
 	D3D12_CPU_DESCRIPTOR_HANDLE m_DepthStencilCPUHandle;
 	UINT m_DsvDescriptorSize;
