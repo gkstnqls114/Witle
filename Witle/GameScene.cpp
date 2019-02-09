@@ -10,6 +10,7 @@
 #include "Terrain.h"
 #include "MyFrustum.h"
 #include "GameInput.h"
+#include "GameScreen.h"
 #include "Player.h"
 #include "CameraObject.h"
 #include "QuadTreeTerrainMesh.h"
@@ -51,7 +52,9 @@ bool GameScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM w
 		}
 		break;
 	case WM_KEYDOWN:
-		switch (wParam) { 
+		switch (wParam) {
+		case 'A':
+			break;
 //#ifdef _DEBUG
 //		case KEY_A:
 //			m_Camera->Move(Vector3::ScalarProduct(m_Camera->GetRightVector(), -100));
@@ -95,11 +98,13 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	//루트 시그너쳐를 생성한다.
 	m_pd3dGraphicsRootSignature = CreateGraphicsRootSignature(pd3dDevice);
 	
+	// 피킹 테스트할 오브젝트 생성
+	ComponentBase* cubemesh = new CubeMesh(m_GameObject, pd3dDevice, pd3dCommandList, 1, 1, 1);
+	
+
 	// 큐브메쉬 생성
 	m_GameObject = new Player("Player");
-	ComponentBase* cubemesh = new CubeMesh(m_GameObject, pd3dDevice, pd3dCommandList, 1, 1, 1);
-	std::cout << cubemesh->GetFamillyID() << " " << cubemesh->GetComponentID() << std::endl;
-	m_GameObject->InsertComponent(cubemesh->GetFamillyID(), cubemesh);
+	m_GameObject->InsertComponent("Mesh", cubemesh);
 
 	// 터레인 생성 
 	XMFLOAT3 xmf3Scale(8.0f, 1.0f, 8.0f);
@@ -110,6 +115,20 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	//// 해당 터레인을 플레이어 콜백으로 설정
 	m_GameObject->SetPlayerUpdatedContext(m_Terrain);
 
+	// 피킹 테스트 오브젝트들
+	m_PickingTESTMeshs = new GameObject*[m_numPickingTESTMeshs];
+	m_PickingColors = new XMFLOAT3[m_numPickingTESTMeshs];
+	for (int x = 0; x < m_numPickingTESTMeshs; ++x)
+	{
+		std::string name = "TESTPikcing" + std::to_string(x);
+		m_PickingTESTMeshs[x] = new GameObject(name);
+		m_PickingColors[x] = XMFLOAT3(1.F, 1.F, 1.F);
+		int rand_x = rand() % int(257);
+		int rand_z = rand() % int(257);
+		m_PickingTESTMeshs[x]->GetTransform().SetPosition(XMFLOAT3(rand_x, m_Terrain->GetHeight(rand_x, rand_z) + 0.5f, rand_z));
+		m_PickingTESTMeshs[x]->InsertComponent("Mesh", cubemesh);
+	}
+
 	m_TerrainHeap = new MyDescriptorHeap();
 	m_TerrainHeap->CreateCbvSrvUavDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 2, 0);
 	// m_TerrainHeap.CreateConstantBufferViews(pd3dDevice, pd3dCommandList, 1, m_pd3dcbGameObject, ncbElementBytes);
@@ -118,27 +137,28 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	// 카메라
 	m_Camera = new CameraObject("Camera");
 	Camera* cameraComponent = new FollowCam(m_Camera, m_GameObject);
+	cameraComponent->CreateShaderVariables(pd3dDevice, pd3dCommandList);
 	cameraComponent->SetOffset(XMFLOAT3(0, -5.f, 10.f)); 
 	m_Camera->ChangeCamera(cameraComponent);
 
 #ifdef CHECK_ANOTHER_CAMERA
 	m_lookAboveCamera = new CameraObject("LookAboveCamera");
 
-	D3D12_VIEWPORT	GBuffer_Viewport{ 0, FRAME_BUFFER_HEIGHT, G_BUFFER_WINDOW_WIDTH , G_BUFFER_WINDOW_HEIGHT, 0.0f, 1.0f };
-	D3D12_RECT		ScissorRect{ 0 , FRAME_BUFFER_HEIGHT, FRAME_BUFFER_WIDTH , FRAME_BUFFER_HEIGHT + G_BUFFER_WINDOW_HEIGHT };
+	D3D12_VIEWPORT	GBuffer_Viewport{ 0, GameScreen::GetHeight(), G_BUFFER_WINDOW_WIDTH , G_BUFFER_WINDOW_HEIGHT, 0.0f, 1.0f };
+	D3D12_RECT		ScissorRect{ 0 , GameScreen::GetHeight(), GameScreen::GetWidth() , GameScreen::GetHeight() + G_BUFFER_WINDOW_HEIGHT };
 
 	m_lookAboveCamera->GetCamera()->SetScissorRect(ScissorRect);
 	m_lookAboveCamera->GetCamera()->SetViewport(GBuffer_Viewport);
-	m_lookAboveCamera->GetCamera()->GenerateProjectionMatrix(0.01f, CAMERA_FAR, float(FRAME_BUFFER_WIDTH) / float(FRAME_BUFFER_HEIGHT), 60.0f);
+	m_lookAboveCamera->GetCamera()->GenerateProjectionMatrix(0.01f, CAMERA_FAR, float(GameScreen::GetWidth()) / float(GameScreen::GetHeight()), 60.0f);
 	//m_lookAboveCamera->GetCamera()->SetAt(XMFLOAT3(xmf3Scale.x * 257 / 2, 0.f, xmf3Scale.y * 257 / 2)); 
 	m_lookAboveCamera->GetCamera()->SetAt(XMFLOAT3(xmf3Scale.x * 257 / 2, 2000.f, xmf3Scale.z * 257 / 2)); 
 	m_lookAboveCamera->GetCamera()->SetOffset(XMFLOAT3(0.0f, 0.f, 10.f));
 	m_lookAboveCamera->GetCamera()->Rotate(90.f, 0.f, 0.f);
 #endif
 
-	cameraComponent->SetViewport(0, 0, FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT, 0.0f, 1.0f);
-	cameraComponent->SetScissorRect(0, 0, FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT);
-	cameraComponent->GenerateProjectionMatrix(0.01f, CAMERA_FAR, float(FRAME_BUFFER_WIDTH) / float(FRAME_BUFFER_HEIGHT), 60.0f);
+	cameraComponent->SetViewport(0, 0, GameScreen::GetWidth(), GameScreen::GetHeight(), 0.0f, 1.0f);
+	cameraComponent->SetScissorRect(0, 0, GameScreen::GetWidth(), GameScreen::GetHeight());
+	cameraComponent->GenerateProjectionMatrix(0.01f, CAMERA_FAR, float(GameScreen::GetWidth()) / float(GameScreen::GetHeight()), 60.0f);
 
 	//테스트 쿼드트리 터레인 생성
 	m_TESTQuadTree = new QuadTreeTerrainMesh(m_gameobject, pd3dDevice, pd3dCommandList, 257, 257,
@@ -194,6 +214,22 @@ void GameScene::ReleaseObjects()
 	{
 		delete m_TESTQuadTree;
 		m_TESTQuadTree = nullptr;
+	}
+	if (m_PickingTESTMeshs)
+	{
+		for (int x = 0; x < m_numPickingTESTMeshs; ++x)
+		{
+			// m_PickingTESTMeshs[x]->ReleaseObjects();
+			delete m_PickingTESTMeshs[x];
+			m_PickingTESTMeshs[x] = nullptr;
+		}
+		delete[] m_PickingTESTMeshs;
+		m_PickingTESTMeshs = nullptr;
+	}
+	if (m_PickingColors)
+	{
+		delete[] m_PickingColors;
+		m_PickingColors = nullptr;
 	}
 }
 
@@ -264,6 +300,31 @@ bool GameScene::ProcessInput(HWND hWnd, float ElapsedTime)
 		
 	}
 
+	// 피킹을 테스트한다.
+	Camera* pCamera = m_Camera->GetCamera();
+	RAY pickRay;
+	bool isPick = GameInput::GenerateRayforPicking(m_Camera->GetTransform().GetPosition(), pCamera->GetViewMatrix(), pCamera->GetProjectionMatrix(), pickRay);
+	if (isPick)
+	{
+		if (m_PickingTESTMeshs)
+		{
+			XMFLOAT3* pickColor;
+			float dist;
+			for (int x = 0; x < m_numPickingTESTMeshs; ++x)
+			{
+				auto world = m_PickingTESTMeshs[x]->GetTransform().GetWorldMatrix();
+				BoundingBox box{ XMFLOAT3(0.F, 0.F, 0.F),  XMFLOAT3(0.5F, 0.5F, 0.5F) };
+				box.Transform(box, XMLoadFloat4x4(&world));
+				if (box.Intersects(XMLoadFloat3(&pickRay.origin), XMLoadFloat3(&pickRay.direction), dist))
+				{
+					m_PickingColors[x] = XMFLOAT3(1.F, 0.F, 0.F);
+				}
+			}
+
+
+		}
+	}
+
 	return true;
 }
 
@@ -296,6 +357,14 @@ void GameScene::Update(float fElapsedTime)
 	if (m_GameObject)
 	{
 		m_GameObject->GetTransform().Update(fElapsedTime); // right, up, look, pos에 맞춰 월드변환행렬 다시 설정
+	}
+
+	if (m_PickingTESTMeshs)
+	{
+		for (int x = 0; x < m_numPickingTESTMeshs; ++x)
+		{
+			m_PickingTESTMeshs[x]->GetTransform().Update(fElapsedTime); // right, up, look, pos에 맞춰 월드변환행렬 다시 설정
+		} 
 	}
 }
 
@@ -334,10 +403,9 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	// 그래픽 루트 시그니처 설정
 	pd3dCommandList->SetGraphicsRootSignature(m_pd3dGraphicsRootSignature);
 
-
 	// 클라 화면 설정
-	m_Camera->SetViewportsAndScissorRects(pd3dCommandList);
-	m_Camera->UpdateShaderVariables(pd3dCommandList);
+	m_Camera->SetViewportsAndScissorRects(pd3dCommandList); 
+	m_Camera->GetCamera()->UpdateShaderVariables(pd3dCommandList, m_parameterForm->GetIndex("Camera"));
 
 	// 조명
 	//D3D12_GPU_VIRTUAL_ADDRESS d3dcbLightsGpuVirtualAddress = m_pd3dcbLights->GetGPUVirtualAddress();
@@ -370,13 +438,10 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	// PSO 설정
 	pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Cube")->GetPSO());
 
-	m_Camera->SetViewportsAndScissorRects(pd3dCommandList);
-	m_Camera->UpdateShaderVariables(pd3dCommandList);
-
-	// 쉐이더 변수 설정
-	XMFLOAT4X4 xmf4x4World;
-	XMStoreFloat4x4(&xmf4x4World, XMMatrixTranspose(XMLoadFloat4x4(&m_GameObject->GetTransform().GetWorldMatrix())));
-	m_parameterForm->UpdateShaderVariable(pd3dCommandList, m_pd3dGraphicsRootSignature, "World", SourcePtr(&xmf4x4World));
+	// 쉐이더 변수 설정 
+	m_parameterForm->UpdateShaderVariable(pd3dCommandList, m_pd3dGraphicsRootSignature, "World", SourcePtr(&XMMatrixTranspose(XMLoadFloat4x4(&m_GameObject->GetTransform().GetWorldMatrix()))));
+	XMFLOAT3 test = XMFLOAT3(0.f, 0.f, 0.f);
+	m_parameterForm->UpdateShaderVariable(pd3dCommandList, m_pd3dGraphicsRootSignature, "Color", SourcePtr(&test));
 
 	// CubeMesh Render
 	Mesh* mesh = m_GameObject->GetComponent<Mesh>("Mesh");
@@ -390,6 +455,17 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 
 	gMeshRenderer.Render(pd3dCommandList, mesh);
 #endif
+	
+	for (int x = 0; x < m_numPickingTESTMeshs; ++x)
+	{
+		// 쉐이더 변수 설정 
+		m_parameterForm->UpdateShaderVariable(pd3dCommandList, m_pd3dGraphicsRootSignature, "World", SourcePtr(&XMMatrixTranspose(XMLoadFloat4x4(&m_PickingTESTMeshs[x]->GetTransform().GetWorldMatrix()))));
+		m_parameterForm->UpdateShaderVariable(pd3dCommandList, m_pd3dGraphicsRootSignature, "Color", SourcePtr(&m_PickingColors[x]));
+		// CubeMesh Render
+		Mesh* mesh = m_PickingTESTMeshs[x]->GetComponent<Mesh>("Mesh");
+		gMeshRenderer.Render(pd3dCommandList, mesh); 
+	}
+	
 }
 
 void GameScene::ReleaseUploadBuffers()
@@ -397,6 +473,13 @@ void GameScene::ReleaseUploadBuffers()
 	if (m_GameObject) m_GameObject->ReleaseUploadBuffers();
 	if (m_Terrain) m_Terrain->ReleaseUploadBuffers();
 	if (m_TESTQuadTree) m_TESTQuadTree->ReleaseUploadBuffers();
+	if (m_PickingTESTMeshs)
+	{
+		for (int x = 0; x < m_numPickingTESTMeshs; ++x)
+		{
+			m_PickingTESTMeshs[x]->ReleaseUploadBuffers();
+		}
+	}
 }
 
 bool GameScene::SaveData()
@@ -430,7 +513,7 @@ ID3D12RootSignature* GameScene::CreateGraphicsRootSignature(ID3D12Device *pd3dDe
 	HRESULT hResult = S_FALSE;
 	ID3D12RootSignature* pd3dGraphicsRootSignature = nullptr;
 
-	D3D12_ROOT_PARAMETER pRootParameters[7];
+	D3D12_ROOT_PARAMETER pRootParameters[8];
 	m_parameterForm = new ParameterForm(_countof(pRootParameters));
 
 	// 루트 상수
@@ -446,13 +529,12 @@ ID3D12RootSignature* GameScene::CreateGraphicsRootSignature(ID3D12Device *pd3dDe
 	pRootParameters[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
 	m_parameterForm->InsertResource(0, "World", pRootParameters[0]);
 
-	pRootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_32BIT_CONSTANTS;
-	pRootParameters[1].Constants.Num32BitValues = 32;
-	pRootParameters[1].Constants.ShaderRegister = 1;
-	pRootParameters[1].Constants.RegisterSpace = 0;
-	pRootParameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
-	m_parameterForm->InsertResource(1, "ViewAndProjection", pRootParameters[0]);
-	 
+	pRootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	pRootParameters[1].Descriptor.ShaderRegister = 1; //Camera
+	pRootParameters[1].Descriptor.RegisterSpace = 0;
+	pRootParameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+	m_parameterForm->InsertResource(1, "Camera", pRootParameters[1]);
+	
 	pRootParameters[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	pRootParameters[2].Descriptor.ShaderRegister = 2; //Materials
 	pRootParameters[2].Descriptor.RegisterSpace = 0;
@@ -465,6 +547,12 @@ ID3D12RootSignature* GameScene::CreateGraphicsRootSignature(ID3D12Device *pd3dDe
 	pRootParameters[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
 	m_parameterForm->InsertResource(3, "Lights", pRootParameters[3]);
 
+	pRootParameters[7].ParameterType = D3D12_ROOT_PARAMETER_TYPE_32BIT_CONSTANTS;
+	pRootParameters[7].Constants.Num32BitValues = 3;
+	pRootParameters[7].Constants.ShaderRegister = 4;
+	pRootParameters[7].Constants.RegisterSpace = 0;
+	pRootParameters[7].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+	m_parameterForm->InsertResource(7, "Color", pRootParameters[7]);
 
 	D3D12_DESCRIPTOR_RANGE pd3dDescriptorRanges[3];
 	 
@@ -504,6 +592,8 @@ ID3D12RootSignature* GameScene::CreateGraphicsRootSignature(ID3D12Device *pd3dDe
 	pRootParameters[6].DescriptorTable.pDescriptorRanges = &pd3dDescriptorRanges[2];
 	pRootParameters[6].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 	m_parameterForm->InsertResource(6, "TerrainDetail", pRootParameters[6]);
+
+
 
 /*
 	pRootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
@@ -657,76 +747,76 @@ ID3D12RootSignature* GameScene::CreateGraphicsRootSignature(ID3D12Device *pd3dDe
 
 void GameScene::BuildLightsAndMaterials(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList)
 {
-	//m_pLights = new LIGHTS;
-	//::ZeroMemory(m_pLights, sizeof(LIGHTS));
+	m_pLights = new LIGHTS;
+	::ZeroMemory(m_pLights, sizeof(LIGHTS));
 
-	//m_pLights->m_xmf4GlobalAmbient = XMFLOAT4(0.1f, 0.1f, 0.1f, 1.0f);
+	m_pLights->m_xmf4GlobalAmbient = XMFLOAT4(0.1f, 0.1f, 0.1f, 1.0f);
 
-	//m_pLights->m_pLights[0].m_bEnable = true;
-	//m_pLights->m_pLights[0].m_nType = POINT_LIGHT;
-	//m_pLights->m_pLights[0].m_fRange = 100.0f;
-	//m_pLights->m_pLights[0].m_xmf4Ambient = XMFLOAT4(0.1f, 0.0f, 0.0f, 1.0f);
-	//m_pLights->m_pLights[0].m_xmf4Diffuse = XMFLOAT4(0.8f, 0.0f, 0.0f, 1.0f);
-	//m_pLights->m_pLights[0].m_xmf4Specular = XMFLOAT4(0.1f, 0.1f, 0.1f, 0.0f);
-	//m_pLights->m_pLights[0].m_xmf3Position = XMFLOAT3(130.0f, 30.0f, 30.0f);
-	//m_pLights->m_pLights[0].m_xmf3Direction = XMFLOAT3(0.0f, 0.0f, 0.0f);
-	//m_pLights->m_pLights[0].m_xmf3Attenuation = XMFLOAT3(1.0f, 0.001f, 0.0001f);
-	//m_pLights->m_pLights[1].m_bEnable = true;
-	//m_pLights->m_pLights[1].m_nType = SPOT_LIGHT;
-	//m_pLights->m_pLights[1].m_fRange = 50.0f;
-	//m_pLights->m_pLights[1].m_xmf4Ambient = XMFLOAT4(0.1f, 0.1f, 0.1f, 1.0f);
-	//m_pLights->m_pLights[1].m_xmf4Diffuse = XMFLOAT4(0.4f, 0.4f, 0.4f, 1.0f);
-	//m_pLights->m_pLights[1].m_xmf4Specular = XMFLOAT4(0.1f, 0.1f, 0.1f, 0.0f);
-	//m_pLights->m_pLights[1].m_xmf3Position = XMFLOAT3(-50.0f, 20.0f, -5.0f);
-	//m_pLights->m_pLights[1].m_xmf3Direction = XMFLOAT3(0.0f, 0.0f, 1.0f);
-	//m_pLights->m_pLights[1].m_xmf3Attenuation = XMFLOAT3(1.0f, 0.01f, 0.0001f);
-	//m_pLights->m_pLights[1].m_fFalloff = 8.0f;
-	//m_pLights->m_pLights[1].m_fPhi = (float)cos(XMConvertToRadians(40.0f));
-	//m_pLights->m_pLights[1].m_fTheta = (float)cos(XMConvertToRadians(20.0f));
-	//m_pLights->m_pLights[2].m_bEnable = true;
-	//m_pLights->m_pLights[2].m_nType = DIRECTIONAL_LIGHT;
-	//m_pLights->m_pLights[2].m_xmf4Ambient = XMFLOAT4(0.1f, 0.1f, 0.1f, 1.0f);
-	//m_pLights->m_pLights[2].m_xmf4Diffuse = XMFLOAT4(0.3f, 0.3f, 0.3f, 1.0f);
-	//m_pLights->m_pLights[2].m_xmf4Specular = XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f);
-	//m_pLights->m_pLights[2].m_xmf3Direction = XMFLOAT3(1.0f, 0.0f, 0.0f);
-	//m_pLights->m_pLights[3].m_bEnable = true;
-	//m_pLights->m_pLights[3].m_nType = SPOT_LIGHT;
-	//m_pLights->m_pLights[3].m_fRange = 60.0f;
-	//m_pLights->m_pLights[3].m_xmf4Ambient = XMFLOAT4(0.1f, 0.1f, 0.1f, 1.0f);
-	//m_pLights->m_pLights[3].m_xmf4Diffuse = XMFLOAT4(0.5f, 0.0f, 0.0f, 1.0f);
-	//m_pLights->m_pLights[3].m_xmf4Specular = XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f);
-	//m_pLights->m_pLights[3].m_xmf3Position = XMFLOAT3(-150.0f, 30.0f, 30.0f);
-	//m_pLights->m_pLights[3].m_xmf3Direction = XMFLOAT3(0.0f, 1.0f, 1.0f);
-	//m_pLights->m_pLights[3].m_xmf3Attenuation = XMFLOAT3(1.0f, 0.01f, 0.0001f);
-	//m_pLights->m_pLights[3].m_fFalloff = 8.0f;
-	//m_pLights->m_pLights[3].m_fPhi = (float)cos(XMConvertToRadians(90.0f));
-	//m_pLights->m_pLights[3].m_fTheta = (float)cos(XMConvertToRadians(30.0f));
+	m_pLights->m_pLights[0].bEnable = true;
+	m_pLights->m_pLights[0].nType = POINT_LIGHT;
+	m_pLights->m_pLights[0].fRange = 100.0f;
+	m_pLights->m_pLights[0].Ambient = XMFLOAT4(0.1f, 0.0f, 0.0f, 1.0f);
+	m_pLights->m_pLights[0].Diffuse = XMFLOAT4(0.8f, 0.0f, 0.0f, 1.0f);
+	m_pLights->m_pLights[0].Specular = XMFLOAT4(0.1f, 0.1f, 0.1f, 0.0f);
+	m_pLights->m_pLights[0].Position = XMFLOAT3(130.0f, 30.0f, 30.0f);
+	m_pLights->m_pLights[0].Direction = XMFLOAT3(0.0f, 0.0f, 0.0f);
+	m_pLights->m_pLights[0].Attenuation = XMFLOAT3(1.0f, 0.001f, 0.0001f);
+	m_pLights->m_pLights[1].bEnable = true;
+	m_pLights->m_pLights[1].nType = SPOT_LIGHT;
+	m_pLights->m_pLights[1].fRange = 50.0f;
+	m_pLights->m_pLights[1].Ambient = XMFLOAT4(0.1f, 0.1f, 0.1f, 1.0f);
+	m_pLights->m_pLights[1].Diffuse = XMFLOAT4(0.4f, 0.4f, 0.4f, 1.0f);
+	m_pLights->m_pLights[1].Specular = XMFLOAT4(0.1f, 0.1f, 0.1f, 0.0f);
+	m_pLights->m_pLights[1].Position = XMFLOAT3(-50.0f, 20.0f, -5.0f);
+	m_pLights->m_pLights[1].Direction = XMFLOAT3(0.0f, 0.0f, 1.0f);
+	m_pLights->m_pLights[1].Attenuation = XMFLOAT3(1.0f, 0.01f, 0.0001f);
+	m_pLights->m_pLights[1].fFalloff = 8.0f;
+	m_pLights->m_pLights[1].fPhi = (float)cos(XMConvertToRadians(40.0f));
+	m_pLights->m_pLights[1].fTheta = (float)cos(XMConvertToRadians(20.0f));
+	m_pLights->m_pLights[2].bEnable = true;
+	m_pLights->m_pLights[2].nType = DIRECTIONAL_LIGHT;
+	m_pLights->m_pLights[2].Ambient = XMFLOAT4(0.1f, 0.1f, 0.1f, 1.0f);
+	m_pLights->m_pLights[2].Diffuse = XMFLOAT4(0.3f, 0.3f, 0.3f, 1.0f);
+	m_pLights->m_pLights[2].Specular = XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f);
+	m_pLights->m_pLights[2].Direction = XMFLOAT3(1.0f, 0.0f, 0.0f);
+	m_pLights->m_pLights[3].bEnable = true;
+	m_pLights->m_pLights[3].nType = SPOT_LIGHT;
+	m_pLights->m_pLights[3].fRange = 60.0f;
+	m_pLights->m_pLights[3].Ambient = XMFLOAT4(0.1f, 0.1f, 0.1f, 1.0f);
+	m_pLights->m_pLights[3].Diffuse = XMFLOAT4(0.5f, 0.0f, 0.0f, 1.0f);
+	m_pLights->m_pLights[3].Specular = XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f);
+	m_pLights->m_pLights[3].Position = XMFLOAT3(-150.0f, 30.0f, 30.0f);
+	m_pLights->m_pLights[3].Direction = XMFLOAT3(0.0f, 1.0f, 1.0f);
+	m_pLights->m_pLights[3].Attenuation = XMFLOAT3(1.0f, 0.01f, 0.0001f);
+	m_pLights->m_pLights[3].fFalloff = 8.0f;
+	m_pLights->m_pLights[3].fPhi = (float)cos(XMConvertToRadians(90.0f));
+	m_pLights->m_pLights[3].fTheta = (float)cos(XMConvertToRadians(30.0f));
 
-	//m_pMaterials = new MATERIALS;
-	//::ZeroMemory(m_pMaterials, sizeof(MATERIALS));
+	m_pMaterials = new MATERIALS;
+	::ZeroMemory(m_pMaterials, sizeof(MATERIALS));
 
-	//m_pMaterials->m_pReflections[0] = { XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f), XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 5.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f) };
-	//m_pMaterials->m_pReflections[1] = { XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f), XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 10.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f) };
-	//m_pMaterials->m_pReflections[2] = { XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f), XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 15.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f) };
-	//m_pMaterials->m_pReflections[3] = { XMFLOAT4(0.5f, 0.0f, 1.0f, 1.0f), XMFLOAT4(0.0f, 0.5f, 1.0f, 1.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 20.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f) };
-	//m_pMaterials->m_pReflections[4] = { XMFLOAT4(0.0f, 0.5f, 1.0f, 1.0f), XMFLOAT4(0.5f, 0.0f, 1.0f, 1.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 25.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f) };
-	//m_pMaterials->m_pReflections[5] = { XMFLOAT4(0.0f, 0.5f, 0.5f, 1.0f), XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 30.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f) };
-	//m_pMaterials->m_pReflections[6] = { XMFLOAT4(0.5f, 0.5f, 1.0f, 1.0f), XMFLOAT4(0.5f, 0.5f, 1.0f, 1.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 35.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f) };
-	//m_pMaterials->m_pReflections[7] = { XMFLOAT4(1.0f, 0.5f, 1.0f, 1.0f), XMFLOAT4(1.0f, 0.0f, 1.0f, 1.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 40.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f) };
+	m_pMaterials->m_pReflections[0] = { XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f), XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 5.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f) };
+	m_pMaterials->m_pReflections[1] = { XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f), XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 10.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f) };
+	m_pMaterials->m_pReflections[2] = { XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f), XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 15.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f) };
+	m_pMaterials->m_pReflections[3] = { XMFLOAT4(0.5f, 0.0f, 1.0f, 1.0f), XMFLOAT4(0.0f, 0.5f, 1.0f, 1.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 20.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f) };
+	m_pMaterials->m_pReflections[4] = { XMFLOAT4(0.0f, 0.5f, 1.0f, 1.0f), XMFLOAT4(0.5f, 0.0f, 1.0f, 1.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 25.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f) };
+	m_pMaterials->m_pReflections[5] = { XMFLOAT4(0.0f, 0.5f, 0.5f, 1.0f), XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 30.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f) };
+	m_pMaterials->m_pReflections[6] = { XMFLOAT4(0.5f, 0.5f, 1.0f, 1.0f), XMFLOAT4(0.5f, 0.5f, 1.0f, 1.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 35.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f) };
+	m_pMaterials->m_pReflections[7] = { XMFLOAT4(1.0f, 0.5f, 1.0f, 1.0f), XMFLOAT4(1.0f, 0.0f, 1.0f, 1.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 40.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f) };
 
-	//// 쉐이더 변수 설정
-	//CreateConstantBuffer(pd3dDevice, pd3dCommandList, m_pd3dcbLights, sizeof(LIGHTS), (void **)&m_pcbMappedLights);
-	//CreateConstantBuffer(pd3dDevice, pd3dCommandList, m_pd3dcbMaterials, sizeof(MATERIALS), (void **)&m_pcbMappedMaterials);
+	// 쉐이더 변수 설정
+	CreateConstantBuffer(pd3dDevice, pd3dCommandList, m_pd3dcbLights, sizeof(LIGHTS), (void **)&m_pcbMappedLights);
+	CreateConstantBuffer(pd3dDevice, pd3dCommandList, m_pd3dcbMaterials, sizeof(MATERIALS), (void **)&m_pcbMappedMaterials);
 
-	//UINT ncbElementBytes = ((sizeof(LIGHTS) + 255) & ~255); //256의 배수
-	//m_pd3dcbLights = d3dUtil::CreateBufferResource(pd3dDevice, pd3dCommandList, NULL, ncbElementBytes, D3D12_HEAP_TYPE_UPLOAD, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, NULL);
+	UINT ncbElementBytes = ((sizeof(LIGHTS) + 255) & ~255); //256의 배수
+	m_pd3dcbLights = d3dUtil::CreateBufferResource(pd3dDevice, pd3dCommandList, NULL, ncbElementBytes, D3D12_HEAP_TYPE_UPLOAD, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, NULL);
 
-	//m_pd3dcbLights->Map(0, NULL, (void **)&m_pcbMappedLights);
+	m_pd3dcbLights->Map(0, NULL, (void **)&m_pcbMappedLights);
 
-	//UINT ncbMaterialBytes = ((sizeof(MATERIALS) + 255) & ~255); //256의 배수
-	//m_pd3dcbMaterials = d3dUtil::CreateBufferResource(pd3dDevice, pd3dCommandList, NULL, ncbMaterialBytes, D3D12_HEAP_TYPE_UPLOAD, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, NULL);
+	UINT ncbMaterialBytes = ((sizeof(MATERIALS) + 255) & ~255); //256의 배수
+	m_pd3dcbMaterials = d3dUtil::CreateBufferResource(pd3dDevice, pd3dCommandList, NULL, ncbMaterialBytes, D3D12_HEAP_TYPE_UPLOAD, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, NULL);
 
-	//m_pd3dcbMaterials->Map(0, NULL, (void **)&m_pcbMappedMaterials);
+	m_pd3dcbMaterials->Map(0, NULL, (void **)&m_pcbMappedMaterials);
 }
 
 //void GameScene::BuildConstantBuffer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList)

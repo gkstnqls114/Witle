@@ -43,12 +43,11 @@ public:
 };
 
 
-inline bool CreateConstantBuffer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, ID3D12Resource* pResource, unsigned long long byteSize, void** ppData)
+inline void CreateConstantBuffer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, ID3D12Resource* pResource, unsigned long long byteSize, void** ppData)
 {
 	UINT ncbBytes = ((sizeof(byteSize) + 255) & ~255); //256ÀÇ ¹è¼ö
 	pResource = d3dUtil::CreateBufferResource(pd3dDevice, pd3dCommandList, NULL, ncbBytes, D3D12_HEAP_TYPE_UPLOAD, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, NULL);
 
 	HRESULT hResult = pResource->Map(0, NULL, ppData);
-	if (hResult != S_OK) return false;
-	else return true;
+	assert(!(hResult != S_OK));
 }

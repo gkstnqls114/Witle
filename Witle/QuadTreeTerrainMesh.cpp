@@ -122,6 +122,7 @@ UINT QuadTreeTerrainMesh::CalculateVertex(UINT widht, UINT length)
 QuadTreeTerrainMesh::QuadTreeTerrainMesh(GameObject * pOwner, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, int nWidth, int nLength, XMFLOAT3 xmf3Scale, XMFLOAT4 xmf4Color, HeightMapImage * pContext)
 	: ComponentBase(pOwner)
 {
+	m_FamilyID.InitTEST();
 	m_ComponenetID = MESH_TYPE_ID::QUADTREE_TERRAIN_MESH;
 
 	m_widthTotal = nWidth;

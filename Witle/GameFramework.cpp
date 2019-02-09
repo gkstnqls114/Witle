@@ -5,9 +5,7 @@
 #include "d3dUtil.h"
 #include "CubeShader.h"
 #include "TerrainShader.h"
-//#include "CameraStorage.h"
-//#include "CTexture.h"
-
+#include "GameScreen.h" 
 #include "GameScene.h"
 
 #include "GameFramework.h"
@@ -225,8 +223,8 @@ D3D12_SHADER_BYTECODE CGameFramework::CreateComputeShader(ID3DBlob ** ppd3dShade
 
 void CGameFramework::CreateSwapChain()
 {
-	m_nWndClientWidth = FRAME_BUFFER_WIDTH;
-	m_nWndClientHeight = FRAME_BUFFER_HEIGHT;
+	m_nWndClientWidth = GameScreen::GetWidth();
+	m_nWndClientHeight = GameScreen::GetHeight();
 
 	DXGI_SWAP_CHAIN_DESC SwapChainDesc;
 	::ZeroMemory(&SwapChainDesc, sizeof(SwapChainDesc));
@@ -507,8 +505,7 @@ void CGameFramework::BuildObjects()
 
 	Shader* pTerrainShader = new TerrainShader();
 	pTerrainShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
-	ShaderManager::GetInstance()->InsertShader("Terrain", pTerrainShader);
-	
+	ShaderManager::GetInstance()->InsertShader("Terrain", pTerrainShader); 
 	///////////////////////////////////////////////////////////////////////////// 리소스 생성
 
 	hResult = m_CommandList->Close();
@@ -544,7 +541,7 @@ void CGameFramework::UpdateGamelogic(float fElapsedTime)
 
 		// 현재 애니메이션 어디다가 쓰는지 모르겠다.
 		//m_pScene->AnimateObjects(0);
-
+		GameInput::Reset();
 	}
 }
 
@@ -584,8 +581,7 @@ void CGameFramework::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM
 	{
 	case WM_MOUSEWHEEL:
 	case WM_MOUSEHWHEEL:
-		m_MouseWheelData = GET_WHEEL_DELTA_WPARAM(wParam);
-
+		GameInput::RotateWheel(wParam);
 		break;
 	case WM_LBUTTONDOWN:
 		//마우스 캡쳐를 하고 현재 마우스 위치를 가져온다. 
@@ -618,9 +614,22 @@ void CGameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPA
 			::PostQuitMessage(0);
 			break;
 		
-		case VK_F9:
+		case VK_F1:
 		{
-
+			BOOL bFullScreenState = FALSE;
+			m_SwapChain->GetFullscreenState(&bFullScreenState, NULL);
+			m_SwapChain->SetFullscreenState(!bFullScreenState, NULL);
+			DXGI_MODE_DESC dxgiTargetParameters;
+			dxgiTargetParameters.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+			dxgiTargetParameters.Width = m_nWndClientWidth;
+			dxgiTargetParameters.Height = m_nWndClientHeight;
+			dxgiTargetParameters.RefreshRate.Numerator = 60;
+			dxgiTargetParameters.RefreshRate.Denominator = 1;
+			dxgiTargetParameters.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
+			dxgiTargetParameters.ScanlineOrdering =
+				DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
+			m_SwapChain->ResizeTarget(&dxgiTargetParameters);
+			OnResizeBackBuffers();
 			break;
 		}
 		default:

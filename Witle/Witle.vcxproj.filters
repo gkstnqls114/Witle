@@ -124,6 +124,24 @@
     <Filter Include="02.Component\MyFrustum">
       <UniqueIdentifier>{4b849b20-e341-441f-a863-7a7ded49cad8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="99.etc\ID">
+      <UniqueIdentifier>{61995b09-dbe4-4501-a127-f71ad8ed4da6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\Light">
+      <UniqueIdentifier>{eecf9577-b11f-4ed6-abb0-4e8cd321fe0e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\Light\DirectionalLight">
+      <UniqueIdentifier>{4990c85f-c2dd-4d41-a492-85b7886490ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\Light\SpotLight">
+      <UniqueIdentifier>{e4301115-bb6e-482d-be6c-3f01c500f886}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\Light\PointLight">
+      <UniqueIdentifier>{78a1d41b-06aa-48f8-b26a-942911a81391}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\Material">
+      <UniqueIdentifier>{45556834-d31a-470b-8819-1c89e3a59b31}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -139,9 +157,6 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="d3dx12.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="ID.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Mesh.h">
@@ -275,6 +290,27 @@
     </ClInclude>
     <ClInclude Include="MyFrustum.h">
       <Filter>02.Component\MyFrustum</Filter>
+    </ClInclude>
+    <ClInclude Include="GameScreen.h">
+      <Filter>01.GameBase</Filter>
+    </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>02.Component\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="SpotLight.h">
+      <Filter>02.Component\Light\SpotLight</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectionalLight.h">
+      <Filter>02.Component\Light\DirectionalLight</Filter>
+    </ClInclude>
+    <ClInclude Include="PointLight.h">
+      <Filter>02.Component\Light\PointLight</Filter>
+    </ClInclude>
+    <ClInclude Include="FamilyID.h">
+      <Filter>99.etc\ID</Filter>
+    </ClInclude>
+    <ClInclude Include="Material.h">
+      <Filter>02.Component\Material</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -410,6 +446,27 @@
     <ClCompile Include="MyFrustum.cpp">
       <Filter>02.Component\MyFrustum</Filter>
     </ClCompile>
+    <ClCompile Include="GameScreen.cpp">
+      <Filter>01.GameBase</Filter>
+    </ClCompile>
+    <ClCompile Include="Light.cpp">
+      <Filter>02.Component\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="SpotLight.cpp">
+      <Filter>02.Component\Light\SpotLight</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectionalLight.cpp">
+      <Filter>02.Component\Light\DirectionalLight</Filter>
+    </ClCompile>
+    <ClCompile Include="PointLight.cpp">
+      <Filter>02.Component\Light\PointLight</Filter>
+    </ClCompile>
+    <ClCompile Include="FamilyID.cpp">
+      <Filter>99.etc\ID</Filter>
+    </ClCompile>
+    <ClCompile Include="Material.cpp">
+      <Filter>02.Component\Material</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Witle.rc">
@@ -432,6 +489,9 @@
       <Filter>HLSL</Filter>
     </FxCompile>
     <FxCompile Include="TerrainShader.hlsl">
+      <Filter>HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="PikcingTESTShader.hlsl">
       <Filter>HLSL</Filter>
     </FxCompile>
   </ItemGroup>

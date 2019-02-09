@@ -4,7 +4,7 @@
 #include "GameObject.h"
  
 void GameObject::ReleaseComponents()
-{
+{ 
 	for (auto& component : m_Components)
 	{
 		delete component.second;
@@ -15,10 +15,10 @@ void GameObject::ReleaseComponents()
 }
 
 void GameObject::ReleaseComponentUploadBuffers()
-{
+{ 
 	for (auto& component : m_Components)
 	{
-		if (component.second->GetFamillyID() == FAMILLYID_MESH)
+		if (component.second->GetFamilyID().isMesh())
 		{
 			static_cast<Mesh*>(component.second)->ReleaseUploadBuffers();
 		}
@@ -34,6 +34,18 @@ GameObject::GameObject(const std::string & entityID)
 GameObject::~GameObject()
 {
 
+}
+
+void GameObject::ReleaseObjects()
+{
+	ReleaseComponents();
+	ReleaseMembers();
+}
+
+void GameObject::ReleaseUploadBuffers()
+{
+	ReleaseComponentUploadBuffers();
+	ReleaseMemberUploadBuffers();
 }
 
 bool GameObject::InsertComponent(const std::string & ComponenetID, ComponentBase * pComponentBase)

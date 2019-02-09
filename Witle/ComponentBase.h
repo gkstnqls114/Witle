@@ -1,22 +1,39 @@
 #pragma once
-#include "ID.h"
+#include "FamilyID.h"
 
 class GameObject;
+class ResourceBase;
+
 class ComponentBase
 {
 public:
 	ComponentBase(GameObject* pOwner) : m_pOwner(pOwner) {}
 	virtual ~ComponentBase();
 	 
-	int GetComponentID() const { return m_ComponenetID; };
-	const std::string& GetFamillyID() const { return m_FamillyID; };
-
 	virtual void Update(float fTimeElapsed) = 0;
+	 
+	int GetComponentID() const { return m_ComponenetID; };
+	const FamilyID& GetFamilyID() const { return m_FamilyID; };
+
 	
 protected: 
 	GameObject* const m_pOwner{ nullptr };
 	
 	UINT m_ComponenetID{ 0 };
-	std::string m_FamillyID{ "ComponentBase" };
+	FamilyID m_FamilyID;
 };
 
+class ResourceComponentBase
+	: public ComponentBase
+{
+protected:
+	ResourceBase	*m_ShaderVariables{ nullptr };
+
+public:
+	ResourceComponentBase(GameObject* pOwner) : ComponentBase(pOwner) {}
+	virtual ~ResourceComponentBase();
+
+	virtual void Update(float fTimeElapsed) = 0;
+
+	const ResourceBase* const GetResource() const { return m_ShaderVariables; }
+};

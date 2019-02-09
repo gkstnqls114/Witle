@@ -14,13 +14,19 @@ class GameObject;
 // 가장 기본적인 카메라입니다.
 // 카메라 자신의 Position을 기준으로 이동하고 회전합니다.
 class Camera
-	: public ComponentBase
+	: public ResourceComponentBase
 {
+private:
+	struct VS_CB_CAMERA_INFO
+	{
+		XMFLOAT4X4						m_xmf4x4View;
+		XMFLOAT4X4						m_xmf4x4Projection;
+		XMFLOAT3						m_xmf3Position;
+	};
+	ID3D12Resource					*m_pd3dcbCamera{ nullptr };
+	VS_CB_CAMERA_INFO				*m_pcbMappedCamera{ nullptr };
+
 protected:
-	//XMFLOAT3		m_Position			{ 0.0f, 0.0f, 0.0f }; // Position = At - Offset
-	//XMFLOAT3		m_Right				{ 1.0f, 0.0f, 0.0f };
-	//XMFLOAT3		m_Up				{ 0.0f, 1.0f, 0.0f };
-	//XMFLOAT3		m_Look				{ 0.0f, 0.0f, 1.0f };
 
 	XMFLOAT3		m_At				{ 0.0f, 0.0f, 1.0f }; // Position + Offset = At
 	XMFLOAT3		m_Offset			{ 0.0f, 0.0f, 1.0f }; // Offset = At - Position
@@ -34,10 +40,9 @@ protected:
 	XMFLOAT4X4		m_xmf4x4View{ Matrix4x4::Identity() };
 	XMFLOAT4X4		m_xmf4x4Projection{ Matrix4x4::Identity() };
 
-	D3D12_VIEWPORT	m_d3dViewport{ 0, 0, FRAME_BUFFER_WIDTH , FRAME_BUFFER_HEIGHT, 0.0f, 1.0f };
-	D3D12_RECT		m_d3dScissorRect{ 0, 0, FRAME_BUFFER_WIDTH , FRAME_BUFFER_HEIGHT };
+	D3D12_VIEWPORT	m_d3dViewport;
+	D3D12_RECT		m_d3dScissorRect;
 
-	ResourceBase	*m_ShaderVariables{ nullptr };
 
 protected:  
 	//절두체(월드 좌표계)를 생성한다.
@@ -54,6 +59,10 @@ public:
 	virtual void LastUpdate(float fTimeElapsed) = 0;
 
 	// 하위 클래스에 구현해야하는 순수 가상 함수
+	
+	void CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
+	void UpdateShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList, int parameterIndex);
+	void ReleaseShaderVariables();
 
 	virtual void Teleport(const XMFLOAT3& pos); // right, up, look을 유지한 상태로 position, at만 이동한다.
 	virtual void Move(const XMFLOAT3& Shift);
