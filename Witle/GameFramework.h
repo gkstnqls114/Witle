@@ -9,53 +9,47 @@ class CGameFramework
 {
 
 private:
-	HINSTANCE m_hInstance;
-	HWND m_hWnd;
-	
-	int m_nWndClientWidth{ 0 };	 
-	int m_nWndClientHeight{ 0 };
+	HINSTANCE					m_hInstance;
+	HWND						m_hWnd;
 
+	int							m_nWndClientWidth;
+	int							m_nWndClientHeight;
+
+	IDXGIFactory4				*m_pdxgiFactory = NULL;
+	IDXGISwapChain3				*m_pdxgiSwapChain = NULL;
+	// Direct3D 디바이스 인터페이스에 대한 포인터이다. 주로 리소스를 생성하기 위하여 필요하다.
+	ID3D12Device				*m_pd3dDevice {nullptr};
 
 	//MSAA 다중 샘플링을 활성화하고 다중 샘플링 레벨을 설정한다.
-	bool m_bMsaa4xEnable = false;
-	UINT m_nMsaa4xQualityLevels = 0;
+	bool						m_bMsaa4xEnable = false;
+	UINT						m_nMsaa4xQualityLevels = 0;
 
-	// Direct3D 디바이스 인터페이스에 대한 포인터이다.
-	// 주로 리소스를 생성하기 위하여 필요하다.
-	ComPtr<ID3D12Device> m_d3dDevice;
+	static const UINT			m_nSwapChainBuffers = 2;
+	UINT						m_nSwapChainBufferIndex;
 
-	ComPtr<IDXGIFactory4> m_dxgiFactory;
+	ID3D12Resource				*m_ppd3dSwapChainBackBuffers[m_nSwapChainBuffers];
+	ID3D12DescriptorHeap		*m_pd3dRtvDescriptorHeap = NULL;
+	UINT						m_nRtvDescriptorIncrementSize;
 
-	ComPtr<IDXGISwapChain3> m_dxgiSwapChain;
-	static const UINT m_SwapChainBuffersCount{ 2 };
-	D3D12_CPU_DESCRIPTOR_HANDLE m_SwapChainCPUHandle[m_SwapChainBuffersCount];
-	UINT m_SwapChainBufferIndex{ 0 };
+	ID3D12Resource				*m_pd3dDepthStencilBuffer = NULL;
+	ID3D12DescriptorHeap		*m_pd3dDsvDescriptorHeap = NULL;
+	UINT						m_nDsvDescriptorIncrementSize;
 
-	ID3D12Resource *m_RenderTargetBuffers[m_SwapChainBuffersCount];
-	ComPtr<ID3D12DescriptorHeap> m_RtvHeap;
-	UINT m_RtvDescriptorSize;
-	
-	ID3D12Resource *m_DepthStencilBuffer;
-	ComPtr<ID3D12DescriptorHeap> m_DsvHeap;
-	D3D12_CPU_DESCRIPTOR_HANDLE m_DepthStencilCPUHandle;
-	UINT m_DsvDescriptorSize;
-	 
+	ID3D12CommandAllocator		*m_pd3dCommandAllocator = NULL;
+	ID3D12CommandQueue			*m_pd3dCommandQueue = NULL;
+	ID3D12GraphicsCommandList	*m_pd3dCommandList = NULL;
 
-	ComPtr<ID3D12CommandQueue> m_CommandQueue;
-	ComPtr<ID3D12CommandAllocator> m_CommandAllocator;
-	ComPtr<ID3D12GraphicsCommandList> m_CommandList;
-	
-	ComPtr<ID3D12Fence> m_Fence;
-	UINT64 m_nFenceValues[m_SwapChainBuffersCount];
-	HANDLE m_hFenceEvent{ NULL };
+	ID3D12Fence					*m_pd3dFence = NULL;
+	UINT64						m_nFenceValues[m_nSwapChainBuffers];
+	HANDLE						m_hFenceEvent;
 
 #if defined(_DEBUG)
-	ComPtr<ID3D12Debug> m_pd3dDebugController;
-	ComPtr<ID3D12DebugDevice> m_pd3dDebugDevice;
+	ID3D12Debug					*m_pd3dDebugController;
 #endif
+
 	
 	//// GBuffer
-	static const UINT m_GBuffersCount{ 0 }; // 컬러 . 노말. 
+	// static const UINT m_GBuffersCount{ 0 }; // 컬러 . 노말. 
 
 	//ID3D12Resource* m_GBuffers[m_GBuffersCount];
 	//D3D12_CPU_DESCRIPTOR_HANDLE m_GBufferCPUHandle[m_GBuffersCount];
@@ -99,7 +93,7 @@ private:
 	void CreateSwapChain();
 	void CreateDirect3DDevice();
 	void CreateRtvAndDsvDescriptorHeaps();
-	void CreateRenderTargetView();
+	void CreateRenderTargetViews();
 	void CreateDepthStencilView();
 	void CreateGBufferView() {}; // MRT를 위한 버퍼
 	void CreateCommandQueueAndList();
