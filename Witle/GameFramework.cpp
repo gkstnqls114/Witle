@@ -56,6 +56,7 @@ bool CGameFramework::OnCreate(HINSTANCE hInstance, HWND hMainWnd)
 	 
 	BuildObjects();
 	 
+	GameScreen::SetSwapChain(m_SwapChain.Get());
 
 	return true;
 }
@@ -625,19 +626,14 @@ void CGameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPA
 		
 		case VK_F1:
 		{
-			BOOL bFullScreenState = FALSE;
-			m_SwapChain->GetFullscreenState(&bFullScreenState, NULL);
-			m_SwapChain->SetFullscreenState(!bFullScreenState, NULL);
-			DXGI_MODE_DESC dxgiTargetParameters;
-			dxgiTargetParameters.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-			dxgiTargetParameters.Width = GameScreen::GetHeight();
-			dxgiTargetParameters.Height = GameScreen::GetWidth();
-			dxgiTargetParameters.RefreshRate.Numerator = 60;
-			dxgiTargetParameters.RefreshRate.Denominator = 1;
-			dxgiTargetParameters.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
-			dxgiTargetParameters.ScanlineOrdering =
-				DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
-			m_SwapChain->ResizeTarget(&dxgiTargetParameters);
+			if (GameScreen::GetHeight() == 540)
+			{
+				GameScreen::ChangeWindowScreen(800, 600);
+			}
+			else
+			{
+				GameScreen::ChangeWindowScreen(960, 540);
+			}
 			OnResizeBackBuffers();
 			break;
 		}
@@ -666,9 +662,7 @@ LRESULT CGameFramework::OnProcessingWindowMessage(HWND hWnd, UINT nMessageID, WP
 
 	case WM_SIZE:
 	{
-		std::cout << "2";
-
-		GameScreen::ChangeScreen(LOWORD(lParam) , HIWORD(lParam));
+		GameScreen::SetScreen(LOWORD(lParam) , HIWORD(lParam));
 
 		//윈도우의 크기가 변경되면 후면버퍼의 크기를 변경한다.
 		OnResizeBackBuffers();
@@ -689,7 +683,7 @@ LRESULT CGameFramework::OnProcessingWindowMessage(HWND hWnd, UINT nMessageID, WP
 		switch (wParam) {
 		case VK_SPACE:
 			std::cout << "1";
-			GameScreen::ChangeScreen(500, 500);
+			GameScreen::ChangeWindowScreen(500, 500);
 			break;
 		}
 	case WM_KEYUP:
