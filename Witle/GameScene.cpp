@@ -103,7 +103,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	m_pd3dGraphicsRootSignature = CreateGraphicsRootSignature(pd3dDevice);
 	
 	// 피킹 테스트할 오브젝트 생성
-	ComponentBase* cubemesh = new CubeMesh(m_GameObject, pd3dDevice, pd3dCommandList, 1, 1, 1);
+	ComponentBase* cubemesh = new CubeMesh(m_GameObject, pd3dDevice, pd3dCommandList, 1.f, 1.f, 1.f);
 	
 	// 큐브메쉬 생성
 	m_GameObject = new Player("Player");

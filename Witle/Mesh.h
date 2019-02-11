@@ -25,8 +25,7 @@ protected:
 
 	D3D12_INDEX_BUFFER_VIEW			m_IndexBufferView;
 
-
-	D3D12_PRIMITIVE_TOPOLOGY		m_d3dPrimitiveTopology = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
+	D3D12_PRIMITIVE_TOPOLOGY		m_d3dPrimitiveTopology;
 	UINT							m_nSlot = 0;
 	UINT							m_nStride = 0;
 	UINT							m_nOffset = 0;
@@ -52,6 +51,8 @@ public:
 
 	UINT GetIndexCount() const { return m_IndexCount; }
 	const D3D12_INDEX_BUFFER_VIEW& GetIndexBufferView() const { return m_IndexBufferView; }
+
+	D3D12_PRIMITIVE_TOPOLOGY GetPrimitiveTopology() const { return m_d3dPrimitiveTopology; }
 	/////////////////////////////////////////////////////////////////////////// Get
 
 	

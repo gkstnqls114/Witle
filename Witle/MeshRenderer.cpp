@@ -9,14 +9,12 @@ void MeshRenderer::RenderCubeMesh(ID3D12GraphicsCommandList * pd3dCommandList, M
 	//정점 버퍼 뷰와 인스턴싱 버퍼 뷰를 입력-조립 단계에 설정한다.
 	CubeMesh *cubeMesh = static_cast<CubeMesh *>(mesh); 
 
-	D3D12_PRIMITIVE_TOPOLOGY m_d3dPrimitiveTopology{ D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST };
-	pd3dCommandList->IASetPrimitiveTopology(m_d3dPrimitiveTopology);
+	pd3dCommandList->IASetPrimitiveTopology(mesh->GetPrimitiveTopology());
 
 	D3D12_VERTEX_BUFFER_VIEW pVertexBufferViews[] = { cubeMesh->GetVertexBufferView(0) };
 	pd3dCommandList->IASetVertexBuffers(0, _countof(pVertexBufferViews), pVertexBufferViews);
 
-	pd3dCommandList->IASetIndexBuffer(&cubeMesh->GetIndexBufferView());
-	pd3dCommandList->DrawIndexedInstanced(cubeMesh->GetIndexCount(), 1, 0, 0, 0);
+	pd3dCommandList->DrawInstanced(cubeMesh->GetVertexCount(), 1, 0, 0);
 }
 
 // TerrainMesh를 렌더한다.
