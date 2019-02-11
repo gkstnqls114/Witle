@@ -415,8 +415,8 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	D3D12_GPU_VIRTUAL_ADDRESS d3dcbLightsGpuVirtualAddress = m_pd3dcbLights->GetGPUVirtualAddress();
 	pd3dCommandList->SetGraphicsRootConstantBufferView(m_parameterForm->GetIndex("Lights"), d3dcbLightsGpuVirtualAddress); //Lights
 
-	//D3D12_GPU_VIRTUAL_ADDRESS d3dcbMaterialsGpuVirtualAddress = m_pd3dcbMaterials->GetGPUVirtualAddress();
-	//pd3dCommandList->SetGraphicsRootConstantBufferView(3, d3dcbMaterialsGpuVirtualAddress);
+	D3D12_GPU_VIRTUAL_ADDRESS d3dcbMaterialsGpuVirtualAddress = m_pd3dcbMaterials->GetGPUVirtualAddress();
+	pd3dCommandList->SetGraphicsRootConstantBufferView(m_parameterForm->GetIndex("Materials"), d3dcbMaterialsGpuVirtualAddress);
 
 	// Terrain PSO
 	pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Terrain")->GetPSO());
@@ -444,9 +444,7 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 
 	// 쉐이더 변수 설정 
 	m_parameterForm->UpdateShaderVariable(pd3dCommandList, m_pd3dGraphicsRootSignature, "World", SourcePtr(&XMMatrixTranspose(XMLoadFloat4x4(&m_GameObject->GetTransform().GetWorldMatrix()))));
-	XMFLOAT3 test = XMFLOAT3(0.f, 0.f, 0.f);
-	m_parameterForm->UpdateShaderVariable(pd3dCommandList, m_pd3dGraphicsRootSignature, "Color", SourcePtr(&test));
-
+	
 	// CubeMesh Render
 	Mesh* mesh = m_GameObject->GetComponent<Mesh>("Mesh");
 	gMeshRenderer.Render(pd3dCommandList, mesh);
@@ -521,11 +519,6 @@ ID3D12RootSignature* GameScene::CreateGraphicsRootSignature(ID3D12Device *pd3dDe
 	m_parameterForm = new ParameterForm(_countof(pRootParameters));
 
 	// 루트 상수
-	UINT World = 0;
-	UINT Camera = 1;
-	UINT Materials = 2;
-	UINT Lights = 3;
-
 	pRootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_32BIT_CONSTANTS;
 	pRootParameters[0].Constants.Num32BitValues = 16;
 	pRootParameters[0].Constants.ShaderRegister = 0;
@@ -752,50 +745,57 @@ ID3D12RootSignature* GameScene::CreateGraphicsRootSignature(ID3D12Device *pd3dDe
 void GameScene::BuildLightsAndMaterials(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList)
 {
 	////////////////////////////// 조명
-	//LightManager::m_pLights = new LIGHTS;
-	//::ZeroMemory(static_cast<void*>(LightManager::m_pLights), sizeof(LIGHTS));
+	LightManager::m_pLights = new LIGHTS;
+	::ZeroMemory(static_cast<void*>(LightManager::m_pLights), sizeof(LIGHTS));
+	for (int x = 0; x < MAX_LIGHTS; ++x)
+	{
+		LightManager::m_pLights->m_pLights[x].bEnable = false;
+	}
 
-	LightManager::m_xmf4GlobalAmbient = XMFLOAT4(0.1f, 0.1f, 0.1f, 1.0f);
+	LightManager::m_pLights->m_xmf4GlobalAmbient = XMFLOAT4(0.1f, 0.1f, 0.1f, 1.0f);
 
-	LightManager::m_pLights[0].bEnable = true;
-	LightManager::m_pLights[0].nType = POINT_LIGHT;
-	LightManager::m_pLights[0].fRange = 100.0f;
-	LightManager::m_pLights[0].Ambient = XMFLOAT4(0.1f, 0.0f, 0.0f, 1.0f);
-	LightManager::m_pLights[0].Diffuse = XMFLOAT4(0.8f, 0.0f, 0.0f, 1.0f);
-	LightManager::m_pLights[0].Specular = XMFLOAT4(0.1f, 0.1f, 0.1f, 0.0f);
-	LightManager::m_pLights[0].Position = XMFLOAT3(130.0f, 30.0f, 30.0f);
-	LightManager::m_pLights[0].Direction = XMFLOAT3(0.0f, 0.0f, 0.0f);
-	LightManager::m_pLights[0].Attenuation = XMFLOAT3(1.0f, 0.001f, 0.0001f);
-	LightManager::m_pLights[1].bEnable = true;
-	LightManager::m_pLights[1].nType = SPOT_LIGHT;
-	LightManager::m_pLights[1].fRange = 50.0f;
-	LightManager::m_pLights[1].Ambient = XMFLOAT4(0.1f, 0.1f, 0.1f, 1.0f);
-	LightManager::m_pLights[1].Diffuse = XMFLOAT4(0.4f, 0.4f, 0.4f, 1.0f);
-	LightManager::m_pLights[1].Specular = XMFLOAT4(0.1f, 0.1f, 0.1f, 0.0f);
-	LightManager::m_pLights[1].Position = XMFLOAT3(-50.0f, 20.0f, -5.0f);
-	LightManager::m_pLights[1].Direction = XMFLOAT3(0.0f, 0.0f, 1.0f);
-	LightManager::m_pLights[1].Attenuation = XMFLOAT3(1.0f, 0.01f, 0.0001f);
-	LightManager::m_pLights[1].fFalloff = 8.0f;
-	LightManager::m_pLights[1].fPhi = (float)cos(XMConvertToRadians(40.0f));
-	LightManager::m_pLights[1].fTheta = (float)cos(XMConvertToRadians(20.0f));
-	LightManager::m_pLights[2].bEnable = true;
-	LightManager::m_pLights[2].nType = DIRECTIONAL_LIGHT;
-	LightManager::m_pLights[2].Ambient = XMFLOAT4(0.1f, 0.1f, 0.1f, 1.0f);
-	LightManager::m_pLights[2].Diffuse = XMFLOAT4(0.3f, 0.3f, 0.3f, 1.0f);
-	LightManager::m_pLights[2].Specular = XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f);
-	LightManager::m_pLights[2].Direction = XMFLOAT3(1.0f, 0.0f, 0.0f);
-	LightManager::m_pLights[3].bEnable = true;
-	LightManager::m_pLights[3].nType = SPOT_LIGHT;
-	LightManager::m_pLights[3].fRange = 60.0f;
-	LightManager::m_pLights[3].Ambient = XMFLOAT4(0.1f, 0.1f, 0.1f, 1.0f);
-	LightManager::m_pLights[3].Diffuse = XMFLOAT4(0.5f, 0.0f, 0.0f, 1.0f);
-	LightManager::m_pLights[3].Specular = XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f);
-	LightManager::m_pLights[3].Position = XMFLOAT3(-150.0f, 30.0f, 30.0f);
-	LightManager::m_pLights[3].Direction = XMFLOAT3(0.0f, 1.0f, 1.0f);
-	LightManager::m_pLights[3].Attenuation = XMFLOAT3(1.0f, 0.01f, 0.0001f);
-	LightManager::m_pLights[3].fFalloff = 8.0f;
-	LightManager::m_pLights[3].fPhi = (float)cos(XMConvertToRadians(90.0f));
-	LightManager::m_pLights[3].fTheta = (float)cos(XMConvertToRadians(30.0f));
+	LightManager::m_pLights->m_pLights[0].bEnable = false;
+	LightManager::m_pLights->m_pLights[0].nType = LIGHT_TYPE::POINT_LIGHT;
+	LightManager::m_pLights->m_pLights[0].fRange = 500.0f;
+	LightManager::m_pLights->m_pLights[0].Ambient = XMFLOAT4(0.1f, 0.0f, 0.0f, 1.0f);
+	LightManager::m_pLights->m_pLights[0].Diffuse = XMFLOAT4(0.8f, 0.0f, 0.0f, 1.0f);
+	LightManager::m_pLights->m_pLights[0].Specular = XMFLOAT4(0.1f, 0.1f, 0.1f, 0.0f);
+	LightManager::m_pLights->m_pLights[0].Position = XMFLOAT3(0.0f, 0.0f, 0.0f);
+	LightManager::m_pLights->m_pLights[0].Direction = XMFLOAT3(0.0f, 0.0f, 0.0f);
+	LightManager::m_pLights->m_pLights[0].Attenuation = XMFLOAT3(1.0f, 0.001f, 0.0001f);
+	
+	LightManager::m_pLights->m_pLights[1].bEnable = false;
+	LightManager::m_pLights->m_pLights[1].nType = LIGHT_TYPE::SPOT_LIGHT;
+	LightManager::m_pLights->m_pLights[1].fRange = 50.0f;
+	LightManager::m_pLights->m_pLights[1].Ambient = XMFLOAT4(0.1f, 0.1f, 0.1f, 1.0f);
+	LightManager::m_pLights->m_pLights[1].Diffuse = XMFLOAT4(0.4f, 0.4f, 0.4f, 1.0f);
+	LightManager::m_pLights->m_pLights[1].Specular = XMFLOAT4(0.1f, 0.1f, 0.1f, 0.0f);
+	LightManager::m_pLights->m_pLights[1].Position = XMFLOAT3(-50.0f, 20.0f, -5.0f);
+	LightManager::m_pLights->m_pLights[1].Direction = XMFLOAT3(0.0f, 0.0f, 1.0f);
+	LightManager::m_pLights->m_pLights[1].Attenuation = XMFLOAT3(1.0f, 0.01f, 0.0001f);
+	LightManager::m_pLights->m_pLights[1].fFalloff = 8.0f;
+	LightManager::m_pLights->m_pLights[1].fPhi = (float)cos(XMConvertToRadians(40.0f));
+	LightManager::m_pLights->m_pLights[1].fTheta = (float)cos(XMConvertToRadians(20.0f));
+
+	LightManager::m_pLights->m_pLights[2].bEnable = true;
+	LightManager::m_pLights->m_pLights[2].nType = LIGHT_TYPE::DIRECTIONAL_LIGHT;
+	LightManager::m_pLights->m_pLights[2].Ambient = XMFLOAT4(0.f, 1.f, 0.2f, 1.0f);
+	LightManager::m_pLights->m_pLights[2].Diffuse = XMFLOAT4(0.4f, 0.4f, 0.4f, 1.0f);
+	LightManager::m_pLights->m_pLights[2].Specular = XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f);
+	LightManager::m_pLights->m_pLights[2].Direction = XMFLOAT3(0.0f, 0.0f, 1.0f);
+	
+	LightManager::m_pLights->m_pLights[3].bEnable = false;
+	LightManager::m_pLights->m_pLights[3].nType = LIGHT_TYPE::SPOT_LIGHT;
+	LightManager::m_pLights->m_pLights[3].fRange = 60.0f;
+	LightManager::m_pLights->m_pLights[3].Ambient = XMFLOAT4(0.1f, 0.1f, 0.1f, 1.0f);
+	LightManager::m_pLights->m_pLights[3].Diffuse = XMFLOAT4(0.5f, 0.0f, 0.0f, 1.0f);
+	LightManager::m_pLights->m_pLights[3].Specular = XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f);
+	LightManager::m_pLights->m_pLights[3].Position = XMFLOAT3(-150.0f, 30.0f, 30.0f);
+	LightManager::m_pLights->m_pLights[3].Direction = XMFLOAT3(0.0f, 1.0f, 1.0f);
+	LightManager::m_pLights->m_pLights[3].Attenuation = XMFLOAT3(1.0f, 0.01f, 0.0001f);
+	LightManager::m_pLights->m_pLights[3].fFalloff = 8.0f;
+	LightManager::m_pLights->m_pLights[3].fPhi = (float)cos(XMConvertToRadians(90.0f));
+	LightManager::m_pLights->m_pLights[3].fTheta = (float)cos(XMConvertToRadians(30.0f));
 
 
 	// 쉐이더 변수 설정
@@ -811,15 +811,8 @@ void GameScene::BuildLightsAndMaterials(ID3D12Device *pd3dDevice, ID3D12Graphics
 	m_pMaterials = new MATERIAL;
 	::ZeroMemory(m_pMaterials, sizeof(MATERIAL));
 
-	*m_pMaterials = { XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f), XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 5.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f) };
-	//m_pMaterials->m_pReflections[1] = { XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f), XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 10.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f) };
-	//m_pMaterials->m_pReflections[2] = { XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f), XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 15.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f) };
-	//m_pMaterials->m_pReflections[3] = { XMFLOAT4(0.5f, 0.0f, 1.0f, 1.0f), XMFLOAT4(0.0f, 0.5f, 1.0f, 1.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 20.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f) };
-	//m_pMaterials->m_pReflections[4] = { XMFLOAT4(0.0f, 0.5f, 1.0f, 1.0f), XMFLOAT4(0.5f, 0.0f, 1.0f, 1.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 25.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f) };
-	//m_pMaterials->m_pReflections[5] = { XMFLOAT4(0.0f, 0.5f, 0.5f, 1.0f), XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 30.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f) };
-	//m_pMaterials->m_pReflections[6] = { XMFLOAT4(0.5f, 0.5f, 1.0f, 1.0f), XMFLOAT4(0.5f, 0.5f, 1.0f, 1.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 35.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f) };
-	//m_pMaterials->m_pReflections[7] = { XMFLOAT4(1.0f, 0.5f, 1.0f, 1.0f), XMFLOAT4(1.0f, 0.0f, 1.0f, 1.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 40.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f) };
-
+	*m_pMaterials = { XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 5.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f) };
+	
 	CreateConstantBuffer(pd3dDevice, pd3dCommandList, m_pd3dcbMaterials, sizeof(MATERIAL), (void **)&m_pcbMappedMaterials);
 
 	UINT ncbMaterialBytes = ((sizeof(MATERIAL) + 255) & ~255); //256의 배수

@@ -16,17 +16,18 @@ cbuffer cbCameraInfo : register(b1)
 // 루트 상수
 cbuffer cbGameObjectInfo : register(b4)
 {
-	float3 color: packoffset(c0);
+	float3 testcolor: packoffset(c0);
 }
 
 //#include "Light.hlsl"
 //--------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------
 #define MAX_LIGHTS			8 
 #define MAX_MATERIALS		8 
 
-#define POINT_LIGHT			1
-#define SPOT_LIGHT			2
-#define DIRECTIONAL_LIGHT	3
+#define POINT_LIGHT			0
+#define SPOT_LIGHT			1
+#define DIRECTIONAL_LIGHT	2
 
 #define _WITH_LOCAL_VIEWER_HIGHLIGHTING
 #define _WITH_THETA_PHI_CONES
@@ -197,39 +198,99 @@ float4 Lighting(float3 vPosition, float3 vNormal)
 }
 
 
+#define _WITH_VERTEX_LIGHTING
+
 struct VertexIn
 {
-	float3 Pos : POSITION;
-	float4 Color : COLOR;
+	float3 position : POSITION;
+	float4 color : COLOR;
 	float3 normal : NORMAL;
 };
 
 struct VertexOut
 {
-	float4 Pos : SV_POSITION;
-	float4 Color : COLOR;
-	float3 normal : NORMAL;
+	float4 position : SV_POSITION;
+	float3 positionW : POSITION;
+	float3 normalW : NORMAL;
+	//	nointerpolation float3 normalW : NORMAL;
+	float4 cubeColor : COLOR0;
+#ifdef _WITH_VERTEX_LIGHTING
+	float4 color : COLOR1;
+#endif
 };
 
 VertexOut VS(VertexIn input)
 {
-	VertexOut vout;
+	VertexOut output;
 
-	vout.Pos = mul(mul(mul(float4(input.Pos, 1.0f), gmtxWorld), gmtxView), gmtxProjection);
-	vout.Color = input.Color; 
-	vout.normal = input.normal;
+	output.positionW = (float3)mul(float4(input.position, 1.0f), gmtxWorld);
+	output.position = mul(mul(float4(output.positionW, 1.0f), gmtxView), gmtxProjection);
 
-	return vout;
+	// output.uv = input.uv;
+	output.normalW = mul(input.normal, (float3x3)gmtxWorld);
+#ifdef _WITH_VERTEX_LIGHTING
+	output.normalW = normalize(output.normalW);
+	output.color = Lighting(output.positionW, output.normalW);
+#endif
+	output.cubeColor = input.color;
+	return(output);
+
+	//VertexOut vout;
+
+	//vout.Pos = mul(mul(mul(float4(input.Pos, 1.0f), gmtxWorld), gmtxView), gmtxProjection);
+	//vout.Color = input.Color; 
+	//vout.normal = input.normal;
+
+	//return vout;
 }
 
 float4 PS(VertexOut input) : SV_TARGET
 {
-	if (color.x == 0.f)
-	{
-		return input.Color;
-	}
-	else
-	{
-		return float4(color, 1.0f);
-	}
+		// float4 cColor = gtxtDiffuse.Sample(gSamplerState, input.uv);
+		float4 cColor = input.cubeColor;
+		// float4 cColor = float4(1.f, 1.f, 1.f, 1.f);
+	#ifdef _WITH_VERTEX_LIGHTING
+		float4 cIllumination = input.color;
+	#else
+		input.normalW = normalize(input.normalW);
+		float4 cIllumination = Lighting(input.positionW, input.normalW);
+	#endif
+		return(cColor * cIllumination);
+
+		//if (color.x == 0.f)
+		//{
+		//	return input.Color;
+		//}
+		//else
+		//{
+		//	return float4(color, 1.0f);
+		//}
 }
+
+
+//VS_TEXTURED_LIGHTING_OUTPUT VSTexturedLighting(VS_TEXTURED_LIGHTING_INPUT input)
+//{
+//	VS_TEXTURED_LIGHTING_OUTPUT output;
+//
+//	output.normalW = mul(input.normal, (float3x3)gmtxGameObject);
+//	output.positionW = (float3)mul(float4(input.position, 1.0f), gmtxGameObject);
+//	output.position = mul(mul(float4(output.positionW, 1.0f), gmtxView), gmtxProjection);
+//	output.uv = input.uv;
+//#ifdef _WITH_VERTEX_LIGHTING
+//	output.normalW = normalize(output.normalW);
+//	output.color = Lighting(output.positionW, output.normalW);
+//#endif
+//	return(output);
+//}
+//
+//float4 PSTexturedLighting(VS_TEXTURED_LIGHTING_OUTPUT input, uint nPrimitiveID : SV_PrimitiveID) : SV_TARGET
+//{
+//	float4 cColor = gtxtDiffuse.Sample(gSamplerState, input.uv);
+//#ifdef _WITH_VERTEX_LIGHTING
+//	float4 cIllumination = input.color;
+//#else
+//	input.normalW = normalize(input.normalW);
+//	float4 cIllumination = Lighting(input.positionW, input.normalW);
+//#endif
+//	return(cColor * cIllumination);
+//}

@@ -12,8 +12,7 @@ class LightManager
 public:
 
 public:
-	static LIGHT					m_pLights[MAX_LIGHTS];
-	static XMFLOAT4				m_xmf4GlobalAmbient;
+	static LIGHTS*					m_pLights;
 
 private:
 
