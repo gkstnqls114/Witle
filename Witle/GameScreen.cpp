@@ -14,10 +14,19 @@ GameScreen::~GameScreen()
 {
 }
 
-void GameScreen::ChangeScreen(UINT width, UINT height)
+bool GameScreen::ChangeScreen(UINT width, UINT height)
 {
-	m_Width = width;
-	m_Height = height;
-	m_pMainCamera->SetViewport(0, 0, m_Width, m_Height);
-	m_pMainCamera->SetScissorRect(0, 0, m_Width, m_Height);
+	if (m_pMainCamera)
+	{
+		m_Width = width;
+		m_Height = height;
+		m_pMainCamera->SetViewport(0, 0, m_Width, m_Height);
+		m_pMainCamera->SetScissorRect(0, 0, m_Width, m_Height);
+		
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }

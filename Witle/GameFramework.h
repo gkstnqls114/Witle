@@ -12,8 +12,8 @@ private:
 	HINSTANCE m_hInstance;
 	HWND m_hWnd;
 	
-	int m_nWndClientWidth{ 0 };	 
-	int m_nWndClientHeight{ 0 };
+	//int m_nWndClientWidth{ 0 };	 
+	//int m_nWndClientHeight{ 0 };
 
 
 	//MSAA 다중 샘플링을 활성화하고 다중 샘플링 레벨을 설정한다.

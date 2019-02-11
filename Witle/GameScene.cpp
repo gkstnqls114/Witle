@@ -1,9 +1,12 @@
 #include "stdafx.h"
 #include "d3dUtil.h"
-#include "CubeMesh.h"
-#include "FollowCam.h"
+
 #include "MeshRenderer.h"
 #include "ShaderManager.h"
+#include "GameScreen.h"
+
+#include "CubeMesh.h"
+#include "FollowCam.h"
 #include "Transform.h"
 #include "MyStructs.h"
 #include "Shader.h"
@@ -16,7 +19,7 @@
 #include "QuadTreeTerrainMesh.h"
 #include "MyDescriptorHeap.h"
 #include "ParameterForm.h"
-#include "d3dUtil.h"
+
 #include "GameScene.h"
 
 GameScene::GameScene()
@@ -101,7 +104,6 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	// 피킹 테스트할 오브젝트 생성
 	ComponentBase* cubemesh = new CubeMesh(m_GameObject, pd3dDevice, pd3dCommandList, 1, 1, 1);
 	
-
 	// 큐브메쉬 생성
 	m_GameObject = new Player("Player");
 	m_GameObject->InsertComponent("Mesh", cubemesh);
@@ -137,6 +139,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	// 카메라
 	m_Camera = new CameraObject("Camera");
 	Camera* cameraComponent = new FollowCam(m_Camera, m_GameObject);
+	GameScreen::SetCamera(cameraComponent);
 	cameraComponent->CreateShaderVariables(pd3dDevice, pd3dCommandList);
 	cameraComponent->SetOffset(XMFLOAT3(0, -5.f, 10.f)); 
 	m_Camera->ChangeCamera(cameraComponent);

@@ -235,14 +235,11 @@ D3D12_SHADER_BYTECODE CGameFramework::CreateComputeShader(ID3DBlob ** ppd3dShade
 
 void CGameFramework::CreateSwapChain()
 {
-	m_nWndClientWidth = GameScreen::GetWidth();
-	m_nWndClientHeight = GameScreen::GetHeight();
-
 	DXGI_SWAP_CHAIN_DESC SwapChainDesc;
 	::ZeroMemory(&SwapChainDesc, sizeof(SwapChainDesc));
 	SwapChainDesc.BufferCount = m_SwapChainBuffersCount;
-	SwapChainDesc.BufferDesc.Width = m_nWndClientWidth;
-	SwapChainDesc.BufferDesc.Height = m_nWndClientHeight;
+	SwapChainDesc.BufferDesc.Width = GameScreen::GetWidth();
+	SwapChainDesc.BufferDesc.Height = GameScreen::GetHeight();
 	SwapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 	SwapChainDesc.BufferDesc.RefreshRate.Numerator = 60;
 	SwapChainDesc.BufferDesc.RefreshRate.Denominator = 1;
@@ -427,8 +424,8 @@ void CGameFramework::CreateDepthStencilView()
 	D3D12_RESOURCE_DESC ResourceDesc;
 	ResourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
 	ResourceDesc.Alignment = 0;
-	ResourceDesc.Width = m_nWndClientWidth;
-	ResourceDesc.Height = m_nWndClientHeight;
+	ResourceDesc.Width = GameScreen::GetWidth();
+	ResourceDesc.Height = GameScreen::GetHeight();
 	ResourceDesc.DepthOrArraySize = 1;
 	ResourceDesc.MipLevels = 1;
 	ResourceDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
@@ -633,8 +630,8 @@ void CGameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPA
 			m_SwapChain->SetFullscreenState(!bFullScreenState, NULL);
 			DXGI_MODE_DESC dxgiTargetParameters;
 			dxgiTargetParameters.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-			dxgiTargetParameters.Width = m_nWndClientWidth;
-			dxgiTargetParameters.Height = m_nWndClientHeight;
+			dxgiTargetParameters.Width = GameScreen::GetHeight();
+			dxgiTargetParameters.Height = GameScreen::GetWidth();
 			dxgiTargetParameters.RefreshRate.Numerator = 60;
 			dxgiTargetParameters.RefreshRate.Denominator = 1;
 			dxgiTargetParameters.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
@@ -669,8 +666,9 @@ LRESULT CGameFramework::OnProcessingWindowMessage(HWND hWnd, UINT nMessageID, WP
 
 	case WM_SIZE:
 	{
-		m_nWndClientWidth = LOWORD(lParam);
-		m_nWndClientHeight = HIWORD(lParam);
+		std::cout << "2";
+
+		GameScreen::ChangeScreen(LOWORD(lParam) , HIWORD(lParam));
 
 		//윈도우의 크기가 변경되면 후면버퍼의 크기를 변경한다.
 		OnResizeBackBuffers();
@@ -689,16 +687,9 @@ LRESULT CGameFramework::OnProcessingWindowMessage(HWND hWnd, UINT nMessageID, WP
 
 	case WM_KEYDOWN: 
 		switch (wParam) {
-		case 'Z':
-		case 'z':
-			d3dUtil::gTEST -= 1;
-			std::cout << d3dUtil::gTEST << std::endl;
-			break;
-
-		case 'X':
-		case 'x':
-			d3dUtil::gTEST += 1;
-			std::cout << d3dUtil::gTEST << std::endl;
+		case VK_SPACE:
+			std::cout << "1";
+			GameScreen::ChangeScreen(500, 500);
 			break;
 		}
 	case WM_KEYUP:
@@ -732,8 +723,8 @@ void CGameFramework::OnResizeBackBuffers()
 #else
 	DXGI_SWAP_CHAIN_DESC dxgiSwapChainDesc;
 	m_SwapChain->GetDesc(&dxgiSwapChainDesc);
-	m_SwapChain->ResizeBuffers(m_SwapChainBuffersCount, m_nWndClientWidth,
-		m_nWndClientHeight, dxgiSwapChainDesc.BufferDesc.Format, dxgiSwapChainDesc.Flags);
+	m_SwapChain->ResizeBuffers(m_SwapChainBuffersCount, GameScreen::GetWidth(),
+		GameScreen::GetHeight(), dxgiSwapChainDesc.BufferDesc.Format, dxgiSwapChainDesc.Flags);
 	m_SwapChainBufferIndex = 0;
 #endif
 

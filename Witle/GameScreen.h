@@ -15,7 +15,7 @@ private:
 public:
 	static UINT GetWidth() { return m_Width; }
 	static UINT GetHeight() { return m_Height; }
-	static void ChangeScreen(UINT width, UINT height);
+	static bool ChangeScreen(UINT width, UINT height);
 	
 	static void SetCamera(Camera* pCamera) { m_pMainCamera = pCamera; }
 };
