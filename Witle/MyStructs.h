@@ -8,8 +8,3 @@ struct MATERIAL
 	XMFLOAT4						m_xmf4Specular; //(r,g,b,a=power)
 	XMFLOAT4						m_xmf4Emissive;
 };
-
-struct MATERIALS
-{
-	MATERIAL				m_pReflections[MAX_MATERIALS];
-};

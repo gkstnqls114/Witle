@@ -71,7 +71,7 @@ protected:
 	ID3D12Resource				*m_pd3dcbLights{ nullptr };
 	LIGHTS			*m_pcbMappedLights{ nullptr };
 
-	MATERIALS					*m_pMaterials{ nullptr };
+	MATERIAL					*m_pMaterials{ nullptr };
 
 	ID3D12Resource				*m_pd3dcbMaterials{ nullptr };
 	MATERIAL					*m_pcbMappedMaterials{ nullptr };

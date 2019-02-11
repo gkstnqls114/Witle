@@ -208,7 +208,6 @@ CubeMesh::CubeMesh(GameObject* pOwner, ID3D12Device * pd3dDevice, ID3D12Graphics
 	XMFLOAT3 pxmf3Normals[CUBE_VERTEX_COUNT];
 	CalculateVertexNormals(pxmf3Normals, pxmf3Positions, m_vertexCount, NULL, 0);
 
-	//정점 버퍼는 직육면체의 꼭지점 8개에 대한 정점 데이터를 가진다.
 	CubeVertex pVertices[CUBE_VERTEX_COUNT];
 	for (int x = 0; x < CUBE_VERTEX_COUNT; ++x)
 	{

@@ -365,6 +365,11 @@ void GameScene::Update(float fElapsedTime)
 			m_PickingTESTMeshs[x]->GetTransform().Update(fElapsedTime); // right, up, look, pos에 맞춰 월드변환행렬 다시 설정
 		} 
 	}
+
+	// light update
+	::memcpy(m_pcbMappedLights, LightManager::m_pLights, sizeof(LIGHTS));
+	// material update
+	::memcpy(m_pcbMappedMaterials, m_pMaterials, sizeof(MATERIAL));
 }
 
 void GameScene::LastUpdate(float fElapsedTime)
@@ -803,105 +808,23 @@ void GameScene::BuildLightsAndMaterials(ID3D12Device *pd3dDevice, ID3D12Graphics
 	////////////////////////////// 조명
 
 	////////////////////////////// 재질
-	/*m_pMaterials = new MATERIALS;
-	::ZeroMemory(m_pMaterials, sizeof(MATERIALS));
+	m_pMaterials = new MATERIAL;
+	::ZeroMemory(m_pMaterials, sizeof(MATERIAL));
 
-	m_pMaterials->m_pReflections[0] = { XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f), XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 5.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f) };
-	m_pMaterials->m_pReflections[1] = { XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f), XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 10.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f) };
-	m_pMaterials->m_pReflections[2] = { XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f), XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 15.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f) };
-	m_pMaterials->m_pReflections[3] = { XMFLOAT4(0.5f, 0.0f, 1.0f, 1.0f), XMFLOAT4(0.0f, 0.5f, 1.0f, 1.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 20.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f) };
-	m_pMaterials->m_pReflections[4] = { XMFLOAT4(0.0f, 0.5f, 1.0f, 1.0f), XMFLOAT4(0.5f, 0.0f, 1.0f, 1.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 25.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f) };
-	m_pMaterials->m_pReflections[5] = { XMFLOAT4(0.0f, 0.5f, 0.5f, 1.0f), XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 30.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f) };
-	m_pMaterials->m_pReflections[6] = { XMFLOAT4(0.5f, 0.5f, 1.0f, 1.0f), XMFLOAT4(0.5f, 0.5f, 1.0f, 1.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 35.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f) };
-	m_pMaterials->m_pReflections[7] = { XMFLOAT4(1.0f, 0.5f, 1.0f, 1.0f), XMFLOAT4(1.0f, 0.0f, 1.0f, 1.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 40.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f) };*/
+	*m_pMaterials = { XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f), XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 5.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f) };
+	//m_pMaterials->m_pReflections[1] = { XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f), XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 10.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f) };
+	//m_pMaterials->m_pReflections[2] = { XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f), XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 15.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f) };
+	//m_pMaterials->m_pReflections[3] = { XMFLOAT4(0.5f, 0.0f, 1.0f, 1.0f), XMFLOAT4(0.0f, 0.5f, 1.0f, 1.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 20.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f) };
+	//m_pMaterials->m_pReflections[4] = { XMFLOAT4(0.0f, 0.5f, 1.0f, 1.0f), XMFLOAT4(0.5f, 0.0f, 1.0f, 1.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 25.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f) };
+	//m_pMaterials->m_pReflections[5] = { XMFLOAT4(0.0f, 0.5f, 0.5f, 1.0f), XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 30.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f) };
+	//m_pMaterials->m_pReflections[6] = { XMFLOAT4(0.5f, 0.5f, 1.0f, 1.0f), XMFLOAT4(0.5f, 0.5f, 1.0f, 1.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 35.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f) };
+	//m_pMaterials->m_pReflections[7] = { XMFLOAT4(1.0f, 0.5f, 1.0f, 1.0f), XMFLOAT4(1.0f, 0.0f, 1.0f, 1.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 40.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f) };
 
-	//CreateConstantBuffer(pd3dDevice, pd3dCommandList, m_pd3dcbMaterials, sizeof(MATERIALS), (void **)&m_pcbMappedMaterials);
+	CreateConstantBuffer(pd3dDevice, pd3dCommandList, m_pd3dcbMaterials, sizeof(MATERIAL), (void **)&m_pcbMappedMaterials);
 
-	//UINT ncbMaterialBytes = ((sizeof(MATERIALS) + 255) & ~255); //256의 배수
-	//m_pd3dcbMaterials = d3dUtil::CreateBufferResource(pd3dDevice, pd3dCommandList, NULL, ncbMaterialBytes, D3D12_HEAP_TYPE_UPLOAD, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, NULL);
+	UINT ncbMaterialBytes = ((sizeof(MATERIAL) + 255) & ~255); //256의 배수
+	m_pd3dcbMaterials = d3dUtil::CreateBufferResource(pd3dDevice, pd3dCommandList, NULL, ncbMaterialBytes, D3D12_HEAP_TYPE_UPLOAD, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, NULL);
 
-	//m_pd3dcbMaterials->Map(0, NULL, (void **)&m_pcbMappedMaterials);
+	m_pd3dcbMaterials->Map(0, NULL, (void **)&m_pcbMappedMaterials);
 	////////////////////////////// 재질
 }
-
-//void GameScene::BuildConstantBuffer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList)
-//{
-//	// PPT 파이프라인 02 - 68p
-//	HRESULT hResult = S_FALSE;
-//
-//	// 자원 생성
-//	UINT HardwareSize = d3dUtil::CalcConstantBufferByteSize(sizeof(CB_OBJECT_INFO)); // 256의 배수
-//#if defined(_DEBUG)
-//	std::cout << "상수버퍼 자원 크기: " << HardwareSize << std::endl;
-//#endif
-//
-//	// 힙 속성
-//	D3D12_HEAP_PROPERTIES HeapProperties;
-//	::ZeroMemory(&HeapProperties, sizeof(D3D12_HEAP_PROPERTIES));
-//	HeapProperties.Type = D3D12_HEAP_TYPE_UPLOAD;
-//	HeapProperties.CreationNodeMask = 1;
-//	HeapProperties.VisibleNodeMask = 1;
-//
-//	D3D12_RESOURCE_DESC ResourceDesc;
-//	::ZeroMemory(&ResourceDesc, sizeof(D3D12_RESOURCE_DESC));
-//	ResourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
-//	ResourceDesc.Width = HardwareSize; // 256의 배수
-//	ResourceDesc.Height = ResourceDesc.SampleDesc.Count = 1;
-//	ResourceDesc.DepthOrArraySize = ResourceDesc.MipLevels = 1;
-//	ResourceDesc.Format = DXGI_FORMAT_UNKNOWN;
-//	ResourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR; // 행우선
-//
-//	// 자원을 생성한다.
-//	hResult = pd3dDevice->CreateCommittedResource(
-//		&HeapProperties,
-//		D3D12_HEAP_FLAG_NONE,
-//		&ResourceDesc,
-//		D3D12_RESOURCE_STATE_GENERIC_READ, // 업로드힙의 초기상태
-//		nullptr,
-//		IID_PPV_ARGS(&m_pd3dCBUpload));
-//	assert(hResult == S_OK);
-//#if defined(_DEBUG)
-//	OutputDebugString(L"...CreateCommittedResource\n");
-//#endif
-//
-//	hResult = m_pd3dCBUpload->Map(0, nullptr, (void**)&m_pCBMappedObjectInfo);
-//	assert(hResult == S_OK);
-//#if defined(_DEBUG)
-//	OutputDebugString(L"...Constant Buffer Map\n");
-//#endif
-//	XMFLOAT4 white{1.F, 0.F, 1.F, 1.F};
-//	::memcpy(&m_pCBMappedObjectInfo->fColor, &white, sizeof(float) * 4);
-//
-//	// 서술자 힙을 생성한다.
-//	D3D12_DESCRIPTOR_HEAP_DESC d3dCBVHeap;
-//	::ZeroMemory(&d3dCBVHeap, sizeof(D3D12_DESCRIPTOR_HEAP_DESC));
-//	d3dCBVHeap.NumDescriptors = 1; // 현재 서술자는 한개만 연결한다.
-//	d3dCBVHeap.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV; // 힙타입 CBV , SRV, UAV
-//	d3dCBVHeap.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE; //쉐이더가 해당 자원을 볼 수 있다.
-//	d3dCBVHeap.NodeMask = 0;
-//	hResult = pd3dDevice->CreateDescriptorHeap(&d3dCBVHeap, IID_PPV_ARGS(&m_pd3dCBVdescriptorHeap));
-//	assert(hResult == S_OK);
-//#if defined(_DEBUG)
-//	OutputDebugString(L"...Create CBV Descriptor Heap\n");
-//#endif
-//
-//	////////////// 상수버퍼뷰 생성
-//	// ppt 파이프라인 02 - 69p
-//
-//	// 상수버퍼뷰를 생성하는 것은 CPU(응용프로그램), 사용하는 것은 GPU(쉐이더)
-//	D3D12_CPU_DESCRIPTOR_HANDLE d3dCPUdescriptorHandle = 
-//		m_pd3dCBVdescriptorHeap->GetCPUDescriptorHandleForHeapStart();
-//	D3D12_GPU_VIRTUAL_ADDRESS d3dGPUVirtualAddress = 
-//		m_pd3dCBUpload->GetGPUVirtualAddress();
-//
-//	// 상수버퍼 뷰 구조체
-//	D3D12_CONSTANT_BUFFER_VIEW_DESC CBVdesc;
-//	::ZeroMemory(&CBVdesc, sizeof(D3D12_CONSTANT_BUFFER_VIEW_DESC));
-//	CBVdesc.BufferLocation = d3dGPUVirtualAddress;
-//	CBVdesc.SizeInBytes = HardwareSize;
-//
-//	pd3dDevice->CreateConstantBufferView(
-//		&CBVdesc,
-//		d3dCPUdescriptorHandle // 상수버퍼뷰를 포함하는 서술자 힙의 시작
-//	);
-//}
