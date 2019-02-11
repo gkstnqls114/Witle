@@ -23,12 +23,14 @@ struct VertexIn
 {
 	float3 Pos : POSITION;
 	float4 Color : COLOR;
+	float3 normal : NORMAL;
 };
 
 struct VertexOut
 {
 	float4 Pos : SV_POSITION;
 	float4 Color : COLOR;
+	float3 normal : NORMAL;
 };
 
 VertexOut VS(VertexIn input)
@@ -38,6 +40,7 @@ VertexOut VS(VertexIn input)
 	// vout.Pos = mul(float4(input.Pos, 1.0f), gmtxWorld);
 	vout.Pos = mul(mul(mul(float4(input.Pos, 1.0f), gmtxWorld), gmtxView), gmtxProjection);
 	vout.Color = input.Color; 
+	vout.normal = input.normal;
 
 	return vout;
 }

@@ -406,9 +406,9 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	m_Camera->SetViewportsAndScissorRects(pd3dCommandList); 
 	m_Camera->GetCamera()->UpdateShaderVariables(pd3dCommandList, m_parameterForm->GetIndex("Camera"));
 
-	// 조명
-	//D3D12_GPU_VIRTUAL_ADDRESS d3dcbLightsGpuVirtualAddress = m_pd3dcbLights->GetGPUVirtualAddress();
-	//pd3dCommandList->SetGraphicsRootConstantBufferView(4, d3dcbLightsGpuVirtualAddress); //Lights
+	//  조명
+	D3D12_GPU_VIRTUAL_ADDRESS d3dcbLightsGpuVirtualAddress = m_pd3dcbLights->GetGPUVirtualAddress();
+	pd3dCommandList->SetGraphicsRootConstantBufferView(m_parameterForm->GetIndex("Lights"), d3dcbLightsGpuVirtualAddress); //Lights
 
 	//D3D12_GPU_VIRTUAL_ADDRESS d3dcbMaterialsGpuVirtualAddress = m_pd3dcbMaterials->GetGPUVirtualAddress();
 	//pd3dCommandList->SetGraphicsRootConstantBufferView(3, d3dcbMaterialsGpuVirtualAddress);
@@ -794,16 +794,16 @@ void GameScene::BuildLightsAndMaterials(ID3D12Device *pd3dDevice, ID3D12Graphics
 
 
 	// 쉐이더 변수 설정
-	//CreateConstantBuffer(pd3dDevice, pd3dCommandList, m_pd3dcbLights, sizeof(LIGHTS), (void **)&m_pcbMappedLights);
+	CreateConstantBuffer(pd3dDevice, pd3dCommandList, m_pd3dcbLights, sizeof(LIGHTS), (void **)&m_pcbMappedLights);
 
-	//UINT ncbElementBytes = ((sizeof(LIGHTS) + 255) & ~255); //256의 배수
-	//m_pd3dcbLights = d3dUtil::CreateBufferResource(pd3dDevice, pd3dCommandList, NULL, ncbElementBytes, D3D12_HEAP_TYPE_UPLOAD, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, NULL);
+	UINT ncbElementBytes = ((sizeof(LIGHTS) + 255) & ~255); //256의 배수
+	m_pd3dcbLights = d3dUtil::CreateBufferResource(pd3dDevice, pd3dCommandList, NULL, ncbElementBytes, D3D12_HEAP_TYPE_UPLOAD, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, NULL);
 
-	//m_pd3dcbLights->Map(0, NULL, (void **)&m_pcbMappedLights);
+	m_pd3dcbLights->Map(0, NULL, (void **)&m_pcbMappedLights);
 	////////////////////////////// 조명
 
 	////////////////////////////// 재질
-	m_pMaterials = new MATERIALS;
+	/*m_pMaterials = new MATERIALS;
 	::ZeroMemory(m_pMaterials, sizeof(MATERIALS));
 
 	m_pMaterials->m_pReflections[0] = { XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f), XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 5.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f) };
@@ -813,7 +813,7 @@ void GameScene::BuildLightsAndMaterials(ID3D12Device *pd3dDevice, ID3D12Graphics
 	m_pMaterials->m_pReflections[4] = { XMFLOAT4(0.0f, 0.5f, 1.0f, 1.0f), XMFLOAT4(0.5f, 0.0f, 1.0f, 1.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 25.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f) };
 	m_pMaterials->m_pReflections[5] = { XMFLOAT4(0.0f, 0.5f, 0.5f, 1.0f), XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 30.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f) };
 	m_pMaterials->m_pReflections[6] = { XMFLOAT4(0.5f, 0.5f, 1.0f, 1.0f), XMFLOAT4(0.5f, 0.5f, 1.0f, 1.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 35.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f) };
-	m_pMaterials->m_pReflections[7] = { XMFLOAT4(1.0f, 0.5f, 1.0f, 1.0f), XMFLOAT4(1.0f, 0.0f, 1.0f, 1.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 40.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f) };
+	m_pMaterials->m_pReflections[7] = { XMFLOAT4(1.0f, 0.5f, 1.0f, 1.0f), XMFLOAT4(1.0f, 0.0f, 1.0f, 1.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 40.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f) };*/
 
 	//CreateConstantBuffer(pd3dDevice, pd3dCommandList, m_pd3dcbMaterials, sizeof(MATERIALS), (void **)&m_pcbMappedMaterials);
 

@@ -13,21 +13,21 @@ CubeMesh::CubeMesh(GameObject* pOwner, ID3D12Device * pd3dDevice, ID3D12Graphics
 
 	//직육면체는 꼭지점(정점)이 8개이다.
 	m_vertexCount = 8;
-	m_nStride = sizeof(CDiffusedVertex);
+	m_nStride = sizeof(CubeVertex);
 	m_d3dPrimitiveTopology = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 	float fx = width * 0.5f;
 	float fy = height * 0.5f;
 	float fz = depth * 0.5f;
 	//정점 버퍼는 직육면체의 꼭지점 8개에 대한 정점 데이터를 가진다.
-	CDiffusedVertex pVertices[8];
-	pVertices[0] = CDiffusedVertex(XMFLOAT3(-fx, +fy, -fz), RANDOM_COLOR);
-	pVertices[1] = CDiffusedVertex(XMFLOAT3(+fx, +fy, -fz), RANDOM_COLOR);
-	pVertices[2] = CDiffusedVertex(XMFLOAT3(+fx, +fy, +fz), RANDOM_COLOR);
-	pVertices[3] = CDiffusedVertex(XMFLOAT3(-fx, +fy, +fz), RANDOM_COLOR);
-	pVertices[4] = CDiffusedVertex(XMFLOAT3(-fx, -fy, -fz), RANDOM_COLOR);
-	pVertices[5] = CDiffusedVertex(XMFLOAT3(+fx, -fy, -fz), RANDOM_COLOR);
-	pVertices[6] = CDiffusedVertex(XMFLOAT3(+fx, -fy, +fz), RANDOM_COLOR);
-	pVertices[7] = CDiffusedVertex(XMFLOAT3(-fx, -fy, +fz), RANDOM_COLOR);
+	CubeVertex pVertices[8];
+	pVertices[0] = CubeVertex(XMFLOAT3(-fx, +fy, -fz), XMFLOAT3(), RANDOM_COLOR);
+	pVertices[1] = CubeVertex(XMFLOAT3(+fx, +fy, -fz), XMFLOAT3(), RANDOM_COLOR);
+	pVertices[2] = CubeVertex(XMFLOAT3(+fx, +fy, +fz), XMFLOAT3(), RANDOM_COLOR);
+	pVertices[3] = CubeVertex(XMFLOAT3(-fx, +fy, +fz), XMFLOAT3(), RANDOM_COLOR);
+	pVertices[4] = CubeVertex(XMFLOAT3(-fx, -fy, -fz), XMFLOAT3(), RANDOM_COLOR);
+	pVertices[5] = CubeVertex(XMFLOAT3(+fx, -fy, -fz), XMFLOAT3(), RANDOM_COLOR);
+	pVertices[6] = CubeVertex(XMFLOAT3(+fx, -fy, +fz), XMFLOAT3(), RANDOM_COLOR);
+	pVertices[7] = CubeVertex(XMFLOAT3(-fx, -fy, +fz), XMFLOAT3(), RANDOM_COLOR);
 	m_pPositionBuffer = d3dUtil::CreateBufferResource(pd3dDevice, pd3dCommandList, pVertices,
 		m_nStride * m_vertexCount, D3D12_HEAP_TYPE_DEFAULT,
 		D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, &m_pPositionUploadBuffer);

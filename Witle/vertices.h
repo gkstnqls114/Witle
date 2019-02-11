@@ -29,21 +29,11 @@ public:
 	~CTextureVertex() { }
 };
 
-class CDiffusedVertex : public CVertex
+
+class CDiffused2TexturedVertex : public CVertex
 {
 public:
 	XMFLOAT4						m_xmf4Diffuse;
-
-public:
-	CDiffusedVertex() { m_xmf3Position = XMFLOAT3(0.0f, 0.0f, 0.0f); m_xmf4Diffuse = XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f); }
-	CDiffusedVertex(float x, float y, float z, XMFLOAT4 xmf4Diffuse) { m_xmf3Position = XMFLOAT3(x, y, z); m_xmf4Diffuse = xmf4Diffuse; }
-	CDiffusedVertex(XMFLOAT3 xmf3Position, XMFLOAT4 xmf4Diffuse = XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f)) { m_xmf3Position = xmf3Position; m_xmf4Diffuse = xmf4Diffuse; }
-	~CDiffusedVertex() { }
-};
-
-class CDiffused2TexturedVertex : public CDiffusedVertex
-{
-public:
 	XMFLOAT2						m_xmf2TexCoord0;
 	XMFLOAT2						m_xmf2TexCoord1;
 
