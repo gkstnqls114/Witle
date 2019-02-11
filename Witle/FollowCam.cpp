@@ -88,8 +88,6 @@ void FollowCam::LastUpdate(float fTimeElapsed)
 	m_pOwner->GetTransform().SetPosition(Vector3::Subtract(m_At, m_Offset));
 
 	RegenerateViewMatrix();
-
-	GenerateFrustum();
 }
 
 void FollowCam::Rotate(float x, float y, float z)

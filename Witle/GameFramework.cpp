@@ -682,8 +682,6 @@ LRESULT CGameFramework::OnProcessingWindowMessage(HWND hWnd, UINT nMessageID, WP
 	case WM_KEYDOWN: 
 		switch (wParam) {
 		case VK_SPACE:
-			std::cout << "1";
-			GameScreen::ChangeWindowScreen(500, 500);
 			break;
 		}
 	case WM_KEYUP:

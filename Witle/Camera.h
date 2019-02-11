@@ -45,8 +45,6 @@ protected:
 
 
 protected:  
-	//절두체(월드 좌표계)를 생성한다.
-	void GenerateFrustum();
 	virtual void MoveSmoothly(float fTimeElapsed, const XMFLOAT3& xmf3LookAt) {}; 
 
 public:

@@ -18,8 +18,7 @@ void BasicCam::LastUpdate(float fTimeElapsed)
 	m_At = m_At;
 	m_pOwner->GetTransform().SetPosition(Vector3::Subtract(m_At, m_Offset));
 
-	RegenerateViewMatrix(); 
-	GenerateFrustum();
+	RegenerateViewMatrix();
 }
 
 void BasicCam::Rotate(float x, float y, float z)
