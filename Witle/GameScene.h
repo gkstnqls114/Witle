@@ -2,12 +2,6 @@
 #include "Scene.h"
 
 
-//게임 객체의 정보를 셰이더에게 넘겨주기 위한 구조체(상수 버퍼)이다.
-struct CB_OBJECT_INFO // b1
-{
-	XMFLOAT4 fColor{1.F , 1.F, 1.F, 1.F};
-};
- 
 class MyDescriptorHeap;
 class CameraObject;
 class Player;
@@ -17,7 +11,6 @@ class GameObject;
 class QuadTreeTerrainMesh;
 
 struct LIGHTS;
-struct LIGHT;
 struct MATERIAL;
 struct MATERIALS;
 
@@ -74,10 +67,9 @@ protected:
 	XMFLOAT4X4              matrix{ Matrix4x4::Identity() };
 
 	//////////////////////////////////////  조명
-	LIGHTS						*m_pLights{ nullptr };
 
 	ID3D12Resource				*m_pd3dcbLights{ nullptr };
-	LIGHTS						*m_pcbMappedLights{ nullptr };
+	LIGHTS			*m_pcbMappedLights{ nullptr };
 
 	MATERIALS					*m_pMaterials{ nullptr };
 

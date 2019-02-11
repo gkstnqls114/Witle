@@ -145,6 +145,9 @@
     <Filter Include="05.Shader\TESTShader">
       <UniqueIdentifier>{fbd787c7-444a-4e68-98f3-306d0a71a446}</UniqueIdentifier>
     </Filter>
+    <Filter Include="99.etc\LightManager">
+      <UniqueIdentifier>{8d004bf1-b8cc-4fd5-b0d1-58af214d6d24}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -321,6 +324,9 @@
     <ClInclude Include="TESTShader.h">
       <Filter>05.Shader\TESTShader</Filter>
     </ClInclude>
+    <ClInclude Include="LightManager.h">
+      <Filter>99.etc\LightManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -481,6 +487,9 @@
     </ClCompile>
     <ClCompile Include="TESTShader.cpp">
       <Filter>05.Shader\TESTShader</Filter>
+    </ClCompile>
+    <ClCompile Include="LightManager.cpp">
+      <Filter>99.etc\LightManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
