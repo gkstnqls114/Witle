@@ -40,6 +40,8 @@ private:
 	GameInput();
 	~GameInput();
 
+	static HWND m_hWnd;
+
 	static UCHAR m_pKeyBuffer[256]; // 키보드의 input을 위한 멤버 변수
 
 	static RAY m_PickingRay;
@@ -54,6 +56,8 @@ private:
 public: 
 	static void Update(HWND hWnd);
 	static void Reset();
+
+	static void SetHWND(HWND hwnd) { m_hWnd = hwnd; }
 
 	// 키가 눌렸는지 확인하는 상태
 	static bool IsKeydownRIGHT() { return (m_pKeyBuffer[VK_RIGHT] & 0xF0); };

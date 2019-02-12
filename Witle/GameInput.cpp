@@ -6,6 +6,8 @@
 #include "GameScreen.h"
 #include "GameInput.h"
 
+HWND GameInput::m_hWnd;
+
 UCHAR GameInput::m_pKeyBuffer[256];
 
 float GameInput::m_cDeltaX = 0.0f; // 마우스를 누른 상태로 x축으로 움직인 마우스 이동량  
@@ -25,17 +27,16 @@ GameInput::~GameInput()
 
 bool GameInput::GenerateRayforPicking(const XMFLOAT3& cameraPos, const XMFLOAT4X4 & view, const XMFLOAT4X4 & projection, RAY& ray)
 {
-	if (m_clickCursor.x < 0 || m_clickCursor.y < 0)
+	if (m_clickCursor.x < 0 || m_clickCursor.y < 0 || m_clickCursor.x > GameScreen::GetWidth() || m_clickCursor.y > GameScreen::GetHeight())
 	{
-		// std::cout << "클릭 안한 상태" << std::endl;
 		return false;
 	}
 	ray.origin = cameraPos;
 
 	// 왼쪽 상단이 (0, 0)로 표현되어있는 윈도우 좌표계의 클릭 커서를
-	// 화면 중심이 (0, 0)이며 각 축이 -1~1 로 표현되는, 즉 투영 좌표계로 변경한다. 
+	// 화면 중심이 (0, 0)이며 각 축이 -1~1 로 표현되는, 즉 투영 좌표계로 변경한다.  
 	ray.direction.x = float(((2.0f * m_clickCursor.x) / float(GameScreen::GetWidth())) - 1.0f);
-	ray.direction.y =  float((-(2.0f * m_clickCursor.y) / float(GameScreen::GetHeight())) + 1.0f);
+	ray.direction.y = float((-(2.0f * m_clickCursor.y) / float(GameScreen::GetHeight())) + 1.0f);
 
 	//현재는 투영좌표계의 Direction 좌표
 	//즉 Direction의 x, y좌표는 -1과 1사이이다.

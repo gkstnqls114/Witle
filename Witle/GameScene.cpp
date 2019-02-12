@@ -142,15 +142,20 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	Camera* cameraComponent = new FollowCam(m_Camera, m_GameObject);
 	GameScreen::SetCamera(cameraComponent);
 	cameraComponent->CreateShaderVariables(pd3dDevice, pd3dCommandList);
-	cameraComponent->SetOffset(XMFLOAT3(0, -5.f, 10.f)); 
+	cameraComponent->SetOffset(XMFLOAT3(0, -5.f, 10.f));
+	cameraComponent->SetViewport(0, 0, GameScreen::GetWidth(), GameScreen::GetHeight(), 0.0f, 1.0f);
+	cameraComponent->SetScissorRect(0, 0, GameScreen::GetWidth(), GameScreen::GetHeight());
+	cameraComponent->GenerateProjectionMatrix(0.01f, CAMERA_FAR, float(GameScreen::GetWidth()) / float(GameScreen::GetHeight()), 60.0f);
+
 	m_Camera->ChangeCamera(cameraComponent);
 
 #ifdef CHECK_ANOTHER_CAMERA
 	m_lookAboveCamera = new CameraObject("LookAboveCamera");
 
-	D3D12_VIEWPORT	GBuffer_Viewport{ 0, GameScreen::GetHeight(), G_BUFFER_WINDOW_WIDTH , G_BUFFER_WINDOW_HEIGHT, 0.0f, 1.0f };
-	D3D12_RECT		ScissorRect{ 0 , GameScreen::GetHeight(), GameScreen::GetWidth() , GameScreen::GetHeight() + G_BUFFER_WINDOW_HEIGHT };
+	D3D12_VIEWPORT	GBuffer_Viewport{ 0, GameScreen::GetHeight(),  GameScreen::GetAnotherWidth(), GameScreen::GetAnotherHeight(), 0.0f, 1.0f };
+	D3D12_RECT		ScissorRect{ 0 , GameScreen::GetHeight(), GameScreen::GetWidth() , GameScreen::GetHeight() + GameScreen::GetAnotherHeight() };
 
+	m_lookAboveCamera->GetCamera()->CreateShaderVariables(pd3dDevice, pd3dCommandList);
 	m_lookAboveCamera->GetCamera()->SetScissorRect(ScissorRect);
 	m_lookAboveCamera->GetCamera()->SetViewport(GBuffer_Viewport);
 	m_lookAboveCamera->GetCamera()->GenerateProjectionMatrix(0.01f, CAMERA_FAR, float(GameScreen::GetWidth()) / float(GameScreen::GetHeight()), 60.0f);
@@ -159,11 +164,6 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	m_lookAboveCamera->GetCamera()->SetOffset(XMFLOAT3(0.0f, 0.f, 10.f));
 	m_lookAboveCamera->GetCamera()->Rotate(90.f, 0.f, 0.f);
 #endif
-
-	cameraComponent->SetViewport(0, 0, GameScreen::GetWidth(), GameScreen::GetHeight(), 0.0f, 1.0f);
-	cameraComponent->SetScissorRect(0, 0, GameScreen::GetWidth(), GameScreen::GetHeight());
-	cameraComponent->GenerateProjectionMatrix(0.01f, CAMERA_FAR, float(GameScreen::GetWidth()) / float(GameScreen::GetHeight()), 60.0f);
-
 	//테스트 쿼드트리 터레인 생성
 	m_TESTQuadTree = new QuadTreeTerrainMesh(m_gameobject, pd3dDevice, pd3dCommandList, 257, 257,
 		xmf3Scale, xmf4Color, m_Terrain->GetHeightMapImage());
@@ -436,13 +436,17 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	
 #ifdef CHECK_ANOTHER_CAMERA
 	m_lookAboveCamera->SetViewportsAndScissorRects(pd3dCommandList); 
-	m_lookAboveCamera->UpdateShaderVariables(pd3dCommandList);
+	m_lookAboveCamera->GetCamera()->UpdateShaderVariables(pd3dCommandList, m_parameterForm->GetIndex("Camera"));
 
 	m_TESTQuadTree->TESTRender(m_TESTQuadTree->GetRootNode(), pd3dCommandList);
 #endif
 
 	// PSO 설정
 	pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Cube")->GetPSO());
+
+	// 클라 화면 설정
+	m_Camera->SetViewportsAndScissorRects(pd3dCommandList);
+	m_Camera->GetCamera()->UpdateShaderVariables(pd3dCommandList, m_parameterForm->GetIndex("Camera"));
 
 	// 쉐이더 변수 설정 
 	m_parameterForm->UpdateShaderVariable(pd3dCommandList, m_pd3dGraphicsRootSignature, "World", SourcePtr(&XMMatrixTranspose(XMLoadFloat4x4(&m_GameObject->GetTransform().GetWorldMatrix()))));
@@ -451,15 +455,6 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	Mesh* mesh = m_GameObject->GetComponent<Mesh>("Mesh");
 	gMeshRenderer.Render(pd3dCommandList, mesh);
 
-
-	// 테스트용 .. 
-#ifdef CHECK_ANOTHER_CAMERA
-	m_lookAboveCamera->SetViewportsAndScissorRects(pd3dCommandList);
-	m_lookAboveCamera->UpdateShaderVariables(pd3dCommandList);
-
-	gMeshRenderer.Render(pd3dCommandList, mesh);
-#endif
-	
 	for (int x = 0; x < m_numPickingTESTMeshs; ++x)
 	{
 		// 쉐이더 변수 설정 

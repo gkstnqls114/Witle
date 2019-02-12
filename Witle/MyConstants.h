@@ -28,7 +28,7 @@ enum LIGHT_TYPE
 /////////////////////////////////////////////// define 정의
 #define CHECK_ROOT_SIGNATURE 
 #define CHECK_TERRAIN_MAX_POS
-// #define CHECK_ANOTHER_CAMERA
+#define CHECK_ANOTHER_CAMERA
 #define CHECK_CONSOLE_TEST
 #define CHECK_FRAMERATE // 정의한경우, 프레임 레이트가 타이틀 화면에 보인다.
 /////////////////////////////////////////////// define 정의
@@ -54,10 +54,6 @@ enum LIGHT_TYPE
 #define DIR_UP						0x10
 #define DIR_DOWN					0x20
 /////////////////////////////////////////////// 조작키
-
-// G Buffer가 현재 게임에서 보이는 사이즈
-#define G_BUFFER_WINDOW_WIDTH 240 //960 / 4 (기준)
-#define G_BUFFER_WINDOW_HEIGHT 135 //1080 (기준)
 
 #define BILLBOARD_PITCH_X 700.F
 #define BILLBOARD_PITCH_Y 100.F

@@ -16,7 +16,7 @@ void CGameFramework::Render()
 	HRESULT hResult = m_CommandAllocator->Reset();
 	hResult = m_CommandList->Reset(m_CommandAllocator.Get(), NULL);
 	 
-	RenderShadowMap();
+	// RenderShadowMap();
 	RenderSwapChain();
 
 	hResult = m_CommandList->Close();
@@ -43,6 +43,7 @@ bool CGameFramework::OnCreate(HINSTANCE hInstance, HWND hMainWnd)
 {
 	m_hInstance = hInstance;
 	m_hWnd = hMainWnd;
+	GameInput::SetHWND(hMainWnd);
 
 	CreateDirect3DDevice();
 	CreateCommandQueueAndList();
@@ -293,8 +294,8 @@ void CGameFramework::CreateSwapChain()
 	DXGI_SWAP_CHAIN_DESC SwapChainDesc;
 	::ZeroMemory(&SwapChainDesc, sizeof(SwapChainDesc));
 	SwapChainDesc.BufferCount = m_SwapChainBuffersCount;
-	SwapChainDesc.BufferDesc.Width = GameScreen::GetWidth();
-	SwapChainDesc.BufferDesc.Height = GameScreen::GetHeight();
+	SwapChainDesc.BufferDesc.Width = GameScreen::GetClientWidth();
+	SwapChainDesc.BufferDesc.Height = GameScreen::GetClientHeight();
 	SwapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 	SwapChainDesc.BufferDesc.RefreshRate.Numerator = 60;
 	SwapChainDesc.BufferDesc.RefreshRate.Denominator = 1;
@@ -479,8 +480,8 @@ void CGameFramework::CreateDepthStencilView()
 	D3D12_RESOURCE_DESC ResourceDesc;
 	ResourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
 	ResourceDesc.Alignment = 0;
-	ResourceDesc.Width = GameScreen::GetWidth();
-	ResourceDesc.Height = GameScreen::GetHeight();
+	ResourceDesc.Width = GameScreen::GetClientWidth();
+	ResourceDesc.Height = GameScreen::GetClientHeight();
 	ResourceDesc.DepthOrArraySize = 1;
 	ResourceDesc.MipLevels = 1;
 	ResourceDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
@@ -771,8 +772,8 @@ void CGameFramework::OnResizeBackBuffers()
 #else
 	DXGI_SWAP_CHAIN_DESC dxgiSwapChainDesc;
 	m_SwapChain->GetDesc(&dxgiSwapChainDesc);
-	m_SwapChain->ResizeBuffers(m_SwapChainBuffersCount, GameScreen::GetWidth(),
-		GameScreen::GetHeight(), dxgiSwapChainDesc.BufferDesc.Format, dxgiSwapChainDesc.Flags);
+	m_SwapChain->ResizeBuffers(m_SwapChainBuffersCount, GameScreen::GetClientWidth(),
+		GameScreen::GetClientHeight(), dxgiSwapChainDesc.BufferDesc.Format, dxgiSwapChainDesc.Flags);
 	m_SwapChainBufferIndex = 0;
 #endif
 
