@@ -25,6 +25,7 @@ protected:
 	virtual ID3D12RootSignature* CreateGraphicsRootSignature(ID3D12Device *pd3dDevice) override; 
 
 	void BuildLightsAndMaterials(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList);
+	void RenderShadowMap(ID3D12GraphicsCommandList *pd3dCommandList);
 
 public:
 	GameScene();
@@ -47,10 +48,9 @@ public:
 	virtual void LastUpdate(float ElapsedTime) override;
 
 protected:
+	
 	ParameterForm*          m_parameterForm{ nullptr };
 	
-
-	float PiekcingDist;
 	XMFLOAT3*				m_PickingColors{ nullptr };
 	GameObject**			m_PickingTESTMeshs{ nullptr };
 	int						m_numPickingTESTMeshs{ 100 };

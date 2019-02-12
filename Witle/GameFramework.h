@@ -54,6 +54,13 @@ private:
 	ComPtr<ID3D12DebugDevice> m_pd3dDebugDevice;
 #endif
 	
+private:
+	void CreateShadowMapView();
+	void RenderShadowMap();
+	const UINT m_DsvDescriptorsCount{ 2 };
+	D3D12_CPU_DESCRIPTOR_HANDLE m_ShadowMapCPUHandle;
+	ID3D12Resource*			m_pShadowMap;
+
 	//// GBuffer
 	static const UINT m_GBuffersCount{ 0 }; // 컬러 . 노말. 
 

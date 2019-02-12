@@ -401,6 +401,8 @@ void GameScene::AnimateObjects(float fTimeElapsed)
 
 void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 {
+	RenderShadowMap(pd3dCommandList);
+
 	// 렌더링
 	extern MeshRenderer gMeshRenderer;
 
@@ -820,4 +822,8 @@ void GameScene::BuildLightsAndMaterials(ID3D12Device *pd3dDevice, ID3D12Graphics
 
 	m_pd3dcbMaterials->Map(0, NULL, (void **)&m_pcbMappedMaterials);
 	////////////////////////////// 재질
+}
+
+void GameScene::RenderShadowMap(ID3D12GraphicsCommandList * pd3dCommandList)
+{
 }
