@@ -169,6 +169,9 @@
     <Filter Include="12.Skill\SkillRestraint">
       <UniqueIdentifier>{dfc629d6-2b26-45c0-ac96-a6cd8663a74c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.GameObject\Light">
+      <UniqueIdentifier>{cb650d53-fa9a-44ef-a203-2eb6dd49787e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -369,6 +372,9 @@
     <ClInclude Include="WideareaMagic.h">
       <Filter>12.Skill\WideareaMagic</Filter>
     </ClInclude>
+    <ClInclude Include="LightObject.h">
+      <Filter>03.GameObject\Light</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -553,6 +559,9 @@
     </ClCompile>
     <ClCompile Include="WideareaMagic.cpp">
       <Filter>12.Skill\WideareaMagic</Filter>
+    </ClCompile>
+    <ClCompile Include="LightObject.cpp">
+      <Filter>03.GameObject\Light</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
