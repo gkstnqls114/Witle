@@ -6,10 +6,10 @@ float4 VSMain(uint nVertexID : SV_VertexID) : SV_POSITION
 	//정점의 위치 좌표는 변환이 된 좌표(SV_POSITION)이다. 즉, 투영좌표계의 좌표이다.
 	if (nVertexID == 0)      output = float4(-1.0,  1.0,  0.5, 1.0);
 	else if (nVertexID == 1) output = float4(1.0,   1.0,  0.5, 1.0);
-	else if (nVertexID == 2) output = float4(-1.0, -1.0, 0.5, 1.0);
-	else if (nVertexID == 3) output = float4(-1.0, -1.0, 0.5, 1.0);
-	else if (nVertexID == 4) output = float4(1.0,   1.0, 0.5, 1.0);
-	else if (nVertexID == 5) output = float4(1.0,  -1.0, 0.5, 1.0);
+	else if (nVertexID == 2) output = float4(-1.0, -1.0,  0.5, 1.0);
+	else if (nVertexID == 3) output = float4(-1.0, -1.0,  0.5, 1.0);
+	else if (nVertexID == 4) output = float4(1.0,   1.0,  0.5, 1.0);
+	else if (nVertexID == 5) output = float4(1.0,  -1.0,  0.5, 1.0);
 
 	return(output);
 }

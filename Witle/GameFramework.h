@@ -55,7 +55,6 @@ private:
 #endif
 	
 private:
-	void CreateShadowMapView();
 	void RenderShadowMap();
 	const UINT m_DsvDescriptorsCount{ 2 };
 	D3D12_CPU_DESCRIPTOR_HANDLE m_ShadowMapCPUHandle;
