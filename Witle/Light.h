@@ -21,13 +21,29 @@ struct LIGHT
 class Light
 	: public ResourceComponentBase
 {
+private:
+	struct VS_CB_LIGHTS_INFO
+	{
+		LIGHT					m_pLights[MAX_LIGHTS];
+		XMFLOAT4				m_xmf4GlobalAmbient;
+	};
+
+	static ID3D12Resource		*m_pd3dcbLights;
+	static VS_CB_LIGHTS_INFO	*m_pcbMappedLights;
+	static UINT m_LightsCount;
+	static VS_CB_LIGHTS_INFO*    m_pLights;
 
 protected:
+	UINT m_numLight{ 0 };
 	LIGHT m_Light;
 
 public:
 	Light(GameObject* pOwner);
 	virtual ~Light();
+
+	static void CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
+	static void UpdateShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList, int parameterIndex);
+	static void ReleaseShaderVariables();
 
 	virtual void Update(float fTimeElapsed) = 0;
 
