@@ -77,6 +77,6 @@ protected:
 	MATERIAL					*m_pcbMappedMaterials{ nullptr };
 	//////////////////////////////////////  Α¶Έν
 
-	GameObject *m_gameobject;
+	GameObject *m_TESTQuadGameobject;
 	QuadTreeTerrainMesh         *m_TESTQuadTree{ nullptr };
 };
