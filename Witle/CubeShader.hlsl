@@ -198,7 +198,7 @@ float4 Lighting(float3 vPosition, float3 vNormal)
 }
 
 
-#define _WITH_VERTEX_LIGHTING
+// #define _WITH_VERTEX_LIGHTING
 
 struct VertexIn
 {
@@ -246,25 +246,25 @@ VertexOut VS(VertexIn input)
 
 float4 PS(VertexOut input) : SV_TARGET
 {
-		// float4 cColor = gtxtDiffuse.Sample(gSamplerState, input.uv);
-		float4 cColor = input.cubeColor;
-		// float4 cColor = float4(1.f, 1.f, 1.f, 1.f);
-	#ifdef _WITH_VERTEX_LIGHTING
-		float4 cIllumination = input.color;
-	#else
-		input.normalW = normalize(input.normalW);
-		float4 cIllumination = Lighting(input.positionW, input.normalW);
-	#endif
-		return(cColor * cIllumination);
+	// float4 cColor = gtxtDiffuse.Sample(gSamplerState, input.uv);
+	float4 cColor;
+	if (testcolor.x == 0.f)
+	{
+		cColor = input.cubeColor;
+	}
+	else
+	{
+		cColor = float4(testcolor, 1.0f);
+	}
+#ifdef _WITH_VERTEX_LIGHTING
+	float4 cIllumination = input.color;
+#else
+	input.normalW = normalize(input.normalW);
+	float4 cIllumination = Lighting(input.positionW, input.normalW);
+#endif
+	return(cColor * cIllumination);
 
-		//if (color.x == 0.f)
-		//{
-		//	return input.Color;
-		//}
-		//else
-		//{
-		//	return float4(color, 1.0f);
-		//}
+
 }
 
 

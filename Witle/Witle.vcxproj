@@ -147,6 +147,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Avoidance.h" />
     <ClInclude Include="BasicCam.h" />
     <ClInclude Include="CameraObject.h" />
     <ClInclude Include="ComponentBase.h" />
@@ -190,8 +191,13 @@
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="Shader.h" />
+    <ClInclude Include="Shield.h" />
+    <ClInclude Include="Skill.h" />
+    <ClInclude Include="SkillRestraint.h" />
     <ClInclude Include="SkyPlane.h" />
+    <ClInclude Include="Sniping.h" />
     <ClInclude Include="SourcePtr.h" />
+    <ClInclude Include="SpeedReduction.h" />
     <ClInclude Include="SpotLight.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
@@ -202,12 +208,14 @@
     <ClInclude Include="TESTShader.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="vertices.h" />
+    <ClInclude Include="WideareaMagic.h" />
     <ClInclude Include="Witle.h" />
     <ClInclude Include="DescriptorTable.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TerrainShader.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Avoidance.cpp" />
     <ClCompile Include="BasicCam.cpp" />
     <ClCompile Include="CameraObject.cpp" />
     <ClCompile Include="ComponentBase.cpp" />
@@ -247,7 +255,12 @@
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="Shield.cpp" />
+    <ClCompile Include="Skill.cpp" />
+    <ClCompile Include="SkillRestraint.cpp" />
+    <ClCompile Include="Sniping.cpp" />
     <ClCompile Include="SourcePtr.cpp" />
+    <ClCompile Include="SpeedReduction.cpp" />
     <ClCompile Include="SpotLight.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -262,6 +275,7 @@
     <ClCompile Include="TESTShader.cpp" />
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="vertices.cpp" />
+    <ClCompile Include="WideareaMagic.cpp" />
     <ClCompile Include="Witle.cpp" />
     <ClCompile Include="DescriptorTable.cpp" />
     <ClCompile Include="Texture.cpp" />
