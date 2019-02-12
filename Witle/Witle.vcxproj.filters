@@ -581,5 +581,8 @@
     <FxCompile Include="TESTShader.hlsl">
       <Filter>HLSL</Filter>
     </FxCompile>
+    <FxCompile Include="ShowTextureShader.hlsl">
+      <Filter>HLSL</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

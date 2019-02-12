@@ -1,10 +1,14 @@
 #include "stdafx.h"
+#include "d3dUtil.h"
+
 #include "ShaderManager.h"
 #include "GameTimer.h"
 #include "GameInput.h"
-#include "d3dUtil.h"
+
+#include "TESTShader.h"
 #include "CubeShader.h"
 #include "TerrainShader.h"
+
 #include "GameScreen.h" 
 #include "GameScene.h"
 
@@ -16,7 +20,6 @@ void CGameFramework::Render()
 	HRESULT hResult = m_CommandAllocator->Reset();
 	hResult = m_CommandList->Reset(m_CommandAllocator.Get(), NULL);
 	 
-	// RenderShadowMap();
 	RenderSwapChain();
 
 	hResult = m_CommandList->Close();
@@ -125,15 +128,36 @@ void CGameFramework::CreateShadowMapView()
 
 void CGameFramework::RenderShadowMap()
 {
-	d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_RenderTargetBuffers[m_SwapChainBufferIndex], D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
-
-	m_CommandList->ClearDepthStencilView(m_ShadowMapCPUHandle, D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, NULL);
-	m_CommandList->OMSetRenderTargets(1, &m_SwapChainCPUHandle[m_SwapChainBufferIndex], TRUE, &m_ShadowMapCPUHandle);
+	// d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_RenderTargetBuffers[m_SwapChainBufferIndex], D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
 
 	// 쉐도우맵 렌더
+
+	// 클라 화면 설정
+
+	D3D12_VIEWPORT viewport;
+	viewport.TopLeftX = static_cast<float>(GameScreen::GetAnotherWidth());
+	viewport.TopLeftY = static_cast<float>(GameScreen::GetHeight());
+	viewport.Width = static_cast<float>(GameScreen::GetAnotherWidth());
+	viewport.Height = static_cast<float>(GameScreen::GetAnotherHeight());
+	viewport.MinDepth = 0.0f;
+	viewport.MaxDepth = 1.0f;
+	D3D12_RECT scissorrect = { GameScreen::GetAnotherWidth(), GameScreen::GetHeight(), GameScreen::GetAnotherWidth() + GameScreen::GetAnotherWidth(), GameScreen::GetHeight() + GameScreen::GetAnotherHeight() };
+	// D3D12_RECT scissorrect = { 0, 0, GameScreen::GetClientWidth(), GameScreen::GetClientHeight() };
+	m_CommandList->RSSetViewports(1, &viewport);
+	m_CommandList->RSSetScissorRects(1, &scissorrect);
+
+
+	//그래픽 루트 시그너쳐를 설정한다.
+	m_CommandList->SetGraphicsRootSignature(m_pScene->GetGraphicsRootSignature());
+	//파이프라인 상태를 설정한다.
+	m_CommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("TEST")->GetPSO());
+	//프리미티브 토폴로지(삼각형 리스트)를 설정한다.
+	m_CommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	//정점 3개를 사용하여 렌더링한다.
+	m_CommandList->DrawInstanced(6, 1, 0, 0);
 	
 
-	d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_RenderTargetBuffers[m_SwapChainBufferIndex], D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
+	// d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_RenderTargetBuffers[m_SwapChainBufferIndex], D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
 }
 
 D3D12_SHADER_BYTECODE CGameFramework::CreateComputeShader(ID3DBlob ** ppd3dShaderBlob, LPCSTR pszShaderName)
@@ -573,6 +597,10 @@ void CGameFramework::BuildObjects()
 	Shader* pTerrainShader = new TerrainShader();
 	pTerrainShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
 	ShaderManager::GetInstance()->InsertShader("Terrain", pTerrainShader); 
+
+	Shader* pTESTShader = new TESTShader();
+	pTESTShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
+	ShaderManager::GetInstance()->InsertShader("TEST", pTESTShader);
 	///////////////////////////////////////////////////////////////////////////// 리소스 생성
 
 	hResult = m_CommandList->Close();
@@ -866,6 +894,8 @@ void CGameFramework::RenderSwapChain()
 	m_CommandList->ClearRenderTargetView(m_SwapChainCPUHandle[m_SwapChainBufferIndex], /*pfClearColor*/Colors::Gray, 0, NULL);
 	m_CommandList->ClearDepthStencilView(m_DepthStencilCPUHandle, D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, NULL);
 	m_CommandList->OMSetRenderTargets(1, &m_SwapChainCPUHandle[m_SwapChainBufferIndex], TRUE, &m_DepthStencilCPUHandle);
+
+	RenderShadowMap();
 
 	// 장면을 렌더합니다.
 	if (m_pScene) { 

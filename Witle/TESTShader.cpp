@@ -109,10 +109,10 @@ D3D12_PRIMITIVE_TOPOLOGY_TYPE TESTShader::CreatePrimitiveTopologyType()
 
 D3D12_SHADER_BYTECODE TESTShader::CreateVertexShader(ID3DBlob ** ppd3dShaderBlob)
 {
-	return(Shader::CompileShaderFromFile(L"TESTShader.hlsl", "VSMain", "vs_5_1", ppd3dShaderBlob));
+	return(Shader::CompileShaderFromFile(L"ShowTextureShader.hlsl", "VSMain", "vs_5_1", ppd3dShaderBlob));
 }
 
 D3D12_SHADER_BYTECODE TESTShader::CreatePixelShader(ID3DBlob ** ppd3dShaderBlob)
 {
-	return(Shader::CompileShaderFromFile(L"TESTShader.hlsl", "PSMain", "ps_5_1", ppd3dShaderBlob));
+	return(Shader::CompileShaderFromFile(L"ShowTextureShader.hlsl", "PSMain", "ps_5_1", ppd3dShaderBlob));
 }
