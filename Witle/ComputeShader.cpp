@@ -7,6 +7,10 @@ ComputeShader::ComputeShader()
 
 ComputeShader::~ComputeShader()
 {
+	if (m_pd3dPipelineState)
+	{
+		m_pd3dPipelineState->Release();
+	}
 }
 
 D3D12_SHADER_BYTECODE ComputeShader::CompileShaderFromFile(const WCHAR * pszFileName, LPCSTR pszShaderName, ID3DBlob ** ppd3dShaderBlob)
@@ -32,7 +36,7 @@ void ComputeShader::CreatePipelineState(ID3D12Device * pd3dDevice, ID3D12RootSig
 
 	D3D12_COMPUTE_PIPELINE_STATE_DESC computepipelinestateDESC = {};
 
-	computepipelinestateDESC.pRootSignature = m_pd3dGraphicsRootSignature;
+	computepipelinestateDESC.pRootSignature = pd3dGraphicsRootSignature;
 	computepipelinestateDESC.CS = CreateComputeShader(&pd3dComputeShaderBlob);
 	computepipelinestateDESC.Flags = D3D12_PIPELINE_STATE_FLAG_NONE;
 	computepipelinestateDESC.NodeMask = 0; // ¥‹¿œ gpu : 0

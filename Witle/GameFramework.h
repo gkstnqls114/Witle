@@ -4,6 +4,7 @@
 
 class Scene;
 class Texture;
+class ComputeShader;
 
 class CGameFramework
 {
@@ -55,13 +56,16 @@ private:
 #endif
 	
 private:
+	////////////////////////////// 쉐도우맵
 	void RenderShadowMap();
 	const UINT m_DsvDescriptorsCount{ 2 };
 	D3D12_CPU_DESCRIPTOR_HANDLE m_ShadowMapCPUHandle;
 	ID3D12Resource*			m_pShadowMap;
+	////////////////////////////// 쉐도우맵
+
 
 	//// GBuffer 
-	static const UINT m_GBuffersCount{ 2 };
+	static const UINT m_GBuffersCount{ 3 };
 
 	ID3D12Resource*				m_GBuffers[m_GBuffersCount];
 	D3D12_CPU_DESCRIPTOR_HANDLE m_GBufferCPUHandle[m_GBuffersCount];
@@ -73,7 +77,7 @@ private:
 	//CBlueShader m_BlueShader;
 	//CRenderComputeShader m_RenderComputeShader;
 
-	Texture*		m_pGBufferTexture;
+	// Texture*		m_pGBufferTexture;
 	float	m_GBufferClearValue[3][4]{
 		{ 1.f, 0.f, 0.f, 1.f },
 		{ 0.f, 1.f, 0.f, 1.f },
@@ -81,12 +85,8 @@ private:
 	};
 
 	///////////////////// 컴퓨트 쉐이더를 위한 변수
-
-	ComPtr<ID3D12RootSignature> m_ComputeRootSignature;
-	
 	float	m_RWClearValue[4] = { 1.f, 0.f, 1.f, 0.f };
-	ID3D12Resource* m_ComputeRWResource;
-	Texture*		m_pComputeTexture;
+	ID3D12Resource* m_ComputeRWResource; // 작성함 
 
 	const UINT m_UAVParameterIndex = 0;
 	D3D12_GPU_DESCRIPTOR_HANDLE m_UAVGPUDescriptorHandle;
@@ -94,10 +94,8 @@ private:
 private:  
 	//스왑 체인, 디바이스, 서술자 힙, 명령 큐/할당자/리스트를 생성하는 함수이다.
 	// OnCreate() 내부에서 사용한다.
-	ID3D12RootSignature* CreateComputeRootSignature() {}; // 원래 기존 루트 시그니처와 똑같지만 보기 편하게 하기 위해 분리
-	void CreateComputePipelineState() {};
-	void CreateRWResourceViews() {};
-	void CreateMRTComputeShader() {};
+	void CreateRWResourceViews() ;
+	void CreateMRTComputeShader() ;
 	
 	void CreateSwapChain();
 	void CreateDirect3DDevice();
@@ -127,6 +125,11 @@ private:
 	void OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam);
 	void OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam);
 
+private:
+	void RenderOnGbuffer();
+	void RenderOnCompute();
+	void RenderOnSwapchain();
+
 public:
 	CGameFramework();
 	~CGameFramework();
@@ -149,6 +152,9 @@ private:
 	 
 	Scene *m_pScene{ nullptr };
 	
-	
+	// 블러를 위한 컴퓨트
+	ComputeShader* m_horizenShader{ nullptr };
+	ComputeShader* m_verticalShader{ nullptr };
+
 };
 

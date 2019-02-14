@@ -155,6 +155,7 @@
     <ClInclude Include="DirectionalLight.h" />
     <ClInclude Include="FamilyID.h" />
     <ClInclude Include="GameScreen.h" />
+    <ClInclude Include="HorizonBlurShader.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="LightManager.h" />
     <ClInclude Include="LightObject.h" />
@@ -209,6 +210,7 @@
     <ClInclude Include="SkinnedMeshRenderer.h" />
     <ClInclude Include="TESTShader.h" />
     <ClInclude Include="Transform.h" />
+    <ClInclude Include="VerticalBlurShader.h" />
     <ClInclude Include="vertices.h" />
     <ClInclude Include="WideareaMagic.h" />
     <ClInclude Include="Witle.h" />
@@ -237,6 +239,7 @@
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameTimer.cpp" />
     <ClCompile Include="HeightMapImage.cpp" />
+    <ClCompile Include="HorizonBlurShader.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="LightManager.cpp" />
     <ClCompile Include="LightObject.cpp" />
@@ -278,6 +281,7 @@
     <ClCompile Include="SkinnedMeshRenderer.cpp" />
     <ClCompile Include="TESTShader.cpp" />
     <ClCompile Include="Transform.cpp" />
+    <ClCompile Include="VerticalBlurShader.cpp" />
     <ClCompile Include="vertices.cpp" />
     <ClCompile Include="WideareaMagic.cpp" />
     <ClCompile Include="Witle.cpp" />
@@ -294,6 +298,17 @@
     <Image Include="Witle.ico" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="BlurShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </FxCompile>
     <FxCompile Include="CubeShader.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compute</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0</ShaderModel>

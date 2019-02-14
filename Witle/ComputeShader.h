@@ -19,7 +19,6 @@ public:
 
 	virtual void						OnPrepareRender(ID3D12GraphicsCommandList *pd3dCommandList);
 
-	virtual void						Update(float ElapsedTime) = 0;
 	ID3D12PipelineState*  GetPSO() const { return m_pd3dPipelineState; }
 
 protected:
