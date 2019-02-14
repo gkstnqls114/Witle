@@ -614,9 +614,6 @@
     <FxCompile Include="TerrainShader.hlsl">
       <Filter>HLSL</Filter>
     </FxCompile>
-    <FxCompile Include="TESTShader.hlsl">
-      <Filter>HLSL</Filter>
-    </FxCompile>
     <FxCompile Include="ShowTextureShader.hlsl">
       <Filter>HLSL</Filter>
     </FxCompile>

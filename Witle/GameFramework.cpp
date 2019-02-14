@@ -11,6 +11,7 @@
 #include "HorizonBlurShader.h"
 #include "VerticalBlurShader.h"
 #include "Texture.h"
+#include "MyDescriptorHeap.h"
 
 #include "GameScreen.h" 
 #include "GameScene.h"
@@ -31,7 +32,7 @@ void CGameFramework::Render()
 	////////////////////////////// ComputeShader
 	
 	////////////////////////////// SwapChain에 Render
-	// RenderOnSwapchain();
+	RenderOnSwapchain();
 	////////////////////////////// SwapChain에 Render
 
 	hResult = m_CommandList->Close();
@@ -114,10 +115,6 @@ void CGameFramework::RenderShadowMap()
 {
 	m_CommandList->OMSetRenderTargets(1, &m_SwapChainCPUHandle[m_SwapChainBufferIndex], TRUE, &m_DepthStencilCPUHandle);
 
-	// 쉐도우맵 렌더
-
-	// 클라 화면 설정
-
 	D3D12_VIEWPORT viewport;
 	viewport.TopLeftX = static_cast<float>(GameScreen::GetAnotherWidth());
 	viewport.TopLeftY = static_cast<float>(GameScreen::GetHeight());
@@ -126,13 +123,12 @@ void CGameFramework::RenderShadowMap()
 	viewport.MinDepth = 0.0f;
 	viewport.MaxDepth = 1.0f;
 	D3D12_RECT scissorrect = { GameScreen::GetAnotherWidth(), GameScreen::GetHeight(), GameScreen::GetAnotherWidth() + GameScreen::GetAnotherWidth(), GameScreen::GetHeight() + GameScreen::GetAnotherHeight() };
-	// D3D12_RECT scissorrect = { 0, 0, GameScreen::GetClientWidth(), GameScreen::GetClientHeight() };
 	m_CommandList->RSSetViewports(1, &viewport);
 	m_CommandList->RSSetScissorRects(1, &scissorrect);
 
-
 	//그래픽 루트 시그너쳐를 설정한다.
-	m_CommandList->SetGraphicsRootSignature(m_pScene->GetGraphicsRootSignature());
+	m_CommandList->SetGraphicsRootSignature(m_pScene->GetGraphicsRootSignature()); 
+
 	//파이프라인 상태를 설정한다.
 	m_CommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("TEST")->GetPSO());
 	//프리미티브 토폴로지(삼각형 리스트)를 설정한다.
@@ -141,6 +137,27 @@ void CGameFramework::RenderShadowMap()
 	m_CommandList->DrawInstanced(6, 1, 0, 0);
 	
 
+	// 장면을 렌더합니다.
+	for (int i = 0; i < m_GBuffersCount; ++i) {
+		D3D12_VIEWPORT	GBuffer_Viewport{ 0 + static_cast<float>(GameScreen::GetAnotherWidth()) * i, static_cast<float>(GameScreen::GetAnotherHeight()),
+			static_cast<float>(GameScreen::GetAnotherWidth()) , static_cast<float>(GameScreen::GetAnotherHeight()), 0.0f, 1.0f };
+		D3D12_RECT		ScissorRect{ 0 + static_cast<float>(GameScreen::GetAnotherWidth()) * i, static_cast<float>(GameScreen::GetAnotherHeight()),
+			static_cast<float>(GameScreen::GetWidth()) , static_cast<float>(GameScreen::GetHeight()) + static_cast<float>(GameScreen::GetAnotherHeight()) };
+
+		m_CommandList->RSSetViewports(1, &GBuffer_Viewport);
+		m_CommandList->RSSetScissorRects(1, &ScissorRect);
+
+		// 리소스만 바꾼다..
+
+		m_TESTHeap_1->FirstUpdate(m_CommandList.Get());
+		D3D12_GPU_DESCRIPTOR_HANDLE handle = m_TESTHeap_1->GetGPUSrvDescriptorStartHandle();
+		handle.ptr += (d3dUtil::gnCbvSrvDescriptorIncrementSize * i);
+		m_CommandList->SetGraphicsRootDescriptorTable(1, handle);
+
+		m_CommandList->IASetVertexBuffers(0, 0, nullptr);
+		m_CommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+		m_CommandList->DrawInstanced(6, 1, 0, 0);
+	}
 }
 
 //
@@ -559,23 +576,9 @@ void CGameFramework::BuildObjects()
 	m_pScene = new GameScene;
 	if (m_pScene) m_pScene->BuildObjects(m_d3dDevice.Get(), m_CommandList.Get());
 	
-	m_horizenShader = new HorizonBlurShader();
-	m_horizenShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
-	
-	m_verticalShader = new VerticalBlurShader();
-	m_verticalShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
+	BuildTESTObjects();
+	BuildShaders();
 
-	Shader* pCubeShader = new CubeShader();
-	pCubeShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
-	ShaderManager::GetInstance()->InsertShader("Cube", pCubeShader);
-
-	Shader* pTerrainShader = new TerrainShader();
-	pTerrainShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
-	ShaderManager::GetInstance()->InsertShader("Terrain", pTerrainShader); 
-
-	Shader* pTESTShader = new TESTShader();
-	pTESTShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
-	ShaderManager::GetInstance()->InsertShader("TEST", pTESTShader);
 	///////////////////////////////////////////////////////////////////////////// 리소스 생성
 
 	hResult = m_CommandList->Close();
@@ -714,28 +717,63 @@ void CGameFramework::RenderOnSwapchain()
 	m_CommandList->ClearDepthStencilView(m_DepthStencilCPUHandle, D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, NULL);
 	m_CommandList->ClearDepthStencilView(m_ShadowMapCPUHandle, D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, NULL);
 
+	// 하단에 테스트용으로 보일 리소스들을 렌더한다.
 	RenderShadowMap();
-
+	
+	// 기본 게임 장면을 렌더한다.
 	RenderSwapChain();
+
 
 	d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_RenderTargetBuffers[m_SwapChainBufferIndex], D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
 }
 
+void CGameFramework::BuildShaders()
+{
+	Shader* pCubeShader = new CubeShader();
+	pCubeShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
+	ShaderManager::GetInstance()->InsertShader("Cube", pCubeShader);
+
+	Shader* pTerrainShader = new TerrainShader();
+	pTerrainShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
+	ShaderManager::GetInstance()->InsertShader("Terrain", pTerrainShader);
+}
+
+void CGameFramework::BuildTESTObjects()
+{
+	m_horizenShader = new HorizonBlurShader();
+	m_horizenShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
+
+	m_verticalShader = new VerticalBlurShader();
+	m_verticalShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
+
+	m_TESTHeap_1 = new MyDescriptorHeap;
+	m_TESTHeap_1->CreateCbvSrvUavDescriptorHeaps(m_d3dDevice.Get(), m_CommandList.Get(), 0, 3, 0);
+	m_TESTHeap_1->CreateShaderResourceViews(m_d3dDevice.Get(), m_CommandList.Get(), m_GBuffersCount, m_GBuffers, RESOURCE_TEXTURE2D, 0);
+
+	Shader* pTESTShader = new TESTShader();
+	pTESTShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
+	ShaderManager::GetInstance()->InsertShader("TEST", pTESTShader);
+}
+
 void CGameFramework::RenderOnGbuffer()
 {
-	UINT gbufferIndex = m_SwapChainBufferIndex;
-	d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_GBuffers[gbufferIndex], D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_RENDER_TARGET);
-
-	m_CommandList->ClearRenderTargetView(m_GBufferCPUHandle[gbufferIndex], m_GBufferClearValue[gbufferIndex], 0, NULL);
-	m_CommandList->OMSetRenderTargets(1, &m_GBufferCPUHandle[gbufferIndex], TRUE, &m_DepthStencilCPUHandle);
+	for (int x = 0; x < m_GBuffersCount; ++x)
+	{
+		d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_GBuffers[x], D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_RENDER_TARGET);
+		m_CommandList->ClearRenderTargetView(m_GBufferCPUHandle[x], m_GBufferClearValue[x], 0, NULL);
+	}
+	
+	m_CommandList->OMSetRenderTargets(m_GBuffersCount, m_GBufferCPUHandle, TRUE, &m_DepthStencilCPUHandle);
 
 	// 장면을 렌더합니다.
 	if (m_pScene) {
 		m_pScene->Render(m_CommandList.Get());
 	}
 
-	d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_GBuffers[gbufferIndex], D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_GENERIC_READ);
-
+	for (int x = 0; x < m_GBuffersCount; ++x)
+	{
+		d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_GBuffers[x], D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_GENERIC_READ);
+	}
 }
 
 void CGameFramework::RenderOnCompute()
@@ -794,7 +832,8 @@ void CGameFramework::OnResizeBackBuffers()
 	m_CommandList->Reset(m_CommandAllocator.Get(), NULL);
 	
 	for (int i = 0; i < m_SwapChainBuffersCount; i++) {
-		if (m_RenderTargetBuffers[i]) {
+		if (m_RenderTargetBuffers[i])
+		{
 			m_RenderTargetBuffers[i]->Release();
 		}
 	}
@@ -805,6 +844,14 @@ void CGameFramework::OnResizeBackBuffers()
 
 	if (m_pShadowMap) {
 		m_pShadowMap->Release();
+	}
+
+	for (int i = 0; i < m_GBuffersCount; ++i)
+	{
+		if (m_GBuffers[i])
+		{
+			m_GBuffers[i]->Release();
+		}
 	}
 
 #ifdef _WITH_ONLY_RESIZE_BACKBUFFERS
@@ -822,6 +869,7 @@ void CGameFramework::OnResizeBackBuffers()
 
 	CreateRenderTargetView();
 	CreateDepthStencilView();
+	CreateGBufferView();
 	
 	m_CommandList->Close();
 	

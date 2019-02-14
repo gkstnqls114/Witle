@@ -29,6 +29,7 @@ enum LIGHT_TYPE
 #define CHECK_ROOT_SIGNATURE 
 #define CHECK_TERRAIN_MAX_POS
 #define CHECK_ANOTHER_CAMERA
+#define CHECK_G_BUFFERS
 #define CHECK_CONSOLE_TEST
 #define CHECK_FRAMERATE // 정의한경우, 프레임 레이트가 타이틀 화면에 보인다.
 /////////////////////////////////////////////// define 정의

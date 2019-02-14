@@ -79,6 +79,27 @@ void MyDescriptorHeap::CreateShaderResourceViews(ID3D12Device * pd3dDevice, ID3D
 	}
 }
 
+void MyDescriptorHeap::CreateShaderResourceViews(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, int nShaderResourceBufferViews, ID3D12Resource *pd3dShaderResourceBuffers[], int nTypes, UINT Start)
+{
+	D3D12_CPU_DESCRIPTOR_HANDLE d3dSrvCPUDescriptorHandle = m_SrvCPUDescriptorStartHandle;
+	D3D12_GPU_DESCRIPTOR_HANDLE d3dSrvGPUDescriptorHandle = m_SrvGPUDescriptorStartHandle;
+
+	d3dSrvCPUDescriptorHandle.ptr = d3dSrvCPUDescriptorHandle.ptr + (Start * d3dUtil::gnCbvSrvDescriptorIncrementSize);
+	d3dSrvGPUDescriptorHandle.ptr = d3dSrvGPUDescriptorHandle.ptr + (Start * d3dUtil::gnCbvSrvDescriptorIncrementSize);
+
+	int nTextureType = nTypes;
+	for (int i = 0; i < nShaderResourceBufferViews; i++)
+	{
+		ID3D12Resource *pShaderResource = pd3dShaderResourceBuffers[i];
+		D3D12_RESOURCE_DESC d3dResourceDesc = pShaderResource->GetDesc();
+		D3D12_SHADER_RESOURCE_VIEW_DESC d3dShaderResourceViewDesc = d3dUtil::GetShaderResourceViewDesc(d3dResourceDesc, nTextureType);
+		pd3dDevice->CreateShaderResourceView(pShaderResource, &d3dShaderResourceViewDesc, d3dSrvCPUDescriptorHandle);
+
+		d3dSrvCPUDescriptorHandle.ptr += d3dUtil::gnCbvSrvDescriptorIncrementSize;
+		d3dSrvGPUDescriptorHandle.ptr += d3dUtil::gnCbvSrvDescriptorIncrementSize;
+	}
+}
+
 void MyDescriptorHeap::CreateUnorderedAccessViews(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, Texture * pTexture, UINT nRootParameterStartIndex, bool bAutoIncrement)
 {
 	D3D12_CPU_DESCRIPTOR_HANDLE UAVCPUDescriptorHandle = m_d3dUAVCPUDescriptorStartHandle;

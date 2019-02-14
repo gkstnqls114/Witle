@@ -5,6 +5,7 @@
 class Scene;
 class Texture;
 class ComputeShader;
+class MyDescriptorHeap;
 
 class CGameFramework
 {
@@ -130,6 +131,9 @@ private:
 	void RenderOnCompute();
 	void RenderOnSwapchain();
 
+	void BuildShaders();
+	void BuildTESTObjects();
+
 public:
 	CGameFramework();
 	~CGameFramework();
@@ -156,5 +160,6 @@ private:
 	ComputeShader* m_horizenShader{ nullptr };
 	ComputeShader* m_verticalShader{ nullptr };
 
+	MyDescriptorHeap* m_TESTHeap_1{ nullptr };
 };
 
