@@ -151,6 +151,7 @@
     <ClInclude Include="BasicCam.h" />
     <ClInclude Include="CameraObject.h" />
     <ClInclude Include="ComponentBase.h" />
+    <ClInclude Include="ComputeShader.h" />
     <ClInclude Include="DirectionalLight.h" />
     <ClInclude Include="FamilyID.h" />
     <ClInclude Include="GameScreen.h" />
@@ -220,6 +221,7 @@
     <ClCompile Include="BasicCam.cpp" />
     <ClCompile Include="CameraObject.cpp" />
     <ClCompile Include="ComponentBase.cpp" />
+    <ClCompile Include="ComputeShader.cpp" />
     <ClCompile Include="CubeMesh.cpp" />
     <ClCompile Include="CubeShader.cpp" />
     <ClCompile Include="d3dUtil.cpp" />

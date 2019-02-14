@@ -3,7 +3,7 @@
 #define _WITH_PLAYER_TOP
 
 class Scene;
-class CameraInfoFont;
+class Texture;
 
 class CGameFramework
 {
@@ -60,43 +60,40 @@ private:
 	D3D12_CPU_DESCRIPTOR_HANDLE m_ShadowMapCPUHandle;
 	ID3D12Resource*			m_pShadowMap;
 
-	//// GBuffer
-	static const UINT m_GBuffersCount{ 0 }; // 컬러 . 노말. 
+	//// GBuffer 
+	static const UINT m_GBuffersCount{ 2 };
 
-	//ID3D12Resource* m_GBuffers[m_GBuffersCount];
-	//D3D12_CPU_DESCRIPTOR_HANDLE m_GBufferCPUHandle[m_GBuffersCount];
-	//ID3D12DescriptorHeap* m_GBufferHeap;
-	//UINT m_GBufferDescriptorSize;
+	ID3D12Resource*				m_GBuffers[m_GBuffersCount];
+	D3D12_CPU_DESCRIPTOR_HANDLE m_GBufferCPUHandle[m_GBuffersCount];
+	ID3D12DescriptorHeap* m_GBufferHeap;
+	UINT m_GBufferDescriptorSize;
 
 	//CTriangleShader m_RedShader;
 	//CGreenShader m_GreenShader;
 	//CBlueShader m_BlueShader;
 	//CRenderComputeShader m_RenderComputeShader;
 
-	//CTexture*		m_pGBufferTexture;
-	//float	m_GBufferClearValue[3][4]{
-	//	{ 1.f, 0.f, 0.f, 1.f },
-	//	{ 0.f, 1.f, 0.f, 1.f },
-	//	{ 0.f, 0.f, 1.f, 1.f }
-	//};
+	Texture*		m_pGBufferTexture;
+	float	m_GBufferClearValue[3][4]{
+		{ 1.f, 0.f, 0.f, 1.f },
+		{ 0.f, 1.f, 0.f, 1.f },
+		{ 0.f, 0.f, 1.f, 1.f }
+	};
 
-	/////////////////////// 컴퓨트 쉐이더를 위한 변수
-	//ComPtr<ID3D12PipelineState> m_HorzComputePipelineState;
-	//ComPtr<ID3D12PipelineState> m_VertComputePipelineState;
+	///////////////////// 컴퓨트 쉐이더를 위한 변수
 
-	//ComPtr<ID3D12RootSignature> m_ComputeRootSignature;
-	//
-	//float	m_RWClearValue[4] = { 1.f, 0.f, 1.f, 0.f };
-	//ID3D12Resource* m_ComputeRWResource;
-	//CTexture*		m_pComputeTexture;
+	ComPtr<ID3D12RootSignature> m_ComputeRootSignature;
+	
+	float	m_RWClearValue[4] = { 1.f, 0.f, 1.f, 0.f };
+	ID3D12Resource* m_ComputeRWResource;
+	Texture*		m_pComputeTexture;
 
-	//const UINT m_UAVParameterIndex = 0;
-	//D3D12_GPU_DESCRIPTOR_HANDLE m_UAVGPUDescriptorHandle;
+	const UINT m_UAVParameterIndex = 0;
+	D3D12_GPU_DESCRIPTOR_HANDLE m_UAVGPUDescriptorHandle;
 
 private:  
 	//스왑 체인, 디바이스, 서술자 힙, 명령 큐/할당자/리스트를 생성하는 함수이다.
 	// OnCreate() 내부에서 사용한다.
-	D3D12_SHADER_BYTECODE CreateComputeShader(ID3DBlob **ppd3dShaderBlob, LPCSTR pszShaderName);
 	ID3D12RootSignature* CreateComputeRootSignature() {}; // 원래 기존 루트 시그니처와 똑같지만 보기 편하게 하기 위해 분리
 	void CreateComputePipelineState() {};
 	void CreateRWResourceViews() {};
@@ -107,7 +104,7 @@ private:
 	void CreateRtvAndDsvDescriptorHeaps();
 	void CreateRenderTargetView();
 	void CreateDepthStencilView();
-	void CreateGBufferView() {}; // MRT를 위한 버퍼
+	void CreateGBufferView(); // MRT를 위한 버퍼
 	void CreateCommandQueueAndList();
 
 	//CPU와 GPU를 동기화하는 함수이다.

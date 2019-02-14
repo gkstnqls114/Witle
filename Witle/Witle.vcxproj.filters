@@ -172,6 +172,9 @@
     <Filter Include="03.GameObject\Light">
       <UniqueIdentifier>{cb650d53-fa9a-44ef-a203-2eb6dd49787e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="06.ComputeShader">
+      <UniqueIdentifier>{7769c5e9-5d6f-49a5-ba85-21c9bd1660b4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -375,6 +378,9 @@
     <ClInclude Include="LightObject.h">
       <Filter>03.GameObject\Light</Filter>
     </ClInclude>
+    <ClInclude Include="ComputeShader.h">
+      <Filter>06.ComputeShader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -562,6 +568,9 @@
     </ClCompile>
     <ClCompile Include="LightObject.cpp">
       <Filter>03.GameObject\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="ComputeShader.cpp">
+      <Filter>06.ComputeShader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

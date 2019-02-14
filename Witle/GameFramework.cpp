@@ -8,6 +8,7 @@
 #include "TESTShader.h"
 #include "CubeShader.h"
 #include "TerrainShader.h"
+#include "Texture.h"
 
 #include "GameScreen.h" 
 #include "GameScene.h"
@@ -62,11 +63,9 @@ bool CGameFramework::OnCreate(HINSTANCE hInstance, HWND hMainWnd)
 	CreateCommandQueueAndList();
 	CreateRtvAndDsvDescriptorHeaps();
 	CreateSwapChain();
-	//CreateGBufferView();
 	
-	//CreateComputePipelineState();
+	// CreateGBufferView();
 	// CreateRWResourceViews();
-
 	//CreateMRTComputeShader();
 	 
 	BuildObjects();
@@ -132,24 +131,6 @@ void CGameFramework::RenderShadowMap()
 	m_CommandList->DrawInstanced(6, 1, 0, 0);
 	
 
-}
-
-D3D12_SHADER_BYTECODE CGameFramework::CreateComputeShader(ID3DBlob ** ppd3dShaderBlob, LPCSTR pszShaderName)
-{
-	//  Shader::CompileShaderFromFile 와 같다.
-
-	UINT nCompileFlags = 0;
-#if defined(_DEBUG)
-	nCompileFlags = D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION;
-#endif
-
-	::D3DCompileFromFile(L"ComputeShader.hlsl", NULL, NULL, pszShaderName, "cs_5_1", nCompileFlags, 0, ppd3dShaderBlob, NULL);
-
-	D3D12_SHADER_BYTECODE d3dShaderByteCode;
-	d3dShaderByteCode.BytecodeLength = (*ppd3dShaderBlob)->GetBufferSize();
-	d3dShaderByteCode.pShaderBytecode = (*ppd3dShaderBlob)->GetBufferPointer();
-
-	return(d3dShaderByteCode); 
 }
 
 //
@@ -521,49 +502,49 @@ void CGameFramework::CreateDepthStencilView()
 	m_d3dDevice->CreateDepthStencilView(m_pShadowMap, &d3dDepthStencilViewDesc, m_ShadowMapCPUHandle);
 }
 
-//void CGameFramework::CreateGBufferView()
-//{ 
-//	m_pGBufferTexture = new CTexture(m_GBuffersCount, RESOURCE_TEXTURE2D_ARRAY, 0);
-//
-//	for (UINT i = 0; i < m_GBuffersCount; i++)
-//	{
-//		D3D12_CLEAR_VALUE d3dClearValue = { DXGI_FORMAT_R8G8B8A8_UNORM,
-//		{m_GBufferClearValue[i][0], m_GBufferClearValue[i][1], m_GBufferClearValue[i][2], m_GBufferClearValue[i][3] } };
-//		
-//		// 해당 텍스쳐를 2디 텍스쳐 어레이로 만들어서?? 버퍼에 담는다.
-//		m_GBuffers[i] =
-//			m_pGBufferTexture->CreateTexture(m_d3dDevice.Get(), m_CommandList.Get(), 
-//				FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT,
-//				DXGI_FORMAT_R8G8B8A8_UNORM,
-//				D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET, 
-//				D3D12_RESOURCE_STATE_GENERIC_READ, &d3dClearValue, i);
-//
-//		// m_GBuffers[i]->AddRef();
-//	}
-//
-//	// 디스크립터 핸들 생성
-//	D3D12_CPU_DESCRIPTOR_HANDLE d3dRtvCPUDescriptorHandle = m_RtvHeap->GetCPUDescriptorHandleForHeapStart();
-//	d3dRtvCPUDescriptorHandle.ptr += (m_SwapChainBuffersCount * m_RtvDescriptorSize);
-//
-//	// 렌더타겟 뷰 생성
-//	D3D12_RENDER_TARGET_VIEW_DESC d3dRenderTargetViewDesc;
-//	d3dRenderTargetViewDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-//	d3dRenderTargetViewDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
-//	d3dRenderTargetViewDesc.Texture2D.MipSlice = 0;
-//	d3dRenderTargetViewDesc.Texture2D.PlaneSlice = 0;
-//
-//	for (UINT i = 0; i < m_GBuffersCount; i++)
-//	{
-//		// 렌더타겟 뷰 생성
-//		m_GBufferCPUHandle[i] = d3dRtvCPUDescriptorHandle;
-//
-//		// 디바이스에 렌더타겟뷰를 해당 텍스쳐로 설정된다...
-//		m_d3dDevice->CreateRenderTargetView(m_pGBufferTexture->GetTexture(i), &d3dRenderTargetViewDesc, m_GBufferCPUHandle[i]);
-//		d3dRtvCPUDescriptorHandle.ptr += m_RtvDescriptorSize;
-//	}
-//
-//
-//}
+void CGameFramework::CreateGBufferView()
+{ 
+	m_pGBufferTexture = new Texture(m_GBuffersCount, RESOURCE_TEXTURE2D_ARRAY, 0);
+
+	for (UINT i = 0; i < m_GBuffersCount; i++)
+	{
+		D3D12_CLEAR_VALUE d3dClearValue = { DXGI_FORMAT_R8G8B8A8_UNORM,
+		{m_GBufferClearValue[i][0], m_GBufferClearValue[i][1], m_GBufferClearValue[i][2], m_GBufferClearValue[i][3] } };
+		
+		// 해당 텍스쳐를 2디 텍스쳐 어레이로 만들어서?? 버퍼에 담는다.
+		m_GBuffers[i] =
+			d3dUtil::CreateTexture2DResource(
+				m_d3dDevice.Get(), m_CommandList.Get(),
+				GameScreen::GetWidth(), GameScreen::GetHeight(),
+				DXGI_FORMAT_R8G8B8A8_UNORM,
+				D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET,
+				D3D12_RESOURCE_STATE_GENERIC_READ, &d3dClearValue
+			);
+
+		// m_GBuffers[i]->AddRef();
+	}
+
+	// 디스크립터 핸들 생성
+	D3D12_CPU_DESCRIPTOR_HANDLE d3dRtvCPUDescriptorHandle = m_RtvHeap->GetCPUDescriptorHandleForHeapStart();
+	d3dRtvCPUDescriptorHandle.ptr += (m_SwapChainBuffersCount * m_RtvDescriptorSize);
+
+	// 렌더타겟 뷰 생성
+	D3D12_RENDER_TARGET_VIEW_DESC d3dRenderTargetViewDesc;
+	d3dRenderTargetViewDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	d3dRenderTargetViewDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
+	d3dRenderTargetViewDesc.Texture2D.MipSlice = 0;
+	d3dRenderTargetViewDesc.Texture2D.PlaneSlice = 0;
+
+	for (UINT i = 0; i < m_GBuffersCount; i++)
+	{
+		// 렌더타겟 뷰 생성
+		m_GBufferCPUHandle[i] = d3dRtvCPUDescriptorHandle;
+
+		// 디바이스에 렌더타겟뷰를 해당 텍스쳐로 설정된다...
+		m_d3dDevice->CreateRenderTargetView(m_pGBufferTexture->GetTexture(i), &d3dRenderTargetViewDesc, m_GBufferCPUHandle[i]);
+		d3dRtvCPUDescriptorHandle.ptr += m_RtvDescriptorSize;
+	}
+}
 
 void CGameFramework::BuildObjects()
 {
