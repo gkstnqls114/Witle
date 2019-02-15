@@ -137,24 +137,26 @@ void CGameFramework::RenderShadowMap()
 	m_CommandList->DrawInstanced(6, 1, 0, 0);
 	
 
+	float anotherWidth = static_cast<float>(GameScreen::GetAnotherWidth());
+	float anotherHeight = static_cast<float>(GameScreen::GetAnotherHeight());
+	float width = static_cast<float>(GameScreen::GetAnotherWidth());
+	float height = static_cast<float>(GameScreen::GetHeight());
 	// 장면을 렌더합니다.
 	for (int i = 0; i < m_GBuffersCount; ++i) {
-		D3D12_VIEWPORT	GBuffer_Viewport{ 0 + static_cast<float>(GameScreen::GetAnotherWidth()) * i, static_cast<float>(GameScreen::GetAnotherHeight()),
-			static_cast<float>(GameScreen::GetAnotherWidth()) , static_cast<float>(GameScreen::GetAnotherHeight()), 0.0f, 1.0f };
-		D3D12_RECT		ScissorRect{ 0 + static_cast<float>(GameScreen::GetAnotherWidth()) * i, static_cast<float>(GameScreen::GetAnotherHeight()),
-			static_cast<float>(GameScreen::GetWidth()) , static_cast<float>(GameScreen::GetHeight()) + static_cast<float>(GameScreen::GetAnotherHeight()) };
+		D3D12_VIEWPORT	GBuffer_Viewport{ anotherWidth * ( 2 +i), height, anotherWidth , anotherHeight, 0.0f, 1.0f };
+		D3D12_RECT		ScissorRect{ anotherWidth * (2+i), height, anotherWidth * (3 + i) , height + anotherHeight };
 
 		m_CommandList->RSSetViewports(1, &GBuffer_Viewport);
 		m_CommandList->RSSetScissorRects(1, &ScissorRect);
 
 		// 리소스만 바꾼다..
 
-		m_TESTHeap_1->FirstUpdate(m_CommandList.Get());
-		D3D12_GPU_DESCRIPTOR_HANDLE handle = m_TESTHeap_1->GetGPUSrvDescriptorStartHandle();
-		handle.ptr += (d3dUtil::gnCbvSrvDescriptorIncrementSize * i);
-		m_CommandList->SetGraphicsRootDescriptorTable(1, handle);
-
-		m_CommandList->IASetVertexBuffers(0, 0, nullptr);
+		static_cast<GameScene*>(m_pScene)->TESTSetRootDescriptor(m_CommandList.Get());
+		//m_TESTHeap_1->FirstUpdate(m_CommandList.Get());
+		//D3D12_GPU_DESCRIPTOR_HANDLE handle = m_TESTHeap_1->GetGPUSrvDescriptorStartHandle();
+		//handle.ptr += (d3dUtil::gnCbvSrvDescriptorIncrementSize * i);
+		//m_CommandList->SetGraphicsRootDescriptorTable(4, handle);
+		 
 		m_CommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 		m_CommandList->DrawInstanced(6, 1, 0, 0);
 	}

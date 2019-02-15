@@ -66,7 +66,7 @@ private:
 
 
 	//// GBuffer 
-	static const UINT m_GBuffersCount{ 3 };
+	static const UINT m_GBuffersCount{ 2 };
 
 	ID3D12Resource*				m_GBuffers[m_GBuffersCount];
 	D3D12_CPU_DESCRIPTOR_HANDLE m_GBufferCPUHandle[m_GBuffersCount];

@@ -394,6 +394,12 @@ void GameScene::LastUpdate(float fElapsedTime)
 	// m_Camera->GetFrustum()->TESTCheckAllTRUE(m_TESTQuadTree->GetRootNode());
 }
 
+void GameScene::TESTSetRootDescriptor(ID3D12GraphicsCommandList * pd3dCommandList)
+{
+	m_TerrainHeap->FirstUpdate(pd3dCommandList);
+	m_Terrain->UpdateShaderVariables(pd3dCommandList);
+}
+
 void GameScene::AnimateObjects(float fTimeElapsed)
 {
 	//if (m_pHeightMapTerrain) m_pHeightMapTerrain->Animate(fTimeElapsed);
@@ -434,7 +440,8 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 
 	//QuadTreeTerrain test Render
 	m_TESTQuadTree->TESTRender(m_TESTQuadTree->GetRootNode(), pd3dCommandList);
-	
+
+
 #ifdef CHECK_ANOTHER_CAMERA
 	m_lookAboveCamera->SetViewportsAndScissorRects(pd3dCommandList); 
 	m_lookAboveCamera->GetCamera()->UpdateShaderVariables(pd3dCommandList, m_parameterForm->GetIndex("Camera"));

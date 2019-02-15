@@ -47,6 +47,8 @@ public:
 	virtual void Update(float ElapsedTime) override;
 	virtual void LastUpdate(float ElapsedTime) override;
 
+	void TESTSetRootDescriptor(ID3D12GraphicsCommandList *pd3dCommandList);
+
 protected:
 	
 	ParameterForm*          m_parameterForm{ nullptr };
