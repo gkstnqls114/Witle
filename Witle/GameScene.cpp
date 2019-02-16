@@ -400,6 +400,10 @@ void GameScene::TESTSetRootDescriptor(ID3D12GraphicsCommandList * pd3dCommandLis
 	m_Terrain->UpdateShaderVariables(pd3dCommandList);
 }
 
+void GameScene::TESTRenderOnGbuffer(ID3D12GraphicsCommandList * pd3dCommandList, UINT gbufferCount)
+{
+}
+
 void GameScene::AnimateObjects(float fTimeElapsed)
 {
 	//if (m_pHeightMapTerrain) m_pHeightMapTerrain->Animate(fTimeElapsed);

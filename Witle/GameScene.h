@@ -48,6 +48,7 @@ public:
 	virtual void LastUpdate(float ElapsedTime) override;
 
 	void TESTSetRootDescriptor(ID3D12GraphicsCommandList *pd3dCommandList);
+	void TESTRenderOnGbuffer(ID3D12GraphicsCommandList *pd3dCommandList, UINT gbufferCount);
 
 protected:
 	
