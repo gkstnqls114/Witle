@@ -393,6 +393,9 @@
     <ClInclude Include="VerticalBlurShader.h">
       <Filter>06.ComputeShader\VerticalBlurShader</Filter>
     </ClInclude>
+    <ClInclude Include="MyTexture.h">
+      <Filter>07.Resource\Texture</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -589,6 +592,9 @@
     </ClCompile>
     <ClCompile Include="VerticalBlurShader.cpp">
       <Filter>06.ComputeShader\VerticalBlurShader</Filter>
+    </ClCompile>
+    <ClCompile Include="MyTexture.cpp">
+      <Filter>07.Resource\Texture</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

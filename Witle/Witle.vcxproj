@@ -181,6 +181,7 @@
     <ClInclude Include="MyFrustum.h" />
     <ClInclude Include="MyRigidbody.h" />
     <ClInclude Include="MyStructs.h" />
+    <ClInclude Include="MyTexture.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PointLight.h" />
     <ClInclude Include="QuadTreeTerrainMesh.h" />
@@ -250,6 +251,7 @@
     <ClCompile Include="MyDescriptorHeap.cpp" />
     <ClCompile Include="MyFrustum.cpp" />
     <ClCompile Include="MyRigidbody.cpp" />
+    <ClCompile Include="MyTexture.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PointLight.cpp" />
     <ClCompile Include="QuadTreeTerrainMesh.cpp" />
