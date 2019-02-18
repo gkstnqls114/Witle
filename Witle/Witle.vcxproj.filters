@@ -70,9 +70,6 @@
     <Filter Include="07.Resource\32bitRootConstants">
       <UniqueIdentifier>{1d7222fc-cbb4-4cf7-b4ea-c36ed29f4ce2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="07.Resource\DescriptorTable">
-      <UniqueIdentifier>{7448360b-46e0-4cc8-b5c4-ca7f787ce6f6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="07.Resource\Texture">
       <UniqueIdentifier>{481b02ef-4f34-447d-9ab6-13db15eea9f3}</UniqueIdentifier>
     </Filter>
@@ -272,9 +269,6 @@
     </ClInclude>
     <ClInclude Include="vertices.h">
       <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="DescriptorTable.h">
-      <Filter>07.Resource\DescriptorTable</Filter>
     </ClInclude>
     <ClInclude Include="32bitRootConstants.h">
       <Filter>07.Resource\32bitRootConstants</Filter>
@@ -478,9 +472,6 @@
     </ClCompile>
     <ClCompile Include="vertices.cpp">
       <Filter>헤더 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="DescriptorTable.cpp">
-      <Filter>07.Resource\DescriptorTable</Filter>
     </ClCompile>
     <ClCompile Include="32bitRootConstants.cpp">
       <Filter>07.Resource\32bitRootConstants</Filter>

@@ -132,8 +132,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 		m_PickingTESTMeshs[x]->InsertComponent("Mesh", cubemesh);
 	}
 
-	m_TerrainHeap = new MyDescriptorHeap();
-	m_TerrainHeap->CreateCbvSrvUavDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 2, 0);
+	m_TerrainHeap = new MyDescriptorHeap(pd3dDevice, pd3dCommandList, 0, 2, 0); 
 	// m_TerrainHeap.CreateConstantBufferViews(pd3dDevice, pd3dCommandList, 1, m_pd3dcbGameObject, ncbElementBytes);
 	m_TerrainHeap->CreateShaderResourceViews(pd3dDevice, pd3dCommandList, m_Terrain->GetTexture(), 5, true);
 

@@ -17,7 +17,7 @@ class MyDescriptorHeap
 
 
 public:
-	MyDescriptorHeap();
+	MyDescriptorHeap(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, int nConstantBufferViews, int nShaderResourceViews, int nUnorderedAcessViews);
 	~MyDescriptorHeap();
 
 	void ReleaseObjects();

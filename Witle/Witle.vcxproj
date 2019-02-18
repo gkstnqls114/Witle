@@ -215,7 +215,6 @@
     <ClInclude Include="vertices.h" />
     <ClInclude Include="WideareaMagic.h" />
     <ClInclude Include="Witle.h" />
-    <ClInclude Include="DescriptorTable.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TerrainShader.h" />
   </ItemGroup>
@@ -287,7 +286,6 @@
     <ClCompile Include="vertices.cpp" />
     <ClCompile Include="WideareaMagic.cpp" />
     <ClCompile Include="Witle.cpp" />
-    <ClCompile Include="DescriptorTable.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TerrainShader.cpp" />
     <ClCompile Include="SkyPlane.cpp" />

@@ -577,8 +577,7 @@ void CGameFramework::CreateGBufferView()
 
 	if (!m_TESTHeap_1)
 	{
-		m_TESTHeap_1 = new MyDescriptorHeap;
-		m_TESTHeap_1->CreateCbvSrvUavDescriptorHeaps(m_d3dDevice.Get(), m_CommandList.Get(), 0, m_GBuffersCount, 0);
+		m_TESTHeap_1 = new MyDescriptorHeap(m_d3dDevice.Get(), m_CommandList.Get(), 0, m_GBuffersCount, 0); 
 		for (int i = 0; i < m_GBuffersCount; ++i)
 		{
 			m_TESTHeap_1->CreateShaderResourceViews(m_d3dDevice.Get(), m_CommandList.Get(), m_GBuffersCount, m_GBuffers[i], RESOURCE_TEXTURE2D, i);
