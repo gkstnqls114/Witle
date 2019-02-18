@@ -1,6 +1,8 @@
 #pragma once
 #include "stdafx.h"
 
+//
+
 struct MATERIAL
 {
 	XMFLOAT4						m_xmf4Ambient;
