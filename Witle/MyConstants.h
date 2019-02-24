@@ -32,16 +32,30 @@ enum LIGHT_TYPE
 #define CHECK_G_BUFFERS
 #define CHECK_CONSOLE_TEST
 #define CHECK_FRAMERATE // 정의한경우, 프레임 레이트가 타이틀 화면에 보인다.
+// #define _DEBUG_FRAME_HIERARCHY
 /////////////////////////////////////////////// define 정의
 
 
-/////////////////////////////////////////////// 패밀리 아이디 정의
+/////////////////////////////////////////////// Mesh File Load
+#define VERTEXT_POSITION				0x0001
+#define VERTEXT_COLOR					0x0002
+#define VERTEXT_NORMAL					0x0004
+#define VERTEXT_TANGENT					0x0008
+#define VERTEXT_TEXTURE_COORD0			0x0010
+#define VERTEXT_TEXTURE_COORD1			0x0020
 
-/////////////////////////////////////////////// 패밀리 아이디 정의
+#define VERTEXT_BONE_INDEX_WEIGHT		0x1000
+
+#define VERTEXT_TEXTURE					(VERTEXT_POSITION | VERTEXT_TEXTURE_COORD0)
+#define VERTEXT_DETAIL					(VERTEXT_POSITION | VERTEXT_TEXTURE_COORD0 | VERTEXT_TEXTURE_COORD1)
+#define VERTEXT_NORMAL_TEXTURE			(VERTEXT_POSITION | VERTEXT_NORMAL | VERTEXT_TEXTURE_COORD0)
+#define VERTEXT_NORMAL_TANGENT_TEXTURE	(VERTEXT_POSITION | VERTEXT_NORMAL | VERTEXT_TANGENT | VERTEXT_TEXTURE_COORD0)
+#define VERTEXT_NORMAL_DETAIL			(VERTEXT_POSITION | VERTEXT_NORMAL | VERTEXT_TEXTURE_COORD0 | VERTEXT_TEXTURE_COORD1)
+#define VERTEXT_NORMAL_TANGENT__DETAIL	(VERTEXT_POSITION | VERTEXT_NORMAL | VERTEXT_TANGENT | VERTEXT_TEXTURE_COORD0 | VERTEXT_TEXTURE_COORD1)
+/////////////////////////////////////////////// Mesh File Load
 
 
 /////////////////////////////////////////////// 조명 
-
 #define MAX_LIGHTS 8
 #define MAX_MATERIALS 8
 /////////////////////////////////////////////// 조명
