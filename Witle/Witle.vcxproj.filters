@@ -181,6 +181,9 @@
     <Filter Include="06.ComputeShader\VerticalBlurShader">
       <UniqueIdentifier>{ed62e02a-815b-4a30-81f6-f42801d21808}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.Component\SkinnedMesh">
+      <UniqueIdentifier>{9d47c2f1-aa91-4941-8058-09e473ae1b0f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -393,6 +396,9 @@
     <ClInclude Include="VerticalBlurShader.h">
       <Filter>06.ComputeShader\VerticalBlurShader</Filter>
     </ClInclude>
+    <ClInclude Include="SkinnedMesh.h">
+      <Filter>02.Component\SkinnedMesh</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -589,6 +595,9 @@
     </ClCompile>
     <ClCompile Include="VerticalBlurShader.cpp">
       <Filter>06.ComputeShader\VerticalBlurShader</Filter>
+    </ClCompile>
+    <ClCompile Include="SkinnedMesh.cpp">
+      <Filter>02.Component\SkinnedMesh</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

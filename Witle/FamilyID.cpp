@@ -7,6 +7,7 @@
 #define FAMILYID_CAMERA "Camera"
 #define FAMILYID_FRUSTUM "Frustum"
 #define FAMILYID_TEST "TEST"
+#define FAMILYID_SKINNEDMESH "SkinnedMesh"
 
 FamilyID & FamilyID::operator=(const FamilyID & other)
 {
@@ -65,6 +66,12 @@ void FamilyID::InitFrustum()
 	m_ID = FAMILYID_FRUSTUM;
 }
 
+void FamilyID::InitSkinnedMesh()
+{
+	assert(!(m_ID != "")); // 이미 한번 설정된 상태라면 더 이상 다시 설정할 수 없다.
+	m_ID = FAMILYID_SKINNEDMESH;
+}
+
 bool FamilyID::isMesh() const
 {
 	if (m_ID == FAMILYID_MESH) return true;
@@ -93,6 +100,12 @@ bool FamilyID::isFrustum() const
 {
 	if (m_ID == FAMILYID_FRUSTUM) return true;
 	else return false;
+}
+
+bool FamilyID::isSkinnedMesh() const
+{
+	if (m_ID == FAMILYID_SKINNEDMESH) return true;
+	return false;
 }
 
 std::ostream & operator<<(std::ostream & os, const FamilyID & familyID)

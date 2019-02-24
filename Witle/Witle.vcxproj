@@ -204,6 +204,7 @@
     <ClInclude Include="Shield.h" />
     <ClInclude Include="Skill.h" />
     <ClInclude Include="SkillRestraint.h" />
+    <ClInclude Include="SkinnedMesh.h" />
     <ClInclude Include="SkyPlane.h" />
     <ClInclude Include="Sniping.h" />
     <ClInclude Include="SourcePtr.h" />
@@ -272,6 +273,7 @@
     <ClCompile Include="Shield.cpp" />
     <ClCompile Include="Skill.cpp" />
     <ClCompile Include="SkillRestraint.cpp" />
+    <ClCompile Include="SkinnedMesh.cpp" />
     <ClCompile Include="Sniping.cpp" />
     <ClCompile Include="SourcePtr.cpp" />
     <ClCompile Include="SpeedReduction.cpp" />
