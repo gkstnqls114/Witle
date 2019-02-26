@@ -104,7 +104,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>false</ConformanceMode>
       <AdditionalIncludeDirectories>C:\Program Files\Autodesk\FBX\FBX SDK\2019.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -220,6 +220,7 @@
     <ClInclude Include="Transform.h" />
     <ClInclude Include="VerticalBlurShader.h" />
     <ClInclude Include="vertices.h" />
+    <ClInclude Include="WICTextureLoader12.h" />
     <ClInclude Include="WideareaMagic.h" />
     <ClInclude Include="Witle.h" />
     <ClInclude Include="DescriptorTable.h" />
@@ -292,6 +293,7 @@
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="VerticalBlurShader.cpp" />
     <ClCompile Include="vertices.cpp" />
+    <ClCompile Include="WICTextureLoader12.cpp" />
     <ClCompile Include="WideareaMagic.cpp" />
     <ClCompile Include="Witle.cpp" />
     <ClCompile Include="DescriptorTable.cpp" />

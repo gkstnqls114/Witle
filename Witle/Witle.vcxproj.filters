@@ -399,6 +399,9 @@
     <ClInclude Include="SkinnedMesh.h">
       <Filter>02.Component\SkinnedMesh</Filter>
     </ClInclude>
+    <ClInclude Include="WICTextureLoader12.h">
+      <Filter>99.etc</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -598,6 +601,9 @@
     </ClCompile>
     <ClCompile Include="SkinnedMesh.cpp">
       <Filter>02.Component\SkinnedMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="WICTextureLoader12.cpp">
+      <Filter>99.etc</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

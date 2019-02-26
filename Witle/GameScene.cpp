@@ -6,6 +6,7 @@
 #include "ShaderManager.h"
 #include "GameScreen.h"
 
+#include "SkinnedMesh.h"
 #include "CubeMesh.h"
 #include "FollowCam.h"
 #include "Transform.h"
@@ -105,6 +106,8 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	// 큐브메쉬 생성
 	m_GameObject = new Player("Player");
 	// 피킹 테스트할 오브젝트 생성, 반드시 순서 유지. gameobject 생성 후 만들어야한다.
+	ComponentBase* testLoadObject = new LoadGameObject(m_GameObject);
+	static_cast<LoadGameObject*>(testLoadObject)->LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/SuperCobra.bin", false);
 	ComponentBase* cubemesh = new CubeMesh(m_GameObject, pd3dDevice, pd3dCommandList, 1.f, 1.f, 1.f);
 	
 	m_GameObject->InsertComponent("Mesh", cubemesh);

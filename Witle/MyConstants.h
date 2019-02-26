@@ -55,6 +55,17 @@ enum LIGHT_TYPE
 /////////////////////////////////////////////// Mesh File Load
 
 
+/////////////////////////////////////////////// Material File Load
+#define MATERIAL_ALBEDO_MAP			0x01
+#define MATERIAL_SPECULAR_MAP		0x02
+#define MATERIAL_NORMAL_MAP			0x04
+#define MATERIAL_METALLIC_MAP		0x08
+#define MATERIAL_EMISSION_MAP		0x10
+#define MATERIAL_DETAIL_ALBEDO_MAP	0x20
+#define MATERIAL_DETAIL_NORMAL_MAP	0x40
+/////////////////////////////////////////////// Material File Load
+
+
 /////////////////////////////////////////////// Α¶Έν 
 #define MAX_LIGHTS 8
 #define MAX_MATERIALS 8
