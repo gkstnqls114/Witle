@@ -239,12 +239,12 @@ public:
 
 	virtual void Update(float fTimeElapsed) {};
 
+	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, int nSubSet);
 	//StandardMesh
 	void LoadMeshFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, FILE *pInFile);
 	void ReleaseUploadBuffers();
 	//StandardMesh
 
-	
 	void LoadSkinInfoFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, FILE *pInFile);
 
 	virtual void CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
@@ -288,6 +288,7 @@ public:
 	void SetChild(LoadGameObject* child) { m_pChild = child; }
 	static  LoadGameObject * LoadGeometryAndAnimationFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, const char *pstrFileName, bool bHasAnimation);
 
+	void Render(ID3D12GraphicsCommandList *pd3dCommandList);
 	Texture *FindReplicatedTexture(_TCHAR *pstrTextureName);
 	void LoadMaterialsFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, LoadGameObject *pParent, FILE *pInFile);
 };

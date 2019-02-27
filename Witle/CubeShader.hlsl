@@ -19,6 +19,27 @@ cbuffer cbGameObjectInfo : register(b4)
 	float3 testcolor: packoffset(c0);
 }
 
+#define MAX_VERTEX_INFLUENCES			4
+#define SKINNED_ANIMATION_BONES			128
+
+cbuffer cbBoneOffsets : register(b7)
+{
+	float4x4 gpmtxBoneOffsets[SKINNED_ANIMATION_BONES];
+};
+
+cbuffer cbBoneTransforms : register(b8)
+{
+	float4x4 gpmtxBoneTransforms[SKINNED_ANIMATION_BONES];
+};
+
+Texture2D gtxtAlbedoTexture : register(t6);
+Texture2D gtxtSpecularTexture : register(t7);
+Texture2D gtxtNormalTexture : register(t8);
+Texture2D gtxtMetallicTexture : register(t9);
+Texture2D gtxtEmissionTexture : register(t10);
+Texture2D gtxtDetailAlbedoTexture : register(t11);
+Texture2D gtxtDetailNormalTexture : register(t12);
+
 //#include "Light.hlsl"
 //--------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------

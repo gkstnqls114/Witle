@@ -184,6 +184,9 @@
     <Filter Include="02.Component\SkinnedMesh">
       <UniqueIdentifier>{9d47c2f1-aa91-4941-8058-09e473ae1b0f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="05.Shader\SkinnedMeshShader">
+      <UniqueIdentifier>{5994879b-c065-48e2-a58e-486b84ad26e6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -402,6 +405,9 @@
     <ClInclude Include="WICTextureLoader12.h">
       <Filter>99.etc</Filter>
     </ClInclude>
+    <ClInclude Include="SkinnedMeshShader.h">
+      <Filter>05.Shader\SkinnedMeshShader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -604,6 +610,9 @@
     </ClCompile>
     <ClCompile Include="WICTextureLoader12.cpp">
       <Filter>99.etc</Filter>
+    </ClCompile>
+    <ClCompile Include="SkinnedMeshShader.cpp">
+      <Filter>05.Shader\SkinnedMeshShader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

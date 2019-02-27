@@ -168,6 +168,30 @@ LoadGameObject * LoadGameObject::LoadGeometryAndAnimationFromFile(ID3D12Device *
 	return pGameObject;
 }
 
+void LoadGameObject::Render(ID3D12GraphicsCommandList * pd3dCommandList)
+{
+	//OnPrepareRender();
+
+	// UpdateShaderVariable(pd3dCommandList, &m_xmf4x4World);
+
+	if (m_nMaterials > 0)
+	{
+		for (int i = 0; i < m_nMaterials; i++)
+		{
+			if (m_ppMaterials[i])
+			{
+				// if (m_ppMaterials[i]->m_pShader) m_ppMaterials[i]->m_pShader->Render(pd3dCommandList, pCamera);
+				// m_ppMaterials[i]->UpdateShaderVariable(pd3dCommandList);
+			}
+
+			if (m_pSkinnedMesh) m_pSkinnedMesh->Render(pd3dCommandList, i);
+		}
+	}
+
+	if (m_pSibling) m_pSibling->Render(pd3dCommandList);
+	if (m_pChild) m_pChild->Render(pd3dCommandList);
+}
+
 Texture * LoadGameObject::FindReplicatedTexture(_TCHAR * pstrTextureName)
 {
 	for (int i = 0; i < m_nMaterials; i++)
@@ -326,6 +350,25 @@ void SkinnedMesh::UpdateShaderVariables(ID3D12GraphicsCommandList * pd3dCommandL
 
 void SkinnedMesh::ReleaseShaderVariables()
 {
+}
+
+void SkinnedMesh::Render(ID3D12GraphicsCommandList * pd3dCommandList, int nSubSet)
+{
+	UpdateShaderVariables(pd3dCommandList);
+
+	OnPreRender(pd3dCommandList, NULL);
+
+	pd3dCommandList->IASetPrimitiveTopology(m_d3dPrimitiveTopology);
+
+	if ((m_nSubMeshes > 0) && (nSubSet < m_nSubMeshes))
+	{
+		pd3dCommandList->IASetIndexBuffer(&(m_pd3dSubSetIndexBufferViews[nSubSet]));
+		pd3dCommandList->DrawIndexedInstanced(m_pnSubSetIndices[nSubSet], 1, 0, 0, 0);
+	}
+	else
+	{
+		pd3dCommandList->DrawInstanced(m_nVertices, 1, m_nOffset, 0);
+	}
 }
 
 void SkinnedMesh::LoadMeshFromFile(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, FILE * pInFile)
