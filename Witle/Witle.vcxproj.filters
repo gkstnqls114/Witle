@@ -184,7 +184,7 @@
     <Filter Include="02.Component\SkinnedMesh">
       <UniqueIdentifier>{9d47c2f1-aa91-4941-8058-09e473ae1b0f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="05.Shader\SkinnedMeshShader">
+    <Filter Include="05.Shader\SkinnedStandardShader">
       <UniqueIdentifier>{5994879b-c065-48e2-a58e-486b84ad26e6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -405,8 +405,8 @@
     <ClInclude Include="WICTextureLoader12.h">
       <Filter>99.etc</Filter>
     </ClInclude>
-    <ClInclude Include="SkinnedMeshShader.h">
-      <Filter>05.Shader\SkinnedMeshShader</Filter>
+    <ClInclude Include="SkinnedStandardShader.h">
+      <Filter>05.Shader\SkinnedStandardShader</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -611,8 +611,8 @@
     <ClCompile Include="WICTextureLoader12.cpp">
       <Filter>99.etc</Filter>
     </ClCompile>
-    <ClCompile Include="SkinnedMeshShader.cpp">
-      <Filter>05.Shader\SkinnedMeshShader</Filter>
+    <ClCompile Include="SkinnedStandardShader.cpp">
+      <Filter>05.Shader\SkinnedStandardShader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -642,6 +642,12 @@
       <Filter>HLSL</Filter>
     </FxCompile>
     <FxCompile Include="BlurShader.hlsl">
+      <Filter>HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="SkinnedAnimationShader.hlsl">
+      <Filter>HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="StandardShader.hlsl">
       <Filter>HLSL</Filter>
     </FxCompile>
   </ItemGroup>

@@ -149,7 +149,7 @@ D3D12_SHADER_BYTECODE Shader::CompileShaderFromFile(const WCHAR *pszFileName, LP
 	nCompileFlags = D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION;
 #endif
 
-	HRESULT hResult = ::D3DCompileFromFile(pszFileName, NULL, NULL, pszShaderName, pszShaderProfile, nCompileFlags, 0, ppd3dShaderBlob, NULL);
+	HRESULT hResult = ::D3DCompileFromFile(pszFileName, NULL, D3D_COMPILE_STANDARD_FILE_INCLUDE, pszShaderName, pszShaderProfile, nCompileFlags, 0, ppd3dShaderBlob, NULL);
 	ThrowIfFailed(hResult);
 
 	D3D12_SHADER_BYTECODE d3dShaderByteCode;
