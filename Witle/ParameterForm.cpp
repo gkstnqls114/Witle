@@ -24,6 +24,7 @@ void ParameterForm::ReleaseObjects()
 void ParameterForm::InsertResource(int parametersIndex, const std::string& name, const D3D12_ROOT_PARAMETER & rootParameter)
 {
 	assert(!(parametersIndex >= m_resourceVector.size())); // 만약 인덱스가 벡터의 크기보다 크다면 오류를 발생한다.
+	assert(!(m_resourceVector[parametersIndex] != nullptr)); // 만약 해당 인덱스에 해당하는 위치에 nullptr가 아니라면 오류를 발생한다.
 	
 	Form* value = nullptr;
 	switch (rootParameter.ParameterType)
