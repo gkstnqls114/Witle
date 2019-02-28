@@ -75,7 +75,7 @@ VS_STANDARD_OUTPUT VSStandard(VS_STANDARD_INPUT input)
 float4 PSStandard(VS_STANDARD_OUTPUT input) : SV_TARGET
 {
 	// 임시로 사용할 컬러 색깔
-	return float4(1.f, 1.f, 1.f, 1.f);
+	float TESTColor = float4(1.f, 1.f, 1.f, 1.f);
 	//float4 cAlbedoColor = float4(0.0f, 0.0f, 0.0f, 1.0f);
 	//if (gnTexturesMask & MATERIAL_ALBEDO_MAP) cAlbedoColor = gtxtAlbedoTexture.Sample(gssWrap, input.uv);
 	//float4 cSpecularColor = float4(0.0f, 0.0f, 0.0f, 1.0f);
@@ -87,7 +87,7 @@ float4 PSStandard(VS_STANDARD_OUTPUT input) : SV_TARGET
 	//float4 cEmissionColor = float4(0.0f, 0.0f, 0.0f, 1.0f);
 	//if (gnTexturesMask & MATERIAL_EMISSION_MAP) cEmissionColor = gtxtEmissionTexture.Sample(gssWrap, input.uv);
 
-	//float3 normalW;
+	float3 normalW;
 	//float4 cColor = cAlbedoColor + cSpecularColor + cMetallicColor + cEmissionColor;
 	//if (gnTexturesMask & MATERIAL_NORMAL_MAP)
 	//{
@@ -97,8 +97,8 @@ float4 PSStandard(VS_STANDARD_OUTPUT input) : SV_TARGET
 	//}
 	//else
 	//{
-	//	normalW = normalize(input.normalW);
+		normalW = normalize(input.normalW);
 	//}
-	//float4 cIllumination = Lighting(input.positionW, normalW);
-	//return(lerp(cColor, cIllumination, 0.5f));
+	float4 cIllumination = Lighting(input.positionW, normalW);
+	return(lerp(TESTColor, cIllumination, 0.5f));
 }

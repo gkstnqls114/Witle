@@ -113,11 +113,11 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 
 
 	//////////////////////////////////////////////////// Å×½ºÆ®ÇÒ ¸ðµ¨ ºôµå
-	LoadObject *pAngrybotModel = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/Player.bin", false);
+	LoadObject *pAngrybotModel = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/Player.bin", true);
 	m_TESTModel = new LoadObject();
 	m_TESTModel->SetChild(pAngrybotModel, true);
 	m_TESTModel->SetPosition(400.0f, m_Terrain->GetHeight(400.0f, 700.0f), 700.0f);
-	m_TESTModel->SetScale(2.0f, 2.0f, 2.0f);
+	m_TESTModel->SetScale(1.0f, 1.0f, 1.0f);
 	//////////////////////////////////////////////////// Å×½ºÆ®ÇÒ ¸ðµ¨ ºôµå
 
 
@@ -444,16 +444,18 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	m_Camera->SetViewportsAndScissorRects(pd3dCommandList);
 	m_Camera->GetCamera()->UpdateShaderVariables(pd3dCommandList, m_parameterForm->GetIndex("Camera"));
 
-	// ½¦ÀÌ´õ º¯¼ö ¼³Á¤ 
+	////////////////////////////// Model Render
 	m_parameterForm->UpdateShaderVariable(pd3dCommandList, m_pd3dGraphicsRootSignature, "World", SourcePtr(&XMMatrixTranspose(XMLoadFloat4x4(&m_GameObject->GetTransform().GetWorldMatrix()))));
-	
-	// ¸ðµ¨¸µ Å×½ºÆ® ·»´õ
-	m_TESTModel->Render(pd3dCommandList);
 
-	// CubeMesh Render
+	m_TESTModel->Render(pd3dCommandList);
+	////////////////////////////// Model Render
+
+	////////////////////////////// CubeMesh Render
+	// ½¦ÀÌ´õ º¯¼ö ¼³Á¤ 
 	pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Cube")->GetPSO());
 	Mesh* mesh = m_GameObject->GetComponent<Mesh>("Mesh");
 	gMeshRenderer.Render(pd3dCommandList, mesh);
+	////////////////////////////// CubeMesh Render
 
 
 	for (int x = 0; x < m_numPickingTESTMeshs; ++x)
