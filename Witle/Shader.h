@@ -1,8 +1,11 @@
 #pragma once
-//#include "GameObject.h"
-//#include "Camera.h"
 
 class CTexture;
+
+class IShader
+{
+
+};
 
 class Shader
 {

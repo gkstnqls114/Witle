@@ -7,6 +7,7 @@ class CameraObject;
 class Player;
 class Terrain;
 class GameObject;
+class LoadObject;
 
 class QuadTreeTerrainMesh;
 
@@ -56,6 +57,7 @@ protected:
 	
 	XMFLOAT3*				m_PickingColors{ nullptr };
 	GameObject**			m_PickingTESTMeshs{ nullptr };
+	LoadObject*				m_TESTModel{ nullptr };
 	int						m_numPickingTESTMeshs{ 100 };
 
 	Player*                 m_GameObject{ nullptr };

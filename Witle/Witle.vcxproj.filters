@@ -187,6 +187,9 @@
     <Filter Include="05.Shader\SkinnedStandardShader">
       <UniqueIdentifier>{5994879b-c065-48e2-a58e-486b84ad26e6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="05.Shader\StandardShader">
+      <UniqueIdentifier>{de0113f4-cf07-4caa-90d1-0142948e989e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -408,6 +411,15 @@
     <ClInclude Include="SkinnedStandardShader.h">
       <Filter>05.Shader\SkinnedStandardShader</Filter>
     </ClInclude>
+    <ClInclude Include="StandardShader.h">
+      <Filter>05.Shader\StandardShader</Filter>
+    </ClInclude>
+    <ClInclude Include="Object.h">
+      <Filter>99.etc</Filter>
+    </ClInclude>
+    <ClInclude Include="CMesh.h">
+      <Filter>99.etc</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -614,6 +626,15 @@
     <ClCompile Include="SkinnedStandardShader.cpp">
       <Filter>05.Shader\SkinnedStandardShader</Filter>
     </ClCompile>
+    <ClCompile Include="StandardShader.cpp">
+      <Filter>05.Shader\StandardShader</Filter>
+    </ClCompile>
+    <ClCompile Include="Object.cpp">
+      <Filter>99.etc</Filter>
+    </ClCompile>
+    <ClCompile Include="CMesh.cpp">
+      <Filter>99.etc</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Witle.rc">
@@ -648,6 +669,9 @@
       <Filter>HLSL</Filter>
     </FxCompile>
     <FxCompile Include="StandardShader.hlsl">
+      <Filter>HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="Variables.hlsl">
       <Filter>HLSL</Filter>
     </FxCompile>
   </ItemGroup>

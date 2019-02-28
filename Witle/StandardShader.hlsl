@@ -1,4 +1,24 @@
 
+// 루트 상수
+cbuffer cbGameObjectInfo : register(b0)
+{
+	matrix gmtxWorld : packoffset(c0);
+}
+
+// 상수 버퍼
+cbuffer cbCameraInfo : register(b1)
+{
+	matrix gmtxView : packoffset(c0);
+	matrix gmtxProjection : packoffset(c4);
+	float3 gvCameraPosition : packoffset(c8);
+}
+
+// 루트 상수
+cbuffer cbGameObjectInfo : register(b4)
+{
+	float3 testcolor: packoffset(c0);
+}
+
 #define MATERIAL_ALBEDO_MAP			0x01
 #define MATERIAL_SPECULAR_MAP		0x02
 #define MATERIAL_NORMAL_MAP			0x04
@@ -16,6 +36,8 @@ Texture2D gtxtDetailAlbedoTexture : register(t11);
 Texture2D gtxtDetailNormalTexture : register(t12);
 
 SamplerState gssWrap : register(s0);
+
+#include "Light.hlsl"
 
 struct VS_STANDARD_INPUT
 {
@@ -40,10 +62,10 @@ VS_STANDARD_OUTPUT VSStandard(VS_STANDARD_INPUT input)
 {
 	VS_STANDARD_OUTPUT output;
 
-	output.positionW = mul(float4(input.position, 1.0f), gmtxGameObject).xyz;
-	output.normalW = mul(input.normal, (float3x3)gmtxGameObject);
-	output.tangentW = mul(input.tangent, (float3x3)gmtxGameObject);
-	output.bitangentW = mul(input.bitangent, (float3x3)gmtxGameObject);
+	output.positionW = mul(float4(input.position, 1.0f), gmtxWorld).xyz;
+	output.normalW = mul(input.normal, (float3x3)gmtxWorld);
+	output.tangentW = mul(input.tangent, (float3x3)gmtxWorld);
+	output.bitangentW = mul(input.bitangent, (float3x3)gmtxWorld);
 	output.position = mul(mul(float4(output.positionW, 1.0f), gmtxView), gmtxProjection);
 	output.uv = input.uv;
 
@@ -52,29 +74,31 @@ VS_STANDARD_OUTPUT VSStandard(VS_STANDARD_INPUT input)
 
 float4 PSStandard(VS_STANDARD_OUTPUT input) : SV_TARGET
 {
-	float4 cAlbedoColor = float4(0.0f, 0.0f, 0.0f, 1.0f);
-	if (gnTexturesMask & MATERIAL_ALBEDO_MAP) cAlbedoColor = gtxtAlbedoTexture.Sample(gssWrap, input.uv);
-	float4 cSpecularColor = float4(0.0f, 0.0f, 0.0f, 1.0f);
-	if (gnTexturesMask & MATERIAL_SPECULAR_MAP) cSpecularColor = gtxtSpecularTexture.Sample(gssWrap, input.uv);
-	float4 cNormalColor = float4(0.0f, 0.0f, 0.0f, 1.0f);
-	if (gnTexturesMask & MATERIAL_NORMAL_MAP) cNormalColor = gtxtNormalTexture.Sample(gssWrap, input.uv);
-	float4 cMetallicColor = float4(0.0f, 0.0f, 0.0f, 1.0f);
-	if (gnTexturesMask & MATERIAL_METALLIC_MAP) cMetallicColor = gtxtMetallicTexture.Sample(gssWrap, input.uv);
-	float4 cEmissionColor = float4(0.0f, 0.0f, 0.0f, 1.0f);
-	if (gnTexturesMask & MATERIAL_EMISSION_MAP) cEmissionColor = gtxtEmissionTexture.Sample(gssWrap, input.uv);
+	// 임시로 사용할 컬러 색깔
+	return float4(1.f, 1.f, 1.f, 1.f);
+	//float4 cAlbedoColor = float4(0.0f, 0.0f, 0.0f, 1.0f);
+	//if (gnTexturesMask & MATERIAL_ALBEDO_MAP) cAlbedoColor = gtxtAlbedoTexture.Sample(gssWrap, input.uv);
+	//float4 cSpecularColor = float4(0.0f, 0.0f, 0.0f, 1.0f);
+	//if (gnTexturesMask & MATERIAL_SPECULAR_MAP) cSpecularColor = gtxtSpecularTexture.Sample(gssWrap, input.uv);
+	//float4 cNormalColor = float4(0.0f, 0.0f, 0.0f, 1.0f);
+	//if (gnTexturesMask & MATERIAL_NORMAL_MAP) cNormalColor = gtxtNormalTexture.Sample(gssWrap, input.uv);
+	//float4 cMetallicColor = float4(0.0f, 0.0f, 0.0f, 1.0f);
+	//if (gnTexturesMask & MATERIAL_METALLIC_MAP) cMetallicColor = gtxtMetallicTexture.Sample(gssWrap, input.uv);
+	//float4 cEmissionColor = float4(0.0f, 0.0f, 0.0f, 1.0f);
+	//if (gnTexturesMask & MATERIAL_EMISSION_MAP) cEmissionColor = gtxtEmissionTexture.Sample(gssWrap, input.uv);
 
-	float3 normalW;
-	float4 cColor = cAlbedoColor + cSpecularColor + cMetallicColor + cEmissionColor;
-	if (gnTexturesMask & MATERIAL_NORMAL_MAP)
-	{
-		float3x3 TBN = float3x3(normalize(input.tangentW), normalize(input.bitangentW), normalize(input.normalW));
-		float3 vNormal = normalize(cNormalColor.rgb * 2.0f - 1.0f); //[0, 1] → [-1, 1]
-		normalW = normalize(mul(vNormal, TBN));
-	}
-	else
-	{
-		normalW = normalize(input.normalW);
-	}
-	float4 cIllumination = Lighting(input.positionW, normalW);
-	return(lerp(cColor, cIllumination, 0.5f));
+	//float3 normalW;
+	//float4 cColor = cAlbedoColor + cSpecularColor + cMetallicColor + cEmissionColor;
+	//if (gnTexturesMask & MATERIAL_NORMAL_MAP)
+	//{
+	//	float3x3 TBN = float3x3(normalize(input.tangentW), normalize(input.bitangentW), normalize(input.normalW));
+	//	float3 vNormal = normalize(cNormalColor.rgb * 2.0f - 1.0f); //[0, 1] → [-1, 1]
+	//	normalW = normalize(mul(vNormal, TBN));
+	//}
+	//else
+	//{
+	//	normalW = normalize(input.normalW);
+	//}
+	//float4 cIllumination = Lighting(input.positionW, normalW);
+	//return(lerp(cColor, cIllumination, 0.5f));
 }

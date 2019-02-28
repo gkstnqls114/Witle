@@ -6,7 +6,7 @@
 #include "ShaderManager.h"
 #include "GameScreen.h"
 
-#include "SkinnedMesh.h"
+#include "Object.h" //교수님코드
 #include "CubeMesh.h"
 #include "FollowCam.h"
 #include "Transform.h"
@@ -77,12 +77,11 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	// 큐브메쉬 생성
 	m_GameObject = new Player("Player");
 	// 피킹 테스트할 오브젝트 생성, 반드시 순서 유지. gameobject 생성 후 만들어야한다.
-	ComponentBase* testLoadObject = new LoadGameObject(m_GameObject);
-	static_cast<LoadGameObject*>(testLoadObject)->LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/SuperCobra.bin", false);
+
 	ComponentBase* cubemesh = new CubeMesh(m_GameObject, pd3dDevice, pd3dCommandList, 1.f, 1.f, 1.f);
-	
 	m_GameObject->InsertComponent("Mesh", cubemesh);
-	m_GameObject->InsertComponent("LoadGameObject", testLoadObject);
+
+
 
 	// 터레인 생성 
 	XMFLOAT3 xmf3Scale(8.0f, 1.0f, 8.0f);
@@ -111,6 +110,16 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	m_TerrainHeap->CreateCbvSrvUavDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 2, 0);
 	// m_TerrainHeap.CreateConstantBufferViews(pd3dDevice, pd3dCommandList, 1, m_pd3dcbGameObject, ncbElementBytes);
 	m_TerrainHeap->CreateShaderResourceViews(pd3dDevice, pd3dCommandList, m_Terrain->GetTexture(), 5, true);
+
+
+	//////////////////////////////////////////////////// 테스트할 모델 빌드
+	LoadObject *pAngrybotModel = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/Player.bin", false);
+	m_TESTModel = new LoadObject();
+	m_TESTModel->SetChild(pAngrybotModel, true);
+	m_TESTModel->SetPosition(400.0f, m_Terrain->GetHeight(400.0f, 700.0f), 700.0f);
+	m_TESTModel->SetScale(2.0f, 2.0f, 2.0f);
+	//////////////////////////////////////////////////// 테스트할 모델 빌드
+
 
 	// 카메라
 	m_Camera = new CameraObject("Camera");
@@ -429,7 +438,7 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 #endif
 
 	// PSO 설정
-	pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Cube")->GetPSO());
+	pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Standard")->GetPSO());
 
 	// 클라 화면 설정
 	m_Camera->SetViewportsAndScissorRects(pd3dCommandList);
@@ -438,10 +447,13 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	// 쉐이더 변수 설정 
 	m_parameterForm->UpdateShaderVariable(pd3dCommandList, m_pd3dGraphicsRootSignature, "World", SourcePtr(&XMMatrixTranspose(XMLoadFloat4x4(&m_GameObject->GetTransform().GetWorldMatrix()))));
 	
+	// 모델링 테스트 렌더
+	m_TESTModel->Render(pd3dCommandList);
+
 	// CubeMesh Render
+	pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Cube")->GetPSO());
 	Mesh* mesh = m_GameObject->GetComponent<Mesh>("Mesh");
 	gMeshRenderer.Render(pd3dCommandList, mesh);
-	m_GameObject->GetComponent<LoadGameObject>("LoadGameObject")->Render(pd3dCommandList);
 
 
 	for (int x = 0; x < m_numPickingTESTMeshs; ++x)
