@@ -116,8 +116,8 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	LoadObject *pAngrybotModel = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/Player.bin", true);
 	m_TESTModel = new LoadObject();
 	m_TESTModel->SetChild(pAngrybotModel, true);
-	m_TESTModel->SetPosition(400.0f, m_Terrain->GetHeight(400.0f, 700.0f), 700.0f);
-	m_TESTModel->SetScale(1.0f, 1.0f, 1.0f);
+	m_TESTModel->SetPosition(.0f, m_Terrain->GetHeight(400.0f, 700.0f), 0.0f);
+	// m_TESTModel->SetScale(1.0f, 1.0f, 1.0f);
 	//////////////////////////////////////////////////// 테스트할 모델 빌드
 
 
@@ -278,7 +278,7 @@ bool GameScene::ProcessInput(HWND hWnd, float ElapsedTime)
 		{
 			// 플레이어와 카메라 똑같이 rotate...
 			// 순서 의존적이므로 변경 금지
-			m_Camera->GetCamera()->Rotate(0.0f, GameInput::GetcDeltaX(), 0.0f);
+			m_Camera->GetCamera()->Rotate(GameInput::GetcDeltaY(), GameInput::GetcDeltaX(), 0.0f);
 			m_GameObject->GetTransform().Rotate(0.0f, GameInput::GetcDeltaX(), 0.0f);
 		}
 		
@@ -332,6 +332,10 @@ bool GameScene::ProcessInput(HWND hWnd, float ElapsedTime)
 // ProcessInput에 의한 right, up, look, pos 를 월드변환 행렬에 갱신한다.
 void GameScene::Update(float fElapsedTime)
 {
+	if (m_TESTModel)
+	{
+		m_TESTModel->UpdateTransform();
+	}
 	if (m_GameObject)
 	{
 		// m_GameObject->Update(m_Camera->GetComponent<FollowCam>("Camera")); //Velocity를 통해 pos 이동
@@ -445,8 +449,6 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	m_Camera->GetCamera()->UpdateShaderVariables(pd3dCommandList, m_parameterForm->GetIndex("Camera"));
 
 	////////////////////////////// Model Render
-	m_parameterForm->UpdateShaderVariable(pd3dCommandList, m_pd3dGraphicsRootSignature, "World", SourcePtr(&XMMatrixTranspose(XMLoadFloat4x4(&m_GameObject->GetTransform().GetWorldMatrix()))));
-
 	m_TESTModel->Render(pd3dCommandList);
 	////////////////////////////// Model Render
 
@@ -454,6 +456,9 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	// 쉐이더 변수 설정 
 	pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Cube")->GetPSO());
 	Mesh* mesh = m_GameObject->GetComponent<Mesh>("Mesh");
+
+	m_parameterForm->UpdateShaderVariable(pd3dCommandList, m_pd3dGraphicsRootSignature, "World", SourcePtr(&XMMatrixTranspose(XMLoadFloat4x4(&m_GameObject->GetTransform().GetWorldMatrix()))));
+
 	gMeshRenderer.Render(pd3dCommandList, mesh);
 	////////////////////////////// CubeMesh Render
 
