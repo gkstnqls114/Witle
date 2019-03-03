@@ -190,6 +190,9 @@
     <Filter Include="05.Shader\StandardShader">
       <UniqueIdentifier>{de0113f4-cf07-4caa-90d1-0142948e989e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="07.Resource\ParameterFormManager">
+      <UniqueIdentifier>{fd0ed904-6de3-45e4-9a31-fa5f1e0cd9df}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -420,6 +423,9 @@
     <ClInclude Include="CMesh.h">
       <Filter>99.etc</Filter>
     </ClInclude>
+    <ClInclude Include="ParameterFormManager.h">
+      <Filter>07.Resource\ParameterFormManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -634,6 +640,9 @@
     </ClCompile>
     <ClCompile Include="CMesh.cpp">
       <Filter>99.etc</Filter>
+    </ClCompile>
+    <ClCompile Include="ParameterFormManager.cpp">
+      <Filter>07.Resource\ParameterFormManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

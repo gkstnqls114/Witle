@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "d3dUtil.h"
 
+#include "ParameterFormManager.h"
 #include "LightManager.h"
 #include "MeshRenderer.h"
 #include "ShaderManager.h"
@@ -521,7 +522,9 @@ ID3D12RootSignature* GameScene::CreateGraphicsRootSignature(ID3D12Device *pd3dDe
 	ID3D12RootSignature* pd3dGraphicsRootSignature = nullptr;
 
 	D3D12_ROOT_PARAMETER pRootParameters[17];
+	
 	m_parameterForm = new ParameterForm(_countof(pRootParameters));
+	ParameterFormManager::GetInstance()->SetCurrForm(m_parameterForm);
 
 	// 루트 상수
 	pRootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_32BIT_CONSTANTS;
