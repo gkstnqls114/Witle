@@ -167,6 +167,7 @@
     <ClInclude Include="Light.h" />
     <ClInclude Include="LightManager.h" />
     <ClInclude Include="LightObject.h" />
+    <ClInclude Include="LoadedModelInfo.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="MyConstants.h" />
     <ClInclude Include="CubeMesh.h" />
@@ -258,6 +259,7 @@
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="LightManager.cpp" />
     <ClCompile Include="LightObject.cpp" />
+    <ClCompile Include="LoadedModelInfo.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="MeshRenderer.cpp" />

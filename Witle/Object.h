@@ -78,6 +78,7 @@ public:
 #define MATERIAL_DETAIL_ALBEDO_MAP	0x20
 #define MATERIAL_DETAIL_NORMAL_MAP	0x40
 
+class CLoadedModelInfo;
 class LoadObject;
 
 class CMaterial
@@ -262,22 +263,6 @@ public:
 };
 
 
-class CLoadedModelInfo
-{
-public:
-	CLoadedModelInfo() { }
-	~CLoadedModelInfo();
-
-	LoadObject						*m_pModelRootObject = NULL;
-
-	int 							m_nSkinnedMeshes = 0;
-	CSkinnedMesh					**m_ppSkinnedMeshes = NULL; //[SkinnedMeshes], Skinned Mesh Cache
-
-	CAnimationSets					**m_ppAnimationSets = NULL;
-
-	int								*m_pnAnimatedBoneFrames = NULL; //[SkinnedMeshes]
-	LoadObject						***m_pppAnimatedBoneFrameCaches = NULL; //[SkinnedMeshes][Bones]
-};
 
 class CAnimationController
 {

@@ -4,6 +4,7 @@
 
 #include "stdafx.h"
 #include "d3dUtil.h"
+#include "LoadedModelInfo.h"
 #include "ParameterFormManager.h"
 #include "Object.h"
 #include "Shader.h"
@@ -369,7 +370,7 @@ CAnimationController::CAnimationController(ID3D12Device *pd3dDevice, ID3D12Graph
 	m_nAnimationTracks = nAnimationTracks;
 	m_pAnimationTracks = new CAnimationTrack[nAnimationTracks];
 
-	m_nSkinnedMeshes = pModel->m_nSkinnedMeshes;
+	m_nSkinnedMeshes = pModel->GetCountSkinnedMesh();
 
 	m_ppAnimationSets = new CAnimationSets*[m_nSkinnedMeshes];
 	m_pnAnimatedBoneFrames = new int[m_nSkinnedMeshes];
@@ -378,17 +379,17 @@ CAnimationController::CAnimationController(ID3D12Device *pd3dDevice, ID3D12Graph
 
 	for (int i = 0; i < m_nSkinnedMeshes; i++)
 	{
-		m_ppSkinnedMeshes[i] = pModel->m_ppSkinnedMeshes[i];
+		m_ppSkinnedMeshes[i] = pModel->GetSkinnedMesh(i);
 
-		m_ppAnimationSets[i] = pModel->m_ppAnimationSets[i];
+		m_ppAnimationSets[i] = pModel->GetAnimationSet(i);
 		m_ppAnimationSets[i]->AddRef();
 
-		m_pnAnimatedBoneFrames[i] = pModel->m_pnAnimatedBoneFrames[i];
+		m_pnAnimatedBoneFrames[i] = pModel->GetCountAnimatedBoneFrames(i);
 
 		m_pppAnimatedBoneFrameCaches[i] = new LoadObject*[m_pnAnimatedBoneFrames[i]];
 		for (int j = 0; j < m_pnAnimatedBoneFrames[i]; j++)
 		{
-			m_pppAnimatedBoneFrameCaches[i][j] = pModel->m_pppAnimatedBoneFrameCaches[i][j];
+			m_pppAnimatedBoneFrameCaches[i][j] = pModel->GetAnimatedBoneFrameCaches(i,j);
 		}
 	}
 
@@ -505,23 +506,6 @@ void CAnimationController::AdvanceTime(float fTimeElapsed, LoadObject *pRootGame
 	}
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-CLoadedModelInfo::~CLoadedModelInfo()
-{
-	if (m_ppAnimationSets) delete[] m_ppAnimationSets;
-	if (m_pnAnimatedBoneFrames) delete[] m_pnAnimatedBoneFrames;
-	if (m_ppSkinnedMeshes) delete[] m_ppSkinnedMeshes;
-
-	for (int i = 0; i < m_nSkinnedMeshes; i++)
-	{
-		if (m_pppAnimatedBoneFrameCaches[i]) delete[] m_pppAnimatedBoneFrameCaches[i];
-	}
-	if (m_pppAnimatedBoneFrameCaches) delete[] m_pppAnimatedBoneFrameCaches;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//
 LoadObject::LoadObject()
 {
 	m_xmf4x4ToParent = Matrix4x4::Identity();
@@ -838,31 +822,6 @@ CTexture *LoadObject::FindReplicatedTexture(_TCHAR *pstrTextureName)
 	return(NULL);
 }
 
-int ReadIntegerFromFile(FILE *pInFile)
-{
-	int nValue = 0;
-	UINT nReads = (UINT)::fread(&nValue, sizeof(int), 1, pInFile);
-	return(nValue);
-}
-
-float ReadFloatFromFile(FILE *pInFile)
-{
-	float fValue = 0;
-	UINT nReads = (UINT)::fread(&fValue, sizeof(float), 1, pInFile);
-	return(fValue);
-}
-
-BYTE ReadStringFromFile(FILE *pInFile, char *pstrToken)
-{
-	BYTE nStrLength = 0;
-	UINT nReads = 0;
-	nReads = (UINT)::fread(&nStrLength, sizeof(BYTE), 1, pInFile);
-	nReads = (UINT)::fread(pstrToken, sizeof(char), nStrLength, pInFile);
-	pstrToken[nStrLength] = '\0';
-
-	return(nStrLength);
-}
-
 void LoadObject::LoadMaterialsFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, LoadObject *pParent, FILE *pInFile)
 {
 	char pstrToken[64] = { '\0' };
@@ -1078,42 +1037,44 @@ void LoadObject::LoadAnimationFromFile(FILE *pInFile, CLoadedModelInfo *pLoadedM
 		}
 		else if (!strcmp(pstrToken, "<FrameNames>:"))
 		{
-			pLoadedModel->m_nSkinnedMeshes = ::ReadIntegerFromFile(pInFile);
-
-			pLoadedModel->m_pnAnimatedBoneFrames = new int[pLoadedModel->m_nSkinnedMeshes];
-			pLoadedModel->m_ppAnimationSets = new CAnimationSets*[pLoadedModel->m_nSkinnedMeshes];
-			pLoadedModel->m_ppSkinnedMeshes = new CSkinnedMesh*[pLoadedModel->m_nSkinnedMeshes];
-			pLoadedModel->m_pppAnimatedBoneFrameCaches = new LoadObject**[pLoadedModel->m_nSkinnedMeshes];
-
-			for (int i = 0; i < pLoadedModel->m_nSkinnedMeshes; i++)
+			pLoadedModel->SetCountSkinnedMesh(::ReadIntegerFromFile(pInFile));
+		
+			//pLoadedModel->m_pnAnimatedBoneFrames = new int[pLoadedModel->m_nSkinnedMeshes];
+			//pLoadedModel->m_ppAnimationSets = new CAnimationSets*[pLoadedModel->m_nSkinnedMeshes];
+			//pLoadedModel->m_ppSkinnedMeshes = new CSkinnedMesh*[pLoadedModel->m_nSkinnedMeshes];
+			//pLoadedModel->m_pppAnimatedBoneFrameCaches = new LoadObject**[pLoadedModel->m_nSkinnedMeshes];
+			pLoadedModel->Create();
+	
+			for (int i = 0; i < pLoadedModel->GetCountSkinnedMesh(); i++)
 			{
-				pLoadedModel->m_ppAnimationSets[i] = new CAnimationSets(nAnimationSets);
-
-				int nSkin = ::ReadIntegerFromFile(pInFile); //i
-
-				::ReadStringFromFile(pInFile, pstrToken); //Skinned Mesh Name
-				pLoadedModel->m_ppSkinnedMeshes[i] = pLoadedModel->m_pModelRootObject->FindSkinnedMesh(pstrToken);
-				pLoadedModel->m_ppSkinnedMeshes[i]->PrepareSkinning(pLoadedModel->m_pModelRootObject);
-
-				pLoadedModel->m_pnAnimatedBoneFrames[i] = ::ReadIntegerFromFile(pInFile);
-				pLoadedModel->m_pppAnimatedBoneFrameCaches[i] = new LoadObject*[pLoadedModel->m_pnAnimatedBoneFrames[i]];
-
-				for (int j = 0; j < pLoadedModel->m_pnAnimatedBoneFrames[i]; j++)
-				{
-					::ReadStringFromFile(pInFile, pstrToken);
-					pLoadedModel->m_pppAnimatedBoneFrameCaches[i][j] = pLoadedModel->m_pModelRootObject->FindFrame(pstrToken);
-
-#ifdef _WITH_DEBUG_SKINNING_BONE
-					TCHAR pstrDebug[256] = { 0 };
-					TCHAR pwstrAnimationBoneName[64] = { 0 };
-					TCHAR pwstrBoneCacheName[64] = { 0 };
-					size_t nConverted = 0;
-					mbstowcs_s(&nConverted, pwstrAnimationBoneName, 64, pstrToken, _TRUNCATE);
-					mbstowcs_s(&nConverted, pwstrBoneCacheName, 64, pLoadedModel->m_pppAnimatedBoneFrameCaches[i][j]->m_pstrFrameName, _TRUNCATE);
-					_stprintf_s(pstrDebug, 256, _T("AnimationBoneFrame:: Cache(%s) AnimationBone(%s)\n"), pwstrBoneCacheName, pwstrAnimationBoneName);
-					OutputDebugString(pstrDebug);
-#endif
-				}
+				pLoadedModel->CreateFrameAndAnimationSets(pInFile, pstrToken, nAnimationSets, i);
+//				pLoadedModel->m_ppAnimationSets[i] = new CAnimationSets(nAnimationSets);
+//
+//				int nSkin = ::ReadIntegerFromFile(pInFile); //i
+//
+//				::ReadStringFromFile(pInFile, pstrToken); //Skinned Mesh Name
+//				pLoadedModel->m_ppSkinnedMeshes[i] = pLoadedModel->m_pModelRootObject->FindSkinnedMesh(pstrToken);
+//				pLoadedModel->m_ppSkinnedMeshes[i]->PrepareSkinning(pLoadedModel->m_pModelRootObject);
+//
+//				pLoadedModel->m_pnAnimatedBoneFrames[i] = ::ReadIntegerFromFile(pInFile);
+//				pLoadedModel->m_pppAnimatedBoneFrameCaches[i] = new LoadObject*[pLoadedModel->m_pnAnimatedBoneFrames[i]];
+//
+//				for (int j = 0; j < pLoadedModel->m_pnAnimatedBoneFrames[i]; j++)
+//				{
+//					::ReadStringFromFile(pInFile, pstrToken);
+//					pLoadedModel->m_pppAnimatedBoneFrameCaches[i][j] = pLoadedModel->m_pModelRootObject->FindFrame(pstrToken);
+//
+//#ifdef _WITH_DEBUG_SKINNING_BONE
+//					TCHAR pstrDebug[256] = { 0 };
+//					TCHAR pwstrAnimationBoneName[64] = { 0 };
+//					TCHAR pwstrBoneCacheName[64] = { 0 };
+//					size_t nConverted = 0;
+//					mbstowcs_s(&nConverted, pwstrAnimationBoneName, 64, pstrToken, _TRUNCATE);
+//					mbstowcs_s(&nConverted, pwstrBoneCacheName, 64, pLoadedModel->m_pppAnimatedBoneFrameCaches[i][j]->m_pstrFrameName, _TRUNCATE);
+//					_stprintf_s(pstrDebug, 256, _T("AnimationBoneFrame:: Cache(%s) AnimationBone(%s)\n"), pwstrBoneCacheName, pwstrAnimationBoneName);
+//					OutputDebugString(pstrDebug);
+//#endif
+//				}
 			}
 		}
 		else if (!strcmp(pstrToken, "<AnimationSet>:"))
@@ -1126,9 +1087,10 @@ void LoadObject::LoadAnimationFromFile(FILE *pInFile, CLoadedModelInfo *pLoadedM
 			int nFramesPerSecond = ::ReadIntegerFromFile(pInFile);
 			int nKeyFrames = ::ReadIntegerFromFile(pInFile);
 
-			for (int i = 0; i < pLoadedModel->m_nSkinnedMeshes; i++)
+			for (int i = 0; i < pLoadedModel->GetCountSkinnedMesh(); i++)
 			{
-				pLoadedModel->m_ppAnimationSets[i]->m_ppAnimationSets[nAnimationSet] = new CAnimationSet(fLength, nFramesPerSecond, nKeyFrames, pLoadedModel->m_pnAnimatedBoneFrames[i], pstrToken);
+				pLoadedModel->CreateAnimationSets(nAnimationSet, i, fLength, nFramesPerSecond, nKeyFrames, pstrToken);
+				// pLoadedModel->m_ppAnimationSets[i]->m_ppAnimationSets[nAnimationSet] = new CAnimationSet(fLength, nFramesPerSecond, nKeyFrames, pLoadedModel->m_pnAnimatedBoneFrames[i], pstrToken);
 			}
 
 			for (int i = 0; i < nKeyFrames; i++)
@@ -1136,15 +1098,16 @@ void LoadObject::LoadAnimationFromFile(FILE *pInFile, CLoadedModelInfo *pLoadedM
 				::ReadStringFromFile(pInFile, pstrToken);
 				if (!strcmp(pstrToken, "<Transforms>:"))
 				{
-					int nKey = ::ReadIntegerFromFile(pInFile); //i
-					float fKeyTime = ::ReadFloatFromFile(pInFile);
-					for (int j = 0; j < pLoadedModel->m_nSkinnedMeshes; j++)
-					{
-						int nSkin = ::ReadIntegerFromFile(pInFile); //j
-						CAnimationSet *pAnimationSet = pLoadedModel->m_ppAnimationSets[j]->m_ppAnimationSets[nAnimationSet];
-						pAnimationSet->m_pfKeyFrameTimes[i] = fKeyTime;
-						nReads = (UINT)::fread(pAnimationSet->m_ppxmf4x4KeyFrameTransforms[i], sizeof(XMFLOAT4X4), pLoadedModel->m_pnAnimatedBoneFrames[j], pInFile);
-					}
+					pLoadedModel->CreateKeyFrame(pInFile, i, &nReads, nAnimationSet);
+					//int nKey = ::ReadIntegerFromFile(pInFile); //i
+					//float fKeyTime = ::ReadFloatFromFile(pInFile);
+					//for (int j = 0; j < pLoadedModel->GetCountSkinnedMesh(); j++)
+					//{
+					//	int nSkin = ::ReadIntegerFromFile(pInFile); //j
+					//	CAnimationSet *pAnimationSet = pLoadedModel->m_ppAnimationSets[j]->m_ppAnimationSets[nAnimationSet];
+					//	pAnimationSet->m_pfKeyFrameTimes[i] = fKeyTime;
+					// 	nReads = (UINT)::fread(pAnimationSet->m_ppxmf4x4KeyFrameTransforms[i], sizeof(XMFLOAT4X4), pLoadedModel->m_pnAnimatedBoneFrames[j], pInFile);
+					//}
 				}
 			}
 		}
@@ -1171,7 +1134,7 @@ CLoadedModelInfo *LoadObject::LoadGeometryAndAnimationFromFile(ID3D12Device *pd3
 		{
 			if (!strcmp(pstrToken, "<Hierarchy>:"))
 			{
-				pLoadedModel->m_pModelRootObject = LoadObject::LoadFrameHierarchyFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, NULL, pInFile, &pLoadedModel->m_nSkinnedMeshes);
+				pLoadedModel->SetRootObject(LoadObject::LoadFrameHierarchyFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, NULL, pInFile, pLoadedModel->GetpCountSkinnedMesh()));
 				::ReadStringFromFile(pInFile, pstrToken); //"</Hierarchy>"
 			}
 			else if (!strcmp(pstrToken, "<Animation>:"))
@@ -1382,7 +1345,7 @@ CAngrybotObject::CAngrybotObject(ID3D12Device *pd3dDevice, ID3D12GraphicsCommand
 	CLoadedModelInfo *pAngrybotModel = pModel;
 	if (!pAngrybotModel) pAngrybotModel = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/Angrybot.bin");
 
-	SetChild(pAngrybotModel->m_pModelRootObject, true);
+	SetChild(pAngrybotModel->GetRootObject(), true);
 	// m_pSkinnedAnimationController = new CAnimationController(pd3dDevice, pd3dCommandList, nAnimationTracks, pAngrybotModel);
 }
 
