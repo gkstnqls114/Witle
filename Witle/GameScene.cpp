@@ -114,9 +114,9 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 
 
 	//////////////////////////////////////////////////// Å×½ºÆ®ÇÒ ¸ðµ¨ ºôµå
-	LoadObject *pAngrybotModel = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/Player.bin", true);
-	m_TESTModel = new LoadObject();
-	m_TESTModel->SetChild(pAngrybotModel, true);
+	CAngrybotObject *pAngrybotModel = new CAngrybotObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, nullptr, 0);
+	m_TESTModel = pAngrybotModel;
+	// m_TESTModel->SetChild(pAngrybotModel, true);
 	m_TESTModel->SetPosition(.0f, m_Terrain->GetHeight(400.0f, 700.0f), 0.0f);
 	// m_TESTModel->SetScale(1.0f, 1.0f, 1.0f);
 	//////////////////////////////////////////////////// Å×½ºÆ®ÇÒ ¸ðµ¨ ºôµå
