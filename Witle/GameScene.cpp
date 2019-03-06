@@ -26,7 +26,6 @@
 
 #include "GameScene.h"
 
-
 ID3D12DescriptorHeap*		GameScene::m_pd3dCbvSrvDescriptorHeap;
 
 D3D12_CPU_DESCRIPTOR_HANDLE	GameScene::m_d3dCbvCPUDescriptorStartHandle;
@@ -89,6 +88,9 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	//루트 시그너쳐를 생성한다.
 	m_pd3dGraphicsRootSignature = CreateGraphicsRootSignature(pd3dDevice);
 
+	// 디스크립터 힙 설정
+	GameScene::CreateCbvSrvDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 2);
+
 	// 큐브메쉬 생성
 	m_GameObject = new Player("Player");
 	// 피킹 테스트할 오브젝트 생성, 반드시 순서 유지. gameobject 생성 후 만들어야한다.
@@ -96,13 +98,13 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	ComponentBase* cubemesh = new CubeMesh(m_GameObject, pd3dDevice, pd3dCommandList, 1.f, 1.f, 1.f);
 	m_GameObject->InsertComponent("Mesh", cubemesh);
 
-
-
 	// 터레인 생성 
 	XMFLOAT3 xmf3Scale(8.0f, 1.0f, 8.0f);
 	XMFLOAT4 xmf4Color(0.0f, 0.5f, 0.0f, 0.0f);
 	m_Terrain = new Terrain("Terrain", pd3dDevice, pd3dCommandList,
 		L"Image/HeightMap.raw", 257, 257, 257, 257, xmf3Scale, xmf4Color);
+	// 리소스설정
+	GameScene::CreateShaderResourceViews(pd3dDevice, m_Terrain->GetTexture(), 5, true);
 
 	//// 해당 터레인을 플레이어 콜백으로 설정
 	m_GameObject->SetPlayerUpdatedContext(m_Terrain);
@@ -121,12 +123,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 		m_PickingTESTMeshs[x]->InsertComponent("Mesh", cubemesh);
 	}
 
-	m_TerrainHeap = new MyDescriptorHeap();
-	m_TerrainHeap->CreateCbvSrvUavDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 2, 0);
-	// m_TerrainHeap.CreateConstantBufferViews(pd3dDevice, pd3dCommandList, 1, m_pd3dcbGameObject, ncbElementBytes);
-	m_TerrainHeap->CreateShaderResourceViews(pd3dDevice, pd3dCommandList, m_Terrain->GetTexture(), 5, true);
-
-
+	
 	//////////////////////////////////////////////////// 테스트할 모델 빌드
 	CAngrybotObject *pAngrybotModel = new CAngrybotObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, nullptr, 0);
 	m_TESTModel = pAngrybotModel;
@@ -202,13 +199,7 @@ void GameScene::ReleaseObjects()
 		m_Terrain->ReleaseObjects();
 		delete m_Terrain;
 		m_Terrain = nullptr;
-	}
-	if (m_TerrainHeap)
-	{
-		delete m_TerrainHeap;
-		m_TerrainHeap = nullptr;
-	}
-
+	} 
 	if (m_TESTQuadTree)
 	{
 		delete m_TESTQuadTree;
@@ -399,7 +390,7 @@ void GameScene::LastUpdate(float fElapsedTime)
 
 void GameScene::TESTSetRootDescriptor(ID3D12GraphicsCommandList * pd3dCommandList)
 {
-	m_TerrainHeap->FirstUpdate(pd3dCommandList);
+	pd3dCommandList->SetDescriptorHeaps(1, &m_pd3dCbvSrvDescriptorHeap);
 	m_Terrain->UpdateShaderVariables(pd3dCommandList);
 }
 
@@ -436,7 +427,7 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 
 	// Terrain PSO
 	pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Terrain")->GetPSO());
-	m_TerrainHeap->FirstUpdate(pd3dCommandList);
+	pd3dCommandList->SetDescriptorHeaps(1, &m_pd3dCbvSrvDescriptorHeap);
 
 	m_parameterForm->UpdateShaderVariable(pd3dCommandList, m_pd3dGraphicsRootSignature, "World", SourcePtr(&matrix));
 	m_Terrain->UpdateShaderVariables(pd3dCommandList); 
