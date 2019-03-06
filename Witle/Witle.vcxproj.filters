@@ -79,9 +79,6 @@
     <Filter Include="05.Shader\TerrainShader">
       <UniqueIdentifier>{aa6b6413-fd8b-46d0-9a8c-ff8f7919a135}</UniqueIdentifier>
     </Filter>
-    <Filter Include="07.Resource\DescriptorHeap">
-      <UniqueIdentifier>{cf4eecd1-5ba8-488b-8766-872ba7df4cfe}</UniqueIdentifier>
-    </Filter>
     <Filter Include="03.GameObject\Player">
       <UniqueIdentifier>{79d88ce3-72d5-440a-881b-7a9ae6ed8439}</UniqueIdentifier>
     </Filter>
@@ -299,9 +296,6 @@
     </ClInclude>
     <ClInclude Include="TerrainShader.h">
       <Filter>05.Shader\TerrainShader</Filter>
-    </ClInclude>
-    <ClInclude Include="MyDescriptorHeap.h">
-      <Filter>07.Resource\DescriptorHeap</Filter>
     </ClInclude>
     <ClInclude Include="Player.h">
       <Filter>03.GameObject\Player</Filter>
@@ -526,9 +520,6 @@
     </ClCompile>
     <ClCompile Include="TerrainShader.cpp">
       <Filter>05.Shader\TerrainShader</Filter>
-    </ClCompile>
-    <ClCompile Include="MyDescriptorHeap.cpp">
-      <Filter>07.Resource\DescriptorHeap</Filter>
     </ClCompile>
     <ClCompile Include="Player.cpp">
       <Filter>03.GameObject\Player</Filter>

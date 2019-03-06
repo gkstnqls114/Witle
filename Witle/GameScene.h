@@ -87,7 +87,6 @@ protected:
 
 	Player*                 m_GameObject{ nullptr };
 	Terrain*                m_Terrain{ nullptr };
-	MyDescriptorHeap*       m_TerrainHeap{ nullptr };
 	CameraObject*           m_Camera{ nullptr };
 
 #ifdef CHECK_ANOTHER_CAMERA
