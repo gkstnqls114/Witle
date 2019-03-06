@@ -426,6 +426,9 @@
     <ClInclude Include="LoadedModelInfo.h">
       <Filter>13.MyFBXModel</Filter>
     </ClInclude>
+    <ClInclude Include="MyDescriptorHeap.h">
+      <Filter>07.Resource</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -643,6 +646,9 @@
     </ClCompile>
     <ClCompile Include="LoadedModelInfo.cpp">
       <Filter>13.MyFBXModel</Filter>
+    </ClCompile>
+    <ClCompile Include="MyDescriptorHeap.cpp">
+      <Filter>07.Resource</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
