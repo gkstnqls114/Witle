@@ -25,6 +25,7 @@ private:
 	D3D12_GPU_DESCRIPTOR_HANDLE		*m_pd3dSamplerGpuDescriptorHandles = NULL;
 
 public:
+
 	void AddRef() { m_nReferences++; }
 	void Release() { if (--m_nReferences <= 0) delete this; }
 
@@ -42,5 +43,10 @@ public:
 	ID3D12Resource *GetTexture(int nIndex) { return(m_ppd3dTextures[nIndex]); }
 	UINT GetTextureType() { return(m_nTextureType); }
 
+	const D3D12_GPU_DESCRIPTOR_HANDLE GetHandler() const { return m_pRootArgumentInfos->m_d3dSrvGpuDescriptorHandle; }
+
 	void ReleaseUploadBuffers();
+
+
+
 };
