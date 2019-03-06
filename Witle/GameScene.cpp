@@ -8,7 +8,6 @@
 #include "GameScreen.h"
 
 #include "Object.h" //±³¼ö´ÔÄÚµå
-#include "Texture.h"
 #include "CubeMesh.h"
 #include "FollowCam.h"
 #include "Transform.h"
@@ -26,6 +25,7 @@
 
 #include "GameScene.h"
 
+<<<<<<< HEAD
 ID3D12DescriptorHeap*		GameScene::m_pd3dCbvSrvDescriptorHeap;
 
 D3D12_CPU_DESCRIPTOR_HANDLE	GameScene::m_d3dCbvCPUDescriptorStartHandle;
@@ -38,6 +38,8 @@ D3D12_GPU_DESCRIPTOR_HANDLE	GameScene::m_d3dCbvGPUDescriptorNextHandle;
 D3D12_CPU_DESCRIPTOR_HANDLE	GameScene::m_d3dSrvCPUDescriptorNextHandle;
 D3D12_GPU_DESCRIPTOR_HANDLE	GameScene::m_d3dSrvGPUDescriptorNextHandle;
 
+=======
+>>>>>>> parent of d22639a... GameScened ?”ìŠ¤?¬ë¦½?????´ëž˜???€? ì— static ë³€?˜ë¡œ ?¤ì •
 GameScene::GameScene()
 {
 
@@ -495,59 +497,30 @@ void GameScene::ReleaseUploadBuffers()
 	}
 }
 
-void GameScene::CreateCbvSrvDescriptorHeaps(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, int nConstantBufferViews, int nShaderResourceViews)
+bool GameScene::SaveData()
 {
-	D3D12_DESCRIPTOR_HEAP_DESC d3dDescriptorHeapDesc;
-	d3dDescriptorHeapDesc.NumDescriptors = nConstantBufferViews + nShaderResourceViews; //CBVs + SRVs 
-	d3dDescriptorHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
-	d3dDescriptorHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
-	d3dDescriptorHeapDesc.NodeMask = 0;
-	pd3dDevice->CreateDescriptorHeap(&d3dDescriptorHeapDesc, __uuidof(ID3D12DescriptorHeap), (void **)&m_pd3dCbvSrvDescriptorHeap);
+	/*std::ofstream out("Data.txt");
 
-	m_d3dCbvCPUDescriptorNextHandle = m_d3dCbvCPUDescriptorStartHandle = m_pd3dCbvSrvDescriptorHeap->GetCPUDescriptorHandleForHeapStart();
-	m_d3dCbvGPUDescriptorNextHandle = m_d3dCbvGPUDescriptorStartHandle = m_pd3dCbvSrvDescriptorHeap->GetGPUDescriptorHandleForHeapStart();
-	m_d3dSrvCPUDescriptorNextHandle.ptr = m_d3dSrvCPUDescriptorStartHandle.ptr = m_d3dCbvCPUDescriptorStartHandle.ptr + (d3dUtil::gnCbvSrvDescriptorIncrementSize * nConstantBufferViews);
-	m_d3dSrvGPUDescriptorNextHandle.ptr = m_d3dSrvGPUDescriptorStartHandle.ptr = m_d3dCbvGPUDescriptorStartHandle.ptr + (d3dUtil::gnCbvSrvDescriptorIncrementSize * nConstantBufferViews);
-}
+	if (out.is_open()) {
+		XMFLOAT3 pos = m_Camera->GetPosition();
+		XMFLOAT3 right = m_Camera->GetRightVector();
+		XMFLOAT3 up = m_Camera->GetUpVector();
+		XMFLOAT3 look = m_Camera->GetLookVector();
+		XMFLOAT3 at = m_Camera->GetAt();
+		XMFLOAT3 offset = m_Camera->GetOffset();
 
-D3D12_GPU_DESCRIPTOR_HANDLE GameScene::CreateConstantBufferViews(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, int nConstantBufferViews, ID3D12Resource * pd3dConstantBuffers, UINT nStride)
-{
-	D3D12_GPU_DESCRIPTOR_HANDLE d3dCbvGPUDescriptorHandle = m_d3dCbvGPUDescriptorNextHandle;
-	D3D12_GPU_VIRTUAL_ADDRESS d3dGpuVirtualAddress = pd3dConstantBuffers->GetGPUVirtualAddress();
-	D3D12_CONSTANT_BUFFER_VIEW_DESC d3dCBVDesc;
-	d3dCBVDesc.SizeInBytes = nStride;
-	for (int j = 0; j < nConstantBufferViews; j++)
-	{
-		d3dCBVDesc.BufferLocation = d3dGpuVirtualAddress + (nStride * j);
-		m_d3dCbvCPUDescriptorNextHandle.ptr = m_d3dCbvCPUDescriptorNextHandle.ptr + d3dUtil::gnCbvSrvDescriptorIncrementSize;
-		pd3dDevice->CreateConstantBufferView(&d3dCBVDesc, m_d3dCbvCPUDescriptorNextHandle);
-		m_d3dCbvGPUDescriptorNextHandle.ptr = m_d3dCbvGPUDescriptorNextHandle.ptr + d3dUtil::gnCbvSrvDescriptorIncrementSize;
+		out << "Camera Data ... " << std::endl;
+		out << "Position ... " << pos.x << " " << pos.y << " " << pos.z << std::endl;
+		out << "Right ... " << right.x << " " << right.y << " " << right.z << " " << std::endl;
+		out << "Up ... " << up.x << " " << up.y << " " << up.z << " " << std::endl;
+		out << "Look ... " << look.x << " " << look.y << " " << look.z << " " <<  std::endl;
+		out << "At ... " << at.x << " " << at.y << " " << at.z << " " << std::endl;
+		out << "Offset ... " << offset.x << " " << offset.y << " " << offset.z << " " << std::endl;
+
 	}
-	return(d3dCbvGPUDescriptorHandle);
-}
-
-D3D12_GPU_DESCRIPTOR_HANDLE GameScene::CreateShaderResourceViews(ID3D12Device * pd3dDevice, Texture * pTexture, UINT nRootParameter, bool bAutoIncrement)
-{
-	assert(!(pTexture == nullptr));
-
-	D3D12_GPU_DESCRIPTOR_HANDLE d3dSrvGPUDescriptorHandle = m_d3dSrvGPUDescriptorNextHandle;
-	if (pTexture)
-	{
-		int nTextures = pTexture->GetTextures();
-		int nTextureType = pTexture->GetTextureType();
-		for (int i = 0; i < nTextures; i++)
-		{
-			ID3D12Resource *pShaderResource = pTexture->GetTexture(i);
-			D3D12_RESOURCE_DESC d3dResourceDesc = pShaderResource->GetDesc();
-			D3D12_SHADER_RESOURCE_VIEW_DESC d3dShaderResourceViewDesc = d3dUtil::GetShaderResourceViewDesc(d3dResourceDesc, nTextureType);
-			pd3dDevice->CreateShaderResourceView(pShaderResource, &d3dShaderResourceViewDesc, m_d3dSrvCPUDescriptorNextHandle);
-			m_d3dSrvCPUDescriptorNextHandle.ptr += d3dUtil::gnCbvSrvDescriptorIncrementSize;
-
-			pTexture->SetRootArgument(i, (bAutoIncrement) ? (nRootParameter + i) : nRootParameter, m_d3dSrvGPUDescriptorNextHandle);
-			m_d3dSrvGPUDescriptorNextHandle.ptr += d3dUtil::gnCbvSrvDescriptorIncrementSize;
-		}
-	}
-	return(d3dSrvGPUDescriptorHandle);
+	std::cout << "ÀúÀå¿Ï·á" << std::endl;
+	*/
+	return true;
 }
 
 ID3D12RootSignature* GameScene::CreateGraphicsRootSignature(ID3D12Device *pd3dDevice)
