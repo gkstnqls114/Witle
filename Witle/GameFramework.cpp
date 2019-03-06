@@ -26,7 +26,9 @@ void CGameFramework::Render()
 	hResult = m_CommandList->Reset(m_CommandAllocator.Get(), NULL);
 
 	////////////////////////////// GBuffer¿¡ Render
+#ifdef  CHECK_G_BUFFERS
 	RenderOnGbuffer();
+#endif //  
 	////////////////////////////// GBuffer¿¡ Render
 	
 	////////////////////////////// ComputeShader
