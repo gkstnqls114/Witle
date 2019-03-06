@@ -28,8 +28,8 @@ enum LIGHT_TYPE
 /////////////////////////////////////////////// define 정의
 #define CHECK_ROOT_SIGNATURE 
 #define CHECK_TERRAIN_MAX_POS
-// #define CHECK_ANOTHER_CAMERA
-// #define CHECK_G_BUFFERS
+#define CHECK_ANOTHER_CAMERA
+#define CHECK_G_BUFFERS
 #define CHECK_CONSOLE_TEST
 #define CHECK_FRAMERATE // 정의한경우, 프레임 레이트가 타이틀 화면에 보인다.
 // #define _DEBUG_FRAME_HIERARCHY
@@ -81,29 +81,16 @@ enum LIGHT_TYPE
 #define DIR_DOWN					0x20
 /////////////////////////////////////////////// 조작키
 
-
-/////////////////////////////////////////////// 루트 패러미터
-#define ROOTPATAMETER_COUNT		17
-
-const UINT ROOTPATAMETER_WORLD = 0;
-const UINT ROOTPATAMETER_CAMERA = 1;
-const UINT ROOTPATAMETER_MATERIAL = 2;
-const UINT ROOTPATAMETER_LIGHT = 3;
-const UINT ROOTPATAMETER_COLOR = 16;
-
-const UINT ROOTPATAMETER_TEXTURE = 4;
-const UINT ROOTPATAMETER_TEXTUREBASE = 5;
-const UINT ROOTPATAMETER_TEXTUREDETAIL = 6;
-
-/////////////////////////////////////////////// 루트패러미터
-
-
 #define BILLBOARD_PITCH_X 700.F
 #define BILLBOARD_PITCH_Y 100.F
 #define BILLBOARD_PITCH_Z 700.F
 
 #define BILLBOARD_WIDTH 500.F
 #define BILLBOARD_HEIGHT 500.F
+
+//#define _WITH_TEXT_MESH
+//#define _WITH_BIN_MESH
+#define _WITH_OBJ_MESH
 
 #define MOUSE_WHEEL_UP		120
 #define MOUSE_WHEEL_DOWN	-120
