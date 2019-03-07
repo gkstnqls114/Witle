@@ -158,6 +158,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	// m_GameObject = new Player("Player");
 	m_GameObject = new CTerrainPlayer(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, m_Terrain->GetHeightMapImage());
 	m_GameObject->CreateShaderVariables(pd3dDevice, pd3dCommandList);
+	m_GameObject->SetPosition(XMFLOAT3(0.f, m_Terrain->GetHeight(0, 0), 0.f));
 	// 피킹 테스트할 오브젝트 생성, 반드시 순서 유지. gameobject 생성 후 만들어야한다.
 
 	//// 해당 터레인을 플레이어 콜백으로 설정
@@ -187,6 +188,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	GameScreen::SetCamera(cameraComponent);
 	cameraComponent->CreateShaderVariables(pd3dDevice, pd3dCommandList);
 	cameraComponent->SetOffset(XMFLOAT3(0, -5.f, 10.f));
+	cameraComponent->SetAt(XMFLOAT3(0, m_Terrain->GetHeight(0, 0), 0));
 	cameraComponent->SetViewport(0, 0, GameScreen::GetWidth(), GameScreen::GetHeight(), 0.0f, 1.0f);
 	cameraComponent->SetScissorRect(0, 0, GameScreen::GetWidth(), GameScreen::GetHeight());
 	cameraComponent->GenerateProjectionMatrix(0.01f, CAMERA_FAR, float(GameScreen::GetWidth()) / float(GameScreen::GetHeight()), 60.0f);
