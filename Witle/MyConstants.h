@@ -31,12 +31,35 @@ enum LIGHT_TYPE
 #define CHECK_ANOTHER_CAMERA
 #define CHECK_G_BUFFERS
 #define CHECK_CONSOLE_TEST
-#define CHECK_FRAMERATE // 정의한경우, 프레임 레이트가 타이틀 화면에 보인다.
+#define CHECK_FRAMERATE // 정의한경우, 프레임 레이트가 상단 타이틀에 보인다.
 // #define _DEBUG_FRAME_HIERARCHY
 /////////////////////////////////////////////// define 정의
 
 
-/////////////////////////////////////////////// Mesh File Load
+//// Root Parameter Index /////////////////////////////////////////// 
+#define ROOTPATAMETER_COUNT 17
+
+const UINT ROOTPARAMETER_WORLD = 0;
+const UINT ROOTPARAMETER_CAMERA = 1;
+const UINT ROOTPARAMETER_MATERIALS = 2;
+const UINT ROOTPARAMETER_LIGHTS = 3;
+const UINT ROOTPARAMETER_COLOR = 16;
+const UINT ROOTPARAMETER_TEXTURE = 4;
+const UINT ROOTPARAMETER_TEXTUREBASE = 5;
+const UINT ROOTPARAMETER_TEXTUREDETAIL = 6;
+const UINT ROOTPARAMETER_ALBEDO = 7;
+const UINT ROOTPARAMETER_SPECULAR = 8;
+const UINT ROOTPARAMETER_NORMAL = 9;
+const UINT ROOTPARAMETER_METALLIC = 10;
+const UINT ROOTPARAMETER_EMISSION_1 = 14;
+const UINT ROOTPARAMETER_EMISSION_2 = 15;
+const UINT ROOTPARAMETER_EMISSION_3 = 13;
+const UINT ROOTPARAMETER_SKINNEDBONEOFFSET = 11;
+const UINT ROOTPARAMETER_SKINNEDBONETRANSFORM = 12;
+//// Root Parameter Index /////////////////////////////////////////// 
+
+
+//// Mesh File Load /////////////////////////////////////////// 
 #define VERTEXT_POSITION				0x0001
 #define VERTEXT_COLOR					0x0002
 #define VERTEXT_NORMAL					0x0004
@@ -52,7 +75,7 @@ enum LIGHT_TYPE
 #define VERTEXT_NORMAL_TANGENT_TEXTURE	(VERTEXT_POSITION | VERTEXT_NORMAL | VERTEXT_TANGENT | VERTEXT_TEXTURE_COORD0)
 #define VERTEXT_NORMAL_DETAIL			(VERTEXT_POSITION | VERTEXT_NORMAL | VERTEXT_TEXTURE_COORD0 | VERTEXT_TEXTURE_COORD1)
 #define VERTEXT_NORMAL_TANGENT__DETAIL	(VERTEXT_POSITION | VERTEXT_NORMAL | VERTEXT_TANGENT | VERTEXT_TEXTURE_COORD0 | VERTEXT_TEXTURE_COORD1)
-/////////////////////////////////////////////// Mesh File Load
+////  Mesh File Load ///////////////////////////////////////////
 
 
 /////////////////////////////////////////////// Material File Load
