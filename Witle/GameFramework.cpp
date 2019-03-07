@@ -8,7 +8,7 @@
 #include "TESTShader.h"
 #include "CubeShader.h"
 #include "TerrainShader.h"
-#include "StandardShader.h"
+#include "SkinnedStandardShader.h"
 #include "HorizonBlurShader.h"
 #include "VerticalBlurShader.h"
 #include "Texture.h"
@@ -758,7 +758,7 @@ void CGameFramework::BuildShaders()
 	pTerrainShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
 	ShaderManager::GetInstance()->InsertShader("Terrain", pTerrainShader);
 
-	Shader* pStandardShader = new StandardShader();
+	Shader* pStandardShader = new SkinnedStandardShader();
 	pStandardShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
 	ShaderManager::GetInstance()->InsertShader("Standard", pStandardShader);
 }

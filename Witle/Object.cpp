@@ -824,6 +824,11 @@ void LoadObject::SetTrackAnimationSet(int nAnimationTrack, int nAnimationSet)
 	if (m_pSkinnedAnimationController) m_pSkinnedAnimationController->SetTrackAnimationSet(nAnimationTrack, nAnimationSet);
 }
 
+void LoadObject::SetTrackAnimationPosition(int nAnimationTrack, float fPosition)
+{
+	if (m_pSkinnedAnimationController) m_pSkinnedAnimationController->SetTrackPosition(nAnimationTrack, fPosition);
+}
+
 void LoadObject::LoadMaterialsFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, LoadObject *pParent, FILE *pInFile)
 {
 	char pstrToken[64] = { '\0' };

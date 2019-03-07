@@ -8,6 +8,7 @@ class CameraObject;
 class Terrain;
 class GameObject;
 class LoadObject;
+class SkinnedStandardShader;
 
 class QuadTreeTerrainMesh;
 
@@ -84,7 +85,7 @@ protected:
 	XMFLOAT3*				m_PickingColors{ nullptr };
 	GameObject**			m_PickingTESTMeshs{ nullptr }; 
 	int						m_numPickingTESTMeshs{ 100 };
-
+	 
 	CPlayer*                 m_GameObject{ nullptr };
 	Terrain*                m_Terrain{ nullptr };
 	CameraObject*           m_Camera{ nullptr };

@@ -482,9 +482,6 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 
 	// TerrainMesh Render
 	Mesh* terrainMesh = m_Terrain->GetComponent<Mesh>("TerrainMesh");
-	//gMeshRenderer.Render(pd3dCommandList, terrainMesh);
-
-	//QuadTreeTerrain test Render
 	m_TESTQuadTree->TESTRender(m_TESTQuadTree->GetRootNode(), pd3dCommandList);
 
 
@@ -495,6 +492,7 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	m_TESTQuadTree->TESTRender(m_TESTQuadTree->GetRootNode(), pd3dCommandList);
 #endif
 
+	////////////////////////////// Model Render
 	// PSO ¼³Á¤
 	pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Standard")->GetPSO());
 
@@ -502,7 +500,6 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	m_Camera->SetViewportsAndScissorRects(pd3dCommandList);
 	m_Camera->GetCamera()->UpdateShaderVariables(pd3dCommandList, m_parameterForm->GetIndex("Camera"));
 
-	////////////////////////////// Model Render
 	m_GameObject->Render(pd3dCommandList);
 	////////////////////////////// Model Render
 
