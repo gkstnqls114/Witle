@@ -822,6 +822,11 @@ CTexture *LoadObject::FindReplicatedTexture(_TCHAR *pstrTextureName)
 	return(NULL);
 }
 
+void LoadObject::SetTrackAnimationSet(int nAnimationTrack, int nAnimationSet)
+{
+	if (m_pSkinnedAnimationController) m_pSkinnedAnimationController->SetTrackAnimationSet(nAnimationTrack, nAnimationSet);
+}
+
 void LoadObject::LoadMaterialsFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, LoadObject *pParent, FILE *pInFile)
 {
 	char pstrToken[64] = { '\0' };

@@ -383,11 +383,14 @@ public:
 
 	UINT GetMeshType() { return((m_pMesh) ? m_pMesh->GetType() : 0x00); }
 
-public:
-	CAnimationController 			*m_pAnimationController = NULL;
 
+
+public:
+	CAnimationController 			*m_pSkinnedAnimationController = NULL;
+	
 	LoadObject *GetRootSkinnedGameObject();
 
+	void SetTrackAnimationSet(int nAnimationTrack, int nAnimationSet);
 	void SetAnimationSet(int nAnimationSet);
 
 	void CacheSkinningBoneFrames(LoadObject *pRootFrame);

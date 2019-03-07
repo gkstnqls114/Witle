@@ -160,6 +160,7 @@
     <ClInclude Include="CMesh.h" />
     <ClInclude Include="ComponentBase.h" />
     <ClInclude Include="ComputeShader.h" />
+    <ClInclude Include="CPlayer.h" />
     <ClInclude Include="DirectionalLight.h" />
     <ClInclude Include="FamilyID.h" />
     <ClInclude Include="GameScreen.h" />
@@ -240,6 +241,7 @@
     <ClCompile Include="CMesh.cpp" />
     <ClCompile Include="ComponentBase.cpp" />
     <ClCompile Include="ComputeShader.cpp" />
+    <ClCompile Include="CPlayer.cpp" />
     <ClCompile Include="CubeMesh.cpp" />
     <ClCompile Include="CubeShader.cpp" />
     <ClCompile Include="d3dUtil.cpp" />

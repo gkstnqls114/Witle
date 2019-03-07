@@ -429,6 +429,9 @@
     <ClInclude Include="MyDescriptorHeap.h">
       <Filter>07.Resource</Filter>
     </ClInclude>
+    <ClInclude Include="CPlayer.h">
+      <Filter>13.MyFBXModel</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -649,6 +652,9 @@
     </ClCompile>
     <ClCompile Include="MyDescriptorHeap.cpp">
       <Filter>07.Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="CPlayer.cpp">
+      <Filter>13.MyFBXModel</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
