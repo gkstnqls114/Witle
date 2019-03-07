@@ -391,10 +391,7 @@ public:
 	LoadObject *GetRootSkinnedGameObject();
 
 	void SetTrackAnimationSet(int nAnimationTrack, int nAnimationSet);
-	void SetAnimationSet(int nAnimationSet);
-
-	void CacheSkinningBoneFrames(LoadObject *pRootFrame);
-
+	
 	void LoadMaterialsFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, LoadObject *pParent, FILE *pInFile);
 	static void LoadAnimationFromFile(FILE *pInFile, CLoadedModelInfo *pLoadedModel);
 	

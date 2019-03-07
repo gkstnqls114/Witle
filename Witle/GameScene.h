@@ -1,10 +1,10 @@
 #pragma once
 #include "Scene.h"
 
-
-class MyDescriptorHeap;
-class CameraObject;
 class Player;
+class CPlayer;
+
+class CameraObject;
 class Terrain;
 class GameObject;
 class LoadObject;
@@ -82,11 +82,10 @@ protected:
 	ParameterForm*          m_parameterForm{ nullptr };
 	
 	XMFLOAT3*				m_PickingColors{ nullptr };
-	GameObject**			m_PickingTESTMeshs{ nullptr };
-	LoadObject*				m_TESTModel{ nullptr };
+	GameObject**			m_PickingTESTMeshs{ nullptr }; 
 	int						m_numPickingTESTMeshs{ 100 };
 
-	Player*                 m_GameObject{ nullptr };
+	CPlayer*                 m_GameObject{ nullptr };
 	Terrain*                m_Terrain{ nullptr };
 	CameraObject*           m_Camera{ nullptr };
 

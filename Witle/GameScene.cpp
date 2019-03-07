@@ -18,10 +18,10 @@
 #include "MyFrustum.h"
 #include "GameInput.h"
 #include "GameScreen.h"
-#include "Player.h"
+#include "CPlayer.h"
 #include "CameraObject.h"
 #include "QuadTreeTerrainMesh.h"
-#include "MyDescriptorHeap.h"
+#include "BasicCam.h"
 #include "ParameterForm.h"
 
 #include "GameScene.h"
@@ -145,12 +145,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	// 디스크립터 힙 설정
 	GameScene::CreateCbvSrvDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 2);
 
-	// 큐브메쉬 생성
-	m_GameObject = new Player("Player");
-	// 피킹 테스트할 오브젝트 생성, 반드시 순서 유지. gameobject 생성 후 만들어야한다.
-
-	ComponentBase* cubemesh = new CubeMesh(m_GameObject, pd3dDevice, pd3dCommandList, 1.f, 1.f, 1.f);
-	m_GameObject->InsertComponent("Mesh", cubemesh);
+	// m_GameObject->InsertComponent("Mesh", cubemesh);
 
 	// 터레인 생성 
 	XMFLOAT3 xmf3Scale(8.0f, 1.0f, 8.0f);
@@ -160,10 +155,17 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	// 리소스설정
 	GameScene::CreateShaderResourceViews(pd3dDevice, m_Terrain->GetTexture(), 5, true);
 
+	// m_GameObject = new Player("Player");
+	m_GameObject = new CTerrainPlayer(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, m_Terrain->GetHeightMapImage());
+	m_GameObject->CreateShaderVariables(pd3dDevice, pd3dCommandList);
+	// 피킹 테스트할 오브젝트 생성, 반드시 순서 유지. gameobject 생성 후 만들어야한다.
+
 	//// 해당 터레인을 플레이어 콜백으로 설정
 	m_GameObject->SetPlayerUpdatedContext(m_Terrain);
 
 	// 피킹 테스트 오브젝트들
+	ComponentBase* cubemesh = new CubeMesh(nullptr, pd3dDevice, pd3dCommandList, 1.f, 1.f, 1.f);
+
 	m_PickingTESTMeshs = new GameObject*[m_numPickingTESTMeshs];
 	m_PickingColors = new XMFLOAT3[m_numPickingTESTMeshs];
 	for (int x = 0; x < m_numPickingTESTMeshs; ++x)
@@ -177,19 +179,11 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 		m_PickingTESTMeshs[x]->InsertComponent("Mesh", cubemesh);
 	}
 
-	
-	//////////////////////////////////////////////////// 테스트할 모델 빌드
-	CAngrybotObject *pAngrybotModel = new CAngrybotObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, nullptr, 0);
-	m_TESTModel = pAngrybotModel;
-	// m_TESTModel->SetChild(pAngrybotModel, true);
-	m_TESTModel->SetPosition(.0f, m_Terrain->GetHeight(400.0f, 700.0f), 0.0f);
-	// m_TESTModel->SetScale(1.0f, 1.0f, 1.0f);
-	//////////////////////////////////////////////////// 테스트할 모델 빌드
-
 
 	// 카메라
 	m_Camera = new CameraObject("Camera");
-	Camera* cameraComponent = new FollowCam(m_Camera, m_GameObject);
+	// Camera* cameraComponent = new FollowCam(m_Camera, m_GameObject);
+	Camera* cameraComponent = new BasicCam(m_Camera);
 	GameScreen::SetCamera(cameraComponent);
 	cameraComponent->CreateShaderVariables(pd3dDevice, pd3dCommandList);
 	cameraComponent->SetOffset(XMFLOAT3(0, -5.f, 10.f));
@@ -230,7 +224,7 @@ void GameScene::ReleaseObjects()
 	}
 	if (m_GameObject)
 	{
-		m_GameObject->ReleaseObjects();
+		m_GameObject->ReleaseShaderVariables();
 		delete m_GameObject;
 		m_GameObject = nullptr;
 	}
@@ -310,7 +304,8 @@ bool GameScene::ProcessInput(HWND hWnd, float ElapsedTime)
 	// 만약 키보드 상하좌우 움직인다면...
 	if (dwDirection != 0)
 	{
-		AXIS axis = m_GameObject->GetTransform().GetCoorAxis();
+		// AXIS axis = m_GameObject->GetTransform().GetCoorAxis();
+		AXIS axis = AXIS{ m_GameObject->GetRight(), m_GameObject->GetUp(), m_GameObject->GetLook() };
 
 		XMFLOAT3 xmf3Shift = XMFLOAT3(0, 0, 0); // 이동량
 
@@ -328,7 +323,8 @@ bool GameScene::ProcessInput(HWND hWnd, float ElapsedTime)
 		if (dwDirection & DIR_DOWN) xmf3Shift = Vector3::Add(xmf3Shift, axis.up, -fDistance);
 
 		//플레이어의 이동량 벡터를 xmf3Shift 벡터만큼 더한다.
-		m_GameObject->VelocityMove(xmf3Shift);
+		// m_GameObject->VelocityMove(xmf3Shift);
+		m_GameObject->Move(xmf3Shift);
 	}
 	
 
@@ -339,7 +335,8 @@ bool GameScene::ProcessInput(HWND hWnd, float ElapsedTime)
 			// 플레이어와 카메라 똑같이 rotate...
 			// 순서 의존적이므로 변경 금지
 			m_Camera->GetCamera()->Rotate(GameInput::GetcDeltaY(), GameInput::GetcDeltaX(), 0.0f);
-			m_GameObject->GetTransform().Rotate(0.0f, GameInput::GetcDeltaX(), 0.0f);
+			// m_GameObject->GetTransform().Rotate(0.0f, GameInput::GetcDeltaX(), 0.0f);
+			m_GameObject->Rotate(0.0f, GameInput::GetcDeltaX(), 0.0f);
 		}
 		
 	}
@@ -392,10 +389,6 @@ bool GameScene::ProcessInput(HWND hWnd, float ElapsedTime)
 // ProcessInput에 의한 right, up, look, pos 를 월드변환 행렬에 갱신한다.
 void GameScene::Update(float fElapsedTime)
 {
-	if (m_TESTModel)
-	{
-		m_TESTModel->UpdateTransform();
-	}
 	if (m_GameObject)
 	{
 		// m_GameObject->Update(m_Camera->GetComponent<FollowCam>("Camera")); //Velocity를 통해 pos 이동
@@ -404,7 +397,8 @@ void GameScene::Update(float fElapsedTime)
 	
 	if (m_GameObject)
 	{
-		m_GameObject->GetTransform().Update(fElapsedTime); // right, up, look, pos에 맞춰 월드변환행렬 다시 설정
+		// m_GameObject->GetTransform().Update(fElapsedTime); // right, up, look, pos에 맞춰 월드변환행렬 다시 설정
+		m_GameObject->Update(fElapsedTime); // right, up, look, pos에 맞춰 월드변환행렬 다시 설정
 	}
 
 	if (m_PickingTESTMeshs)
@@ -455,7 +449,7 @@ void GameScene::TESTRenderOnGbuffer(ID3D12GraphicsCommandList * pd3dCommandList,
 void GameScene::AnimateObjects(float fTimeElapsed)
 {
 	//if (m_pHeightMapTerrain) m_pHeightMapTerrain->Animate(fTimeElapsed);
-	//if (m_Player) m_Player->OnPrepareRender();
+	if (m_GameObject) m_GameObject->Animate(fTimeElapsed);
 }
 
 void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
@@ -509,19 +503,13 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	m_Camera->GetCamera()->UpdateShaderVariables(pd3dCommandList, m_parameterForm->GetIndex("Camera"));
 
 	////////////////////////////// Model Render
-	m_TESTModel->Render(pd3dCommandList);
+	m_GameObject->Render(pd3dCommandList);
 	////////////////////////////// Model Render
+
 
 	////////////////////////////// CubeMesh Render
 	// 쉐이더 변수 설정 
 	pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Cube")->GetPSO());
-	Mesh* mesh = m_GameObject->GetComponent<Mesh>("Mesh");
-
-	m_parameterForm->UpdateShaderVariable(pd3dCommandList, m_pd3dGraphicsRootSignature, "World", SourcePtr(&XMMatrixTranspose(XMLoadFloat4x4(&m_GameObject->GetTransform().GetWorldMatrix()))));
-
-	gMeshRenderer.Render(pd3dCommandList, mesh);
-	////////////////////////////// CubeMesh Render
-
 
 	for (int x = 0; x < m_numPickingTESTMeshs; ++x)
 	{
@@ -532,6 +520,7 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 		Mesh* mesh = m_PickingTESTMeshs[x]->GetComponent<Mesh>("Mesh");
 		gMeshRenderer.Render(pd3dCommandList, mesh); 
 	}
+	////////////////////////////// CubeMesh Render
 	
 }
 

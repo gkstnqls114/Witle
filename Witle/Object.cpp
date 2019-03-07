@@ -535,8 +535,7 @@ LoadObject::~LoadObject()
 	}
 	if (m_ppMaterials) delete[] m_ppMaterials;
 
-	// TEST
-	// if (m_pSkinnedAnimationController) delete m_pSkinnedAnimationController;
+	if (m_pSkinnedAnimationController) delete m_pSkinnedAnimationController;
 }
 
 void LoadObject::AddRef()
@@ -636,8 +635,7 @@ void LoadObject::Animate(float fTimeElapsed)
 {
 	OnPrepareRender();
 
-	// TEST
-	// if (m_pSkinnedAnimationController) m_pSkinnedAnimationController->AdvanceTime(fTimeElapsed, this);
+	if (m_pSkinnedAnimationController) m_pSkinnedAnimationController->AdvanceTime(fTimeElapsed, this);
 
 	if (m_pSibling) m_pSibling->Animate(fTimeElapsed);
 	if (m_pChild) m_pChild->Animate(fTimeElapsed);
@@ -645,8 +643,7 @@ void LoadObject::Animate(float fTimeElapsed)
 
 void LoadObject::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 {
-	// TEST
-	// if (m_pSkinnedAnimationController) m_pSkinnedAnimationController->UpdateShaderVariables(pd3dCommandList);
+	if (m_pSkinnedAnimationController) m_pSkinnedAnimationController->UpdateShaderVariables(pd3dCommandList);
 
 	if (m_pMesh)
 	{
