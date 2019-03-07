@@ -154,6 +154,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="32bitRootConstants.h" />
     <ClInclude Include="Avoidance.h" />
     <ClInclude Include="BasicCam.h" />
     <ClInclude Include="CameraObject.h" />
@@ -197,7 +198,6 @@
     <ClInclude Include="PointLight.h" />
     <ClInclude Include="QuadTreeTerrainMesh.h" />
     <ClInclude Include="ResourceBase.h" />
-    <ClInclude Include="32bitRootConstants.h" />
     <ClInclude Include="ParameterForm.h" />
     <ClInclude Include="RootConstantBuffer.h" />
     <ClInclude Include="ShaderManager.h" />
@@ -230,11 +230,11 @@
     <ClInclude Include="WICTextureLoader12.h" />
     <ClInclude Include="WideareaMagic.h" />
     <ClInclude Include="Witle.h" />
-    <ClInclude Include="DescriptorTable.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TerrainShader.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="32bitRootConstants.cpp" />
     <ClCompile Include="Avoidance.cpp" />
     <ClCompile Include="BasicCam.cpp" />
     <ClCompile Include="CameraObject.cpp" />
@@ -275,7 +275,6 @@
     <ClCompile Include="PointLight.cpp" />
     <ClCompile Include="QuadTreeTerrainMesh.cpp" />
     <ClCompile Include="ResourceBase.cpp" />
-    <ClCompile Include="32bitRootConstants.cpp" />
     <ClCompile Include="ParameterForm.cpp" />
     <ClCompile Include="RootConstantBuffer.cpp" />
     <ClCompile Include="ShaderManager.cpp" />
@@ -310,7 +309,6 @@
     <ClCompile Include="WICTextureLoader12.cpp" />
     <ClCompile Include="WideareaMagic.cpp" />
     <ClCompile Include="Witle.cpp" />
-    <ClCompile Include="DescriptorTable.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TerrainShader.cpp" />
     <ClCompile Include="SkyPlane.cpp" />

@@ -155,7 +155,7 @@ void CPlayer::Update(float fTimeElapsed)
 	XMFLOAT3 xmf3Velocity = Vector3::ScalarProduct(m_xmf3Velocity, fTimeElapsed, false);
 	Move(xmf3Velocity, false);
 
-	if (m_pPlayerUpdatedContext) OnPlayerUpdateCallback(fTimeElapsed);
+	// if (m_pPlayerUpdatedContext) OnPlayerUpdateCallback(fTimeElapsed);
 
 	//DWORD nCurrentCameraMode = m_pCamera->GetMode();
 	//if (nCurrentCameraMode == THIRD_PERSON_CAMERA) m_pCamera->Update(m_xmf3Position, fTimeElapsed);
@@ -232,12 +232,16 @@ CTerrainPlayer::CTerrainPlayer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandLi
 
 	CreateShaderVariables(pd3dDevice, pd3dCommandList);
 	
-	SetPlayerUpdatedContext(pContext);
-	SetCameraUpdatedContext(pContext);
+	
+	if (pContext)
+	{
+		SetPlayerUpdatedContext(pContext);
+		SetCameraUpdatedContext(pContext);
 
-	HeightMapImage *pTerrain = (HeightMapImage *)pContext;
-	SetPosition(XMFLOAT3(370.0f, pTerrain->GetHeight(370.0f, 650.0f), 650.0f));
-
+		HeightMapImage *pTerrain = (HeightMapImage *)pContext;
+		SetPosition(XMFLOAT3(370.0f, pTerrain->GetHeight(370.0f, 650.0f), 650.0f));
+	}
+	
 	if (pAngrybotModel) delete pAngrybotModel;
 }
 

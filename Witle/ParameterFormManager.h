@@ -13,18 +13,18 @@ private:
 	~ParameterFormManager();
 
 public:
-	static ParameterFormManager* GetInstance()
-	{
-		if (m_Instance == nullptr)
-		{
-			m_Instance = new ParameterFormManager;
-		}
-		return m_Instance;
-	}
+	//static ParameterFormManager* GetInstance()
+	//{
+	//	if (m_Instance == nullptr)
+	//	{
+	//		m_Instance = new ParameterFormManager;
+	//	}
+	//	return m_Instance;
+	//}
 
-	const ParameterForm* GetCurrForm() const { return m_CurrParameterForm; }
-	void SetCurrForm(ParameterForm* pParameterForm)
-	{
-		m_CurrParameterForm = pParameterForm;
-	}
+	//const ParameterForm* GetCurrForm() const { return m_CurrParameterForm; }
+	//void SetCurrForm(ParameterForm* pParameterForm)
+	//{
+	//	m_CurrParameterForm = pParameterForm;
+	//}
 };

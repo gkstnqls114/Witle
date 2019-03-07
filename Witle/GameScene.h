@@ -79,9 +79,6 @@ public:
 	void TESTRenderOnGbuffer(ID3D12GraphicsCommandList *pd3dCommandList, UINT gbufferCount);
 
 protected:
-	
-	ParameterForm*          m_parameterForm{ nullptr };
-	
 	XMFLOAT3*				m_PickingColors{ nullptr };
 	GameObject**			m_PickingTESTMeshs{ nullptr }; 
 	int						m_numPickingTESTMeshs{ 100 };
