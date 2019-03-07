@@ -10,7 +10,7 @@ public:
 	CLoadedModelInfo();
 	~CLoadedModelInfo();
 
-private:
+public:
 	LoadObject						*m_pModelRootObject{ nullptr };
 
 	int 							m_nSkinnedMeshes{ 0 };

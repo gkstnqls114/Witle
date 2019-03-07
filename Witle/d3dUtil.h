@@ -53,6 +53,12 @@ public:
 		return(nStrLength);
 	}
 
+	static float ReadFloatFromFile(FILE *pInFile)
+	{
+		float fValue = 0;
+		UINT nReads = (UINT)::fread(&fValue, sizeof(float), 1, pInFile);
+		return(fValue);
+	}
 	static int ReadIntegerFromFile(FILE *pInFile)
 	{
 		int nValue = 0;
