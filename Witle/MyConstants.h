@@ -36,6 +36,8 @@ enum LIGHT_TYPE
 #define CHECK_FRAMERATE // 정의한경우, 프레임 레이트가 상단 타이틀에 보인다.
 
 // #define _WITH_DEBUG_FRAME_HIERARCHY
+#define _WITH_DEBUG_SKINNING_BONE
+#define _WITH_DISPLAY_TEXTURE_NAME
 /////////////////////////////////////////////// define 정의
 
 
@@ -121,11 +123,6 @@ const UINT ROOTPARAMETER_SKINNEDBONETRANSFORM = 12;
 //// HeightMapImage.h 관련 define ////////////////////////
 #define _WITH_APPROXIMATE_OPPOSITE_CORNER
 //// HeightMapImage.h 관련 define ////////////////////////
-
-
-//// Object.h 교수님 코드 관련 define ////////////////////////
-#define _WITH_DISPLAY_TEXTURE_NAME
-//// Object.h 교수님 코드 관련 define ////////////////////////
 
 
 //// 조작키 /////////////////////////////////////////// 

@@ -1020,6 +1020,7 @@ void LoadObject::PrintFrameInfo(LoadObject *pGameObject, LoadObject *pParent)
 
 void LoadObject::LoadAnimationFromFile(FILE *pInFile, CLoadedModelInfo *pLoadedModel)
 {
+
 	char pstrToken[64] = { '\0' };
 	UINT nReads = 0;
 

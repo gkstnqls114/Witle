@@ -211,23 +211,23 @@ void CPlayer::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 
 CTerrainPlayer::CTerrainPlayer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext)
 {
-	CLoadedModelInfo *pAngrybotModel = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/Human.bin");
+	CLoadedModelInfo *pAngrybotModel = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/Angrybot.bin");
 	SetChild(pAngrybotModel->GetRootObject(), true);
 
 	m_pSkinnedAnimationController = new CAnimationController(pd3dDevice, pd3dCommandList, 1, pAngrybotModel);
 	m_pSkinnedAnimationController->SetTrackAnimationSet(0, 0);
 
-	m_pSkinnedAnimationController->SetCallbackKeys(0, 1, 3);
-#ifdef _WITH_SOUND_RESOURCE
-	m_pSkinnedAnimationController->SetCallbackKey(0, 0, 0.1f, _T("Footstep01"));
-	m_pSkinnedAnimationController->SetCallbackKey(0, 1, 0.5f, _T("Footstep02"));
-	m_pSkinnedAnimationController->SetCallbackKey(0, 2, 0.9f, _T("Footstep03"));
-#else
-	m_pSkinnedAnimationController->SetCallbackKey(0, 1, 0, 0.1f, _T("Sound/Footstep01.wav"));
-	m_pSkinnedAnimationController->SetCallbackKey(0, 1, 1, 0.5f, _T("Sound/Footstep02.wav"));
-	m_pSkinnedAnimationController->SetCallbackKey(0, 1, 2, 0.9f, _T("Sound/Footstep03.wav"));
-#endif
 	// TEST
+//	m_pSkinnedAnimationController->SetCallbackKeys(0, 1, 3);
+//#ifdef _WITH_SOUND_RESOURCE
+//	m_pSkinnedAnimationController->SetCallbackKey(0, 0, 0.1f, _T("Footstep01"));
+//	m_pSkinnedAnimationController->SetCallbackKey(0, 1, 0.5f, _T("Footstep02"));
+//	m_pSkinnedAnimationController->SetCallbackKey(0, 2, 0.9f, _T("Footstep03"));
+//#else
+//	m_pSkinnedAnimationController->SetCallbackKey(0, 1, 0, 0.1f, _T("Sound/Footstep01.wav"));
+//	m_pSkinnedAnimationController->SetCallbackKey(0, 1, 1, 0.5f, _T("Sound/Footstep02.wav"));
+//	m_pSkinnedAnimationController->SetCallbackKey(0, 1, 2, 0.9f, _T("Sound/Footstep03.wav"));
+//#endif
 	// CAnimationCallbackHandler *pAnimationCallbackHandler = new CSoundCallbackHandler();
 	// m_pSkinnedAnimationController->SetAnimationCallbackHandler(0, 1, pAnimationCallbackHandler);
 
