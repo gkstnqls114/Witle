@@ -71,7 +71,7 @@ void GameInput::Update(HWND hWnd)
 	if (::GetCapture() == hWnd)
 	{
 		//마우스 커서를 화면에서 없앤다(보이지 않게 한다).
-		std::cout << m_clickCursor.x << " " << m_clickCursor.y << std::endl;
+
 		::SetCursor(NULL);
 		//현재 마우스 커서의 위치를 가져온다.
 		::GetCursorPos(&ptCursorPos);

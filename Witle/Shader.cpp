@@ -194,9 +194,6 @@ void Shader::CreatePipelineState(ID3D12Device * pd3dDevice, ID3D12RootSignature 
 
 	HRESULT hResult = pd3dDevice->CreateGraphicsPipelineState(&d3dPipelineStateDesc, IID_PPV_ARGS(&m_pd3dPipelineState));
 	assert(hResult == S_OK);
-#if defined(_DEBUG)
-	std::cout << "PSO 생성 완료" << std::endl;
-#endif
 
 	if (pd3dVertexShaderBlob) pd3dVertexShaderBlob->Release();
 	if (pd3dPixelShaderBlob) pd3dPixelShaderBlob->Release();

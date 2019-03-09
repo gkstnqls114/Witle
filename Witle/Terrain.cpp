@@ -14,9 +14,6 @@ Terrain::Terrain(const std::string& entityID, ID3D12Device * pd3dDevice, ID3D12G
 {
 	if (pFileName == nullptr)
 	{
-#ifdef _DEBUG
-		std::cout << "file name is nullptr";
-#endif
 		return;
 	}
 

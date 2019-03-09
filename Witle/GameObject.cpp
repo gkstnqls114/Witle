@@ -51,16 +51,12 @@ void GameObject::ReleaseUploadBuffers()
 bool GameObject::InsertComponent(const std::string & ComponenetID, ComponentBase * pComponentBase)
 {
 	auto pair = m_Components.insert(std::pair< std::string, ComponentBase*>(ComponenetID, pComponentBase));
-	if (pair.second) {
-#ifdef CHECK_CONSOLE_TEST
-		std::cout << m_EntityID << " ... " << "( ID: " << ComponenetID << " , " << pComponentBase << " ... Insert Componenet SUCCESS" << std::endl;
-#endif // CHECK_CONSOLE_TEST 
+	if (pair.second)
+	{
 		return true;
 	}
-	else { 
-#ifdef CHECK_CONSOLE_TEST
-		std::cout << m_EntityID << " ... " << "( ID: " << ComponenetID << " , " << pComponentBase << " ... Insert Componenet FAIL" << std::endl;
-#endif // CHECK_CONSOLE_TEST 
+	else
+	{
 		return false;
 	}
 }
