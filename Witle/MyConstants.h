@@ -31,10 +31,8 @@ enum LIGHT_TYPE
 #define CAMERA_FAR			50000.F 
 
 /////////////////////////////////////////////// define 정의
-#define CHECK_ROOT_SIGNATURE 
-#define CHECK_TERRAIN_MAX_POS
-#define CHECK_ANOTHER_CAMERA
-#define CHECK_G_BUFFERS
+#define _WITH_DEBUG_TERRAIN_MAX_POS
+// #define CHECK_SUBVIEWS
 #define CHECK_FRAMERATE // 정의한경우, 프레임 레이트가 상단 타이틀에 보인다.
 
 // #define _WITH_DEBUG_FRAME_HIERARCHY

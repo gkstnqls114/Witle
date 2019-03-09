@@ -143,26 +143,22 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	// 디스크립터 힙 설정
 	GameScene::CreateCbvSrvDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 2);
 
-	// m_GameObject->InsertComponent("Mesh", cubemesh);
-
 	// 터레인 생성 
 	XMFLOAT3 xmf3Scale(8.0f, 1.0f, 8.0f);
 	XMFLOAT4 xmf4Color(0.0f, 0.5f, 0.0f, 0.0f);
 	m_Terrain = new Terrain("Terrain", pd3dDevice, pd3dCommandList, L"Image/HeightMap.raw", 257, 257, 257, 257, xmf3Scale, xmf4Color);
-	// 리소스설정
-	GameScene::CreateShaderResourceViews(pd3dDevice, m_Terrain->GetTexture(), 5, true);
 
-	// m_GameObject = new Player("Player");
+	//테스트 쿼드트리 터레인 생성
+	m_TESTQuadGameobject = new GameObject("TESTQuad");
+	m_TESTQuadTree = new QuadTreeTerrainMesh(m_TESTQuadGameobject, pd3dDevice, pd3dCommandList, 257, 257, xmf3Scale, xmf4Color, m_Terrain->GetHeightMapImage());
+
+	// 테스트할 모델 오브젝트
 	m_GameObject = new CTerrainPlayer(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, nullptr);
 	m_GameObject->CreateShaderVariables(pd3dDevice, pd3dCommandList);
 	m_GameObject->SetPosition(XMFLOAT3(0.f, m_Terrain->GetHeight(1.f, 1.f), 0.f));
-	// 피킹 테스트할 오브젝트 생성, 반드시 순서 유지. gameobject 생성 후 만들어야한다.
 
-	//// 해당 터레인을 플레이어 콜백으로 설정
+	// 해당 터레인을 플레이어 콜백으로 설정
 	m_GameObject->SetPlayerUpdatedContext(m_Terrain);
-
-	// 피킹 테스트 오브젝트들
-	ComponentBase* cubemesh = new CubeMesh(nullptr, pd3dDevice, pd3dCommandList, 1.f, 1.f, 1.f);
 
 	// 카메라
 	m_Camera = new CameraObject("Camera");
@@ -175,10 +171,10 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	cameraComponent->SetViewport(0, 0, GameScreen::GetWidth(), GameScreen::GetHeight(), 0.0f, 1.0f);
 	cameraComponent->SetScissorRect(0, 0, GameScreen::GetWidth(), GameScreen::GetHeight());
 	cameraComponent->GenerateProjectionMatrix(0.01f, CAMERA_FAR, float(GameScreen::GetWidth()) / float(GameScreen::GetHeight()), 60.0f);
-
 	m_Camera->ChangeCamera(cameraComponent);
 
-#ifdef CHECK_ANOTHER_CAMERA
+
+#ifdef CHECK_SUBVIEWS
 	m_lookAboveCamera = new CameraObject("LookAboveCamera");
 
 	D3D12_VIEWPORT	GBuffer_Viewport{ 0, GameScreen::GetHeight(),  GameScreen::GetAnotherWidth(), GameScreen::GetAnotherHeight(), 0.0f, 1.0f };
@@ -193,10 +189,10 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	m_lookAboveCamera->GetCamera()->SetOffset(XMFLOAT3(0.0f, 0.f, 10.f));
 	m_lookAboveCamera->GetCamera()->Rotate(90.f, 0.f, 0.f);
 #endif
-	//테스트 쿼드트리 터레인 생성
-	m_TESTQuadGameobject = new GameObject("TESTQuad");
-	m_TESTQuadTree = new QuadTreeTerrainMesh(m_TESTQuadGameobject, pd3dDevice, pd3dCommandList, 257, 257,
-		xmf3Scale, xmf4Color, m_Terrain->GetHeightMapImage());
+
+
+	// 리소스 뷰 설정
+	GameScene::CreateShaderResourceViews(pd3dDevice, m_Terrain->GetTexture(), 5, true);
 }
 
 void GameScene::ReleaseObjects()
@@ -204,10 +200,11 @@ void GameScene::ReleaseObjects()
 	if (m_GameObject)
 	{
 		m_GameObject->ReleaseShaderVariables();
-		delete m_GameObject;
+		m_GameObject->Release();
+		// delete m_GameObject;
 		m_GameObject = nullptr;
 	}
-#ifdef CHECK_ANOTHER_CAMERA
+#ifdef CHECK_SUBVIEWS
 	if (m_lookAboveCamera)
 	{
 		m_lookAboveCamera->ReleaseObjects();
@@ -329,12 +326,12 @@ void GameScene::Update(float fElapsedTime)
 
 void GameScene::LastUpdate(float fElapsedTime)
 {
-#ifdef CHECK_ANOTHER_CAMERA
+#ifdef CHECK_SUBVIEWS
 	if (m_lookAboveCamera)
 	{
 		m_lookAboveCamera->LastUpdate(fElapsedTime);
 	}
-#endif // CHECK_ANOTHER_CAMERA
+#endif // CHECK_SUBVIEWS
 
 
 	// player update 이후에 camera update
@@ -393,7 +390,7 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	m_TESTQuadTree->TESTRender(m_TESTQuadTree->GetRootNode(), pd3dCommandList);
 
 
-#ifdef CHECK_ANOTHER_CAMERA
+#ifdef CHECK_SUBVIEWS
 	m_lookAboveCamera->SetViewportsAndScissorRects(pd3dCommandList); 
 	m_lookAboveCamera->GetCamera()->UpdateShaderVariables(pd3dCommandList, ROOTPARAMETER_CAMERA);
 

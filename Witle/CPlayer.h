@@ -69,34 +69,6 @@ public:
 	virtual void OnPrepareRender();
 	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList);
 };
-//
-//class CAirplanePlayer : public CPlayer
-//{
-//public:
-//	CAirplanePlayer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext=NULL);
-//	virtual ~CAirplanePlayer();
-//
-//	CGameObject					*m_pMainRotorFrame = NULL;
-//	CGameObject					*m_pTailRotorFrame = NULL;
-//
-//private:
-//	virtual void OnPrepareAnimate();
-//	virtual void Animate(float fTimeElapsed);
-//
-//public:
-//	virtual CCamera *ChangeCamera(DWORD nNewCameraMode, float fTimeElapsed);
-//	virtual void OnPrepareRender();
-//};
-//
-//class CSoundCallbackHandler : public CAnimationCallbackHandler
-//{
-//public:
-//	CSoundCallbackHandler() { }
-//	~CSoundCallbackHandler() { }
-//
-//public:
-//	virtual void HandleCallback(void *pCallbackData); 
-//};
 
 class CTerrainPlayer : public CPlayer
 {

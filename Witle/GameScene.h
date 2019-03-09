@@ -82,7 +82,7 @@ protected:
 	Terrain*                m_Terrain{ nullptr };
 	CameraObject*           m_Camera{ nullptr };
 
-#ifdef CHECK_ANOTHER_CAMERA
+#ifdef CHECK_SUBVIEWS
 	CameraObject*			m_lookAboveCamera{ nullptr };
 #endif
 

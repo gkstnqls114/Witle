@@ -26,7 +26,7 @@ TerrainMesh::TerrainMesh(GameObject* pOwner, ID3D12Device * pd3dDevice, ID3D12Gr
 	int cxHeightMap = pHeightMapImage->GetHeightMapWidth();
 	int czHeightMap = pHeightMapImage->GetHeightMapLength();
 
-#ifdef CHECK_TERRAIN_MAX_POS
+#ifdef _WITH_DEBUG_TERRAIN_MAX_POS
 	XMFLOAT3 max{ 0.f, 0.f, 0.f };
 #endif
 	float fHeight = 0.0f, fMinHeight = +FLT_MAX, fMaxHeight = -FLT_MAX;
@@ -36,7 +36,7 @@ TerrainMesh::TerrainMesh(GameObject* pOwner, ID3D12Device * pd3dDevice, ID3D12Gr
 		{
 			fHeight = OnGetHeight(x, z, pContext);
 			m_pVertices[i].m_xmf3Position = XMFLOAT3((x*m_xmf3Scale.x), fHeight, (z*m_xmf3Scale.z));
-#ifdef CHECK_TERRAIN_MAX_POS
+#ifdef _WITH_DEBUG_TERRAIN_MAX_POS
 			if (max.x < m_pVertices[i].m_xmf3Position.x) max.x = m_pVertices[i].m_xmf3Position.x;
 			if (max.y < m_pVertices[i].m_xmf3Position.y) max.y = m_pVertices[i].m_xmf3Position.y;
 			if (max.z < m_pVertices[i].m_xmf3Position.z) max.z = m_pVertices[i].m_xmf3Position.z;
@@ -48,12 +48,12 @@ TerrainMesh::TerrainMesh(GameObject* pOwner, ID3D12Device * pd3dDevice, ID3D12Gr
 			if (fHeight > fMaxHeight) fMaxHeight = fHeight;
 		}
 	}
-#ifdef CHECK_TERRAIN_MAX_POS
-	std::cout << "Terrain Scale: " << m_xmf3Scale.x << " " << m_xmf3Scale.y << " " << m_xmf3Scale.z << std::endl;
-	std::cout << "Terrain MAX value: " << max.x << " " << max.y << " " << max.z << std::endl; 
+#ifdef _WITH_DEBUG_TERRAIN_MAX_POS
+	TCHAR pstrDebug[256] = { 0 };
+	_stprintf_s(pstrDebug, 256, L"(Terrain value (x,y,z): %f, %f, %f)\n", max.x, max.y, max.z);
+	OutputDebugString(pstrDebug);
 #endif
 	m_pPositionBuffer = d3dUtil::CreateBufferResource(pd3dDevice, pd3dCommandList, m_pVertices, m_nStride * m_vertexCount, D3D12_HEAP_TYPE_DEFAULT, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, &m_pPositionUploadBuffer);
-
 
 	m_pVertexBufferViews = new D3D12_VERTEX_BUFFER_VIEW;
 

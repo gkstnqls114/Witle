@@ -140,7 +140,7 @@ void CMaterial::ReleaseUploadBuffers()
 
 void CMaterial::UpdateShaderVariable(ID3D12GraphicsCommandList *pd3dCommandList)
 {
-	// test
+	// TEST
 	//pd3dCommandList->SetGraphicsRoot32BitConstants(1, 4, &m_xmf4AmbientColor, 16);
 	//pd3dCommandList->SetGraphicsRoot32BitConstants(1, 4, &m_xmf4AlbedoColor, 20);
 	//pd3dCommandList->SetGraphicsRoot32BitConstants(1, 4, &m_xmf4SpecularColor, 24);
@@ -691,6 +691,7 @@ void LoadObject::UpdateShaderVariable(ID3D12GraphicsCommandList *pd3dCommandList
 
 void LoadObject::ReleaseShaderVariables()
 {
+
 }
 
 void LoadObject::ReleaseUploadBuffers()

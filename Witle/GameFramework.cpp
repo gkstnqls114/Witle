@@ -26,7 +26,9 @@ void CGameFramework::Render()
 	hResult = m_CommandList->Reset(m_CommandAllocator.Get(), NULL);
 
 	//// GBuffer¿¡ Render //////////////////////////
+#ifdef CHECK_SUBVIEWS
 	RenderOnGbuffer();
+#endif
 	//// GBuffer¿¡ Render //////////////////////////
 
 	//// ComputeShader ////////////////////////// 
