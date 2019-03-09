@@ -149,8 +149,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	// 터레인 생성 
 	XMFLOAT3 xmf3Scale(8.0f, 1.0f, 8.0f);
 	XMFLOAT4 xmf4Color(0.0f, 0.5f, 0.0f, 0.0f);
-	m_Terrain = new Terrain("Terrain", pd3dDevice, pd3dCommandList,
-		L"Image/HeightMap.raw", 257, 257, 257, 257, xmf3Scale, xmf4Color);
+	m_Terrain = new Terrain("Terrain", pd3dDevice, pd3dCommandList, L"Image/HeightMap.raw", 257, 257, 257, 257, xmf3Scale, xmf4Color);
 	// 리소스설정
 	GameScene::CreateShaderResourceViews(pd3dDevice, m_Terrain->GetTexture(), 5, true);
 
@@ -536,198 +535,49 @@ ID3D12RootSignature* GameScene::CreateGraphicsRootSignature(ID3D12Device *pd3dDe
 	HRESULT hResult = S_FALSE;
 	ID3D12RootSignature* pd3dGraphicsRootSignature = nullptr;
 
+	//// 루트 패러미터 ///////////////////////////////////////////////////////////////////// 
 	D3D12_ROOT_PARAMETER pRootParameters[ROOTPATAMETER_COUNT];
-	
-	// 루트 상수
-	pRootParameters[ROOTPARAMETER_WORLD].ParameterType = D3D12_ROOT_PARAMETER_TYPE_32BIT_CONSTANTS;
-	pRootParameters[ROOTPARAMETER_WORLD].Constants.Num32BitValues = 16;
-	pRootParameters[ROOTPARAMETER_WORLD].Constants.ShaderRegister = 0;
-	pRootParameters[ROOTPARAMETER_WORLD].Constants.RegisterSpace = 0;
-	pRootParameters[ROOTPARAMETER_WORLD].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
-	
-	pRootParameters[ROOTPARAMETER_CAMERA].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
-	pRootParameters[ROOTPARAMETER_CAMERA].Descriptor.ShaderRegister = 1; //Camera
-	pRootParameters[ROOTPARAMETER_CAMERA].Descriptor.RegisterSpace = 0;
-	pRootParameters[ROOTPARAMETER_CAMERA].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
-	
-	pRootParameters[ROOTPARAMETER_MATERIALS].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
-	pRootParameters[ROOTPARAMETER_MATERIALS].Descriptor.ShaderRegister = 2; //Materials
-	pRootParameters[ROOTPARAMETER_MATERIALS].Descriptor.RegisterSpace = 0;
-	pRootParameters[ROOTPARAMETER_MATERIALS].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
-	
-	pRootParameters[ROOTPARAMETER_LIGHTS].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
-	pRootParameters[ROOTPARAMETER_LIGHTS].Descriptor.ShaderRegister = 3; //Lights
-	pRootParameters[ROOTPARAMETER_LIGHTS].Descriptor.RegisterSpace = 0;
-	pRootParameters[ROOTPARAMETER_LIGHTS].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
-	
-	pRootParameters[ROOTPARAMETER_COLOR].ParameterType = D3D12_ROOT_PARAMETER_TYPE_32BIT_CONSTANTS;
-	pRootParameters[ROOTPARAMETER_COLOR].Constants.Num32BitValues = 3;
-	pRootParameters[ROOTPARAMETER_COLOR].Constants.ShaderRegister = 4;
-	pRootParameters[ROOTPARAMETER_COLOR].Constants.RegisterSpace = 0;
-	pRootParameters[ROOTPARAMETER_COLOR].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+
+	pRootParameters[ROOTPARAMETER_WORLD] = d3dUtil::CreateRootParameterConstants(16, 0); // b0: World
+	pRootParameters[ROOTPARAMETER_CAMERA] = d3dUtil::CreateRootParameterCBV(1);          // b1: Camera
+	pRootParameters[ROOTPARAMETER_MATERIALS] = d3dUtil::CreateRootParameterCBV(2);       // b2: Materials
+	pRootParameters[ROOTPARAMETER_LIGHTS] = d3dUtil::CreateRootParameterCBV(3);          // b3: Lights
+	pRootParameters[ROOTPARAMETER_COLOR] = d3dUtil::CreateRootParameterConstants(3, 4);  // b4: Color
 	
 	D3D12_DESCRIPTOR_RANGE pTextureDescriptorRanges[3];
-	 
-	pTextureDescriptorRanges[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
-	pTextureDescriptorRanges[0].NumDescriptors = 1;
-	pTextureDescriptorRanges[0].BaseShaderRegister = 0; //t0: gtxtTexture
-	pTextureDescriptorRanges[0].RegisterSpace = 0;
-	pTextureDescriptorRanges[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
-
-	pTextureDescriptorRanges[1].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
-	pTextureDescriptorRanges[1].NumDescriptors = 1;
-	pTextureDescriptorRanges[1].BaseShaderRegister = 1; //t1: gtxtTerrainBaseTexture
-	pTextureDescriptorRanges[1].RegisterSpace = 0;
-	pTextureDescriptorRanges[1].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
-
-	pTextureDescriptorRanges[2].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
-	pTextureDescriptorRanges[2].NumDescriptors = 1;
-	pTextureDescriptorRanges[2].BaseShaderRegister = 2; //t2: gtxtTerrainDetailTexture
-	pTextureDescriptorRanges[2].RegisterSpace = 0;
-	pTextureDescriptorRanges[2].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+	pTextureDescriptorRanges[0] = d3dUtil::CreateDescriptorRangeSRV(1, 0); //t0: gtxtTexture
+	pTextureDescriptorRanges[1] = d3dUtil::CreateDescriptorRangeSRV(1, 1); //t1: gtxtTerrainBaseTexture
+	pTextureDescriptorRanges[2] = d3dUtil::CreateDescriptorRangeSRV(1, 2); //t2: gtxtTerrainDetailTexture	
 
 	// 다시 루프 패러미터 
-	pRootParameters[ROOTPARAMETER_TEXTURE].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	pRootParameters[ROOTPARAMETER_TEXTURE].DescriptorTable.NumDescriptorRanges = 1;
-	pRootParameters[ROOTPARAMETER_TEXTURE].DescriptorTable.pDescriptorRanges = &pTextureDescriptorRanges[0]; //gtxtexture
-	pRootParameters[ROOTPARAMETER_TEXTURE].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	pRootParameters[ROOTPARAMETER_TEXTURE] = d3dUtil::CreateRootParameterTable(1, &pTextureDescriptorRanges[0], D3D12_SHADER_VISIBILITY_PIXEL);
+	pRootParameters[ROOTPARAMETER_TEXTUREBASE] = d3dUtil::CreateRootParameterTable(1, &pTextureDescriptorRanges[1], D3D12_SHADER_VISIBILITY_PIXEL);
+	pRootParameters[ROOTPARAMETER_TEXTUREDETAIL] = d3dUtil::CreateRootParameterTable(1, &pTextureDescriptorRanges[2], D3D12_SHADER_VISIBILITY_PIXEL);
 	
-	pRootParameters[ROOTPARAMETER_TEXTUREBASE].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	pRootParameters[ROOTPARAMETER_TEXTUREBASE].DescriptorTable.NumDescriptorRanges = 1;
-	pRootParameters[ROOTPARAMETER_TEXTUREBASE].DescriptorTable.pDescriptorRanges = &pTextureDescriptorRanges[1];//t4: gtxtTerrainBaseTexture
-	pRootParameters[ROOTPARAMETER_TEXTUREBASE].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	D3D12_DESCRIPTOR_RANGE pd3dDescriptorRanges[8];
+	pd3dDescriptorRanges[0] = d3dUtil::CreateDescriptorRangeSRV(1, 6);  //t6: gtxtAlbedoTexture
+	pd3dDescriptorRanges[1] = d3dUtil::CreateDescriptorRangeSRV(1, 7);  //t7: gtxtSpecularTexture
+	pd3dDescriptorRanges[2] = d3dUtil::CreateDescriptorRangeSRV(1, 8);  //t8: gtxtNormalTexture
+	pd3dDescriptorRanges[3] = d3dUtil::CreateDescriptorRangeSRV(1, 9);  //t9: gtxtMetallicTexture
+	pd3dDescriptorRanges[4] = d3dUtil::CreateDescriptorRangeSRV(1, 10); //t10: gtxtEmissionTexture
+	pd3dDescriptorRanges[5] = d3dUtil::CreateDescriptorRangeSRV(1, 11); //t11: gtxtEmissionTexture
+	pd3dDescriptorRanges[6] = d3dUtil::CreateDescriptorRangeSRV(1, 12); //t12: gtxtEmissionTexture
+	pd3dDescriptorRanges[7] = d3dUtil::CreateDescriptorRangeSRV(1, 13); //t13: gtxtSkyBoxTexture
 	
-	pRootParameters[ROOTPARAMETER_TEXTUREDETAIL].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	pRootParameters[ROOTPARAMETER_TEXTUREDETAIL].DescriptorTable.NumDescriptorRanges = 1;
-	pRootParameters[ROOTPARAMETER_TEXTUREDETAIL].DescriptorTable.pDescriptorRanges = &pTextureDescriptorRanges[2]; 
-	pRootParameters[ROOTPARAMETER_TEXTUREDETAIL].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-	
-	D3D12_DESCRIPTOR_RANGE pd3dDescriptorRanges[10];
+	pRootParameters[ROOTPARAMETER_ALBEDO] = d3dUtil::CreateRootParameterTable(1, &pd3dDescriptorRanges[0], D3D12_SHADER_VISIBILITY_PIXEL);
+	pRootParameters[ROOTPARAMETER_SPECULAR] = d3dUtil::CreateRootParameterTable(1, &pd3dDescriptorRanges[1], D3D12_SHADER_VISIBILITY_PIXEL);
+	pRootParameters[ROOTPARAMETER_NORMAL] = d3dUtil::CreateRootParameterTable(1, &pd3dDescriptorRanges[2], D3D12_SHADER_VISIBILITY_PIXEL);
+	pRootParameters[ROOTPARAMETER_METALLIC] = d3dUtil::CreateRootParameterTable(1, &pd3dDescriptorRanges[3], D3D12_SHADER_VISIBILITY_PIXEL);
+	pRootParameters[ROOTPARAMETER_EMISSION_1] = d3dUtil::CreateRootParameterTable(1, &pd3dDescriptorRanges[4], D3D12_SHADER_VISIBILITY_PIXEL);
+	pRootParameters[ROOTPARAMETER_EMISSION_2] = d3dUtil::CreateRootParameterTable(1, &pd3dDescriptorRanges[5], D3D12_SHADER_VISIBILITY_PIXEL);
+	pRootParameters[ROOTPARAMETER_EMISSION_3] = d3dUtil::CreateRootParameterTable(1, &pd3dDescriptorRanges[6], D3D12_SHADER_VISIBILITY_PIXEL);
 
-	pd3dDescriptorRanges[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
-	pd3dDescriptorRanges[0].NumDescriptors = 1;
-	pd3dDescriptorRanges[0].BaseShaderRegister = 6; //t6: gtxtAlbedoTexture
-	pd3dDescriptorRanges[0].RegisterSpace = 0;
-	pd3dDescriptorRanges[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+	pRootParameters[ROOTPARAMETER_SKINNEDBONEOFFSET] = d3dUtil::CreateRootParameterCBV(7, 0, D3D12_SHADER_VISIBILITY_VERTEX);
+	pRootParameters[ROOTPARAMETER_SKINNEDBONETRANSFORM] = d3dUtil::CreateRootParameterCBV(8, 0, D3D12_SHADER_VISIBILITY_VERTEX);
+	//// 루트 패러미터 ///////////////////////////////////////////////////////////////////// 
 
-	pd3dDescriptorRanges[1].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
-	pd3dDescriptorRanges[1].NumDescriptors = 1;
-	pd3dDescriptorRanges[1].BaseShaderRegister = 7; //t7: gtxtSpecularTexture
-	pd3dDescriptorRanges[1].RegisterSpace = 0;
-	pd3dDescriptorRanges[1].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
-	pd3dDescriptorRanges[2].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
-	pd3dDescriptorRanges[2].NumDescriptors = 1;
-	pd3dDescriptorRanges[2].BaseShaderRegister = 8; //t8: gtxtNormalTexture
-	pd3dDescriptorRanges[2].RegisterSpace = 0;
-	pd3dDescriptorRanges[2].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
-
-	pd3dDescriptorRanges[3].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
-	pd3dDescriptorRanges[3].NumDescriptors = 1;
-	pd3dDescriptorRanges[3].BaseShaderRegister = 9; //t9: gtxtMetallicTexture
-	pd3dDescriptorRanges[3].RegisterSpace = 0;
-	pd3dDescriptorRanges[3].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
-
-	pd3dDescriptorRanges[4].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
-	pd3dDescriptorRanges[4].NumDescriptors = 1;
-	pd3dDescriptorRanges[4].BaseShaderRegister = 10; //t10: gtxtEmissionTexture
-	pd3dDescriptorRanges[4].RegisterSpace = 0;
-	pd3dDescriptorRanges[4].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
-
-	pd3dDescriptorRanges[5].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
-	pd3dDescriptorRanges[5].NumDescriptors = 1;
-	pd3dDescriptorRanges[5].BaseShaderRegister = 11; //t11: gtxtEmissionTexture
-	pd3dDescriptorRanges[5].RegisterSpace = 0;
-	pd3dDescriptorRanges[5].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
-
-	pd3dDescriptorRanges[6].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
-	pd3dDescriptorRanges[6].NumDescriptors = 1;
-	pd3dDescriptorRanges[6].BaseShaderRegister = 12; //t12: gtxtEmissionTexture
-	pd3dDescriptorRanges[6].RegisterSpace = 0;
-	pd3dDescriptorRanges[6].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
-
-	pd3dDescriptorRanges[7].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
-	pd3dDescriptorRanges[7].NumDescriptors = 1;
-	pd3dDescriptorRanges[7].BaseShaderRegister = 13; //t13: gtxtSkyBoxTexture
-	pd3dDescriptorRanges[7].RegisterSpace = 0;
-	pd3dDescriptorRanges[7].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
-
-	pd3dDescriptorRanges[8].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
-	pd3dDescriptorRanges[8].NumDescriptors = 1;
-	pd3dDescriptorRanges[8].BaseShaderRegister = 1; //t1: gtxtTerrainBaseTexture
-	pd3dDescriptorRanges[8].RegisterSpace = 0;
-	pd3dDescriptorRanges[8].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
-
-	pd3dDescriptorRanges[9].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
-	pd3dDescriptorRanges[9].NumDescriptors = 1;
-	pd3dDescriptorRanges[9].BaseShaderRegister = 2; //t2: gtxtTerrainDetailTexture
-	pd3dDescriptorRanges[9].RegisterSpace = 0;
-	pd3dDescriptorRanges[9].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
-
-	pRootParameters[ROOTPARAMETER_ALBEDO].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	pRootParameters[ROOTPARAMETER_ALBEDO].DescriptorTable.NumDescriptorRanges = 1;
-	pRootParameters[ROOTPARAMETER_ALBEDO].DescriptorTable.pDescriptorRanges = &(pd3dDescriptorRanges[0]);
-	pRootParameters[ROOTPARAMETER_ALBEDO].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-	
-	pRootParameters[ROOTPARAMETER_SPECULAR].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	pRootParameters[ROOTPARAMETER_SPECULAR].DescriptorTable.NumDescriptorRanges = 1;
-	pRootParameters[ROOTPARAMETER_SPECULAR].DescriptorTable.pDescriptorRanges = &(pd3dDescriptorRanges[1]);
-	pRootParameters[ROOTPARAMETER_SPECULAR].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-	
-	pRootParameters[ROOTPARAMETER_NORMAL].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	pRootParameters[ROOTPARAMETER_NORMAL].DescriptorTable.NumDescriptorRanges = 1;
-	pRootParameters[ROOTPARAMETER_NORMAL].DescriptorTable.pDescriptorRanges = &(pd3dDescriptorRanges[2]);
-	pRootParameters[ROOTPARAMETER_NORMAL].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-	
-	pRootParameters[ROOTPARAMETER_METALLIC].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	pRootParameters[ROOTPARAMETER_METALLIC].DescriptorTable.NumDescriptorRanges = 1;
-	pRootParameters[ROOTPARAMETER_METALLIC].DescriptorTable.pDescriptorRanges = &(pd3dDescriptorRanges[3]);
-	pRootParameters[ROOTPARAMETER_METALLIC].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-	
-	pRootParameters[ROOTPARAMETER_EMISSION_1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	pRootParameters[ROOTPARAMETER_EMISSION_1].DescriptorTable.NumDescriptorRanges = 1;
-	pRootParameters[ROOTPARAMETER_EMISSION_1].DescriptorTable.pDescriptorRanges = &(pd3dDescriptorRanges[4]);
-	pRootParameters[ROOTPARAMETER_EMISSION_1].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-	
-	pRootParameters[ROOTPARAMETER_EMISSION_2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	pRootParameters[ROOTPARAMETER_EMISSION_2].DescriptorTable.NumDescriptorRanges = 1;
-	pRootParameters[ROOTPARAMETER_EMISSION_2].DescriptorTable.pDescriptorRanges = &(pd3dDescriptorRanges[5]);
-	pRootParameters[ROOTPARAMETER_EMISSION_2].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-	
-	pRootParameters[ROOTPARAMETER_EMISSION_3].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	pRootParameters[ROOTPARAMETER_EMISSION_3].DescriptorTable.NumDescriptorRanges = 1;
-	pRootParameters[ROOTPARAMETER_EMISSION_3].DescriptorTable.pDescriptorRanges = &(pd3dDescriptorRanges[6]);
-	pRootParameters[ROOTPARAMETER_EMISSION_3].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-	
-	pRootParameters[ROOTPARAMETER_SKINNEDBONEOFFSET].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
-	pRootParameters[ROOTPARAMETER_SKINNEDBONEOFFSET].Descriptor.ShaderRegister = 7; //Skinned Bone Offsets
-	pRootParameters[ROOTPARAMETER_SKINNEDBONEOFFSET].Descriptor.RegisterSpace = 0;
-	pRootParameters[ROOTPARAMETER_SKINNEDBONEOFFSET].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
-	
-	pRootParameters[ROOTPARAMETER_SKINNEDBONETRANSFORM].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
-	pRootParameters[ROOTPARAMETER_SKINNEDBONETRANSFORM].Descriptor.ShaderRegister = 8; //Skinned Bone Transforms
-	pRootParameters[ROOTPARAMETER_SKINNEDBONETRANSFORM].Descriptor.RegisterSpace = 0;
-	pRootParameters[ROOTPARAMETER_SKINNEDBONETRANSFORM].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
-	/*
-	pRootParameters[16].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	pRootParameters[16].DescriptorTable.NumDescriptorRanges = 1;
-	pRootParameters[16].DescriptorTable.pDescriptorRanges = &(pd3dDescriptorRanges[7]);
-	pRootParameters[16].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-	m_parameterForm->InsertResource(16, "SkyBox", pRootParameters[16]);*/
-/*
-	pRootParameters[17].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	pRootParameters[17].DescriptorTable.NumDescriptorRanges = 1;
-	pRootParameters[17].DescriptorTable.pDescriptorRanges = &(pd3dDescriptorRanges[8]);
-	pRootParameters[17].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-	m_parameterForm->InsertResource(17, "TerrainDetail", pRootParameters[17]);
-
-	pRootParameters[18].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	pRootParameters[18].DescriptorTable.NumDescriptorRanges = 1;
-	pRootParameters[18].DescriptorTable.pDescriptorRanges = &(pd3dDescriptorRanges[9]);
-	pRootParameters[18].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-	m_parameterForm->InsertResource(18, "TerrainDetail", pRootParameters[18]);*/
-
-	///////////////////////////////////////////////////////////////////////// 샘플러
+	//// 샘플러 ///////////////////////////////////////////////////////////////////// 
 	D3D12_STATIC_SAMPLER_DESC d3dSamplerDesc;
 	::ZeroMemory(&d3dSamplerDesc, sizeof(D3D12_STATIC_SAMPLER_DESC));
 	d3dSamplerDesc.Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR;
@@ -742,7 +592,7 @@ ID3D12RootSignature* GameScene::CreateGraphicsRootSignature(ID3D12Device *pd3dDe
 	d3dSamplerDesc.ShaderRegister = 0;
 	d3dSamplerDesc.RegisterSpace = 0;
 	d3dSamplerDesc.ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
-	///////////////////////////////////////////////////////////////////////// 샘플러
+	//// 샘플러 ///////////////////////////////////////////////////////////////////// 
 
 	D3D12_ROOT_SIGNATURE_FLAGS d3dRootSignatureFlags =
 		D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT |
@@ -761,12 +611,10 @@ ID3D12RootSignature* GameScene::CreateGraphicsRootSignature(ID3D12Device *pd3dDe
 
 	ID3DBlob *pd3dSignatureBlob = nullptr;
 	ID3DBlob *pd3dErrorBlob = nullptr;
-	hResult = ::D3D12SerializeRootSignature(&d3dRootSignatureDesc, D3D_ROOT_SIGNATURE_VERSION_1,
-		&pd3dSignatureBlob, &pd3dErrorBlob);
+	hResult = ::D3D12SerializeRootSignature(&d3dRootSignatureDesc, D3D_ROOT_SIGNATURE_VERSION_1, &pd3dSignatureBlob, &pd3dErrorBlob);
 	assert(hResult == S_OK); 
 
-	hResult = pd3dDevice->CreateRootSignature(0, pd3dSignatureBlob->GetBufferPointer(),
-		pd3dSignatureBlob->GetBufferSize(), IID_PPV_ARGS(&pd3dGraphicsRootSignature));
+	hResult = pd3dDevice->CreateRootSignature(0, pd3dSignatureBlob->GetBufferPointer(), pd3dSignatureBlob->GetBufferSize(), IID_PPV_ARGS(&pd3dGraphicsRootSignature));
 	assert(hResult == S_OK); 
 
 	if (pd3dSignatureBlob) pd3dSignatureBlob->Release();

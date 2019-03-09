@@ -192,6 +192,8 @@ void CPlayer::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // 
 #define _WITH_DEBUG_CALLBACK_DATA
+
+// TEST
 //
 //void CSoundCallbackHandler::HandleCallback(void *pCallbackData)
 //{
@@ -210,7 +212,7 @@ void CPlayer::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 
 CTerrainPlayer::CTerrainPlayer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext)
 {
-	CLoadedModelInfo *pAngrybotModel = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/Angrybot.bin");
+	CLoadedModelInfo *pAngrybotModel = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/Human.bin");
 	SetChild(pAngrybotModel->GetRootObject(), true);
 
 	m_pSkinnedAnimationController = new CAnimationController(pd3dDevice, pd3dCommandList, 1, pAngrybotModel);

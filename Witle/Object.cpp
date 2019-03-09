@@ -185,9 +185,10 @@ void CMaterial::LoadTextureFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsComm
 #endif
 		if (!bDuplicated)
 		{
-			*ppTexture = new CTexture(1, RESOURCE_TEXTURE2D, 0);
-			(*ppTexture)->LoadTextureFromFile(pd3dDevice, pd3dCommandList, pwstrTextureName, 0, true);
-			if (*ppTexture) (*ppTexture)->AddRef();
+			// TEST
+			// *ppTexture = new CTexture(1, RESOURCE_TEXTURE2D, 0);
+			// (*ppTexture)->LoadTextureFromFile(pd3dDevice, pd3dCommandList, pwstrTextureName, 0, true);
+			// if (*ppTexture) (*ppTexture)->AddRef();
 
 			// TEST
 			// CScene::CreateShaderResourceViews(pd3dDevice, *ppTexture, nRootParameter, false);
@@ -249,9 +250,12 @@ void CAnimationSet::SetPosition(float fTrackPosition)
 	{
 	case ANIMATION_TYPE_LOOP:
 	{
-		m_fPosition = fmod(fTrackPosition, m_pfKeyFrameTimes[m_nKeyFrames - 1]); // m_fPosition = fTrackPosition - int(fTrackPosition / m_pfKeyFrameTimes[m_nKeyFrames-1]) * m_pfKeyFrameTimes[m_nKeyFrames-1];
-//			m_fPosition = fmod(fTrackPosition, m_fLength); //if (m_fPosition < 0) m_fPosition += m_fLength;
-//			m_fPosition = fTrackPosition - int(fTrackPosition / m_fLength) * m_fLength;
+		m_fPosition = fmod(fTrackPosition, m_pfKeyFrameTimes[m_nKeyFrames - 1]);
+
+		//m_fPosition = fTrackPosition - int(fTrackPosition / m_pfKeyFrameTimes[m_nKeyFrames-1]) * m_pfKeyFrameTimes[m_nKeyFrames-1];
+		//m_fPosition = fmod(fTrackPosition, m_fLength);
+		//if (m_fPosition < 0) m_fPosition += m_fLength;
+		//m_fPosition = fTrackPosition - int(fTrackPosition / m_fLength) * m_fLength;
 		break;
 	}
 	case ANIMATION_TYPE_ONCE:
@@ -794,7 +798,7 @@ void LoadObject::Rotate(XMFLOAT4 *pxmf4Quaternion)
 	UpdateTransform(NULL);
 }
 
-//#define _WITH_DEBUG_FRAME_HIERARCHY
+#define _WITH_DEBUG_FRAME_HIERARCHY
 
 CTexture *LoadObject::FindReplicatedTexture(_TCHAR *pstrTextureName)
 {
@@ -992,7 +996,7 @@ LoadObject *LoadObject::LoadFrameHierarchyFromFile(ID3D12Device *pd3dDevice, ID3
 					if (pChild) pGameObject->SetChild(pChild);
 #ifdef _WITH_DEBUG_FRAME_HIERARCHY
 					TCHAR pstrDebug[256] = { 0 };
-					_stprintf_s(pstrDebug, 256, "(Frame: %p) (Parent: %p)\n"), pChild, pGameObject);
+					_stprintf_s(pstrDebug, 256, L"(Frame: %p) (Parent: %p)\n", pChild, pGameObject);
 					OutputDebugString(pstrDebug);
 #endif
 				}
@@ -1146,10 +1150,10 @@ CLoadedModelInfo *LoadObject::LoadGeometryAndAnimationFromFile(ID3D12Device *pd3
 
 #ifdef _WITH_DEBUG_FRAME_HIERARCHY
 	TCHAR pstrDebug[256] = { 0 };
-	_stprintf_s(pstrDebug, 256, "Frame Hierarchy\n"));
+	_stprintf_s(pstrDebug, 256, L"Frame Hierarchy\n");
 	OutputDebugString(pstrDebug);
 
-	LoadObject::PrintFrameInfo(pGameObject, NULL);
+	LoadObject::PrintFrameInfo(pLoadedModel->m_pModelRootObject, NULL);
 #endif
 
 	return(pLoadedModel);

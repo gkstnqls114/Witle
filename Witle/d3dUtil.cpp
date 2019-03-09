@@ -5,7 +5,6 @@
 #include "d3dUtil.h"
 
 UINT d3dUtil::gnCbvSrvDescriptorIncrementSize = 0;
-int d3dUtil::gTEST = 0;
 
 d3dUtil::d3dUtil()
 {
@@ -14,6 +13,56 @@ d3dUtil::d3dUtil()
 
 d3dUtil::~d3dUtil()
 {
+}
+
+D3D12_DESCRIPTOR_RANGE d3dUtil::CreateDescriptorRangeSRV(UINT NumDescriptors, UINT BaseShaderRegister, UINT RegisterSpace)
+{
+	D3D12_DESCRIPTOR_RANGE d3dDescriptorRange;
+
+	d3dDescriptorRange.RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	d3dDescriptorRange.NumDescriptors = NumDescriptors;
+	d3dDescriptorRange.BaseShaderRegister = BaseShaderRegister;
+	d3dDescriptorRange.RegisterSpace = RegisterSpace;
+	d3dDescriptorRange.OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+	
+	return d3dDescriptorRange;
+}
+
+D3D12_ROOT_PARAMETER d3dUtil::CreateRootParameterConstants(UINT Num32BitValues, UINT ShaderRegister, UINT RegisterSpace, D3D12_SHADER_VISIBILITY ShaderVisibility)
+{
+	D3D12_ROOT_PARAMETER d3dRootParameter;
+
+	d3dRootParameter.ParameterType = D3D12_ROOT_PARAMETER_TYPE_32BIT_CONSTANTS;
+	d3dRootParameter.Constants.Num32BitValues = Num32BitValues;
+	d3dRootParameter.Constants.ShaderRegister = ShaderRegister;
+	d3dRootParameter.Constants.RegisterSpace = RegisterSpace;
+	d3dRootParameter.ShaderVisibility = ShaderVisibility;
+
+	return d3dRootParameter;
+}
+
+D3D12_ROOT_PARAMETER d3dUtil::CreateRootParameterCBV(UINT ShaderRegister, UINT RegisterSpace, D3D12_SHADER_VISIBILITY ShaderVisibility)
+{
+	D3D12_ROOT_PARAMETER d3dRootParameter;
+
+	d3dRootParameter.ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV; 
+	d3dRootParameter.Descriptor.ShaderRegister = ShaderRegister;
+	d3dRootParameter.Descriptor.RegisterSpace = RegisterSpace;
+	d3dRootParameter.ShaderVisibility = ShaderVisibility;
+
+	return d3dRootParameter;
+}
+
+D3D12_ROOT_PARAMETER d3dUtil::CreateRootParameterTable(UINT NumDescriptorRanges, D3D12_DESCRIPTOR_RANGE* pDescriptorRanges, D3D12_SHADER_VISIBILITY ShaderVisibility)
+{
+	D3D12_ROOT_PARAMETER d3dRootParameter;
+
+	d3dRootParameter.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	d3dRootParameter.DescriptorTable.NumDescriptorRanges = NumDescriptorRanges;
+	d3dRootParameter.DescriptorTable.pDescriptorRanges = pDescriptorRanges;
+	d3dRootParameter.ShaderVisibility = ShaderVisibility;
+	
+	return d3dRootParameter;
 }
 
 ID3D12Resource* d3dUtil::CreateBufferResource(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, void *pData, UINT nBytes, D3D12_HEAP_TYPE d3dHeapType, D3D12_RESOURCE_STATES d3dResourceStates, ID3D12Resource **ppd3dUploadBuffer)

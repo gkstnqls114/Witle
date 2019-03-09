@@ -7,8 +7,11 @@ class d3dUtil
 public:
 	d3dUtil();
 	~d3dUtil();
-
-	static int gTEST;
+	
+	static D3D12_DESCRIPTOR_RANGE CreateDescriptorRangeSRV(UINT NumDescriptors, UINT BaseShaderRegister, UINT RegisterSpace = 0);
+	static D3D12_ROOT_PARAMETER CreateRootParameterConstants(UINT Num32BitValues, UINT ShaderRegister, UINT RegisterSpace = 0, D3D12_SHADER_VISIBILITY ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL);
+	static D3D12_ROOT_PARAMETER CreateRootParameterCBV(UINT ShaderRegister, UINT RegisterSpace = 0, D3D12_SHADER_VISIBILITY ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL);
+	static D3D12_ROOT_PARAMETER CreateRootParameterTable(UINT NumDescriptorRanges, D3D12_DESCRIPTOR_RANGE* pDescriptorRanges, D3D12_SHADER_VISIBILITY ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL);
 
 	static ID3D12Resource* CreateBufferResource(ID3D12Device *pd3dDevice,
 		ID3D12GraphicsCommandList *pd3dCommandList, void *pData, UINT nBytes, D3D12_HEAP_TYPE
