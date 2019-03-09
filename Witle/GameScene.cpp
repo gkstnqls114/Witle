@@ -164,20 +164,6 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	// 피킹 테스트 오브젝트들
 	ComponentBase* cubemesh = new CubeMesh(nullptr, pd3dDevice, pd3dCommandList, 1.f, 1.f, 1.f);
 
-	m_PickingTESTMeshs = new GameObject*[m_numPickingTESTMeshs];
-	m_PickingColors = new XMFLOAT3[m_numPickingTESTMeshs];
-	for (int x = 0; x < m_numPickingTESTMeshs; ++x)
-	{
-		std::string name = "TESTPikcing" + std::to_string(x);
-		m_PickingTESTMeshs[x] = new GameObject(name);
-		m_PickingColors[x] = XMFLOAT3(1.F, 1.F, 1.F);
-		int rand_x = rand() % int(257);
-		int rand_z = rand() % int(257);
-		m_PickingTESTMeshs[x]->GetTransform().SetPosition(XMFLOAT3(rand_x, m_Terrain->GetHeight(rand_x, rand_z) + 0.5f, rand_z));
-		m_PickingTESTMeshs[x]->InsertComponent("Mesh", cubemesh);
-	}
-
-
 	// 카메라
 	m_Camera = new CameraObject("Camera");
 	// Camera* cameraComponent = new FollowCam(m_Camera, m_GameObject);
@@ -245,22 +231,6 @@ void GameScene::ReleaseObjects()
 	{
 		delete m_TESTQuadTree;
 		m_TESTQuadTree = nullptr;
-	}
-	if (m_PickingTESTMeshs)
-	{
-		for (int x = 0; x < m_numPickingTESTMeshs; ++x)
-		{
-			// m_PickingTESTMeshs[x]->ReleaseObjects();
-			delete m_PickingTESTMeshs[x];
-			m_PickingTESTMeshs[x] = nullptr;
-		}
-		delete[] m_PickingTESTMeshs;
-		m_PickingTESTMeshs = nullptr;
-	}
-	if (m_PickingColors)
-	{
-		delete[] m_PickingColors;
-		m_PickingColors = nullptr;
 	}
 }
 
@@ -334,73 +304,22 @@ bool GameScene::ProcessInput(HWND hWnd, float ElapsedTime)
 		
 	}
 
-	// 피킹을 테스트한다.
-	Camera* pCamera = m_Camera->GetCamera();
-	RAY pickRay;
-	bool isPick = GameInput::GenerateRayforPicking(m_Camera->GetTransform().GetPosition(), pCamera->GetViewMatrix(), pCamera->GetProjectionMatrix(), pickRay);
-	if (isPick)
-	{
-		if (m_PickingTESTMeshs)
-		{
-			XMFLOAT3* pickColor;
-			float dist;
-			for (int x = 0; x < m_numPickingTESTMeshs; ++x)
-			{
-				auto world = m_PickingTESTMeshs[x]->GetTransform().GetWorldMatrix();
-				BoundingBox box{ XMFLOAT3(0.F, 0.F, 0.F),  XMFLOAT3(0.5F, 0.5F, 0.5F) };
-				box.Transform(box, XMLoadFloat4x4(&world));
-				if (box.Intersects(XMLoadFloat3(&pickRay.origin), XMLoadFloat3(&pickRay.direction), dist))
-				{
-					m_PickingColors[x] = XMFLOAT3(1.F, 0.F, 0.F);
-				}
-			}
-
-
-		}
-	}
-
 	return true;
 }
-
-//
-//bool GameScene::ProcessMouseWheel(HWND hWnd, short WheelData, float ElapsedTime)
-//{
-	//if (WheelData == MOUSE_WHEEL_STOP) return false;
-
-	//bool isUpWheel = WheelData == MOUSE_WHEEL_UP;
-	//bool isDownWheel = WheelData == MOUSE_WHEEL_DOWN;
-	//if (isUpWheel) {
-	//	m_Camera->ZoomIn(0.8f);
-	//}
-	//else if (isDownWheel) {
-	//	m_Camera->ZoomOut(1.2f);
-	//} 
-//
-//	return false;
-//}
 
 // ProcessInput에 의한 right, up, look, pos 를 월드변환 행렬에 갱신한다.
 void GameScene::Update(float fElapsedTime)
 {
 	if (m_GameObject)
 	{
-		// m_GameObject->Update(m_Camera->GetComponent<FollowCam>("Camera")); //Velocity를 통해 pos 이동
 		m_GameObject->Update(fElapsedTime); //Velocity를 통해 pos 이동
 	}
 	
 	if (m_GameObject)
 	{
-		// m_GameObject->GetTransform().Update(fElapsedTime); // right, up, look, pos에 맞춰 월드변환행렬 다시 설정
 		m_GameObject->Update(fElapsedTime); // right, up, look, pos에 맞춰 월드변환행렬 다시 설정
 	}
 
-	if (m_PickingTESTMeshs)
-	{
-		for (int x = 0; x < m_numPickingTESTMeshs; ++x)
-		{
-			m_PickingTESTMeshs[x]->GetTransform().Update(fElapsedTime); // right, up, look, pos에 맞춰 월드변환행렬 다시 설정
-		} 
-	}
 
 	// light update
 	::memcpy(m_pcbMappedLights, LightManager::m_pLights, sizeof(LIGHTS));
@@ -433,10 +352,6 @@ void GameScene::TESTSetRootDescriptor(ID3D12GraphicsCommandList * pd3dCommandLis
 {
 	pd3dCommandList->SetDescriptorHeaps(1, &m_pd3dCbvSrvDescriptorHeap);
 	m_Terrain->UpdateShaderVariables(pd3dCommandList);
-}
-
-void GameScene::TESTRenderOnGbuffer(ID3D12GraphicsCommandList * pd3dCommandList, UINT gbufferCount)
-{
 }
 
 void GameScene::AnimateObjects(float fTimeElapsed)
@@ -496,22 +411,6 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	m_GameObject->Render(pd3dCommandList);
 	////////////////////////////// Model Render
 
-
-	////////////////////////////// CubeMesh Render
-	// 쉐이더 변수 설정 
-	pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Cube")->GetPSO());
-
-	for (int x = 0; x < m_numPickingTESTMeshs; ++x)
-	{
-		// 쉐이더 변수 설정 
-		pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_WORLD, 16, &(XMMatrixTranspose(XMLoadFloat4x4(&m_PickingTESTMeshs[x]->GetTransform().GetWorldMatrix()))), 0);
-		pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_COLOR, 3, &(m_PickingColors[x]), 0);
-		// CubeMesh Render
-		Mesh* mesh = m_PickingTESTMeshs[x]->GetComponent<Mesh>("Mesh");
-		gMeshRenderer.Render(pd3dCommandList, mesh); 
-	}
-	////////////////////////////// CubeMesh Render
-	
 }
 
 void GameScene::ReleaseUploadBuffers()
@@ -519,13 +418,6 @@ void GameScene::ReleaseUploadBuffers()
 	if (m_GameObject) m_GameObject->ReleaseUploadBuffers();
 	if (m_Terrain) m_Terrain->ReleaseUploadBuffers();
 	if (m_TESTQuadTree) m_TESTQuadTree->ReleaseUploadBuffers();
-	if (m_PickingTESTMeshs)
-	{
-		for (int x = 0; x < m_numPickingTESTMeshs; ++x)
-		{
-			m_PickingTESTMeshs[x]->ReleaseUploadBuffers();
-		}
-	}
 }
 
 
