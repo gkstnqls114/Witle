@@ -10,7 +10,6 @@ Camera::Camera(GameObject* pOwner)
 {
 	m_d3dViewport = D3D12_VIEWPORT{ 0.0f, 0.0f, static_cast<FLOAT>(GameScreen::GetWidth()) , static_cast<FLOAT>(GameScreen::GetHeight()), 0.0f, 1.0f };
 	m_d3dScissorRect = D3D12_RECT{ 0, 0, static_cast<LONG>(GameScreen::GetWidth()) ,static_cast<LONG>(GameScreen::GetHeight()) };
-	m_ShaderVariables = new RootConstants(1, 2);
 	m_FamilyID.InitCamera();
 }
 
@@ -27,11 +26,7 @@ Camera::Camera(GameObject* pOwner, Camera *pCamera)
 
 Camera::~Camera()
 {
-	if (m_ShaderVariables)
-	{
-		delete m_ShaderVariables;
-		m_ShaderVariables = nullptr;
-	}
+
 }
 
 void Camera::CreateShaderVariables(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList)
@@ -152,8 +147,6 @@ Camera & Camera::operator=(const Camera & camera)
 
 	m_d3dViewport = camera.m_d3dViewport;
 	m_d3dScissorRect = camera.m_d3dScissorRect;
-
-	m_ShaderVariables = camera.m_ShaderVariables;
 
 	return *this;
 }

@@ -154,7 +154,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="32bitRootConstants.h" />
     <ClInclude Include="Avoidance.h" />
     <ClInclude Include="BasicCam.h" />
     <ClInclude Include="CameraObject.h" />
@@ -193,13 +192,9 @@
     <ClInclude Include="MyRigidbody.h" />
     <ClInclude Include="MyStructs.h" />
     <ClInclude Include="Object.h" />
-    <ClInclude Include="ParameterFormManager.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PointLight.h" />
     <ClInclude Include="QuadTreeTerrainMesh.h" />
-    <ClInclude Include="ResourceBase.h" />
-    <ClInclude Include="ParameterForm.h" />
-    <ClInclude Include="RootConstantBuffer.h" />
     <ClInclude Include="ShaderManager.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Resource.h" />
@@ -213,7 +208,6 @@
     <ClInclude Include="SkinnedStandardShader.h" />
     <ClInclude Include="SkyPlane.h" />
     <ClInclude Include="Sniping.h" />
-    <ClInclude Include="SourcePtr.h" />
     <ClInclude Include="SpeedReduction.h" />
     <ClInclude Include="SpotLight.h" />
     <ClInclude Include="StandardShader.h" />
@@ -234,7 +228,6 @@
     <ClInclude Include="TerrainShader.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="32bitRootConstants.cpp" />
     <ClCompile Include="Avoidance.cpp" />
     <ClCompile Include="BasicCam.cpp" />
     <ClCompile Include="CameraObject.cpp" />
@@ -270,13 +263,9 @@
     <ClCompile Include="MyFrustum.cpp" />
     <ClCompile Include="MyRigidbody.cpp" />
     <ClCompile Include="Object.cpp" />
-    <ClCompile Include="ParameterFormManager.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PointLight.cpp" />
     <ClCompile Include="QuadTreeTerrainMesh.cpp" />
-    <ClCompile Include="ResourceBase.cpp" />
-    <ClCompile Include="ParameterForm.cpp" />
-    <ClCompile Include="RootConstantBuffer.cpp" />
     <ClCompile Include="ShaderManager.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Scene.cpp" />
@@ -288,7 +277,6 @@
     <ClCompile Include="SkinnedMesh.cpp" />
     <ClCompile Include="SkinnedStandardShader.cpp" />
     <ClCompile Include="Sniping.cpp" />
-    <ClCompile Include="SourcePtr.cpp" />
     <ClCompile Include="SpeedReduction.cpp" />
     <ClCompile Include="SpotLight.cpp" />
     <ClCompile Include="StandardShader.cpp" />

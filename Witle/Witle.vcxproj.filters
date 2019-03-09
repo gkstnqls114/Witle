@@ -103,14 +103,8 @@
     <Filter Include="02.Component\Mesh\QuadTreeTerrainMesh">
       <UniqueIdentifier>{711330f0-9106-4126-b083-880c2df6277b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="07.Resource\ParameterForm">
-      <UniqueIdentifier>{f9cc346e-90c1-4bea-8f08-32e231438fd9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="HLSL">
       <UniqueIdentifier>{8071701e-797b-47cb-9dab-2e0e157a4b18}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="07.Resource\RootConstantBuffer">
-      <UniqueIdentifier>{20c205d1-00e0-4b84-b74c-bc21a2ca6598}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.Component\MyFrustum">
       <UniqueIdentifier>{4b849b20-e341-441f-a863-7a7ded49cad8}</UniqueIdentifier>
@@ -180,9 +174,6 @@
     </Filter>
     <Filter Include="05.Shader\StandardShader">
       <UniqueIdentifier>{de0113f4-cf07-4caa-90d1-0142948e989e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="07.Resource\ParameterFormManager">
-      <UniqueIdentifier>{fd0ed904-6de3-45e4-9a31-fa5f1e0cd9df}</UniqueIdentifier>
     </Filter>
     <Filter Include="13.MyFBXModel">
       <UniqueIdentifier>{0e386d01-2dc2-4301-bf93-6eaec3577bd0}</UniqueIdentifier>
@@ -258,9 +249,6 @@
     <ClInclude Include="FollowCam.h">
       <Filter>02.Component\Camera\FollowCam</Filter>
     </ClInclude>
-    <ClInclude Include="ResourceBase.h">
-      <Filter>07.Resource</Filter>
-    </ClInclude>
     <ClInclude Include="HeightMapImage.h">
       <Filter>02.Component</Filter>
     </ClInclude>
@@ -300,9 +288,6 @@
     <ClInclude Include="BasicCam.h">
       <Filter>02.Component\Camera\BasicCam</Filter>
     </ClInclude>
-    <ClInclude Include="SourcePtr.h">
-      <Filter>07.Resource</Filter>
-    </ClInclude>
     <ClInclude Include="EventHandler.h">
       <Filter>11.Event</Filter>
     </ClInclude>
@@ -317,12 +302,6 @@
     </ClInclude>
     <ClInclude Include="QuadTreeTerrainMesh.h">
       <Filter>02.Component\Mesh\QuadTreeTerrainMesh</Filter>
-    </ClInclude>
-    <ClInclude Include="ParameterForm.h">
-      <Filter>07.Resource\ParameterForm</Filter>
-    </ClInclude>
-    <ClInclude Include="RootConstantBuffer.h">
-      <Filter>07.Resource\RootConstantBuffer</Filter>
     </ClInclude>
     <ClInclude Include="MyFrustum.h">
       <Filter>02.Component\MyFrustum</Filter>
@@ -408,9 +387,6 @@
     <ClInclude Include="CMesh.h">
       <Filter>99.etc</Filter>
     </ClInclude>
-    <ClInclude Include="ParameterFormManager.h">
-      <Filter>07.Resource\ParameterFormManager</Filter>
-    </ClInclude>
     <ClInclude Include="LoadedModelInfo.h">
       <Filter>13.MyFBXModel</Filter>
     </ClInclude>
@@ -419,9 +395,6 @@
     </ClInclude>
     <ClInclude Include="CPlayer.h">
       <Filter>13.MyFBXModel</Filter>
-    </ClInclude>
-    <ClInclude Include="32bitRootConstants.h">
-      <Filter>07.Resource</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -485,9 +458,6 @@
     <ClCompile Include="FollowCam.cpp">
       <Filter>02.Component\Camera\FollowCam</Filter>
     </ClCompile>
-    <ClCompile Include="ResourceBase.cpp">
-      <Filter>07.Resource</Filter>
-    </ClCompile>
     <ClCompile Include="HeightMapImage.cpp">
       <Filter>02.Component</Filter>
     </ClCompile>
@@ -527,9 +497,6 @@
     <ClCompile Include="BasicCam.cpp">
       <Filter>02.Component\Camera\BasicCam</Filter>
     </ClCompile>
-    <ClCompile Include="SourcePtr.cpp">
-      <Filter>99.etc</Filter>
-    </ClCompile>
     <ClCompile Include="EventHandler.cpp">
       <Filter>11.Event</Filter>
     </ClCompile>
@@ -538,12 +505,6 @@
     </ClCompile>
     <ClCompile Include="QuadTreeTerrainMesh.cpp">
       <Filter>02.Component\Mesh\QuadTreeTerrainMesh</Filter>
-    </ClCompile>
-    <ClCompile Include="ParameterForm.cpp">
-      <Filter>07.Resource\ParameterForm</Filter>
-    </ClCompile>
-    <ClCompile Include="RootConstantBuffer.cpp">
-      <Filter>07.Resource\RootConstantBuffer</Filter>
     </ClCompile>
     <ClCompile Include="MyFrustum.cpp">
       <Filter>02.Component\MyFrustum</Filter>
@@ -629,9 +590,6 @@
     <ClCompile Include="CMesh.cpp">
       <Filter>99.etc</Filter>
     </ClCompile>
-    <ClCompile Include="ParameterFormManager.cpp">
-      <Filter>07.Resource\ParameterFormManager</Filter>
-    </ClCompile>
     <ClCompile Include="LoadedModelInfo.cpp">
       <Filter>13.MyFBXModel</Filter>
     </ClCompile>
@@ -640,9 +598,6 @@
     </ClCompile>
     <ClCompile Include="CPlayer.cpp">
       <Filter>13.MyFBXModel</Filter>
-    </ClCompile>
-    <ClCompile Include="32bitRootConstants.cpp">
-      <Filter>07.Resource</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

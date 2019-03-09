@@ -27,7 +27,7 @@ class ResourceComponentBase
 	: public ComponentBase
 {
 protected:
-	ResourceBase	*m_ShaderVariables{ nullptr };
+	// ResourceBase	*m_ShaderVariables{ nullptr };
 
 public:
 	ResourceComponentBase(GameObject* pOwner) : ComponentBase(pOwner) {}
@@ -35,5 +35,5 @@ public:
 
 	virtual void Update(float fTimeElapsed) = 0;
 
-	const ResourceBase* const GetResource() const { return m_ShaderVariables; }
+	// const ResourceBase* const GetResource() const { return m_ShaderVariables; }
 };
