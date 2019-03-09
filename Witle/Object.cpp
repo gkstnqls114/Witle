@@ -825,7 +825,7 @@ void LoadObject::LoadMaterialsFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsC
 	int nMaterial = 0;
 	UINT nReads = 0;
 
-	m_nMaterials = ReadIntegerFromFile(pInFile);
+	m_nMaterials = d3dUtil::ReadIntegerFromFile(pInFile);
 
 	m_ppMaterials = new CMaterial*[m_nMaterials];
 	for (int i = 0; i < m_nMaterials; i++) m_ppMaterials[i] = NULL;
@@ -838,7 +838,7 @@ void LoadObject::LoadMaterialsFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsC
 
 		if (!strcmp(pstrToken, "<Material>:"))
 		{
-			nMaterial = ReadIntegerFromFile(pInFile);
+			nMaterial = d3dUtil::ReadIntegerFromFile(pInFile);
 
 			pMaterial = new CMaterial(7); //0:Albedo, 1:Specular, 2:Metallic, 3:Normal, 4:Emission, 5:DetailAlbedo, 6:DetailNormal
 
