@@ -175,8 +175,6 @@ void CMaterial::LoadTextureFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsComm
 		size_t nConverted = 0;
 		mbstowcs_s(&nConverted, pwstrTextureName, 64, pstrFilePath, _TRUNCATE);
 
-		//#define _WITH_DISPLAY_TEXTURE_NAME
-
 #ifdef _WITH_DISPLAY_TEXTURE_NAME
 		static int nTextures = 0, nRepeatedTextures = 0;
 		TCHAR pstrDebug[256] = { 0 };
@@ -797,8 +795,6 @@ void LoadObject::Rotate(XMFLOAT4 *pxmf4Quaternion)
 
 	UpdateTransform(NULL);
 }
-
-#define _WITH_DEBUG_FRAME_HIERARCHY
 
 CTexture *LoadObject::FindReplicatedTexture(_TCHAR *pstrTextureName)
 {

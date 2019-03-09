@@ -1,6 +1,5 @@
 #pragma once
 #include "MeshRenderer.h"
-#define _WITH_PLAYER_TOP
 
 class Scene;
 class Texture;
@@ -96,7 +95,6 @@ private:
 	//스왑 체인, 디바이스, 서술자 힙, 명령 큐/할당자/리스트를 생성하는 함수이다.
 	// OnCreate() 내부에서 사용한다.
 	void CreateRWResourceViews() ;
-	void CreateMRTComputeShader() ;
 	
 	void CreateSwapChain();
 	void CreateDirect3DDevice();

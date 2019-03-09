@@ -126,8 +126,6 @@ XMFLOAT3 CHeightMapImage::GetHeightMapNormal(int x, int z)
 	return(xmf3Normal);
 }
 
-#define _WITH_APPROXIMATE_OPPOSITE_CORNER
-
 float CHeightMapImage::GetHeight(float fx, float fz, bool bReverseQuad)
 {
 	fx = fx / m_xmf3Scale.x;

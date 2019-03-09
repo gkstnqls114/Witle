@@ -1,8 +1,11 @@
 #pragma once
 
-/////////////////////////////////////////////// 전처리문을 위한 정의 
-/////////////////////////////////////////////// 전처리문을 위한 정의
+// 
+// MyConstants.h
+// 전처리문을 정의하는 헤더 파일
+// 
 
+//// Enum Type ////////////////////////////////////
 enum MESH_TYPE_ID
 {
 	CUBE_MESH,
@@ -16,14 +19,16 @@ enum LIGHT_TYPE
 	SPOT_LIGHT,
 	DIRECTIONAL_LIGHT
 };
+//// Enum Type ////////////////////////////////////
+
 
 #define EPSILON				1.0e-10f
 
-#define G_BUFFER_ROOT_PARMATER 0
-#define COMPUTE_UAV_ROOT_PARAMETER 0
-#define COMPUTE_SRV_ROOT_PARAMETER G_BUFFER_ROOT_PARMATER + 3
+#define MOUSE_WHEEL_UP		120
+#define MOUSE_WHEEL_DOWN	-120
+#define MOUSE_WHEEL_STOP	0
 
-#define NUM32BITTOBYTE 4
+#define CAMERA_FAR			50000.F 
 
 /////////////////////////////////////////////// define 정의
 #define CHECK_ROOT_SIGNATURE 
@@ -32,7 +37,8 @@ enum LIGHT_TYPE
 #define CHECK_G_BUFFERS
 #define CHECK_CONSOLE_TEST
 #define CHECK_FRAMERATE // 정의한경우, 프레임 레이트가 상단 타이틀에 보인다.
-// #define _DEBUG_FRAME_HIERARCHY
+
+// #define _WITH_DEBUG_FRAME_HIERARCHY
 /////////////////////////////////////////////// define 정의
 
 
@@ -75,10 +81,14 @@ const UINT ROOTPARAMETER_SKINNEDBONETRANSFORM = 12;
 #define VERTEXT_NORMAL_TANGENT_TEXTURE	(VERTEXT_POSITION | VERTEXT_NORMAL | VERTEXT_TANGENT | VERTEXT_TEXTURE_COORD0)
 #define VERTEXT_NORMAL_DETAIL			(VERTEXT_POSITION | VERTEXT_NORMAL | VERTEXT_TEXTURE_COORD0 | VERTEXT_TEXTURE_COORD1)
 #define VERTEXT_NORMAL_TANGENT__DETAIL	(VERTEXT_POSITION | VERTEXT_NORMAL | VERTEXT_TANGENT | VERTEXT_TEXTURE_COORD0 | VERTEXT_TEXTURE_COORD1)
+
+#define SKINNED_ANIMATION_BONES		128
+
+#define _WITH_DEBUG_CALLBACK_DATA
 ////  Mesh File Load ///////////////////////////////////////////
 
 
-/////////////////////////////////////////////// Material File Load
+//// Load Material /////////////////////////////////////////// 
 #define MATERIAL_ALBEDO_MAP			0x01
 #define MATERIAL_SPECULAR_MAP		0x02
 #define MATERIAL_NORMAL_MAP			0x04
@@ -86,49 +96,59 @@ const UINT ROOTPARAMETER_SKINNEDBONETRANSFORM = 12;
 #define MATERIAL_EMISSION_MAP		0x10
 #define MATERIAL_DETAIL_ALBEDO_MAP	0x20
 #define MATERIAL_DETAIL_NORMAL_MAP	0x40
-/////////////////////////////////////////////// Material File Load
+//// Load Material /////////////////////////////////////////// 
 
 
-/////////////////////////////////////////////// 조명 
+//// Animation Type /////////////////////////////////////////// 
+#define ANIMATION_TYPE_ONCE			0
+#define ANIMATION_TYPE_LOOP			1
+#define ANIMATION_TYPE_PINGPONG		2
+
+#define ANIMATION_CALLBACK_EPSILON	0.015f
+//// Animation Type /////////////////////////////////////////// 
+
+
+//// Animation Type /////////////////////////////////////////// 
+//#define _WITH_ANIMATION_SRT
+#define _WITH_ANIMATION_INTERPOLATION
+// 위 둘 중에 하나만 define
+//// Animation Type /////////////////////////////////////////// 
+
+
+//// 조명 및 재질 ///////////////////////////////////////////  
 #define MAX_LIGHTS 8
 #define MAX_MATERIALS 8
-/////////////////////////////////////////////// 조명
+//// 조명 및 재질 ///////////////////////////////////////////  
 
 
-/////////////////////////////////////////////// 조작키
-#define DIR_FORWARD 0x01
-#define DIR_BACKWARD 0x02
-#define DIR_LEFT 0x04
-#define DIR_RIGHT 0x08
+//// HeightMapImage.h 관련 define ////////////////////////
+#define _WITH_APPROXIMATE_OPPOSITE_CORNER
+//// HeightMapImage.h 관련 define ////////////////////////
+
+
+//// Object.h 교수님 코드 관련 define ////////////////////////
+#define _WITH_DISPLAY_TEXTURE_NAME
+//// Object.h 교수님 코드 관련 define ////////////////////////
+
+
+//// 조작키 /////////////////////////////////////////// 
+#define DIR_FORWARD					0x01
+#define DIR_BACKWARD				0x02
+#define DIR_LEFT					0x04
+#define DIR_RIGHT					0x08
 #define DIR_UP						0x10
 #define DIR_DOWN					0x20
-/////////////////////////////////////////////// 조작키
-
-#define BILLBOARD_PITCH_X 700.F
-#define BILLBOARD_PITCH_Y 100.F
-#define BILLBOARD_PITCH_Z 700.F
-
-#define BILLBOARD_WIDTH 500.F
-#define BILLBOARD_HEIGHT 500.F
-
-//#define _WITH_TEXT_MESH
-//#define _WITH_BIN_MESH
-#define _WITH_OBJ_MESH
-
-#define MOUSE_WHEEL_UP		120
-#define MOUSE_WHEEL_DOWN	-120
-#define MOUSE_WHEEL_STOP	0
+//// 조작키 /////////////////////////////////////////// 
 
 
+//// Load Texture /////////////////////////////////////////// 
 #define RESOURCE_TEXTURE2D			0x01
 #define RESOURCE_TEXTURE2D_ARRAY	0x02	//[]
 #define RESOURCE_TEXTURE2DARRAY		0x03
 #define RESOURCE_TEXTURE_CUBE		0x04
 #define RESOURCE_BUFFER				0x05
+//// Load Texture /////////////////////////////////////////// 
 
-
-#define CAMERA_FAR			50000.F 
 
 //정점의 색상을 무작위로(Random) 설정하기 위해 사용한다. 각 정점의 색상은 난수(Random Number)를 생성하여 지정한다.
 #define RANDOM_COLOR XMFLOAT4{rand() / float(RAND_MAX), rand() / float(RAND_MAX), rand() / float(RAND_MAX), rand() / float(RAND_MAX)}
-/////////////////////////////////////////////// define 정의

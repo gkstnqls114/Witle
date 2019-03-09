@@ -6,20 +6,6 @@
 
 #include "CMesh.h"
 
-#define DIR_FORWARD					0x01
-#define DIR_BACKWARD				0x02
-#define DIR_LEFT					0x04
-#define DIR_RIGHT					0x08
-#define DIR_UP						0x10
-#define DIR_DOWN					0x20
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-#define RESOURCE_TEXTURE2D			0x01
-#define RESOURCE_TEXTURE2D_ARRAY	0x02	//[]
-#define RESOURCE_TEXTURE2DARRAY		0x03
-#define RESOURCE_TEXTURE_CUBE		0x04
-#define RESOURCE_BUFFER				0x05
 
 struct SRVROOTARGUMENTINFO
 {
@@ -70,14 +56,6 @@ public:
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
-#define MATERIAL_ALBEDO_MAP			0x01
-#define MATERIAL_SPECULAR_MAP		0x02
-#define MATERIAL_NORMAL_MAP			0x04
-#define MATERIAL_METALLIC_MAP		0x08
-#define MATERIAL_EMISSION_MAP		0x10
-#define MATERIAL_DETAIL_ALBEDO_MAP	0x20
-#define MATERIAL_DETAIL_NORMAL_MAP	0x40
-
 class CLoadedModelInfo;
 class LoadObject;
 
@@ -138,9 +116,6 @@ public:
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
-#define ANIMATION_TYPE_ONCE			0
-#define ANIMATION_TYPE_LOOP			1
-#define ANIMATION_TYPE_PINGPONG		2
 
 struct CALLBACKKEY
 {
@@ -148,8 +123,6 @@ struct CALLBACKKEY
    void  							*m_pCallbackData = NULL;
 };
 
-//#define _WITH_ANIMATION_SRT
-#define _WITH_ANIMATION_INTERPOLATION
 
 class CAnimationCallbackHandler
 {
@@ -233,11 +206,6 @@ public:
 };
 
 
-#define ANIMATION_TYPE_ONCE			0
-#define ANIMATION_TYPE_LOOP			1
-#define ANIMATION_TYPE_PINGPONG		2
-
-#define ANIMATION_CALLBACK_EPSILON	0.015f
 
 class CAnimationSets
 {

@@ -7,8 +7,8 @@
 #define DIRECTIONAL_LIGHT 2
 
 #define _WITH_LOCAL_VIEWER_HIGHLIGHTING
-#define _WITH_THETA_PHI_CONES
-//#define _WITH_REFLECT
+ #define _WITH_THETA_PHI_CONES
+ //#define _WITH_REFLECT
 
 struct MATERIAL
 {
