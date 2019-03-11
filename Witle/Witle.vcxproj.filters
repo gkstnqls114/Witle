@@ -175,9 +175,6 @@
     <Filter Include="05.Shader\StandardShader">
       <UniqueIdentifier>{de0113f4-cf07-4caa-90d1-0142948e989e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="13.MyFBXModel">
-      <UniqueIdentifier>{0e386d01-2dc2-4301-bf93-6eaec3577bd0}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -387,14 +384,14 @@
     <ClInclude Include="CMesh.h">
       <Filter>99.etc</Filter>
     </ClInclude>
-    <ClInclude Include="LoadedModelInfo.h">
-      <Filter>13.MyFBXModel</Filter>
-    </ClInclude>
     <ClInclude Include="MyDescriptorHeap.h">
       <Filter>07.Resource</Filter>
     </ClInclude>
     <ClInclude Include="CPlayer.h">
-      <Filter>13.MyFBXModel</Filter>
+      <Filter>99.etc</Filter>
+    </ClInclude>
+    <ClInclude Include="LoadedModelInfo.h">
+      <Filter>99.etc</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -472,9 +469,6 @@
     </ClCompile>
     <ClCompile Include="SkinnedMeshRenderer.cpp">
       <Filter>10.Renderer\SkinnedMeshRenderer</Filter>
-    </ClCompile>
-    <ClCompile Include="vertices.cpp">
-      <Filter>헤더 파일</Filter>
     </ClCompile>
     <ClCompile Include="Texture.cpp">
       <Filter>07.Resource\Texture</Filter>
@@ -590,14 +584,14 @@
     <ClCompile Include="CMesh.cpp">
       <Filter>99.etc</Filter>
     </ClCompile>
-    <ClCompile Include="LoadedModelInfo.cpp">
-      <Filter>13.MyFBXModel</Filter>
-    </ClCompile>
     <ClCompile Include="MyDescriptorHeap.cpp">
       <Filter>07.Resource</Filter>
     </ClCompile>
     <ClCompile Include="CPlayer.cpp">
-      <Filter>13.MyFBXModel</Filter>
+      <Filter>99.etc</Filter>
+    </ClCompile>
+    <ClCompile Include="LoadedModelInfo.cpp">
+      <Filter>99.etc</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

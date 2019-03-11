@@ -81,6 +81,7 @@ void CPlayer::Move(const XMFLOAT3& xmf3Shift, bool bUpdateVelocity)
 
 void CPlayer::Rotate(float x, float y, float z)
 {
+	// TEST
 	/*DWORD nCurrentCameraMode = m_pCamera->GetMode();
 	if ((nCurrentCameraMode == FIRST_PERSON_CAMERA) || (nCurrentCameraMode == THIRD_PERSON_CAMERA))
 	{
@@ -133,9 +134,9 @@ void CPlayer::Rotate(float x, float y, float z)
 		}
 	}*/
 
-	m_xmf3Look = Vector3::Normalize(m_xmf3Look);
-	m_xmf3Right = Vector3::CrossProduct(m_xmf3Up, m_xmf3Look, true);
-	m_xmf3Up = Vector3::CrossProduct(m_xmf3Look, m_xmf3Right, true);
+	//m_xmf3Look = Vector3::Normalize(m_xmf3Look);
+	//m_xmf3Right = Vector3::CrossProduct(m_xmf3Up, m_xmf3Look, true);
+	//m_xmf3Up = Vector3::CrossProduct(m_xmf3Look, m_xmf3Right, true);
 }
 
 void CPlayer::Update(float fTimeElapsed)
@@ -155,6 +156,7 @@ void CPlayer::Update(float fTimeElapsed)
 	XMFLOAT3 xmf3Velocity = Vector3::ScalarProduct(m_xmf3Velocity, fTimeElapsed, false);
 	Move(xmf3Velocity, false);
 
+	// TEST
 	// if (m_pPlayerUpdatedContext) OnPlayerUpdateCallback(fTimeElapsed);
 
 	//DWORD nCurrentCameraMode = m_pCamera->GetMode();
@@ -212,7 +214,7 @@ void CPlayer::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 CTerrainPlayer::CTerrainPlayer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext)
 {
 	CLoadedModelInfo *pAngrybotModel = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/Angrybot.bin");
-	SetChild(pAngrybotModel->GetRootObject(), true);
+	SetChild(pAngrybotModel->m_pModelRootObject, true);
 
 	m_pSkinnedAnimationController = new CAnimationController(pd3dDevice, pd3dCommandList, 1, pAngrybotModel);
 	m_pSkinnedAnimationController->SetTrackAnimationSet(0, 0);
@@ -232,17 +234,14 @@ CTerrainPlayer::CTerrainPlayer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandLi
 	// m_pSkinnedAnimationController->SetAnimationCallbackHandler(0, 1, pAnimationCallbackHandler);
 
 	CreateShaderVariables(pd3dDevice, pd3dCommandList);
-	
-	
-	if (pContext)
-	{
-		SetPlayerUpdatedContext(pContext);
-		SetCameraUpdatedContext(pContext);
 
-		HeightMapImage *pTerrain = (HeightMapImage *)pContext;
-		SetPosition(XMFLOAT3(370.0f, pTerrain->GetHeight(370.0f, 650.0f), 650.0f));
-	}
-	
+	SetPlayerUpdatedContext(pContext);
+	SetCameraUpdatedContext(pContext);
+
+	// TEST
+	//HeightMapImage *pTerrain = (HeightMapImage *)pContext;
+	//SetPosition(XMFLOAT3(370.0f, pTerrain->GetHeight(370.0f, 650.0f), 650.0f));
+
 	if (pAngrybotModel) delete pAngrybotModel;
 }
 

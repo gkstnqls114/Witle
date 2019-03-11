@@ -293,7 +293,6 @@
     <ClCompile Include="TESTShader.cpp" />
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="VerticalBlurShader.cpp" />
-    <ClCompile Include="vertices.cpp" />
     <ClCompile Include="WICTextureLoader12.cpp" />
     <ClCompile Include="WideareaMagic.cpp" />
     <ClCompile Include="Witle.cpp" />

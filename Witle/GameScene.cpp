@@ -295,7 +295,6 @@ bool GameScene::ProcessInput(HWND hWnd, float ElapsedTime)
 			// 플레이어와 카메라 똑같이 rotate...
 			// 순서 의존적이므로 변경 금지
 			m_Camera->GetCamera()->Rotate(GameInput::GetcDeltaY(), GameInput::GetcDeltaX(), 0.0f);
-			// m_GameObject->GetTransform().Rotate(0.0f, GameInput::GetcDeltaX(), 0.0f);
 			m_GameObject->Rotate(0.0f, GameInput::GetcDeltaX(), 0.0f);
 		}
 		
@@ -342,7 +341,6 @@ void GameScene::LastUpdate(float fElapsedTime)
 
 	// 카메라 프러스텀과 쿼드트리 지형 렌더링 체크
 	m_Camera->GetFrustum()->TESTCheck(m_TESTQuadTree->GetRootNode());
-	// m_Camera->GetFrustum()->TESTCheckAllTRUE(m_TESTQuadTree->GetRootNode());
 }
 
 void GameScene::TESTSetRootDescriptor(ID3D12GraphicsCommandList * pd3dCommandList)
@@ -353,7 +351,7 @@ void GameScene::TESTSetRootDescriptor(ID3D12GraphicsCommandList * pd3dCommandLis
 
 void GameScene::AnimateObjects(float fTimeElapsed)
 {
-	//if (m_pHeightMapTerrain) m_pHeightMapTerrain->Animate(fTimeElapsed);
+	// if (m_pHeightMapTerrain) m_pHeightMapTerrain->Animate(fTimeElapsed);
 	if (m_GameObject) m_GameObject->Animate(fTimeElapsed);
 }
 
@@ -566,9 +564,7 @@ void GameScene::BuildLightsAndMaterials(ID3D12Device *pd3dDevice, ID3D12Graphics
 	LightManager::m_pLights->m_pLights[3].fPhi = (float)cos(XMConvertToRadians(90.0f));
 	LightManager::m_pLights->m_pLights[3].fTheta = (float)cos(XMConvertToRadians(30.0f));
 
-
-	// 쉐이더 변수 설정
-
+	 
 	UINT ncbElementBytes = ((sizeof(LIGHTS) + 255) & ~255); //256의 배수
 	m_pd3dcbLights = d3dUtil::CreateBufferResource(pd3dDevice, pd3dCommandList, NULL, ncbElementBytes, D3D12_HEAP_TYPE_UPLOAD, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, NULL);
 
