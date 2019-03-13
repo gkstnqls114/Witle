@@ -168,7 +168,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	Camera* cameraComponent = new BasicCam(m_Camera);
 	GameScreen::SetCamera(cameraComponent);
 	cameraComponent->CreateShaderVariables(pd3dDevice, pd3dCommandList);
-	cameraComponent->SetOffset(XMFLOAT3(0, 0, 10.f));
+	cameraComponent->SetOffset(XMFLOAT3(0, 0, 50.f));
 	cameraComponent->SetAt(XMFLOAT3(0, 0, 0));
 	// cameraComponent->SetAt(XMFLOAT3(0, m_Terrain->GetHeight(1, 1) + 10, 0));
 	cameraComponent->SetViewport(0, 0, GameScreen::GetWidth(), GameScreen::GetHeight(), 0.0f, 1.0f);

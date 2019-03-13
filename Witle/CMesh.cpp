@@ -516,7 +516,7 @@ void CStandardMesh::LoadMeshFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCom
 				m_nType |= VERTEXT_TEXTURE_COORD1;
 				m_pxmf2TextureCoords1 = new XMFLOAT2[nTextureCoords];
 				nReads = (UINT)::fread(m_pxmf2TextureCoords1, sizeof(XMFLOAT2), nTextureCoords, pInFile);
-
+				
 				m_pd3dTextureCoord1Buffer = d3dUtil::CreateBufferResource(pd3dDevice, pd3dCommandList, m_pxmf2TextureCoords1, sizeof(XMFLOAT2) * m_nVertices, D3D12_HEAP_TYPE_DEFAULT, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, &m_pd3dTextureCoord1UploadBuffer);
 
 				m_d3dTextureCoord1BufferView.BufferLocation = m_pd3dTextureCoord1Buffer->GetGPUVirtualAddress();
@@ -526,14 +526,24 @@ void CStandardMesh::LoadMeshFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCom
 		}
 		else if (!strcmp(pstrToken, "<Normals>:"))
 		{
-			nReads = (UINT)::fread(&nNormals, sizeof(int), 1, pInFile);
+			// nReads = (UINT)::fread(&nNormals, sizeof(int), 1, pInFile); // 노말개수
+			nNormals = d3dUtil::ReadIntegerFromFile(pInFile); // 노말개수
+			int nNormalsPerVertex = d3dUtil::ReadIntegerFromFile(pInFile); // 하나의 정점에 존재하는 노말
+			
+			d3dUtil::ReadStringFromFile(pInFile, pstrToken); // <Normal>:
+			int temp = d3dUtil::ReadIntegerFromFile(pInFile); // <Normal>: 의 0번째 1번째 2번째...
+			if (m_nVertices != nNormals)
+			{
+				assert(false);
+			}
 			if (nNormals > 0)
 			{
 				m_nType |= VERTEXT_NORMAL;
 				m_pxmf3Normals = new XMFLOAT3[nNormals];
 				nReads = (UINT)::fread(m_pxmf3Normals, sizeof(XMFLOAT3), nNormals, pInFile);
 
-				m_pd3dNormalBuffer = d3dUtil::CreateBufferResource(pd3dDevice, pd3dCommandList, m_pxmf3Normals, sizeof(XMFLOAT3) * m_nVertices, D3D12_HEAP_TYPE_DEFAULT, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, &m_pd3dNormalUploadBuffer);
+				UINT ncbElementBytes = ((sizeof(XMFLOAT3) * m_nVertices + 255) & ~255); //256의 배수
+				m_pd3dNormalBuffer = d3dUtil::CreateBufferResource(pd3dDevice, pd3dCommandList, m_pxmf3Normals, ncbElementBytes, D3D12_HEAP_TYPE_DEFAULT, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, &m_pd3dNormalUploadBuffer);
 
 				m_d3dNormalBufferView.BufferLocation = m_pd3dNormalBuffer->GetGPUVirtualAddress();
 				m_d3dNormalBufferView.StrideInBytes = sizeof(XMFLOAT3);

@@ -29,6 +29,10 @@ Texture2D gtxtDetailAlbedoTexture : register(t11);
 Texture2D gtxtDetailNormalTexture : register(t12);
 // #define _WITH_VERTEX_LIGHTING
 
+SamplerState gssWrap : register(s0);
+
+#include "Light.hlsl"
+
 #define MAX_VERTEX_INFLUENCES			4
 #define SKINNED_ANIMATION_BONES			128
 
@@ -45,12 +49,14 @@ cbuffer cbBoneTransforms : register(b8)
 struct VertexIn
 {
 	float3 position : POSITION; 
+	float3 normal : NORMAL;
 };
 
 struct VertexOut
 {
 	float4 position : SV_POSITION;
-	float3 positionW : POSITION; 
+	float3 positionW : POSITION;
+	float3 normalW : NORMAL;
 };
 
 VertexOut VS(VertexIn input)
@@ -59,13 +65,18 @@ VertexOut VS(VertexIn input)
 
 	output.positionW = (float3)mul(float4(input.position, 1.0f), gmtxWorld);
 	output.position = mul(mul(float4(output.positionW, 1.0f), gmtxView), gmtxProjection);
+	output.normalW = mul(input.normal, (float3x3)gmtxWorld);
 
 	return output;
 }
 
 float4 PS(VertexOut input) : SV_TARGET
 {
-	return float4(1.f, 1.f, 1.f, 1.f);
+	float TESTColor = float4(1.f, 1.f, 1.f, 1.f); 
+	float3 normalW = normalize(input.normalW);
+	float4 cIllumination = Lighting(input.positionW, normalW);
+
+	return(lerp(TESTColor, cIllumination, 0.5f));
 }
 
  
