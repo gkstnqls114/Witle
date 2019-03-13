@@ -22,6 +22,8 @@
 #include "QuadTreeTerrainMesh.h"
 #include "BasicCam.h"
 
+#include "TESTLoadFBXShader.h"
+
 #include "GameScene.h"
 
 ID3D12DescriptorHeap*		GameScene::m_pd3dCbvSrvDescriptorHeap;
@@ -166,13 +168,16 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	Camera* cameraComponent = new BasicCam(m_Camera);
 	GameScreen::SetCamera(cameraComponent);
 	cameraComponent->CreateShaderVariables(pd3dDevice, pd3dCommandList);
-	cameraComponent->SetOffset(XMFLOAT3(0, -5.f, 10.f));
-	cameraComponent->SetAt(XMFLOAT3(0, m_Terrain->GetHeight(1, 1) + 10, 0));
+	cameraComponent->SetOffset(XMFLOAT3(0, 0, 10.f));
+	cameraComponent->SetAt(XMFLOAT3(0, 0, 0));
+	// cameraComponent->SetAt(XMFLOAT3(0, m_Terrain->GetHeight(1, 1) + 10, 0));
 	cameraComponent->SetViewport(0, 0, GameScreen::GetWidth(), GameScreen::GetHeight(), 0.0f, 1.0f);
 	cameraComponent->SetScissorRect(0, 0, GameScreen::GetWidth(), GameScreen::GetHeight());
 	cameraComponent->GenerateProjectionMatrix(0.01f, CAMERA_FAR, float(GameScreen::GetWidth()) / float(GameScreen::GetHeight()), 60.0f);
 	m_Camera->ChangeCamera(cameraComponent);
 
+	m_LoadFBXShader = new TESTLoadFBXShader();
+	m_LoadFBXShader->CreateShader(pd3dDevice, m_pd3dGraphicsRootSignature);
 
 #ifdef CHECK_SUBVIEWS
 	m_lookAboveCamera = new CameraObject("LookAboveCamera");
@@ -352,7 +357,7 @@ void GameScene::TESTSetRootDescriptor(ID3D12GraphicsCommandList * pd3dCommandLis
 void GameScene::AnimateObjects(float fTimeElapsed)
 {
 	// if (m_pHeightMapTerrain) m_pHeightMapTerrain->Animate(fTimeElapsed);
-	if (m_GameObject) m_GameObject->Animate(fTimeElapsed);
+	// if (m_GameObject) m_GameObject->Animate(fTimeElapsed);
 }
 
 void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
@@ -397,7 +402,7 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 
 	////////////////////////////// Model Render
 	// PSO 설정
-	pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Standard")->GetPSO());
+	pd3dCommandList->SetPipelineState(m_LoadFBXShader->GetPSO());
 
 	// 클라 화면 설정
 	m_Camera->SetViewportsAndScissorRects(pd3dCommandList);

@@ -67,7 +67,7 @@ void CMesh::Render(ID3D12GraphicsCommandList *pd3dCommandList, int nSubSet)
 		pd3dCommandList->DrawIndexedInstanced(m_pnSubSetIndices[nSubSet], 1, 0, 0, 0);
 	}
 	else
-	{
+	{  
 		pd3dCommandList->DrawInstanced(m_nVertices, 1, m_nOffset, 0);
 	}
 }
@@ -428,9 +428,10 @@ void CStandardMesh::LoadMeshFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCom
 	char pstrToken[64] = { '\0' };
 	int nPositions = 0, nColors = 0, nNormals = 0, nTangents = 0, nBiTangents = 0, nTextureCoords = 0, nIndices = 0, nSubMeshes = 0, nSubIndices = 0;
 
-	UINT nReads = (UINT)::fread(&m_nVertices, sizeof(int), 1, pInFile);
+	UINT nReads = 0;
+	// UINT nReads = (UINT)::fread(&m_nVertices, sizeof(int), 1, pInFile);
 
-	d3dUtil::ReadStringFromFile(pInFile, m_pstrMeshName);
+	d3dUtil::ReadStringFromFile(pInFile, m_pstrMeshName); // 메쉬이름 저장
 
 	for (; ; )
 	{
@@ -440,21 +441,49 @@ void CStandardMesh::LoadMeshFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCom
 			nReads = (UINT)::fread(&m_xmf3AABBCenter, sizeof(XMFLOAT3), 1, pInFile);
 			nReads = (UINT)::fread(&m_xmf3AABBExtents, sizeof(XMFLOAT3), 1, pInFile);
 		}
-		else if (!strcmp(pstrToken, "<Positions>:"))
+		else if (!strcmp(pstrToken, "<ControlPoints>:")) // 정점 정보를 의미한다.
 		{
-			nReads = (UINT)::fread(&nPositions, sizeof(int), 1, pInFile);
+			nReads = (UINT)::fread(&nPositions, sizeof(int), 1, pInFile); // 몇개의 컨트롤 포인트가 있는가?
+			m_nVertices = nPositions;
 			if (nPositions > 0)
 			{
-				m_nType |= VERTEXT_POSITION;
+				// TEST
+				// m_nType |= VERTEXT_POSITION;
+				m_pxmf3Positions = new XMFLOAT3[nPositions];
+				nReads = (UINT)::fread(m_pxmf3Positions, sizeof(XMFLOAT3), nPositions, pInFile);
+				delete m_pxmf3Positions;
+				m_pxmf3Positions = nullptr;
+
+				//UINT ncbElementBytes = ((sizeof(XMFLOAT3) * nPositions + 255) & ~255); //256의 배수
+				//m_pd3dPositionBuffer = d3dUtil::CreateBufferResource(pd3dDevice, pd3dCommandList, m_pxmf3Positions, sizeof(XMFLOAT3) * nPositions, D3D12_HEAP_TYPE_DEFAULT, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, &m_pd3dPositionUploadBuffer);
+
+				//m_d3dPositionBufferView.BufferLocation = m_pd3dPositionBuffer->GetGPUVirtualAddress();
+				//m_d3dPositionBufferView.StrideInBytes = sizeof(XMFLOAT3);
+				//m_d3dPositionBufferView.SizeInBytes = sizeof(XMFLOAT3) * nPositions;
+			}
+		}
+		else if (!strcmp(pstrToken, "<Polygons>:")) // 메쉬의 삼각형을 의미한다.
+		{
+			int nPolygons = d3dUtil::ReadIntegerFromFile(pInFile);
+			d3dUtil::ReadStringFromFile(pInFile, pstrToken);
+			if (!strcmp(pstrToken, "<Indices>:"))
+			{  
+				int nPositions = d3dUtil::ReadIntegerFromFile(pInFile);
 				m_pxmf3Positions = new XMFLOAT3[nPositions];
 				nReads = (UINT)::fread(m_pxmf3Positions, sizeof(XMFLOAT3), nPositions, pInFile);
 
-				m_pd3dPositionBuffer = d3dUtil::CreateBufferResource(pd3dDevice, pd3dCommandList, m_pxmf3Positions, sizeof(XMFLOAT3) * m_nVertices, D3D12_HEAP_TYPE_DEFAULT, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, &m_pd3dPositionUploadBuffer);
+				UINT ncbElementBytes = ((sizeof(XMFLOAT3) * nPositions + 255) & ~255); //256의 배수
+				m_pd3dPositionBuffer = d3dUtil::CreateBufferResource(pd3dDevice, pd3dCommandList, m_pxmf3Positions, sizeof(XMFLOAT3) * nPositions, D3D12_HEAP_TYPE_DEFAULT, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, &m_pd3dPositionUploadBuffer);
 
 				m_d3dPositionBufferView.BufferLocation = m_pd3dPositionBuffer->GetGPUVirtualAddress();
 				m_d3dPositionBufferView.StrideInBytes = sizeof(XMFLOAT3);
-				m_d3dPositionBufferView.SizeInBytes = sizeof(XMFLOAT3) * m_nVertices;
+				m_d3dPositionBufferView.SizeInBytes = sizeof(XMFLOAT3) * nPositions;
 			}
+			else
+			{
+				assert(false);
+			}
+
 		}
 		else if (!strcmp(pstrToken, "<Colors>:"))
 		{
@@ -583,6 +612,12 @@ void CStandardMesh::LoadMeshFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCom
 		else if (!strcmp(pstrToken, "</Mesh>"))
 		{
 			break;
+		}
+		else
+		{
+#ifdef _DEBUG
+		printf("%s not have ... " , pstrToken);
+#endif // _DEBUG 
 		}
 	}
 }

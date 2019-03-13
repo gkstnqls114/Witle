@@ -297,7 +297,7 @@ public:
 	CMaterial						**m_ppMaterials = NULL;
 
 	XMFLOAT4X4						m_xmf4x4ToParent;
-	XMFLOAT4X4						m_xmf4x4World;
+	XMFLOAT4X4						m_xmf4x4World = Matrix4x4::Identity();
 
 	LoadObject 					*m_pParent = NULL;
 	LoadObject 					*m_pChild = NULL;

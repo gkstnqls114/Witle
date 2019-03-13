@@ -44,28 +44,37 @@ public:
 	static UINT CalcConstantBufferByteSize(UINT byteSize);
 
 	static UINT gnCbvSrvDescriptorIncrementSize;
-
-	static BYTE ReadStringFromFile(FILE *pInFile, char *pstrToken)
+	static int ReadStringFromFile(FILE *pInFile, char *pstrToken)
 	{
-		BYTE nStrLength = 0;
+		int nStrLength = 0;
 		UINT nReads = 0;
-		nReads = (UINT)::fread(&nStrLength, sizeof(BYTE), 1, pInFile);
+		nReads = (UINT)::fread(&nStrLength, sizeof(int), 1, pInFile);
 		nReads = (UINT)::fread(pstrToken, sizeof(char), nStrLength, pInFile);
 		pstrToken[nStrLength] = '\0';
+#ifdef _DEBUG
+		printf("String ... %d %s\n", nStrLength, pstrToken);
+#endif // DEBUG
 
 		return(nStrLength);
-	}
+	} 
 
 	static float ReadFloatFromFile(FILE *pInFile)
 	{
 		float fValue = 0;
 		UINT nReads = (UINT)::fread(&fValue, sizeof(float), 1, pInFile);
+#ifdef _DEBUG
+		printf("Float ... %f\n", fValue);
+#endif // DEBUG
 		return(fValue);
 	}
+
 	static int ReadIntegerFromFile(FILE *pInFile)
 	{
 		int nValue = 0;
 		UINT nReads = (UINT)::fread(&nValue, sizeof(int), 1, pInFile);
+#ifdef _DEBUG
+		printf("Int ... %d\n", nValue);
+#endif // DEBUG
 		return(nValue);
 	}
 };

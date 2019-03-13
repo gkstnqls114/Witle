@@ -3,6 +3,7 @@
 
 class Player;
 class CPlayer;
+class Shader;
 
 class CameraObject;
 class Terrain;
@@ -78,7 +79,9 @@ public:
 	void TESTSetRootDescriptor(ID3D12GraphicsCommandList *pd3dCommandList);
 	
 protected:
+	Shader*					m_LoadFBXShader{ nullptr };
 	CPlayer*                 m_GameObject{ nullptr };
+	 
 	Terrain*                m_Terrain{ nullptr };
 	CameraObject*           m_Camera{ nullptr };
 

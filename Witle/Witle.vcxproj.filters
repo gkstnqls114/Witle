@@ -175,6 +175,9 @@
     <Filter Include="05.Shader\StandardShader">
       <UniqueIdentifier>{de0113f4-cf07-4caa-90d1-0142948e989e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="05.Shader\TESTLoadFBXShader">
+      <UniqueIdentifier>{225397ac-3fb8-4611-951b-655a6891efa9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -393,6 +396,9 @@
     <ClInclude Include="LoadedModelInfo.h">
       <Filter>99.etc</Filter>
     </ClInclude>
+    <ClInclude Include="TESTLoadFBXShader.h">
+      <Filter>05.Shader\TESTLoadFBXShader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -593,6 +599,9 @@
     <ClCompile Include="LoadedModelInfo.cpp">
       <Filter>99.etc</Filter>
     </ClCompile>
+    <ClCompile Include="TESTLoadFBXShader.cpp">
+      <Filter>05.Shader\TESTLoadFBXShader</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Witle.rc">
@@ -630,6 +639,9 @@
       <Filter>HLSL</Filter>
     </FxCompile>
     <FxCompile Include="Variables.hlsl">
+      <Filter>HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="TESTLoadFBXShader.hlsl">
       <Filter>HLSL</Filter>
     </FxCompile>
   </ItemGroup>
