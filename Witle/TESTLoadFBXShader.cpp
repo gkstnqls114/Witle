@@ -27,7 +27,7 @@ D3D12_INPUT_LAYOUT_DESC TESTLoadFBXShader::CreateInputLayout()
 
 	pd3dInputElementDescs[0] =
 		D3D12_INPUT_ELEMENT_DESC{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 };
-	
+	 
 	D3D12_INPUT_LAYOUT_DESC InputLayout;
 	InputLayout.pInputElementDescs = pd3dInputElementDescs;
 	InputLayout.NumElements = nInputElementDescs;

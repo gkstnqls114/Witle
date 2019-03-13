@@ -428,9 +428,7 @@ void CStandardMesh::LoadMeshFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCom
 	char pstrToken[64] = { '\0' };
 	int nPositions = 0, nColors = 0, nNormals = 0, nTangents = 0, nBiTangents = 0, nTextureCoords = 0, nIndices = 0, nSubMeshes = 0, nSubIndices = 0;
 
-	UINT nReads = 0;
-	// UINT nReads = (UINT)::fread(&m_nVertices, sizeof(int), 1, pInFile);
-
+	UINT nReads = 0; 
 	d3dUtil::ReadStringFromFile(pInFile, m_pstrMeshName); // 메쉬이름 저장
 
 	for (; ; )
@@ -444,10 +442,9 @@ void CStandardMesh::LoadMeshFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCom
 		else if (!strcmp(pstrToken, "<ControlPoints>:")) // 정점 정보를 의미한다.
 		{
 			nReads = (UINT)::fread(&nPositions, sizeof(int), 1, pInFile); // 몇개의 컨트롤 포인트가 있는가?
-			m_nVertices = nPositions;
 			if (nPositions > 0)
 			{
-				// TEST
+				// TEST 
 				// m_nType |= VERTEXT_POSITION;
 				m_pxmf3Positions = new XMFLOAT3[nPositions];
 				nReads = (UINT)::fread(m_pxmf3Positions, sizeof(XMFLOAT3), nPositions, pInFile);
@@ -467,17 +464,17 @@ void CStandardMesh::LoadMeshFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCom
 			int nPolygons = d3dUtil::ReadIntegerFromFile(pInFile);
 			d3dUtil::ReadStringFromFile(pInFile, pstrToken);
 			if (!strcmp(pstrToken, "<Indices>:"))
-			{  
-				int nPositions = d3dUtil::ReadIntegerFromFile(pInFile);
-				m_pxmf3Positions = new XMFLOAT3[nPositions];
-				nReads = (UINT)::fread(m_pxmf3Positions, sizeof(XMFLOAT3), nPositions, pInFile);
+			{
+				m_nVertices = d3dUtil::ReadIntegerFromFile(pInFile);
+				m_pxmf3Positions = new XMFLOAT3[m_nVertices];
+				nReads = (UINT)::fread(m_pxmf3Positions, sizeof(XMFLOAT3), m_nVertices, pInFile);
 
-				UINT ncbElementBytes = ((sizeof(XMFLOAT3) * nPositions + 255) & ~255); //256의 배수
-				m_pd3dPositionBuffer = d3dUtil::CreateBufferResource(pd3dDevice, pd3dCommandList, m_pxmf3Positions, sizeof(XMFLOAT3) * nPositions, D3D12_HEAP_TYPE_DEFAULT, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, &m_pd3dPositionUploadBuffer);
+				UINT ncbElementBytes = ((sizeof(XMFLOAT3) * m_nVertices + 255) & ~255); //256의 배수
+				m_pd3dPositionBuffer = d3dUtil::CreateBufferResource(pd3dDevice, pd3dCommandList, m_pxmf3Positions, sizeof(XMFLOAT3) * m_nVertices, D3D12_HEAP_TYPE_DEFAULT, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, &m_pd3dPositionUploadBuffer);
 
 				m_d3dPositionBufferView.BufferLocation = m_pd3dPositionBuffer->GetGPUVirtualAddress();
 				m_d3dPositionBufferView.StrideInBytes = sizeof(XMFLOAT3);
-				m_d3dPositionBufferView.SizeInBytes = sizeof(XMFLOAT3) * nPositions;
+				m_d3dPositionBufferView.SizeInBytes = sizeof(XMFLOAT3) * m_nVertices;
 			}
 			else
 			{
