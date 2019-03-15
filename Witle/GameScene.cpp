@@ -143,7 +143,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	m_pd3dGraphicsRootSignature = CreateGraphicsRootSignature(pd3dDevice);
 
 	// 디스크립터 힙 설정
-	GameScene::CreateCbvSrvDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 2);
+	GameScene::CreateCbvSrvDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 3);
 
 	// 터레인 생성 
 	XMFLOAT3 xmf3Scale(8.0f, 1.0f, 8.0f);
@@ -158,7 +158,9 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	m_GameObject = new CTerrainPlayer(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, nullptr);
 	m_GameObject->CreateShaderVariables(pd3dDevice, pd3dCommandList);
 	// m_GameObject->SetPosition(XMFLOAT3(0.f, m_Terrain->GetHeight(1.f, 1.f), 0.f));
-
+	m_GameObjectDiffuse = new Texture(1, RESOURCE_TEXTURE2D);
+	m_GameObjectDiffuse->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/ReflexTree_Diffuse.dds", 0);
+	 
 	// 해당 터레인을 플레이어 콜백으로 설정
 	m_GameObject->SetPlayerUpdatedContext(m_Terrain);
 
@@ -168,7 +170,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	Camera* cameraComponent = new BasicCam(m_Camera);
 	GameScreen::SetCamera(cameraComponent);
 	cameraComponent->CreateShaderVariables(pd3dDevice, pd3dCommandList);
-	cameraComponent->SetOffset(XMFLOAT3(0, 0, 200.f));
+	cameraComponent->SetOffset(XMFLOAT3(0, 0, 1000.f));
 	cameraComponent->SetAt(XMFLOAT3(0, 0, 0));
 	// cameraComponent->SetAt(XMFLOAT3(0, m_Terrain->GetHeight(1, 1) + 10, 0));
 	cameraComponent->SetViewport(0, 0, GameScreen::GetWidth(), GameScreen::GetHeight(), 0.0f, 1.0f);
@@ -197,7 +199,8 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 
 
 	// 리소스 뷰 설정
-	GameScene::CreateShaderResourceViews(pd3dDevice, m_Terrain->GetTexture(), 5, true);
+	GameScene::CreateShaderResourceViews(pd3dDevice, m_Terrain->GetTexture(), ROOTPARAMETER_TEXTUREBASE, true);
+	GameScene::CreateShaderResourceViews(pd3dDevice, m_GameObjectDiffuse, ROOTPARAMETER_TEXTURE, true);
 }
 
 void GameScene::ReleaseObjects()
@@ -407,6 +410,9 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	// 클라 화면 설정
 	m_Camera->SetViewportsAndScissorRects(pd3dCommandList);
 	m_Camera->GetCamera()->UpdateShaderVariables(pd3dCommandList, ROOTPARAMETER_CAMERA);
+	
+	pd3dCommandList->SetDescriptorHeaps(1, &m_pd3dCbvSrvDescriptorHeap);
+	m_GameObjectDiffuse->UpdateShaderVariables(pd3dCommandList);
 
 	m_GameObject->Render(pd3dCommandList);
 	////////////////////////////// Model Render

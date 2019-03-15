@@ -80,6 +80,7 @@ public:
 	
 protected:
 	Shader*					m_LoadFBXShader{ nullptr };
+	Texture*				m_GameObjectDiffuse{ nullptr };
 	CPlayer*                 m_GameObject{ nullptr };
 	 
 	Terrain*                m_Terrain{ nullptr };

@@ -492,7 +492,29 @@ void CStandardMesh::LoadMeshFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCom
 				nReads = (UINT)::fread(m_pxmf4Colors, sizeof(XMFLOAT4), nColors, pInFile);
 			}
 		}
-		else if (!strcmp(pstrToken, "<TextureCoords0>:"))
+		else if (!strcmp(pstrToken, "<UVs>:"))
+		{
+			int nUVsPerVertex, k;
+			nTextureCoords = d3dUtil::ReadIntegerFromFile(pInFile); // nUVs
+			nUVsPerVertex = d3dUtil::ReadIntegerFromFile(pInFile); // nUVsPerVertex 
+			if (nTextureCoords > 0)
+			{
+				d3dUtil::ReadStringFromFile(pInFile, pstrToken); // <UV>:
+				k = d3dUtil::ReadIntegerFromFile(pInFile); // k 번째...
+
+				m_nType |= VERTEXT_TEXTURE_COORD0;
+				m_pxmf2TextureCoords0 = new XMFLOAT2[nTextureCoords];
+				nReads = (UINT)::fread(m_pxmf2TextureCoords0, sizeof(XMFLOAT2), nTextureCoords, pInFile);
+
+				UINT ncbElementBytes = ((sizeof(XMFLOAT3) * m_nVertices + 255) & ~255); //256의 배수
+				m_pd3dTextureCoord0Buffer = d3dUtil::CreateBufferResource(pd3dDevice, pd3dCommandList, m_pxmf2TextureCoords0, ncbElementBytes, D3D12_HEAP_TYPE_DEFAULT, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, &m_pd3dTextureCoord0UploadBuffer);
+
+				m_d3dTextureCoord0BufferView.BufferLocation = m_pd3dTextureCoord0Buffer->GetGPUVirtualAddress();
+				m_d3dTextureCoord0BufferView.StrideInBytes = sizeof(XMFLOAT2);
+				m_d3dTextureCoord0BufferView.SizeInBytes = sizeof(XMFLOAT2) * m_nVertices;
+			}
+		}
+		/*else if (!strcmp(pstrToken, "<TextureCoords0>:"))
 		{
 			nReads = (UINT)::fread(&nTextureCoords, sizeof(int), 1, pInFile);
 			if (nTextureCoords > 0)
@@ -507,7 +529,7 @@ void CStandardMesh::LoadMeshFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCom
 				m_d3dTextureCoord0BufferView.StrideInBytes = sizeof(XMFLOAT2);
 				m_d3dTextureCoord0BufferView.SizeInBytes = sizeof(XMFLOAT2) * m_nVertices;
 			}
-		}
+		}*/
 		else if (!strcmp(pstrToken, "<TextureCoords1>:"))
 		{
 			nReads = (UINT)::fread(&nTextureCoords, sizeof(int), 1, pInFile);

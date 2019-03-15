@@ -20,6 +20,10 @@ cbuffer cbGameObjectInfo : register(b4)
 }
  
 
+Texture2D gtxtTexture : register(t0);
+Texture2D gtxtTerrainBaseTexture : register(t1);
+Texture2D gtxtTerrainDetailTexture : register(t2);
+
 Texture2D gtxtAlbedoTexture : register(t6);
 Texture2D gtxtSpecularTexture : register(t7);
 Texture2D gtxtNormalTexture : register(t8);
@@ -28,7 +32,7 @@ Texture2D gtxtEmissionTexture : register(t10);
 Texture2D gtxtDetailAlbedoTexture : register(t11);
 Texture2D gtxtDetailNormalTexture : register(t12);
 // #define _WITH_VERTEX_LIGHTING
-
+ 
 SamplerState gssWrap : register(s0);
 
 #include "Light.hlsl"
@@ -58,6 +62,7 @@ struct VertexOut
 	float4 position : SV_POSITION;
 	float3 positionW : POSITION;
 	float3 normalW : NORMAL;
+	float2 uv : TEXCOORD;
 };
 
 VertexOut VS(VertexIn input)
@@ -67,17 +72,19 @@ VertexOut VS(VertexIn input)
 	output.positionW = (float3)mul(float4(input.position, 1.0f), gmtxWorld);
 	output.position = mul(mul(float4(output.positionW, 1.0f), gmtxView), gmtxProjection);
 	output.normalW = mul(input.normal, (float3x3)gmtxWorld);
+	output.uv = input.uv;
 
 	return output;
 }
 
 float4 PS(VertexOut input) : SV_TARGET
 {
-	float TESTColor = float4(1.f, 1.f, 1.f, 1.f); 
+	float4 cColor = gtxtTexture.Sample(gssWrap, input.uv); 
 	float3 normalW = normalize(input.normalW);
 	float4 cIllumination = Lighting(input.positionW, normalW);
-
-	return(lerp(TESTColor, cIllumination, 0.5f));
+	 
+	return cColor;
+	return(lerp(cColor, cIllumination, 0.5f));
 }
 
  
