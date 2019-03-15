@@ -636,7 +636,8 @@ void LoadObject::Animate(float fTimeElapsed)
 {
 	OnPrepareRender();
 
-	if (m_pSkinnedAnimationController) m_pSkinnedAnimationController->AdvanceTime(fTimeElapsed, this);
+	// TEST
+	// if (m_pSkinnedAnimationController) m_pSkinnedAnimationController->AdvanceTime(fTimeElapsed, this);
 
 	if (m_pSibling) m_pSibling->Animate(fTimeElapsed);
 	if (m_pChild) m_pChild->Animate(fTimeElapsed);
@@ -936,7 +937,7 @@ LoadObject *LoadObject::LoadFrameHierarchyFromFile(ID3D12Device *pd3dDevice, ID3
 	int nFrame = 0, nTextures = 0;
 
 	LoadObject *pGameObject = new LoadObject();
-
+	 
 	for (; ; )
 	{
 		d3dUtil::ReadStringFromFile(pInFile, pstrToken);
@@ -944,16 +945,19 @@ LoadObject *LoadObject::LoadFrameHierarchyFromFile(ID3D12Device *pd3dDevice, ID3
 		{ 
 			nFrame = d3dUtil::ReadIntegerFromFile(pInFile); // 프레임 번호?
 			
+			// TEST
 			// nTextures = d3dUtil::ReadIntegerFromFile(pInFile); 
 			d3dUtil::ReadStringFromFile(pInFile, pGameObject->m_pstrFrameName);
 		}
 		else if (!strcmp(pstrToken, "<Transform>:"))
-		{
-			XMFLOAT4 xmf3Position, xmf3Rotation, xmf3Scale, xmf4Rotation;
-			nReads = (UINT)::fread(&xmf3Position, sizeof(float), 4, pInFile);
-			nReads = (UINT)::fread(&xmf3Rotation, sizeof(float), 4, pInFile); //Euler Angle
-			nReads = (UINT)::fread(&xmf3Scale, sizeof(float), 4, pInFile);
-			nReads = (UINT)::fread(&xmf4Rotation, sizeof(float), 4, pInFile); //Quaternion
+		{ 
+			//XMFLOAT4 xmf3Position, xmf3Rotation, xmf3Scale, xmf4Rotation;
+			//nReads = (UINT)::fread(&xmf3Position, sizeof(float), 4, pInFile);
+			//nReads = (UINT)::fread(&xmf3Rotation, sizeof(float), 4, pInFile); //Euler Angle
+			//nReads = (UINT)::fread(&xmf3Scale, sizeof(float), 4, pInFile);
+			//nReads = (UINT)::fread(&xmf4Rotation, sizeof(float), 4, pInFile); //Quaternion
+
+			nReads = (UINT)::fread(&pGameObject->m_xmf4x4World, sizeof(float), 16, pInFile); 
 		}
 		else if (!strcmp(pstrToken, "<TransformMatrix>:"))
 		{

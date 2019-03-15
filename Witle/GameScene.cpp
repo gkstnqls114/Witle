@@ -157,7 +157,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	// 테스트할 모델 오브젝트
 	m_GameObject = new CTerrainPlayer(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, nullptr);
 	m_GameObject->CreateShaderVariables(pd3dDevice, pd3dCommandList);
-	m_GameObject->SetPosition(XMFLOAT3(0.f, m_Terrain->GetHeight(1.f, 1.f), 0.f));
+	// m_GameObject->SetPosition(XMFLOAT3(0.f, m_Terrain->GetHeight(1.f, 1.f), 0.f));
 
 	// 해당 터레인을 플레이어 콜백으로 설정
 	m_GameObject->SetPlayerUpdatedContext(m_Terrain);
@@ -168,7 +168,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	Camera* cameraComponent = new BasicCam(m_Camera);
 	GameScreen::SetCamera(cameraComponent);
 	cameraComponent->CreateShaderVariables(pd3dDevice, pd3dCommandList);
-	cameraComponent->SetOffset(XMFLOAT3(0, 0, 50.f));
+	cameraComponent->SetOffset(XMFLOAT3(0, 0, 200.f));
 	cameraComponent->SetAt(XMFLOAT3(0, 0, 0));
 	// cameraComponent->SetAt(XMFLOAT3(0, m_Terrain->GetHeight(1, 1) + 10, 0));
 	cameraComponent->SetViewport(0, 0, GameScreen::GetWidth(), GameScreen::GetHeight(), 0.0f, 1.0f);
@@ -311,15 +311,15 @@ bool GameScene::ProcessInput(HWND hWnd, float ElapsedTime)
 // ProcessInput에 의한 right, up, look, pos 를 월드변환 행렬에 갱신한다.
 void GameScene::Update(float fElapsedTime)
 {
-	if (m_GameObject)
-	{
-		m_GameObject->Update(fElapsedTime); //Velocity를 통해 pos 이동
-	}
-	
-	if (m_GameObject)
-	{
-		m_GameObject->Update(fElapsedTime); // right, up, look, pos에 맞춰 월드변환행렬 다시 설정
-	}
+	//if (m_GameObject)
+	//{
+	//	m_GameObject->Update(fElapsedTime); //Velocity를 통해 pos 이동
+	//}
+	//
+	//if (m_GameObject)
+	//{
+	//	m_GameObject->Update(fElapsedTime); // right, up, look, pos에 맞춰 월드변환행렬 다시 설정
+	//}
 
 
 	// light update

@@ -95,7 +95,7 @@ void Camera::SetScissorRect(LONG xLeft, LONG yTop, LONG xRight, LONG yBottom)
 }
 
 void Camera::RegenerateViewMatrix()
-{
+{ 
 	m_xmf4x4View = Matrix4x4::LookAtLH(m_pOwner->GetTransform().GetPosition(), m_At, m_pOwner->GetTransform().GetUp());
 
 	m_pOwner->GetTransform().SetRight(XMFLOAT3(m_xmf4x4View._11, m_xmf4x4View._21, m_xmf4x4View._31)); 

@@ -17,7 +17,7 @@ void BasicCam::LastUpdate(float fTimeElapsed)
 	//Move, Rotate된 At과 카메라 좌표축(Right, Up, Look)을 기준으로 Position 재설정
 	m_At = m_At;
 	m_pOwner->GetTransform().SetPosition(Vector3::Subtract(m_At, m_Offset));
-
+	
 	RegenerateViewMatrix();
 }
 
