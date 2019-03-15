@@ -958,6 +958,9 @@ LoadObject *LoadObject::LoadFrameHierarchyFromFile(ID3D12Device *pd3dDevice, ID3
 			//nReads = (UINT)::fread(&xmf4Rotation, sizeof(float), 4, pInFile); //Quaternion
 
 			nReads = (UINT)::fread(&pGameObject->m_xmf4x4World, sizeof(float), 16, pInFile); 
+
+			Matrix4x4::Show(pGameObject->m_xmf4x4World);
+			std::cout << std::endl;
 		}
 		else if (!strcmp(pstrToken, "<TransformMatrix>:"))
 		{

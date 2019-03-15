@@ -357,7 +357,7 @@ void GameScene::TESTSetRootDescriptor(ID3D12GraphicsCommandList * pd3dCommandLis
 void GameScene::AnimateObjects(float fTimeElapsed)
 {
 	// if (m_pHeightMapTerrain) m_pHeightMapTerrain->Animate(fTimeElapsed);
-	// if (m_GameObject) m_GameObject->Animate(fTimeElapsed);
+	if (m_GameObject) m_GameObject->Animate(fTimeElapsed);
 }
 
 void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
