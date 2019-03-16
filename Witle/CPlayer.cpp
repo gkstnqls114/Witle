@@ -288,3 +288,13 @@ void CTerrainPlayer::OnCameraUpdateCallback(float fTimeElapsed)
 	//	}
 	//}
 }
+
+ReflexTree::ReflexTree(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void * pContext)
+{ 
+	CLoadedModelInfo *pAngrybotModel = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/ReflexTree.bin");
+	SetChild(pAngrybotModel->m_pModelRootObject, true);
+}
+
+ReflexTree::~ReflexTree()
+{
+}

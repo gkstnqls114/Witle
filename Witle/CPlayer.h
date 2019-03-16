@@ -72,6 +72,9 @@ public:
 
 class CTerrainPlayer : public CPlayer
 {
+protected:
+	CTerrainPlayer() {};
+
 public:
 	CTerrainPlayer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext=NULL);
 	virtual ~CTerrainPlayer();
@@ -82,3 +85,11 @@ public:
 	virtual void OnCameraUpdateCallback(float fTimeElapsed);
 };
 
+class ReflexTree : public CTerrainPlayer
+{
+public:
+	ReflexTree(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext = NULL);
+	virtual ~ReflexTree();
+
+
+};

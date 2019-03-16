@@ -497,6 +497,10 @@ void CStandardMesh::LoadMeshFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCom
 			int nUVsPerVertex, k;
 			nTextureCoords = d3dUtil::ReadIntegerFromFile(pInFile); // nUVs
 			nUVsPerVertex = d3dUtil::ReadIntegerFromFile(pInFile); // nUVsPerVertex 
+			if (nTextureCoords != nTextureCoords)
+			{
+				assert(false);
+			}
 			if (nTextureCoords > 0)
 			{
 				d3dUtil::ReadStringFromFile(pInFile, pstrToken); // <UV>:
@@ -512,6 +516,11 @@ void CStandardMesh::LoadMeshFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCom
 				m_d3dTextureCoord0BufferView.BufferLocation = m_pd3dTextureCoord0Buffer->GetGPUVirtualAddress();
 				m_d3dTextureCoord0BufferView.StrideInBytes = sizeof(XMFLOAT2);
 				m_d3dTextureCoord0BufferView.SizeInBytes = sizeof(XMFLOAT2) * m_nVertices;
+
+				for (int i = 0; i < nTextureCoords; ++i)
+				{
+					std::cout << m_pxmf2TextureCoords0[i].x << " " << m_pxmf2TextureCoords0[i].y << std::endl;
+				}
 			}
 		}
 		/*else if (!strcmp(pstrToken, "<TextureCoords0>:"))

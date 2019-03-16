@@ -79,10 +79,13 @@ public:
 	void TESTSetRootDescriptor(ID3D12GraphicsCommandList *pd3dCommandList);
 	
 protected:
+	// fbx test
 	Shader*					m_LoadFBXShader{ nullptr };
 	Texture*				m_GameObjectDiffuse{ nullptr };
 	CPlayer*                 m_GameObject{ nullptr };
-	 
+	
+	// fbx test
+
 	Terrain*                m_Terrain{ nullptr };
 	CameraObject*           m_Camera{ nullptr };
 
