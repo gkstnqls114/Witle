@@ -636,7 +636,6 @@ void LoadObject::Animate(float fTimeElapsed)
 {
 	OnPrepareRender();
 
-	// TEST
 	// if (m_pSkinnedAnimationController) m_pSkinnedAnimationController->AdvanceTime(fTimeElapsed, this);
 
 	if (m_pSibling) m_pSibling->Animate(fTimeElapsed);

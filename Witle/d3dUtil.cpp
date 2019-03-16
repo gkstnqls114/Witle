@@ -112,7 +112,7 @@ ID3D12Resource* d3dUtil::CreateBufferResource(ID3D12Device *pd3dDevice, ID3D12Gr
 				UINT8 *pBufferDataBegin = NULL;
 				(*ppd3dUploadBuffer)->Map(0, &d3dReadRange, (void **)&pBufferDataBegin);
 				memcpy(pBufferDataBegin, pData, nBytes);
-				(*ppd3dUploadBuffer)->Unmap(0, NULL);
+				// (*ppd3dUploadBuffer)->Unmap(0, NULL);
 
 				pd3dCommandList->CopyResource(pd3dBuffer, *ppd3dUploadBuffer);
 

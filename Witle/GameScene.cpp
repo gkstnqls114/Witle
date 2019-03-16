@@ -161,6 +161,11 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	m_GameObjectDiffuse = new Texture(1, RESOURCE_TEXTURE2D);
 	m_GameObjectDiffuse->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/ReflexTree_Diffuse.dds", 0);
 	 
+	m_Trees = new ReflexTree(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_TreeDiffuse = new Texture(1, RESOURCE_TEXTURE2D); 
+	m_TreeDiffuse->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/ReflexTree_Diffuse.dds", 0);
+	// m_Trees->SetPosition(XMFLOAT3(10, 10, 10));
+
 	// 해당 터레인을 플레이어 콜백으로 설정
 	m_GameObject->SetPlayerUpdatedContext(m_Terrain);
 
@@ -201,6 +206,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	// 리소스 뷰 설정
 	GameScene::CreateShaderResourceViews(pd3dDevice, m_Terrain->GetTexture(), ROOTPARAMETER_TEXTUREBASE, true);
 	GameScene::CreateShaderResourceViews(pd3dDevice, m_GameObjectDiffuse, ROOTPARAMETER_TEXTURE, true);
+	// GameScene::CreateShaderResourceViews(pd3dDevice, m_TreeDiffuse, ROOTPARAMETER_TEXTURE, true);
 }
 
 void GameScene::ReleaseObjects()
@@ -360,6 +366,7 @@ void GameScene::TESTSetRootDescriptor(ID3D12GraphicsCommandList * pd3dCommandLis
 void GameScene::AnimateObjects(float fTimeElapsed)
 {
 	// if (m_pHeightMapTerrain) m_pHeightMapTerrain->Animate(fTimeElapsed);
+	if (m_Trees) m_Trees->Animate(fTimeElapsed);
 	if (m_GameObject) m_GameObject->Animate(fTimeElapsed);
 }
 
@@ -415,6 +422,7 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	m_GameObjectDiffuse->UpdateShaderVariables(pd3dCommandList);
 
 	m_GameObject->Render(pd3dCommandList);
+	m_Trees->Render(pd3dCommandList);
 	////////////////////////////// Model Render
 
 }

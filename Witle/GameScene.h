@@ -4,6 +4,7 @@
 class Player;
 class CPlayer;
 class Shader;
+class ReflexTree;
 
 class CameraObject;
 class Terrain;
@@ -83,7 +84,9 @@ protected:
 	Shader*					m_LoadFBXShader{ nullptr };
 	Texture*				m_GameObjectDiffuse{ nullptr };
 	CPlayer*                 m_GameObject{ nullptr };
-	
+
+	Texture*				m_TreeDiffuse{ nullptr };
+	ReflexTree*				m_Trees{ nullptr };
 	// fbx test
 
 	Terrain*                m_Terrain{ nullptr };
