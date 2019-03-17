@@ -636,7 +636,7 @@ void LoadObject::Animate(float fTimeElapsed)
 {
 	OnPrepareRender();
 
-	// if (m_pSkinnedAnimationController) m_pSkinnedAnimationController->AdvanceTime(fTimeElapsed, this);
+	if (m_pSkinnedAnimationController) m_pSkinnedAnimationController->AdvanceTime(fTimeElapsed, this);
 
 	if (m_pSibling) m_pSibling->Animate(fTimeElapsed);
 	if (m_pChild) m_pChild->Animate(fTimeElapsed);
@@ -956,10 +956,8 @@ LoadObject *LoadObject::LoadFrameHierarchyFromFile(ID3D12Device *pd3dDevice, ID3
 			//nReads = (UINT)::fread(&xmf3Scale, sizeof(float), 4, pInFile);
 			//nReads = (UINT)::fread(&xmf4Rotation, sizeof(float), 4, pInFile); //Quaternion
 
-			nReads = (UINT)::fread(&pGameObject->m_xmf4x4World, sizeof(float), 16, pInFile); 
+			nReads = (UINT)::fread(&pGameObject->m_xmf4x4ToParent, sizeof(float), 16, pInFile);
 
-			Matrix4x4::Show(pGameObject->m_xmf4x4World);
-			std::cout << std::endl;
 		}
 		else if (!strcmp(pstrToken, "<TransformMatrix>:"))
 		{
