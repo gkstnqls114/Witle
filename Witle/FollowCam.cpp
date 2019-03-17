@@ -1,10 +1,10 @@
 #include "stdafx.h"
 #include "Transform.h"
+#include "Object.h"
 #include "GameObject.h"
 #include "FollowCam.h"
 
-
-
+ 
 FollowCam::FollowCam(GameObject * pOwner, GameObject * target)
 	: Camera(pOwner)
 {
@@ -140,5 +140,59 @@ void FollowCam::ZoomIn(float val)
 void FollowCam::ZoomOut(float val)
 {
 	m_Offset = Vector3::ScalarProduct(m_Offset, Vector3::Length(m_Offset) * val);
+
+}
+
+FollowCamForLoad::FollowCamForLoad(GameObject * pOwner, LoadObject * target)
+	:FollowCam(pOwner)
+{
+	m_pLoadTarget = target;
+}
+
+void FollowCamForLoad::LastUpdate(float fTimeElapsed)
+{
+	m_At = m_pLoadTarget->GetPosition();
+	m_pOwner->GetTransform().SetPosition(Vector3::Subtract(m_At, m_Offset));
+
+	RegenerateViewMatrix();
+}
+
+
+void FollowCamForLoad::Rotate(float x, float y, float z)
+{
+	XMFLOAT3 right = m_pLoadTarget->GetRight();
+	XMFLOAT3 up = m_pLoadTarget->GetUp();
+	XMFLOAT3 look = m_pLoadTarget->GetLook(); 
+
+	if (x != 0.0f)
+	{
+		XMMATRIX xmmtxRotate = XMMatrixRotationAxis(XMLoadFloat3(&right), XMConvertToRadians(x));
+		m_pOwner->GetTransform().SetLook(Vector3::TransformNormal(m_pLoadTarget->GetLook(), xmmtxRotate));
+		m_pOwner->GetTransform().SetUp(Vector3::TransformNormal(m_pLoadTarget->GetUp(), xmmtxRotate));
+
+		m_Offset = Vector3::TransformCoord(m_Offset, xmmtxRotate);
+	}
+	if (y != 0.0f)
+	{
+		XMMATRIX xmmtxRotate = XMMatrixRotationAxis(XMLoadFloat3(&up), XMConvertToRadians(y));
+		m_pOwner->GetTransform().SetLook(Vector3::TransformNormal(m_pLoadTarget->GetLook(), xmmtxRotate));
+		m_pOwner->GetTransform().SetRight(Vector3::TransformNormal(m_pLoadTarget->GetRight(), xmmtxRotate));
+
+		m_Offset = Vector3::TransformCoord(m_Offset, xmmtxRotate);
+	}
+	if (z != 0.0f)
+	{
+		XMMATRIX xmmtxRotate = XMMatrixRotationAxis(XMLoadFloat3(&look), XMConvertToRadians(z));
+		m_pOwner->GetTransform().SetUp(Vector3::TransformNormal(m_pLoadTarget->GetUp(), xmmtxRotate));
+		m_pOwner->GetTransform().SetRight(Vector3::TransformNormal(m_pLoadTarget->GetRight(), xmmtxRotate));
+
+		m_Offset = Vector3::TransformCoord(m_Offset, xmmtxRotate);
+	}
+
+	/*회전으로 인해 플레이어의 로컬 x-축, y-축, z-축이 서로 직교하지 않을 수 있으므로 z-축(LookAt 벡터)을 기준으
+	로 하여 서로 직교하고 단위벡터가 되도록 한다.*/
+	m_pOwner->GetTransform().SetLook(Vector3::Normalize(m_pLoadTarget->GetLook()));
+	m_pOwner->GetTransform().SetRight(Vector3::CrossProduct(m_pLoadTarget->GetUp(), m_pLoadTarget->GetLook(), true));
+	m_pOwner->GetTransform().SetUp(Vector3::CrossProduct(m_pLoadTarget->GetLook(), m_pLoadTarget->GetRight(), true));
 
 }

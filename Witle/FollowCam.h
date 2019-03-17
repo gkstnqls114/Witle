@@ -1,6 +1,7 @@
 #pragma once
 #include "Camera.h"
 
+class LoadObject;
 // target을 뒤에서 따라다니는 카메라입니다.
 class FollowCam :
 	public Camera
@@ -10,7 +11,8 @@ class FollowCam :
 private:
 	virtual void MoveSmoothly(float fTimeElapsed, const XMFLOAT3& xmf3LookAt) override;
 
-
+protected:
+	FollowCam(GameObject* pOwner) : Camera(pOwner) {}; //TEST
 
 public:
 	FollowCam(GameObject* pOwner, GameObject* target); // target을 지정합니다.
@@ -32,3 +34,14 @@ public:
 
 };
 
+class FollowCamForLoad
+	: public FollowCam
+{
+	LoadObject		*m_pLoadTarget{ nullptr };
+
+public:
+	FollowCamForLoad(GameObject* pOwner, LoadObject* target);
+	virtual ~FollowCamForLoad() {};
+	virtual void LastUpdate(float fTimeElapsed) override;
+	virtual void Rotate(float x, float y, float z) override;
+};
