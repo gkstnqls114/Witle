@@ -296,15 +296,13 @@ bool GameScene::ProcessInput(HWND hWnd, float ElapsedTime)
 
 		/*플레이어를 dwDirection 방향으로 이동한다(실제로는 속도 벡터를 변경한다). 이동 거리는 시간에 비례하도록 한다.
 		플레이어의 이동 속력은 (50/초)로 가정한다.*/
-		float fDistance = 50.0f * ElapsedTime;
+		float fDistance = 200.f * ElapsedTime;
 
 		if (dwDirection & DIR_FORWARD) xmf3Shift = Vector3::Add(xmf3Shift, axis.look, fDistance);
 		if (dwDirection & DIR_BACKWARD) xmf3Shift = Vector3::Add(xmf3Shift, axis.look, -fDistance);
 		if (dwDirection & DIR_RIGHT) xmf3Shift = Vector3::Add(xmf3Shift, axis.right, fDistance);
 		if (dwDirection & DIR_LEFT) xmf3Shift = Vector3::Add(xmf3Shift, axis.right, -fDistance);
-		if (dwDirection & DIR_UP) {
-			xmf3Shift = Vector3::Add(xmf3Shift, axis.up, fDistance);
-		}
+		if (dwDirection & DIR_UP) xmf3Shift = Vector3::Add(xmf3Shift, axis.up, fDistance);
 		if (dwDirection & DIR_DOWN) xmf3Shift = Vector3::Add(xmf3Shift, axis.up, -fDistance);
 
 		//플레이어의 이동량 벡터를 xmf3Shift 벡터만큼 더한다.
@@ -331,11 +329,11 @@ bool GameScene::ProcessInput(HWND hWnd, float ElapsedTime)
 // ProcessInput에 의한 right, up, look, pos 를 월드변환 행렬에 갱신한다.
 void GameScene::Update(float fElapsedTime)
 {
-	//if (m_GameObject)
-	//{
-	//	m_GameObject->Update(fElapsedTime); //Velocity를 통해 pos 이동
-	//}
-	//
+	if (m_GameObject)
+	{
+		m_GameObject->Update(fElapsedTime); //Velocity를 통해 pos 이동
+	}
+	
 	//if (m_GameObject)
 	//{
 	//	m_GameObject->Update(fElapsedTime); // right, up, look, pos에 맞춰 월드변환행렬 다시 설정
