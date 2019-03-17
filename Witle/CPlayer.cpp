@@ -301,3 +301,8 @@ ReflexTree::ReflexTree(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd
 ReflexTree::~ReflexTree()
 {
 }
+
+void ReflexTree::SetPosition(XMFLOAT3 xmf3Position)
+{
+	LoadObject::SetPosition(xmf3Position.x, xmf3Position.y, xmf3Position.z);
+}

@@ -7,6 +7,7 @@
 #include "GameScreen.h"
 
 #include "Object.h" //±³¼ö´ÔÄÚµå
+#include "LoadedModelInfo.h"
 #include "Texture.h"
 #include "CubeMesh.h"
 #include "FollowCam.h"
@@ -161,7 +162,17 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	m_GameObjectDiffuse = new Texture(1, RESOURCE_TEXTURE2D);
 	m_GameObjectDiffuse->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/ReflexTree_Diffuse.dds", 0);
 	 
-	m_Trees = new ReflexTree(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	// Trees
+	m_Trees = new ReflexTree* [m_TreeCount];
+
+
+	for (int x = 0; x < m_TreeCount; ++x)
+	{
+		m_Trees[x] = new ReflexTree();
+		CLoadedModelInfo* pTreeModel = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/ReflexTree.bin");
+		m_Trees[x]->SetChild(pTreeModel->m_pModelRootObject, true);
+		m_Trees[x]->SetPosition(XMFLOAT3(rand() % (257 * 8), 0, rand() % (257 * 8)));
+	}
 	m_TreeDiffuse = new Texture(1, RESOURCE_TEXTURE2D); 
 	m_TreeDiffuse->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/ReflexTree_Diffuse.dds", 0);
 	// m_Trees->SetPosition(XMFLOAT3(10, 10, 10));
@@ -366,7 +377,13 @@ void GameScene::TESTSetRootDescriptor(ID3D12GraphicsCommandList * pd3dCommandLis
 void GameScene::AnimateObjects(float fTimeElapsed)
 {
 	// if (m_pHeightMapTerrain) m_pHeightMapTerrain->Animate(fTimeElapsed);
-	if (m_Trees) m_Trees->Animate(fTimeElapsed);
+	if (m_Trees)
+	{
+		for (int x = 0; x < m_TreeCount; ++x)
+		{
+			if (m_Trees[x]) m_Trees[x]->Animate(fTimeElapsed);
+		}
+	}
 	if (m_GameObject) m_GameObject->Animate(fTimeElapsed);
 }
 
@@ -422,14 +439,20 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	m_GameObjectDiffuse->UpdateShaderVariables(pd3dCommandList);
 
 	m_GameObject->Render(pd3dCommandList);
-	m_Trees->Render(pd3dCommandList);
+	for (int x = 0; x < m_TreeCount; ++x)
+	{
+		m_Trees[x]->Render(pd3dCommandList);
+	}
 	////////////////////////////// Model Render
 
 }
 
 void GameScene::ReleaseUploadBuffers()
-{ 
-	if (m_Trees) m_Trees->ReleaseUploadBuffers();
+{
+	for (int x = 0; x < m_TreeCount; ++x)
+	{
+		if (m_Trees[x]) m_Trees[x]->ReleaseUploadBuffers();
+	}
 	if (m_GameObject) m_GameObject->ReleaseUploadBuffers();
 	if (m_Terrain) m_Terrain->ReleaseUploadBuffers();
 	if (m_TESTQuadTree) m_TESTQuadTree->ReleaseUploadBuffers();
