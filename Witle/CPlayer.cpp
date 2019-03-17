@@ -294,6 +294,8 @@ ReflexTree::ReflexTree(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd
 { 
 	CLoadedModelInfo *pAngrybotModel = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/ReflexTree.bin");
 	SetChild(pAngrybotModel->m_pModelRootObject, true);
+
+	pAngrybotModel->m_pModelRootObject->SetPosition(XMFLOAT3(100, 0, 100));
 }
 
 ReflexTree::~ReflexTree()
