@@ -429,6 +429,7 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 
 void GameScene::ReleaseUploadBuffers()
 { 
+	if (m_Trees) m_Trees->ReleaseUploadBuffers();
 	if (m_GameObject) m_GameObject->ReleaseUploadBuffers();
 	if (m_Terrain) m_Terrain->ReleaseUploadBuffers();
 	if (m_TESTQuadTree) m_TESTQuadTree->ReleaseUploadBuffers();
