@@ -147,7 +147,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	GameScene::CreateCbvSrvDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 3);
 
 	// 터레인 생성 
-	XMFLOAT3 xmf3Scale(8.0f, 1.0f, 8.0f);
+	XMFLOAT3 xmf3Scale(39.0625f, 1.0f, 39.0625f);
 	XMFLOAT4 xmf4Color(0.0f, 0.5f, 0.0f, 0.0f);
 	m_Terrain = new Terrain("Terrain", pd3dDevice, pd3dCommandList, L"Image/HeightMap.raw", 257, 257, 257, 257, xmf3Scale, xmf4Color);
 
@@ -171,7 +171,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 		m_Trees[x] = new ReflexTree();
 		CLoadedModelInfo* pTreeModel = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/ReflexTree.bin");
 		m_Trees[x]->SetChild(pTreeModel->m_pModelRootObject, true);
-		m_Trees[x]->SetPosition(XMFLOAT3(rand() % (257 * 8), 0, rand() % (257 * 8)));
+		m_Trees[x]->SetPosition(XMFLOAT3(rand() % (257 * int(xmf3Scale.x)), 0, rand() % (257 * int(xmf3Scale.z))));
 	}
 	m_TreeDiffuse = new Texture(1, RESOURCE_TEXTURE2D); 
 	m_TreeDiffuse->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/ReflexTree_Diffuse.dds", 0);
@@ -292,11 +292,11 @@ bool GameScene::ProcessInput(HWND hWnd, float ElapsedTime)
 		// AXIS axis = m_GameObject->GetTransform().GetCoorAxis();
 		AXIS axis = AXIS{ m_GameObject->GetRight(), m_GameObject->GetUp(), m_GameObject->GetLook() };
 
-		XMFLOAT3 xmf3Shift = XMFLOAT3(0, 0, 0); // 이동량
+		XMFLOAT3 xmf3Shift = XMFLOAT3(0.f, 0.f, 0.f); // 이동량
 
 		/*플레이어를 dwDirection 방향으로 이동한다(실제로는 속도 벡터를 변경한다). 이동 거리는 시간에 비례하도록 한다.
-		플레이어의 이동 속력은 (50/초)로 가정한다.*/
-		float fDistance = 200.f * ElapsedTime;
+		플레이어의 이동 속력은 (20m/초)로 가정한다.*/
+		float fDistance = 2000.f * ElapsedTime; // 1초당 최대 속력 20m으로 가정, 현재 1 = 1cm
 
 		if (dwDirection & DIR_FORWARD) xmf3Shift = Vector3::Add(xmf3Shift, axis.look, fDistance);
 		if (dwDirection & DIR_BACKWARD) xmf3Shift = Vector3::Add(xmf3Shift, axis.look, -fDistance);
@@ -306,8 +306,19 @@ bool GameScene::ProcessInput(HWND hWnd, float ElapsedTime)
 		if (dwDirection & DIR_DOWN) xmf3Shift = Vector3::Add(xmf3Shift, axis.up, -fDistance);
 
 		//플레이어의 이동량 벡터를 xmf3Shift 벡터만큼 더한다.
-		// m_GameObject->VelocityMove(xmf3Shift);
-		m_GameObject->Move(xmf3Shift);
+		// m_GameObject->VelocityMove(xmf3Shift); 
+		m_GameObject->Move(xmf3Shift, true);
+	}
+	else
+	{
+		XMFLOAT3 Veclocity = m_GameObject->GetVelocity();
+		if (Vector3::Length(Veclocity) > 0.f)
+		{ 
+			float fLength = Vector3::Length(Veclocity);
+			float fDeceleration = (3000.f * ElapsedTime); //해당상수는 Friction
+			if (fDeceleration > fLength) fDeceleration = fLength;
+			m_GameObject->Move(Vector3::ScalarProduct(Veclocity, -fDeceleration, true), true);
+		} 
 	}
 	
 

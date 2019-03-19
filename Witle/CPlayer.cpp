@@ -19,10 +19,10 @@ CPlayer::CPlayer()
 	m_xmf3Look = XMFLOAT3(0.0f, 0.0f, 1.0f);
 
 	m_xmf3Velocity = XMFLOAT3(0.0f, 0.0f, 0.0f);
-	m_xmf3Gravity = XMFLOAT3(0.0f, 0.0f, 0.0f);
-	m_fMaxVelocityXZ = 300.0f;
+	m_xmf3Gravity = XMFLOAT3(0.0f, 0.0f, 0.0f); //중력가속도
+	m_fMaxVelocityXZ = 2000.0f;
 	m_fMaxVelocityY = 400.0f;
-	m_fFriction = 25.0f;
+	m_fFriction = 1700.f;
 
 	m_fPitch = 0.0f;
 	m_fRoll = 0.0f;
@@ -136,10 +136,11 @@ void CPlayer::Update(float fTimeElapsed)
 	//if (nCurrentCameraMode == THIRD_PERSON_CAMERA) m_pCamera->SetLookAt(m_xmf3Position);
 	//m_pCamera->RegenerateViewMatrix();
 
-	fLength = Vector3::Length(m_xmf3Velocity);
-	float fDeceleration = (m_fFriction * fTimeElapsed);
-	if (fDeceleration > fLength) fDeceleration = fLength;
-	m_xmf3Velocity = Vector3::Add(m_xmf3Velocity, Vector3::ScalarProduct(m_xmf3Velocity, -fDeceleration, true));
+	// 마찰 저항 제거
+	// fLength = Vector3::Length(m_xmf3Velocity);
+	//float fDeceleration = (m_fFriction * fTimeElapsed);
+	//if (fDeceleration > fLength) fDeceleration = fLength;
+	//m_xmf3Velocity = Vector3::Add(m_xmf3Velocity, Vector3::ScalarProduct(m_xmf3Velocity, -fDeceleration, true));
 
 	SetTrackAnimationSet(0, ::IsZero(fLength) ? 0 : 1);
 }
