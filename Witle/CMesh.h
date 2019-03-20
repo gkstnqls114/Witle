@@ -194,7 +194,7 @@ public:
 	virtual ~CSkinnedMesh();
 
 protected:
-	int								m_nBonesPerVertex = 4;
+	int								m_nBonesPerVertex = 4; // 하나의 vertex에 연결된 최대 본 개수
 
 	XMINT4							*m_pxmn4BoneIndices = NULL;
 	XMFLOAT4						*m_pxmf4BoneWeights = NULL;

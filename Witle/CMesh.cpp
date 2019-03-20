@@ -737,8 +737,8 @@ void CSkinnedMesh::LoadSkinInfoFromFile(ID3D12Device *pd3dDevice, ID3D12Graphics
 	char pstrToken[64] = { '\0' };
 	UINT nReads = 0;
 
-	d3dUtil::ReadStringFromFile(pInFile, m_pstrMeshName);
-
+	// d3dUtil::ReadStringFromFile(pInFile, m_pstrMeshName); 
+	
 	for (; ; )
 	{
 		d3dUtil::ReadStringFromFile(pInFile, pstrToken);
@@ -751,16 +751,16 @@ void CSkinnedMesh::LoadSkinInfoFromFile(ID3D12Device *pd3dDevice, ID3D12Graphics
 			nReads = (UINT)::fread(&m_xmf3AABBCenter, sizeof(XMFLOAT3), 1, pInFile);
 			nReads = (UINT)::fread(&m_xmf3AABBExtents, sizeof(XMFLOAT3), 1, pInFile);
 		}
-		else if (!strcmp(pstrToken, "<BoneNames>:"))
+		else if (!strcmp(pstrToken, "<BoneNames>:")) // 뼈 이름
 		{
-			m_nSkinningBones = d3dUtil::ReadIntegerFromFile(pInFile);
+			m_nSkinningBones = d3dUtil::ReadIntegerFromFile(pInFile); // nClusters, cluster Count, 즉 joint
 			if (m_nSkinningBones > 0)
 			{
 				m_ppstrSkinningBoneNames = new char[m_nSkinningBones][64];
 				for (int i = 0; i < m_nSkinningBones; i++) d3dUtil::ReadStringFromFile(pInFile, m_ppstrSkinningBoneNames[i]);
 			}
 		}
-		else if (!strcmp(pstrToken, "<BoneOffsets>:"))
+		else if (!strcmp(pstrToken, "<BoneOffsets>:")) // 월드좌표계에서 프레임 좌표계로 변환하는 행렬
 		{
 			m_nSkinningBones = d3dUtil::ReadIntegerFromFile(pInFile);
 			if (m_nSkinningBones > 0)
@@ -781,7 +781,7 @@ void CSkinnedMesh::LoadSkinInfoFromFile(ID3D12Device *pd3dDevice, ID3D12Graphics
 		else if (!strcmp(pstrToken, "<BoneIndices>:"))
 		{
 			m_nType |= VERTEXT_BONE_INDEX_WEIGHT;
-
+			// WriteInt("<BoneIndices>:", nControlPoints); 부분과 대응
 			m_nVertices = d3dUtil::ReadIntegerFromFile(pInFile);
 			if (m_nVertices > 0)
 			{
@@ -798,7 +798,8 @@ void CSkinnedMesh::LoadSkinInfoFromFile(ID3D12Device *pd3dDevice, ID3D12Graphics
 		else if (!strcmp(pstrToken, "<BoneWeights>:"))
 		{
 			m_nType |= VERTEXT_BONE_INDEX_WEIGHT;
-
+			// WriteFloat(pfSkinningWeights[i][0], pfSkinningWeights[i][1], pfSkinningWeights[i][2], pfSkinningWeights[i][3]);
+			// 와 대응
 			m_nVertices = d3dUtil::ReadIntegerFromFile(pInFile);
 			if (m_nVertices > 0)
 			{
@@ -812,7 +813,7 @@ void CSkinnedMesh::LoadSkinInfoFromFile(ID3D12Device *pd3dDevice, ID3D12Graphics
 				m_d3dBoneWeightBufferView.SizeInBytes = sizeof(XMFLOAT4) * m_nVertices;
 			}
 		}
-		else if (!strcmp(pstrToken, "</SkinningInfo>"))
+		else if (!strcmp(pstrToken, "</SkinDeformations>"))
 		{
 			break;
 		}

@@ -10,9 +10,12 @@ CLoadedModelInfo::~CLoadedModelInfo()
 	if (m_pnAnimatedBoneFrames) delete[] m_pnAnimatedBoneFrames;
 	if (m_ppSkinnedMeshes) delete[] m_ppSkinnedMeshes;
 
-	for (int i = 0; i < m_nSkinnedMeshes; i++)
+	if (m_pppAnimatedBoneFrameCaches)
 	{
-		if (m_pppAnimatedBoneFrameCaches[i]) delete[] m_pppAnimatedBoneFrameCaches[i];
+		for (int i = 0; i < m_nSkinnedMeshes; i++)
+		{
+			if (m_pppAnimatedBoneFrameCaches[i]) delete[] m_pppAnimatedBoneFrameCaches[i];
+		}
 	}
 	if (m_pppAnimatedBoneFrameCaches) delete[] m_pppAnimatedBoneFrameCaches;
 }

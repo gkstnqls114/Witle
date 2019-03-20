@@ -963,14 +963,13 @@ LoadObject *LoadObject::LoadFrameHierarchyFromFile(ID3D12Device *pd3dDevice, ID3
 		{
 			nReads = (UINT)::fread(&pGameObject->m_xmf4x4ToParent, sizeof(float), 16, pInFile);
 		}
-		else if (!strcmp(pstrToken, "<Mesh>:"))
+		else if (!strcmp(pstrToken, "<Mesh>:")) // 일반적인 메쉬
 		{
 			CStandardMesh *pMesh = new CStandardMesh(pd3dDevice, pd3dCommandList);
 			pMesh->LoadMeshFromFile(pd3dDevice, pd3dCommandList, pInFile);
 			pGameObject->SetMesh(pMesh);
-			
 		}
-		else if (!strcmp(pstrToken, "<SkinningInfo>:"))
+		else if (!strcmp(pstrToken, "<SkinDeformations>:")) // 애니메이션 존재하는 스킨메쉬
 		{
 			if (pnSkinnedMeshes) (*pnSkinnedMeshes)++;
 
@@ -978,8 +977,8 @@ LoadObject *LoadObject::LoadFrameHierarchyFromFile(ID3D12Device *pd3dDevice, ID3
 			pSkinnedMesh->LoadSkinInfoFromFile(pd3dDevice, pd3dCommandList, pInFile);
 			pSkinnedMesh->CreateShaderVariables(pd3dDevice, pd3dCommandList);
 
-			d3dUtil::ReadStringFromFile(pInFile, pstrToken); //<Mesh>:
-			if (!strcmp(pstrToken, "<Mesh>:")) pSkinnedMesh->LoadMeshFromFile(pd3dDevice, pd3dCommandList, pInFile);
+			 d3dUtil::ReadStringFromFile(pInFile, pstrToken); //<Mesh>:
+			 if (!strcmp(pstrToken, "<Mesh>:")) pSkinnedMesh->LoadMeshFromFile(pd3dDevice, pd3dCommandList, pInFile);
 
 			pGameObject->SetMesh(pSkinnedMesh);
 		}
@@ -1025,7 +1024,6 @@ void LoadObject::PrintFrameInfo(LoadObject *pGameObject, LoadObject *pParent)
 
 void LoadObject::LoadAnimationFromFile(FILE *pInFile, CLoadedModelInfo *pLoadedModel)
 {
-
 	char pstrToken[64] = { '\0' };
 	UINT nReads = 0;
 
@@ -1133,7 +1131,11 @@ CLoadedModelInfo *LoadObject::LoadGeometryAndAnimationFromFile(ID3D12Device *pd3
 		{ 
 			if (!strcmp(pstrToken, "<Hierarchy>:"))
 			{
-				pLoadedModel->m_pModelRootObject = LoadObject::LoadFrameHierarchyFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, NULL, pInFile, &pLoadedModel->m_nSkinnedMeshes);
+				int RootChildCount = d3dUtil::ReadIntegerFromFile(pInFile);
+				for (int i = 0; i < RootChildCount; ++i)
+				{
+					pLoadedModel->m_pModelRootObject = LoadObject::LoadFrameHierarchyFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, NULL, pInFile, &pLoadedModel->m_nSkinnedMeshes);
+				}
 				d3dUtil::ReadStringFromFile(pInFile, pstrToken); //"</Hierarchy>"
 			} 
 			else if (!strcmp(pstrToken, "<Animation>:"))
