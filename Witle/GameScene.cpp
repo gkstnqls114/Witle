@@ -447,7 +447,7 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	pd3dCommandList->SetDescriptorHeaps(1, &m_pd3dCbvSrvDescriptorHeap);
 	m_GameObjectDiffuse->UpdateShaderVariables(pd3dCommandList);
 
-	// m_GameObject->Render(pd3dCommandList);
+	m_GameObject->Render(pd3dCommandList);
 	for (int x = 0; x < m_TreeCount; ++x)
 	{
 		m_Trees[x]->Render(pd3dCommandList);
