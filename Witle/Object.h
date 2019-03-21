@@ -287,11 +287,12 @@ public:
 	LoadObject();
 	LoadObject(int nMaterials);
 	virtual ~LoadObject();
-
+	
+private:
 public:
+	CMesh							*m_pMesh = NULL;
 	char							m_pstrFrameName[64];
 
-	CMesh							*m_pMesh = NULL;
 
 	int								m_nMaterials = 0;
 	CMaterial						**m_ppMaterials = NULL;

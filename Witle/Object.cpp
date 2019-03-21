@@ -590,11 +590,23 @@ void LoadObject::SetMaterial(int nMaterial, CMaterial *pMaterial)
 
 CSkinnedMesh *LoadObject::FindSkinnedMesh(char *pstrSkinnedMeshName)
 {
+#ifdef _DEBUG
+	printf("%s Find...", pstrSkinnedMeshName);
+#endif
 	CSkinnedMesh *pSkinnedMesh = NULL;
-	if (m_pMesh && (m_pMesh->GetType() & VERTEXT_BONE_INDEX_WEIGHT))
+	if (m_pMesh)
 	{
-		pSkinnedMesh = (CSkinnedMesh *)m_pMesh;
-		if (!strncmp(pSkinnedMesh->m_pstrMeshName, pstrSkinnedMeshName, strlen(pstrSkinnedMeshName))) return(pSkinnedMesh);
+		if ((m_pMesh->GetType() & VERTEXT_BONE_INDEX_WEIGHT))
+		{
+			pSkinnedMesh = (CSkinnedMesh *)m_pMesh;
+			if (!strncmp(pSkinnedMesh->m_pstrMeshName, pstrSkinnedMeshName, strlen(pstrSkinnedMeshName)))
+			{
+#ifdef _DEBUG
+				printf("FIND!", pstrSkinnedMeshName);
+#endif
+				return(pSkinnedMesh);
+			}
+		}
 	}
 
 	if (m_pSibling) if (pSkinnedMesh = m_pSibling->FindSkinnedMesh(pstrSkinnedMeshName)) return(pSkinnedMesh);
@@ -928,8 +940,11 @@ void LoadObject::LoadMaterialsFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsC
 	}
 }
 
+static int count = -1;
+
 LoadObject *LoadObject::LoadFrameHierarchyFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, LoadObject *pParent, FILE *pInFile, int *pnSkinnedMeshes)
 {
+	count++;
 	char pstrToken[64] = { '\0' };
 	UINT nReads = 0;
 
@@ -980,7 +995,7 @@ LoadObject *LoadObject::LoadFrameHierarchyFromFile(ID3D12Device *pd3dDevice, ID3
 			 d3dUtil::ReadStringFromFile(pInFile, pstrToken); //<Mesh>:
 			 if (!strcmp(pstrToken, "<Mesh>:")) pSkinnedMesh->LoadMeshFromFile(pd3dDevice, pd3dCommandList, pInFile);
 
-			pGameObject->SetMesh(pSkinnedMesh);
+			pGameObject->SetMesh(pSkinnedMesh); 
 		}
 		else if (!strcmp(pstrToken, "<Materials>:"))
 		{
@@ -1023,7 +1038,7 @@ void LoadObject::PrintFrameInfo(LoadObject *pGameObject, LoadObject *pParent)
 }
 
 void LoadObject::LoadAnimationFromFile(FILE *pInFile, CLoadedModelInfo *pLoadedModel)
-{
+{ 
 	char pstrToken[64] = { '\0' };
 	UINT nReads = 0;
 
@@ -1039,7 +1054,7 @@ void LoadObject::LoadAnimationFromFile(FILE *pInFile, CLoadedModelInfo *pLoadedM
 		else if (!strcmp(pstrToken, "<FrameNames>:"))
 		{
 			pLoadedModel->m_nSkinnedMeshes = d3dUtil::ReadIntegerFromFile(pInFile);
-
+			
 			pLoadedModel->m_pnAnimatedBoneFrames = new int[pLoadedModel->m_nSkinnedMeshes];
 			pLoadedModel->m_ppAnimationSets = new CAnimationSets*[pLoadedModel->m_nSkinnedMeshes];
 			pLoadedModel->m_ppSkinnedMeshes = new CSkinnedMesh*[pLoadedModel->m_nSkinnedMeshes];
@@ -1052,7 +1067,9 @@ void LoadObject::LoadAnimationFromFile(FILE *pInFile, CLoadedModelInfo *pLoadedM
 				int nSkin = d3dUtil::ReadIntegerFromFile(pInFile); //i
 
 				d3dUtil::ReadStringFromFile(pInFile, pstrToken); //Skinned Mesh Name
+				// 해당 이름을 통해 RootObject의 SkineMesh를 가져온다
 				pLoadedModel->m_ppSkinnedMeshes[i] = pLoadedModel->m_pModelRootObject->FindSkinnedMesh(pstrToken);
+
 				pLoadedModel->m_ppSkinnedMeshes[i]->PrepareSkinning(pLoadedModel->m_pModelRootObject);
 
 				pLoadedModel->m_pnAnimatedBoneFrames[i] = d3dUtil::ReadIntegerFromFile(pInFile);
@@ -1060,7 +1077,7 @@ void LoadObject::LoadAnimationFromFile(FILE *pInFile, CLoadedModelInfo *pLoadedM
 
 				for (int j = 0; j < pLoadedModel->m_pnAnimatedBoneFrames[i]; j++)
 				{
-					d3dUtil::ReadStringFromFile(pInFile, pstrToken);
+					d3dUtil::ReadStringFromFile(pInFile, pstrToken); // Bone Frame 이름
 					pLoadedModel->m_pppAnimatedBoneFrameCaches[i][j] = pLoadedModel->m_pModelRootObject->FindFrame(pstrToken);
 
 #ifdef _WITH_DEBUG_SKINNING_BONE
@@ -1130,16 +1147,12 @@ CLoadedModelInfo *LoadObject::LoadGeometryAndAnimationFromFile(ID3D12Device *pd3
 		if (d3dUtil::ReadStringFromFile(pInFile, pstrToken))
 		{ 
 			if (!strcmp(pstrToken, "<Hierarchy>:"))
-			{
-				int RootChildCount = d3dUtil::ReadIntegerFromFile(pInFile);
-				for (int i = 0; i < RootChildCount; ++i)
-				{
-					pLoadedModel->m_pModelRootObject = LoadObject::LoadFrameHierarchyFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, NULL, pInFile, &pLoadedModel->m_nSkinnedMeshes);
-				}
+			{ 
+				pLoadedModel->m_pModelRootObject = LoadObject::LoadFrameHierarchyFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, NULL, pInFile, &pLoadedModel->m_nSkinnedMeshes);
 				d3dUtil::ReadStringFromFile(pInFile, pstrToken); //"</Hierarchy>"
 			} 
 			else if (!strcmp(pstrToken, "<Animation>:"))
-			{
+			{ 
 				LoadObject::LoadAnimationFromFile(pInFile, pLoadedModel);
 			}
 			else if (!strcmp(pstrToken, "</Animation>"))
