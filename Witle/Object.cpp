@@ -1034,7 +1034,7 @@ void LoadObject::LoadAnimationFromFile(FILE *pInFile, CLoadedModelInfo *pLoadedM
 		d3dUtil::ReadStringFromFile(pInFile, pstrToken);
 		if (!strcmp(pstrToken, "<AnimationSets>:"))
 		{
-			nAnimationSets = d3dUtil::ReadIntegerFromFile(pInFile);
+			nAnimationSets = d3dUtil::ReadIntegerFromFile(pInFile); // animation setÀÇ °³¼ö
 		}
 		else if (!strcmp(pstrToken, "<FrameNames>:"))
 		{

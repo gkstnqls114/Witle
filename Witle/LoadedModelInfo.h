@@ -11,7 +11,7 @@ public:
 	CLoadedModelInfo() { }
 	~CLoadedModelInfo();
 
-	LoadObject						*m_pModelRootObject = NULL;
+	LoadObject						*m_pModelRootObject = NULL; 
 
 	int 							m_nSkinnedMeshes = 0;
 	CSkinnedMesh					**m_ppSkinnedMeshes = NULL; //[SkinnedMeshes], Skinned Mesh Cache
