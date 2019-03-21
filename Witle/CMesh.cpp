@@ -649,7 +649,7 @@ void CStandardMesh::LoadMeshFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCom
 		else
 		{
 #ifdef _DEBUG
-		printf("%s not have ... " , pstrToken);
+		// printf("%s not have ... " , pstrToken);
 #endif // _DEBUG 
 		}
 	}
