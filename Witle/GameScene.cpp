@@ -163,14 +163,14 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	m_GameObjectDiffuse->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/ReflexTree_Diffuse.dds", 0);
 	 
 	// Trees
+
+
 	m_Trees = new ReflexTree* [m_TreeCount];
-
-
-	// CLoadedModelInfo* pTreeModel = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/ReflexTree.bin");
 	for (int x = 0; x < m_TreeCount; ++x)
 	{
+		CLoadedModelInfo* pTreeModel = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/ReflexTree.bin");
 		m_Trees[x] = new ReflexTree();
-		// m_Trees[x]->SetChild(pTreeModel->m_pModelRootObject, true);
+		m_Trees[x]->SetChild(pTreeModel->m_pModelRootObject, true);
 		m_Trees[x]->SetPosition(XMFLOAT3(rand() % (257 * int(xmf3Scale.x)), 0, rand() % (257 * int(xmf3Scale.z))));
 	}
 	m_TreeDiffuse = new Texture(1, RESOURCE_TEXTURE2D); 
