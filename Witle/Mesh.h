@@ -34,6 +34,8 @@ protected:
 	int								m_nBaseVertex = 0;
 
 
+protected:
+	Mesh() {};
 
 public:
 	Mesh(GameObject* pOwner);

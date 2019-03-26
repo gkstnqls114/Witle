@@ -33,7 +33,7 @@ private:
 
 	void ReleaseComponents();
 	void ReleaseComponentUploadBuffers();
-
+	 
 public:
 	GameObject(const std::string& entityID);
 	virtual ~GameObject();

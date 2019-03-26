@@ -194,8 +194,6 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	cameraComponent->GenerateProjectionMatrix(0.01f, CAMERA_FAR, float(GameScreen::GetWidth()) / float(GameScreen::GetHeight()), 60.0f);
 	m_Camera->ChangeCamera(cameraComponent);
 
-	m_LoadFBXShader = new TESTLoadFBXShader();
-	m_LoadFBXShader->CreateShader(pd3dDevice, m_pd3dGraphicsRootSignature);
 
 #ifdef CHECK_SUBVIEWS
 	m_lookAboveCamera = new CameraObject("LookAboveCamera");
@@ -438,8 +436,7 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 
 	////////////////////////////// Model Render
 	// PSO 설정
-	pd3dCommandList->SetPipelineState(m_LoadFBXShader->GetPSO());
-
+	
 	// 클라 화면 설정
 	m_Camera->SetViewportsAndScissorRects(pd3dCommandList);
 	m_Camera->GetCamera()->UpdateShaderVariables(pd3dCommandList, ROOTPARAMETER_CAMERA);

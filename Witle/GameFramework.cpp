@@ -7,6 +7,12 @@
 
 #include "TESTShader.h"
 #include "CubeShader.h"
+
+#ifdef _SHOW_BOUNDINGBOX
+#include "LineShader.h"
+#endif // _SHOW_BOUNDINGBOX
+
+#include "TESTLoadFBXShader.h"
 #include "TerrainShader.h"
 #include "SkinnedStandardShader.h"
 #include "HorizonBlurShader.h"
@@ -625,6 +631,16 @@ void CGameFramework::BuildShaders()
 	Shader* pStandardShader = new SkinnedStandardShader();
 	pStandardShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
 	ShaderManager::GetInstance()->InsertShader("Standard", pStandardShader);
+
+	Shader* pLoadFBXShader = new TESTLoadFBXShader();
+	pLoadFBXShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
+	ShaderManager::GetInstance()->InsertShader("LoadFBX", pLoadFBXShader);
+
+#ifdef _SHOW_BOUNDINGBOX
+	Shader* pLineShader = new LineShader();
+	pLineShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
+	ShaderManager::GetInstance()->InsertShader("Line", pLineShader);
+#endif
 }
 
 void CGameFramework::BuildTESTObjects()

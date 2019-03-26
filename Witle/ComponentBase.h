@@ -6,6 +6,9 @@ class ResourceBase;
 
 class ComponentBase
 {
+protected:
+	ComponentBase() {}
+
 public:
 	ComponentBase(GameObject* pOwner) : m_pOwner(pOwner) {}
 	virtual ~ComponentBase();

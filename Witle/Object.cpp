@@ -4,6 +4,8 @@
 
 #include "stdafx.h"
 #include "d3dUtil.h"
+#include "ShaderManager.h"
+#include "LineCube.h"
 #include "LoadedModelInfo.h"
 #include "Object.h"
 #include "Shader.h"
@@ -656,6 +658,18 @@ void LoadObject::Animate(float fTimeElapsed)
 
 void LoadObject::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 {
+	// Bounding Box Render
+#ifdef _SHOW_BOUNDINGBOX 
+	if (m_pLineCube)
+	{
+		pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Line")->GetPSO());
+		m_pLineCube->Render(pd3dCommandList, m_xmf4x4World);
+	}
+#endif // _SHOW_BOUNDINGBOX
+	//
+
+	pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("LoadFBX")->GetPSO());
+
 	if (m_pSkinnedAnimationController)
 	{
 		m_pSkinnedAnimationController->UpdateShaderVariables(pd3dCommandList);
@@ -986,6 +1000,7 @@ LoadObject *LoadObject::LoadFrameHierarchyFromFile(ID3D12Device *pd3dDevice, ID3
 			CStandardMesh *pMesh = new CStandardMesh(pd3dDevice, pd3dCommandList);
 			pMesh->LoadMeshFromFile(pd3dDevice, pd3dCommandList, pInFile);
 			pGameObject->SetMesh(pMesh);
+			pGameObject->m_pLineCube = new LineCube(pd3dDevice, pd3dCommandList, pMesh->GetAABBExtents().x, pMesh->GetAABBExtents().y, pMesh->GetAABBExtents().z);
 		}
 		else if (!strcmp(pstrToken, "<SkinDeformations>:")) // 애니메이션 존재하는 스킨메쉬
 		{

@@ -276,6 +276,10 @@ public:
 
 class LoadObject 
 {
+#ifdef _SHOW_BOUNDINGBOX
+	LineCube* m_pLineCube;
+#endif
+
 private:
 	int								m_nReferences = 0;
 

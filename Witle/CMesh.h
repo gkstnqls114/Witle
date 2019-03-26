@@ -10,8 +10,11 @@ class LoadObject;
 //
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
+class LineShader;
+class LineCube;
 class CMesh
 {
+
 public:
 	CMesh(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
 	virtual ~CMesh();
@@ -54,7 +57,9 @@ protected:
 	D3D12_INDEX_BUFFER_VIEW			*m_pd3dSubSetIndexBufferViews = NULL;
 
 public:
-	UINT GetType() { return(m_nType); }
+	UINT GetType() const { return(m_nType); }
+	XMFLOAT3 GetAABBCenter() const { return m_xmf3AABBCenter; }
+	XMFLOAT3 GetAABBExtents() const { return m_xmf3AABBExtents; }
 
 	virtual void CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList) { }
 	virtual void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList) { }

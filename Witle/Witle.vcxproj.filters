@@ -178,6 +178,12 @@
     <Filter Include="05.Shader\TESTLoadFBXShader">
       <UniqueIdentifier>{225397ac-3fb8-4611-951b-655a6891efa9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="05.Shader\LineShader">
+      <UniqueIdentifier>{fda23db5-9c9d-46fa-abe2-a357f294f44c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\Mesh\LineCube">
+      <UniqueIdentifier>{6d1d2593-cc91-440b-987d-23328fb5f18c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -399,6 +405,12 @@
     <ClInclude Include="TESTLoadFBXShader.h">
       <Filter>05.Shader\TESTLoadFBXShader</Filter>
     </ClInclude>
+    <ClInclude Include="LineShader.h">
+      <Filter>05.Shader\LineShader</Filter>
+    </ClInclude>
+    <ClInclude Include="LineCube.h">
+      <Filter>02.Component\Mesh\LineCube</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -602,6 +614,12 @@
     <ClCompile Include="TESTLoadFBXShader.cpp">
       <Filter>05.Shader\TESTLoadFBXShader</Filter>
     </ClCompile>
+    <ClCompile Include="LineShader.cpp">
+      <Filter>05.Shader\LineShader</Filter>
+    </ClCompile>
+    <ClCompile Include="LineCube.cpp">
+      <Filter>02.Component\Mesh\LineCube</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Witle.rc">
@@ -642,6 +660,9 @@
       <Filter>HLSL</Filter>
     </FxCompile>
     <FxCompile Include="TESTLoadFBXShader.hlsl">
+      <Filter>HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="LineShader.hlsl">
       <Filter>HLSL</Filter>
     </FxCompile>
   </ItemGroup>
