@@ -279,6 +279,7 @@ class LoadObject
 #ifdef _SHOW_BOUNDINGBOX
 	LineCube* m_pLineCube;
 #endif
+	BoundingBox m_BoundingBox;
 
 private:
 	int								m_nReferences = 0;

@@ -184,6 +184,12 @@
     <Filter Include="02.Component\Mesh\LineCube">
       <UniqueIdentifier>{6d1d2593-cc91-440b-987d-23328fb5f18c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="99.etc\Collider">
+      <UniqueIdentifier>{e42b872b-d74d-4d65-862f-295508e73de7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="99.etc\Collision">
+      <UniqueIdentifier>{08871af7-7e49-4250-9196-1ced0dbcb5b1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -411,6 +417,9 @@
     <ClInclude Include="LineCube.h">
       <Filter>02.Component\Mesh\LineCube</Filter>
     </ClInclude>
+    <ClInclude Include="Collision.h">
+      <Filter>99.etc\Collision</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -619,6 +628,9 @@
     </ClCompile>
     <ClCompile Include="LineCube.cpp">
       <Filter>02.Component\Mesh\LineCube</Filter>
+    </ClCompile>
+    <ClCompile Include="Collision.cpp">
+      <Filter>99.etc\Collision</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -6,6 +6,8 @@ class LineCube :
 	public Mesh
 { 
 private: 
+	bool m_isMoved{ false }; // 움직이는 객체인가?
+
 	class CubeVertex
 	{
 	public:
@@ -26,7 +28,8 @@ private:
 	void CalculateVertexNormals(XMFLOAT3 *pxmf3Normals, XMFLOAT3 *pxmf3Positions, int nVertices, UINT *pnIndices, int nIndices);
 
 public:
-	LineCube(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, float width, float height, float depth);
+	LineCube(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, XMFLOAT3 center, XMFLOAT3 extents, bool isMoved);
+	LineCube(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, float width, float height, float depth, bool isMoved);
 	LineCube(GameObject* pOwner, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, float width, float height, float depth);
 	virtual ~LineCube();
 

@@ -1000,7 +1000,8 @@ LoadObject *LoadObject::LoadFrameHierarchyFromFile(ID3D12Device *pd3dDevice, ID3
 			CStandardMesh *pMesh = new CStandardMesh(pd3dDevice, pd3dCommandList);
 			pMesh->LoadMeshFromFile(pd3dDevice, pd3dCommandList, pInFile);
 			pGameObject->SetMesh(pMesh);
-			pGameObject->m_pLineCube = new LineCube(pd3dDevice, pd3dCommandList, pMesh->GetAABBExtents().x, pMesh->GetAABBExtents().y, pMesh->GetAABBExtents().z);
+			pGameObject->m_pLineCube = new LineCube(pd3dDevice, pd3dCommandList, pMesh->GetAABBCenter(), pMesh->GetAABBExtents(), false);
+			pGameObject->m_BoundingBox = BoundingBox(pMesh->GetAABBCenter(), pMesh->GetAABBExtents());
 		}
 		else if (!strcmp(pstrToken, "<SkinDeformations>:")) // 애니메이션 존재하는 스킨메쉬
 		{
