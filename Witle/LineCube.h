@@ -34,7 +34,7 @@ public:
 	virtual ~LineCube();
 
 	virtual void Update(float ElapsedTime) override {};
-	void Render(ID3D12GraphicsCommandList *pd3dCommandLis, const XMFLOAT4X4&);
+	void Render(ID3D12GraphicsCommandList *pd3dCommandLis, const XMFLOAT4X4&, bool);
 
 private:
 };

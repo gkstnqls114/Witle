@@ -496,17 +496,17 @@ LineCube::~LineCube()
 
 }
 
-void LineCube::Render(ID3D12GraphicsCommandList * pd3dCommandList, const XMFLOAT4X4& world)
+void LineCube::Render(ID3D12GraphicsCommandList * pd3dCommandList, const XMFLOAT4X4& world, bool isMoved)
 { 
 	XMFLOAT4X4 xmf4x4World;
-	//if (m_isMoved)
-	//{
-		// XMStoreFloat4x4(&xmf4x4World, XMMatrixTranspose(XMLoadFloat4x4(&world))); 
-	//}
-	//else 
-	//{ 
+	if (isMoved)
+	{
+		 XMStoreFloat4x4(&xmf4x4World, XMMatrixTranspose(XMLoadFloat4x4(&world))); 
+	}
+	else 
+	{ 
 		XMStoreFloat4x4(&xmf4x4World, XMMatrixTranspose(XMLoadFloat4x4(&Matrix4x4::Identity())));
-	//}
+	}
 	pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_WORLD, 16, &xmf4x4World, 0);
 	
 	pd3dCommandList->IASetPrimitiveTopology(m_d3dPrimitiveTopology);

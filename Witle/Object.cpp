@@ -657,17 +657,7 @@ void LoadObject::Animate(float fTimeElapsed)
 }
 
 void LoadObject::Render(ID3D12GraphicsCommandList *pd3dCommandList)
-{
-	// Bounding Box Render
-#ifdef _SHOW_BOUNDINGBOX 
-	if (m_pLineCube)
-	{
-		pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Line")->GetPSO());
-		m_pLineCube->Render(pd3dCommandList, m_xmf4x4World);
-	}
-#endif // _SHOW_BOUNDINGBOX
-	//
-
+{ 
 	pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("LoadFBX")->GetPSO());
 
 	if (m_pSkinnedAnimationController)
@@ -1000,8 +990,6 @@ LoadObject *LoadObject::LoadFrameHierarchyFromFile(ID3D12Device *pd3dDevice, ID3
 			CStandardMesh *pMesh = new CStandardMesh(pd3dDevice, pd3dCommandList);
 			pMesh->LoadMeshFromFile(pd3dDevice, pd3dCommandList, pInFile);
 			pGameObject->SetMesh(pMesh);
-			pGameObject->m_pLineCube = new LineCube(pd3dDevice, pd3dCommandList, pMesh->GetAABBCenter(), pMesh->GetAABBExtents(), false);
-			pGameObject->m_BoundingBox = BoundingBox(pMesh->GetAABBCenter(), pMesh->GetAABBExtents());
 		}
 		else if (!strcmp(pstrToken, "<SkinDeformations>:")) // 애니메이션 존재하는 스킨메쉬
 		{

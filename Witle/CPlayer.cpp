@@ -3,6 +3,9 @@
 //-----------------------------------------------------------------------------
 
 #include "stdafx.h"
+#include "LineCube.h"
+#include "ShaderManager.h"
+#include "Shader.h"
 #include "HeightMapImage.h"
 #include "LoadedModelInfo.h"
 // #include "Shader.h"
@@ -30,6 +33,7 @@ CPlayer::CPlayer()
 
 	m_pPlayerUpdatedContext = NULL;
 	m_pCameraUpdatedContext = NULL;
+	 
 }
 
 CPlayer::~CPlayer()
@@ -71,10 +75,12 @@ void CPlayer::Move(const XMFLOAT3& xmf3Shift, bool bUpdateVelocity)
 {
 	if (bUpdateVelocity)
 	{
+		m_BoundingBox.Center = Vector3::Add(m_xmf3Velocity, xmf3Shift);
 		m_xmf3Velocity = Vector3::Add(m_xmf3Velocity, xmf3Shift);
 	}
 	else
 	{
+		m_BoundingBox.Center = Vector3::Add(m_xmf3Position, xmf3Shift);
 		m_xmf3Position = Vector3::Add(m_xmf3Position, xmf3Shift);
 	}
 
@@ -191,6 +197,13 @@ CTerrainPlayer::CTerrainPlayer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandLi
 	CLoadedModelInfo *pAngrybotModel = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/AnimationTest.bin");
 	SetChild(pAngrybotModel->m_pModelRootObject, true);
 
+#ifdef _SHOW_BOUNDINGBOX
+	XMFLOAT3 center{ 0.f, 75.f, 0.f };
+	XMFLOAT3 extents{ 25.f, 75.f, 25.f };
+	m_BoundingBox = BoundingBox(center, extents);
+	m_pLineCube = new LineCube(pd3dDevice, pd3dCommandList, center, extents, true);
+#endif // DEBUG 
+
 	//m_pSkinnedAnimationController = new CAnimationController(pd3dDevice, pd3dCommandList, 1, pAngrybotModel);
 	//m_pSkinnedAnimationController->SetTrackAnimationSet(0, 0);
 
@@ -263,12 +276,37 @@ void CTerrainPlayer::OnCameraUpdateCallback(float fTimeElapsed)
 	//}
 }
 
+void CTerrainPlayer::Render(ID3D12GraphicsCommandList * pd3dCommandList)
+{
+	// Bounding Box Render
+#ifdef _SHOW_BOUNDINGBOX 
+	if (m_pLineCube)
+	{
+		pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Line")->GetPSO());
+		m_pLineCube->Render(pd3dCommandList, m_xmf4x4World, true);
+	}
+#endif // _SHOW_BOUNDINGBOX
+	//
+
+	CPlayer::Render(pd3dCommandList);
+}
+
 ReflexTree::ReflexTree(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void * pContext)
 { 
 	CLoadedModelInfo *pAngrybotModel = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/ReflexTree.bin");
 	SetChild(pAngrybotModel->m_pModelRootObject, true);
 
 	LoadObject::SetPosition(XMFLOAT3(100, 0, 100));
+	
+#ifdef _SHOW_BOUNDINGBOX
+	XMFLOAT3 center{ 0.f, 75.f, 0.f };
+	XMFLOAT3 extents{ 25.f, 75.f, 25.f };
+	XMFLOAT3 pos{ m_xmf4x4ToParent._41,  m_xmf4x4ToParent._42,  m_xmf4x4ToParent._43 };
+	center = Vector3::Add(m_BoundingBox.Center, pos);
+	m_BoundingBox = BoundingBox(center, extents);
+	
+	m_pLineCube = new LineCube(pd3dDevice, pd3dCommandList, m_BoundingBox.Center, m_BoundingBox.Extents, false);
+#endif // DEBUG 
 }
 
 ReflexTree::~ReflexTree()
@@ -278,4 +316,19 @@ ReflexTree::~ReflexTree()
 void ReflexTree::SetPosition(XMFLOAT3 xmf3Position)
 {
 	LoadObject::SetPosition(xmf3Position.x, xmf3Position.y, xmf3Position.z);
+}
+
+void ReflexTree::Render(ID3D12GraphicsCommandList * pd3dCommandList)
+{
+	// Bounding Box Render
+#ifdef _SHOW_BOUNDINGBOX 
+	if (m_pLineCube)
+	{
+		pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Line")->GetPSO());
+		m_pLineCube->Render(pd3dCommandList, m_xmf4x4World, false);
+	}
+#endif // _SHOW_BOUNDINGBOX
+	//
+
+	CPlayer::Render(pd3dCommandList);
 }

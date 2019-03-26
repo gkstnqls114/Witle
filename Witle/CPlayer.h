@@ -83,6 +83,8 @@ public:
 	
 	virtual void OnPlayerUpdateCallback(float fTimeElapsed);
 	virtual void OnCameraUpdateCallback(float fTimeElapsed);
+
+	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList);
 };
 
 class ReflexTree : public CTerrainPlayer
@@ -94,4 +96,5 @@ public:
 
 	virtual void SetPosition(XMFLOAT3 xmf3Position);
 
+	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList);
 };

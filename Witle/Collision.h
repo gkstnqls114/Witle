@@ -3,5 +3,8 @@
 class Collision
 {
 public:
-	static bool isCollide() {}
+	static bool isCollide(const BoundingBox& a, const BoundingBox& b)
+	{
+		return a.Intersects(b);
+	}
 };

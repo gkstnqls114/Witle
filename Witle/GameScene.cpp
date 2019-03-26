@@ -6,6 +6,7 @@
 #include "ShaderManager.h"
 #include "GameScreen.h"
 
+#include "Collision.h"
 #include "Object.h" //교수님코드
 #include "LoadedModelInfo.h"
 #include "Texture.h"
@@ -168,10 +169,10 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	m_Trees = new ReflexTree* [m_TreeCount];
 	for (int x = 0; x < m_TreeCount; ++x)
 	{
-		CLoadedModelInfo* pTreeModel = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/ReflexTree.bin");
-		m_Trees[x] = new ReflexTree();
-		m_Trees[x]->SetChild(pTreeModel->m_pModelRootObject, true);
-		m_Trees[x]->SetPosition(XMFLOAT3(rand() % (257 * int(xmf3Scale.x)), 0, rand() % (257 * int(xmf3Scale.z))));
+		// CLoadedModelInfo* pTreeModel = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/ReflexTree.bin");
+		m_Trees[x] = new ReflexTree(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+		// m_Trees[x]->SetChild(pTreeModel->m_pModelRootObject, true);
+		// m_Trees[x]->SetPosition(XMFLOAT3(rand() % (257 * int(xmf3Scale.x)), 0, rand() % (257 * int(xmf3Scale.z))));
 	}
 	m_TreeDiffuse = new Texture(1, RESOURCE_TEXTURE2D); 
 	m_TreeDiffuse->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/ReflexTree_Diffuse.dds", 0);
@@ -342,12 +343,19 @@ void GameScene::Update(float fElapsedTime)
 	{
 		m_GameObject->Update(fElapsedTime); //Velocity를 통해 pos 이동
 	}
-	
-	//if (m_GameObject)
-	//{
-	//	m_GameObject->Update(fElapsedTime); // right, up, look, pos에 맞춰 월드변환행렬 다시 설정
-	//}
+	 
 
+	// 충돌체크 /////////////////////////
+	for (int i = 0; i < m_TreeCount; ++i)
+	{
+		bool isPlayerCollide = Collision::isCollide(m_GameObject->GetBoundingBox(), m_Trees[i]->GetBoundingBox());
+		if (isPlayerCollide)
+		{
+			printf("%d collide\n", i);
+		}
+	}
+	
+	// 충돌체크 /////////////////////////
 
 	// light update
 	::memcpy(m_pcbMappedLights, LightManager::m_pLights, sizeof(LIGHTS));

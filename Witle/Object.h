@@ -276,10 +276,6 @@ public:
 
 class LoadObject 
 {
-#ifdef _SHOW_BOUNDINGBOX
-	LineCube* m_pLineCube;
-#endif
-	BoundingBox m_BoundingBox;
 
 private:
 	int								m_nReferences = 0;
@@ -293,7 +289,12 @@ public:
 	LoadObject(int nMaterials);
 	virtual ~LoadObject();
 	
-private:
+protected: 
+#ifdef _SHOW_BOUNDINGBOX
+	LineCube* m_pLineCube;
+#endif
+	BoundingBox m_BoundingBox;
+
 public:
 	CMesh							*m_pMesh = NULL;
 	char							m_pstrFrameName[64];
@@ -373,6 +374,9 @@ public:
 	static CLoadedModelInfo *LoadGeometryAndAnimationFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, const char *pstrFileName);
 
 	static void PrintFrameInfo(LoadObject *pGameObject, LoadObject *pParent);
+
+	// 내가 추가
+	BoundingBox GetBoundingBox() { return m_BoundingBox; }
 };
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
