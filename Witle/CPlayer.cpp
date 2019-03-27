@@ -114,8 +114,8 @@ void CPlayer::Move(const XMFLOAT3& xmf3Shift, bool bUpdateVelocity)
 	}
 	else
 	{ 
-		m_BOBox.Transform(m_BOBox, 1.f, Vector4::XMFloat4ToVector(XMFLOAT4(0.f, 0.f, 0.f, 1.f)), Vector3::XMFloat3ToVector(xmf3Shift));
 		m_xmf3Position = Vector3::Add(m_xmf3Position, xmf3Shift);
+		m_BOBox.Center = Vector3::Add(m_BOBox.Center, xmf3Shift);
 	}
 
 }
@@ -124,18 +124,21 @@ void CPlayer::Rotate(float x, float y, float z)
 {
 	if (x != 0.0f)
 	{
+		m_fRoll += x;
 		XMMATRIX xmmtxRotate = XMMatrixRotationAxis(XMLoadFloat3(&m_xmf3Right), XMConvertToRadians(x));
 		m_xmf3Look = Vector3::TransformNormal(m_xmf3Look, xmmtxRotate);
 		m_xmf3Up = Vector3::TransformNormal(m_xmf3Up, xmmtxRotate);
 	}
 	if (y != 0.0f)
 	{
+		m_fYaw += y;
 		XMMATRIX xmmtxRotate = XMMatrixRotationAxis(XMLoadFloat3(&m_xmf3Up), XMConvertToRadians(y));
 		m_xmf3Look = Vector3::TransformNormal(m_xmf3Look, xmmtxRotate);
 		m_xmf3Right = Vector3::TransformNormal(m_xmf3Right, xmmtxRotate);
 	}
 	if (z != 0.0f)
 	{
+		m_fPitch += z;
 		XMMATRIX xmmtxRotate = XMMatrixRotationAxis(XMLoadFloat3(&m_xmf3Look), XMConvertToRadians(z));
 		m_xmf3Up = Vector3::TransformNormal(m_xmf3Up, xmmtxRotate);
 		m_xmf3Right = Vector3::TransformNormal(m_xmf3Right, xmmtxRotate);
@@ -148,7 +151,7 @@ void CPlayer::Rotate(float x, float y, float z)
 	m_xmf3Up = Vector3::CrossProduct(m_xmf3Look, m_xmf3Right, true);
 
 	UpdateTransform(NULL);
-	m_BOBox.Transform(m_BOBox, 1.f, Vector4::XMFloat4ToVector(Quaternion::ToQuaternion(x,y,z)), Vector3::XMFloat3ToVector(XMFLOAT3(0.F, 0.F, 0.F)));
+	m_BOBox.Orientation = Quaternion::ToQuaternion(m_fRoll, m_fYaw, m_fPitch);
 }
 
 void CPlayer::Update(float fTimeElapsed)

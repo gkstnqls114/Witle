@@ -12,9 +12,9 @@ protected:
 
 	XMFLOAT3					m_xmf3Scale = XMFLOAT3(1.0f, 1.0f, 1.0f);
 
-	float           			m_fPitch = 0.0f;
-	float           			m_fYaw = 0.0f;
-	float           			m_fRoll = 0.0f;
+	float           			m_fPitch = 0.0f; // z축 회전
+	float           			m_fYaw = 0.0f; // y축 회전
+	float           			m_fRoll = 0.0f; // x축 회전
 
 	XMFLOAT3					m_xmf3Velocity = XMFLOAT3(0.0f, 0.0f, 0.0f);
 	XMFLOAT3     				m_xmf3Gravity = XMFLOAT3(0.0f, 0.0f, 0.0f);

@@ -319,7 +319,6 @@ bool GameScene::ProcessInput(HWND hWnd, float ElapsedTime)
 		} 
 	}
 	
-
 	if ((GameInput::GetcDeltaX() != 0.0f) || (GameInput::GetcDeltaY() != 0.0f))
 	{
 		if (GameInput::GetcDeltaX() || GameInput::GetcDeltaY())
