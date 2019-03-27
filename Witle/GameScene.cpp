@@ -304,8 +304,7 @@ bool GameScene::ProcessInput(HWND hWnd, float ElapsedTime)
 		if (dwDirection & DIR_UP) xmf3Shift = Vector3::Add(xmf3Shift, axis.up, fDistance);
 		if (dwDirection & DIR_DOWN) xmf3Shift = Vector3::Add(xmf3Shift, axis.up, -fDistance);
 
-		//플레이어의 이동량 벡터를 xmf3Shift 벡터만큼 더한다.
-		// m_GameObject->VelocityMove(xmf3Shift); 
+		//플레이어의 이동량 벡터를 xmf3Shift 벡터만큼 더한다. 
 		m_GameObject->Move(xmf3Shift, true);
 	}
 	else
@@ -339,23 +338,27 @@ bool GameScene::ProcessInput(HWND hWnd, float ElapsedTime)
 // ProcessInput에 의한 right, up, look, pos 를 월드변환 행렬에 갱신한다.
 void GameScene::Update(float fElapsedTime)
 {
+
+	// 충돌체크 /////////////////////////
+	BoundingBox AlreadyBBox = m_GameObject->CalculateAlreadyBoundingBox(fElapsedTime);
+	for (int i = 0; i < m_TreeCount; ++i)
+	{
+		bool isAlreadyCollide = Collision::isCollide(AlreadyBBox, m_Trees[i]->GetBoundingBox());
+		// bool isPlayerCollide = Collision::isCollide(m_GameObject->GetBoundingBox(), m_Trees[i]->GetBoundingBox());
+		if (isAlreadyCollide)
+		{ 
+			std::cout << "Collide";
+			m_GameObject->Move(Vector3::ScalarProduct(m_GameObject->GetVelocity(), -1, false), true);
+		}
+	}
+	// 충돌체크 /////////////////////////
+
 	if (m_GameObject)
 	{
 		m_GameObject->Update(fElapsedTime); //Velocity를 통해 pos 이동
 	}
 	 
 
-	// 충돌체크 /////////////////////////
-	for (int i = 0; i < m_TreeCount; ++i)
-	{
-		bool isPlayerCollide = Collision::isCollide(m_GameObject->GetBoundingBox(), m_Trees[i]->GetBoundingBox());
-		if (isPlayerCollide)
-		{
-			printf("%d collide\n", i);
-		}
-	}
-	
-	// 충돌체크 /////////////////////////
 
 	// light update
 	::memcpy(m_pcbMappedLights, LightManager::m_pLights, sizeof(LIGHTS));

@@ -41,6 +41,33 @@ CPlayer::~CPlayer()
 	ReleaseShaderVariables();
 }
 
+XMFLOAT3 CPlayer::CalculateAlreadyVelocity(float fTimeElapsed)
+{ 
+	XMFLOAT3 AlreadyVelocity = Vector3::Add(m_xmf3Velocity, m_xmf3Gravity);
+	float fLength = sqrtf(AlreadyVelocity.x * AlreadyVelocity.x + AlreadyVelocity.z * AlreadyVelocity.z);
+	float fMaxVelocityXZ = m_fMaxVelocityXZ;
+	if (fLength > m_fMaxVelocityXZ)
+	{
+		AlreadyVelocity.x *= (fMaxVelocityXZ / fLength);
+		AlreadyVelocity.z *= (fMaxVelocityXZ / fLength);
+	}
+	float fMaxVelocityY = m_fMaxVelocityY;
+	fLength = sqrtf(AlreadyVelocity.y * AlreadyVelocity.y);
+	if (fLength > m_fMaxVelocityY) AlreadyVelocity.y *= (fMaxVelocityY / fLength);
+
+	XMFLOAT3 xmf3Velocity = Vector3::ScalarProduct(AlreadyVelocity, fTimeElapsed, false); 
+
+	return xmf3Velocity;
+}
+
+BoundingBox CPlayer::CalculateAlreadyBoundingBox(float fTimeElapsed)
+{ 
+	XMFLOAT3 AlreadyVelocity = CalculateAlreadyVelocity(fTimeElapsed);
+	BoundingBox AlreadyBBox = m_BoundingBox;
+	AlreadyBBox.Center = Vector3::Add(AlreadyBBox.Center, AlreadyVelocity);
+	return AlreadyBBox;
+}
+
 void CPlayer::CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList)
 {
 
@@ -74,8 +101,7 @@ void CPlayer::Move(DWORD dwDirection, float fDistance, bool bUpdateVelocity)
 void CPlayer::Move(const XMFLOAT3& xmf3Shift, bool bUpdateVelocity)
 {
 	if (bUpdateVelocity)
-	{
-		m_BoundingBox.Center = Vector3::Add(m_xmf3Velocity, xmf3Shift);
+	{ 
 		m_xmf3Velocity = Vector3::Add(m_xmf3Velocity, xmf3Shift);
 	}
 	else
