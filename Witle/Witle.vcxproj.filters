@@ -190,6 +190,9 @@
     <Filter Include="99.etc\Collision">
       <UniqueIdentifier>{08871af7-7e49-4250-9196-1ced0dbcb5b1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.Component\MyBOBox">
+      <UniqueIdentifier>{e8a14a7d-6bcb-4984-b8cf-189fb6ec9d20}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -420,6 +423,9 @@
     <ClInclude Include="Collision.h">
       <Filter>99.etc\Collision</Filter>
     </ClInclude>
+    <ClInclude Include="MyBOBox.h">
+      <Filter>02.Component\MyBOBox</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -631,6 +637,9 @@
     </ClCompile>
     <ClCompile Include="Collision.cpp">
       <Filter>99.etc\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="MyBOBox.cpp">
+      <Filter>02.Component\MyBOBox</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
