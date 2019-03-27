@@ -347,6 +347,7 @@ void GameScene::Update(float fElapsedTime)
 		XMFLOAT3 TreePos = XMFLOAT3(m_Trees[i]->GetBoundingBox().Center.x, 0, m_Trees[i]->GetBoundingBox().Center.z); 
 		if (isAlreadyCollide)
 		{ 
+			bool isUseSliding = false;
 			for (int x = 0; x < 4; ++x)
 			{
 				bool isIntersect = Plane::Intersect(m_Trees[i]->GetBoBoxPlane(x), AlreadyPositon, m_GameObject->GetVelocity());
@@ -354,9 +355,20 @@ void GameScene::Update(float fElapsedTime)
 				if (isIntersect && isFront)
 				{
 					std::cout << x << " ... intersect! ";
-					m_GameObject->Move(Vector3::ScalarProduct(m_GameObject->GetVelocity(), -1, false), true);
+					//슬라이딩벡터
+
+					m_GameObject->SetVelocity(
+						Vector3::Sliding(XMFLOAT3(m_Trees[i]->GetBoBoxPlane(x).x, m_Trees[i]->GetBoBoxPlane(x).y, m_Trees[i]->GetBoBoxPlane(x).z), m_GameObject->GetVelocity())
+					);
+
+					isUseSliding = true; 
 				}
 			} 
+			 
+			if(!isUseSliding)
+			{
+				m_GameObject->Move(Vector3::ScalarProduct(m_GameObject->GetVelocity(), -1, false), true);
+			}
 			std::cout << std::endl;
 		}
 	}
