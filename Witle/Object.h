@@ -294,7 +294,7 @@ protected:
 	LineCube* m_pLineCube;
 #endif
 	BoundingOrientedBox m_BOBox;
-	// BoundingBox m_BoundingBox;
+	XMFLOAT4 m_BoBoxPlane[4]; // 평면
 
 public:
 	CMesh							*m_pMesh = NULL;
@@ -378,6 +378,7 @@ public:
 
 	// 내가 추가
 	BoundingOrientedBox GetBoundingBox() { return m_BOBox; }
+	XMFLOAT4 GetBoBoxPlane(int index) { return m_BoBoxPlane[index]; }
 };
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
