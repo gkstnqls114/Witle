@@ -87,7 +87,7 @@ protected:
 
 
 	CLoadedModelInfo *m_pTreeModel{ nullptr };
-	UINT					m_TreeCount{ 1 };
+	UINT					m_TreeCount{ 100 };
 	Texture*				m_TreeDiffuse{ nullptr };
 	ReflexTree**			m_Trees{ nullptr };
 	// fbx test

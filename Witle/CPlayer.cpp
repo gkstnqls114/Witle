@@ -325,18 +325,17 @@ void CTerrainPlayer::Render(ID3D12GraphicsCommandList * pd3dCommandList)
 	CPlayer::Render(pd3dCommandList);
 }
 
-ReflexTree::ReflexTree(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void * pContext)
+ReflexTree::ReflexTree(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, XMFLOAT3 position, void * pContext)
 { 
 	CLoadedModelInfo *pAngrybotModel = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/ReflexTree.bin");
 	SetChild(pAngrybotModel->m_pModelRootObject, true);
 	 
-	ReflexTree::SetPosition(XMFLOAT3(100, 0, 100));
+	ReflexTree::SetPosition(position);
 	
 #ifdef _SHOW_BOUNDINGBOX
 	XMFLOAT3 center{ -30.f, 100.f, 0.f };
-	XMFLOAT3 extents{ 40.f, 100.f, 40.f };
-	XMFLOAT3 pos{ m_xmf4x4ToParent._41,  m_xmf4x4ToParent._42,  m_xmf4x4ToParent._43 };
-	center = Vector3::Add(center, pos);
+	XMFLOAT3 extents{ 40.f, 100.f, 40.f }; 
+	center = Vector3::Add(center, position);
 	m_BoundingBox = BoundingBox(center, extents);
 	
 	m_pLineCube = new LineCube(pd3dDevice, pd3dCommandList, m_BoundingBox.Center, m_BoundingBox.Extents, false);
