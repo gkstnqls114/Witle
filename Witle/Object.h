@@ -293,7 +293,8 @@ protected:
 #ifdef _SHOW_BOUNDINGBOX
 	LineCube* m_pLineCube;
 #endif
-	BoundingBox m_BoundingBox;
+	BoundingOrientedBox m_BOBox;
+	// BoundingBox m_BoundingBox;
 
 public:
 	CMesh							*m_pMesh = NULL;
@@ -376,7 +377,7 @@ public:
 	static void PrintFrameInfo(LoadObject *pGameObject, LoadObject *pParent);
 
 	// 내가 추가
-	BoundingBox GetBoundingBox() { return m_BoundingBox; }
+	BoundingOrientedBox GetBoundingBox() { return m_BOBox; }
 };
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

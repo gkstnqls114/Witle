@@ -60,10 +60,10 @@ XMFLOAT3 CPlayer::CalculateAlreadyVelocity(float fTimeElapsed)
 	return xmf3Velocity;
 }
 
-BoundingBox CPlayer::CalculateAlreadyBoundingBox(float fTimeElapsed)
+BoundingOrientedBox CPlayer::CalculateAlreadyBoundingBox(float fTimeElapsed)
 { 
 	XMFLOAT3 AlreadyVelocity = CalculateAlreadyVelocity(fTimeElapsed);
-	BoundingBox AlreadyBBox = m_BoundingBox;
+	BoundingOrientedBox AlreadyBBox = m_BOBox;
 	AlreadyBBox.Center = Vector3::Add(AlreadyBBox.Center, AlreadyVelocity);
 	return AlreadyBBox;
 }
@@ -113,8 +113,8 @@ void CPlayer::Move(const XMFLOAT3& xmf3Shift, bool bUpdateVelocity)
 		m_xmf3Velocity = Vector3::Add(m_xmf3Velocity, xmf3Shift);
 	}
 	else
-	{
-		m_BoundingBox.Center = Vector3::Add(m_xmf3Position, xmf3Shift);
+	{ 
+		m_BOBox.Transform(m_BOBox, 1.f, Vector4::XMFloat4ToVector(XMFLOAT4(0.f, 0.f, 0.f, 1.f)), Vector3::XMFloat3ToVector(xmf3Shift));
 		m_xmf3Position = Vector3::Add(m_xmf3Position, xmf3Shift);
 	}
 
@@ -148,6 +148,7 @@ void CPlayer::Rotate(float x, float y, float z)
 	m_xmf3Up = Vector3::CrossProduct(m_xmf3Look, m_xmf3Right, true);
 
 	UpdateTransform(NULL);
+	m_BOBox.Transform(m_BOBox, 1.f, Vector4::XMFloat4ToVector(Quaternion::ToQuaternion(x,y,z)), Vector3::XMFloat3ToVector(XMFLOAT3(0.F, 0.F, 0.F)));
 }
 
 void CPlayer::Update(float fTimeElapsed)
@@ -234,7 +235,7 @@ CTerrainPlayer::CTerrainPlayer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandLi
 #ifdef _SHOW_BOUNDINGBOX
 	XMFLOAT3 center{ 0.f, 75.f, 0.f };
 	XMFLOAT3 extents{ 25.f, 75.f, 25.f };
-	m_BoundingBox = BoundingBox(center, extents);
+	m_BOBox = BoundingOrientedBox(center, extents, XMFLOAT4{0.f, 0.f, 0.f, 1.f});
 	m_pLineCube = new LineCube(pd3dDevice, pd3dCommandList, center, extents, true);
 #endif // DEBUG 
 
@@ -336,9 +337,9 @@ ReflexTree::ReflexTree(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd
 	XMFLOAT3 center{ -30.f, 100.f, 0.f };
 	XMFLOAT3 extents{ 40.f, 100.f, 40.f }; 
 	center = Vector3::Add(center, position);
-	m_BoundingBox = BoundingBox(center, extents);
+	m_BOBox = BoundingOrientedBox(center, extents, XMFLOAT4(0.f, 0.f, 0.f, 1.f));
 	
-	m_pLineCube = new LineCube(pd3dDevice, pd3dCommandList, m_BoundingBox.Center, m_BoundingBox.Extents, false);
+	m_pLineCube = new LineCube(pd3dDevice, pd3dCommandList, m_BOBox.Center, m_BOBox.Extents, false);
 #endif // DEBUG 
 }
 

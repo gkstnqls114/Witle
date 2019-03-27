@@ -340,7 +340,7 @@ void GameScene::Update(float fElapsedTime)
 {
 
 	// 충돌체크 ///////////////////////// 
-	BoundingBox AlreadyBBox = m_GameObject->CalculateAlreadyBoundingBox(fElapsedTime);
+	BoundingOrientedBox AlreadyBBox = m_GameObject->CalculateAlreadyBoundingBox(fElapsedTime);
 	XMFLOAT3 AlreadyPosition = XMFLOAT3(AlreadyBBox.Center.x, 0, AlreadyBBox.Center.z) ;
 	for (int i = 0; i < m_TreeCount; ++i)
 	{

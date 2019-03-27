@@ -7,4 +7,9 @@ public:
 	{
 		return a.Intersects(b);
 	}
+
+	static bool isCollide(const BoundingOrientedBox& a, const BoundingOrientedBox& b)
+	{
+		return a.Intersects(b);
+	}
 };
