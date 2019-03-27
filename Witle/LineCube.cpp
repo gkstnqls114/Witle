@@ -102,9 +102,9 @@ LineCube::LineCube(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCo
 	m_nStride = sizeof(CubeVertex);
 	m_d3dPrimitiveTopology = D3D_PRIMITIVE_TOPOLOGY_LINELIST;
 
-	float fx = extents.x * 0.5f;
-	float fy = extents.y * 0.5f;
-	float fz = extents.z * 0.5f;
+	float fx = extents.x;
+	float fy = extents.y;
+	float fz = extents.z;
 
 	XMFLOAT3 pxmf3Positions[CUBE_VERTEX_COUNT];
 	int i = 0;

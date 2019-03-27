@@ -299,10 +299,10 @@ ReflexTree::ReflexTree(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd
 	LoadObject::SetPosition(XMFLOAT3(100, 0, 100));
 	
 #ifdef _SHOW_BOUNDINGBOX
-	XMFLOAT3 center{ 0.f, 75.f, 0.f };
-	XMFLOAT3 extents{ 25.f, 75.f, 25.f };
+	XMFLOAT3 center{ -30.f, 100.f, 0.f };
+	XMFLOAT3 extents{ 40.f, 100.f, 40.f };
 	XMFLOAT3 pos{ m_xmf4x4ToParent._41,  m_xmf4x4ToParent._42,  m_xmf4x4ToParent._43 };
-	center = Vector3::Add(m_BoundingBox.Center, pos);
+	center = Vector3::Add(center, pos);
 	m_BoundingBox = BoundingBox(center, extents);
 	
 	m_pLineCube = new LineCube(pd3dDevice, pd3dCommandList, m_BoundingBox.Center, m_BoundingBox.Extents, false);
