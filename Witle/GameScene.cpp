@@ -170,9 +170,9 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	for (int x = 0; x < m_TreeCount; ++x)
 	{
 		// CLoadedModelInfo* pTreeModel = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Model/ReflexTree.bin");
-		m_Trees[x] = new ReflexTree(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, XMFLOAT3(rand() % (257 * int(xmf3Scale.x)), 0, rand() % (257 * int(xmf3Scale.z))));
-		// m_Trees[x]->SetChild(pTreeModel->m_pModelRootObject, true);
-		// m_Trees[x]->SetPosition(XMFLOAT3(rand() % (257 * int(xmf3Scale.x)), 0, rand() % (257 * int(xmf3Scale.z))));
+		// m_Trees[x] = new ReflexTree(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, XMFLOAT3(rand() % (257 * int(xmf3Scale.x)), 0, rand() % (257 * int(xmf3Scale.z))));
+		m_Trees[x] = new ReflexTree(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, XMFLOAT3(200, 0, 200));
+		// m_Trees[x]->SetChild(pTreeModel->m_pModelRootObject, true); 
 	}
 	m_TreeDiffuse = new Texture(1, RESOURCE_TEXTURE2D); 
 	m_TreeDiffuse->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/ReflexTree_Diffuse.dds", 0);
@@ -339,21 +339,25 @@ void GameScene::Update(float fElapsedTime)
 {
 
 	// 面倒眉农 ///////////////////////// 
-	BoundingOrientedBox AlreadyBBox = m_GameObject->CalculateAlreadyBoundingBox(fElapsedTime);
-	XMFLOAT3 AlreadyPosition = XMFLOAT3(AlreadyBBox.Center.x, 0, AlreadyBBox.Center.z) ;
+	BoundingOrientedBox AlreadyBBox = m_GameObject->CalculateAlreadyBoundingBox(fElapsedTime); 
+	XMFLOAT3 AlreadyPositon{ AlreadyBBox.Center.x, AlreadyBBox.Center.y, AlreadyBBox.Center.z };
 	for (int i = 0; i < m_TreeCount; ++i)
 	{
 		bool isAlreadyCollide = Collision::isCollide(AlreadyBBox, m_Trees[i]->GetBoundingBox());
-		XMFLOAT3 TreePos = XMFLOAT3(m_Trees[i]->GetBoundingBox().Center.x, 0, m_Trees[i]->GetBoundingBox().Center.z);
-		bool isInCircle = 65 > Vector3::Length(Vector3::Subtract(AlreadyPosition, TreePos));
+		XMFLOAT3 TreePos = XMFLOAT3(m_Trees[i]->GetBoundingBox().Center.x, 0, m_Trees[i]->GetBoundingBox().Center.z); 
 		if (isAlreadyCollide)
 		{ 
-			std::cout << Vector3::Length(Vector3::Subtract(AlreadyPosition, TreePos)) << std::endl;
-			if (isInCircle)
+			for (int x = 0; x < 4; ++x)
 			{
-				std::cout << "Collide";
-				m_GameObject->Move(Vector3::ScalarProduct(m_GameObject->GetVelocity(), -1, false), true);
-			}
+				bool isIntersect = Plane::Intersect(m_Trees[i]->GetBoBoxPlane(x), AlreadyPositon, m_GameObject->GetVelocity());
+				bool isFront = Plane::IsFront(m_Trees[i]->GetBoBoxPlane(x), AlreadyPositon);
+				if (isIntersect && isFront)
+				{
+					std::cout << x << " ... intersect! ";
+					m_GameObject->Move(Vector3::ScalarProduct(m_GameObject->GetVelocity(), -1, false), true);
+				}
+			} 
+			std::cout << std::endl;
 		}
 	}
 	// 面倒眉农 /////////////////////////

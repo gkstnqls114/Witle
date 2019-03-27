@@ -337,13 +337,13 @@ ReflexTree::ReflexTree(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd
 	ReflexTree::SetPosition(position);
 	
 	XMFLOAT3 center{ -30.f, 100.f, 0.f };
-	XMFLOAT3 extents{ 40.f, 100.f, 40.f }; 
+	XMFLOAT3 extents{ 100.f, 100.f, 100.f }; 
 	center = Vector3::Add(center, position);
 	m_BOBox = BoundingOrientedBox(center, extents, XMFLOAT4(0.f, 0.f, 0.f, 1.f));
 	m_BoBoxPlane[0] = Plane::Plane(Vector3::Add(center, XMFLOAT3(extents.x, 0.f, 0.f)), XMFLOAT3(1.f, 0.f, 0.f)); // +x면 normal (1, 0, 0)
 	m_BoBoxPlane[1] = Plane::Plane(Vector3::Add(center, XMFLOAT3(-extents.x, 0.f, 0.f)), XMFLOAT3(-1.f, 0.f, 0.f)); // -x면 normal (-1, 0, 0)
-	m_BoBoxPlane[2] = Plane::Plane(Vector3::Add(center, XMFLOAT3(0.f, 0.f, extents.z)), XMFLOAT3(1.f, 0.f, 0.f)); // +z면 normal (0, 0, 1)
-	m_BoBoxPlane[3] = Plane::Plane(Vector3::Add(center, XMFLOAT3(0.f, 0.f, -extents.z)), XMFLOAT3(1.f, 0.f, 0.f)); // +z면 normal (0, 0, -1)
+	m_BoBoxPlane[2] = Plane::Plane(Vector3::Add(center, XMFLOAT3(0.f, 0.f, extents.z)), XMFLOAT3(0.f, 0.f, 1.f)); // +z면 normal (0, 0, 1)
+	m_BoBoxPlane[3] = Plane::Plane(Vector3::Add(center, XMFLOAT3(0.f, 0.f, -extents.z)), XMFLOAT3(0.f, 0.f, -1.f)); // +z면 normal (0, 0, -1)
 
 #ifdef _SHOW_BOUNDINGBOX
 	m_pLineCube = new LineCube(pd3dDevice, pd3dCommandList, m_BOBox.Center, m_BOBox.Extents, false);
