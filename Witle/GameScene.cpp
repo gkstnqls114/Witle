@@ -339,16 +339,22 @@ bool GameScene::ProcessInput(HWND hWnd, float ElapsedTime)
 void GameScene::Update(float fElapsedTime)
 {
 
-	// 面倒眉农 /////////////////////////
+	// 面倒眉农 ///////////////////////// 
 	BoundingBox AlreadyBBox = m_GameObject->CalculateAlreadyBoundingBox(fElapsedTime);
+	XMFLOAT3 AlreadyPosition = XMFLOAT3(AlreadyBBox.Center.x, 0, AlreadyBBox.Center.z) ;
 	for (int i = 0; i < m_TreeCount; ++i)
 	{
 		bool isAlreadyCollide = Collision::isCollide(AlreadyBBox, m_Trees[i]->GetBoundingBox());
-		// bool isPlayerCollide = Collision::isCollide(m_GameObject->GetBoundingBox(), m_Trees[i]->GetBoundingBox());
+		XMFLOAT3 TreePos = XMFLOAT3(m_Trees[i]->GetBoundingBox().Center.x, 0, m_Trees[i]->GetBoundingBox().Center.z);
+		bool isInCircle = 65 > Vector3::Length(Vector3::Subtract(AlreadyPosition, TreePos));
 		if (isAlreadyCollide)
 		{ 
-			std::cout << "Collide";
-			m_GameObject->Move(Vector3::ScalarProduct(m_GameObject->GetVelocity(), -1, false), true);
+			std::cout << Vector3::Length(Vector3::Subtract(AlreadyPosition, TreePos)) << std::endl;
+			if (isInCircle)
+			{
+				std::cout << "Collide";
+				m_GameObject->Move(Vector3::ScalarProduct(m_GameObject->GetVelocity(), -1, false), true);
+			}
 		}
 	}
 	// 面倒眉农 /////////////////////////

@@ -31,6 +31,7 @@ public:
 
 	XMFLOAT3 CalculateAlreadyVelocity(float fTimeElapsed);
 	BoundingBox CalculateAlreadyBoundingBox(float fTimeElapsed);
+	XMFLOAT3 CalculateAlreadyPosition(float fTimeElapsed);
 	XMFLOAT3 GetPosition() { return(m_xmf3Position); }
 	XMFLOAT3 GetLookVector() { return(m_xmf3Look); }
 	XMFLOAT3 GetUpVector() { return(m_xmf3Up); }

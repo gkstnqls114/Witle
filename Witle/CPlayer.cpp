@@ -68,6 +68,14 @@ BoundingBox CPlayer::CalculateAlreadyBoundingBox(float fTimeElapsed)
 	return AlreadyBBox;
 }
 
+XMFLOAT3 CPlayer::CalculateAlreadyPosition(float fTimeElapsed)
+{
+	XMFLOAT3 AlreadyVelocity = CalculateAlreadyVelocity(fTimeElapsed);
+	XMFLOAT3 AlreadyPosition = m_xmf3Position;
+	AlreadyPosition = Vector3::Add(AlreadyPosition, AlreadyVelocity);
+	return AlreadyPosition;
+}
+
 void CPlayer::CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList)
 {
 
@@ -321,8 +329,8 @@ ReflexTree::ReflexTree(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd
 { 
 	CLoadedModelInfo *pAngrybotModel = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/ReflexTree.bin");
 	SetChild(pAngrybotModel->m_pModelRootObject, true);
-
-	LoadObject::SetPosition(XMFLOAT3(100, 0, 100));
+	 
+	ReflexTree::SetPosition(XMFLOAT3(100, 0, 100));
 	
 #ifdef _SHOW_BOUNDINGBOX
 	XMFLOAT3 center{ -30.f, 100.f, 0.f };
@@ -341,6 +349,7 @@ ReflexTree::~ReflexTree()
 
 void ReflexTree::SetPosition(XMFLOAT3 xmf3Position)
 {
+	m_xmf3Position = xmf3Position;
 	LoadObject::SetPosition(xmf3Position.x, xmf3Position.y, xmf3Position.z);
 }
 
