@@ -27,6 +27,8 @@ MyBOBox::~MyBOBox()
 #endif
 }
 
+
+#ifdef _SHOW_BOUNDINGBOX
 void MyBOBox::Render(ID3D12GraphicsCommandList * pd3dCommandList, const XMFLOAT4X4& xmf4x4World)
 {
 	if (m_pLineCube)
@@ -35,6 +37,7 @@ void MyBOBox::Render(ID3D12GraphicsCommandList * pd3dCommandList, const XMFLOAT4
 		m_pLineCube->Render(pd3dCommandList, xmf4x4World, true);
 	}
 }
+#endif
 
 void MyBOBox::Rotate(float roll, float yaw, float pitch)
 {

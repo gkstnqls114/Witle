@@ -39,7 +39,7 @@ enum LIGHT_TYPE
 #define _WITH_DEBUG_SKINNING_BONE
 #define _WITH_DISPLAY_TEXTURE_NAME
 
-#define _SHOW_BOUNDINGBOX
+// #define _SHOW_BOUNDINGBOX
 /////////////////////////////////////////////// define Á¤ÀÇ
 
 
