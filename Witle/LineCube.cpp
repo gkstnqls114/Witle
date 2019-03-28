@@ -91,7 +91,9 @@ void LineCube::CalculateVertexNormals(XMFLOAT3 * pxmf3Normals, XMFLOAT3 * pxmf3P
 }
 
 LineCube::LineCube(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, XMFLOAT3 center, XMFLOAT3 extents)
-{ 
+{  
+	m_FamilyID.InitMesh();
+
 	m_ComponenetID = MESH_TYPE_ID::CUBE_MESH;
 
 	m_nVertexBufferViews = 1;
