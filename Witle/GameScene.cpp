@@ -21,7 +21,7 @@
 #include "MyFrustum.h"
 #include "GameInput.h"
 #include "GameScreen.h"
-#include "CPlayer.h"
+#include "Player.h"
 #include "CameraObject.h"
 #include "QuadTreeTerrainMesh.h"
 #include "BasicCam.h"
@@ -159,9 +159,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	m_TESTQuadTree = new QuadTreeTerrainMesh(m_TESTQuadGameobject, pd3dDevice, pd3dCommandList, 257, 257, xmf3Scale, xmf4Color, m_Terrain->GetHeightMapImage());
 
 	// 테스트할 모델 오브젝트
-	m_GameObject = new CTerrainPlayer(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, nullptr);
-	m_GameObject->CreateShaderVariables(pd3dDevice, pd3dCommandList);
-	// m_GameObject->SetPosition(XMFLOAT3(0.f, m_Terrain->GetHeight(1.f, 1.f), 0.f));
+	m_pPlayer = new Player("Player", pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, nullptr);
 	m_GameObjectDiffuse = new Texture(1, RESOURCE_TEXTURE2D);
 	m_GameObjectDiffuse->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/ReflexTree_Diffuse.dds", 0);
 	 
@@ -176,12 +174,12 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	m_TreeDiffuse->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/ReflexTree_Diffuse.dds", 0);
 	
 	// 해당 터레인을 플레이어 콜백으로 설정
-	m_GameObject->SetPlayerUpdatedContext(m_Terrain);
+	m_pPlayer->SetUpdatedContext(m_Terrain);
 
 	// 카메라
 	m_Camera = new CameraObject("Camera");
-	// Camera* cameraComponent = new FollowCam(m_Camera, m_GameObject);
-	Camera* cameraComponent = new FollowCamForLoad(m_Camera, m_GameObject);
+	// Camera* cameraComponent = new FollowCam(m_Camera, m_pPlayer);
+	Camera* cameraComponent = new FollowCam(m_Camera, m_pPlayer);
 	GameScreen::SetCamera(cameraComponent);
 	cameraComponent->CreateShaderVariables(pd3dDevice, pd3dCommandList);
 	cameraComponent->SetOffset(XMFLOAT3(0, 0, 1000.f));
@@ -218,12 +216,11 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 
 void GameScene::ReleaseObjects()
 {
-	if (m_GameObject)
+	if (m_pPlayer)
 	{
-		m_GameObject->ReleaseShaderVariables();
-		m_GameObject->Release();
-		// delete m_GameObject;
-		m_GameObject = nullptr;
+		m_pPlayer->ReleaseObjects(); 
+		delete m_pPlayer;
+		m_pPlayer = nullptr;
 	}
 #ifdef CHECK_SUBVIEWS
 	if (m_lookAboveCamera)
@@ -285,14 +282,14 @@ bool GameScene::ProcessInput(HWND hWnd, float ElapsedTime)
 	// 만약 키보드 상하좌우 움직인다면...
 	if (dwDirection != 0)
 	{
-		// AXIS axis = m_GameObject->GetTransform().GetCoorAxis();
-		AXIS axis = AXIS{ m_GameObject->GetRight(), m_GameObject->GetUp(), m_GameObject->GetLook() };
+		// AXIS axis = m_pPlayer->GetTransform().GetCoorAxis();
+		AXIS axis = AXIS{ m_pPlayer->GetCoorAxis() };
 
 		XMFLOAT3 xmf3Shift = XMFLOAT3(0.f, 0.f, 0.f); // 이동량
 
 		/*플레이어를 dwDirection 방향으로 이동한다(실제로는 속도 벡터를 변경한다). 이동 거리는 시간에 비례하도록 한다.
 		플레이어의 이동 속력은 (20m/초)로 가정한다.*/
-		float fDistance = 2000.f * ElapsedTime; // 1초당 최대 속력 20m으로 가정, 현재 1 = 1cm
+		float fDistance = 2000.0f * ElapsedTime; // 1초당 최대 속력 20m으로 가정, 현재 1 = 1cm
 
 		if (dwDirection & DIR_FORWARD) xmf3Shift = Vector3::Add(xmf3Shift, axis.look, fDistance);
 		if (dwDirection & DIR_BACKWARD) xmf3Shift = Vector3::Add(xmf3Shift, axis.look, -fDistance);
@@ -302,17 +299,17 @@ bool GameScene::ProcessInput(HWND hWnd, float ElapsedTime)
 		if (dwDirection & DIR_DOWN) xmf3Shift = Vector3::Add(xmf3Shift, axis.up, -fDistance);
 
 		//플레이어의 이동량 벡터를 xmf3Shift 벡터만큼 더한다. 
-		m_GameObject->Move(xmf3Shift, true);
+		m_pPlayer->MoveVelocity(xmf3Shift);
 	}
 	else
 	{
-		XMFLOAT3 Veclocity = m_GameObject->GetVelocity();
+		XMFLOAT3 Veclocity = m_pPlayer->GetVelocity();
 		if (Vector3::Length(Veclocity) > 0.f)
 		{ 
 			float fLength = Vector3::Length(Veclocity);
 			float fDeceleration = (3000.f * ElapsedTime); //해당상수는 Friction
 			if (fDeceleration > fLength) fDeceleration = fLength;
-			m_GameObject->Move(Vector3::ScalarProduct(Veclocity, -fDeceleration, true), true);
+			m_pPlayer->MoveVelocity(Vector3::ScalarProduct(Veclocity, -fDeceleration, true));
 		} 
 	}
 	
@@ -323,7 +320,7 @@ bool GameScene::ProcessInput(HWND hWnd, float ElapsedTime)
 			// 플레이어와 카메라 똑같이 rotate...
 			// 순서 의존적이므로 변경 금지
 			m_Camera->GetCamera()->Rotate(GameInput::GetcDeltaY(), GameInput::GetcDeltaX(), 0.0f);
-			m_GameObject->Rotate(0.0f, GameInput::GetcDeltaX(), 0.0f);
+			m_pPlayer->Rotate(0.0f, GameInput::GetcDeltaX(), 0.0f);
 		}
 		
 	}
@@ -336,7 +333,7 @@ void GameScene::Update(float fElapsedTime)
 {
 
 	// 충돌체크 ///////////////////////// 
-	BoundingOrientedBox AlreadyBBox = m_GameObject->CalculateAlreadyBoundingBox(fElapsedTime); 
+	BoundingOrientedBox AlreadyBBox = m_pPlayer->CalculateAlreadyBoundingBox(fElapsedTime); 
 	XMFLOAT3 AlreadyPositon{ AlreadyBBox.Center.x, AlreadyBBox.Center.y, AlreadyBBox.Center.z };
 	for (int i = 0; i < m_TreeCount; ++i)
 	{
@@ -346,15 +343,15 @@ void GameScene::Update(float fElapsedTime)
 			bool isUseSliding = false;
 			for (int x = 0; x < 4; ++x)
 			{
-				bool isIntersect = Plane::Intersect(m_Trees[i]->GetBOBox()->GetPlane(x), AlreadyPositon, m_GameObject->GetVelocity());
+				bool isIntersect = Plane::Intersect(m_Trees[i]->GetBOBox()->GetPlane(x), AlreadyPositon, m_pPlayer->GetVelocity());
 				bool isFront = Plane::IsFront(m_Trees[i]->GetBOBox()->GetPlane(x), AlreadyPositon);
 				if (isIntersect && isFront)
 				{
 					std::cout << x << " ... intersect! ";
 					//슬라이딩벡터
 
-					m_GameObject->SetVelocity(
-						Vector3::Sliding(m_Trees[i]->GetBOBox()->GetPlane(x), m_GameObject->GetVelocity())
+					m_pPlayer->SetVelocity(
+						Vector3::Sliding(m_Trees[i]->GetBOBox()->GetPlane(x), m_pPlayer->GetVelocity())
 					);
 
 					isUseSliding = true; 
@@ -363,16 +360,16 @@ void GameScene::Update(float fElapsedTime)
 			 
 			if(!isUseSliding)
 			{
-				m_GameObject->Move(Vector3::ScalarProduct(m_GameObject->GetVelocity(), -1, false), true);
+				m_pPlayer->MoveVelocity(Vector3::ScalarProduct(m_pPlayer->GetVelocity(), -1, false));
 			}
 			std::cout << std::endl;
 		}
 	}
 	// 충돌체크 /////////////////////////
 
-	if (m_GameObject)
+	if (m_pPlayer)
 	{
-		m_GameObject->Update(fElapsedTime); //Velocity를 통해 pos 이동
+		m_pPlayer->Update(fElapsedTime); //Velocity를 통해 pos 이동
 	}
 	 
 
@@ -413,7 +410,7 @@ void GameScene::AnimateObjects(float fTimeElapsed)
 {
 	// if (m_pHeightMapTerrain) m_pHeightMapTerrain->Animate(fTimeElapsed);
 
-	if (m_GameObject) m_GameObject->Animate(fTimeElapsed);
+	if (m_pPlayer) m_pPlayer->Animate(fTimeElapsed);
 }
 
 void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
@@ -466,7 +463,7 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	pd3dCommandList->SetDescriptorHeaps(1, &m_pd3dCbvSrvDescriptorHeap);
 	m_GameObjectDiffuse->UpdateShaderVariables(pd3dCommandList);
 
-	m_GameObject->Render(pd3dCommandList);
+	m_pPlayer->Render(pd3dCommandList);
 	for (int x = 0; x < m_TreeCount; ++x)
 	{
 		m_Trees[x]->Render(pd3dCommandList);
@@ -481,7 +478,7 @@ void GameScene::ReleaseUploadBuffers()
 	{
 		if (m_Trees[x]) m_Trees[x]->ReleaseUploadBuffers();
 	}
-	if (m_GameObject) m_GameObject->ReleaseUploadBuffers();
+	if (m_pPlayer) m_pPlayer->ReleaseUploadBuffers();
 	if (m_Terrain) m_Terrain->ReleaseUploadBuffers();
 	if (m_TESTQuadTree) m_TESTQuadTree->ReleaseUploadBuffers();
 }

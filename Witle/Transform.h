@@ -38,6 +38,7 @@ public:
 
 	//////////////////////////////////////////////// Get
 	const XMFLOAT4X4& GetWorldMatrix() const { return m_transformWorld; }
+	XMFLOAT4X4* GetpWorldMatrix()  { return &m_transformWorld; }
 	const XMFLOAT3& GetRight() const { return m_Right; }
 	const XMFLOAT3& GetUp() const { return m_Up; }
 	const XMFLOAT3& GetLook() const { return m_Look; }
