@@ -337,13 +337,12 @@ ReflexTree::ReflexTree(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd
 	ModelStorage::GetInstance()->CreateModels(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature);
 	 
 	SetChild(ModelStorage::GetInstance()->GetRootObject("ReflexTree"), true);
-	 
-	XMFLOAT3 tempPos(400.F *(gTreecount + 1), 0.F, 400.F *(gTreecount + 1));
-	ReflexTree::SetPosition(tempPos);
+	  
+	ReflexTree::SetPosition(position);
 	
 	XMFLOAT3 center{ -30.f, 100.f, 0.f };
 	XMFLOAT3 extents{ 100.f, 100.f, 100.f };
-	center = Vector3::Add(center, tempPos);
+	center = Vector3::Add(center, position);
 	m_BOBox = BoundingOrientedBox(center, extents, XMFLOAT4(0.f, 0.f, 0.f, 1.f));
 	m_BoBoxPlane[0] = Plane::Plane(Vector3::Add(center, XMFLOAT3(extents.x, 0.f, 0.f)), XMFLOAT3(1.f, 0.f, 0.f)); // +x¸é normal (1, 0, 0)
 	m_BoBoxPlane[1] = Plane::Plane(Vector3::Add(center, XMFLOAT3(-extents.x, 0.f, 0.f)), XMFLOAT3(-1.f, 0.f, 0.f)); // -x¸é normal (-1, 0, 0)

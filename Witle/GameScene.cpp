@@ -170,7 +170,6 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 		m_Trees[x] = new ReflexTree(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, XMFLOAT3(rand() % (257 * int(xmf3Scale.x)), 0, rand() % (257 * int(xmf3Scale.z))));
 		// m_Trees[x] = new ReflexTree(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, XMFLOAT3(200, 0, 200));
 	}
-	m_TestTree = new ReflexTree(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, XMFLOAT3());
 	m_TreeDiffuse = new Texture(1, RESOURCE_TEXTURE2D); 
 	m_TreeDiffuse->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/ReflexTree_Diffuse.dds", 0);
 	
@@ -476,8 +475,7 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	for (int x = 0; x < m_TreeCount; ++x)
 	{
 		m_Trees[x]->Render(pd3dCommandList);
-	}
-	m_TestTree->Render(pd3dCommandList);
+	} 
 	////////////////////////////// Model Render
 
 }
