@@ -3,8 +3,8 @@
 //-----------------------------------------------------------------------------
 
 #include "stdafx.h"
+#include "MyBOBox.h"
 #include "ModelStorage.h"
-#include "LineCube.h"
 #include "ShaderManager.h"
 #include "Shader.h"
 #include "HeightMapImage.h"
@@ -39,6 +39,10 @@ CPlayer::CPlayer()
 
 CPlayer::~CPlayer()
 {
+	if (m_MyBOBox)
+	{
+		delete m_MyBOBox;
+	}
 	ReleaseShaderVariables();
 }
 
@@ -64,7 +68,7 @@ XMFLOAT3 CPlayer::CalculateAlreadyVelocity(float fTimeElapsed)
 BoundingOrientedBox CPlayer::CalculateAlreadyBoundingBox(float fTimeElapsed)
 { 
 	XMFLOAT3 AlreadyVelocity = CalculateAlreadyVelocity(fTimeElapsed);
-	BoundingOrientedBox AlreadyBBox = m_BOBox;
+	BoundingOrientedBox AlreadyBBox = m_MyBOBox->GetBOBox();
 	AlreadyBBox.Center = Vector3::Add(AlreadyBBox.Center, AlreadyVelocity);
 	return AlreadyBBox;
 }
@@ -116,9 +120,8 @@ void CPlayer::Move(const XMFLOAT3& xmf3Shift, bool bUpdateVelocity)
 	else
 	{ 
 		m_xmf3Position = Vector3::Add(m_xmf3Position, xmf3Shift);
-		m_BOBox.Center = Vector3::Add(m_BOBox.Center, xmf3Shift);
-	}
-
+		m_MyBOBox->Move(xmf3Shift);
+	} 
 }
 
 void CPlayer::Rotate(float x, float y, float z)
@@ -152,7 +155,7 @@ void CPlayer::Rotate(float x, float y, float z)
 	m_xmf3Up = Vector3::CrossProduct(m_xmf3Look, m_xmf3Right, true);
 
 	UpdateTransform(NULL);
-	m_BOBox.Orientation = Quaternion::ToQuaternion(m_fRoll, m_fYaw, m_fPitch);
+	m_MyBOBox->Rotate(m_fRoll, m_fYaw, m_fPitch);
 }
 
 void CPlayer::Update(float fTimeElapsed)
@@ -235,13 +238,10 @@ CTerrainPlayer::CTerrainPlayer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandLi
 	// CLoadedModelInfo *pAngrybotModel = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/testbox.bin");
 	CLoadedModelInfo *pAngrybotModel = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/AnimationTest.bin");
 	SetChild(pAngrybotModel->m_pModelRootObject, true);
-
+	
 	XMFLOAT3 center{ 0.f, 75.f, 0.f };
 	XMFLOAT3 extents{ 25.f, 75.f, 25.f };
-	m_BOBox = BoundingOrientedBox(center, extents, XMFLOAT4{0.f, 0.f, 0.f, 1.f});
-#ifdef _SHOW_BOUNDINGBOX
-	m_pLineCube = new LineCube(pd3dDevice, pd3dCommandList, center, extents, true);
-#endif // DEBUG 
+	m_MyBOBox = new MyBOBox(pd3dDevice, pd3dCommandList, center, extents);
 
 	//m_pSkinnedAnimationController = new CAnimationController(pd3dDevice, pd3dCommandList, 1, pAngrybotModel);
 	//m_pSkinnedAnimationController->SetTrackAnimationSet(0, 0);
@@ -319,11 +319,7 @@ void CTerrainPlayer::Render(ID3D12GraphicsCommandList * pd3dCommandList)
 {
 	// Bounding Box Render
 #ifdef _SHOW_BOUNDINGBOX 
-	if (m_pLineCube)
-	{
-		pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Line")->GetPSO());
-		m_pLineCube->Render(pd3dCommandList, m_xmf4x4World, true);
-	}
+	m_MyBOBox->Render(pd3dCommandList, m_xmf4x4World);
 #endif // _SHOW_BOUNDINGBOX
 	//
 
@@ -343,16 +339,9 @@ ReflexTree::ReflexTree(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd
 	XMFLOAT3 center{ -30.f, 100.f, 0.f };
 	XMFLOAT3 extents{ 100.f, 100.f, 100.f };
 	center = Vector3::Add(center, position);
-	m_BOBox = BoundingOrientedBox(center, extents, XMFLOAT4(0.f, 0.f, 0.f, 1.f));
-	m_BoBoxPlane[0] = Plane::Plane(Vector3::Add(center, XMFLOAT3(extents.x, 0.f, 0.f)), XMFLOAT3(1.f, 0.f, 0.f)); // +x면 normal (1, 0, 0)
-	m_BoBoxPlane[1] = Plane::Plane(Vector3::Add(center, XMFLOAT3(-extents.x, 0.f, 0.f)), XMFLOAT3(-1.f, 0.f, 0.f)); // -x면 normal (-1, 0, 0)
-	m_BoBoxPlane[2] = Plane::Plane(Vector3::Add(center, XMFLOAT3(0.f, 0.f, extents.z)), XMFLOAT3(0.f, 0.f, 1.f)); // +z면 normal (0, 0, 1)
-	m_BoBoxPlane[3] = Plane::Plane(Vector3::Add(center, XMFLOAT3(0.f, 0.f, -extents.z)), XMFLOAT3(0.f, 0.f, -1.f)); // +z면 normal (0, 0, -1)
+	m_MyBOBox = new MyBOBox(pd3dDevice, pd3dCommandList, center, extents); 
 	gTreecount += 1;
-
-#ifdef _SHOW_BOUNDINGBOX
-	m_pLineCube = new LineCube(pd3dDevice, pd3dCommandList, m_BOBox.Center, m_BOBox.Extents, false);
-#endif // DEBUG 
+	 
 }
 
 ReflexTree::~ReflexTree()
@@ -369,11 +358,7 @@ void ReflexTree::Render(ID3D12GraphicsCommandList * pd3dCommandList)
 {
 	// Bounding Box Render
 #ifdef _SHOW_BOUNDINGBOX 
-	if (m_pLineCube)
-	{
-		pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Line")->GetPSO());
-		m_pLineCube->Render(pd3dCommandList, m_xmf4x4World, false);
-	}
+	m_MyBOBox->Render(pd3dCommandList, Matrix4x4::Identity());
 #endif // _SHOW_BOUNDINGBOX
 	//
 

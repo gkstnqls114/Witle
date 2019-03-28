@@ -90,9 +90,8 @@ void LineCube::CalculateVertexNormals(XMFLOAT3 * pxmf3Normals, XMFLOAT3 * pxmf3P
 	}
 }
 
-LineCube::LineCube(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, XMFLOAT3 center, XMFLOAT3 extents, bool isMoved)
-{
-	m_isMoved = isMoved;
+LineCube::LineCube(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, XMFLOAT3 center, XMFLOAT3 extents)
+{ 
 	m_ComponenetID = MESH_TYPE_ID::CUBE_MESH;
 
 	m_nVertexBufferViews = 1;
@@ -206,9 +205,8 @@ LineCube::LineCube(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCo
 	m_pVertexBufferViews[0].SizeInBytes = m_nStride * m_vertexCount;
 }
 
-LineCube::LineCube(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, float width, float height, float depth, bool isMoved)
-{
-	m_isMoved = isMoved;
+LineCube::LineCube(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, float width, float height, float depth)
+{ 
 	m_ComponenetID = MESH_TYPE_ID::CUBE_MESH;
 
 	m_nVertexBufferViews = 1;

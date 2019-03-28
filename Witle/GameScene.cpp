@@ -6,6 +6,7 @@
 #include "ShaderManager.h"
 #include "GameScreen.h"
 
+#include "MyBOBox.h"
 #include "Collision.h"
 #include "Object.h" //교수님코드
 #include "LoadedModelInfo.h"
@@ -338,22 +339,21 @@ void GameScene::Update(float fElapsedTime)
 	XMFLOAT3 AlreadyPositon{ AlreadyBBox.Center.x, AlreadyBBox.Center.y, AlreadyBBox.Center.z };
 	for (int i = 0; i < m_TreeCount; ++i)
 	{
-		bool isAlreadyCollide = Collision::isCollide(AlreadyBBox, m_Trees[i]->GetBoundingBox());
-		XMFLOAT3 TreePos = XMFLOAT3(m_Trees[i]->GetBoundingBox().Center.x, 0, m_Trees[i]->GetBoundingBox().Center.z); 
+		bool isAlreadyCollide = Collision::isCollide(AlreadyBBox, m_Trees[i]->GetBOBox()->GetBOBox());
 		if (isAlreadyCollide)
 		{ 
 			bool isUseSliding = false;
 			for (int x = 0; x < 4; ++x)
 			{
-				bool isIntersect = Plane::Intersect(m_Trees[i]->GetBoBoxPlane(x), AlreadyPositon, m_GameObject->GetVelocity());
-				bool isFront = Plane::IsFront(m_Trees[i]->GetBoBoxPlane(x), AlreadyPositon);
+				bool isIntersect = Plane::Intersect(m_Trees[i]->GetBOBox()->GetPlane(x), AlreadyPositon, m_GameObject->GetVelocity());
+				bool isFront = Plane::IsFront(m_Trees[i]->GetBOBox()->GetPlane(x), AlreadyPositon);
 				if (isIntersect && isFront)
 				{
 					std::cout << x << " ... intersect! ";
 					//슬라이딩벡터
 
 					m_GameObject->SetVelocity(
-						Vector3::Sliding(XMFLOAT3(m_Trees[i]->GetBoBoxPlane(x).x, m_Trees[i]->GetBoBoxPlane(x).y, m_Trees[i]->GetBoBoxPlane(x).z), m_GameObject->GetVelocity())
+						Vector3::Sliding(m_Trees[i]->GetBOBox()->GetPlane(x), m_GameObject->GetVelocity())
 					);
 
 					isUseSliding = true; 

@@ -274,6 +274,8 @@ public:
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 
+class MyBOBox;
+
 class LoadObject 
 {
 
@@ -289,12 +291,7 @@ public:
 	LoadObject(int nMaterials);
 	virtual ~LoadObject();
 	
-protected: 
-#ifdef _SHOW_BOUNDINGBOX
-	LineCube* m_pLineCube;
-#endif
-	BoundingOrientedBox m_BOBox;
-	XMFLOAT4 m_BoBoxPlane[4]; // 평면
+	MyBOBox* m_MyBOBox{ nullptr };
 
 public:
 	CMesh							*m_pMesh = NULL;
@@ -380,9 +377,7 @@ public:
 	static void PrintFrameInfo(LoadObject *pGameObject, LoadObject *pParent);
 
 	// 내가 추가
-	BoundingOrientedBox GetBoundingBox() { return m_BOBox; }
-	XMFLOAT4 GetBoBoxPlane(int index) { return m_BoBoxPlane[index]; }
-
+	MyBOBox* GetBOBox() { return m_MyBOBox; } 
 };
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
