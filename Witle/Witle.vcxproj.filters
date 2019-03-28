@@ -193,6 +193,12 @@
     <Filter Include="02.Component\MyBOBox">
       <UniqueIdentifier>{e8a14a7d-6bcb-4984-b8cf-189fb6ec9d20}</UniqueIdentifier>
     </Filter>
+    <Filter Include="13.Storage">
+      <UniqueIdentifier>{ef16f092-5f62-4c3c-9ce6-0b84f633136a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="13.Storage\ModelStorage">
+      <UniqueIdentifier>{6f721a66-4caa-4e6f-b8e2-a51b09ac77f4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -426,6 +432,9 @@
     <ClInclude Include="MyBOBox.h">
       <Filter>02.Component\MyBOBox</Filter>
     </ClInclude>
+    <ClInclude Include="ModelStorage.h">
+      <Filter>13.Storage\ModelStorage</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -640,6 +649,9 @@
     </ClCompile>
     <ClCompile Include="MyBOBox.cpp">
       <Filter>02.Component\MyBOBox</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelStorage.cpp">
+      <Filter>13.Storage\ModelStorage</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -231,6 +231,7 @@
     <ClInclude Include="Witle.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TerrainShader.h" />
+    <ClInclude Include="ModelStorage.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Avoidance.cpp" />
@@ -309,6 +310,7 @@
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TerrainShader.cpp" />
     <ClCompile Include="SkyPlane.cpp" />
+    <ClCompile Include="ModelStorage.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Witle.rc" />
