@@ -335,6 +335,7 @@ ReflexTree::ReflexTree(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd
 { 
 	// CLoadedModelInfo *pAngrybotModel = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/ReflexTree.bin");
 	ModelStorage::GetInstance()->CreateModels(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature);
+	 
 	SetChild(ModelStorage::GetInstance()->GetRootObject("ReflexTree"), true);
 	 
 	XMFLOAT3 tempPos(400.F *(gTreecount + 1), 0.F, 400.F *(gTreecount + 1));

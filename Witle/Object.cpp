@@ -590,6 +590,24 @@ void LoadObject::SetMaterial(int nMaterial, CMaterial *pMaterial)
 	if (m_ppMaterials[nMaterial]) m_ppMaterials[nMaterial]->AddRef();
 }
 
+void LoadObject::CopyWorldMatrix(LoadObject* copy, LoadObject* copyed)
+{ 
+	copy->m_pMesh = copyed->m_pMesh;
+	copy->m_xmf4x4ToParent = copyed->m_xmf4x4ToParent;
+	copy->m_xmf4x4World = copyed->m_xmf4x4World;
+
+	if (copyed->m_pSibling)
+	{
+		copy->m_pSibling = new LoadObject;
+		CopyWorldMatrix(copy->m_pSibling, copyed->m_pSibling);
+	}
+	if (copyed->m_pChild)
+	{
+		copy->m_pChild = new LoadObject;
+		CopyWorldMatrix(copy->m_pChild, copyed->m_pChild);
+	}
+}
+
 CSkinnedMesh *LoadObject::FindSkinnedMesh(char *pstrSkinnedMeshName)
 {
 #ifdef _DEBUG

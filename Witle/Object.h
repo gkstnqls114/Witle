@@ -359,7 +359,10 @@ public:
 
 	UINT GetMeshType() { return((m_pMesh) ? m_pMesh->GetType() : 0x00); }
 
+
 public:
+	static void CopyWorldMatrix(LoadObject* copy, LoadObject* copyed);
+
 	CAnimationController 			*m_pSkinnedAnimationController = NULL;
 
 	CSkinnedMesh *FindSkinnedMesh(char *pstrSkinnedMeshName);
@@ -379,6 +382,7 @@ public:
 	// 내가 추가
 	BoundingOrientedBox GetBoundingBox() { return m_BOBox; }
 	XMFLOAT4 GetBoBoxPlane(int index) { return m_BoBoxPlane[index]; }
+
 };
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

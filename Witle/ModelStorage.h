@@ -1,6 +1,7 @@
 #pragma once
 
 class CLoadedModelInfo;
+class CMesh;
 class LoadObject;
 
 class ModelStorage
@@ -13,5 +14,5 @@ public:
 	static ModelStorage* GetInstance();
 
 	void CreateModels(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature);
-	LoadObject * GetRootObject(std::string name);
+	LoadObject * GetRootObject(std::string name); 
 };

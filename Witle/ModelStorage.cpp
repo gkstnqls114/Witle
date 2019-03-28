@@ -24,5 +24,8 @@ void ModelStorage::CreateModels(ID3D12Device * pd3dDevice, ID3D12GraphicsCommand
 
 LoadObject * ModelStorage::GetRootObject(std::string name)
 {
-	return m_ModelStorage[name]->m_pModelRootObject;
+	LoadObject* newRootObject = new LoadObject;
+	LoadObject::CopyWorldMatrix(newRootObject, m_ModelStorage[name]->m_pModelRootObject);
+
+	return newRootObject;
 }
