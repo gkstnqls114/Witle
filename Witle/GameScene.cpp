@@ -6,6 +6,7 @@
 #include "ShaderManager.h"
 #include "GameScreen.h"
 
+#include "StaticObject.h"
 #include "MyBOBox.h"
 #include "Collision.h"
 #include "Object.h" //±³¼ö´ÔÄÚµå
@@ -165,10 +166,10 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	m_GameObjectDiffuse->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/ReflexTree_Diffuse.dds", 0);
 	 
 	// Trees
-	m_Trees = new ReflexTree* [m_TreeCount];
+	m_Trees = new MyReflexTree* [m_TreeCount];
 	for (int x = 0; x < m_TreeCount; ++x)
 	{
-		m_Trees[x] = new ReflexTree(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, XMFLOAT3(rand() % (257 * int(xmf3Scale.x)), 0, rand() % (257 * int(xmf3Scale.z))));
+		m_Trees[x] = new MyReflexTree(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, XMFLOAT3(rand() % (257 * int(xmf3Scale.x)), 0, rand() % (257 * int(xmf3Scale.z))));
 		// m_Trees[x] = new ReflexTree(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, XMFLOAT3(200, 0, 200));
 	}
 	m_TreeDiffuse = new Texture(1, RESOURCE_TEXTURE2D); 
@@ -411,13 +412,7 @@ void GameScene::TESTSetRootDescriptor(ID3D12GraphicsCommandList * pd3dCommandLis
 void GameScene::AnimateObjects(float fTimeElapsed)
 {
 	// if (m_pHeightMapTerrain) m_pHeightMapTerrain->Animate(fTimeElapsed);
-	if (m_Trees)
-	{
-		for (int x = 0; x < m_TreeCount; ++x)
-		{
-			if (m_Trees[x]) m_Trees[x]->Animate(fTimeElapsed);
-		}
-	}
+
 	if (m_GameObject) m_GameObject->Animate(fTimeElapsed);
 }
 

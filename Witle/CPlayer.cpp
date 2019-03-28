@@ -325,42 +325,4 @@ void CTerrainPlayer::Render(ID3D12GraphicsCommandList * pd3dCommandList)
 
 	CPlayer::Render(pd3dCommandList);
 }
-
-static int gTreecount = 0;;
-ReflexTree::ReflexTree(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, XMFLOAT3 position, void * pContext)
-{ 
-	// CLoadedModelInfo *pAngrybotModel = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/ReflexTree.bin");
-	ModelStorage::GetInstance()->CreateModels(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature);
-	 
-	SetChild(ModelStorage::GetInstance()->GetRootObject("ReflexTree"), true);
-	  
-	ReflexTree::SetPosition(position);
-	
-	XMFLOAT3 center{ -30.f, 100.f, 0.f };
-	XMFLOAT3 extents{ 100.f, 100.f, 100.f };
-	center = Vector3::Add(center, position);
-	m_MyBOBox = new MyBOBox(pd3dDevice, pd3dCommandList, center, extents); 
-	gTreecount += 1;
-	 
-}
-
-ReflexTree::~ReflexTree()
-{
-}
-
-void ReflexTree::SetPosition(XMFLOAT3 xmf3Position)
-{
-	m_xmf3Position = xmf3Position;
-	LoadObject::SetPosition(xmf3Position.x, xmf3Position.y, xmf3Position.z);
-}
-
-void ReflexTree::Render(ID3D12GraphicsCommandList * pd3dCommandList)
-{
-	// Bounding Box Render
-#ifdef _SHOW_BOUNDINGBOX 
-	m_MyBOBox->Render(pd3dCommandList, Matrix4x4::Identity());
-#endif // _SHOW_BOUNDINGBOX
-	//
-
-	CPlayer::Render(pd3dCommandList);
-}
+ 

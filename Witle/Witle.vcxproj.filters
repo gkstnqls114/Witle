@@ -435,6 +435,9 @@
     <ClInclude Include="ModelStorage.h">
       <Filter>13.Storage\ModelStorage</Filter>
     </ClInclude>
+    <ClInclude Include="StaticObject.h">
+      <Filter>03.GameObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -652,6 +655,9 @@
     </ClCompile>
     <ClCompile Include="ModelStorage.cpp">
       <Filter>13.Storage\ModelStorage</Filter>
+    </ClCompile>
+    <ClCompile Include="StaticObject.cpp">
+      <Filter>03.GameObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

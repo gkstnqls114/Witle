@@ -88,14 +88,4 @@ public:
 
 	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList);
 };
-
-class ReflexTree : public CTerrainPlayer
-{
-public: 
-	ReflexTree(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, XMFLOAT3 position, void *pContext = NULL);
-	virtual ~ReflexTree();
-
-	virtual void SetPosition(XMFLOAT3 xmf3Position);
-
-	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList);
-};
+ 
