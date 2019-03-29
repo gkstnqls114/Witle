@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Object.h"
+#include "LoadObject.h"
 
 class CPlayer : public LoadObject
 {

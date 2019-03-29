@@ -330,8 +330,7 @@ bool GameScene::ProcessInput(HWND hWnd, float ElapsedTime)
 
 // ProcessInput에 의한 right, up, look, pos 를 월드변환 행렬에 갱신한다.
 void GameScene::Update(float fElapsedTime)
-{
-
+{ 
 	// 충돌체크 ///////////////////////// 
 	BoundingOrientedBox AlreadyBBox = m_pPlayer->CalculateAlreadyBoundingBox(fElapsedTime); 
 	XMFLOAT3 AlreadyPositon{ AlreadyBBox.Center.x, AlreadyBBox.Center.y, AlreadyBBox.Center.z };

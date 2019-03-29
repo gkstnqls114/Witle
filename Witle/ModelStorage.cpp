@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "Object.h"
+#include "LoadObject.h"
 #include "LoadedModelInfo.h"
 #include "ModelStorage.h"
 

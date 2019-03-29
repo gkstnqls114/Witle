@@ -199,6 +199,9 @@
     <Filter Include="13.Storage\ModelStorage">
       <UniqueIdentifier>{6f721a66-4caa-4e6f-b8e2-a51b09ac77f4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="99.etc\LoadObject">
+      <UniqueIdentifier>{fa497a72-3755-4d1c-a238-e56f753c6fbc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -438,6 +441,9 @@
     <ClInclude Include="StaticObject.h">
       <Filter>03.GameObject</Filter>
     </ClInclude>
+    <ClInclude Include="LoadObject.h">
+      <Filter>99.etc\LoadObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -658,6 +664,9 @@
     </ClCompile>
     <ClCompile Include="StaticObject.cpp">
       <Filter>03.GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="LoadObject.cpp">
+      <Filter>99.etc\LoadObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

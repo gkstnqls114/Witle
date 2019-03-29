@@ -4,7 +4,7 @@
 
 #include "stdafx.h"
 #include "d3dUtil.h"
-#include "Object.h"
+#include "LoadObject.h"
 #include "LineCube.h"
 #include "LineShader.h"
 #include "CMesh.h"

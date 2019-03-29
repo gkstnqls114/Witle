@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Object.h"
 #include "MyBOBox.h"
+#include "LoadObject.h"
 #include "ModelStorage.h"
 #include "StaticObject.h"
 

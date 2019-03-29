@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "MyBOBox.h"
-#include "Object.h"
+#include "LoadObject.h"
 #include "LoadedModelInfo.h"
 #include "Transform.h"
 #include "GameTimer.h"
