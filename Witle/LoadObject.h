@@ -11,6 +11,9 @@ class CLoadedModelInfo;
 
 class LoadObject
 {
+protected:
+
+	MyBOBox* m_MyBOBox{ nullptr };
 
 private:
 	int								m_nReferences = 0;
@@ -24,25 +27,24 @@ public:
 	LoadObject(int nMaterials);
 	virtual ~LoadObject();
 
-	MyBOBox* m_MyBOBox{ nullptr };
-
 public:
-	CMesh							*m_pMesh = NULL;
 	char							m_pstrFrameName[64];
 
+	CMesh							*m_pMesh = NULL;
 
 	int								m_nMaterials = 0;
 	CMaterial						**m_ppMaterials = NULL;
 
 	XMFLOAT4X4						m_xmf4x4ToParent;
-	XMFLOAT4X4						m_xmf4x4World = Matrix4x4::Identity();
+	XMFLOAT4X4						m_xmf4x4World;
 
 	LoadObject 					*m_pParent = NULL;
 	LoadObject 					*m_pChild = NULL;
 	LoadObject 					*m_pSibling = NULL;
 
-	void SetMesh(CMesh *pMesh);
-
+	void SetMesh(CMesh *pMesh);  
+	void SetWireFrameShader();
+	void SetSkinnedAnimationWireFrameShader();
 	void SetMaterial(int nMaterial, CMaterial *pMaterial);
 
 	void SetChild(LoadObject *pChild, bool bReferenceUpdate = false);
@@ -83,24 +85,18 @@ public:
 
 	LoadObject *GetParent() { return(m_pParent); }
 	void UpdateTransform(XMFLOAT4X4 *pxmf4x4Parent = NULL);
-	LoadObject *FindFrame(const char *pstrFrameName);
-
-	CTexture *FindReplicatedTexture(_TCHAR *pstrTextureName);
+	LoadObject *FindFrame(char *pstrFrameName);
 
 	UINT GetMeshType();
 
-
 public:
-	static void CopyWorldMatrix(LoadObject* copy, LoadObject* copyed);
-
 	CAnimationController 			*m_pSkinnedAnimationController = NULL;
 
 	CSkinnedMesh *FindSkinnedMesh(char *pstrSkinnedMeshName);
+	void FindAndSetSkinnedMesh(CSkinnedMesh **ppSkinnedMeshes, int *pnSkinnedMesh);
 
 	void SetTrackAnimationSet(int nAnimationTrack, int nAnimationSet);
 	void SetTrackAnimationPosition(int nAnimationTrack, float fPosition);
-
-	void LoadMaterialsFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, LoadObject *pParent, FILE *pInFile);
 
 	static void LoadAnimationFromFile(FILE *pInFile, CLoadedModelInfo *pLoadedModel);
 	static LoadObject *LoadFrameHierarchyFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, LoadObject *pParent, FILE *pInFile, int *pnSkinnedMeshes);
@@ -108,7 +104,62 @@ public:
 	static CLoadedModelInfo *LoadGeometryAndAnimationFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, const char *pstrFileName);
 
 	static void PrintFrameInfo(LoadObject *pGameObject, LoadObject *pParent);
+	static void CopyWorldMatrix(LoadObject* copy, LoadObject* copyed);
 
 	// 내가 추가
 	MyBOBox* GetBOBox() { return m_MyBOBox; }
+};
+
+//
+//class CHeightMapTerrain : public LoadObject
+//{
+//public:
+//	CHeightMapTerrain(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, LPCTSTR pFileName, int nWidth, int nLength, XMFLOAT3 xmf3Scale, XMFLOAT4 xmf4Color);
+//	virtual ~CHeightMapTerrain();
+//
+//private:
+//	CHeightMapImage				*m_pHeightMapImage;
+//
+//	int							m_nWidth;
+//	int							m_nLength;
+//
+//	XMFLOAT3					m_xmf3Scale;
+//
+//public:
+//	float GetHeight(float x, float z, bool bReverseQuad = false) { return(m_pHeightMapImage->GetHeight(x, z, bReverseQuad) * m_xmf3Scale.y); } //World
+//	XMFLOAT3 GetNormal(float x, float z) { return(m_pHeightMapImage->GetHeightMapNormal(int(x / m_xmf3Scale.x), int(z / m_xmf3Scale.z))); }
+//
+//	int GetHeightMapWidth() { return(m_pHeightMapImage->GetHeightMapWidth()); }
+//	int GetHeightMapLength() { return(m_pHeightMapImage->GetHeightMapLength()); }
+//
+//	XMFLOAT3 GetScale() { return(m_xmf3Scale); }
+//	float GetWidth() { return(m_nWidth * m_xmf3Scale.x); }
+//	float GetLength() { return(m_nLength * m_xmf3Scale.z); }
+//};
+
+class CSkyBox : public LoadObject
+{
+public:
+	CSkyBox(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature);
+	virtual ~CSkyBox();
+
+	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList);
+};
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+class CAngrybotObject : public LoadObject
+{
+public:
+	CAngrybotObject(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, CLoadedModelInfo *pModel, int nAnimationTracks);
+	virtual ~CAngrybotObject();
+};
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+class CElvenWitchObject : public LoadObject
+{
+public:
+	CElvenWitchObject(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, CLoadedModelInfo *pModel, int nAnimationTracks);
+	virtual ~CElvenWitchObject();
 };
