@@ -25,9 +25,7 @@
 #include "CameraObject.h"
 #include "QuadTreeTerrainMesh.h"
 #include "BasicCam.h"
-
-#include "TESTLoadFBXShader.h"
-
+ 
 #include "GameScene.h"
 
 ID3D12DescriptorHeap*		GameScene::m_pd3dCbvSrvDescriptorHeap;

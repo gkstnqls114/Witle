@@ -39,43 +39,43 @@ SamplerState gssWrap : register(s0);
 
 #include "Light.hlsl"
 
-cbuffer cbCameraInfo : register(b1)
-{
-	matrix					gmtxView : packoffset(c0);
-	matrix					gmtxProjection : packoffset(c4);
-	float3					gvCameraPosition : packoffset(c8);
-};
-
-cbuffer cbGameObjectInfo : register(b2)
-{
-	matrix					gmtxGameObject : packoffset(c0);
-};
+//cbuffer cbCameraInfo : register(b1)
+//{
+//	matrix					gmtxView : packoffset(c0);
+//	matrix					gmtxProjection : packoffset(c4);
+//	float3					gvCameraPosition : packoffset(c8);
+//};
+//
+//cbuffer cbGameObjectInfo : register(b2)
+//{
+//	matrix					gmtxGameObject : packoffset(c0);
+//};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
-struct VS_WIREFRAME_INPUT
-{
-	float3 position : POSITION;
-};
-
-struct VS_WIREFRAME_OUTPUT
-{
-	float4 position : SV_POSITION;
-};
-
-VS_WIREFRAME_OUTPUT VSStandard(VS_WIREFRAME_INPUT input)
-{
-	VS_WIREFRAME_OUTPUT output;
-
-	output.position = mul(mul(mul(float4(input.position, 1.0f), gmtxGameObject), gmtxView), gmtxProjection);
-
-	return(output);
-}
-
-float4 PSStandard(VS_WIREFRAME_OUTPUT input) : SV_TARGET
-{
-	return(float4(0.0f, 0.0f, 1.0f, 1.0f));
-}
+//struct VS_WIREFRAME_INPUT
+//{
+//	float3 position : POSITION;
+//};
+//
+//struct VS_WIREFRAME_OUTPUT
+//{
+//	float4 position : SV_POSITION;
+//};
+//
+//VS_WIREFRAME_OUTPUT VSWireFrame(VS_WIREFRAME_INPUT input)
+//{
+//	VS_WIREFRAME_OUTPUT output;
+//
+//	output.position = mul(mul(mul(float4(input.position, 1.0f), gmtxGameObject), gmtxView), gmtxProjection);
+//
+//	return(output);
+//}
+//
+//float4 PSWireFrame(VS_WIREFRAME_OUTPUT input) : SV_TARGET
+//{
+//	return(float4(0.0f, 0.0f, 1.0f, 1.0f));
+//}
 
 struct VS_STANDARD_INPUT
 {
@@ -96,7 +96,7 @@ struct VS_STANDARD_OUTPUT
 	float2 uv : TEXCOORD;
 };
 
-VS_STANDARD_OUTPUT VSStandard2(VS_STANDARD_INPUT input)
+VS_STANDARD_OUTPUT VSStandard(VS_STANDARD_INPUT input)
 {
 	VS_STANDARD_OUTPUT output;
 
@@ -110,7 +110,7 @@ VS_STANDARD_OUTPUT VSStandard2(VS_STANDARD_INPUT input)
 	return(output);
 }
 
-float4 PSStandard2(VS_STANDARD_OUTPUT input) : SV_TARGET
+float4 PSStandard(VS_STANDARD_OUTPUT input) : SV_TARGET
 {
 	// 임시로 사용할 컬러 색깔
 	float TESTColor = float4(1.f, 1.f, 1.f, 1.f);

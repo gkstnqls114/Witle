@@ -12,7 +12,7 @@ class CameraObject;
 class Terrain;
 class GameObject;
 class LoadObject;
-class SkinnedStandardShader;
+class SkinnedAnimationShader;
 
 class QuadTreeTerrainMesh;
 

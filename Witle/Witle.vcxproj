@@ -223,7 +223,6 @@
     <ClInclude Include="Terrain.h" />
     <ClInclude Include="TerrainMesh.h" />
     <ClInclude Include="SkinnedMeshRenderer.h" />
-    <ClInclude Include="TESTLoadFBXShader.h" />
     <ClInclude Include="TESTShader.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="VerticalBlurShader.h" />
@@ -304,7 +303,6 @@
     <ClCompile Include="Terrain.cpp" />
     <ClCompile Include="TerrainMesh.cpp" />
     <ClCompile Include="SkinnedMeshRenderer.cpp" />
-    <ClCompile Include="TESTLoadFBXShader.cpp" />
     <ClCompile Include="TESTShader.cpp" />
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="VerticalBlurShader.cpp" />

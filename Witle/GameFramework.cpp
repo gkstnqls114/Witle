@@ -11,8 +11,8 @@
 #ifdef _SHOW_BOUNDINGBOX
 #include "LineShader.h"
 #endif // _SHOW_BOUNDINGBOX
-
-#include "TESTLoadFBXShader.h"
+ 
+#include "StandardShader.h"
 #include "TerrainShader.h"
 #include "SkinnedStandardShader.h"
 #include "HorizonBlurShader.h"
@@ -628,13 +628,13 @@ void CGameFramework::BuildShaders()
 	pTerrainShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
 	ShaderManager::GetInstance()->InsertShader("Terrain", pTerrainShader);
 
-	Shader* pStandardShader = new SkinnedStandardShader();
-	pStandardShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
-	ShaderManager::GetInstance()->InsertShader("Standard", pStandardShader);
+	//Shader* pStandardShader = new SkinnedAnimationShader();
+	//pStandardShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
+	//ShaderManager::GetInstance()->InsertShader("SkinnedAnimationShader", pStandardShader);
 
-	Shader* pLoadFBXShader = new TESTLoadFBXShader();
-	pLoadFBXShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
-	ShaderManager::GetInstance()->InsertShader("LoadFBX", pLoadFBXShader);
+	Shader* pStandardShader = new StandardShader();
+	pStandardShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
+	ShaderManager::GetInstance()->InsertShader("StandardShader", pStandardShader);
 
 #ifdef _SHOW_BOUNDINGBOX
 	Shader* pLineShader = new LineShader();

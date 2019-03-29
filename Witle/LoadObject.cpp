@@ -176,8 +176,6 @@ void LoadObject::Animate(float fTimeElapsed)
 
 void LoadObject::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 {
-	pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("LoadFBX")->GetPSO());
-
 	if (m_pSkinnedAnimationController) m_pSkinnedAnimationController->UpdateShaderVariables(pd3dCommandList);
 
 	if (m_pMesh)
@@ -196,7 +194,7 @@ void LoadObject::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 				//	m_ppMaterials[i]->UpdateShaderVariable(pd3dCommandList);
 				//}
 
-				//m_pMesh->Render(pd3dCommandList, i);
+				m_pMesh->Render(pd3dCommandList, i);
 			}
 		}
 	}

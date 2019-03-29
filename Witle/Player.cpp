@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "MyBOBox.h"
 #include "LoadObject.h"
+#include "Shader.h"
+#include "ShaderManager.h"
 #include "LoadedModelInfo.h"
 #include "Transform.h"
 #include "GameTimer.h"
@@ -84,8 +86,8 @@ XMFLOAT3 Player::CalculateAlreadyPosition(float fTimeElapsed)
 Player::Player(const std::string & entityID, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void * pContext)
 	: GameObject(entityID)
 {
-	// CLoadedModelInfo *pAngrybotModel = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/Angrybot.bin");
-	// m_pLoadObject = pAngrybotModel->m_pModelRootObject;
+	CLoadedModelInfo *pAngrybotModel = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/Angrybot.bin");
+	m_pLoadObject = pAngrybotModel->m_pModelRootObject;
 	 
 	XMFLOAT3 center{ 0.f, 75.f, 0.f };
 	XMFLOAT3 extents{ 25.f, 75.f, 25.f };
@@ -154,6 +156,8 @@ void Player::Render(ID3D12GraphicsCommandList * pd3dCommandList)
 	m_MyBOBox->Render(pd3dCommandList, m_Transform.GetWorldMatrix());
 #endif // _SHOW_BOUNDINGBOX
 
+	pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("StandardShader")->GetPSO());
+	//pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("SkinnedAnimationShader")->GetPSO());
 	if(m_pLoadObject) m_pLoadObject->Render(pd3dCommandList);
 }
  

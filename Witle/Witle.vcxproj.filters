@@ -175,9 +175,6 @@
     <Filter Include="05.Shader\StandardShader">
       <UniqueIdentifier>{de0113f4-cf07-4caa-90d1-0142948e989e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="05.Shader\TESTLoadFBXShader">
-      <UniqueIdentifier>{225397ac-3fb8-4611-951b-655a6891efa9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="05.Shader\LineShader">
       <UniqueIdentifier>{fda23db5-9c9d-46fa-abe2-a357f294f44c}</UniqueIdentifier>
     </Filter>
@@ -420,9 +417,6 @@
     <ClInclude Include="LoadedModelInfo.h">
       <Filter>99.etc</Filter>
     </ClInclude>
-    <ClInclude Include="TESTLoadFBXShader.h">
-      <Filter>05.Shader\TESTLoadFBXShader</Filter>
-    </ClInclude>
     <ClInclude Include="LineShader.h">
       <Filter>05.Shader\LineShader</Filter>
     </ClInclude>
@@ -643,9 +637,6 @@
     </ClCompile>
     <ClCompile Include="LoadedModelInfo.cpp">
       <Filter>99.etc</Filter>
-    </ClCompile>
-    <ClCompile Include="TESTLoadFBXShader.cpp">
-      <Filter>05.Shader\TESTLoadFBXShader</Filter>
     </ClCompile>
     <ClCompile Include="LineShader.cpp">
       <Filter>05.Shader\LineShader</Filter>

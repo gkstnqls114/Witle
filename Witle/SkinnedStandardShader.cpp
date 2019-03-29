@@ -1,25 +1,25 @@
 #include "stdafx.h"
 #include "SkinnedStandardShader.h"
 
-SkinnedStandardShader::SkinnedStandardShader()
+SkinnedAnimationShader::SkinnedAnimationShader()
 {
 }
 
 
-SkinnedStandardShader::~SkinnedStandardShader()
+SkinnedAnimationShader::~SkinnedAnimationShader()
 {
 }
 
-void SkinnedStandardShader::CreateShader(ID3D12Device * pd3dDevice, ID3D12RootSignature * const pd3dGraphicsRootSignature)
+void SkinnedAnimationShader::CreateShader(ID3D12Device * pd3dDevice, ID3D12RootSignature * const pd3dGraphicsRootSignature)
 {
 	Shader::CreatePipelineState(pd3dDevice, pd3dGraphicsRootSignature);
 }
 
-void SkinnedStandardShader::Update(float ElapsedTime)
+void SkinnedAnimationShader::Update(float ElapsedTime)
 {
 }
 
-D3D12_INPUT_LAYOUT_DESC SkinnedStandardShader::CreateInputLayout()
+D3D12_INPUT_LAYOUT_DESC SkinnedAnimationShader::CreateInputLayout()
 {
 	UINT nInputElementDescs = 7;
 	D3D12_INPUT_ELEMENT_DESC *pd3dInputElementDescs = new D3D12_INPUT_ELEMENT_DESC[nInputElementDescs];
@@ -39,7 +39,7 @@ D3D12_INPUT_LAYOUT_DESC SkinnedStandardShader::CreateInputLayout()
 	return(d3dInputLayoutDesc);
 }
 
-D3D12_RASTERIZER_DESC SkinnedStandardShader::CreateRasterizerState()
+D3D12_RASTERIZER_DESC SkinnedAnimationShader::CreateRasterizerState()
 {
 	D3D12_RASTERIZER_DESC d3dRasterizerDesc;
 	::ZeroMemory(&d3dRasterizerDesc, sizeof(D3D12_RASTERIZER_DESC));
@@ -58,7 +58,7 @@ D3D12_RASTERIZER_DESC SkinnedStandardShader::CreateRasterizerState()
 	return d3dRasterizerDesc;
 }
 
-D3D12_BLEND_DESC SkinnedStandardShader::CreateBlendState()
+D3D12_BLEND_DESC SkinnedAnimationShader::CreateBlendState()
 {
 	D3D12_BLEND_DESC d3dBlendDesc;
 	::ZeroMemory(&d3dBlendDesc, sizeof(D3D12_BLEND_DESC));
@@ -78,7 +78,7 @@ D3D12_BLEND_DESC SkinnedStandardShader::CreateBlendState()
 	return d3dBlendDesc;
 }
 
-D3D12_DEPTH_STENCIL_DESC SkinnedStandardShader::CreateDepthStencilState()
+D3D12_DEPTH_STENCIL_DESC SkinnedAnimationShader::CreateDepthStencilState()
 {
 	D3D12_DEPTH_STENCIL_DESC d3dDepthStencilDesc;
 	::ZeroMemory(&d3dDepthStencilDesc, sizeof(D3D12_DEPTH_STENCIL_DESC));
@@ -100,22 +100,22 @@ D3D12_DEPTH_STENCIL_DESC SkinnedStandardShader::CreateDepthStencilState()
 	return(d3dDepthStencilDesc);
 }
 
-D3D12_PRIMITIVE_TOPOLOGY_TYPE SkinnedStandardShader::CreatePrimitiveTopologyType()
+D3D12_PRIMITIVE_TOPOLOGY_TYPE SkinnedAnimationShader::CreatePrimitiveTopologyType()
 {
 	return D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
 }
 
-D3D12_SHADER_BYTECODE SkinnedStandardShader::CreateVertexShader(ID3DBlob ** ppd3dShaderBlob)
+D3D12_SHADER_BYTECODE SkinnedAnimationShader::CreateVertexShader(ID3DBlob ** ppd3dShaderBlob)
 {
 	return Shader::CompileShaderFromFile(L"SkinnedAnimationShader.hlsl", "VSSkinnedAnimationStandard", "vs_5_1", ppd3dShaderBlob);
 }
 
-D3D12_SHADER_BYTECODE SkinnedStandardShader::CreatePixelShader(ID3DBlob ** ppd3dShaderBlob)
+D3D12_SHADER_BYTECODE SkinnedAnimationShader::CreatePixelShader(ID3DBlob ** ppd3dShaderBlob)
 {
 	return Shader::CompileShaderFromFile(L"SkinnedAnimationShader.hlsl", "PSStandard", "ps_5_1", ppd3dShaderBlob);
 }
 
-D3D12_SHADER_BYTECODE SkinnedStandardShader::CreateGeometryShader(ID3DBlob ** ppd3dShaderBlob)
+D3D12_SHADER_BYTECODE SkinnedAnimationShader::CreateGeometryShader(ID3DBlob ** ppd3dShaderBlob)
 {
 	return Shader::CreateGeometryShader(ppd3dShaderBlob);
 }

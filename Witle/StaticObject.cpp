@@ -1,7 +1,9 @@
 #include "stdafx.h"
 #include "Object.h"
 #include "MyBOBox.h"
+#include "Shader.h"
 #include "LoadObject.h"
+#include "ShaderManager.h"
 #include "ModelStorage.h"
 #include "StaticObject.h"
 
@@ -41,5 +43,6 @@ void MyReflexTree::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	m_MyBOBox->Render(pd3dCommandList, Matrix4x4::Identity());
 #endif // _SHOW_BOUNDINGBOX
 
+	pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("StandardShader")->GetPSO());
 	m_LoadObject->Render(pd3dCommandList);
 }
