@@ -84,8 +84,8 @@ XMFLOAT3 Player::CalculateAlreadyPosition(float fTimeElapsed)
 Player::Player(const std::string & entityID, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void * pContext)
 	: GameObject(entityID)
 {
-	CLoadedModelInfo *pAngrybotModel = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/AnimationTest.bin");
-	m_pLoadObject = pAngrybotModel->m_pModelRootObject;
+	// CLoadedModelInfo *pAngrybotModel = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/Angrybot.bin");
+	// m_pLoadObject = pAngrybotModel->m_pModelRootObject;
 	 
 	XMFLOAT3 center{ 0.f, 75.f, 0.f };
 	XMFLOAT3 extents{ 25.f, 75.f, 25.f };
@@ -140,12 +140,12 @@ void Player::Update(float fElapsedTime)
 
 	// 반드시 트랜스폼 업데이트..!
 	m_Transform.Update(fElapsedTime); 
-	m_pLoadObject->UpdateTransform(m_Transform.GetpWorldMatrix());
+	if(m_pLoadObject) m_pLoadObject->UpdateTransform(m_Transform.GetpWorldMatrix());
 }
 
 void Player::Animate(float fElapsedTime)
 {
-	m_pLoadObject->Animate(fElapsedTime);
+	if(m_pLoadObject) m_pLoadObject->Animate(fElapsedTime);
 }
 
 void Player::Render(ID3D12GraphicsCommandList * pd3dCommandList)
@@ -154,7 +154,7 @@ void Player::Render(ID3D12GraphicsCommandList * pd3dCommandList)
 	m_MyBOBox->Render(pd3dCommandList, m_Transform.GetWorldMatrix());
 #endif // _SHOW_BOUNDINGBOX
 
-	m_pLoadObject->Render(pd3dCommandList);
+	if(m_pLoadObject) m_pLoadObject->Render(pd3dCommandList);
 }
  
 void Player::Move(const XMFLOAT3 & xmf3Shift)

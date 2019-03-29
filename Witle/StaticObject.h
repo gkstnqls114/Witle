@@ -32,8 +32,5 @@ public:
 	virtual ~MyReflexTree() {};
 	 
 	void Render(ID3D12GraphicsCommandList *pd3dCommandList);
-	MyBOBox* GetBOBox() {
-		return m_MyBOBox
-			;
-	}
+	MyBOBox* GetBOBox() { return m_MyBOBox;  }
 };
