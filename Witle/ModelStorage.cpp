@@ -1,6 +1,5 @@
 #include "stdafx.h"
-#include "LoadObject.h"
-#include "LoadedModelInfo.h"
+#include "Object.h" 
 #include "ModelStorage.h"
 
 ModelStorage* ModelStorage::m_Instance{ nullptr };
@@ -19,7 +18,7 @@ void ModelStorage::CreateModels(ID3D12Device * pd3dDevice, ID3D12GraphicsCommand
 {
 	if (m_isCreate) return;
 
-	m_ModelStorage["ReflexTree"] = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/ReflexTree.bin");
+	m_ModelStorage["ReflexTree"] = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/ReflexTree.bin", NULL);
 	m_isCreate = true;
 }
 

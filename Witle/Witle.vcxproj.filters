@@ -196,9 +196,6 @@
     <Filter Include="13.Storage\ModelStorage">
       <UniqueIdentifier>{6f721a66-4caa-4e6f-b8e2-a51b09ac77f4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="99.etc\LoadObject">
-      <UniqueIdentifier>{fa497a72-3755-4d1c-a238-e56f753c6fbc}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -414,9 +411,6 @@
     <ClInclude Include="CPlayer.h">
       <Filter>99.etc</Filter>
     </ClInclude>
-    <ClInclude Include="LoadedModelInfo.h">
-      <Filter>99.etc</Filter>
-    </ClInclude>
     <ClInclude Include="LineShader.h">
       <Filter>05.Shader\LineShader</Filter>
     </ClInclude>
@@ -434,9 +428,6 @@
     </ClInclude>
     <ClInclude Include="StaticObject.h">
       <Filter>03.GameObject</Filter>
-    </ClInclude>
-    <ClInclude Include="LoadObject.h">
-      <Filter>99.etc\LoadObject</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -635,9 +626,6 @@
     <ClCompile Include="CPlayer.cpp">
       <Filter>99.etc</Filter>
     </ClCompile>
-    <ClCompile Include="LoadedModelInfo.cpp">
-      <Filter>99.etc</Filter>
-    </ClCompile>
     <ClCompile Include="LineShader.cpp">
       <Filter>05.Shader\LineShader</Filter>
     </ClCompile>
@@ -655,9 +643,6 @@
     </ClCompile>
     <ClCompile Include="StaticObject.cpp">
       <Filter>03.GameObject</Filter>
-    </ClCompile>
-    <ClCompile Include="LoadObject.cpp">
-      <Filter>99.etc\LoadObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

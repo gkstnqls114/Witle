@@ -7,8 +7,8 @@
 #include "ModelStorage.h"
 #include "ShaderManager.h"
 #include "Shader.h"
-#include "HeightMapImage.h"
-#include "LoadedModelInfo.h"
+#include "HeightMapImage.h" 
+#include "Object.h"
 // #include "Shader.h"
 #include "CPlayer.h"
 
@@ -38,48 +38,10 @@ CPlayer::CPlayer()
 }
 
 CPlayer::~CPlayer()
-{
-	if (m_MyBOBox)
-	{
-		delete m_MyBOBox;
-	}
+{ 
 	ReleaseShaderVariables();
 }
-
-XMFLOAT3 CPlayer::CalculateAlreadyVelocity(float fTimeElapsed)
-{ 
-	XMFLOAT3 AlreadyVelocity = Vector3::Add(m_xmf3Velocity, m_xmf3Gravity);
-	float fLength = sqrtf(AlreadyVelocity.x * AlreadyVelocity.x + AlreadyVelocity.z * AlreadyVelocity.z);
-	float fMaxVelocityXZ = m_fMaxVelocityXZ;
-	if (fLength > m_fMaxVelocityXZ)
-	{
-		AlreadyVelocity.x *= (fMaxVelocityXZ / fLength);
-		AlreadyVelocity.z *= (fMaxVelocityXZ / fLength);
-	}
-	float fMaxVelocityY = m_fMaxVelocityY;
-	fLength = sqrtf(AlreadyVelocity.y * AlreadyVelocity.y);
-	if (fLength > m_fMaxVelocityY) AlreadyVelocity.y *= (fMaxVelocityY / fLength);
-
-	XMFLOAT3 xmf3Velocity = Vector3::ScalarProduct(AlreadyVelocity, fTimeElapsed, false); 
-
-	return xmf3Velocity;
-}
-
-BoundingOrientedBox CPlayer::CalculateAlreadyBoundingBox(float fTimeElapsed)
-{ 
-	XMFLOAT3 AlreadyVelocity = CalculateAlreadyVelocity(fTimeElapsed);
-	BoundingOrientedBox AlreadyBBox = m_MyBOBox->GetBOBox();
-	AlreadyBBox.Center = Vector3::Add(AlreadyBBox.Center, AlreadyVelocity);
-	return AlreadyBBox;
-}
-
-XMFLOAT3 CPlayer::CalculateAlreadyPosition(float fTimeElapsed)
-{
-	XMFLOAT3 AlreadyVelocity = CalculateAlreadyVelocity(fTimeElapsed);
-	XMFLOAT3 AlreadyPosition = m_xmf3Position;
-	AlreadyPosition = Vector3::Add(AlreadyPosition, AlreadyVelocity);
-	return AlreadyPosition;
-}
+ 
 
 void CPlayer::CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList)
 {
@@ -119,8 +81,7 @@ void CPlayer::Move(const XMFLOAT3& xmf3Shift, bool bUpdateVelocity)
 	}
 	else
 	{ 
-		m_xmf3Position = Vector3::Add(m_xmf3Position, xmf3Shift);
-		m_MyBOBox->Move(xmf3Shift);
+		m_xmf3Position = Vector3::Add(m_xmf3Position, xmf3Shift); 
 	} 
 }
 
@@ -154,8 +115,7 @@ void CPlayer::Rotate(float x, float y, float z)
 	m_xmf3Right = Vector3::CrossProduct(m_xmf3Up, m_xmf3Look, true);
 	m_xmf3Up = Vector3::CrossProduct(m_xmf3Look, m_xmf3Right, true);
 
-	UpdateTransform(NULL);
-	m_MyBOBox->Rotate(m_fRoll, m_fYaw, m_fPitch);
+	UpdateTransform(NULL); 
 }
 
 void CPlayer::Update(float fTimeElapsed)
@@ -236,12 +196,11 @@ void CPlayer::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 CTerrainPlayer::CTerrainPlayer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext)
 {
 	// CLoadedModelInfo *pAngrybotModel = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/testbox.bin");
-	CLoadedModelInfo *pAngrybotModel = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/AnimationTest.bin");
+	CLoadedModelInfo *pAngrybotModel = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/AnimationTest.bin", NULL);
 	SetChild(pAngrybotModel->m_pModelRootObject, true);
 	
 	XMFLOAT3 center{ 0.f, 75.f, 0.f };
-	XMFLOAT3 extents{ 25.f, 75.f, 25.f };
-	m_MyBOBox = new MyBOBox(pd3dDevice, pd3dCommandList, center, extents);
+	XMFLOAT3 extents{ 25.f, 75.f, 25.f }; 
 
 	//m_pSkinnedAnimationController = new CAnimationController(pd3dDevice, pd3dCommandList, 1, pAngrybotModel);
 	//m_pSkinnedAnimationController->SetTrackAnimationSet(0, 0);
@@ -316,13 +275,7 @@ void CTerrainPlayer::OnCameraUpdateCallback(float fTimeElapsed)
 }
 
 void CTerrainPlayer::Render(ID3D12GraphicsCommandList * pd3dCommandList)
-{
-	// Bounding Box Render
-#ifdef _SHOW_BOUNDINGBOX 
-	m_MyBOBox->Render(pd3dCommandList, m_xmf4x4World);
-#endif // _SHOW_BOUNDINGBOX
-	//
-
+{ 
 	CPlayer::Render(pd3dCommandList);
 }
  

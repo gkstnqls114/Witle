@@ -4,8 +4,8 @@
 
 #include "stdafx.h"
 #include "d3dUtil.h"
-#include "LoadObject.h"
-#include "CMesh.h"
+#include "Mesh.h"
+#include "Object.h"
 
 CMesh::CMesh(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList)
 {
@@ -85,8 +85,8 @@ void CMesh::LoadMeshFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList
 	int nColors = 0, nIndices = 0, nSubMeshes = 0, nSubIndices = 0;
 
 	d3dUtil::ReadStringFromFile(pInFile, m_pstrMeshName);
-
-	for (; ; )
+	
+	for ( ; ; )
 	{
 		d3dUtil::ReadStringFromFile(pInFile, pstrToken);
 
@@ -115,7 +115,7 @@ void CMesh::LoadMeshFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList
 		{
 			int nPolygons = 0;
 			nReads = (UINT)::fread(&nPolygons, sizeof(int), 1, pInFile);
-			for (; ; )
+			for ( ; ; )
 			{
 				d3dUtil::ReadStringFromFile(pInFile, pstrToken);
 
@@ -542,7 +542,7 @@ void CSkinnedMesh::LoadSkinDeformationsFromFile(ID3D12Device *pd3dDevice, ID3D12
 	BYTE nStrLength = 0;
 	UINT nReads = 0;
 
-	for (; ; )
+	for ( ; ; )
 	{
 		d3dUtil::ReadStringFromFile(pInFile, pstrToken);
 		if (!strcmp(pstrToken, "<BonesPerVertex>:"))

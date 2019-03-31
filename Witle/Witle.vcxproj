@@ -171,8 +171,6 @@
     <ClInclude Include="LightObject.h" />
     <ClInclude Include="LineCube.h" />
     <ClInclude Include="LineShader.h" />
-    <ClInclude Include="LoadedModelInfo.h" />
-    <ClInclude Include="LoadObject.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="MyBOBox.h" />
     <ClInclude Include="MyConstants.h" />
@@ -264,8 +262,6 @@
     <ClCompile Include="LightObject.cpp" />
     <ClCompile Include="LineCube.cpp" />
     <ClCompile Include="LineShader.cpp" />
-    <ClCompile Include="LoadedModelInfo.cpp" />
-    <ClCompile Include="LoadObject.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="MeshRenderer.cpp" />

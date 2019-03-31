@@ -9,8 +9,7 @@
 #include "StaticObject.h"
 #include "MyBOBox.h"
 #include "Collision.h"
-#include "Object.h" //교수님코드
-#include "LoadedModelInfo.h"
+#include "Object.h" //교수님코드 
 #include "Texture.h"
 #include "CubeMesh.h"
 #include "FollowCam.h"

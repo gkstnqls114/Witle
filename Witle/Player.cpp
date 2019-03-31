@@ -1,10 +1,8 @@
 #include "stdafx.h"
-#include "MyBOBox.h"
-#include "LoadObject.h"
+#include "MyBOBox.h" 
 #include "Shader.h"
 #include "Object.h"
-#include "ShaderManager.h"
-#include "LoadedModelInfo.h"
+#include "ShaderManager.h" 
 #include "Transform.h"
 #include "GameTimer.h"
 #include "FollowCam.h"
@@ -88,7 +86,7 @@ Player::Player(const std::string & entityID, ID3D12Device * pd3dDevice, ID3D12Gr
 	: GameObject(entityID)
 {
 
-	CLoadedModelInfo *pPlayerModel = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/Angrybot.bin");
+	CLoadedModelInfo *pPlayerModel = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/Angrybot.bin", NULL);
 	m_pLoadObject = pPlayerModel->m_pModelRootObject;
 
 	m_pLoadObject->m_pSkinnedAnimationController

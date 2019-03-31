@@ -2,7 +2,7 @@
 #include "Object.h"
 #include "MyBOBox.h"
 #include "Shader.h"
-#include "LoadObject.h"
+#include "Object.h"
 #include "ShaderManager.h"
 #include "ModelStorage.h"
 #include "StaticObject.h"

@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "Transform.h"
-#include "LoadObject.h"
+#include "Object.h"
 #include "GameObject.h"
 #include "FollowCam.h"
 
