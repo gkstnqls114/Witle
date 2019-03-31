@@ -502,7 +502,7 @@ void CGameFramework::UpdateGamelogic(float fElapsedTime)
 		GameInput::Update(m_hWnd);
 		m_pScene->ProcessInput(m_hWnd, fElapsedTime);
 		m_pScene->Update(fElapsedTime);
-		m_pScene->AnimateObjects(fElapsedTime);
+		// m_pScene->AnimateObjects(fElapsedTime);
 		m_pScene->LastUpdate(fElapsedTime);
 
 		// 현재 애니메이션 어디다가 쓰는지 모르겠다.
@@ -628,9 +628,9 @@ void CGameFramework::BuildShaders()
 	pTerrainShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
 	ShaderManager::GetInstance()->InsertShader("Terrain", pTerrainShader);
 
-	//Shader* pStandardShader = new SkinnedAnimationShader();
-	//pStandardShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
-	//ShaderManager::GetInstance()->InsertShader("SkinnedAnimationShader", pStandardShader);
+	Shader* pSkinnedAnimationShader = new SkinnedAnimationShader();
+	pSkinnedAnimationShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
+	ShaderManager::GetInstance()->InsertShader("SkinnedAnimationShader", pSkinnedAnimationShader);
 
 	Shader* pStandardShader = new StandardShader();
 	pStandardShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());

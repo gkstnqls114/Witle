@@ -17,6 +17,7 @@ void SkinnedAnimationShader::CreateShader(ID3D12Device * pd3dDevice, ID3D12RootS
 
 void SkinnedAnimationShader::Update(float ElapsedTime)
 {
+	m_fElapsedTime = ElapsedTime;
 }
 
 D3D12_INPUT_LAYOUT_DESC SkinnedAnimationShader::CreateInputLayout()

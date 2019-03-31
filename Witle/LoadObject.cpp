@@ -176,7 +176,10 @@ void LoadObject::Animate(float fTimeElapsed)
 
 void LoadObject::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 {
-	if (m_pSkinnedAnimationController) m_pSkinnedAnimationController->UpdateShaderVariables(pd3dCommandList);
+	if (m_pSkinnedAnimationController)
+	{
+		m_pSkinnedAnimationController->UpdateShaderVariables(pd3dCommandList);
+	}
 
 	if (m_pMesh)
 	{

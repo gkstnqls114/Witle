@@ -47,7 +47,7 @@ SamplerState gssWrap : register(s0);
 #define MATERIAL_DETAIL_NORMAL_MAP	0x40
  
 
-#include "Light.hlsl"
+// #include "Light.hlsl"
 
 
 #define MAX_VERTEX_INFLUENCES			4
@@ -73,8 +73,7 @@ struct VS_SKINNED_STANDARD_INPUT
 	int4 indices : BONEINDEX;
 	float4 weights : BONEWEIGHT;
 };
-
-
+ 
 struct VS_STANDARD_OUTPUT
 {
 	float4 position : SV_POSITION;
@@ -103,9 +102,10 @@ VS_STANDARD_OUTPUT VSSkinnedAnimationStandard(VS_SKINNED_STANDARD_INPUT input)
 	output.tangentW = mul(input.tangent, (float3x3)gmtxWorld);
 	output.bitangentW = mul(input.bitangent, (float3x3)gmtxWorld);
 	output.uv = input.uv;
-
-
+	 
 	return(output);
+
+
 
 	//VS_STANDARD_OUTPUT output;
 
@@ -122,6 +122,7 @@ VS_STANDARD_OUTPUT VSSkinnedAnimationStandard(VS_SKINNED_STANDARD_INPUT input)
 	////	output.tangentW += input.weights[i] * mul(input.tangent, (float3x3)mtxVertexToBoneWorld);
 	////	output.bitangentW += input.weights[i] * mul(input.bitangent, (float3x3)mtxVertexToBoneWorld);
 	////}
+	// 
 	//float4x4 mtxVertexToBoneWorld = (float4x4)0.0f;
 	//for (int i = 0; i < MAX_VERTEX_INFLUENCES; i++)
 	//{
@@ -133,43 +134,43 @@ VS_STANDARD_OUTPUT VSSkinnedAnimationStandard(VS_SKINNED_STANDARD_INPUT input)
 	//output.tangentW = mul(input.tangent, (float3x3)mtxVertexToBoneWorld).xyz;
 	//output.bitangentW = mul(input.bitangent, (float3x3)mtxVertexToBoneWorld).xyz;
 
-	////	output.positionW = mul(float4(input.position, 1.0f), gmtxGameObject).xyz;
-
+	////	output.positionW = mul(float4(input.position, 1.0f), gmtxGameObject).xyz; 
 	//output.position = mul(mul(float4(output.positionW, 1.0f), gmtxView), gmtxProjection);
 	//output.uv = input.uv;
 
-	//return(output);
+	return(output);
 }
 
 
 float4 PSStandard(VS_STANDARD_OUTPUT input) : SV_TARGET
 {
-	// 임시로 사용할 컬러 색깔
-	float TESTColor = float4(1.f, 1.f, 1.f, 1.f);
-//float4 cAlbedoColor = float4(0.0f, 0.0f, 0.0f, 1.0f);
-//if (gnTexturesMask & MATERIAL_ALBEDO_MAP) cAlbedoColor = gtxtAlbedoTexture.Sample(gssWrap, input.uv);
-//float4 cSpecularColor = float4(0.0f, 0.0f, 0.0f, 1.0f);
-//if (gnTexturesMask & MATERIAL_SPECULAR_MAP) cSpecularColor = gtxtSpecularTexture.Sample(gssWrap, input.uv);
-//float4 cNormalColor = float4(0.0f, 0.0f, 0.0f, 1.0f);
-//if (gnTexturesMask & MATERIAL_NORMAL_MAP) cNormalColor = gtxtNormalTexture.Sample(gssWrap, input.uv);
-//float4 cMetallicColor = float4(0.0f, 0.0f, 0.0f, 1.0f);
-//if (gnTexturesMask & MATERIAL_METALLIC_MAP) cMetallicColor = gtxtMetallicTexture.Sample(gssWrap, input.uv);
-//float4 cEmissionColor = float4(0.0f, 0.0f, 0.0f, 1.0f);
-//if (gnTexturesMask & MATERIAL_EMISSION_MAP) cEmissionColor = gtxtEmissionTexture.Sample(gssWrap, input.uv);
-
-float3 normalW;
-//float4 cColor = cAlbedoColor + cSpecularColor + cMetallicColor + cEmissionColor;
-//if (gnTexturesMask & MATERIAL_NORMAL_MAP)
-//{
-//	float3x3 TBN = float3x3(normalize(input.tangentW), normalize(input.bitangentW), normalize(input.normalW));
-//	float3 vNormal = normalize(cNormalColor.rgb * 2.0f - 1.0f); //[0, 1] → [-1, 1]
-//	normalW = normalize(mul(vNormal, TBN));
-//}
-//else
-//{
-	normalW = normalize(input.normalW);
-	//}
-	float4 cIllumination = Lighting(input.positionW, normalW);
-	return(lerp(TESTColor, cIllumination, 0.5f));
+	return float4(1.f, 1.f, 1.f, 1.f);
+//	// 임시로 사용할 컬러 색깔
+//	float TESTColor = float4(1.f, 1.f, 1.f, 1.f);
+////float4 cAlbedoColor = float4(0.0f, 0.0f, 0.0f, 1.0f);
+////if (gnTexturesMask & MATERIAL_ALBEDO_MAP) cAlbedoColor = gtxtAlbedoTexture.Sample(gssWrap, input.uv);
+////float4 cSpecularColor = float4(0.0f, 0.0f, 0.0f, 1.0f);
+////if (gnTexturesMask & MATERIAL_SPECULAR_MAP) cSpecularColor = gtxtSpecularTexture.Sample(gssWrap, input.uv);
+////float4 cNormalColor = float4(0.0f, 0.0f, 0.0f, 1.0f);
+////if (gnTexturesMask & MATERIAL_NORMAL_MAP) cNormalColor = gtxtNormalTexture.Sample(gssWrap, input.uv);
+////float4 cMetallicColor = float4(0.0f, 0.0f, 0.0f, 1.0f);
+////if (gnTexturesMask & MATERIAL_METALLIC_MAP) cMetallicColor = gtxtMetallicTexture.Sample(gssWrap, input.uv);
+////float4 cEmissionColor = float4(0.0f, 0.0f, 0.0f, 1.0f);
+////if (gnTexturesMask & MATERIAL_EMISSION_MAP) cEmissionColor = gtxtEmissionTexture.Sample(gssWrap, input.uv);
+//
+//float3 normalW;
+////float4 cColor = cAlbedoColor + cSpecularColor + cMetallicColor + cEmissionColor;
+////if (gnTexturesMask & MATERIAL_NORMAL_MAP)
+////{
+////	float3x3 TBN = float3x3(normalize(input.tangentW), normalize(input.bitangentW), normalize(input.normalW));
+////	float3 vNormal = normalize(cNormalColor.rgb * 2.0f - 1.0f); //[0, 1] → [-1, 1]
+////	normalW = normalize(mul(vNormal, TBN));
+////}
+////else
+////{
+//	normalW = normalize(input.normalW);
+//	//}
+//	float4 cIllumination = Lighting(input.positionW, normalW);
+//	return(lerp(TESTColor, cIllumination, 0.5f));
 }
 

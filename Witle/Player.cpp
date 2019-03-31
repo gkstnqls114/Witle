@@ -2,6 +2,7 @@
 #include "MyBOBox.h"
 #include "LoadObject.h"
 #include "Shader.h"
+#include "Object.h"
 #include "ShaderManager.h"
 #include "LoadedModelInfo.h"
 #include "Transform.h"
@@ -86,9 +87,14 @@ XMFLOAT3 Player::CalculateAlreadyPosition(float fTimeElapsed)
 Player::Player(const std::string & entityID, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void * pContext)
 	: GameObject(entityID)
 {
-	CLoadedModelInfo *pAngrybotModel = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/Angrybot.bin");
-	m_pLoadObject = pAngrybotModel->m_pModelRootObject;
-	 
+
+	CLoadedModelInfo *pPlayerModel = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/Angrybot.bin");
+	m_pLoadObject = pPlayerModel->m_pModelRootObject;
+
+	m_pLoadObject->m_pSkinnedAnimationController
+		= new CAnimationController(pd3dDevice, pd3dCommandList, 1, pPlayerModel);
+
+
 	XMFLOAT3 center{ 0.f, 75.f, 0.f };
 	XMFLOAT3 extents{ 25.f, 75.f, 25.f };
 	m_MyBOBox = new MyBOBox(pd3dDevice, pd3dCommandList, center, extents);
@@ -96,7 +102,6 @@ Player::Player(const std::string & entityID, ID3D12Device * pd3dDevice, ID3D12Gr
 	// CreateShaderVariables(pd3dDevice, pd3dCommandList);
 
 	SetUpdatedContext(pContext); 
-
 }
 
 Player::~Player()
@@ -140,9 +145,12 @@ void Player::Update(float fElapsedTime)
 	//if (fDeceleration > fLength) fDeceleration = fLength;
 	//m_xmf3Velocity = Vector3::Add(m_xmf3Velocity, Vector3::ScalarProduct(m_xmf3Velocity, -fDeceleration, true));
 
+	Animate(fElapsedTime); // 애니메이션대로 움직인다.
+
 	// 반드시 트랜스폼 업데이트..!
 	m_Transform.Update(fElapsedTime); 
 	if(m_pLoadObject) m_pLoadObject->UpdateTransform(m_Transform.GetpWorldMatrix());
+
 }
 
 void Player::Animate(float fElapsedTime)
@@ -156,8 +164,7 @@ void Player::Render(ID3D12GraphicsCommandList * pd3dCommandList)
 	m_MyBOBox->Render(pd3dCommandList, m_Transform.GetWorldMatrix());
 #endif // _SHOW_BOUNDINGBOX
 
-	pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("StandardShader")->GetPSO());
-	//pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("SkinnedAnimationShader")->GetPSO());
+ 	pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("SkinnedAnimationShader")->GetPSO());
 	if(m_pLoadObject) m_pLoadObject->Render(pd3dCommandList);
 }
  
