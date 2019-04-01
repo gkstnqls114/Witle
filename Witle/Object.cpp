@@ -589,6 +589,7 @@ void LoadObject::SetShader(int nMaterial, Shader *pShader)
 
 void LoadObject::SetWireFrameShader()
 {
+	assert(!(m_ppMaterials));
 	m_nMaterials = 1;
 	m_ppMaterials = new CMaterial*[m_nMaterials];
 	m_ppMaterials[0] = NULL;
@@ -599,6 +600,7 @@ void LoadObject::SetWireFrameShader()
 
 void LoadObject::SetSkinnedAnimationWireFrameShader()
 {
+	assert(!(m_ppMaterials));
 	m_nMaterials = 1;
 	m_ppMaterials = new CMaterial*[m_nMaterials];
 	m_ppMaterials[0] = NULL;
@@ -697,7 +699,7 @@ void LoadObject::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 					}
 					else
 					{
-						pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("SkinnedShader")->GetPSO());
+						// pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("SkinnedShader")->GetPSO());
 					}
 					m_ppMaterials[i]->UpdateShaderVariable(pd3dCommandList);
 				}
@@ -901,7 +903,7 @@ LoadObject *LoadObject::LoadFrameHierarchyFromFile(ID3D12Device *pd3dDevice, ID3
 			if (!strcmp(pstrToken, "<Mesh>:")) pSkinnedMesh->LoadMeshFromFile(pd3dDevice, pd3dCommandList, pInFile);
 
 			pGameObject->SetMesh(pSkinnedMesh);
-
+			  
 			pGameObject->SetSkinnedAnimationWireFrameShader();
 		}
 		else if (!strcmp(pstrToken, "<Children>:"))

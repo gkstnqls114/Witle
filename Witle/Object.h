@@ -100,7 +100,6 @@ public:
 	void Release() { if (--m_nReferences <= 0) delete this; }
 
 public:
-	Shader							*m_pShader = NULL;
 
 	XMFLOAT4						m_xmf4AlbedoColor = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
 	XMFLOAT4						m_xmf4EmissiveColor = XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
@@ -116,6 +115,8 @@ public:
 	virtual void ReleaseUploadBuffers();
 
 public:
+	Shader							*m_pShader = NULL;
+
 	UINT							m_nType = 0x00;
 
 	float							m_fGlossiness = 0.0f;
@@ -133,7 +134,7 @@ public:
 
 public:
 	static void PrepareShaders(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature);
-
+	 
 	void SetWireFrameShader() { 
 		std::cout << "SetWireFrameShader" << std::endl;
 		m_pShader = m_pWireFrameShader;

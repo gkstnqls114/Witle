@@ -141,7 +141,10 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	BuildLightsAndMaterials(pd3dDevice, pd3dCommandList);
 
 	//루트 시그너쳐를 생성한다.
-	m_pd3dGraphicsRootSignature = CreateGraphicsRootSignature(pd3dDevice);
+	if (!m_pd3dGraphicsRootSignature)
+	{
+		CreateRootSignature(pd3dDevice);
+	}
 
 	// 디스크립터 힙 설정
 	GameScene::CreateCbvSrvDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 3);
@@ -520,19 +523,9 @@ ID3D12RootSignature* GameScene::CreateGraphicsRootSignature(ID3D12Device *pd3dDe
 	pRootParameters[ROOTPARAMETER_EMISSION_1] = d3dUtil::CreateRootParameterTable(1, &pd3dDescriptorRanges[4], D3D12_SHADER_VISIBILITY_PIXEL);
 	pRootParameters[ROOTPARAMETER_EMISSION_2] = d3dUtil::CreateRootParameterTable(1, &pd3dDescriptorRanges[5], D3D12_SHADER_VISIBILITY_PIXEL);
 	pRootParameters[ROOTPARAMETER_EMISSION_3] = d3dUtil::CreateRootParameterTable(1, &pd3dDescriptorRanges[6], D3D12_SHADER_VISIBILITY_PIXEL);
-
-	pRootParameters[11].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
-	pRootParameters[11].Descriptor.ShaderRegister = 7; //Skinned Bone Offsets
-	pRootParameters[11].Descriptor.RegisterSpace = 0;
-	pRootParameters[11].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
-
-	pRootParameters[12].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
-	pRootParameters[12].Descriptor.ShaderRegister = 8; //Skinned Bone Transforms
-	pRootParameters[12].Descriptor.RegisterSpace = 0;
-	pRootParameters[12].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
-
-	//pRootParameters[ROOTPARAMETER_SKINNEDBONEOFFSET] = d3dUtil::CreateRootParameterCBV(7, 0, D3D12_SHADER_VISIBILITY_VERTEX);
-	//pRootParameters[ROOTPARAMETER_SKINNEDBONETRANSFORM] = d3dUtil::CreateRootParameterCBV(8, 0, D3D12_SHADER_VISIBILITY_VERTEX);
+	 
+	pRootParameters[ROOTPARAMETER_SKINNEDBONEOFFSET] = d3dUtil::CreateRootParameterCBV(7, 0, D3D12_SHADER_VISIBILITY_VERTEX);
+	pRootParameters[ROOTPARAMETER_SKINNEDBONETRANSFORM] = d3dUtil::CreateRootParameterCBV(8, 0, D3D12_SHADER_VISIBILITY_VERTEX);
 	//// 루트 패러미터 ///////////////////////////////////////////////////////////////////// 
 
 

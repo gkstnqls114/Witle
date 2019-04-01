@@ -12,6 +12,8 @@ public:
 	Scene();
 	virtual ~Scene();
 
+	void CreateRootSignature(ID3D12Device *pd3dDevice);
+
 	//씬에서 마우스와 키보드 메시지를 처리한다.
 	virtual bool OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam) = 0;
 	virtual bool OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam, float ElapsedTime) = 0;
