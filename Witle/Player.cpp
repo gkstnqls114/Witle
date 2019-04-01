@@ -61,7 +61,7 @@ XMFLOAT3 Player::CalculateAlreadyPosition(float fTimeElapsed)
 	AlreadyPosition = Vector3::Add(AlreadyPosition, AlreadyVelocity);
 	return AlreadyPosition;
 }
-//
+
 //void Player::OnCameraUpdateCallback(float fTimeElapsed, Camera* pCamera)
 //{
 //	if (!m_pCameraUpdatedContext) return;
@@ -126,30 +126,24 @@ void Player::Update(float fElapsedTime)
 	 
 	// 플레이어 콜백
 	// OnPlayerUpdateCallback(fElapsedTime);
-
-	// 카메라도 마찬가지로 이동
-	/*pCamera->Update(fElapsedTime, m_Transform.GetPosition());
-	static_cast<FollowCam*>(pCamera)->Update(fTimeElapsed, m_Transform.GetPosition());
-	OnCameraUpdateCallback(fTimeElapsed, pCamera);
-	static_cast<FollowCam*>(pCamera)->RegenerateViewMatrix();*/
-
+	 
 	// 이동량 줄어든다.
 	//fLength = Vector3::Length(m_xmf3Velocity);
 	//float fDeceleration = (m_fFriction * fElapsedTime); // 감소량
 	//if (fDeceleration > fLength) fDeceleration = fLength;
 	//m_xmf3Velocity = Vector3::Add(m_xmf3Velocity, Vector3::ScalarProduct(m_xmf3Velocity, -fDeceleration, true));
-
-
-	// 반드시 트랜스폼 업데이트..!
-	m_Transform.Update(fElapsedTime);  
-	m_pLoadObject->m_xmf4x4ToParent = Matrix4x4::Multiply(XMMatrixRotationX(-90.0f), m_Transform.GetWorldMatrix());
-	// if(m_pLoadObject) m_pLoadObject->UpdateTransform(m_Transform.GetpWorldMatrix());
-	
-	Animate(fElapsedTime); // 애니메이션대로 움직인다.
+	 
 }
 
 void Player::Animate(float fElapsedTime)
 {
+	// 반드시 트랜스폼 업데이트..! 
+	m_Transform.Update(fElapsedTime);
+
+	//// 위치가 안맞아서 재조정 
+	m_pLoadObject->m_xmf4x4ToParent =  
+		Matrix4x4::Multiply(XMMatrixRotationX(-90.0f), m_Transform.GetWorldMatrix());
+	 
 	if(m_pLoadObject) m_pLoadObject->Animate(fElapsedTime);
 }
 
