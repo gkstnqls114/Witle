@@ -1,37 +1,37 @@
 #include "stdafx.h"
-#include "SkinnedStandardShader.h"
+#include "SkinnedShader.h"
 
-SkinnedAnimationShader::SkinnedAnimationShader()
+SkinnedShader::SkinnedShader()
 {
 }
 
 
-SkinnedAnimationShader::~SkinnedAnimationShader()
+SkinnedShader::~SkinnedShader()
 {
 }
 
-void SkinnedAnimationShader::CreateShader(ID3D12Device * pd3dDevice, ID3D12RootSignature * const pd3dGraphicsRootSignature)
+void SkinnedShader::CreateShader(ID3D12Device * pd3dDevice, ID3D12RootSignature * const pd3dGraphicsRootSignature)
 {
 	Shader::CreatePipelineState(pd3dDevice, pd3dGraphicsRootSignature);
 }
 
-void SkinnedAnimationShader::Update(float ElapsedTime)
+void SkinnedShader::Update(float ElapsedTime)
 {
 	m_fElapsedTime = ElapsedTime;
 }
 
-D3D12_INPUT_LAYOUT_DESC SkinnedAnimationShader::CreateInputLayout()
+D3D12_INPUT_LAYOUT_DESC SkinnedShader::CreateInputLayout()
 {
 	UINT nInputElementDescs = 7;
 	D3D12_INPUT_ELEMENT_DESC *pd3dInputElementDescs = new D3D12_INPUT_ELEMENT_DESC[nInputElementDescs];
 
 	pd3dInputElementDescs[0] = { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 };
-	pd3dInputElementDescs[1] = { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 1, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 };
-	pd3dInputElementDescs[2] = { "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 2, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 };
-	pd3dInputElementDescs[3] = { "TANGENT", 0, DXGI_FORMAT_R32G32B32_FLOAT, 3, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 };
-	pd3dInputElementDescs[4] = { "BITANGENT", 0, DXGI_FORMAT_R32G32B32_FLOAT, 4, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 };
-	pd3dInputElementDescs[5] = { "BONEINDEX", 0, DXGI_FORMAT_R32G32B32A32_SINT, 5, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 };
-	pd3dInputElementDescs[6] = { "BONEWEIGHT", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 6, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 };
+	pd3dInputElementDescs[1] = { "BONEINDEX", 0, DXGI_FORMAT_R32G32B32A32_SINT, 1, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 };
+	pd3dInputElementDescs[2] = { "BONEWEIGHT", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 2, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 };
+	pd3dInputElementDescs[3] = { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 3, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 };
+	pd3dInputElementDescs[4] = { "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 4, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 };
+	pd3dInputElementDescs[5] = { "TANGENT", 0, DXGI_FORMAT_R32G32B32_FLOAT, 5, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 };
+	pd3dInputElementDescs[6] = { "BITANGENT", 0, DXGI_FORMAT_R32G32B32_FLOAT, 6, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 };
 
 	D3D12_INPUT_LAYOUT_DESC d3dInputLayoutDesc;
 	d3dInputLayoutDesc.pInputElementDescs = pd3dInputElementDescs;
@@ -40,7 +40,7 @@ D3D12_INPUT_LAYOUT_DESC SkinnedAnimationShader::CreateInputLayout()
 	return(d3dInputLayoutDesc);
 }
 
-D3D12_RASTERIZER_DESC SkinnedAnimationShader::CreateRasterizerState()
+D3D12_RASTERIZER_DESC SkinnedShader::CreateRasterizerState()
 {
 	D3D12_RASTERIZER_DESC d3dRasterizerDesc;
 	::ZeroMemory(&d3dRasterizerDesc, sizeof(D3D12_RASTERIZER_DESC));
@@ -59,7 +59,7 @@ D3D12_RASTERIZER_DESC SkinnedAnimationShader::CreateRasterizerState()
 	return d3dRasterizerDesc;
 }
 
-D3D12_BLEND_DESC SkinnedAnimationShader::CreateBlendState()
+D3D12_BLEND_DESC SkinnedShader::CreateBlendState()
 {
 	D3D12_BLEND_DESC d3dBlendDesc;
 	::ZeroMemory(&d3dBlendDesc, sizeof(D3D12_BLEND_DESC));
@@ -79,7 +79,7 @@ D3D12_BLEND_DESC SkinnedAnimationShader::CreateBlendState()
 	return d3dBlendDesc;
 }
 
-D3D12_DEPTH_STENCIL_DESC SkinnedAnimationShader::CreateDepthStencilState()
+D3D12_DEPTH_STENCIL_DESC SkinnedShader::CreateDepthStencilState()
 {
 	D3D12_DEPTH_STENCIL_DESC d3dDepthStencilDesc;
 	::ZeroMemory(&d3dDepthStencilDesc, sizeof(D3D12_DEPTH_STENCIL_DESC));
@@ -101,22 +101,22 @@ D3D12_DEPTH_STENCIL_DESC SkinnedAnimationShader::CreateDepthStencilState()
 	return(d3dDepthStencilDesc);
 }
 
-D3D12_PRIMITIVE_TOPOLOGY_TYPE SkinnedAnimationShader::CreatePrimitiveTopologyType()
+D3D12_PRIMITIVE_TOPOLOGY_TYPE SkinnedShader::CreatePrimitiveTopologyType()
 {
 	return D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
 }
 
-D3D12_SHADER_BYTECODE SkinnedAnimationShader::CreateVertexShader(ID3DBlob ** ppd3dShaderBlob)
+D3D12_SHADER_BYTECODE SkinnedShader::CreateVertexShader(ID3DBlob ** ppd3dShaderBlob)
 {
 	return Shader::CompileShaderFromFile(L"SkinnedAnimationShader.hlsl", "VSSkinnedAnimationStandard", "vs_5_1", ppd3dShaderBlob);
 }
 
-D3D12_SHADER_BYTECODE SkinnedAnimationShader::CreatePixelShader(ID3DBlob ** ppd3dShaderBlob)
+D3D12_SHADER_BYTECODE SkinnedShader::CreatePixelShader(ID3DBlob ** ppd3dShaderBlob)
 {
 	return Shader::CompileShaderFromFile(L"SkinnedAnimationShader.hlsl", "PSStandard", "ps_5_1", ppd3dShaderBlob);
 }
 
-D3D12_SHADER_BYTECODE SkinnedAnimationShader::CreateGeometryShader(ID3DBlob ** ppd3dShaderBlob)
+D3D12_SHADER_BYTECODE SkinnedShader::CreateGeometryShader(ID3DBlob ** ppd3dShaderBlob)
 {
 	return Shader::CreateGeometryShader(ppd3dShaderBlob);
 }

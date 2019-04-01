@@ -20,7 +20,7 @@
 #include "MyFrustum.h"
 #include "GameInput.h"
 #include "GameScreen.h"
-#include "Player.h"
+#include "CPlayer.h"
 #include "CameraObject.h"
 #include "QuadTreeTerrainMesh.h"
 #include "BasicCam.h"
@@ -156,7 +156,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	m_TESTQuadTree = new QuadTreeTerrainMesh(m_TESTQuadGameobject, pd3dDevice, pd3dCommandList, 257, 257, xmf3Scale, xmf4Color, m_Terrain->GetHeightMapImage());
 
 	// 테스트할 모델 오브젝트
-	m_pPlayer = new Player("Player", pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, nullptr);
+	m_pPlayer = new CTerrainPlayer(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, NULL);
 	m_GameObjectDiffuse = new Texture(1, RESOURCE_TEXTURE2D);
 	m_GameObjectDiffuse->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/ReflexTree_Diffuse.dds", 0);
 	 
@@ -169,14 +169,11 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	}
 	m_TreeDiffuse = new Texture(1, RESOURCE_TEXTURE2D); 
 	m_TreeDiffuse->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/ReflexTree_Diffuse.dds", 0);
-	
-	// 해당 터레인을 플레이어 콜백으로 설정
-	m_pPlayer->SetUpdatedContext(m_Terrain);
-
+	 
 	// 카메라
 	m_Camera = new CameraObject("Camera");
 	// Camera* cameraComponent = new FollowCam(m_Camera, m_pPlayer);
-	Camera* cameraComponent = new FollowCam(m_Camera, m_pPlayer);
+	Camera* cameraComponent = new FollowCamForLoad(m_Camera, m_pPlayer);
 	GameScreen::SetCamera(cameraComponent);
 	cameraComponent->CreateShaderVariables(pd3dDevice, pd3dCommandList);
 	cameraComponent->SetOffset(XMFLOAT3(0, 0, 1000.f));
@@ -215,7 +212,7 @@ void GameScene::ReleaseObjects()
 {
 	if (m_pPlayer)
 	{
-		m_pPlayer->ReleaseObjects(); 
+		// m_pPlayer->ReleaseObjects(); 
 		delete m_pPlayer;
 		m_pPlayer = nullptr;
 	}
@@ -280,7 +277,7 @@ bool GameScene::ProcessInput(HWND hWnd, float ElapsedTime)
 	if (dwDirection != 0)
 	{
 		// AXIS axis = m_pPlayer->GetTransform().GetCoorAxis();
-		AXIS axis = AXIS{ m_pPlayer->GetCoorAxis() };
+		AXIS axis = AXIS{ m_pPlayer->GetRight(),  m_pPlayer->GetUp(), m_pPlayer->GetLook()};
 
 		XMFLOAT3 xmf3Shift = XMFLOAT3(0.f, 0.f, 0.f); // 이동량
 
@@ -296,7 +293,8 @@ bool GameScene::ProcessInput(HWND hWnd, float ElapsedTime)
 		if (dwDirection & DIR_DOWN) xmf3Shift = Vector3::Add(xmf3Shift, axis.up, -fDistance);
 
 		//플레이어의 이동량 벡터를 xmf3Shift 벡터만큼 더한다. 
-		m_pPlayer->MoveVelocity(xmf3Shift);
+		// m_pPlayer->MoveVelocity(xmf3Shift);
+		m_pPlayer->Move(xmf3Shift, true);
 	}
 	else
 	{
@@ -306,7 +304,8 @@ bool GameScene::ProcessInput(HWND hWnd, float ElapsedTime)
 			float fLength = Vector3::Length(Veclocity);
 			float fDeceleration = (3000.f * ElapsedTime); //해당상수는 Friction
 			if (fDeceleration > fLength) fDeceleration = fLength;
-			m_pPlayer->MoveVelocity(Vector3::ScalarProduct(Veclocity, -fDeceleration, true));
+			// m_pPlayer->MoveVelocity(Vector3::ScalarProduct(Veclocity, -fDeceleration, true));
+			m_pPlayer->Move(Vector3::ScalarProduct(Veclocity, -fDeceleration, true), true);
 		} 
 	}
 	
@@ -329,38 +328,38 @@ bool GameScene::ProcessInput(HWND hWnd, float ElapsedTime)
 void GameScene::Update(float fElapsedTime)
 { 
 	// 충돌체크 ///////////////////////// 
-	BoundingOrientedBox AlreadyBBox = m_pPlayer->CalculateAlreadyBoundingBox(fElapsedTime); 
-	XMFLOAT3 AlreadyPositon{ AlreadyBBox.Center.x, AlreadyBBox.Center.y, AlreadyBBox.Center.z };
-	for (int i = 0; i < m_TreeCount; ++i)
-	{
-		bool isAlreadyCollide = Collision::isCollide(AlreadyBBox, m_Trees[i]->GetBOBox()->GetBOBox());
-		if (isAlreadyCollide)
-		{ 
-			bool isUseSliding = false;
-			for (int x = 0; x < 4; ++x)
-			{
-				bool isIntersect = Plane::Intersect(m_Trees[i]->GetBOBox()->GetPlane(x), AlreadyPositon, m_pPlayer->GetVelocity());
-				bool isFront = Plane::IsFront(m_Trees[i]->GetBOBox()->GetPlane(x), AlreadyPositon);
-				if (isIntersect && isFront)
-				{
-					std::cout << x << " ... intersect! ";
-					//슬라이딩벡터
+	//BoundingOrientedBox AlreadyBBox = m_pPlayer->CalculateAlreadyBoundingBox(fElapsedTime); 
+	//XMFLOAT3 AlreadyPositon{ AlreadyBBox.Center.x, AlreadyBBox.Center.y, AlreadyBBox.Center.z };
+	//for (int i = 0; i < m_TreeCount; ++i)
+	//{
+	//	bool isAlreadyCollide = Collision::isCollide(AlreadyBBox, m_Trees[i]->GetBOBox()->GetBOBox());
+	//	if (isAlreadyCollide)
+	//	{ 
+	//		bool isUseSliding = false;
+	//		for (int x = 0; x < 4; ++x)
+	//		{
+	//			bool isIntersect = Plane::Intersect(m_Trees[i]->GetBOBox()->GetPlane(x), AlreadyPositon, m_pPlayer->GetVelocity());
+	//			bool isFront = Plane::IsFront(m_Trees[i]->GetBOBox()->GetPlane(x), AlreadyPositon);
+	//			if (isIntersect && isFront)
+	//			{
+	//				std::cout << x << " ... intersect! ";
+	//				//슬라이딩벡터
 
-					m_pPlayer->SetVelocity(
-						Vector3::Sliding(m_Trees[i]->GetBOBox()->GetPlane(x), m_pPlayer->GetVelocity())
-					);
+	//				m_pPlayer->SetVelocity(
+	//					Vector3::Sliding(m_Trees[i]->GetBOBox()->GetPlane(x), m_pPlayer->GetVelocity())
+	//				);
 
-					isUseSliding = true; 
-				}
-			} 
-			 
-			if(!isUseSliding)
-			{
-				m_pPlayer->MoveVelocity(Vector3::ScalarProduct(m_pPlayer->GetVelocity(), -1, false));
-			}
-			std::cout << std::endl;
-		}
-	}
+	//				isUseSliding = true; 
+	//			}
+	//		} 
+	//		 
+	//		if(!isUseSliding)
+	//		{
+	//			m_pPlayer->MoveVelocity(Vector3::ScalarProduct(m_pPlayer->GetVelocity(), -1, false));
+	//		}
+	//		std::cout << std::endl;
+	//	}
+	//}
 	// 충돌체크 /////////////////////////
 
 	if (m_pPlayer)
@@ -405,7 +404,7 @@ void GameScene::TESTSetRootDescriptor(ID3D12GraphicsCommandList * pd3dCommandLis
 void GameScene::AnimateObjects(float fTimeElapsed)
 {
 	// if (m_pHeightMapTerrain) m_pHeightMapTerrain->Animate(fTimeElapsed);
-
+	 
 	if (m_pPlayer) m_pPlayer->Animate(fTimeElapsed);
 }
 
@@ -458,12 +457,12 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	
 	pd3dCommandList->SetDescriptorHeaps(1, &m_pd3dCbvSrvDescriptorHeap);
 	m_GameObjectDiffuse->UpdateShaderVariables(pd3dCommandList);
-
+	 
+	//for (int x = 0; x < m_TreeCount; ++x)
+	//{
+	//	m_Trees[x]->Render(pd3dCommandList);
+	//} 
 	m_pPlayer->Render(pd3dCommandList);
-	for (int x = 0; x < m_TreeCount; ++x)
-	{
-		m_Trees[x]->Render(pd3dCommandList);
-	} 
 	////////////////////////////// Model Render
 
 }
@@ -522,8 +521,18 @@ ID3D12RootSignature* GameScene::CreateGraphicsRootSignature(ID3D12Device *pd3dDe
 	pRootParameters[ROOTPARAMETER_EMISSION_2] = d3dUtil::CreateRootParameterTable(1, &pd3dDescriptorRanges[5], D3D12_SHADER_VISIBILITY_PIXEL);
 	pRootParameters[ROOTPARAMETER_EMISSION_3] = d3dUtil::CreateRootParameterTable(1, &pd3dDescriptorRanges[6], D3D12_SHADER_VISIBILITY_PIXEL);
 
-	pRootParameters[ROOTPARAMETER_SKINNEDBONEOFFSET] = d3dUtil::CreateRootParameterCBV(7, 0, D3D12_SHADER_VISIBILITY_VERTEX);
-	pRootParameters[ROOTPARAMETER_SKINNEDBONETRANSFORM] = d3dUtil::CreateRootParameterCBV(8, 0, D3D12_SHADER_VISIBILITY_VERTEX);
+	pRootParameters[11].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	pRootParameters[11].Descriptor.ShaderRegister = 7; //Skinned Bone Offsets
+	pRootParameters[11].Descriptor.RegisterSpace = 0;
+	pRootParameters[11].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
+
+	pRootParameters[12].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	pRootParameters[12].Descriptor.ShaderRegister = 8; //Skinned Bone Transforms
+	pRootParameters[12].Descriptor.RegisterSpace = 0;
+	pRootParameters[12].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
+
+	//pRootParameters[ROOTPARAMETER_SKINNEDBONEOFFSET] = d3dUtil::CreateRootParameterCBV(7, 0, D3D12_SHADER_VISIBILITY_VERTEX);
+	//pRootParameters[ROOTPARAMETER_SKINNEDBONETRANSFORM] = d3dUtil::CreateRootParameterCBV(8, 0, D3D12_SHADER_VISIBILITY_VERTEX);
 	//// 루트 패러미터 ///////////////////////////////////////////////////////////////////// 
 
 

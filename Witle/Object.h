@@ -4,8 +4,7 @@
 
 #pragma once
 
-#include "CMesh.h"
-#include "Camera.h"
+#include "CMesh.h" 
 
 #define DIR_FORWARD					0x01
 #define DIR_BACKWARD				0x02
@@ -63,7 +62,7 @@ public:
 	void UpdateShaderVariable(ID3D12GraphicsCommandList *pd3dCommandList, int nIndex);
 	void ReleaseShaderVariables();
 
-	void LoadTextureFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, const wchar_t *pszFileName, UINT nIndex, bool bIsDDSFile=true);
+	void LoadTextureFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, const wchar_t *pszFileName, UINT nIndex, bool bIsDDSFile = true);
 
 	int GetTextures() { return(m_nTextures); }
 	ID3D12Resource *GetTexture(int nIndex) { return(m_ppd3dTextures[nIndex]); }
@@ -92,6 +91,9 @@ public:
 
 private:
 	int								m_nReferences = 0;
+
+	static Shader					*m_pWireFrameShader;
+	static Shader					*m_pSkinnedAnimationWireFrameShader;
 
 public:
 	void AddRef() { m_nReferences++; }
@@ -124,19 +126,25 @@ public:
 
 public:
 	int 							m_nTextures = 0;
-	_TCHAR							(*m_ppstrTextureNames)[64] = NULL;
+	_TCHAR(*m_ppstrTextureNames)[64] = NULL;
 	CTexture						**m_ppTextures = NULL; //0:Albedo, 1:Specular, 2:Metallic, 3:Normal, 4:Emission, 5:DetailAlbedo, 6:DetailNormal
 
 	void LoadTextureFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, UINT nType, UINT nRootParameter, _TCHAR *pwstrTextureName, CTexture **ppTexture, LoadObject *pParent, FILE *pInFile, Shader *pShader);
 
 public:
-	static Shader					*m_pWireFrameShader;
-	static Shader					*m_pSkinnedAnimationWireFrameShader;
-
 	static void PrepareShaders(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature);
 
-	void SetWireFrameShader() { CMaterial::SetShader(m_pWireFrameShader); }
-	void SetSkinnedAnimationWireFrameShader() { CMaterial::SetShader(m_pSkinnedAnimationWireFrameShader); }
+	void SetWireFrameShader() { 
+		std::cout << "SetWireFrameShader" << std::endl;
+		m_pShader = m_pWireFrameShader;
+
+		//CMaterial::SetShader(m_pWireFrameShader);
+	}
+	void SetSkinnedAnimationWireFrameShader() { 
+		std::cout << "SetSkinnedAnimationWireFrameShader" << std::endl;
+		m_pShader = m_pSkinnedAnimationWireFrameShader;
+		//CMaterial::SetShader(m_pSkinnedAnimationWireFrameShader); 
+	}
 };
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -151,8 +159,8 @@ public:
 
 struct CALLBACKKEY
 {
-   float  							m_fTime = 0.0f;
-   void  							*m_pCallbackData = NULL;
+	float  							m_fTime = 0.0f;
+	void  							*m_pCallbackData = NULL;
 };
 
 #define _WITH_ANIMATION_INTERPOLATION
@@ -164,7 +172,7 @@ public:
 	~CAnimationCallbackHandler() { }
 
 public:
-   virtual void HandleCallback(void *pCallbackData) { }
+	virtual void HandleCallback(void *pCallbackData) { }
 };
 
 class CAnimationCurve
@@ -192,7 +200,7 @@ public:
 public:
 	float							m_fWeight = 1.0f;
 
-	int								m_nAnimatedBoneFrames = 0; 
+	int								m_nAnimatedBoneFrames = 0;
 	LoadObject						**m_ppAnimatedBoneFrameCaches = NULL; //[m_nAnimatedBoneFrames]
 
 	CAnimationCurve					*(*m_ppAnimationCurves)[9] = NULL;
@@ -220,7 +228,7 @@ public:
 	float							m_fLength = 0.0f;
 
 	float 							m_fPosition = 0.0f;
-    int 							m_nType = ANIMATION_TYPE_LOOP; //Once, Loop, PingPong
+	int 							m_nType = ANIMATION_TYPE_LOOP; //Once, Loop, PingPong
 
 	int 							m_nCallbackKeys = 0;
 	CALLBACKKEY 					*m_pCallbackKeys = NULL;
@@ -269,10 +277,10 @@ public:
 	~CAnimationTrack() { }
 
 public:
-    BOOL 							m_bEnable = true;
-    float 							m_fSpeed = 1.0f;
-    float 							m_fPosition = 0.0f;
-    float 							m_fWeight = 1.0f;
+	BOOL 							m_bEnable = true;
+	float 							m_fSpeed = 1.0f;
+	float 							m_fPosition = 0.0f;
+	float 							m_fWeight = 1.0f;
 
 	int 							m_nAnimationSet = 0;
 
@@ -292,7 +300,7 @@ public:
 	~CLoadedModelInfo();
 
 public:
-    LoadObject						*m_pModelRootObject = NULL;
+	LoadObject						*m_pModelRootObject = NULL;
 
 	CAnimationSets					*m_pAnimationSets = NULL;
 
@@ -303,17 +311,17 @@ public:
 	void PrepareSkinning();
 };
 
-class CAnimationController 
+class CAnimationController
 {
 public:
 	CAnimationController(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, int nAnimationTracks, CLoadedModelInfo *pModel);
 	~CAnimationController();
 
 public:
-    float 							m_fTime = 0.0f;
+	float 							m_fTime = 0.0f;
 
-    int 							m_nAnimationTracks = 0;
-    CAnimationTrack 				*m_pAnimationTracks = NULL;
+	int 							m_nAnimationTracks = 0;
+	CAnimationTrack 				*m_pAnimationTracks = NULL;
 
 	CAnimationSets					*m_pAnimationSets = NULL;
 
@@ -353,7 +361,7 @@ public:
 public:
 	LoadObject();
 	LoadObject(int nMaterials);
-    virtual ~LoadObject();
+	virtual ~LoadObject();
 
 public:
 	char							m_pstrFrameName[64];
@@ -377,7 +385,7 @@ public:
 	void SetSkinnedAnimationWireFrameShader();
 	void SetMaterial(int nMaterial, CMaterial *pMaterial);
 
-	void SetChild(LoadObject *pChild, bool bReferenceUpdate=false);
+	void SetChild(LoadObject *pChild, bool bReferenceUpdate = false);
 
 	virtual void BuildMaterials(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList) { }
 
@@ -414,7 +422,7 @@ public:
 	void Rotate(XMFLOAT4 *pxmf4Quaternion);
 
 	LoadObject *GetParent() { return(m_pParent); }
-	void UpdateTransform(XMFLOAT4X4 *pxmf4x4Parent=NULL);
+	void UpdateTransform(XMFLOAT4X4 *pxmf4x4Parent = NULL);
 	LoadObject *FindFrame(char *pstrFrameName);
 
 	UINT GetMeshType() { return((m_pMesh) ? m_pMesh->GetType() : 0x00); }
@@ -438,7 +446,7 @@ public:
 	static void LoadObject::CopyWorldMatrix(LoadObject* copy, LoadObject* copyed)
 	{
 		strcpy(copy->m_pstrFrameName, copyed->m_pstrFrameName);
-		   
+
 		copy->m_pMesh = copyed->m_pMesh;
 		copy->m_nMaterials = copyed->m_nMaterials;
 		copy->m_ppMaterials = copyed->m_ppMaterials;

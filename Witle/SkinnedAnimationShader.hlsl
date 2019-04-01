@@ -53,6 +53,7 @@ SamplerState gssWrap : register(s0);
 #define MAX_VERTEX_INFLUENCES			4
 #define SKINNED_ANIMATION_BONES			128
 
+
 cbuffer cbBoneOffsets : register(b7)
 {
 	float4x4 gpmtxBoneOffsets[SKINNED_ANIMATION_BONES];
@@ -66,12 +67,13 @@ cbuffer cbBoneTransforms : register(b8)
 struct VS_SKINNED_STANDARD_INPUT
 {
 	float3 position : POSITION;
+	int4 indices : BONEINDEX;
+	float4 weights : BONEWEIGHT;
+
 	float2 uv : TEXCOORD;
 	float3 normal : NORMAL;
 	float3 tangent : TANGENT;
 	float3 bitangent : BITANGENT;
-	int4 indices : BONEINDEX;
-	float4 weights : BONEWEIGHT;
 };
  
 struct VS_STANDARD_OUTPUT
@@ -87,7 +89,7 @@ struct VS_STANDARD_OUTPUT
 VS_STANDARD_OUTPUT VSSkinnedAnimationStandard(VS_SKINNED_STANDARD_INPUT input)
 { 
 	VS_STANDARD_OUTPUT output;
-
+	 
 	float3 positionW = float3(0.0f, 0.0f, 0.0f);
 	matrix mtxVertexToBoneWorld;
 	for (int i = 0; i < MAX_VERTEX_INFLUENCES; i++)

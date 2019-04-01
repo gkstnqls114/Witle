@@ -7,6 +7,8 @@
 #include "Mesh.h"
 #include "Object.h"
 
+using namespace FileRead;
+
 CMesh::CMesh(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList)
 {
 }
@@ -84,11 +86,11 @@ void CMesh::LoadMeshFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList
 
 	int nColors = 0, nIndices = 0, nSubMeshes = 0, nSubIndices = 0;
 
-	d3dUtil::ReadStringFromFile(pInFile, m_pstrMeshName);
-	
-	for ( ; ; )
+	::ReadStringFromFile(pInFile, m_pstrMeshName);
+
+	for (; ; )
 	{
-		d3dUtil::ReadStringFromFile(pInFile, pstrToken);
+		::ReadStringFromFile(pInFile, pstrToken);
 
 		if (!strcmp(pstrToken, "<Bounds>:"))
 		{
@@ -115,9 +117,9 @@ void CMesh::LoadMeshFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList
 		{
 			int nPolygons = 0;
 			nReads = (UINT)::fread(&nPolygons, sizeof(int), 1, pInFile);
-			for ( ; ; )
+			for (; ; )
 			{
-				d3dUtil::ReadStringFromFile(pInFile, pstrToken);
+				::ReadStringFromFile(pInFile, pstrToken);
 
 				if (!strcmp(pstrToken, "<Indices>:"))
 				{
@@ -542,12 +544,12 @@ void CSkinnedMesh::LoadSkinDeformationsFromFile(ID3D12Device *pd3dDevice, ID3D12
 	BYTE nStrLength = 0;
 	UINT nReads = 0;
 
-	for ( ; ; )
+	for (; ; )
 	{
-		d3dUtil::ReadStringFromFile(pInFile, pstrToken);
+		::ReadStringFromFile(pInFile, pstrToken);
 		if (!strcmp(pstrToken, "<BonesPerVertex>:"))
 		{
-			m_nBonesPerVertex = d3dUtil::ReadIntegerFromFile(pInFile);
+			m_nBonesPerVertex = ::ReadIntegerFromFile(pInFile);
 		}
 		else if (!strcmp(pstrToken, "<Bounds>:"))
 		{
@@ -556,21 +558,21 @@ void CSkinnedMesh::LoadSkinDeformationsFromFile(ID3D12Device *pd3dDevice, ID3D12
 		}
 		else if (!strcmp(pstrToken, "<BoneNames>:"))
 		{
-			m_nSkinningBones = d3dUtil::ReadIntegerFromFile(pInFile);
+			m_nSkinningBones = ::ReadIntegerFromFile(pInFile);
 			if (m_nSkinningBones > 0)
 			{
 				m_ppstrSkinningBoneNames = new char[m_nSkinningBones][64];
 				m_ppSkinningBoneFrameCaches = new LoadObject*[m_nSkinningBones];
 				for (int i = 0; i < m_nSkinningBones; i++)
 				{
-					d3dUtil::ReadStringFromFile(pInFile, m_ppstrSkinningBoneNames[i]);
+					::ReadStringFromFile(pInFile, m_ppstrSkinningBoneNames[i]);
 					m_ppSkinningBoneFrameCaches[i] = NULL;
 				}
 			}
 		}
 		else if (!strcmp(pstrToken, "<BoneOffsets>:"))
 		{
-			m_nSkinningBones = d3dUtil::ReadIntegerFromFile(pInFile);
+			m_nSkinningBones = ::ReadIntegerFromFile(pInFile);
 			if (m_nSkinningBones > 0)
 			{
 				m_pxmf4x4BindPoseBoneOffsets = new XMFLOAT4X4[m_nSkinningBones];
@@ -590,7 +592,7 @@ void CSkinnedMesh::LoadSkinDeformationsFromFile(ID3D12Device *pd3dDevice, ID3D12
 		{
 			m_nType |= VERTEXT_BONE_INDEX_WEIGHT;
 
-			m_nVertices = d3dUtil::ReadIntegerFromFile(pInFile);
+			m_nVertices = ::ReadIntegerFromFile(pInFile);
 			if (m_nVertices > 0)
 			{
 				m_pxmn4BoneIndices = new XMINT4[m_nVertices];
@@ -607,7 +609,7 @@ void CSkinnedMesh::LoadSkinDeformationsFromFile(ID3D12Device *pd3dDevice, ID3D12
 		{
 			m_nType |= VERTEXT_BONE_INDEX_WEIGHT;
 
-			m_nVertices = d3dUtil::ReadIntegerFromFile(pInFile);
+			m_nVertices = ::ReadIntegerFromFile(pInFile);
 			if (m_nVertices > 0)
 			{
 				m_pxmf4BoneWeights = new XMFLOAT4[m_nVertices];

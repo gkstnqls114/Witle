@@ -112,6 +112,7 @@ VS_STANDARD_OUTPUT VSStandard(VS_STANDARD_INPUT input)
 
 float4 PSStandard(VS_STANDARD_OUTPUT input) : SV_TARGET
 {
+	return float4(1.f, 0.f, 0.f, 1.f);
 	// 임시로 사용할 컬러 색깔
 	float TESTColor = float4(1.f, 1.f, 1.f, 1.f);
 	//float4 cAlbedoColor = float4(0.0f, 0.0f, 0.0f, 1.0f);

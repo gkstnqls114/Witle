@@ -393,9 +393,6 @@
     <ClInclude Include="WICTextureLoader12.h">
       <Filter>99.etc</Filter>
     </ClInclude>
-    <ClInclude Include="SkinnedStandardShader.h">
-      <Filter>05.Shader\SkinnedStandardShader</Filter>
-    </ClInclude>
     <ClInclude Include="StandardShader.h">
       <Filter>05.Shader\StandardShader</Filter>
     </ClInclude>
@@ -428,6 +425,9 @@
     </ClInclude>
     <ClInclude Include="StaticObject.h">
       <Filter>03.GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="SkinnedShader.h">
+      <Filter>05.Shader\SkinnedStandardShader</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -608,9 +608,6 @@
     <ClCompile Include="WICTextureLoader12.cpp">
       <Filter>99.etc</Filter>
     </ClCompile>
-    <ClCompile Include="SkinnedStandardShader.cpp">
-      <Filter>05.Shader\SkinnedStandardShader</Filter>
-    </ClCompile>
     <ClCompile Include="StandardShader.cpp">
       <Filter>05.Shader\StandardShader</Filter>
     </ClCompile>
@@ -643,6 +640,9 @@
     </ClCompile>
     <ClCompile Include="StaticObject.cpp">
       <Filter>03.GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="SkinnedShader.cpp">
+      <Filter>05.Shader\SkinnedStandardShader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -681,9 +681,6 @@
       <Filter>HLSL</Filter>
     </FxCompile>
     <FxCompile Include="Variables.hlsl">
-      <Filter>HLSL</Filter>
-    </FxCompile>
-    <FxCompile Include="TESTLoadFBXShader.hlsl">
       <Filter>HLSL</Filter>
     </FxCompile>
     <FxCompile Include="LineShader.hlsl">

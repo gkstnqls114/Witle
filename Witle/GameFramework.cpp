@@ -12,9 +12,10 @@
 #include "LineShader.h"
 #endif // _SHOW_BOUNDINGBOX
  
+#include "Object.h"
 #include "StandardShader.h"
 #include "TerrainShader.h"
-#include "SkinnedStandardShader.h"
+#include "SkinnedShader.h"
 #include "HorizonBlurShader.h"
 #include "VerticalBlurShader.h"
 #include "Texture.h"
@@ -502,7 +503,7 @@ void CGameFramework::UpdateGamelogic(float fElapsedTime)
 		GameInput::Update(m_hWnd);
 		m_pScene->ProcessInput(m_hWnd, fElapsedTime);
 		m_pScene->Update(fElapsedTime);
-		// m_pScene->AnimateObjects(fElapsedTime);
+		m_pScene->AnimateObjects(fElapsedTime);
 		m_pScene->LastUpdate(fElapsedTime);
 
 		// 현재 애니메이션 어디다가 쓰는지 모르겠다.
@@ -620,6 +621,8 @@ void CGameFramework::RenderOnSwapchain()
 
 void CGameFramework::BuildShaders()
 {
+	CMaterial::PrepareShaders(m_d3dDevice.Get(), m_CommandList.Get(), m_pScene->GetGraphicsRootSignature());
+
 	Shader* pCubeShader = new CubeShader();
 	pCubeShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
 	ShaderManager::GetInstance()->InsertShader("Cube", pCubeShader);
@@ -627,15 +630,14 @@ void CGameFramework::BuildShaders()
 	Shader* pTerrainShader = new TerrainShader();
 	pTerrainShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
 	ShaderManager::GetInstance()->InsertShader("Terrain", pTerrainShader);
-
-	Shader* pSkinnedAnimationShader = new SkinnedAnimationShader();
-	pSkinnedAnimationShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
-	ShaderManager::GetInstance()->InsertShader("SkinnedAnimationShader", pSkinnedAnimationShader);
-
+	 
 	Shader* pStandardShader = new StandardShader();
 	pStandardShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
 	ShaderManager::GetInstance()->InsertShader("StandardShader", pStandardShader);
 
+	Shader* pSkinnedShader = new SkinnedShader();
+	pSkinnedShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
+	ShaderManager::GetInstance()->InsertShader("SkinnedShader", pSkinnedShader);
 #ifdef _SHOW_BOUNDINGBOX
 	Shader* pLineShader = new LineShader();
 	pLineShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());

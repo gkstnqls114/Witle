@@ -1,6 +1,41 @@
 #pragma once
 
+namespace FileRead
+{
+	static int ReadStringFromFile(FILE *pInFile, char *pstrToken)
+	{
+		int nStrLength = 0;
+		UINT nReads = 0;
+		nReads = (UINT)::fread(&nStrLength, sizeof(int), 1, pInFile);
+		nReads = (UINT)::fread(pstrToken, sizeof(char), nStrLength, pInFile);
+		pstrToken[nStrLength] = '\0';
+#ifdef _DEBUG
+		printf("String ... %d %s\n", nStrLength, pstrToken);
+#endif // DEBUG
 
+		return(nStrLength);
+	}
+
+	static float ReadFloatFromFile(FILE *pInFile)
+	{
+		float fValue = 0;
+		UINT nReads = (UINT)::fread(&fValue, sizeof(float), 1, pInFile);
+#ifdef _DEBUG
+		printf("Float ... %f\n", fValue);
+#endif // DEBUG
+		return(fValue);
+	}
+
+	static int ReadIntegerFromFile(FILE *pInFile)
+	{
+		int nValue = 0;
+		UINT nReads = (UINT)::fread(&nValue, sizeof(int), 1, pInFile);
+#ifdef _DEBUG
+		printf("Int ... %d\n", nValue);
+#endif // DEBUG
+		return(nValue);
+	}
+}
 // 유용한 함수들이 모여있는 클래스
 class d3dUtil
 {
@@ -44,6 +79,7 @@ public:
 	static UINT CalcConstantBufferByteSize(UINT byteSize);
 
 	static UINT gnCbvSrvDescriptorIncrementSize;
+
 	static int ReadStringFromFile(FILE *pInFile, char *pstrToken)
 	{
 		int nStrLength = 0;
@@ -56,7 +92,7 @@ public:
 #endif // DEBUG
 
 		return(nStrLength);
-	} 
+	}
 
 	static float ReadFloatFromFile(FILE *pInFile)
 	{

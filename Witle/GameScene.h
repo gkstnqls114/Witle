@@ -12,7 +12,7 @@ class CameraObject;
 class Terrain;
 class GameObject;
 class LoadObject;
-class SkinnedAnimationShader;
+class SkinnedShader;
 
 class QuadTreeTerrainMesh;
 
@@ -84,7 +84,7 @@ public:
 protected:
 	// fbx test
 	Texture*				m_GameObjectDiffuse{ nullptr };
-	Player*                 m_pPlayer{ nullptr };
+	CPlayer*                 m_pPlayer{ nullptr };
 
 
 	CLoadedModelInfo *m_pTreeModel{ nullptr };
