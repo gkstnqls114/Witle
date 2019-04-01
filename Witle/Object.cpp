@@ -696,11 +696,7 @@ void LoadObject::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 					{ 
 						//m_ppMaterials[i]->m_pShader->Render(pd3dCommandList);
 						m_ppMaterials[i]->m_pShader->OnPrepareRender(pd3dCommandList);
-					}
-					else
-					{
-						// pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("SkinnedShader")->GetPSO());
-					}
+					} 
 					m_ppMaterials[i]->UpdateShaderVariable(pd3dCommandList);
 				}
 

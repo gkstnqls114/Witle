@@ -20,7 +20,7 @@
 #include "MyFrustum.h"
 #include "GameInput.h"
 #include "GameScreen.h"
-#include "CPlayer.h"
+#include "Player.h"
 #include "CameraObject.h"
 #include "QuadTreeTerrainMesh.h"
 #include "BasicCam.h"
@@ -159,7 +159,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	m_TESTQuadTree = new QuadTreeTerrainMesh(m_TESTQuadGameobject, pd3dDevice, pd3dCommandList, 257, 257, xmf3Scale, xmf4Color, m_Terrain->GetHeightMapImage());
 
 	// 테스트할 모델 오브젝트
-	m_pPlayer = new CTerrainPlayer(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, NULL);
+	m_pPlayer = new Player("Player", pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 	m_GameObjectDiffuse = new Texture(1, RESOURCE_TEXTURE2D);
 	m_GameObjectDiffuse->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/ReflexTree_Diffuse.dds", 0);
 	 
@@ -176,7 +176,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	// 카메라
 	m_Camera = new CameraObject("Camera");
 	// Camera* cameraComponent = new FollowCam(m_Camera, m_pPlayer);
-	Camera* cameraComponent = new FollowCamForLoad(m_Camera, m_pPlayer);
+	Camera* cameraComponent = new FollowCam(m_Camera, m_pPlayer);
 	GameScreen::SetCamera(cameraComponent);
 	cameraComponent->CreateShaderVariables(pd3dDevice, pd3dCommandList);
 	cameraComponent->SetOffset(XMFLOAT3(0, 0, 1000.f));
@@ -280,7 +280,7 @@ bool GameScene::ProcessInput(HWND hWnd, float ElapsedTime)
 	if (dwDirection != 0)
 	{
 		// AXIS axis = m_pPlayer->GetTransform().GetCoorAxis();
-		AXIS axis = AXIS{ m_pPlayer->GetRight(),  m_pPlayer->GetUp(), m_pPlayer->GetLook()};
+		AXIS axis = AXIS{ m_pPlayer->GetCoorAxis()};
 
 		XMFLOAT3 xmf3Shift = XMFLOAT3(0.f, 0.f, 0.f); // 이동량
 
@@ -297,7 +297,7 @@ bool GameScene::ProcessInput(HWND hWnd, float ElapsedTime)
 
 		//플레이어의 이동량 벡터를 xmf3Shift 벡터만큼 더한다. 
 		// m_pPlayer->MoveVelocity(xmf3Shift);
-		m_pPlayer->Move(xmf3Shift, true);
+		m_pPlayer->MoveVelocity(xmf3Shift);
 	}
 	else
 	{
@@ -308,7 +308,7 @@ bool GameScene::ProcessInput(HWND hWnd, float ElapsedTime)
 			float fDeceleration = (3000.f * ElapsedTime); //해당상수는 Friction
 			if (fDeceleration > fLength) fDeceleration = fLength;
 			// m_pPlayer->MoveVelocity(Vector3::ScalarProduct(Veclocity, -fDeceleration, true));
-			m_pPlayer->Move(Vector3::ScalarProduct(Veclocity, -fDeceleration, true), true);
+			m_pPlayer->MoveVelocity(Vector3::ScalarProduct(Veclocity, -fDeceleration, true));
 		} 
 	}
 	

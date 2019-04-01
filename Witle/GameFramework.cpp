@@ -472,9 +472,7 @@ void CGameFramework::BuildObjects()
 	BuildTESTObjects();
 	BuildShaders();
 
-	if (m_pScene) m_pScene->BuildObjects(m_d3dDevice.Get(), m_CommandList.Get());
-	
-
+	m_pScene->BuildObjects(m_d3dDevice.Get(), m_CommandList.Get());
 	///////////////////////////////////////////////////////////////////////////// 府家胶 积己
 
 	hResult = m_CommandList->Close();

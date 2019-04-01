@@ -84,7 +84,7 @@ public:
 protected:
 	// fbx test
 	Texture*				m_GameObjectDiffuse{ nullptr };
-	CPlayer*                 m_pPlayer{ nullptr };
+	Player*                 m_pPlayer{ nullptr };
 
 
 	CLoadedModelInfo *m_pTreeModel{ nullptr };

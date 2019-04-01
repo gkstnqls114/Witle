@@ -84,21 +84,17 @@ XMFLOAT3 Player::CalculateAlreadyPosition(float fTimeElapsed)
 
 Player::Player(const std::string & entityID, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void * pContext)
 	: GameObject(entityID)
-{
-
+{ 
 	CLoadedModelInfo *pPlayerModel = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/Angrybot.bin", NULL);
 	m_pLoadObject = pPlayerModel->m_pModelRootObject;
 
-	m_pLoadObject->m_pSkinnedAnimationController
-		= new CAnimationController(pd3dDevice, pd3dCommandList, 1, pPlayerModel);
-
+	m_pLoadObject->m_pSkinnedAnimationController = new CAnimationController(pd3dDevice, pd3dCommandList, 1, pPlayerModel);
+	m_pLoadObject->m_pSkinnedAnimationController->SetTrackAnimationSet(0, 0);
 
 	XMFLOAT3 center{ 0.f, 75.f, 0.f };
 	XMFLOAT3 extents{ 25.f, 75.f, 25.f };
 	m_MyBOBox = new MyBOBox(pd3dDevice, pd3dCommandList, center, extents);
 	 
-	// CreateShaderVariables(pd3dDevice, pd3dCommandList);
-
 	SetUpdatedContext(pContext); 
 }
 
@@ -143,12 +139,13 @@ void Player::Update(float fElapsedTime)
 	//if (fDeceleration > fLength) fDeceleration = fLength;
 	//m_xmf3Velocity = Vector3::Add(m_xmf3Velocity, Vector3::ScalarProduct(m_xmf3Velocity, -fDeceleration, true));
 
-	Animate(fElapsedTime); // 애니메이션대로 움직인다.
 
 	// 반드시 트랜스폼 업데이트..!
-	m_Transform.Update(fElapsedTime); 
-	if(m_pLoadObject) m_pLoadObject->UpdateTransform(m_Transform.GetpWorldMatrix());
-
+	m_Transform.Update(fElapsedTime);  
+	m_pLoadObject->m_xmf4x4ToParent = Matrix4x4::Multiply(XMMatrixRotationX(-90.0f), m_Transform.GetWorldMatrix());
+	// if(m_pLoadObject) m_pLoadObject->UpdateTransform(m_Transform.GetpWorldMatrix());
+	
+	Animate(fElapsedTime); // 애니메이션대로 움직인다.
 }
 
 void Player::Animate(float fElapsedTime)
@@ -162,8 +159,7 @@ void Player::Render(ID3D12GraphicsCommandList * pd3dCommandList)
 	m_MyBOBox->Render(pd3dCommandList, m_Transform.GetWorldMatrix());
 #endif // _SHOW_BOUNDINGBOX
 
- 	pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("SkinnedAnimationShader")->GetPSO());
-	if(m_pLoadObject) m_pLoadObject->Render(pd3dCommandList);
+ 	if(m_pLoadObject) m_pLoadObject->Render(pd3dCommandList);
 }
  
 void Player::Move(const XMFLOAT3 & xmf3Shift)
