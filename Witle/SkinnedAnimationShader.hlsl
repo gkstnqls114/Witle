@@ -46,7 +46,6 @@ SamplerState gssWrap : register(s0);
 #define MATERIAL_DETAIL_ALBEDO_MAP	0x20
 #define MATERIAL_DETAIL_NORMAL_MAP	0x40
  
-
 #include "Light.hlsl"
 
 
@@ -145,8 +144,7 @@ VS_STANDARD_OUTPUT VSSkinnedAnimationStandard(VS_SKINNED_STANDARD_INPUT input)
 
 
 float4 PSStandard(VS_STANDARD_OUTPUT input) : SV_TARGET
-{ 
-	return float4(1.f, 1.f, 1.f, 1.f);
+{  
 // 임시로 사용할 컬러 색깔
 float TESTColor = float4(1.f, 1.f, 1.f, 1.f);
 //float4 cAlbedoColor = float4(0.0f, 0.0f, 0.0f, 1.0f);
@@ -171,8 +169,9 @@ float3 normalW;
 //else
 //{
 	normalW = normalize(input.normalW);
-	//}
+	//} 
 	float4 cIllumination = Lighting(input.positionW, normalW);
+	return float4(1.f, 1.f, 1.f, 1.f);
 	return(lerp(TESTColor, cIllumination, 0.5f));
 }
 
