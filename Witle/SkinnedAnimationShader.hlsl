@@ -66,13 +66,12 @@ cbuffer cbBoneTransforms : register(b8)
 struct VS_SKINNED_STANDARD_INPUT
 {
 	float3 position : POSITION;
-	int4 indices : BONEINDEX;
-	float4 weights : BONEWEIGHT;
-
 	float2 uv : TEXCOORD;
 	float3 normal : NORMAL;
 	float3 tangent : TANGENT;
 	float3 bitangent : BITANGENT;
+	int4  indices : BONEINDEX;
+	float4 weights : BONEWEIGHT;
 };
  
 struct VS_STANDARD_OUTPUT
@@ -98,7 +97,7 @@ VS_STANDARD_OUTPUT VSSkinnedAnimationStandard(VS_SKINNED_STANDARD_INPUT input)
 	}
 
 	output.position = mul(mul(float4(positionW, 1.0f), gmtxView), gmtxProjection);
-
+	output.positionW = positionW;
 	output.normalW = mul(input.normal, (float3x3)gmtxWorld);
 	output.tangentW = mul(input.tangent, (float3x3)gmtxWorld);
 	output.bitangentW = mul(input.bitangent, (float3x3)gmtxWorld);
@@ -146,32 +145,14 @@ VS_STANDARD_OUTPUT VSSkinnedAnimationStandard(VS_SKINNED_STANDARD_INPUT input)
 float4 PSStandard(VS_STANDARD_OUTPUT input) : SV_TARGET
 {  
 // 임시로 사용할 컬러 색깔
-float TESTColor = float4(1.f, 1.f, 1.f, 1.f);
-//float4 cAlbedoColor = float4(0.0f, 0.0f, 0.0f, 1.0f);
-//if (gnTexturesMask & MATERIAL_ALBEDO_MAP) cAlbedoColor = gtxtAlbedoTexture.Sample(gssWrap, input.uv);
-//float4 cSpecularColor = float4(0.0f, 0.0f, 0.0f, 1.0f);
-//if (gnTexturesMask & MATERIAL_SPECULAR_MAP) cSpecularColor = gtxtSpecularTexture.Sample(gssWrap, input.uv);
-//float4 cNormalColor = float4(0.0f, 0.0f, 0.0f, 1.0f);
-//if (gnTexturesMask & MATERIAL_NORMAL_MAP) cNormalColor = gtxtNormalTexture.Sample(gssWrap, input.uv);
-//float4 cMetallicColor = float4(0.0f, 0.0f, 0.0f, 1.0f);
-//if (gnTexturesMask & MATERIAL_METALLIC_MAP) cMetallicColor = gtxtMetallicTexture.Sample(gssWrap, input.uv);
-//float4 cEmissionColor = float4(0.0f, 0.0f, 0.0f, 1.0f);
-//if (gnTexturesMask & MATERIAL_EMISSION_MAP) cEmissionColor = gtxtEmissionTexture.Sample(gssWrap, input.uv);
+	float4 TESTColor = float4(1.f, 1.f, 1.f, 1.f);
 
-float3 normalW;
-//float4 cColor = cAlbedoColor + cSpecularColor + cMetallicColor + cEmissionColor;
-//if (gnTexturesMask & MATERIAL_NORMAL_MAP)
-//{
-//	float3x3 TBN = float3x3(normalize(input.tangentW), normalize(input.bitangentW), normalize(input.normalW));
-//	float3 vNormal = normalize(cNormalColor.rgb * 2.0f - 1.0f); //[0, 1] → [-1, 1]
-//	normalW = normalize(mul(vNormal, TBN));
-//}
-//else
-//{
+	float3 normalW = float3(0.f, 0.f, 0.f);
+
 	normalW = normalize(input.normalW);
-	//} 
+
 	float4 cIllumination = Lighting(input.positionW, normalW);
-	return float4(1.f, 1.f, 1.f, 1.f);
+	 
 	return(lerp(TESTColor, cIllumination, 0.5f));
 }
 
