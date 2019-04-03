@@ -49,6 +49,7 @@ public:
 	void Render(ID3D12GraphicsCommandList *pd3dCommandList);
   
 	void Move(ULONG nDirection, float fDistance, bool bVelocity = false);
+	void SetTrackAnimationSet(ULONG nDirection);
 	void Move(const XMFLOAT3& xmf3Shift);
 	void MoveVelocity(const XMFLOAT3& xmf3Shift);
 	void Move(float fxOffset = 0.0f, float fyOffset = 0.0f, float fzOffset = 0.0f);

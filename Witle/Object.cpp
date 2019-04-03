@@ -10,6 +10,8 @@
 #include "Object.h"
 #include "Scene.h"
 
+#define SECOND_PER_FRAME float(1.f/30.f) // 1 프레임당 몇초인가?
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 CTexture::CTexture(int nTextures, UINT nTextureType, int nSamplers)
@@ -955,7 +957,9 @@ void LoadObject::LoadAnimationFromFile(FILE *pInFile, CLoadedModelInfo *pLoadedM
 		if (!strcmp(pstrToken, "<AnimationSets>:"))
 		{
 			nAnimationSets = ::ReadIntegerFromFile(pInFile);
-			pLoadedModel->m_pAnimationSets = new CAnimationSets(nAnimationSets);
+			//일단 idle, 그외로 구성해보자..
+			// 현재 idle 애니메이션은 총 75프레임
+			pLoadedModel->m_pAnimationSets = new CAnimationSets(5);
 		}
 		else if (!strcmp(pstrToken, "<AnimationSet>:"))
 		{
@@ -966,7 +970,11 @@ void LoadObject::LoadAnimationFromFile(FILE *pInFile, CLoadedModelInfo *pLoadedM
 			float fStartTime = ::ReadFloatFromFile(pInFile);
 			float fEndTime = ::ReadFloatFromFile(pInFile);
 
-			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[nAnimationSet] = new CAnimationSet(fStartTime, fEndTime, pstrToken);
+			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[0] = new CAnimationSet(fStartTime,						   fStartTime + SECOND_PER_FRAME * 75.f, pstrToken);
+			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[1] = new CAnimationSet(fStartTime + SECOND_PER_FRAME * 76.f, fStartTime + SECOND_PER_FRAME * 95.f, pstrToken);
+			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[2] = new CAnimationSet(fStartTime + SECOND_PER_FRAME * 96.f, fStartTime + SECOND_PER_FRAME * 115.f, pstrToken);
+			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[3] = new CAnimationSet(fStartTime + SECOND_PER_FRAME * 116.f, fStartTime + SECOND_PER_FRAME * 135.f, pstrToken);
+			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[4] = new CAnimationSet(fStartTime + SECOND_PER_FRAME * 136.f, fEndTime,						 pstrToken);
 			CAnimationSet *pAnimationSet = pLoadedModel->m_pAnimationSets->m_ppAnimationSets[nAnimationSet];
 
 			::ReadStringFromFile(pInFile, pstrToken);
@@ -974,6 +982,12 @@ void LoadObject::LoadAnimationFromFile(FILE *pInFile, CLoadedModelInfo *pLoadedM
 			{
 				pAnimationSet->m_nAnimationLayers = ::ReadIntegerFromFile(pInFile);
 				pAnimationSet->m_pAnimationLayers = new CAnimationLayer[pAnimationSet->m_nAnimationLayers];
+
+				for (int i = 1; i < 5; ++i)
+				{
+					pLoadedModel->m_pAnimationSets->m_ppAnimationSets[i]->m_nAnimationLayers = 1;
+					pLoadedModel->m_pAnimationSets->m_ppAnimationSets[i]->m_pAnimationLayers = pAnimationSet->m_pAnimationLayers;
+				}
 
 				for (int i = 0; i < pAnimationSet->m_nAnimationLayers; i++)
 				{
@@ -1027,6 +1041,7 @@ void LoadObject::LoadAnimationFromFile(FILE *pInFile, CLoadedModelInfo *pLoadedM
 				::ReadStringFromFile(pInFile, pstrToken); //</AnimationLayers>
 			}
 			::ReadStringFromFile(pInFile, pstrToken); //</AnimationSet>
+
 		}
 		else if (!strcmp(pstrToken, "</AnimationSets>"))
 		{

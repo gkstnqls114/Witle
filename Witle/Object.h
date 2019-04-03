@@ -246,6 +246,7 @@ public:
 	void SetAnimationCallbackHandler(CAnimationCallbackHandler *pCallbackHandler);
 
 	void *GetCallbackData();
+
 };
 
 class CAnimationSets

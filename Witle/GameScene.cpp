@@ -298,7 +298,7 @@ bool GameScene::ProcessInput(HWND hWnd, float ElapsedTime)
 
 		//플레이어의 이동량 벡터를 xmf3Shift 벡터만큼 더한다. 
 		// m_pPlayer->MoveVelocity(xmf3Shift);
-		m_pPlayer->MoveVelocity(xmf3Shift);
+		m_pPlayer->MoveVelocity(xmf3Shift); 
 	}
 	else
 	{
@@ -312,6 +312,7 @@ bool GameScene::ProcessInput(HWND hWnd, float ElapsedTime)
 			m_pPlayer->MoveVelocity(Vector3::ScalarProduct(Veclocity, -fDeceleration, true));
 		} 
 	}
+	m_pPlayer->SetTrackAnimationSet(dwDirection);
 	
 	if ((GameInput::GetcDeltaX() != 0.0f) || (GameInput::GetcDeltaY() != 0.0f))
 	{
