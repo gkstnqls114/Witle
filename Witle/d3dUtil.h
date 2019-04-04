@@ -9,10 +9,6 @@ namespace FileRead
 		nReads = (UINT)::fread(&nStrLength, sizeof(int), 1, pInFile);
 		nReads = (UINT)::fread(pstrToken, sizeof(char), nStrLength, pInFile);
 		pstrToken[nStrLength] = '\0';
-#ifdef _DEBUG
-		printf("String ... %d %s\n", nStrLength, pstrToken);
-#endif // DEBUG
-
 		return(nStrLength);
 	}
 
@@ -20,9 +16,6 @@ namespace FileRead
 	{
 		float fValue = 0;
 		UINT nReads = (UINT)::fread(&fValue, sizeof(float), 1, pInFile);
-#ifdef _DEBUG
-		printf("Float ... %f\n", fValue);
-#endif // DEBUG
 		return(fValue);
 	}
 
@@ -30,9 +23,6 @@ namespace FileRead
 	{
 		int nValue = 0;
 		UINT nReads = (UINT)::fread(&nValue, sizeof(int), 1, pInFile);
-#ifdef _DEBUG
-		printf("Int ... %d\n", nValue);
-#endif // DEBUG
 		return(nValue);
 	}
 }
@@ -42,7 +32,7 @@ class d3dUtil
 public:
 	d3dUtil();
 	~d3dUtil();
-	
+
 	static D3D12_DESCRIPTOR_RANGE CreateDescriptorRangeSRV(UINT NumDescriptors, UINT BaseShaderRegister, UINT RegisterSpace = 0);
 	static D3D12_ROOT_PARAMETER CreateRootParameterConstants(UINT Num32BitValues, UINT ShaderRegister, UINT RegisterSpace = 0, D3D12_SHADER_VISIBILITY ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL);
 	static D3D12_ROOT_PARAMETER CreateRootParameterCBV(UINT ShaderRegister, UINT RegisterSpace = 0, D3D12_SHADER_VISIBILITY ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL);
@@ -75,7 +65,7 @@ public:
 		d3dResourceBarrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
 		pd3dCommandList->ResourceBarrier(1, &d3dResourceBarrier);
 	}
-	
+
 	static UINT CalcConstantBufferByteSize(UINT byteSize);
 
 	static UINT gnCbvSrvDescriptorIncrementSize;
