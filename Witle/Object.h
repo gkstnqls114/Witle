@@ -135,16 +135,12 @@ public:
 public:
 	static void PrepareShaders(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature);
 	 
-	void SetWireFrameShader() { 
-		std::cout << "SetWireFrameShader" << std::endl;
-		m_pShader = m_pWireFrameShader;
-
-		//CMaterial::SetShader(m_pWireFrameShader);
+	void SetWireFrameShader() {  
+		 
+		CMaterial::SetShader(m_pWireFrameShader);
 	}
 	void SetSkinnedAnimationWireFrameShader() { 
-		std::cout << "SetSkinnedAnimationWireFrameShader" << std::endl;
-		m_pShader = m_pSkinnedAnimationWireFrameShader;
-		//CMaterial::SetShader(m_pSkinnedAnimationWireFrameShader); 
+		SetShader(m_pSkinnedAnimationWireFrameShader); 
 	}
 };
 

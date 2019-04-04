@@ -5,6 +5,7 @@
 #include "MeshRenderer.h"
 #include "ShaderManager.h"
 #include "GameScreen.h"
+#include "MapInfoLoader.h"
 
 #include "StaticObject.h"
 #include "MyBOBox.h"
@@ -157,22 +158,48 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	//테스트 쿼드트리 터레인 생성
 	m_TESTQuadGameobject = new GameObject("TESTQuad");
 	m_TESTQuadTree = new QuadTreeTerrainMesh(m_TESTQuadGameobject, pd3dDevice, pd3dCommandList, 257, 257, xmf3Scale, xmf4Color, m_Terrain->GetHeightMapImage());
-
+	
+	// 맵위에 올려놓을 오브젝트 위치 설정
+	MapInfoLoader::LoadTerrainObjectFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Information/Terrain.bin");
+ 
 	// 테스트할 모델 오브젝트
 	m_pPlayer = new Player("Player", pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 	m_GameObjectDiffuse = new Texture(1, RESOURCE_TEXTURE2D);
 	m_GameObjectDiffuse->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/ReflexTree_Diffuse.dds", 0);
 	 
 	// Trees
-	//m_Trees = new MyReflexTree* [m_TreeCount];
-	//for (int x = 0; x < m_TreeCount; ++x)
-	//{
-	//	m_Trees[x] = new MyReflexTree(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, XMFLOAT3(rand() % (257 * int(xmf3Scale.x)), 0, rand() % (257 * int(xmf3Scale.z))));
-	//	// m_Trees[x] = new ReflexTree(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, XMFLOAT3(200, 0, 200));
-	//}
-	//m_TreeDiffuse = new Texture(1, RESOURCE_TEXTURE2D); 
-	//m_TreeDiffuse->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/ReflexTree_Diffuse.dds", 0);
+	m_TreeCount = MyReflexTree::m_CountFromMap;
+	m_Trees = new MyReflexTree* [m_TreeCount];
+	for (int x = 0; x < m_TreeCount; ++x)
+	{
+		m_Trees[x] = new MyReflexTree(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+ 	}
+	m_TreeDiffuse = new Texture(1, RESOURCE_TEXTURE2D); 
+	m_TreeDiffuse->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/ReflexTree_Diffuse.dds", 0);
 	
+
+	// SunFlower
+	m_SunFlowerCount = SunFlower::m_CountFromMap;
+	m_SunFlowers = new SunFlower*[m_SunFlowerCount];
+	for (int x = 0; x < m_SunFlowerCount; ++x)
+	{
+		m_SunFlowers[x] = new SunFlower(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	}
+
+	// Trees
+	m_PillaCount = Pillar::m_CountFromMap;
+	m_Pillas = new Pillar*[m_PillaCount];
+	for (int x = 0; x < m_PillaCount; ++x)
+	{
+		m_Pillas[x] = new Pillar(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	}
+
+	m_RockCount = Rock::m_CountFromMap;
+	m_Rocks = new Rock*[m_RockCount];
+	for (int x = 0; x < m_RockCount; ++x)
+	{
+		m_Rocks[x] = new Rock(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	}
 
 	// 카메라
 	m_Camera = new CameraObject("Camera");
@@ -463,10 +490,25 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	pd3dCommandList->SetDescriptorHeaps(1, &m_pd3dCbvSrvDescriptorHeap);
 	m_GameObjectDiffuse->UpdateShaderVariables(pd3dCommandList);
 	 
-	//for (int x = 0; x < m_TreeCount; ++x)
-	//{
-	//	m_Trees[x]->Render(pd3dCommandList);
-	//} 
+	for (int x = 0; x < m_SunFlowerCount; ++x)
+	{
+		m_SunFlowers[x]->Render(pd3dCommandList);
+	} 
+
+	for (int x = 0; x < m_PillaCount; ++x)
+	{
+		m_Pillas[x]->Render(pd3dCommandList);
+	} 
+
+	for (int x = 0; x < m_RockCount; ++x)
+	{
+		m_Rocks[x]->Render(pd3dCommandList);
+	}
+
+	for (int x = 0; x < m_TreeCount; ++x)
+	{
+		m_Trees[x]->Render(pd3dCommandList);
+	}
 	m_pPlayer->Render(pd3dCommandList);
 	////////////////////////////// Model Render
 

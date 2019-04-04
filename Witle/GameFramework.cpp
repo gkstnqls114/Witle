@@ -88,6 +88,8 @@ bool CGameFramework::OnCreate(HINSTANCE hInstance, HWND hMainWnd)
 
 void CGameFramework::OnDestroy()
 {
+	GameScreen::ChangeWindowScreen(800, 600);
+
 	ReleaseObjects();
 
 	::CloseHandle(m_hFenceEvent);
@@ -570,8 +572,10 @@ void CGameFramework::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM
 	}
 }
 
+static BOOL is_fullscreen = FALSE;
 void CGameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam)
 {
+
 	switch (nMessageID)
 	{
 	case WM_KEYUP:
@@ -582,15 +586,17 @@ void CGameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPA
 			break;
 		
 		case VK_F1:
-		{
-			if (GameScreen::GetHeight() == 540)
+		{ 
+			if (!is_fullscreen)
 			{
-				GameScreen::ChangeWindowScreen(800, 600);
+				is_fullscreen = TRUE;
+				GameScreen::ChangeFullScreen(800, 600);
 			}
 			else
 			{
-				GameScreen::ChangeWindowScreen(960, 540);
-			}
+				is_fullscreen = FALSE;
+				GameScreen::ChangeWindowScreen(800, 600);
+			} 
 			OnResizeBackBuffers();
 			break;
 		}
@@ -612,7 +618,7 @@ void CGameFramework::RenderOnSwapchain()
 	m_CommandList->ClearDepthStencilView(m_ShadowMapCPUHandle, D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, NULL);
 
 	// 하단에 테스트용으로 보일 리소스들을 렌더한다.
-	RenderShadowMap();
+	// RenderShadowMap();
 	
 	// 기본 게임 장면을 렌더한다.
 	RenderSwapChain();
@@ -744,23 +750,7 @@ void CGameFramework::OnResizeBackBuffers()
 	if (m_DepthStencilBuffer) {
 		m_DepthStencilBuffer->Release();
 	}
-
-	if (m_pShadowMap) {
-		m_pShadowMap->Release();
-	}
-
-	for (int i = 0; i < m_GBuffersCount; ++i)
-	{
-		if (m_GBuffers[i])
-		{
-			m_GBuffers[i]->Release();
-		}
-	}
-	if (m_TESTHeap_1)
-	{
-		delete m_TESTHeap_1;
-		m_TESTHeap_1 = nullptr;
-	}
+	 
 
 #ifdef _WITH_ONLY_RESIZE_BACKBUFFERS
 	DXGI_SWAP_CHAIN_DESC SwapChainDesc;
@@ -776,8 +766,7 @@ void CGameFramework::OnResizeBackBuffers()
 #endif
 
 	CreateRenderTargetView();
-	CreateDepthStencilView();
-	CreateGBufferView();
+	CreateDepthStencilView(); 
 	
 	m_CommandList->Close();
 	

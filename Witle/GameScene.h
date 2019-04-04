@@ -1,10 +1,15 @@
 #pragma once
 #include "Scene.h"
 
+class MyReflexTree;
+class SunFlower;
+class Pillar;
+class Rock;
+
+
 class Player;
 class CPlayer;
 class Shader;
-class MyReflexTree;
 class ReflexTree;
 class CLoadedModelInfo;
 
@@ -85,12 +90,20 @@ protected:
 	// fbx test
 	Texture*				m_GameObjectDiffuse{ nullptr };
 	Player*                 m_pPlayer{ nullptr };
+	 
+	UINT					m_SunFlowerCount{ 100 };
+	SunFlower**			m_SunFlowers{ nullptr };
 
+	UINT					m_PillaCount{ 100 };
+	Pillar**			m_Pillas{ nullptr };
 
-	CLoadedModelInfo *m_pTreeModel{ nullptr };
+	UINT					m_RockCount{ 100 };
+	Rock**			m_Rocks{ nullptr };
+
 	UINT					m_TreeCount{ 100 };
+	MyReflexTree**			m_Trees{ nullptr };
+
 	Texture*				m_TreeDiffuse{ nullptr };
-	MyReflexTree**			m_Trees{ nullptr }; 
 	// fbx test
 
 	Terrain*                m_Terrain{ nullptr };

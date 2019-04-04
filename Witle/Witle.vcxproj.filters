@@ -429,6 +429,9 @@
     <ClInclude Include="SkinnedShader.h">
       <Filter>05.Shader\SkinnedStandardShader</Filter>
     </ClInclude>
+    <ClInclude Include="MapInfoLoader.h">
+      <Filter>99.etc</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -643,6 +646,9 @@
     </ClCompile>
     <ClCompile Include="SkinnedShader.cpp">
       <Filter>05.Shader\SkinnedStandardShader</Filter>
+    </ClCompile>
+    <ClCompile Include="MapInfoLoader.cpp">
+      <Filter>99.etc</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

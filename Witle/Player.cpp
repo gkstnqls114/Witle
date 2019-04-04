@@ -126,8 +126,7 @@ void Player::Update(float fElapsedTime)
 	if (fLength > m_fMaxVelocityY) m_xmf3Velocity.y *= (fMaxVelocityY / fLength);
 
 	XMFLOAT3 xmf3Velocity = Vector3::ScalarProduct(m_xmf3Velocity, fElapsedTime, false);
-
-	std::cout << Vector3::Length(xmf3Velocity) << std::endl;
+	
 	Move(xmf3Velocity); // 이동량만큼 움직인다.
 	 
 	// 플레이어 콜백

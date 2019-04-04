@@ -12,6 +12,7 @@
 
 #define SECOND_PER_FRAME float(1.f/30.f) // 1 프레임당 몇초인가?
 
+using namespace FileRead;
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 CTexture::CTexture(int nTextures, UINT nTextureType, int nSamplers)
@@ -582,11 +583,7 @@ void LoadObject::SetShader(int nMaterial, Shader *pShader)
 	if (m_ppMaterials[nMaterial])
 	{
 		m_ppMaterials[nMaterial]->SetShader(pShader);
-	}
-	else
-	{
-		std::cout << "뭐 !!!!!!!!!!!!!! 없어1" << std::endl;
-	}
+	} 
 }
 
 void LoadObject::SetWireFrameShader()
@@ -839,30 +836,6 @@ void LoadObject::Rotate(XMFLOAT4 *pxmf4Quaternion)
 
 //#define _WITH_DEBUG_FRAME_HIERARCHY
 
-int ReadIntegerFromFile(FILE *pInFile)
-{
-	int nValue = 0;
-	UINT nReads = (UINT)::fread(&nValue, sizeof(int), 1, pInFile);
-	return(nValue);
-}
-
-float ReadFloatFromFile(FILE *pInFile)
-{
-	float fValue = 0;
-	UINT nReads = (UINT)::fread(&fValue, sizeof(float), 1, pInFile);
-	return(fValue);
-}
-
-int ReadStringFromFile(FILE *pInFile, char *pstrToken)
-{
-	int nStrLength = 0;
-	UINT nReads = 0;
-	nReads = (UINT)::fread(&nStrLength, sizeof(int), 1, pInFile);
-	nReads = (UINT)::fread(pstrToken, sizeof(char), nStrLength, pInFile);
-	pstrToken[nStrLength] = '\0';
-
-	return(nStrLength);
-}
 
 LoadObject *LoadObject::LoadFrameHierarchyFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, LoadObject *pParent, FILE *pInFile, Shader *pShader, int *pnSkinnedMeshes)
 {
