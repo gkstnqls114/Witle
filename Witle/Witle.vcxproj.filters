@@ -196,6 +196,9 @@
     <Filter Include="13.Storage\ModelStorage">
       <UniqueIdentifier>{6f721a66-4caa-4e6f-b8e2-a51b09ac77f4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="99.etc\NewFilter1">
+      <UniqueIdentifier>{336fca6f-fc21-4c05-a804-c9e60309ed49}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">

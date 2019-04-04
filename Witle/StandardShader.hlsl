@@ -103,3 +103,35 @@ float4 PSStandard(VS_STANDARD_OUTPUT input) : SV_TARGET
 	return(lerp(TESTColor, cIllumination, 0.5f));
 }
  
+
+// Instancing ////////////////////////////////////////////////////////////
+struct VS_INSTANCING_OUTPUT
+{
+	float3 position : POSITION;
+	float2 uv : TEXCOORD;
+	float3 normal : NORMAL;
+	float3 tangent : TANGENT;
+	float3 bitangent : BITANGENT;
+};
+
+//인스턴싱 데이터를 위한 구조체
+struct INSTANCING_TRANSFORM
+{
+	matrix m_mtxWorld; 
+};
+
+StructuredBuffer<INSTANCING_TRANSFORM> gmtxInstancingWorld : register(t14);
+
+VS_STANDARD_OUTPUT VSStandardInstancing(VS_INSTANCING_OUTPUT input, uint nInstanceID : SV_InstanceID)
+{
+	VS_STANDARD_OUTPUT output;
+
+	output.positionW = mul(float4(input.position, 1.0f), gmtxInstancingWorld[nInstanceID].m_mtxWorld).xyz;
+	output.normalW = mul(input.normal, (float3x3)gmtxWorld);
+	output.tangentW = mul(input.tangent, (float3x3)gmtxWorld);
+	output.bitangentW = mul(input.bitangent, (float3x3)gmtxWorld);
+	output.position = mul(mul(float4(output.positionW, 1.0f), gmtxView), gmtxProjection);
+	output.uv = input.uv;
+
+	return(output);
+}
