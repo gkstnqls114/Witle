@@ -70,6 +70,7 @@ void MapInfoLoader::LoadNameAndPositionFromFile(ID3D12Device * pd3dDevice, ID3D1
 		{
 			XMFLOAT4X4 test;
 			nReads = (UINT)::fread(&test, sizeof(XMFLOAT4X4), 1, pInFile);
+			 
 			if (!strcmp(name, "Tree"))
 			{
 				MyReflexTree::m_PostionFromMap[MyReflexTree::m_CountFromMap] = (test);

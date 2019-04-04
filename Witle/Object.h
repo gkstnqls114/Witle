@@ -392,9 +392,11 @@ public:
 
 	virtual void OnPrepareRender() { }
 	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList);
+	virtual void RenderInstancing(ID3D12GraphicsCommandList *pd3dCommandList, int InstanceCount);
 
 	virtual void CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
 	virtual void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList);
+	virtual void UpdateShaderVariablesForInstancing(ID3D12GraphicsCommandList *pd3dCommandList, XMFLOAT4X4* pStartWorld, int nWorldCount);
 	virtual void ReleaseShaderVariables();
 
 	virtual void UpdateShaderVariable(ID3D12GraphicsCommandList *pd3dCommandList, XMFLOAT4X4 *pxmf4x4World);

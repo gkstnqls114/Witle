@@ -199,6 +199,9 @@
     <Filter Include="99.etc\NewFilter1">
       <UniqueIdentifier>{336fca6f-fc21-4c05-a804-c9e60309ed49}</UniqueIdentifier>
     </Filter>
+    <Filter Include="05.Shader\InstancingStandardShader">
+      <UniqueIdentifier>{3f982932-7ab3-47f3-9f5c-fe5b5329e354}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -435,6 +438,9 @@
     <ClInclude Include="MapInfoLoader.h">
       <Filter>99.etc</Filter>
     </ClInclude>
+    <ClInclude Include="InstancingStandardShader.h">
+      <Filter>05.Shader\InstancingStandardShader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -652,6 +658,9 @@
     </ClCompile>
     <ClCompile Include="MapInfoLoader.cpp">
       <Filter>99.etc</Filter>
+    </ClCompile>
+    <ClCompile Include="InstancingStandardShader.cpp">
+      <Filter>05.Shader\InstancingStandardShader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

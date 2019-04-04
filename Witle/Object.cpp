@@ -708,11 +708,28 @@ void LoadObject::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	if (m_pChild) m_pChild->Render(pd3dCommandList);
 }
 
+void LoadObject::RenderInstancing(ID3D12GraphicsCommandList * pd3dCommandList, int InstanceCount)
+{
+	if (m_pSkinnedAnimationController) m_pSkinnedAnimationController->UpdateShaderVariables(pd3dCommandList);
+
+	if (m_pMesh)
+	{ 
+		m_pMesh->RenderInstancing(pd3dCommandList, 0, InstanceCount); 
+	}
+
+	if (m_pSibling) m_pSibling->RenderInstancing(pd3dCommandList, InstanceCount);
+	if (m_pChild) m_pChild->RenderInstancing(pd3dCommandList, InstanceCount);
+}
+
 void LoadObject::CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList)
 {
 }
 
 void LoadObject::UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList)
+{
+}
+
+void LoadObject::UpdateShaderVariablesForInstancing(ID3D12GraphicsCommandList * pd3dCommandList, XMFLOAT4X4 * pStartWorld, int nWorldCount)
 {
 }
 
@@ -725,6 +742,9 @@ void LoadObject::UpdateShaderVariable(ID3D12GraphicsCommandList *pd3dCommandList
 
 void LoadObject::UpdateShaderVariable(ID3D12GraphicsCommandList *pd3dCommandList, CMaterial *pMaterial)
 {
+	/*XMFLOAT4X4 xmf4x4World;
+	XMStoreFloat4x4(&xmf4x4World, XMMatrixTranspose(XMLoadFloat4x4(pxmf4x4World)));
+	pd3dCommandList->SetGraphicsRoot32BitConstants(0, 16, &xmf4x4World, 0);*/
 }
 
 void LoadObject::ReleaseShaderVariables()

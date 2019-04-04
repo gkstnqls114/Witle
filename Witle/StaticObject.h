@@ -13,6 +13,7 @@ protected:
 public:
 	// GameObject::Update의 모든 구현은 파생된 게임 오브젝트마다 다르다.
 	virtual void Update(float fElapsedTime) override {};
+	virtual void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList, int nInstance) {};
 	 
 public:
 	StaticObject(const std::string &EntityID);
@@ -22,8 +23,18 @@ public:
 class LoadObject;
 class MyBOBox;
 
+struct VS_SRV_INSTANCEINFO
+{
+	XMFLOAT4X4 m_xmf4x4Transform;
+};
+
 class MyReflexTree : public StaticObject
 { 
+	// 인스턴스 데이터
+	static ID3D12Resource* m_pd3dcbGameObjects;
+	static VS_SRV_INSTANCEINFO* m_pcbMappedGameObjects;
+	// 인스턴스 데이터
+
 	MyBOBox* m_MyBOBox{ nullptr };
 	LoadObject* m_LoadObject{ nullptr };
 
@@ -31,18 +42,20 @@ public:
 	MyReflexTree(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, XMFLOAT3 position);
 	MyReflexTree(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature);
 	virtual ~MyReflexTree() {};
-	 
+
+	static void CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
+	virtual void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList, int nInstance) override;
 	void Render(ID3D12GraphicsCommandList *pd3dCommandList);
 	MyBOBox* GetBOBox() { return m_MyBOBox;  }
 	 
 	static std::vector<XMFLOAT4X4> m_PostionFromMap;
 	static int m_CountFromMap;
 	static int m_Count;
-
+	
 };
 
 class SunFlower : public StaticObject
-{
+{ 
 	MyBOBox* m_MyBOBox{ nullptr };
 	LoadObject* m_LoadObject{ nullptr };
 
@@ -51,7 +64,7 @@ public:
 	SunFlower(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature);
 	virtual ~SunFlower() {};
 
-	void Render(ID3D12GraphicsCommandList *pd3dCommandList);
+ 	void Render(ID3D12GraphicsCommandList *pd3dCommandList);
 	MyBOBox* GetBOBox() { return m_MyBOBox; }
 
 	static std::vector<XMFLOAT4X4> m_PostionFromMap;
@@ -61,7 +74,7 @@ public:
 };
 
 class Rock : public StaticObject
-{
+{  
 	MyBOBox* m_MyBOBox{ nullptr };
 	LoadObject* m_LoadObject{ nullptr };
 
@@ -80,7 +93,7 @@ public:
 };
 
 class Pillar : public StaticObject
-{
+{ 
 	MyBOBox* m_MyBOBox{ nullptr };
 	LoadObject* m_LoadObject{ nullptr };
 
@@ -101,6 +114,11 @@ public:
 
 class Altar : public StaticObject
 {
+	// 인스턴스 데이터
+	static ID3D12Resource* m_pd3dcbGameObjects;
+	static VS_SRV_INSTANCEINFO* m_pcbMappedGameObjects;
+	// 인스턴스 데이터
+
 	MyBOBox* m_MyBOBox{ nullptr };
 	LoadObject* m_LoadObject{ nullptr };
 

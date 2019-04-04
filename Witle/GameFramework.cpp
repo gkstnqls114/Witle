@@ -18,6 +18,7 @@
 #include "SkinnedShader.h"
 #include "HorizonBlurShader.h"
 #include "VerticalBlurShader.h"
+#include "InstancingStandardShader.h"
 #include "Texture.h"
 #include "MyDescriptorHeap.h"
 
@@ -642,9 +643,15 @@ void CGameFramework::BuildShaders()
 	pStandardShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
 	ShaderManager::GetInstance()->InsertShader("StandardShader", pStandardShader);
 
+	Shader* pInstancingStandardShader = new InstancingStandardShader();
+	pInstancingStandardShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
+	ShaderManager::GetInstance()->InsertShader("InstancingStandardShader", pInstancingStandardShader);
+
 	Shader* pSkinnedShader = new SkinnedShader();
 	pSkinnedShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
 	ShaderManager::GetInstance()->InsertShader("SkinnedShader", pSkinnedShader);
+	 
+
 #ifdef _SHOW_BOUNDINGBOX
 	Shader* pLineShader = new LineShader();
 	pLineShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
