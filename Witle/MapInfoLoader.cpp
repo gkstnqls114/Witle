@@ -51,6 +51,7 @@ void MapInfoLoader::LoadTerrainObjectFromFile(ID3D12Device * pd3dDevice, ID3D12G
 
 	::fclose(pInFile); 
 }
+ 
 
 void MapInfoLoader::LoadNameAndPositionFromFile(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, FILE *pInFile)
 {
@@ -126,3 +127,4 @@ void MapInfoLoader::LoadNameAndPositionFromFile(ID3D12Device * pd3dDevice, ID3D1
 		}
 	} 
 }
+ 

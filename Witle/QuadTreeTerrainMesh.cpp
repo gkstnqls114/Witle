@@ -2,13 +2,15 @@
 #include "d3dUtil.h"
 #include "TerrainMesh.h" 
 #include "MeshRenderer.h"
+#include "StaticObjectStorage.h"
 #include "HeightMapImage.h"
 #include "MyFrustum.h"
 #include "QuadTreeTerrainMesh.h"
 
-//처음 아이디는 0으로 시작한다.
-// 즉, 그러므로 루트 노드의 아이디는 0이다.
-int QuadTreeTerrainMesh::gQuadTreeCount{ 0 }; 
+// 처음 아이디는 0으로 시작한다.
+// 리프 노드만 아이디를 설정한다.
+// 따라서 아이디는 0부터 시작한다.
+int QuadTreeTerrainMesh::gTreePieceCount{ 0 }; 
 
 UINT QuadTreeTerrainMesh::CalculateTriangles(UINT widthPixel, UINT lengthPixel)
 {
@@ -16,6 +18,7 @@ UINT QuadTreeTerrainMesh::CalculateTriangles(UINT widthPixel, UINT lengthPixel)
 	
 	return (widthPixel - 1) * (lengthPixel -1) * 2;
 }
+  
 
 void QuadTreeTerrainMesh::RecursiveReleaseUploadBuffers(QUAD_TREE_NODE * node)
 {
@@ -58,6 +61,34 @@ void QuadTreeTerrainMesh::RecursiveReleaseObjects(QUAD_TREE_NODE * node)
 	}
 }
 
+void QuadTreeTerrainMesh::RecursiveCalculateIDs(QUAD_TREE_NODE * node, const XMFLOAT3 position, int* pIDs) const
+{
+	if (node->terrainMesh)
+	{
+		// 포지션이 해당 메쉬에 맞는지 확인한다. 
+		// 만약 속한다면...
+		if (node->boundingBox.Contains(Vector3::XMFloat3ToVector(position)) != ContainmentType::DISJOINT)
+		{  
+			assert(!(pIDs[QUAD - 1] != -1)); // 만약 마지막이 채워져 있다면 오류이다.
+			for (int x = 0; x < QUAD; ++x)
+			{
+				if (pIDs[x] == -1)
+				{
+					pIDs[x] = node->id; 
+					break;
+				}
+			} 
+		}
+	}
+	else
+	{
+		RecursiveCalculateIDs(node->children[0], position, pIDs);
+		RecursiveCalculateIDs(node->children[1], position, pIDs);
+		RecursiveCalculateIDs(node->children[2], position, pIDs);
+		RecursiveCalculateIDs(node->children[3], position, pIDs);
+	}
+}
+
 void QuadTreeTerrainMesh::RecursiveCreateTerrain(QUAD_TREE_NODE * node, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList,
 	int xStart, int zStart, int nBlockWidth, int nBlockLength,
 	 HeightMapImage * pContext)
@@ -68,7 +99,8 @@ void QuadTreeTerrainMesh::RecursiveCreateTerrain(QUAD_TREE_NODE * node, ID3D12De
 
 	if (nBlockWidth == m_widthMin || nBlockLength == m_lengthMin) // 마지막 리프 노드라면..
 	{ 
-		node->id = gQuadTreeCount++;
+		// 마지막 노드는 아이디를 설정한다.
+		node->id = gTreePieceCount++;
 
 		// 현재 테스트로 바운딩박스의 centerY = 128, externY = 256 으로 설정
 		node->boundingBox = BoundingBox(XMFLOAT3{ 
@@ -89,7 +121,7 @@ void QuadTreeTerrainMesh::RecursiveCreateTerrain(QUAD_TREE_NODE * node, ID3D12De
 
 		int index = 0;
 
-		node->id = gQuadTreeCount++;
+		// node->id = gTreePieceCount++;
 
 		for (int z = 0; z < 2; z++)
 		{
@@ -136,6 +168,9 @@ QuadTreeTerrainMesh::QuadTreeTerrainMesh(GameObject * pOwner, ID3D12Device * pd3
 	m_pRootNode = new QUAD_TREE_NODE;
 
 	RecursiveCreateTerrain(m_pRootNode, pd3dDevice, pd3dCommandList, 0, 0, m_widthTotal, m_lengthTotal, pContext);
+
+	// 재귀함수로 모든 터레인 조각 로드 완료후...
+	StaticObjectStorage::GetInstance(this)->CreateInfo(pd3dDevice, pd3dCommandList, this);
 }
 
 QuadTreeTerrainMesh::~QuadTreeTerrainMesh()
@@ -153,6 +188,19 @@ void QuadTreeTerrainMesh::ReleaseUploadBuffers()
 	RecursiveReleaseUploadBuffers(m_pRootNode); 
 }
 
+int const * QuadTreeTerrainMesh::GetIDs(const XMFLOAT3 & position) const
+{
+	int* pIDs = new int[QUAD];
+	for (int i = 0; i < QUAD; ++i)
+	{
+		pIDs[i] = -1; // -1로 리셋. -1이라면 존재하지 않는 것.
+	}
+
+	RecursiveCalculateIDs(m_pRootNode, position, pIDs);
+
+	return pIDs;
+}
+
 void QuadTreeTerrainMesh::Render(const QUAD_TREE_NODE* node, ID3D12GraphicsCommandList *pd3dCommandList)
 {
 	// 렌더링
@@ -160,6 +208,7 @@ void QuadTreeTerrainMesh::Render(const QUAD_TREE_NODE* node, ID3D12GraphicsComma
 
 	if (node->terrainMesh)
 	{
+		StaticObjectStorage::GetInstance(this)->Render(pd3dCommandList, node->id);
 		gMeshRenderer.Render(pd3dCommandList, node->terrainMesh);
 	}
 	else
