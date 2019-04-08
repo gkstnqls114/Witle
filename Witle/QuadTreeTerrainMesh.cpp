@@ -6,6 +6,10 @@
 #include "MyFrustum.h"
 #include "QuadTreeTerrainMesh.h"
 
+//처음 아이디는 0으로 시작한다.
+// 즉, 그러므로 루트 노드의 아이디는 0이다.
+int QuadTreeTerrainMesh::gQuadTreeCount{ 0 }; 
+
 UINT QuadTreeTerrainMesh::CalculateTriangles(UINT widthPixel, UINT lengthPixel)
 {
 	assert(!(widthPixel != lengthPixel));
@@ -56,20 +60,17 @@ void QuadTreeTerrainMesh::RecursiveReleaseObjects(QUAD_TREE_NODE * node)
 
 void QuadTreeTerrainMesh::RecursiveCreateTerrain(QUAD_TREE_NODE * node, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList,
 	int xStart, int zStart, int nBlockWidth, int nBlockLength,
-	int internal, HeightMapImage * pContext)
+	 HeightMapImage * pContext)
 {
 	assert(!(m_widthMin < 3));
 	assert(!(m_lengthMin < 3));
 	assert(!(m_lengthMin != m_widthMin));
 
-	if (nBlockWidth == m_widthMin || nBlockLength == m_lengthMin) // 마지막 리프 노드
-	{
-		// 터레인을 생성한다.
-		static int numLeaf = 0;
-		node->numLeaf = numLeaf;
-		node->numInternal = internal;
-		// 현재 테스트로 centerY = 128, externY = 256 으로 설정
+	if (nBlockWidth == m_widthMin || nBlockLength == m_lengthMin) // 마지막 리프 노드라면..
+	{ 
+		node->id = gQuadTreeCount++;
 
+		// 현재 테스트로 바운딩박스의 centerY = 128, externY = 256 으로 설정
 		node->boundingBox = BoundingBox(XMFLOAT3{ 
 			float(xStart) * m_xmf3Scale.x + float(nBlockWidth) / 2.0f * m_xmf3Scale.x , 
 			0.0f,
@@ -79,9 +80,7 @@ void QuadTreeTerrainMesh::RecursiveCreateTerrain(QUAD_TREE_NODE * node, ID3D12De
 		node->terrainMesh = new TerrainMesh(m_pOwner, pd3dDevice, pd3dCommandList, xStart, zStart, m_widthMin, m_lengthMin, m_xmf3Scale, m_xmf4Color, pContext);
 	}
 	else
-	{
-		static int numInternal = 0;
-
+	{ 
 		int cxQuadsPerBlock = nBlockWidth - 1;
 		int czQuadsPerBlock = nBlockLength - 1;
 
@@ -90,7 +89,7 @@ void QuadTreeTerrainMesh::RecursiveCreateTerrain(QUAD_TREE_NODE * node, ID3D12De
 
 		int index = 0;
 
-		node->numInternal = numInternal;
+		node->id = gQuadTreeCount++;
 
 		for (int z = 0; z < 2; z++)
 		{
@@ -106,11 +105,10 @@ void QuadTreeTerrainMesh::RecursiveCreateTerrain(QUAD_TREE_NODE * node, ID3D12De
 					XMFLOAT3{ float(nBlockWidth) / 2.0f * m_xmf3Scale.x, 1000.f, float(nBlockLength) / 2.0f* m_xmf3Scale.z });
 
 				node->children[index] = new QUAD_TREE_NODE(); 
-				RecursiveCreateTerrain(node->children[index], pd3dDevice, pd3dCommandList, New_xStart, New_zStart, Next_BlockWidth, Next_BlockLength, numInternal, pContext);
+				RecursiveCreateTerrain(node->children[index], pd3dDevice, pd3dCommandList, New_xStart, New_zStart, Next_BlockWidth, Next_BlockLength, pContext);
 				index += 1;
 			}
-		}
-		numInternal += 1;
+		} 
 	}
 }
 
@@ -137,7 +135,7 @@ QuadTreeTerrainMesh::QuadTreeTerrainMesh(GameObject * pOwner, ID3D12Device * pd3
 	// 쿼드 트리의 부모 노드를 만듭니다.
 	m_pRootNode = new QUAD_TREE_NODE;
 
-	RecursiveCreateTerrain(m_pRootNode, pd3dDevice, pd3dCommandList, 0, 0, m_widthTotal, m_lengthTotal, 0, pContext);
+	RecursiveCreateTerrain(m_pRootNode, pd3dDevice, pd3dCommandList, 0, 0, m_widthTotal, m_lengthTotal, pContext);
 }
 
 QuadTreeTerrainMesh::~QuadTreeTerrainMesh()
@@ -152,42 +150,10 @@ QuadTreeTerrainMesh::~QuadTreeTerrainMesh()
 
 void QuadTreeTerrainMesh::ReleaseUploadBuffers()
 {
-	RecursiveReleaseUploadBuffers(m_pRootNode);
-	//// 재귀 적으로 트리 아래로 내려와 맨 아래 노드를 먼저 놓습니다.
-	//for (int i = 0; i < 4; i++)
-	//{
-	//	if (node->children[i] != 0)
-	//	{
-	//		ReleaseNode(node->children[i]);
-	//	}
-	//}
-
-	//// 이 노드의 버텍스 버퍼를 해제한다.
-	//if (node->vertexBuffer)
-	//{
-	//	node->vertexBuffer->Release();
-	//	node->vertexBuffer = 0;
-	//}
-
-	//// 이 노드의 인덱스 버퍼를 해제합니다.
-	//if (node->indexBuffer)
-	//{
-	//	node->indexBuffer->Release();
-	//	node->indexBuffer = ;
-	//}
-
-	//// 네 개의 자식 노드를 해제합니다.
-	//for (int i = 0; i < 4; i++)
-	//{
-	//	if (node->children[i])
-	//	{
-	//		delete node->children[i];
-	//		node->children[i] = 0;
-	//	}
-	//}
+	RecursiveReleaseUploadBuffers(m_pRootNode); 
 }
 
-void QuadTreeTerrainMesh::TESTRender(const QUAD_TREE_NODE* node, ID3D12GraphicsCommandList *pd3dCommandList)
+void QuadTreeTerrainMesh::Render(const QUAD_TREE_NODE* node, ID3D12GraphicsCommandList *pd3dCommandList)
 {
 	// 렌더링
 	extern MeshRenderer gMeshRenderer;
@@ -198,21 +164,12 @@ void QuadTreeTerrainMesh::TESTRender(const QUAD_TREE_NODE* node, ID3D12GraphicsC
 	}
 	else
 	{
-		if (node->children[0]->isRendering)
-		{
-			TESTRender(node->children[0], pd3dCommandList);
-		}
-		if (node->children[1]->isRendering)
-		{
-			TESTRender(node->children[1], pd3dCommandList);
-		}
-		if (node->children[2]->isRendering)
-		{
-			TESTRender(node->children[2], pd3dCommandList);
-		}
-		if (node->children[3]->isRendering)
-		{
-			TESTRender(node->children[3], pd3dCommandList);
-		}
+		for (int x = 0; x < QUAD; ++x)
+		{ 
+			if (node->children[x]->isRendering)
+			{
+				Render(node->children[x], pd3dCommandList);
+			}
+		} 
 	}
 }

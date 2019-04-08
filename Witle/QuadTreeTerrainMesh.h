@@ -17,17 +17,18 @@ struct INFO
 
 struct QUAD_TREE_NODE
 {
-	BoundingBox boundingBox;
-	bool isRendering{ false };
-	int numLeaf{ -1 }; // -1이라면 리프노드가 아니다.
-	int numInternal{ -1 }; // 자신이 속하는 내부 노드
-	Mesh* terrainMesh{ nullptr };
+	BoundingBox boundingBox; // 해당 터레인에 속하는가 확인을 해주는 바운딩박스
+	bool isRendering{ false }; // 렌더링 할 것인가, 말 것인가. 
+	int id{ -1 }; // 터레인 아이디 넘버
+	Mesh* terrainMesh{ nullptr }; // 렌더할 터레인 메쉬
 	QUAD_TREE_NODE* children[QUAD]{ nullptr,  nullptr , nullptr , nullptr };
 };
 
 class QuadTreeTerrainMesh
 	: public ComponentBase
 {
+	static int gQuadTreeCount;
+
 private:
 	UINT m_widthTotal{ 0 };
 	UINT m_lengthTotal{ 0 };
@@ -47,7 +48,7 @@ private:
 	// 해당 함수를 재귀적으로 호출하며 터레인을 생성하는 함수입니다.
 	void RecursiveCreateTerrain(QUAD_TREE_NODE* node, ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, 
 		int xStart, int zStart, int nBlockWidth, int nBlockLength,
-		int internal, HeightMapImage *pContext = NULL);
+		HeightMapImage *pContext = NULL);
 
 	UINT CalculateVertex(UINT widht, UINT length);
 	UINT CalculateTriangles(UINT widthPixel, UINT lengthPixel);
@@ -62,7 +63,7 @@ public:
 
 	QUAD_TREE_NODE* const GetRootNode() const { return m_pRootNode; }
 
-	void TESTRender(const QUAD_TREE_NODE* node, ID3D12GraphicsCommandList *pd3dCommandList);
+	void Render(const QUAD_TREE_NODE* node, ID3D12GraphicsCommandList *pd3dCommandList);
 private:
 
 };

@@ -217,12 +217,14 @@
     <ClInclude Include="SpotLight.h" />
     <ClInclude Include="StandardShader.h" />
     <ClInclude Include="StaticObject.h" />
+    <ClInclude Include="StaticObjectStorage.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="GameScene.h" />
     <ClInclude Include="Terrain.h" />
     <ClInclude Include="TerrainMesh.h" />
     <ClInclude Include="SkinnedMeshRenderer.h" />
+    <ClInclude Include="TerrainObjectID.h" />
     <ClInclude Include="TESTShader.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="VerticalBlurShader.h" />
@@ -293,6 +295,7 @@
     <ClCompile Include="SpotLight.cpp" />
     <ClCompile Include="StandardShader.cpp" />
     <ClCompile Include="StaticObject.cpp" />
+    <ClCompile Include="StaticObjectStorage.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -303,6 +306,7 @@
     <ClCompile Include="Terrain.cpp" />
     <ClCompile Include="TerrainMesh.cpp" />
     <ClCompile Include="SkinnedMeshRenderer.cpp" />
+    <ClCompile Include="TerrainObjectID.cpp" />
     <ClCompile Include="TESTShader.cpp" />
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="VerticalBlurShader.cpp" />

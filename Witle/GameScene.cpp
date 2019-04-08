@@ -471,14 +471,14 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 
 	// TerrainMesh Render
 	Mesh* terrainMesh = m_Terrain->GetComponent<Mesh>("TerrainMesh");
-	m_TESTQuadTree->TESTRender(m_TESTQuadTree->GetRootNode(), pd3dCommandList);
+	m_TESTQuadTree->Render(m_TESTQuadTree->GetRootNode(), pd3dCommandList);
 
 
 #ifdef CHECK_SUBVIEWS
 	m_lookAboveCamera->SetViewportsAndScissorRects(pd3dCommandList); 
 	m_lookAboveCamera->GetCamera()->UpdateShaderVariables(pd3dCommandList, ROOTPARAMETER_CAMERA);
 
-	m_TESTQuadTree->TESTRender(m_TESTQuadTree->GetRootNode(), pd3dCommandList);
+	m_TESTQuadTree->Render(m_TESTQuadTree->GetRootNode(), pd3dCommandList);
 #endif
 
 	////////////////////////////// Model Render

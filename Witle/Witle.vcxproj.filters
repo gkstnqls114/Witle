@@ -202,6 +202,15 @@
     <Filter Include="05.Shader\InstancingStandardShader">
       <UniqueIdentifier>{3f982932-7ab3-47f3-9f5c-fe5b5329e354}</UniqueIdentifier>
     </Filter>
+    <Filter Include="13.Storage\StaticObjectStorage">
+      <UniqueIdentifier>{d8ca9f62-bada-44fd-a0d4-807e00dae610}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="99.etc\ID\FamilyID">
+      <UniqueIdentifier>{c058a8e0-f7c8-4e83-ad16-f15713affe96}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="99.etc\ID\TerrainObjectID">
+      <UniqueIdentifier>{dd631a4a-4f0b-4012-957b-e1b304c15f34}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -345,9 +354,6 @@
     <ClInclude Include="PointLight.h">
       <Filter>02.Component\Light\PointLight</Filter>
     </ClInclude>
-    <ClInclude Include="FamilyID.h">
-      <Filter>99.etc\ID</Filter>
-    </ClInclude>
     <ClInclude Include="Material.h">
       <Filter>02.Component\Material</Filter>
     </ClInclude>
@@ -440,6 +446,15 @@
     </ClInclude>
     <ClInclude Include="InstancingStandardShader.h">
       <Filter>05.Shader\InstancingStandardShader</Filter>
+    </ClInclude>
+    <ClInclude Include="StaticObjectStorage.h">
+      <Filter>13.Storage\StaticObjectStorage</Filter>
+    </ClInclude>
+    <ClInclude Include="FamilyID.h">
+      <Filter>99.etc\ID\FamilyID</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainObjectID.h">
+      <Filter>99.etc\ID\TerrainObjectID</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -566,9 +581,6 @@
     <ClCompile Include="PointLight.cpp">
       <Filter>02.Component\Light\PointLight</Filter>
     </ClCompile>
-    <ClCompile Include="FamilyID.cpp">
-      <Filter>99.etc\ID</Filter>
-    </ClCompile>
     <ClCompile Include="Material.cpp">
       <Filter>02.Component\Material</Filter>
     </ClCompile>
@@ -661,6 +673,15 @@
     </ClCompile>
     <ClCompile Include="InstancingStandardShader.cpp">
       <Filter>05.Shader\InstancingStandardShader</Filter>
+    </ClCompile>
+    <ClCompile Include="StaticObjectStorage.cpp">
+      <Filter>13.Storage\StaticObjectStorage</Filter>
+    </ClCompile>
+    <ClCompile Include="FamilyID.cpp">
+      <Filter>99.etc\ID\FamilyID</Filter>
+    </ClCompile>
+    <ClCompile Include="TerrainObjectID.cpp">
+      <Filter>99.etc\ID\TerrainObjectID</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
