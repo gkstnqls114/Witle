@@ -28,7 +28,7 @@ enum LIGHT_TYPE
 #define MOUSE_WHEEL_DOWN	-120
 #define MOUSE_WHEEL_STOP	0
 
-#define CAMERA_FAR			50000.F 
+#define CAMERA_FAR			10000.f 
 
 /////////////////////////////////////////////// define Á¤ÀÇ
 #define _WITH_DEBUG_TERRAIN_MAX_POS

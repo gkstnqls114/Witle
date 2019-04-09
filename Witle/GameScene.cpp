@@ -489,44 +489,14 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 
 	////////////////////////////// Model Render
 	// PSO 설정
-	
-	// 클라 화면 설정
-	m_Camera->SetViewportsAndScissorRects(pd3dCommandList);
-	m_Camera->GetCamera()->UpdateShaderVariables(pd3dCommandList, ROOTPARAMETER_CAMERA);
-	
+	 
 	pd3dCommandList->SetDescriptorHeaps(1, &m_pd3dCbvSrvDescriptorHeap);
 	m_GameObjectDiffuse->UpdateShaderVariables(pd3dCommandList);
-	m_pPlayer->Render(pd3dCommandList);
-
-	//for (int x = 0; x < m_SunFlowerCount; ++x)
-	//{
-	//	m_SunFlowers[x]->Render(pd3dCommandList);
-	//} 
-
-	//for (int x = 0; x < m_PillaCount; ++x)
-	//{
-	//	m_Pillas[x]->Render(pd3dCommandList);
-	//} 
-
-	//for (int x = 0; x < m_RockCount; ++x)
-	//{
-	//	m_Rocks[x]->Render(pd3dCommandList);
-	//}
-
-	//for (int x = 0; x < m_TreeCount; ++x)
-	//{
-	// m_Trees[0]->Render(pd3dCommandList);
-	//}
-	////////////////////////////// Model Render
-
+	m_pPlayer->Render(pd3dCommandList); 
 }
 
 void GameScene::ReleaseUploadBuffers()
-{
-	//for (int x = 0; x < m_TreeCount; ++x)
-	//{
-	//	if (m_Trees[x]) m_Trees[x]->ReleaseUploadBuffers();
-	//}
+{ 
 	if (m_pPlayer) m_pPlayer->ReleaseUploadBuffers();
 	if (m_Terrain) m_Terrain->ReleaseUploadBuffers();
 	if (m_TESTQuadTree) m_TESTQuadTree->ReleaseUploadBuffers();

@@ -228,10 +228,12 @@ void StaticObjectStorage::CreateShaderVariables(ID3D12Device * pd3dDevice, ID3D1
 	//인스턴스 정보를 저장할 정점 버퍼를 업로드 힙 유형으로 생성한다. 
 	for (auto& info : m_StaticObjectStorage)
 	{ 
+		m_StaticObjectModelsStorage[info.first] = ModelStorage::GetInstance()->GetRootObject(info.first);
+		
 		for (int iTerrainPiece = 0; iTerrainPiece < TerrainPieceCount; ++iTerrainPiece)
 		{
 			if (info.second[iTerrainPiece].TerrainObjectCount == 0) continue;
-
+			
 			// 쉐이더 변수 생성
 			info.second[iTerrainPiece].m_pd3dcbGameObjects =
 				d3dUtil::CreateBufferResource(pd3dDevice, pd3dCommandList, NULL,
@@ -241,6 +243,22 @@ void StaticObjectStorage::CreateShaderVariables(ID3D12Device * pd3dDevice, ID3D1
 			info.second[iTerrainPiece].m_pd3dcbGameObjects->Map(0, NULL, (void **)&info.second[iTerrainPiece].m_pcbMappedGameObjects);
 		}
 	} 
+
+	// 정보 저장 
+	for (auto& info : m_StaticObjectStorage)
+	{
+		for (int iTerrainPiece = 0; iTerrainPiece < TerrainPieceCount; ++iTerrainPiece)
+		{
+			if (info.second[iTerrainPiece].TerrainObjectCount == 0) continue;
+			for (int i = 0; i < info.second[iTerrainPiece].TerrainObjectCount; ++i)
+			{
+				XMStoreFloat4x4(
+					&info.second[iTerrainPiece].m_pcbMappedGameObjects[i].m_xmf4x4Transform,
+					XMMatrixTranspose(XMLoadFloat4x4(&info.second[iTerrainPiece].TransformList[i]
+					)));
+			} 
+		}
+	}
 }
 
 StaticObjectStorage * StaticObjectStorage::GetInstance(const QuadtreeTerrain const * pTerrain)
@@ -262,10 +280,7 @@ void StaticObjectStorage::CreateInfo(ID3D12Device * pd3dDevice, ID3D12GraphicsCo
 	
 	// 읽어온 위치 정보의 개수대로 쉐이더 변수를 생성한다.
 	CreateShaderVariables(pd3dDevice, pd3dCommandList);
-
-	// 임시로 생성
-	m_TestObject = ModelStorage::GetInstance()->GetRootObject(SUNFLOWER);
-
+	 
 	m_isCreate = true;
 }
  
@@ -276,15 +291,15 @@ void StaticObjectStorage::Render(ID3D12GraphicsCommandList * pd3dCommandList, in
 	for (auto& info : m_StaticObjectStorage)
 	{
 		if (info.second[index].TerrainObjectCount == 0) continue;
-		for (int i = 0 ; i < info.second[index].TerrainObjectCount; ++i)
-		{
-			XMStoreFloat4x4(
-				&info.second[index].m_pcbMappedGameObjects[i].m_xmf4x4Transform,
-				XMMatrixTranspose(XMLoadFloat4x4(&info.second[index].TransformList[i]
-			)));
-		}
+		//for (int i = 0 ; i < info.second[index].TerrainObjectCount; ++i)
+		//{
+		//	XMStoreFloat4x4(
+		//		&info.second[index].m_pcbMappedGameObjects[i].m_xmf4x4Transform,
+		//		XMMatrixTranspose(XMLoadFloat4x4(&info.second[index].TransformList[i]
+		//	)));
+		//}
 		pd3dCommandList->SetGraphicsRootShaderResourceView(ROOTPARAMETER_INSTANCING, info.second[index].m_pd3dcbGameObjects->GetGPUVirtualAddress());
-		m_TestObject->RenderInstancing(pd3dCommandList, info.second[index].TerrainObjectCount);
-	} 
-	
+		
+		m_StaticObjectModelsStorage[info.first]->RenderInstancing(pd3dCommandList, info.second[index].TerrainObjectCount);
+	}  
 }

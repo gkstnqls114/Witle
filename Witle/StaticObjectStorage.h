@@ -17,18 +17,16 @@ private:
 	int TerrainObjectAllCount = 0; //모든 터레인 오브젝트는 몇개가 있는가?
 	 
 	struct TerrainObjectInfo
-	{
+	{ 
 		ID3D12Resource* m_pd3dcbGameObjects{ nullptr };
 		VS_SRV_INSTANCEINFO* m_pcbMappedGameObjects{ nullptr };
 		int         TerrainObjectCount = 0; // 터레인 조각 위에 배치되는 오브젝트의 개수
 		//XMFLOAT4X4* pTerrainObjectsTransform; // 터레인 조각 위에 배치되는 오브젝트의 월드 행렬
 		std::vector<XMFLOAT4X4> TransformList;
 	};
-
 	 
-	LoadObject* m_TestObject{ nullptr };
-
-	bool m_isCreate = false;
+	bool m_isCreate = false; 
+	std::map<std::string, LoadObject*> m_StaticObjectModelsStorage; // 모델 이름은 반드시 클래스에 맞춘다.
 	std::map<std::string, TerrainObjectInfo*> m_StaticObjectStorage; // 모델 이름은 반드시 클래스에 맞춘다.
 	void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList, int count, XMFLOAT4X4* transforms);
 
