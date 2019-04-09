@@ -49,8 +49,6 @@ private:
 
 	int m_ReafNodeCount = 0;
 	QUAD_TREE_NODE** m_pReafNodes{ nullptr };
-	
-	int * m_RenderingIndices{ nullptr };
 
 private:  
 	void RenderTerrainObjects(ID3D12GraphicsCommandList *pd3dCommandList);

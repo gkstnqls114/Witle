@@ -18,13 +18,13 @@ private:
 	 
 	struct TerrainObjectInfo
 	{
+		ID3D12Resource* m_pd3dcbGameObjects{ nullptr };
+		VS_SRV_INSTANCEINFO* m_pcbMappedGameObjects{ nullptr };
 		int         TerrainObjectCount = 0; // 터레인 조각 위에 배치되는 오브젝트의 개수
 		//XMFLOAT4X4* pTerrainObjectsTransform; // 터레인 조각 위에 배치되는 오브젝트의 월드 행렬
 		std::vector<XMFLOAT4X4> TransformList;
 	};
 
-	ID3D12Resource* m_pd3dcbGameObjects{ nullptr };
-	VS_SRV_INSTANCEINFO* m_pcbMappedGameObjects{ nullptr };
 	 
 	LoadObject* m_TestObject{ nullptr };
 
@@ -46,5 +46,5 @@ public:
 	void CreateInfo(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, const QuadtreeTerrain const * pTerrain);
 	
 	// 인스턴싱을 통해 렌더합니다.
-	void Render(ID3D12GraphicsCommandList * pd3dCommandList, const int* indexs, int indexCount);
+	void Render(ID3D12GraphicsCommandList * pd3dCommandList, int index);
 };

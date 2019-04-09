@@ -24,8 +24,7 @@ UINT QuadtreeTerrain::CalculateTriangles(UINT widthPixel, UINT lengthPixel)
 
 void QuadtreeTerrain::ReleaseMembers()
 {
-	delete[] m_pReafNodes;
-	delete[] m_RenderingIndices;
+	delete[] m_pReafNodes; 
 }
 
 void QuadtreeTerrain::ReleaseMemberUploadBuffers()
@@ -35,7 +34,13 @@ void QuadtreeTerrain::ReleaseMemberUploadBuffers()
 
 void QuadtreeTerrain::RenderTerrainObjects(ID3D12GraphicsCommandList * pd3dCommandList)
 {
-	StaticObjectStorage::GetInstance(this)->Render(pd3dCommandList, m_RenderingIndices, m_ReafNodeCount);
+	for (int i = 0; i < m_ReafNodeCount; ++i)
+	{
+		if (m_pReafNodes[i]->isRendering)
+		{
+			StaticObjectStorage::GetInstance(this)->Render(pd3dCommandList, m_pReafNodes[i]->id);
+		}
+	}
 }
 
 void QuadtreeTerrain::RecursiveRender(const QUAD_TREE_NODE * node, ID3D12GraphicsCommandList * pd3dCommandList)
@@ -240,7 +245,6 @@ QuadtreeTerrain::QuadtreeTerrain(GameObject * pOwner, ID3D12Device * pd3dDevice,
 	// 순서변경X
 	RecursiveCreateTerrain(m_pRootNode, pd3dDevice, pd3dCommandList, 0, 0, m_widthTotal, m_lengthTotal, pContext);
 	m_pReafNodes = new QUAD_TREE_NODE*[m_ReafNodeCount]; //리프노드를 가리킬 포인터 배열을 생성
-	m_RenderingIndices = new int[m_ReafNodeCount];
 	RecursiveInitReafNodes(m_pRootNode);
 	// 순서변경X
 
@@ -265,16 +269,7 @@ void QuadtreeTerrain::Update(float fElapsedTime)
 void QuadtreeTerrain::LastUpdate(float fElapsedTime)
 {
 	// 그려야하는 렌더링 인덱스 초기화
-	for (int i = 0; i < m_ReafNodeCount; ++i) m_RenderingIndices[i] = -1;
 
-	int RenderingIndexCount = 0;
-	for (int i = 0; i < m_ReafNodeCount; ++i)
-	{
-		if (m_pReafNodes[i]->isRendering)
-		{
-			m_RenderingIndices[RenderingIndexCount++] = i;
-		}
-	}
 }
 
 int const * QuadtreeTerrain::GetIDs(const XMFLOAT3 & position) const
@@ -304,8 +299,5 @@ void QuadtreeTerrain::Render(int index, ID3D12GraphicsCommandList * pd3dCommandL
 	if (index < 0 || index >= m_ReafNodeCount) return;
 	pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Terrain")->GetPSO());
 	gMeshRenderer.Render(pd3dCommandList, m_pReafNodes[index]->terrainMesh);
-	// 강제로 Index 설정
-	for (int i = 0; i < m_ReafNodeCount; ++i) m_RenderingIndices[i] = -1;
-	m_RenderingIndices[0] = index;
-	StaticObjectStorage::GetInstance(this)->Render(pd3dCommandList, m_RenderingIndices, m_ReafNodeCount);
+	StaticObjectStorage::GetInstance(this)->Render(pd3dCommandList, index);
 }

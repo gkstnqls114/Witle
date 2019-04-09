@@ -477,7 +477,7 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 
 	// TerrainMesh Render
 	Mesh* terrainMesh = m_Terrain->GetComponent<Mesh>("TerrainMesh");
-	m_TESTQuadTree->Render(TerrainIndex,pd3dCommandList);
+	m_TESTQuadTree->Render(pd3dCommandList);
 
 
 #ifdef CHECK_SUBVIEWS
@@ -515,7 +515,7 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 
 	//for (int x = 0; x < m_TreeCount; ++x)
 	//{
-		m_Trees[0]->Render(pd3dCommandList);
+	// m_Trees[0]->Render(pd3dCommandList);
 	//}
 	////////////////////////////// Model Render
 

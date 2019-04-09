@@ -106,68 +106,59 @@ void StaticObjectStorage::LoadNameAndPositionFromFile(ID3D12Device * pd3dDevice,
 
 			// 계산을 통해 몇번째 아이디인지 즉 어디의 리프노드에 존재하는 위치인지 알아낸다...
 			// fbx sdk 에서 꺼내올때 무슨 문제가 있는지 x, z좌표에 -부호 붙여야함 ...
-			
-			//if (!strcmp(name, TREE))
-			//{
-			//	TerrainObjectCount += 1;
-			//	for (int x = 0; x < QUAD; ++x)
-			//	{
-			//		if (terrainIDs[x] == -1) continue;
-			//		m_StaticObjectStorage[TREE][terrainIDs[x]].TerrainObjectCount += 1;
 
-			//		LoadObject* TestObject = ModelStorage::GetInstance()->GetRootObject(TREE);
-			//		TestObject->SetPosition(XMFLOAT3{ transform._41, transform._42, transform._43 });
-			//		TestObject->UpdateTransform(NULL);
-			//		 
-			//		m_StaticObjectStorage[TREE][terrainIDs[x]].TransformList.emplace_back(TestObject->m_pChild->m_xmf4x4World);
-			//		delete TestObject; 
-			//	}
-			//}
-			//else if (!strcmp(name, ROCK))
-			//{
-			//	TerrainObjectCount += 1;
-			//	for (int x = 0; x < QUAD; ++x)
-			//	{
-			//		if (terrainIDs[x] == -1) continue;
-			//		m_StaticObjectStorage[ROCK][terrainIDs[x]].TerrainObjectCount += 1;
+			XMFLOAT3 position{ transform._41, transform._42, transform._43 };
+			const int* terrainIDs = pTerrain->GetIDs(position);
 
-			//		LoadObject* TestObject = ModelStorage::GetInstance()->GetRootObject(ROCK);
-			//		TestObject->SetPosition(XMFLOAT3{ transform._41, transform._42, transform._43 });
-			//		TestObject->UpdateTransform(NULL);
+			if (!strcmp(name, "Tree"/*임시*/))
+			{ 
+				for (int x = 0; x < QUAD; ++x)
+				{
+					if (terrainIDs[x] == -1) continue;
+					m_StaticObjectStorage[TREE][terrainIDs[x]].TerrainObjectCount += 1;
 
-			//		m_StaticObjectStorage[ROCK][terrainIDs[x]].TransformList.emplace_back(TestObject->m_pChild->m_xmf4x4World);
-			//		delete TestObject;
+					LoadObject* TestObject = ModelStorage::GetInstance()->GetRootObject(TREE);
+					TestObject->SetPosition(XMFLOAT3{ transform._41, transform._42, transform._43 });
+					TestObject->UpdateTransform(NULL);
+					 
+					m_StaticObjectStorage[TREE][terrainIDs[x]].TransformList.emplace_back(TestObject->m_pChild->m_xmf4x4World);
+					delete TestObject; 
+				}
+			}
+			else if (!strcmp(name, ROCK))
+			{ 
+				for (int x = 0; x < QUAD; ++x)
+				{
+					if (terrainIDs[x] == -1) continue;
+					m_StaticObjectStorage[ROCK][terrainIDs[x]].TerrainObjectCount += 1;
 
-			//	}
-			//}
-			//else if (!strcmp(name, PILLAR))
-			//{
-			//	TerrainObjectCount += 1;
+					LoadObject* TestObject = ModelStorage::GetInstance()->GetRootObject(ROCK);
+					TestObject->SetPosition(XMFLOAT3{ transform._41, transform._42, transform._43 });
+					TestObject->UpdateTransform(NULL);
 
-			//	for (int x = 0; x < QUAD; ++x)
-			//	{
-			//		if (terrainIDs[x] == -1) continue;
-			//		m_StaticObjectStorage[PILLAR][terrainIDs[x]].TerrainObjectCount += 1;
+					m_StaticObjectStorage[ROCK][terrainIDs[x]].TransformList.emplace_back(TestObject->m_pChild->m_xmf4x4World);
+					delete TestObject;
 
-			//		LoadObject* TestObject = ModelStorage::GetInstance()->GetRootObject(PILLAR);
-			//		TestObject->SetPosition(XMFLOAT3{ transform._41, transform._42, transform._43 });
-			//		TestObject->UpdateTransform(NULL);
+				}
+			}
+			else if (!strcmp(name, PILLAR))
+			{ 
+				for (int x = 0; x < QUAD; ++x)
+				{
+					if (terrainIDs[x] == -1) continue;
+					m_StaticObjectStorage[PILLAR][terrainIDs[x]].TerrainObjectCount += 1;
 
-			//		m_StaticObjectStorage[PILLAR][terrainIDs[x]].TransformList.emplace_back(TestObject->m_pChild->m_xmf4x4World);
-			//		delete TestObject;
+					LoadObject* TestObject = ModelStorage::GetInstance()->GetRootObject(PILLAR);
+					TestObject->SetPosition(XMFLOAT3{ transform._41, transform._42, transform._43 });
+					TestObject->UpdateTransform(NULL);
 
-			//	} 
-			//}
-			if (!strcmp(name, SUNFLOWER))
-			{
-				XMFLOAT3 position{ transform._41, transform._42, transform._43 };
-				const int* terrainIDs = pTerrain->GetIDs(position);
+					m_StaticObjectStorage[PILLAR][terrainIDs[x]].TransformList.emplace_back(TestObject->m_pChild->m_xmf4x4World);
+					delete TestObject;
 
-#ifdef _WITH_DEBUG_TERRAIN_MAX_POS
-				TCHAR pstrDebug[256] = { 0 };
-				_stprintf_s(pstrDebug, 256, L"(position: %f, %f, %f) node: %d %d %d %d\n", position.x, position.y, position.z, terrainIDs[0], terrainIDs[1], terrainIDs[2], terrainIDs[3]);
-				OutputDebugString(pstrDebug);
-#endif 
+				} 
+			}
+			else if (!strcmp(name, SUNFLOWER))
+			{ 
 				for (int x = 0; x < QUAD; ++x)
 				{
 					if (terrainIDs[x] == -1) continue;
@@ -181,7 +172,6 @@ void StaticObjectStorage::LoadNameAndPositionFromFile(ID3D12Device * pd3dDevice,
 					delete TestObject;
 				} 
 
-				delete terrainIDs;
 			}
 			//else if (!strcmp(name, ALTER))
 			//{
@@ -203,6 +193,7 @@ void StaticObjectStorage::LoadNameAndPositionFromFile(ID3D12Device * pd3dDevice,
 			else
 			{
 			}
+			delete terrainIDs; 
 
 		}
 		else if (!strcmp(pstrToken, "<Children>:"))
@@ -234,13 +225,22 @@ void StaticObjectStorage::LoadNameAndPositionFromFile(ID3D12Device * pd3dDevice,
 
 void StaticObjectStorage::CreateShaderVariables(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList)
 {
-	//인스턴스 정보를 저장할 정점 버퍼를 업로드 힙 유형으로 생성한다.
-	m_pd3dcbGameObjects = d3dUtil::CreateBufferResource(pd3dDevice, pd3dCommandList, NULL,
-		sizeof(VS_SRV_INSTANCEINFO) * TerrainObjectAllCount, D3D12_HEAP_TYPE_UPLOAD,
-		D3D12_RESOURCE_STATE_GENERIC_READ, NULL);
+	//인스턴스 정보를 저장할 정점 버퍼를 업로드 힙 유형으로 생성한다. 
+	for (auto& info : m_StaticObjectStorage)
+	{ 
+		for (int iTerrainPiece = 0; iTerrainPiece < TerrainPieceCount; ++iTerrainPiece)
+		{
+			if (info.second[iTerrainPiece].TerrainObjectCount == 0) continue;
 
-	//정점 버퍼(업로드 힙)에 대한 포인터를 저장한다.
-	m_pd3dcbGameObjects->Map(0, NULL, (void **)&m_pcbMappedGameObjects);
+			// 쉐이더 변수 생성
+			info.second[iTerrainPiece].m_pd3dcbGameObjects =
+				d3dUtil::CreateBufferResource(pd3dDevice, pd3dCommandList, NULL,
+					sizeof(VS_SRV_INSTANCEINFO) * info.second[iTerrainPiece].TerrainObjectCount, D3D12_HEAP_TYPE_UPLOAD,
+					D3D12_RESOURCE_STATE_GENERIC_READ, NULL);
+		
+			info.second[iTerrainPiece].m_pd3dcbGameObjects->Map(0, NULL, (void **)&info.second[iTerrainPiece].m_pcbMappedGameObjects);
+		}
+	} 
 }
 
 StaticObjectStorage * StaticObjectStorage::GetInstance(const QuadtreeTerrain const * pTerrain)
@@ -269,25 +269,22 @@ void StaticObjectStorage::CreateInfo(ID3D12Device * pd3dDevice, ID3D12GraphicsCo
 	m_isCreate = true;
 }
  
-void StaticObjectStorage::Render(ID3D12GraphicsCommandList * pd3dCommandList, const int* indexs, int indexCount)
+void StaticObjectStorage::Render(ID3D12GraphicsCommandList * pd3dCommandList, int index)
 { 
 	pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("InstancingStandardShader")->GetPSO());
 	 
-	int k = 0;
-	for (UINT x = 0; x < indexCount; x++)
+	for (auto& info : m_StaticObjectStorage)
 	{
-		if (indexs[x] == -1) continue;
-
-		for (int i = 0; i < m_StaticObjectStorage[SUNFLOWER][indexs[x]].TerrainObjectCount; ++i)
+		if (info.second[index].TerrainObjectCount == 0) continue;
+		for (int i = 0 ; i < info.second[index].TerrainObjectCount; ++i)
 		{
 			XMStoreFloat4x4(
-				&m_pcbMappedGameObjects[k].m_xmf4x4Transform, 
-				XMMatrixTranspose(XMLoadFloat4x4(&m_StaticObjectStorage[SUNFLOWER][indexs[x]].TransformList[i]
+				&info.second[index].m_pcbMappedGameObjects[i].m_xmf4x4Transform,
+				XMMatrixTranspose(XMLoadFloat4x4(&info.second[index].TransformList[i]
 			)));
-			++k;
 		}
-	}
-	pd3dCommandList->SetGraphicsRootShaderResourceView(ROOTPARAMETER_INSTANCING, m_pd3dcbGameObjects->GetGPUVirtualAddress());
+		pd3dCommandList->SetGraphicsRootShaderResourceView(ROOTPARAMETER_INSTANCING, info.second[index].m_pd3dcbGameObjects->GetGPUVirtualAddress());
+		m_TestObject->RenderInstancing(pd3dCommandList, info.second[index].TerrainObjectCount);
+	} 
 	
-	m_TestObject->RenderInstancing(pd3dCommandList, k);
 }
