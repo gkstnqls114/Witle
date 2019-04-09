@@ -23,7 +23,7 @@
 #include "GameScreen.h"
 #include "Player.h"
 #include "CameraObject.h"
-#include "QuadTreeTerrainMesh.h"
+#include "QuadTreeTerrain.h"
 #include "BasicCam.h"
  
 #include "GameScene.h"
@@ -207,9 +207,8 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 		m_Rocks[x] = new Rock(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 	}
 
-	//테스트 쿼드트리 터레인 생성
-	m_TESTQuadGameobject = new GameObject("TESTQuad");
-	m_TESTQuadTree = new QuadtreeTerrain(m_TESTQuadGameobject, pd3dDevice, pd3dCommandList, 257, 257, xmf3Scale, xmf4Color, m_Terrain->GetHeightMapImage());
+	//테스트 쿼드트리 터레인 생성 
+	m_pQuadtreeTerrain = new QuadtreeTerrain(pd3dDevice, pd3dCommandList, 257, 257, xmf3Scale, xmf4Color, m_Terrain->GetHeightMapImage());
 
 	// 카메라
 	m_Camera = new CameraObject("Camera");
@@ -277,10 +276,11 @@ void GameScene::ReleaseObjects()
 		delete m_Terrain;
 		m_Terrain = nullptr;
 	} 
-	if (m_TESTQuadTree)
+	if (m_pQuadtreeTerrain)
 	{
-		delete m_TESTQuadTree;
-		m_TESTQuadTree = nullptr;
+		m_pQuadtreeTerrain->ReleaseObjects();
+		delete m_pQuadtreeTerrain;
+		m_pQuadtreeTerrain = nullptr;
 	}
 }
 
@@ -433,8 +433,8 @@ void GameScene::LastUpdate(float fElapsedTime)
 	} 
 
 	// 카메라 프러스텀과 쿼드트리 지형 렌더링 체크
-	m_Camera->GetFrustum()->CheckRendering(m_TESTQuadTree->GetRootNode()); 
-	m_TESTQuadTree->LastUpdate(fElapsedTime);
+	m_Camera->GetFrustum()->CheckRendering(m_pQuadtreeTerrain->GetRootNode()); 
+	m_pQuadtreeTerrain->LastUpdate(fElapsedTime);
 	// 순서변경X 
 }
 
@@ -477,14 +477,14 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 
 	// TerrainMesh Render
 	Mesh* terrainMesh = m_Terrain->GetComponent<Mesh>("TerrainMesh");
-	m_TESTQuadTree->Render(pd3dCommandList);
+	m_pQuadtreeTerrain->Render(pd3dCommandList);
 
 
 #ifdef CHECK_SUBVIEWS
 	m_lookAboveCamera->SetViewportsAndScissorRects(pd3dCommandList); 
 	m_lookAboveCamera->GetCamera()->UpdateShaderVariables(pd3dCommandList, ROOTPARAMETER_CAMERA);
 
-	m_TESTQuadTree->Render(m_TESTQuadTree->GetRootNode(), pd3dCommandList);
+	m_pQuadtreeTerrain->Render(m_pQuadtreeTerrain->GetRootNode(), pd3dCommandList);
 #endif
 
 	////////////////////////////// Model Render
@@ -499,7 +499,7 @@ void GameScene::ReleaseUploadBuffers()
 { 
 	if (m_pPlayer) m_pPlayer->ReleaseUploadBuffers();
 	if (m_Terrain) m_Terrain->ReleaseUploadBuffers();
-	if (m_TESTQuadTree) m_TESTQuadTree->ReleaseUploadBuffers();
+	if (m_pQuadtreeTerrain) m_pQuadtreeTerrain->ReleaseUploadBuffers();
 }
 
 

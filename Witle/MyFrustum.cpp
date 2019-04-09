@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "QuadTreeTerrainMesh.h"
+#include "QuadTreeTerrain.h"
 #include "MyFrustum.h"
 
 MyFrustum::MyFrustum(GameObject * pOwner)

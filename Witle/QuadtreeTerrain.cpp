@@ -7,7 +7,7 @@
 #include "StaticObjectStorage.h"
 #include "HeightMapImage.h"
 #include "MyFrustum.h"
-#include "QuadTreeTerrainMesh.h"
+#include "QuadTreeTerrain.h"
 
 // 처음 아이디는 0으로 시작한다.
 // 리프 노드만 아이디를 설정한다.
@@ -225,7 +225,7 @@ UINT QuadtreeTerrain::CalculateVertex(UINT widht, UINT length)
 	return (widht* length);
 }
 
-QuadtreeTerrain::QuadtreeTerrain(GameObject * pOwner, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, int nWidth, int nLength, XMFLOAT3 xmf3Scale, XMFLOAT4 xmf4Color, HeightMapImage * pContext)
+QuadtreeTerrain::QuadtreeTerrain(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, int nWidth, int nLength, XMFLOAT3 xmf3Scale, XMFLOAT4 xmf4Color, HeightMapImage * pContext)
 	: GameObject("QuadTreeTerrain")
 {
 

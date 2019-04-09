@@ -6,7 +6,7 @@
 #include "ShaderManager.h"
 #include "Shader.h"
 
-#include "QuadTreeTerrainMesh.h"
+#include "QuadTreeTerrain.h"
 #include "MapInfoLoader.h"
 #include "Object.h" 
 #include "StaticObjectStorage.h"
@@ -291,13 +291,7 @@ void StaticObjectStorage::Render(ID3D12GraphicsCommandList * pd3dCommandList, in
 	for (auto& info : m_StaticObjectStorage)
 	{
 		if (info.second[index].TerrainObjectCount == 0) continue;
-		//for (int i = 0 ; i < info.second[index].TerrainObjectCount; ++i)
-		//{
-		//	XMStoreFloat4x4(
-		//		&info.second[index].m_pcbMappedGameObjects[i].m_xmf4x4Transform,
-		//		XMMatrixTranspose(XMLoadFloat4x4(&info.second[index].TransformList[i]
-		//	)));
-		//}
+
 		pd3dCommandList->SetGraphicsRootShaderResourceView(ROOTPARAMETER_INSTANCING, info.second[index].m_pd3dcbGameObjects->GetGPUVirtualAddress());
 		
 		m_StaticObjectModelsStorage[info.first]->RenderInstancing(pd3dCommandList, info.second[index].TerrainObjectCount);

@@ -125,7 +125,6 @@ protected:
 	ID3D12Resource				*m_pd3dcbMaterials{ nullptr };
 	MATERIAL					*m_pcbMappedMaterials{ nullptr };
 	//////////////////////////////////////  Α¶Έν
-
-	GameObject *m_TESTQuadGameobject;
-	QuadtreeTerrain         *m_TESTQuadTree{ nullptr };
+	 
+	QuadtreeTerrain         *m_pQuadtreeTerrain{ nullptr };
 };
