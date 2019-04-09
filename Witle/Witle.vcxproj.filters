@@ -211,6 +211,15 @@
     <Filter Include="99.etc\ID\TerrainObjectID">
       <UniqueIdentifier>{dd631a4a-4f0b-4012-957b-e1b304c15f34}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04.Scene\LoadingScene">
+      <UniqueIdentifier>{812fe0ce-fb65-4796-a546-9adef1eba558}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.Scene\LobbyScene">
+      <UniqueIdentifier>{033ba113-a22a-419b-8d84-91a47f23756e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.Scene\RoomScene">
+      <UniqueIdentifier>{0cb84e77-e644-46e4-adeb-bac56c763ceb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -456,6 +465,15 @@
     <ClInclude Include="TerrainObjectID.h">
       <Filter>99.etc\ID\TerrainObjectID</Filter>
     </ClInclude>
+    <ClInclude Include="LoadingScene.h">
+      <Filter>04.Scene\LoadingScene</Filter>
+    </ClInclude>
+    <ClInclude Include="LobbyScene.h">
+      <Filter>04.Scene\LobbyScene</Filter>
+    </ClInclude>
+    <ClInclude Include="RoomScene.h">
+      <Filter>04.Scene\RoomScene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -682,6 +700,15 @@
     </ClCompile>
     <ClCompile Include="TerrainObjectID.cpp">
       <Filter>99.etc\ID\TerrainObjectID</Filter>
+    </ClCompile>
+    <ClCompile Include="LoadingScene.cpp">
+      <Filter>04.Scene\LoadingScene</Filter>
+    </ClCompile>
+    <ClCompile Include="LobbyScene.cpp">
+      <Filter>04.Scene\LobbyScene</Filter>
+    </ClCompile>
+    <ClCompile Include="RoomScene.cpp">
+      <Filter>04.Scene\RoomScene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

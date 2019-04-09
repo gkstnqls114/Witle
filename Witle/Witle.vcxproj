@@ -172,6 +172,8 @@
     <ClInclude Include="LightObject.h" />
     <ClInclude Include="LineCube.h" />
     <ClInclude Include="LineShader.h" />
+    <ClInclude Include="LoadingScene.h" />
+    <ClInclude Include="LobbyScene.h" />
     <ClInclude Include="MapInfoLoader.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="MyBOBox.h" />
@@ -200,6 +202,7 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="PointLight.h" />
     <ClInclude Include="QuadTreeTerrainMesh.h" />
+    <ClInclude Include="RoomScene.h" />
     <ClInclude Include="ShaderManager.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Resource.h" />
@@ -267,6 +270,8 @@
     <ClCompile Include="LightObject.cpp" />
     <ClCompile Include="LineCube.cpp" />
     <ClCompile Include="LineShader.cpp" />
+    <ClCompile Include="LoadingScene.cpp" />
+    <ClCompile Include="LobbyScene.cpp" />
     <ClCompile Include="MapInfoLoader.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="Mesh.cpp" />
@@ -280,6 +285,7 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PointLight.cpp" />
     <ClCompile Include="QuadTreeTerrainMesh.cpp" />
+    <ClCompile Include="RoomScene.cpp" />
     <ClCompile Include="ShaderManager.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Scene.cpp" />
