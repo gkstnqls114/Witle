@@ -33,15 +33,19 @@ private:
 	UINT m_widthTotal{ 0 };
 	UINT m_lengthTotal{ 0 };
 
-	const UINT m_lengthMin{ 256 + 1 };
-	const UINT m_widthMin{ 256 + 1 };
+	const UINT m_lengthMin{ 64 + 1 };
+	const UINT m_widthMin{ 64 + 1 };
 
 	XMFLOAT3 m_xmf3Scale{ 0.f, 0.f, 0.f };
 	XMFLOAT4 m_xmf4Color{ 1.f, 0.f, 0.f , 1.f};
 
 	QUAD_TREE_NODE* m_pRootNode{ nullptr };
 
+	int m_ReafNodeCount = 0;
+	QUAD_TREE_NODE** m_pReafNodes{ nullptr };
+
 private:  
+	void RecursiveInitReafNodes(QUAD_TREE_NODE* node);
 	void RecursiveReleaseUploadBuffers(QUAD_TREE_NODE* node);
 	void RecursiveReleaseObjects(QUAD_TREE_NODE* node);
 	void RecursiveCalculateIDs(QUAD_TREE_NODE* node, const XMFLOAT3 position, int* pIDs) const;
@@ -67,6 +71,7 @@ public:
 	const int const * GetIDs(const XMFLOAT3& position) const;
 
 	void Render(const QUAD_TREE_NODE* node, ID3D12GraphicsCommandList *pd3dCommandList);
+	void Render(int index, ID3D12GraphicsCommandList *pd3dCommandList);
 	static int GetTerrainPieceCount() { return gTreePieceCount; }
 private:
 

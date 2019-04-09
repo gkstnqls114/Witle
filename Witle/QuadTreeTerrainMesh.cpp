@@ -22,6 +22,21 @@ UINT QuadTreeTerrainMesh::CalculateTriangles(UINT widthPixel, UINT lengthPixel)
 }
   
 
+void QuadTreeTerrainMesh::RecursiveInitReafNodes(QUAD_TREE_NODE * node)
+{ 
+	if (node->terrainMesh)
+	{
+		m_pReafNodes[node->id] = node;
+	}
+	else
+	{
+		RecursiveInitReafNodes(node->children[0]);
+		RecursiveInitReafNodes(node->children[1]);
+		RecursiveInitReafNodes(node->children[2]);
+		RecursiveInitReafNodes(node->children[3]);
+	}
+}
+
 void QuadTreeTerrainMesh::RecursiveReleaseUploadBuffers(QUAD_TREE_NODE * node)
 {
 	if (node->terrainMesh)
@@ -67,13 +82,17 @@ void QuadTreeTerrainMesh::RecursiveCalculateIDs(QUAD_TREE_NODE * node, const XMF
 {
 	if (node->terrainMesh)
 	{
+		assert(!(node->id == -1));
 		// 포지션이 해당 메쉬에 맞는지 확인한다. 
 		// x, z 사이에 있는지 검사한다.
-		bool isIntervenedX = (node->boundingBox.Center.x - node->boundingBox.Extents.x <= position.x)
-							  && (position.x <= node->boundingBox.Center.x + node->boundingBox.Extents.x);
-		bool isIntervenedZ = (node->boundingBox.Center.z - node->boundingBox.Extents.z <= position.z)
-							  && (position.z <= node->boundingBox.Center.z + node->boundingBox.Extents.z);
+		float minX = node->boundingBox.Center.x - node->boundingBox.Extents.x;
+		float maxX = node->boundingBox.Center.x + node->boundingBox.Extents.x;
+		bool isIntervenedX = (minX <= position.x) && (position.x <= maxX);
 
+		float minZ = node->boundingBox.Center.z - node->boundingBox.Extents.z;
+		float maxZ = node->boundingBox.Center.z + node->boundingBox.Extents.z;
+		bool isIntervenedZ = (minZ <= position.z)  && (position.z <= maxZ);
+		 
 		if (isIntervenedX && isIntervenedZ)
 		{  
 			// 만약 속한다면 해당 ID를 채운다.
@@ -107,16 +126,22 @@ void QuadTreeTerrainMesh::RecursiveCreateTerrain(QUAD_TREE_NODE * node, ID3D12De
 
 	if (nBlockWidth == m_widthMin || nBlockLength == m_lengthMin) // 마지막 리프 노드라면..
 	{ 
-		// 마지막 노드는 아이디를 설정한다.
+		// 마지막 리프 노드는 아이디를 설정한다.
 		node->id = gTreePieceCount++;
+		m_ReafNodeCount += 1;
 
-		// 현재 테스트로 바운딩박스의 centerY = 128, externY = 256 으로 설정
-		node->boundingBox = BoundingBox(XMFLOAT3{ 
-			float(xStart) * m_xmf3Scale.x + float(nBlockWidth) / 2.0f * m_xmf3Scale.x , 
+		// 현재 테스트로 바운딩박스의 centerY = 128, externY = 256 으로 설정 
+		XMFLOAT3 center{
+			float(xStart) * m_xmf3Scale.x + float(nBlockWidth - 1) / 2.0f * m_xmf3Scale.x ,
 			0.0f,
-			float(zStart) * m_xmf3Scale.z + float(nBlockLength) / 2.0f * m_xmf3Scale.z },
-			XMFLOAT3{ float(nBlockWidth) / 2.0f * m_xmf3Scale.x, 1000.f, float(nBlockLength) / 2.0f* m_xmf3Scale.z });
+			float(zStart) * m_xmf3Scale.z + float(nBlockLength - 1) / 2.0f * m_xmf3Scale.z };
 
+		XMFLOAT3 extents{
+				float(nBlockWidth - 1) / 2.0f * m_xmf3Scale.x,
+				1000.f,
+				float(nBlockLength - 1) / 2.0f* m_xmf3Scale.z };
+
+		node->boundingBox = BoundingBox( center, extents); 
 		node->terrainMesh = new TerrainMesh(m_pOwner, pd3dDevice, pd3dCommandList, xStart, zStart, m_widthMin, m_lengthMin, m_xmf3Scale, m_xmf4Color, pContext);
 	}
 	else
@@ -136,11 +161,17 @@ void QuadTreeTerrainMesh::RecursiveCreateTerrain(QUAD_TREE_NODE * node, ID3D12De
 				int New_xStart = xStart + x * (Next_BlockWidth - 1);
 				int New_zStart = zStart + z * (Next_BlockLength - 1);
 
-				node->boundingBox = BoundingBox(XMFLOAT3{
-					float(xStart) * m_xmf3Scale.x + float(nBlockWidth) / 2.0f * m_xmf3Scale.x ,
+				XMFLOAT3 center{ 
+					float(xStart) * m_xmf3Scale.x + float(nBlockWidth - 1) / 2.0f * m_xmf3Scale.x ,
 					0.0f,
-					float(zStart) * m_xmf3Scale.z + float(nBlockLength) / 2.0f * m_xmf3Scale.z },
-					XMFLOAT3{ float(nBlockWidth) / 2.0f * m_xmf3Scale.x, 1000.f, float(nBlockLength) / 2.0f* m_xmf3Scale.z });
+					float(zStart) * m_xmf3Scale.z + float(nBlockLength - 1) / 2.0f * m_xmf3Scale.z };
+				
+				XMFLOAT3 extents{
+						float(nBlockWidth - 1) / 2.0f * m_xmf3Scale.x,
+						1000.f,
+						float(nBlockLength - 1) / 2.0f* m_xmf3Scale.z  };
+
+				node->boundingBox = BoundingBox(center, extents);
 
 				node->children[index] = new QUAD_TREE_NODE(); 
 				RecursiveCreateTerrain(node->children[index], pd3dDevice, pd3dCommandList, New_xStart, New_zStart, Next_BlockWidth, Next_BlockLength, pContext);
@@ -172,8 +203,13 @@ QuadTreeTerrainMesh::QuadTreeTerrainMesh(GameObject * pOwner, ID3D12Device * pd3
 
 	// 쿼드 트리의 부모 노드를 만듭니다.
 	m_pRootNode = new QUAD_TREE_NODE;
-
+	 
+	// 리프노드의 개수를 구하고, 바운딩박스및 터레인 조각을 생성한다.
+	// 순서변경X
 	RecursiveCreateTerrain(m_pRootNode, pd3dDevice, pd3dCommandList, 0, 0, m_widthTotal, m_lengthTotal, pContext);
+	m_pReafNodes = new QUAD_TREE_NODE*[m_ReafNodeCount]; //리프노드를 가리킬 포인터 배열을 생성
+	RecursiveInitReafNodes(m_pRootNode);
+	// 순서변경X
 
 	// 재귀함수로 모든 터레인 조각 로드 완료후...
 	StaticObjectStorage::GetInstance(this)->CreateInfo(pd3dDevice, pd3dCommandList, this);
@@ -213,7 +249,7 @@ void QuadTreeTerrainMesh::Render(const QUAD_TREE_NODE* node, ID3D12GraphicsComma
 	extern MeshRenderer gMeshRenderer;
 
 	if (node->terrainMesh)
-	{
+	{ 
 		pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Terrain")->GetPSO());
 		gMeshRenderer.Render(pd3dCommandList, node->terrainMesh);
 		StaticObjectStorage::GetInstance(this)->Render(pd3dCommandList, node->id);
@@ -228,4 +264,15 @@ void QuadTreeTerrainMesh::Render(const QUAD_TREE_NODE* node, ID3D12GraphicsComma
 			}
 		} 
 	}
+}
+
+void QuadTreeTerrainMesh::Render(int index, ID3D12GraphicsCommandList * pd3dCommandList)
+{
+	// 렌더링
+	extern MeshRenderer gMeshRenderer;
+
+	if (index < 0 || index >= m_ReafNodeCount) return;
+	pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Terrain")->GetPSO());
+	gMeshRenderer.Render(pd3dCommandList, m_pReafNodes[index]->terrainMesh);
+	StaticObjectStorage::GetInstance(this)->Render(pd3dCommandList, m_pReafNodes[index]->id);
 }

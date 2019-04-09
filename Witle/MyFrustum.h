@@ -28,7 +28,7 @@ public:
 	bool IsIntersect(const XMFLOAT3& pos) const;
 	bool IsIntersect(const BoundingBox& pos) const;
 
-	void TESTCheck(QUAD_TREE_NODE* node);
-	void TESTCheckAllTRUE(QUAD_TREE_NODE* node);
-	void TESTCheckAllFALSE(QUAD_TREE_NODE* node);
+	void CheckRendering(QUAD_TREE_NODE* node);
+	void CheckRenderingAllTRUE(QUAD_TREE_NODE* node);
+	void CheckRenderingAllFALSE(QUAD_TREE_NODE* node);
 };

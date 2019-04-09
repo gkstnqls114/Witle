@@ -105,7 +105,7 @@ protected:
 
 	Texture*				m_TreeDiffuse{ nullptr };
 	// fbx test
-
+	int TerrainIndex = 0;
 	Terrain*                m_Terrain{ nullptr };
 	CameraObject*           m_Camera{ nullptr };
 

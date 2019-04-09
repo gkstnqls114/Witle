@@ -543,9 +543,9 @@ void CGameFramework::MoveToNextFrame()
 
 void CGameFramework::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam)
 {
-	//if (m_pScene) {
-	//	m_pScene->OnProcessingMouseMessage(hWnd, nMessageID, wParam, lParam);
-	//}
+	if (m_pScene) {
+		m_pScene->OnProcessingMouseMessage(hWnd, nMessageID, wParam, lParam);
+	}
 
 	switch (nMessageID)
 	{
@@ -576,6 +576,9 @@ void CGameFramework::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM
 static BOOL is_fullscreen = FALSE;
 void CGameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam)
 {
+	if (m_pScene) {
+		m_pScene->OnProcessingKeyboardMessage(hWnd, nMessageID, wParam, lParam, 0.f);
+	}
 
 	switch (nMessageID)
 	{
