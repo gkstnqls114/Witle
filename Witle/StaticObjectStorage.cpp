@@ -96,6 +96,7 @@ void StaticObjectStorage::LoadNameAndPositionFromFile(ID3D12Device * pd3dDevice,
 		if (!strcmp(pstrToken, "<GlobalTransform>:"))
 		{
 			TerrainObjectAllCount += 1;
+
 			XMFLOAT4X4 temp;
 			nReads = (UINT)::fread(&temp, sizeof(XMFLOAT4X4), 1, pInFile);
 			XMFLOAT4X4 transform = Matrix4x4::Identity();

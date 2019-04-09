@@ -333,8 +333,7 @@ bool GameScene::ProcessInput(HWND hWnd, float ElapsedTime)
 		if (dwDirection & DIR_UP) xmf3Shift = Vector3::Add(xmf3Shift, axis.up, fDistance);
 		if (dwDirection & DIR_DOWN) xmf3Shift = Vector3::Add(xmf3Shift, axis.up, -fDistance);
 
-		//플레이어의 이동량 벡터를 xmf3Shift 벡터만큼 더한다. 
-		// m_pPlayer->MoveVelocity(xmf3Shift);
+		//플레이어의 이동량 벡터를 xmf3Shift 벡터만큼 더한다.  
 		m_pPlayer->MoveVelocity(xmf3Shift); 
 	}
 	else
@@ -344,8 +343,7 @@ bool GameScene::ProcessInput(HWND hWnd, float ElapsedTime)
 		{ 
 			float fLength = Vector3::Length(Veclocity);
 			float fDeceleration = (3000.f * ElapsedTime); //해당상수는 Friction
-			if (fDeceleration > fLength) fDeceleration = fLength;
-			// m_pPlayer->MoveVelocity(Vector3::ScalarProduct(Veclocity, -fDeceleration, true));
+			if (fDeceleration > fLength) fDeceleration = fLength; 
 			m_pPlayer->MoveVelocity(Vector3::ScalarProduct(Veclocity, -fDeceleration, true));
 		} 
 	}
@@ -447,9 +445,7 @@ void GameScene::TESTSetRootDescriptor(ID3D12GraphicsCommandList * pd3dCommandLis
 }
 
 void GameScene::AnimateObjects(float fTimeElapsed)
-{
-	// if (m_pHeightMapTerrain) m_pHeightMapTerrain->Animate(fTimeElapsed);
-	 
+{ 
 	if (m_pPlayer) m_pPlayer->Animate(fTimeElapsed);
 }
 
@@ -474,16 +470,14 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	D3D12_GPU_VIRTUAL_ADDRESS d3dcbMaterialsGpuVirtualAddress = m_pd3dcbMaterials->GetGPUVirtualAddress();
 	pd3dCommandList->SetGraphicsRootConstantBufferView(ROOTPARAMETER_MATERIALS, d3dcbMaterialsGpuVirtualAddress);
 
-	// Terrain PSO
-	// pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Terrain")->GetPSO());
-	pd3dCommandList->SetDescriptorHeaps(1, &m_pd3dCbvSrvDescriptorHeap);
-
+	// 터레인
+	pd3dCommandList->SetDescriptorHeaps(1, &m_pd3dCbvSrvDescriptorHeap); 
 	pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_WORLD,  16, &matrix, 0);
 	m_Terrain->UpdateShaderVariables(pd3dCommandList); 
 
 	// TerrainMesh Render
 	Mesh* terrainMesh = m_Terrain->GetComponent<Mesh>("TerrainMesh");
-	m_TESTQuadTree->Render(pd3dCommandList);
+	m_TESTQuadTree->Render(TerrainIndex,pd3dCommandList);
 
 
 #ifdef CHECK_SUBVIEWS
@@ -715,3 +709,4 @@ void GameScene::BuildLightsAndMaterials(ID3D12Device *pd3dDevice, ID3D12Graphics
 void GameScene::RenderShadowMap(ID3D12GraphicsCommandList * pd3dCommandList)
 {
 }
+ 
