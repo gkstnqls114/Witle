@@ -155,18 +155,23 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	XMFLOAT4 xmf4Color(0.0f, 0.5f, 0.0f, 0.0f);
 	m_Terrain = new Terrain("Terrain", pd3dDevice, pd3dCommandList, L"Image/HeightMap.raw", 257, 257, 257, 257, xmf3Scale, xmf4Color);
 
-	//테스트 쿼드트리 터레인 생성
-	m_TESTQuadGameobject = new GameObject("TESTQuad");
-	m_TESTQuadTree = new QuadTreeTerrainMesh(m_TESTQuadGameobject, pd3dDevice, pd3dCommandList, 257, 257, xmf3Scale, xmf4Color, m_Terrain->GetHeightMapImage());
-	
-	// 맵위에 올려놓을 오브젝트 위치 설정
-	MapInfoLoader::LoadTerrainObjectFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Information/Terrain.bin");
- 
+
 	// 테스트할 모델 오브젝트
 	m_pPlayer = new Player("Player", pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 	m_GameObjectDiffuse = new Texture(1, RESOURCE_TEXTURE2D);
 	m_GameObjectDiffuse->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/ReflexTree_Diffuse.dds", 0);
-	 
+
+
+	// 맵위에 올려놓을 오브젝트 위치 설정
+	MapInfoLoader::LoadTerrainObjectFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Information/Terrain.bin");
+ 
+	// SunFlower
+	m_SunFlowerCount = SunFlower::m_CountFromMap;
+	m_SunFlowers = new SunFlower*[m_SunFlowerCount];
+	for (int x = 0; x < m_SunFlowerCount; ++x)
+	{
+		m_SunFlowers[x] = new SunFlower(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	}
 	// Trees
 	m_TreeCount = MyReflexTree::m_CountFromMap;
 	m_Trees = new MyReflexTree* [m_TreeCount];
@@ -178,14 +183,6 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	m_TreeDiffuse = new Texture(1, RESOURCE_TEXTURE2D); 
 	m_TreeDiffuse->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/ReflexTree_Diffuse.dds", 0);
 	
-
-	// SunFlower
-	m_SunFlowerCount = SunFlower::m_CountFromMap;
-	m_SunFlowers = new SunFlower*[m_SunFlowerCount];
-	for (int x = 0; x < m_SunFlowerCount; ++x)
-	{
-		m_SunFlowers[x] = new SunFlower(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
-	}
 
 	// Trees
 	m_PillaCount = Pillar::m_CountFromMap;
@@ -201,6 +198,10 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	{
 		m_Rocks[x] = new Rock(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 	}
+
+	//테스트 쿼드트리 터레인 생성
+	m_TESTQuadGameobject = new GameObject("TESTQuad");
+	m_TESTQuadTree = new QuadTreeTerrainMesh(m_TESTQuadGameobject, pd3dDevice, pd3dCommandList, 257, 257, xmf3Scale, xmf4Color, m_Terrain->GetHeightMapImage());
 
 	// 카메라
 	m_Camera = new CameraObject("Camera");
@@ -463,7 +464,7 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	pd3dCommandList->SetGraphicsRootConstantBufferView(ROOTPARAMETER_MATERIALS, d3dcbMaterialsGpuVirtualAddress);
 
 	// Terrain PSO
-	pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Terrain")->GetPSO());
+	// pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Terrain")->GetPSO());
 	pd3dCommandList->SetDescriptorHeaps(1, &m_pd3dCbvSrvDescriptorHeap);
 
 	pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_WORLD,  16, &matrix, 0);

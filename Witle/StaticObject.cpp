@@ -113,16 +113,18 @@ int SunFlower::m_CountFromMap = 0;
 int SunFlower::m_Count = 0;
 
 SunFlower::SunFlower(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, XMFLOAT3 position)
-	: StaticObject("SunFlower") 
+	: StaticObject("Sunflower") 
 {
+	ModelStorage::GetInstance()->CreateModels(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature);
+	m_LoadObject = ModelStorage::GetInstance()->GetRootObject("Sunflower");
 }
 
 SunFlower::SunFlower(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature)
-	: StaticObject("SunFlower") 
+	: StaticObject("Sunflower") 
 {
 	ModelStorage::GetInstance()->CreateModels(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature);
 
-	m_LoadObject = ModelStorage::GetInstance()->GetRootObject("SunFlower");
+	m_LoadObject = ModelStorage::GetInstance()->GetRootObject("Sunflower");
 
 	XMFLOAT4X4 transform = m_PostionFromMap[m_Count];
 	XMFLOAT3 position =

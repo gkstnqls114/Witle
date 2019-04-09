@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "d3dUtil.h"
 #include "TerrainMesh.h" 
+#include "ShaderManager.h"
+#include "Shader.h"
 #include "MeshRenderer.h"
 #include "StaticObjectStorage.h"
 #include "HeightMapImage.h"
@@ -66,9 +68,15 @@ void QuadTreeTerrainMesh::RecursiveCalculateIDs(QUAD_TREE_NODE * node, const XMF
 	if (node->terrainMesh)
 	{
 		// 포지션이 해당 메쉬에 맞는지 확인한다. 
-		// 만약 속한다면...
-		if (node->boundingBox.Contains(Vector3::XMFloat3ToVector(position)) != ContainmentType::DISJOINT)
+		// x, z 사이에 있는지 검사한다.
+		bool isIntervenedX = (node->boundingBox.Center.x - node->boundingBox.Extents.x <= position.x)
+							  && (position.x <= node->boundingBox.Center.x + node->boundingBox.Extents.x);
+		bool isIntervenedZ = (node->boundingBox.Center.z - node->boundingBox.Extents.z <= position.z)
+							  && (position.z <= node->boundingBox.Center.z + node->boundingBox.Extents.z);
+
+		if (isIntervenedX && isIntervenedZ)
 		{  
+			// 만약 속한다면 해당 ID를 채운다.
 			assert(!(pIDs[QUAD - 1] != -1)); // 만약 마지막이 채워져 있다면 오류이다.
 			for (int x = 0; x < QUAD; ++x)
 			{
@@ -120,9 +128,7 @@ void QuadTreeTerrainMesh::RecursiveCreateTerrain(QUAD_TREE_NODE * node, ID3D12De
 		int Next_BlockLength = czQuadsPerBlock / 2 + 1;
 
 		int index = 0;
-
-		// node->id = gTreePieceCount++;
-
+		 
 		for (int z = 0; z < 2; z++)
 		{
 			for (int x = 0; x < 2; x++)
@@ -191,11 +197,11 @@ void QuadTreeTerrainMesh::ReleaseUploadBuffers()
 int const * QuadTreeTerrainMesh::GetIDs(const XMFLOAT3 & position) const
 {
 	int* pIDs = new int[QUAD];
-	for (int i = 0; i < QUAD; ++i)
+	for (int x = 0; x < QUAD; ++x)
 	{
-		pIDs[i] = -1; // -1로 리셋. -1이라면 존재하지 않는 것.
+		pIDs[x] = -1; // -1로 리셋. -1이라면 존재하지 않는 것.
 	}
-
+	
 	RecursiveCalculateIDs(m_pRootNode, position, pIDs);
 
 	return pIDs;
@@ -208,8 +214,9 @@ void QuadTreeTerrainMesh::Render(const QUAD_TREE_NODE* node, ID3D12GraphicsComma
 
 	if (node->terrainMesh)
 	{
-		StaticObjectStorage::GetInstance(this)->Render(pd3dCommandList, node->id);
+		pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Terrain")->GetPSO());
 		gMeshRenderer.Render(pd3dCommandList, node->terrainMesh);
+		StaticObjectStorage::GetInstance(this)->Render(pd3dCommandList, node->id);
 	}
 	else
 	{

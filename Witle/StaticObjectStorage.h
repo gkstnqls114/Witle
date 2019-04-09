@@ -1,39 +1,41 @@
 #pragma once
  
 class QuadTreeTerrainMesh;
+class LoadObject;
 
+struct VS_SRV_INSTANCEINFO;
 /*
 
 터레인 위에 배치되는 오브젝트들을 모아놓은 클래스이다.
-터레인 오브젝트의 이름과 터레인 조각의 인덱스를 키로 가진다.
-
-┌ m_StaticObjectStorage -------------------┐
-| name           |    pointer              |
-|
-|
-|
+["이름"]["터레인 아이디"]를 통해 갖고있는 월드행렬정보를 보여줄 수 있다.
 
 */
 class StaticObjectStorage
 {  
-private:
-	struct TerrainObjectInfo;
-	int TerrainPieceCount;
+private: 
+	int TerrainPieceCount = 0; // 터레인 제일 작은 조각이 몇개 있는가?
+	int TerrainObjectCount = 0; //모든 터레인 오브젝트는 몇개가 있는가?
 	 
 	struct TerrainObjectInfo
 	{
 		int         TerrainObjectCount = 0; // 터레인 조각 위에 배치되는 오브젝트의 개수
 		//XMFLOAT4X4* pTerrainObjectsTransform; // 터레인 조각 위에 배치되는 오브젝트의 월드 행렬
-		std::list<XMFLOAT4X4> TransformList;
+		std::vector<XMFLOAT4X4> TransformList;
 	};
 
+	ID3D12Resource* m_pd3dcbGameObjects{ nullptr };
+	VS_SRV_INSTANCEINFO* m_pcbMappedGameObjects{ nullptr };
 	 
+	LoadObject* m_TestObject{ nullptr };
+
 	bool m_isCreate = false;
 	std::map<std::string, TerrainObjectInfo*> m_StaticObjectStorage; // 모델 이름은 반드시 클래스에 맞춘다.
-	
+	void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList, int count, XMFLOAT4X4* transforms);
+
 private:
 	void LoadTerrainObjectFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, const char *pstrFileName, const QuadTreeTerrainMesh const * pTerrain);
 	void LoadNameAndPositionFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, FILE *pInFile, const QuadTreeTerrainMesh const * pTerrain);
+	void CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList);
 
 public:
 	static StaticObjectStorage* m_Instance;
@@ -43,5 +45,6 @@ public:
 
 	void CreateInfo(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, const QuadTreeTerrainMesh const * pTerrain);
 	
+	// 인스턴싱을 통해 렌더합니다.
 	void Render(ID3D12GraphicsCommandList * pd3dCommandList, int terrainID);
 };
