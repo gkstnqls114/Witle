@@ -34,6 +34,7 @@ void QuadtreeTerrain::ReleaseMemberUploadBuffers()
 
 void QuadtreeTerrain::RenderTerrainObjects(ID3D12GraphicsCommandList * pd3dCommandList)
 {
+	pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("InstancingStandardShader")->GetPSO());
 	for (int i = 0; i < m_ReafNodeCount; ++i)
 	{
 		if (m_pReafNodes[i]->isRendering)

@@ -285,9 +285,7 @@ void StaticObjectStorage::CreateInfo(ID3D12Device * pd3dDevice, ID3D12GraphicsCo
 }
  
 void StaticObjectStorage::Render(ID3D12GraphicsCommandList * pd3dCommandList, int index)
-{ 
-	pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("InstancingStandardShader")->GetPSO());
-	 
+{  
 	for (auto& info : m_StaticObjectStorage)
 	{
 		if (info.second[index].TerrainObjectCount == 0) continue;
