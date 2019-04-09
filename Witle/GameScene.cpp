@@ -434,8 +434,7 @@ void GameScene::LastUpdate(float fElapsedTime)
 	} 
 
 	// 카메라 프러스텀과 쿼드트리 지형 렌더링 체크
-	//m_Camera->GetFrustum()->CheckRendering(m_TESTQuadTree->GetRootNode());
-	m_Camera->GetFrustum()->CheckRenderingAllTRUE(m_TESTQuadTree->GetRootNode());
+	m_Camera->GetFrustum()->CheckRendering(m_TESTQuadTree->GetRootNode()); 
 }
 
 void GameScene::TESTSetRootDescriptor(ID3D12GraphicsCommandList * pd3dCommandList)
@@ -481,8 +480,7 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 
 	// TerrainMesh Render
 	Mesh* terrainMesh = m_Terrain->GetComponent<Mesh>("TerrainMesh");
-	// m_TESTQuadTree->Render(m_TESTQuadTree->GetRootNode(), pd3dCommandList);
-	m_TESTQuadTree->Render(TerrainIndex, pd3dCommandList);
+	m_TESTQuadTree->Render(pd3dCommandList);
 
 
 #ifdef CHECK_SUBVIEWS

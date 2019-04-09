@@ -14,7 +14,7 @@ class StaticObjectStorage
 {  
 private: 
 	int TerrainPieceCount = 0; // 터레인 제일 작은 조각이 몇개 있는가?
-	int TerrainObjectCount = 0; //모든 터레인 오브젝트는 몇개가 있는가?
+	int TerrainObjectAllCount = 0; //모든 터레인 오브젝트는 몇개가 있는가?
 	 
 	struct TerrainObjectInfo
 	{
@@ -46,5 +46,5 @@ public:
 	void CreateInfo(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, const QuadTreeTerrainMesh const * pTerrain);
 	
 	// 인스턴싱을 통해 렌더합니다.
-	void Render(ID3D12GraphicsCommandList * pd3dCommandList, int terrainID);
+	void Render(ID3D12GraphicsCommandList * pd3dCommandList, const int* indexs, int indexCount);
 };

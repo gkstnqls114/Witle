@@ -22,6 +22,41 @@ UINT QuadTreeTerrainMesh::CalculateTriangles(UINT widthPixel, UINT lengthPixel)
 }
   
 
+void QuadTreeTerrainMesh::RenderTerrainObjects(ID3D12GraphicsCommandList * pd3dCommandList)
+{
+	// 그려야하는 렌더링 인덱스 초기화
+	for (int i = 0; i < m_ReafNodeCount; ++i) m_RenderingIndices[i] = -1;
+
+	int RenderingIndexCount = 0;
+	for (int i = 0; i < m_ReafNodeCount; ++i)
+	{
+		if (m_pReafNodes[i]->isRendering)
+		{
+			m_RenderingIndices[RenderingIndexCount++] = i;
+		}
+	}
+	StaticObjectStorage::GetInstance(this)->Render(pd3dCommandList, m_RenderingIndices, m_ReafNodeCount);
+}
+
+void QuadTreeTerrainMesh::RecursiveRender(const QUAD_TREE_NODE * node, ID3D12GraphicsCommandList * pd3dCommandList)
+{
+	// 렌더링
+	extern MeshRenderer gMeshRenderer;
+
+	if (node->terrainMesh)
+	{
+		pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Terrain")->GetPSO());
+		gMeshRenderer.Render(pd3dCommandList, node->terrainMesh); 
+	}
+	else
+	{
+		if (node->children[0]->isRendering) RecursiveRender(node->children[0], pd3dCommandList);
+		if (node->children[1]->isRendering) RecursiveRender(node->children[1], pd3dCommandList);
+		if (node->children[2]->isRendering) RecursiveRender(node->children[2], pd3dCommandList);
+		if (node->children[3]->isRendering) RecursiveRender(node->children[3], pd3dCommandList);
+	}
+}
+
 void QuadTreeTerrainMesh::RecursiveInitReafNodes(QUAD_TREE_NODE * node)
 { 
 	if (node->terrainMesh)
@@ -208,6 +243,7 @@ QuadTreeTerrainMesh::QuadTreeTerrainMesh(GameObject * pOwner, ID3D12Device * pd3
 	// 순서변경X
 	RecursiveCreateTerrain(m_pRootNode, pd3dDevice, pd3dCommandList, 0, 0, m_widthTotal, m_lengthTotal, pContext);
 	m_pReafNodes = new QUAD_TREE_NODE*[m_ReafNodeCount]; //리프노드를 가리킬 포인터 배열을 생성
+	m_RenderingIndices = new int[m_ReafNodeCount];
 	RecursiveInitReafNodes(m_pRootNode);
 	// 순서변경X
 
@@ -243,27 +279,10 @@ int const * QuadTreeTerrainMesh::GetIDs(const XMFLOAT3 & position) const
 	return pIDs;
 }
 
-void QuadTreeTerrainMesh::Render(const QUAD_TREE_NODE* node, ID3D12GraphicsCommandList *pd3dCommandList)
+void QuadTreeTerrainMesh::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 {
-	// 렌더링
-	extern MeshRenderer gMeshRenderer;
-
-	if (node->terrainMesh)
-	{ 
-		pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Terrain")->GetPSO());
-		gMeshRenderer.Render(pd3dCommandList, node->terrainMesh);
-		StaticObjectStorage::GetInstance(this)->Render(pd3dCommandList, node->id);
-	}
-	else
-	{
-		for (int x = 0; x < QUAD; ++x)
-		{ 
-			if (node->children[x]->isRendering)
-			{
-				Render(node->children[x], pd3dCommandList);
-			}
-		} 
-	}
+	RecursiveRender(m_pRootNode, pd3dCommandList);
+	RenderTerrainObjects(pd3dCommandList);
 }
 
 void QuadTreeTerrainMesh::Render(int index, ID3D12GraphicsCommandList * pd3dCommandList)
@@ -272,7 +291,7 @@ void QuadTreeTerrainMesh::Render(int index, ID3D12GraphicsCommandList * pd3dComm
 	extern MeshRenderer gMeshRenderer;
 
 	if (index < 0 || index >= m_ReafNodeCount) return;
-	pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Terrain")->GetPSO());
+	//pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Terrain")->GetPSO());
 	gMeshRenderer.Render(pd3dCommandList, m_pReafNodes[index]->terrainMesh);
-	StaticObjectStorage::GetInstance(this)->Render(pd3dCommandList, m_pReafNodes[index]->id);
+	//StaticObjectStorage::GetInstance(this)->Render(pd3dCommandList, m_pReafNodes[index]->id);
 }

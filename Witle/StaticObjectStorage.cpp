@@ -23,12 +23,6 @@ StaticObjectStorage* StaticObjectStorage::m_Instance{ nullptr };
 
 void StaticObjectStorage::UpdateShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList, int count, XMFLOAT4X4 * transforms)
 { 
-	pd3dCommandList->SetGraphicsRootShaderResourceView(ROOTPARAMETER_INSTANCING, m_pd3dcbGameObjects->GetGPUVirtualAddress());
-
-	for (UINT x = 0; x < count; x++)
-	{
-		XMStoreFloat4x4(&m_pcbMappedGameObjects[x].m_xmf4x4Transform, XMMatrixTranspose(XMLoadFloat4x4(&transforms[x])));
-	}
 }
 
 void StaticObjectStorage::LoadTerrainObjectFromFile(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, const char * pstrFileName, const QuadTreeTerrainMesh const * pTerrain)
@@ -101,7 +95,7 @@ void StaticObjectStorage::LoadNameAndPositionFromFile(ID3D12Device * pd3dDevice,
 		::ReadStringFromFile(pInFile, pstrToken);
 		if (!strcmp(pstrToken, "<GlobalTransform>:"))
 		{
-			TerrainObjectCount += 1;
+			TerrainObjectAllCount += 1;
 			XMFLOAT4X4 temp;
 			nReads = (UINT)::fread(&temp, sizeof(XMFLOAT4X4), 1, pInFile);
 			XMFLOAT4X4 transform = Matrix4x4::Identity();
@@ -241,7 +235,7 @@ void StaticObjectStorage::CreateShaderVariables(ID3D12Device * pd3dDevice, ID3D1
 {
 	//인스턴스 정보를 저장할 정점 버퍼를 업로드 힙 유형으로 생성한다.
 	m_pd3dcbGameObjects = d3dUtil::CreateBufferResource(pd3dDevice, pd3dCommandList, NULL,
-		sizeof(VS_SRV_INSTANCEINFO) * TerrainObjectCount, D3D12_HEAP_TYPE_UPLOAD,
+		sizeof(VS_SRV_INSTANCEINFO) * TerrainObjectAllCount, D3D12_HEAP_TYPE_UPLOAD,
 		D3D12_RESOURCE_STATE_GENERIC_READ, NULL);
 
 	//정점 버퍼(업로드 힙)에 대한 포인터를 저장한다.
@@ -274,9 +268,25 @@ void StaticObjectStorage::CreateInfo(ID3D12Device * pd3dDevice, ID3D12GraphicsCo
 	m_isCreate = true;
 }
  
-void StaticObjectStorage::Render(ID3D12GraphicsCommandList * pd3dCommandList, int terrainID)
-{
+void StaticObjectStorage::Render(ID3D12GraphicsCommandList * pd3dCommandList, const int* indexs, int indexCount)
+{ 
 	pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("InstancingStandardShader")->GetPSO());
-	UpdateShaderVariables(pd3dCommandList, m_StaticObjectStorage[SUNFLOWER][terrainID].TerrainObjectCount, m_StaticObjectStorage[SUNFLOWER][terrainID].TransformList.begin()._Ptr);
-	m_TestObject->RenderInstancing(pd3dCommandList, m_StaticObjectStorage[SUNFLOWER][terrainID].TerrainObjectCount);
+	 
+	int k = 0;
+	for (UINT x = 0; x < indexCount; x++)
+	{
+		if (indexs[x] == -1) continue;
+
+		for (int i = 0; i < m_StaticObjectStorage[SUNFLOWER][indexs[x]].TerrainObjectCount; ++i)
+		{
+			XMStoreFloat4x4(
+				&m_pcbMappedGameObjects[k].m_xmf4x4Transform, 
+				XMMatrixTranspose(XMLoadFloat4x4(&m_StaticObjectStorage[SUNFLOWER][indexs[x]].TransformList[i]
+			)));
+			++k;
+		}
+	}
+	pd3dCommandList->SetGraphicsRootShaderResourceView(ROOTPARAMETER_INSTANCING, m_pd3dcbGameObjects->GetGPUVirtualAddress());
+	
+	m_TestObject->RenderInstancing(pd3dCommandList, k);
 }
