@@ -1,5 +1,5 @@
 #pragma once
-#include "Mesh.h"
+#include "GameObject.h"
  
 const int MAX_TRIANGLES = 10000;
 const int QUAD = 4;
@@ -7,6 +7,7 @@ const int QUAD = 4;
 class TerrainMesh;
 class HeightMapImage;
 class MyFrustum;
+class Mesh;
 
 struct INFO
 {
@@ -24,17 +25,22 @@ struct QUAD_TREE_NODE
 	QUAD_TREE_NODE* children[QUAD]{ nullptr,  nullptr , nullptr , nullptr };
 };
 
-class QuadTreeTerrainMesh
-	: public ComponentBase
+class QuadtreeTerrain
+	: public GameObject
 {
 	static int gTreePieceCount;
+	
+	// 컴포넌트가 아닌, 게임오브젝트 내에서 동적할당된 멤버변수를 해제한다.
+	virtual void ReleaseMembers() override;
+	// 컴포넌트가 아닌, 게임오브젝트 내에서 동적할당된 업로드 힙을 해제한다.
+	virtual void ReleaseMemberUploadBuffers() override;
 
 private:
 	UINT m_widthTotal{ 0 };
 	UINT m_lengthTotal{ 0 };
 
-	const UINT m_lengthMin{ 64 + 1 };
-	const UINT m_widthMin{ 64 + 1 };
+	const UINT m_lengthMin{ 64 + 1 }; // 나누어지는 픽셀 크기
+	const UINT m_widthMin{ 64 + 1 }; // 나누어지는 픽셀 크기
 
 	XMFLOAT3 m_xmf3Scale{ 0.f, 0.f, 0.f };
 	XMFLOAT4 m_xmf4Color{ 1.f, 0.f, 0.f , 1.f};
@@ -63,12 +69,11 @@ private:
 	UINT CalculateTriangles(UINT widthPixel, UINT lengthPixel);
 
 public:
-	QuadTreeTerrainMesh(GameObject* pOwner, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, int nWidth, int nLength, XMFLOAT3 xmf3Scale = XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT4 xmf4Color = XMFLOAT4(1.0f, 1.0f, 0.0f, 0.0f), HeightMapImage *pContext = NULL);
-	virtual ~QuadTreeTerrainMesh();
-
-	void ReleaseUploadBuffers(); 
-
-	virtual void Update(float fTimeElapsed) override {};
+	QuadtreeTerrain(GameObject* pOwner, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, int nWidth, int nLength, XMFLOAT3 xmf3Scale = XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT4 xmf4Color = XMFLOAT4(1.0f, 1.0f, 0.0f, 0.0f), HeightMapImage *pContext = NULL);
+	virtual ~QuadtreeTerrain();
+	 
+	virtual void Update(float fElapsedTime) override;
+	void LastUpdate(float fElapsedTime);
 
 	QUAD_TREE_NODE* const GetRootNode() const { return m_pRootNode; }
 	// 해당 포지션에 속하는 리프노드의 아이디들을 리턴한다. 쿼드트리이므로 최대 4개가 존재한다.

@@ -19,7 +19,7 @@ class GameObject;
 class LoadObject;
 class SkinnedShader;
 
-class QuadTreeTerrainMesh;
+class QuadtreeTerrain;
 
 struct LIGHTS;
 struct MATERIAL;
@@ -127,5 +127,5 @@ protected:
 	//////////////////////////////////////  Α¶Έν
 
 	GameObject *m_TESTQuadGameobject;
-	QuadTreeTerrainMesh         *m_TESTQuadTree{ nullptr };
+	QuadtreeTerrain         *m_TESTQuadTree{ nullptr };
 };

@@ -209,7 +209,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 
 	//테스트 쿼드트리 터레인 생성
 	m_TESTQuadGameobject = new GameObject("TESTQuad");
-	m_TESTQuadTree = new QuadTreeTerrainMesh(m_TESTQuadGameobject, pd3dDevice, pd3dCommandList, 257, 257, xmf3Scale, xmf4Color, m_Terrain->GetHeightMapImage());
+	m_TESTQuadTree = new QuadtreeTerrain(m_TESTQuadGameobject, pd3dDevice, pd3dCommandList, 257, 257, xmf3Scale, xmf4Color, m_Terrain->GetHeightMapImage());
 
 	// 카메라
 	m_Camera = new CameraObject("Camera");
@@ -428,6 +428,7 @@ void GameScene::LastUpdate(float fElapsedTime)
 
 
 	// player update 이후에 camera update
+	// 순서변경X
 	if (m_Camera)
 	{
 		m_Camera->LastUpdate(fElapsedTime);
@@ -435,6 +436,8 @@ void GameScene::LastUpdate(float fElapsedTime)
 
 	// 카메라 프러스텀과 쿼드트리 지형 렌더링 체크
 	m_Camera->GetFrustum()->CheckRendering(m_TESTQuadTree->GetRootNode()); 
+	m_TESTQuadTree->LastUpdate(fElapsedTime);
+	// 순서변경X 
 }
 
 void GameScene::TESTSetRootDescriptor(ID3D12GraphicsCommandList * pd3dCommandList)

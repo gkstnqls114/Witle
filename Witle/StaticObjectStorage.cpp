@@ -25,7 +25,7 @@ void StaticObjectStorage::UpdateShaderVariables(ID3D12GraphicsCommandList * pd3d
 { 
 }
 
-void StaticObjectStorage::LoadTerrainObjectFromFile(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, const char * pstrFileName, const QuadTreeTerrainMesh const * pTerrain)
+void StaticObjectStorage::LoadTerrainObjectFromFile(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, const char * pstrFileName, const QuadtreeTerrain const * pTerrain)
 {
 	FILE *pInFile = NULL;
 	::fopen_s(&pInFile, pstrFileName, "rb");
@@ -80,7 +80,7 @@ void StaticObjectStorage::LoadTerrainObjectFromFile(ID3D12Device * pd3dDevice, I
 	::fclose(pInFile);
 }
 
-void StaticObjectStorage::LoadNameAndPositionFromFile(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, FILE * pInFile, const QuadTreeTerrainMesh const * pTerrain)
+void StaticObjectStorage::LoadNameAndPositionFromFile(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, FILE * pInFile, const QuadtreeTerrain const * pTerrain)
 {
 	char pstrToken[64] = { '\0' };
 	UINT nReads = 0;
@@ -242,7 +242,7 @@ void StaticObjectStorage::CreateShaderVariables(ID3D12Device * pd3dDevice, ID3D1
 	m_pd3dcbGameObjects->Map(0, NULL, (void **)&m_pcbMappedGameObjects);
 }
 
-StaticObjectStorage * StaticObjectStorage::GetInstance(const QuadTreeTerrainMesh const * pTerrain)
+StaticObjectStorage * StaticObjectStorage::GetInstance(const QuadtreeTerrain const * pTerrain)
 {
 	if (!m_Instance)
 	{
@@ -252,7 +252,7 @@ StaticObjectStorage * StaticObjectStorage::GetInstance(const QuadTreeTerrainMesh
 	return m_Instance;
 }
 
-void StaticObjectStorage::CreateInfo(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, const QuadTreeTerrainMesh const * pTerrain)
+void StaticObjectStorage::CreateInfo(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, const QuadtreeTerrain const * pTerrain)
 {
 	if (m_isCreate) return;
 

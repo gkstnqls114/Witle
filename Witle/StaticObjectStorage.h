@@ -1,6 +1,6 @@
 #pragma once
  
-class QuadTreeTerrainMesh;
+class QuadtreeTerrain;
 class LoadObject;
 
 struct VS_SRV_INSTANCEINFO;
@@ -33,17 +33,17 @@ private:
 	void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList, int count, XMFLOAT4X4* transforms);
 
 private:
-	void LoadTerrainObjectFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, const char *pstrFileName, const QuadTreeTerrainMesh const * pTerrain);
-	void LoadNameAndPositionFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, FILE *pInFile, const QuadTreeTerrainMesh const * pTerrain);
+	void LoadTerrainObjectFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, const char *pstrFileName, const QuadtreeTerrain const * pTerrain);
+	void LoadNameAndPositionFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, FILE *pInFile, const QuadtreeTerrain const * pTerrain);
 	void CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList);
 
 public:
 	static StaticObjectStorage* m_Instance;
 
 public:
-	static StaticObjectStorage* GetInstance(const QuadTreeTerrainMesh const * pTerrain);
+	static StaticObjectStorage* GetInstance(const QuadtreeTerrain const * pTerrain);
 
-	void CreateInfo(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, const QuadTreeTerrainMesh const * pTerrain);
+	void CreateInfo(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, const QuadtreeTerrain const * pTerrain);
 	
 	// 인스턴싱을 통해 렌더합니다.
 	void Render(ID3D12GraphicsCommandList * pd3dCommandList, const int* indexs, int indexCount);
