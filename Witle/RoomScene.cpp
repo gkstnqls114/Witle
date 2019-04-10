@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "d3dUtil.h" 
+#include "Button.h"
 #include "Texture.h"
 #include "RoomScene.h"
 
@@ -130,6 +131,7 @@ void RoomScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	// 디스크립터 힙 설정
 	RoomScene::CreateCbvSrvDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 3);
 
+	m_pStartButton = new Button("StartButton", pd3dDevice, pd3dCommandList, RECT{ 100, 200, 300, 400 });
 
 }
 
@@ -162,12 +164,12 @@ void RoomScene::AnimateObjects(float fTimeElapsed)
 
 void RoomScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 {
-
+	m_pStartButton->Render(pd3dCommandList);
 }
 
 void RoomScene::ReleaseUploadBuffers()
 {
-
+	if (m_pStartButton) m_pStartButton->ReleaseUploadBuffers();
 }
 
 

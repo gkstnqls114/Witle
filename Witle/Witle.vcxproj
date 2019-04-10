@@ -156,6 +156,7 @@
   <ItemGroup>
     <ClInclude Include="Avoidance.h" />
     <ClInclude Include="BasicCam.h" />
+    <ClInclude Include="Button.h" />
     <ClInclude Include="CameraObject.h" />
     <ClInclude Include="CMesh.h" />
     <ClInclude Include="Collision.h" />
@@ -201,6 +202,7 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="PointLight.h" />
     <ClInclude Include="QuadtreeTerrain.h" />
+    <ClInclude Include="MyRectangle.h" />
     <ClInclude Include="RoomScene.h" />
     <ClInclude Include="ShaderManager.h" />
     <ClInclude Include="Renderer.h" />
@@ -242,6 +244,7 @@
   <ItemGroup>
     <ClCompile Include="Avoidance.cpp" />
     <ClCompile Include="BasicCam.cpp" />
+    <ClCompile Include="Button.cpp" />
     <ClCompile Include="CameraObject.cpp" />
     <ClCompile Include="CMesh.cpp" />
     <ClCompile Include="Collision.cpp" />
@@ -284,6 +287,7 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PointLight.cpp" />
     <ClCompile Include="QuadtreeTerrain.cpp" />
+    <ClCompile Include="MyRectangle.cpp" />
     <ClCompile Include="RoomScene.cpp" />
     <ClCompile Include="ShaderManager.cpp" />
     <ClCompile Include="Renderer.cpp" />

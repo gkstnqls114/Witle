@@ -50,3 +50,4 @@ void Shape::ReleaseUploadBuffers()
 		m_pIndexUploadBuffer = nullptr;
 	}
 }
+

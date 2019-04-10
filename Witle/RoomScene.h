@@ -1,6 +1,7 @@
 #pragma once
 #include "Scene.h"
 
+class Button;
 
 class RoomScene
 	: public Scene
@@ -63,4 +64,7 @@ public:
 	virtual void LastUpdate(float ElapsedTime) override;
 
 protected:
+
+private:
+	Button* m_pStartButton{ nullptr };
 };

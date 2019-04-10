@@ -42,6 +42,7 @@ public:
 	Shape(GameObject* pOwner);
 	virtual ~Shape();
 
+	virtual void Update(float fTimeElapsed) override {};
 	void ReleaseUploadBuffers();
 
 	/////////////////////////////////////////////////////////////////////////// Get
@@ -58,6 +59,7 @@ public:
 	D3D12_PRIMITIVE_TOPOLOGY GetPrimitiveTopology() const { return m_d3dPrimitiveTopology; }
 	/////////////////////////////////////////////////////////////////////////// Get
 
+	virtual void Render(ID3D12GraphicsCommandList * pd3dCommandList) = 0;
 
 };
 

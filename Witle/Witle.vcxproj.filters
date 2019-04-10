@@ -220,6 +220,12 @@
     <Filter Include="02.Component\Shape">
       <UniqueIdentifier>{e049cf3c-d529-4adb-a560-648f593ee5bf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.GameObject\Button">
+      <UniqueIdentifier>{03be92de-946d-46c5-9be8-52173edf3c04}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\Shape\MyRectangle">
+      <UniqueIdentifier>{d4a57115-6c92-4d13-abe2-811676fc65d5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -474,6 +480,12 @@
     <ClInclude Include="Shape.h">
       <Filter>02.Component\Shape</Filter>
     </ClInclude>
+    <ClInclude Include="Button.h">
+      <Filter>03.GameObject\Button</Filter>
+    </ClInclude>
+    <ClInclude Include="MyRectangle.h">
+      <Filter>02.Component\Shape\MyRectangle</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -709,6 +721,12 @@
     </ClCompile>
     <ClCompile Include="Shape.cpp">
       <Filter>02.Component\Shape</Filter>
+    </ClCompile>
+    <ClCompile Include="Button.cpp">
+      <Filter>03.GameObject\Button</Filter>
+    </ClCompile>
+    <ClCompile Include="MyRectangle.cpp">
+      <Filter>02.Component\Shape\MyRectangle</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
