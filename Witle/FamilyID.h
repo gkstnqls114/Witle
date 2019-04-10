@@ -19,6 +19,7 @@ public:
 	void InitCamera();
 	void InitFrustum();
 	void InitSkinnedMesh();
+	void InitShape();
 
 	bool isMesh() const;
 	bool isLight() const;
@@ -26,6 +27,7 @@ public:
 	bool isCamera() const;
 	bool isFrustum() const;
 	bool isSkinnedMesh() const;
+	bool isShape() const;
 
 	friend std::ostream& operator<<(std::ostream& os, const FamilyID& familyID);
 };

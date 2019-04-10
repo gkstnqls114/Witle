@@ -19,7 +19,7 @@ struct LIGHT
 };
 
 class Light
-	: public ResourceComponentBase
+	: public ComponentBase
 {
 private:
 	struct VS_CB_LIGHTS_INFO

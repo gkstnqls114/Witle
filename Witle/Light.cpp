@@ -8,7 +8,7 @@ UINT							Light::m_LightsCount = 0;
 Light::VS_CB_LIGHTS_INFO*    Light::m_pLights = nullptr;
 
 Light::Light(GameObject * pOwner) 
-	: ResourceComponentBase(pOwner)
+	: ComponentBase(pOwner)
 {
 	assert(!(m_LightsCount > MAX_LIGHTS));
 	m_FamilyID.InitLight();

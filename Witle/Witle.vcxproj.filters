@@ -217,6 +217,9 @@
     <Filter Include="04.Scene\RoomScene">
       <UniqueIdentifier>{0cb84e77-e644-46e4-adeb-bac56c763ceb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.Component\Shape">
+      <UniqueIdentifier>{e049cf3c-d529-4adb-a560-648f593ee5bf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -468,6 +471,9 @@
     <ClInclude Include="QuadtreeTerrain.h">
       <Filter>03.GameObject\Terrain</Filter>
     </ClInclude>
+    <ClInclude Include="Shape.h">
+      <Filter>02.Component\Shape</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -701,6 +707,9 @@
     <ClCompile Include="QuadtreeTerrain.cpp">
       <Filter>03.GameObject\Terrain</Filter>
     </ClCompile>
+    <ClCompile Include="Shape.cpp">
+      <Filter>02.Component\Shape</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Witle.rc">
@@ -741,6 +750,9 @@
       <Filter>HLSL</Filter>
     </FxCompile>
     <FxCompile Include="LineShader.hlsl">
+      <Filter>HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="ScreenShader.hlsl">
       <Filter>HLSL</Filter>
     </FxCompile>
   </ItemGroup>

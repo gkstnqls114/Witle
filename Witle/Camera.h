@@ -13,7 +13,7 @@ class GameObject;
 // 가장 기본적인 카메라입니다.
 // 카메라 자신의 Position을 기준으로 이동하고 회전합니다.
 class Camera
-	: public ResourceComponentBase
+	: public ComponentBase
 {
 private:
 	struct VS_CB_CAMERA_INFO
