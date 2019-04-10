@@ -54,7 +54,7 @@ private:
 	static short m_WheelDelta; // 마우스 휠이 움직인 정도
 
 public: 
-	static void Update(HWND hWnd);
+	static void Update(HWND hWnd,SOCKET socket);
 	static void Reset();
 
 	static void SetHWND(HWND hwnd) { m_hWnd = hwnd; }
