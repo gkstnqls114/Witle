@@ -1,3 +1,5 @@
+#pragma warning(disable:4996), _CRT_SECURE_NO_WARNINGS;
+
 #include "stdafx.h"
 #include "d3dUtil.h"
 
@@ -26,7 +28,6 @@
 #include "GameFramework.h"
 
 #include "CNetworkManager.h"
-
 
 void CGameFramework::Render()
 {
@@ -501,7 +502,7 @@ void CGameFramework::ReleaseObjects()
 void CGameFramework::UpdateGamelogic(float fElapsedTime)
 {
 	if (m_pScene) {
-		GameInput::Update(m_hWnd, m_socket);
+		GameInput::Update(m_hWnd,m_socket);
 		m_pScene->ProcessInput(m_hWnd, fElapsedTime);
 		m_pScene->Update(fElapsedTime);
 		m_pScene->AnimateObjects(fElapsedTime);
