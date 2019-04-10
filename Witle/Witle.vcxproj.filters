@@ -193,9 +193,6 @@
     <Filter Include="13.Storage\ModelStorage">
       <UniqueIdentifier>{6f721a66-4caa-4e6f-b8e2-a51b09ac77f4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="99.etc\NewFilter1">
-      <UniqueIdentifier>{336fca6f-fc21-4c05-a804-c9e60309ed49}</UniqueIdentifier>
-    </Filter>
     <Filter Include="05.Shader\InstancingStandardShader">
       <UniqueIdentifier>{3f982932-7ab3-47f3-9f5c-fe5b5329e354}</UniqueIdentifier>
     </Filter>
@@ -228,6 +225,9 @@
     </Filter>
     <Filter Include="05.Shader\ScreenShader">
       <UniqueIdentifier>{e11c642f-3db6-462a-afa9-ea97701a5168}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="99.etc\TextureManager">
+      <UniqueIdentifier>{336fca6f-fc21-4c05-a804-c9e60309ed49}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

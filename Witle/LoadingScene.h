@@ -1,6 +1,7 @@
 #pragma once
 #include "Scene.h"
  
+class Button;
 
 class LoadingScene
 	: public Scene
@@ -63,4 +64,10 @@ public:
 	virtual void LastUpdate(float ElapsedTime) override;
 	 
 protected:  
+
+private:
+	D3D12_VIEWPORT	m_d3dViewport;
+	D3D12_RECT		m_d3dScissorRect;
+
+	Button* m_pBackGround{ nullptr };
 };

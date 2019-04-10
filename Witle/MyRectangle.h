@@ -1,6 +1,8 @@
 #pragma once
 #include "Shape.h"
 
+class Texture;
+
 class MyRectangle
 	: public Shape
 {
@@ -14,10 +16,14 @@ class MyRectangle
 		RectVertex(XMFLOAT3 p, XMFLOAT4 c, XMFLOAT2 u) : position(p), color(c), uv(u) {}
 	};
 
+	Texture* m_pTexture{ nullptr };
+
 public: 
-	MyRectangle(GameObject* pOwner, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, RECT rect);
+	MyRectangle(GameObject* pOwner, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, RECT rect, const wchar_t * filepath);
 	MyRectangle(GameObject* pOwner, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, float centerX, float centerY, float width, float height);
 	virtual ~MyRectangle();
+
+	Texture* GetTexture() { return m_pTexture; }
 
 	virtual void Render(ID3D12GraphicsCommandList * pd3dCommandList) override;
 };

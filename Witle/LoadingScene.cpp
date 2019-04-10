@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "d3dUtil.h" 
+#include "Button.h"
+#include "GameScreen.H"
 #include "Texture.h"
 #include "LoadingScene.h"
 
@@ -127,10 +129,19 @@ void LoadingScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommand
 		CreateRootSignature(pd3dDevice);
 	}
 
+	// 카메라 설정
+	m_d3dViewport = D3D12_VIEWPORT{ 0.0f, 0.0f, static_cast<FLOAT>(GameScreen::GetWidth()) , static_cast<FLOAT>(GameScreen::GetHeight()), 0.0f, 1.0f };
+	m_d3dScissorRect = D3D12_RECT{ 0, 0, static_cast<LONG>(GameScreen::GetWidth()) ,static_cast<LONG>(GameScreen::GetHeight()) };
+
 	// 디스크립터 힙 설정
 	LoadingScene::CreateCbvSrvDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 3);
 
+	m_pBackGround = new Button("Background", pd3dDevice, pd3dCommandList, RECT{ 
+		0, 0,
+		static_cast<LONG>(GameScreen::GetWidth()), static_cast<LONG>(GameScreen::GetHeight())},
+		L"Image/Wittle_800x600.dds");
 
+	LoadingScene::CreateShaderResourceViews(pd3dDevice, m_pBackGround->GetTexture(), ROOTPARAMETER_TEXTURE, true);
 }
 
 void LoadingScene::ReleaseObjects()
@@ -161,15 +172,21 @@ void LoadingScene::AnimateObjects(float fTimeElapsed)
 }
 
 void LoadingScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
-{
+{ 
+	pd3dCommandList->SetGraphicsRootSignature(m_pd3dGraphicsRootSignature);
 
+	// 클라 화면 설정
+	pd3dCommandList->RSSetViewports(1, &m_d3dViewport);
+	pd3dCommandList->RSSetScissorRects(1, &m_d3dScissorRect);
+
+	pd3dCommandList->SetDescriptorHeaps(1, &m_pd3dCbvSrvDescriptorHeap);
+	m_pBackGround->Render(pd3dCommandList);
 }
 
 void LoadingScene::ReleaseUploadBuffers()
 {
 
 }
-
 
 ID3D12RootSignature* LoadingScene::CreateGraphicsRootSignature(ID3D12Device *pd3dDevice)
 {

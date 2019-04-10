@@ -137,7 +137,9 @@ void RoomScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	// 디스크립터 힙 설정
 	RoomScene::CreateCbvSrvDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 3);
 
-	m_pStartButton = new Button("StartButton", pd3dDevice, pd3dCommandList, RECT{ 100, 200, 100, 200 });
+	m_pStartButton = new Button("StartButton", pd3dDevice, pd3dCommandList, 
+		RECT{ static_cast<LONG>(GameScreen::GetWidth()) - 250, static_cast<LONG>(GameScreen::GetHeight()) - 100,
+		      static_cast<LONG>(GameScreen::GetWidth()) - 25, static_cast<LONG>(GameScreen::GetHeight()) - 25} , nullptr);
 
 }
 

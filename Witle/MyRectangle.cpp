@@ -1,15 +1,23 @@
 #include "stdafx.h"
 #include "d3dUtil.h"
+#include "Texture.h"
+#include "LoadingScene.h"
 #include "ShaderManager.h"
 #include "MyRectangle.h"
 
 #define RECTANGLE_VERTEX_COUNT 6
  
-MyRectangle::MyRectangle(GameObject * pOwner, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, RECT rect)
+MyRectangle::MyRectangle(GameObject * pOwner, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, RECT rect, const wchar_t * filepath)
 	:Shape(pOwner) 
 {
 	m_ComponenetID = SHAPE_TYPE_ID::RECTANGLE_SHAPE;
 
+	if (filepath)
+	{
+		m_pTexture = new Texture(1, RESOURCE_TEXTURE2D);
+		m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, filepath, 0);
+	}
+	
 	m_nVertexBufferViews = 1;
 	m_pVertexBufferViews = new D3D12_VERTEX_BUFFER_VIEW[m_nVertexBufferViews];
 
@@ -19,13 +27,13 @@ MyRectangle::MyRectangle(GameObject * pOwner, ID3D12Device * pd3dDevice, ID3D12G
 
 	XMFLOAT3 pxmf3Positions[RECTANGLE_VERTEX_COUNT];
 	// »ó´Ü »ï°¢Çü
-	pxmf3Positions[0] = XMFLOAT3(rect.left, rect.top, 0.5f);
-	pxmf3Positions[1] = XMFLOAT3(rect.right, rect.top, 0.5f);
-	pxmf3Positions[2] = XMFLOAT3(rect.left, rect.bottom, 0.5f);
+	pxmf3Positions[0] = XMFLOAT3( rect.left,   rect.top, 0.5f);
+	pxmf3Positions[1] = XMFLOAT3( rect.right,  rect.top, 0.5f);
+	pxmf3Positions[2] = XMFLOAT3( rect.left,   rect.bottom, 0.5f);
 	// ÇÏ´Ü »ï°¢Çü
-	pxmf3Positions[3] = XMFLOAT3(rect.left, rect.bottom, 0.5f);
-	pxmf3Positions[4] = XMFLOAT3(rect.right, rect.top, 0.5f);
-	pxmf3Positions[5] = XMFLOAT3(rect.right, rect.bottom, 0.5f);
+	pxmf3Positions[3] = XMFLOAT3( rect.left,   rect.bottom, 0.5f);
+	pxmf3Positions[4] = XMFLOAT3( rect.right,  rect.top, 0.5f);
+	pxmf3Positions[5] = XMFLOAT3( rect.right,  rect.bottom, 0.5f);
 
 	XMFLOAT2 pxmf2UVs[RECTANGLE_VERTEX_COUNT]; 
 	pxmf2UVs[0] = XMFLOAT2{ 0.f, 0.f };
@@ -62,11 +70,12 @@ MyRectangle::~MyRectangle()
 void MyRectangle::Render(ID3D12GraphicsCommandList * pd3dCommandList)
 {
 	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, "ScreenShader");
+	m_pTexture->UpdateShaderVariables(pd3dCommandList);
 
 	pd3dCommandList->IASetPrimitiveTopology(m_d3dPrimitiveTopology);
 
 	D3D12_VERTEX_BUFFER_VIEW pVertexBufferViews[] = { m_pVertexBufferViews[0] };
-	pd3dCommandList->IASetVertexBuffers(0, _countof(pVertexBufferViews), pVertexBufferViews);
+	pd3dCommandList->IASetVertexBuffers(m_nSlot, _countof(pVertexBufferViews), pVertexBufferViews);
 	
-	pd3dCommandList->DrawInstanced(m_vertexCount, 1, 0, 0);
+	pd3dCommandList->DrawInstanced(m_vertexCount, 1, m_nOffset, 0);
 }

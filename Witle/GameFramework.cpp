@@ -4,6 +4,7 @@
 #include "ShaderManager.h"
 #include "GameTimer.h"
 #include "GameInput.h"
+#include "GameScreen.h" 
 
 #include "StandardShader.h"
 #include "TerrainShader.h"
@@ -23,9 +24,9 @@
 #include "Texture.h"
 #include "MyDescriptorHeap.h"
 
-#include "GameScreen.h" 
 #include "GameScene.h"
 #include "RoomScene.h"
+#include "LoadingScene.h"
 
 #include "GameFramework.h"
 
@@ -472,7 +473,7 @@ void CGameFramework::BuildObjects()
 	
 	///////////////////////////////////////////////////////////////////////////// 府家胶 积己
 	//m_pScene = new GameScene;
-	m_pScene = new RoomScene;
+	m_pScene = new LoadingScene;
 	m_pScene->CreateRootSignature(m_d3dDevice.Get());
 
 	BuildTESTObjects();
