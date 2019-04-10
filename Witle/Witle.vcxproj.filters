@@ -199,6 +199,12 @@
     <Filter Include="13.Storage\ModelStorage">
       <UniqueIdentifier>{6f721a66-4caa-4e6f-b8e2-a51b09ac77f4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="14.PointerForNetwork">
+      <UniqueIdentifier>{70b6517f-9f99-4d74-819e-ea942503f8c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98.ServerNetWork">
+      <UniqueIdentifier>{3b03c748-0b8e-47c8-8fa9-342fa1f10d98}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -438,6 +444,12 @@
     <ClInclude Include="StaticObject.h">
       <Filter>03.GameObject</Filter>
     </ClInclude>
+    <ClInclude Include="PointerForNetwork.h">
+      <Filter>14.PointerForNetwork</Filter>
+    </ClInclude>
+    <ClInclude Include="CNetworkManager.h">
+      <Filter>98.ServerNetWork</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -658,6 +670,12 @@
     </ClCompile>
     <ClCompile Include="StaticObject.cpp">
       <Filter>03.GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="PointerForNetwork.cpp">
+      <Filter>14.PointerForNetwork</Filter>
+    </ClCompile>
+    <ClCompile Include="CNetworkManager.cpp">
+      <Filter>98.ServerNetWork</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
