@@ -1,6 +1,8 @@
 #include "stdafx.h"
+#include "GameScreen.h"
 #include "d3dUtil.h" 
 #include "Button.h"
+#include "ShaderManager.h"
 #include "Texture.h"
 #include "RoomScene.h"
 
@@ -128,6 +130,10 @@ void RoomScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 		CreateRootSignature(pd3dDevice);
 	}
 
+	// 카메라 설정
+	m_d3dViewport = D3D12_VIEWPORT{ 0.0f, 0.0f, static_cast<FLOAT>(GameScreen::GetWidth()) , static_cast<FLOAT>(GameScreen::GetHeight()), 0.0f, 1.0f };
+	m_d3dScissorRect = D3D12_RECT{ 0, 0, static_cast<LONG>(GameScreen::GetWidth()) ,static_cast<LONG>(GameScreen::GetHeight()) };
+
 	// 디스크립터 힙 설정
 	RoomScene::CreateCbvSrvDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 3);
 
@@ -165,6 +171,11 @@ void RoomScene::AnimateObjects(float fTimeElapsed)
 void RoomScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 {
 	pd3dCommandList->SetGraphicsRootSignature(m_pd3dGraphicsRootSignature);
+
+	// 클라 화면 설정
+	pd3dCommandList->RSSetViewports(1, &m_d3dViewport);
+	pd3dCommandList->RSSetScissorRects(1, &m_d3dScissorRect);
+	 
 	m_pStartButton->Render(pd3dCommandList);
 }
 

@@ -64,7 +64,9 @@ void MyRectangle::Render(ID3D12GraphicsCommandList * pd3dCommandList)
 	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, "ScreenShader");
 
 	pd3dCommandList->IASetPrimitiveTopology(m_d3dPrimitiveTopology);
-	D3D12_VERTEX_BUFFER_VIEW pVertexBufferViews[] = { GetVertexBufferView(0) };
+
+	D3D12_VERTEX_BUFFER_VIEW pVertexBufferViews[] = { m_pVertexBufferViews[0] };
 	pd3dCommandList->IASetVertexBuffers(0, _countof(pVertexBufferViews), pVertexBufferViews);
+	
 	pd3dCommandList->DrawInstanced(m_vertexCount, 1, 0, 0);
 }
