@@ -26,8 +26,8 @@ VS_SCREEN_OUTPUT VSScreen(VS_SCREEN_INPUT input)
      
     // 해당 스크린 좌표를 투영 좌표계로 변환
     float ProjectionX = 2 / ClientSize.x * (input.position.x - (ClientSize.x / 2));
-    float ProjectionY = 2 / ClientSize.x * (input.position.y - (ClientSize.x / 2));
-    
+    float ProjectionY = -2 / ClientSize.y * (input.position.y - (ClientSize.y / 2));
+
     output.position = float4(ProjectionX, ProjectionY, 1.f, 1.f);
     output.uv0 = input.uv0;
      
@@ -35,7 +35,7 @@ VS_SCREEN_OUTPUT VSScreen(VS_SCREEN_INPUT input)
 }
 
 
-float4 PSTerrain(VS_SCREEN_OUTPUT input) : SV_TARGET
+float4 PSScreen(VS_SCREEN_OUTPUT input) : SV_TARGET
 {
     float4 color = input.color;
   //  float4 color = gtxtTexture.Sample(gWrapSamplerState, input.uv0);

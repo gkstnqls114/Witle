@@ -12,6 +12,7 @@
 #include "VerticalBlurShader.h"
 #include "InstancingStandardShader.h"
 #include "TESTShader.h"
+#include "ScreenShader.h"
 #include "CubeShader.h"
 
 #ifdef _SHOW_BOUNDINGBOX
@@ -655,7 +656,10 @@ void CGameFramework::BuildShaders()
 	Shader* pSkinnedShader = new SkinnedShader();
 	pSkinnedShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
 	ShaderManager::GetInstance()->InsertShader("SkinnedShader", pSkinnedShader);
-	 
+	
+	Shader* pScreenShader = new ScreenShader();
+	pScreenShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
+	ShaderManager::GetInstance()->InsertShader("ScreenShader", pScreenShader);
 
 #ifdef _SHOW_BOUNDINGBOX
 	Shader* pLineShader = new LineShader();

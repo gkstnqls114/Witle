@@ -29,5 +29,5 @@ void Button::Update(float fElapsedTime)
 
 void Button::Render(ID3D12GraphicsCommandList * pd3dCommandList)
 {
-	// m_pButton->Render(pd3dCommandList);
+	m_pButton->Render(pd3dCommandList);
 }

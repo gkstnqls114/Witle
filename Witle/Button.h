@@ -6,7 +6,8 @@ class MyRectangle;
 class Button
 	: public GameObject
 {
-	MyRectangle* m_pButton{ nullptr };
+	MyRectangle* m_pButton{ nullptr }; 
+	bool m_isClick{ false };
 
 private:
 	virtual void ReleaseMembers() override;

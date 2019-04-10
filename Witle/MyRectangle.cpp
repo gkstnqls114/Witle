@@ -19,13 +19,13 @@ MyRectangle::MyRectangle(GameObject * pOwner, ID3D12Device * pd3dDevice, ID3D12G
 
 	XMFLOAT3 pxmf3Positions[RECTANGLE_VERTEX_COUNT];
 	// »ó´Ü »ï°¢Çü
-	pxmf3Positions[0] = XMFLOAT3(rect.left, rect.top, -1.f);
-	pxmf3Positions[1] = XMFLOAT3(rect.right, rect.top, 1.f);
-	pxmf3Positions[2] = XMFLOAT3(rect.left, rect.bottom, 1.f);
+	pxmf3Positions[0] = XMFLOAT3(rect.left, rect.top, 0.5f);
+	pxmf3Positions[1] = XMFLOAT3(rect.right, rect.top, 0.5f);
+	pxmf3Positions[2] = XMFLOAT3(rect.left, rect.bottom, 0.5f);
 	// ÇÏ´Ü »ï°¢Çü
-	pxmf3Positions[3] = XMFLOAT3(rect.left, rect.bottom, 1.f);
-	pxmf3Positions[4] = XMFLOAT3(rect.right, rect.top, 1.f);
-	pxmf3Positions[5] = XMFLOAT3(rect.right, rect.bottom, 1.f);
+	pxmf3Positions[3] = XMFLOAT3(rect.left, rect.bottom, 0.5f);
+	pxmf3Positions[4] = XMFLOAT3(rect.right, rect.top, 0.5f);
+	pxmf3Positions[5] = XMFLOAT3(rect.right, rect.bottom, 0.5f);
 
 	XMFLOAT2 pxmf2UVs[RECTANGLE_VERTEX_COUNT]; 
 	pxmf2UVs[0] = XMFLOAT2{ 0.f, 0.f };
@@ -63,6 +63,7 @@ void MyRectangle::Render(ID3D12GraphicsCommandList * pd3dCommandList)
 {
 	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, "ScreenShader");
 
+	pd3dCommandList->IASetPrimitiveTopology(m_d3dPrimitiveTopology);
 	D3D12_VERTEX_BUFFER_VIEW pVertexBufferViews[] = { GetVertexBufferView(0) };
 	pd3dCommandList->IASetVertexBuffers(0, _countof(pVertexBufferViews), pVertexBufferViews);
 	pd3dCommandList->DrawInstanced(m_vertexCount, 1, 0, 0);

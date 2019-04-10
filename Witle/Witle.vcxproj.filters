@@ -226,6 +226,9 @@
     <Filter Include="02.Component\Shape\MyRectangle">
       <UniqueIdentifier>{d4a57115-6c92-4d13-abe2-811676fc65d5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="05.Shader\ScreenShader">
+      <UniqueIdentifier>{e11c642f-3db6-462a-afa9-ea97701a5168}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -486,6 +489,9 @@
     <ClInclude Include="MyRectangle.h">
       <Filter>02.Component\Shape\MyRectangle</Filter>
     </ClInclude>
+    <ClInclude Include="ScreenShader.h">
+      <Filter>05.Shader\ScreenShader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -727,6 +733,9 @@
     </ClCompile>
     <ClCompile Include="MyRectangle.cpp">
       <Filter>02.Component\Shape\MyRectangle</Filter>
+    </ClCompile>
+    <ClCompile Include="ScreenShader.cpp">
+      <Filter>05.Shader\ScreenShader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
