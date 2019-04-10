@@ -1,11 +1,11 @@
 #include "stdafx.h"
 #include "d3dUtil.h"
 
+#include "ModelStorage.h"
 #include "LightManager.h"
 #include "MeshRenderer.h"
 #include "ShaderManager.h"
 #include "GameScreen.h"
-#include "MapInfoLoader.h"
 
 #include "StaticObject.h"
 #include "MyBOBox.h"
@@ -157,6 +157,9 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	// 디스크립터 힙 설정
 	GameScene::CreateCbvSrvDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 3);
 
+	// 모든 모델 오브젝트 빌드
+	ModelStorage::GetInstance()->CreateModels(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+
 	// 터레인 생성 
 	XMFLOAT3 xmf3Scale(39.0625f * 3.f, 1.0f, 39.0625f * 3.f);
 	// XMFLOAT3 xmf3Scale(1.f, 1.0f, 1.f);
@@ -168,45 +171,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	m_pPlayer = new Player("Player", pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 	m_GameObjectDiffuse = new Texture(1, RESOURCE_TEXTURE2D);
 	m_GameObjectDiffuse->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/ReflexTree_Diffuse.dds", 0);
-
-
-	// 맵위에 올려놓을 오브젝트 위치 설정
-	MapInfoLoader::LoadTerrainObjectFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, "Information/Terrain.bin");
- 
-	// SunFlower
-	m_SunFlowerCount = SunFlower::m_CountFromMap;
-	m_SunFlowers = new SunFlower*[m_SunFlowerCount];
-	for (int x = 0; x < m_SunFlowerCount; ++x)
-	{
-		m_SunFlowers[x] = new SunFlower(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
-	}
-	// Trees
-	m_TreeCount = MyReflexTree::m_CountFromMap;
-	m_Trees = new MyReflexTree* [m_TreeCount];
-	for (int x = 0; x < m_TreeCount; ++x)
-	{
-		m_Trees[x] = new MyReflexTree(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
- 	}
-	MyReflexTree::CreateShaderVariables(pd3dDevice, pd3dCommandList);
-	m_TreeDiffuse = new Texture(1, RESOURCE_TEXTURE2D); 
-	m_TreeDiffuse->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/ReflexTree_Diffuse.dds", 0);
-	
-
-	// Trees
-	m_PillaCount = Pillar::m_CountFromMap;
-	m_Pillas = new Pillar*[m_PillaCount];
-	for (int x = 0; x < m_PillaCount; ++x)
-	{
-		m_Pillas[x] = new Pillar(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
-	}
-
-	m_RockCount = Rock::m_CountFromMap;
-	m_Rocks = new Rock*[m_RockCount];
-	for (int x = 0; x < m_RockCount; ++x)
-	{
-		m_Rocks[x] = new Rock(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
-	}
-
+	 
 	//테스트 쿼드트리 터레인 생성 
 	m_pQuadtreeTerrain = new QuadtreeTerrain(pd3dDevice, pd3dCommandList, 257, 257, xmf3Scale, xmf4Color, m_Terrain->GetHeightMapImage());
 
@@ -478,7 +443,6 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	// TerrainMesh Render
 	Mesh* terrainMesh = m_Terrain->GetComponent<Mesh>("TerrainMesh");
 	m_pQuadtreeTerrain->Render(pd3dCommandList);
-
 
 #ifdef CHECK_SUBVIEWS
 	m_lookAboveCamera->SetViewportsAndScissorRects(pd3dCommandList); 

@@ -6,8 +6,7 @@
 #include "ShaderManager.h"
 #include "Shader.h"
 
-#include "QuadTreeTerrain.h"
-#include "MapInfoLoader.h"
+#include "QuadTreeTerrain.h" 
 #include "Object.h" 
 #include "StaticObjectStorage.h"
 

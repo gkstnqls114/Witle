@@ -91,20 +91,7 @@ protected:
 	Texture*				m_GameObjectDiffuse{ nullptr };
 	Player*                 m_pPlayer{ nullptr };
 	 
-	UINT					m_SunFlowerCount{ 100 };
-	SunFlower**			m_SunFlowers{ nullptr };
 
-	UINT					m_PillaCount{ 100 };
-	Pillar**			m_Pillas{ nullptr };
-
-	UINT					m_RockCount{ 100 };
-	Rock**			m_Rocks{ nullptr };
-
-	UINT					m_TreeCount{ 100 };
-	MyReflexTree**			m_Trees{ nullptr };
-
-	Texture*				m_TreeDiffuse{ nullptr };
-	// fbx test
 	int TerrainIndex = 0;
 	Terrain*                m_Terrain{ nullptr };
 	CameraObject*           m_Camera{ nullptr };

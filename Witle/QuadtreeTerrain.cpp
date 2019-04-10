@@ -20,7 +20,6 @@ UINT QuadtreeTerrain::CalculateTriangles(UINT widthPixel, UINT lengthPixel)
 	
 	return (widthPixel - 1) * (lengthPixel -1) * 2;
 }
-  
 
 void QuadtreeTerrain::ReleaseMembers()
 {

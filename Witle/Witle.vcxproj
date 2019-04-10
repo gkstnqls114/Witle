@@ -174,7 +174,6 @@
     <ClInclude Include="LineShader.h" />
     <ClInclude Include="LoadingScene.h" />
     <ClInclude Include="LobbyScene.h" />
-    <ClInclude Include="MapInfoLoader.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="MyBOBox.h" />
     <ClInclude Include="MyConstants.h" />
@@ -272,7 +271,6 @@
     <ClCompile Include="LineShader.cpp" />
     <ClCompile Include="LoadingScene.cpp" />
     <ClCompile Include="LobbyScene.cpp" />
-    <ClCompile Include="MapInfoLoader.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="MeshRenderer.cpp" />

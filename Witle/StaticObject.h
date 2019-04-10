@@ -29,29 +29,18 @@ struct VS_SRV_INSTANCEINFO
 };
 
 class MyReflexTree : public StaticObject
-{ 
-	// 인스턴스 데이터
-	static ID3D12Resource* m_pd3dcbGameObjects;
-	static VS_SRV_INSTANCEINFO* m_pcbMappedGameObjects;
-	// 인스턴스 데이터
-
+{  
 	MyBOBox* m_MyBOBox{ nullptr };
 	LoadObject* m_LoadObject{ nullptr };
 
 public:
-	MyReflexTree(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, XMFLOAT3 position);
-	MyReflexTree(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature);
+	MyReflexTree(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, XMFLOAT3 position); 
 	virtual ~MyReflexTree() {};
 
-	static void CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
-	virtual void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList, int nInstance) override;
+ 	virtual void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList, int nInstance) override;
 	void Render(ID3D12GraphicsCommandList *pd3dCommandList);
 	MyBOBox* GetBOBox() { return m_MyBOBox;  }
-	 
-	static std::vector<XMFLOAT4X4> m_PostionFromMap;
-	static int m_CountFromMap;
-	static int m_Count;
-	
+	  
 };
 
 class SunFlower : public StaticObject
@@ -61,16 +50,11 @@ class SunFlower : public StaticObject
 
 public:
 	SunFlower(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, XMFLOAT3 position);
-	SunFlower(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature);
 	virtual ~SunFlower() {};
 
  	void Render(ID3D12GraphicsCommandList *pd3dCommandList);
 	MyBOBox* GetBOBox() { return m_MyBOBox; }
-
-	static std::vector<XMFLOAT4X4> m_PostionFromMap;
-	static int m_CountFromMap;
-	static int m_Count;
-
+	 
 };
 
 class Rock : public StaticObject
@@ -80,16 +64,11 @@ class Rock : public StaticObject
 
 public:
 	Rock(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, XMFLOAT3 position);
-	Rock(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature);
 	virtual ~Rock() {};
 
 	void Render(ID3D12GraphicsCommandList *pd3dCommandList);
 	MyBOBox* GetBOBox() { return m_MyBOBox; }
-
-	static std::vector<XMFLOAT4X4> m_PostionFromMap;
-	static int m_CountFromMap;
-	static int m_Count;
-
+	 
 };
 
 class Pillar : public StaticObject
@@ -99,39 +78,24 @@ class Pillar : public StaticObject
 
 public:
 	Pillar(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, XMFLOAT3 position);
-	Pillar(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature);
 	virtual ~Pillar() {};
 
 	void Render(ID3D12GraphicsCommandList *pd3dCommandList);
 	MyBOBox* GetBOBox() { return m_MyBOBox; }
 
-	static std::vector<XMFLOAT4X4> m_PostionFromMap;
-	static int m_CountFromMap;
-	static int m_Count;
-
 };
 
 
 class Altar : public StaticObject
-{
-	// 인스턴스 데이터
-	static ID3D12Resource* m_pd3dcbGameObjects;
-	static VS_SRV_INSTANCEINFO* m_pcbMappedGameObjects;
-	// 인스턴스 데이터
-
+{  
 	MyBOBox* m_MyBOBox{ nullptr };
 	LoadObject* m_LoadObject{ nullptr };
 
 public:
 	Altar(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, XMFLOAT3 position);
-	Altar(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature);
 	virtual ~Altar() {};
 
 	void Render(ID3D12GraphicsCommandList *pd3dCommandList);
 	MyBOBox* GetBOBox() { return m_MyBOBox; }
-
-	static std::vector<XMFLOAT4X4> m_PostionFromMap;
-	static int m_CountFromMap;
-	static int m_Count;
 
 };
