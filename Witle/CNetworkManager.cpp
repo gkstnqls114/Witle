@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "CNetworkManager.h"
+#pragma warning(disable:4996), _CRT_SECURE_NO_WARNINGS;
 
 // 데이터 통신에 사용할 변수
 char m_Buf[BUFSIZE + 1];

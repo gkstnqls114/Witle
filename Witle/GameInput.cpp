@@ -5,6 +5,7 @@
 #include "stdafx.h"
 #include "GameScreen.h"
 #include "GameInput.h"
+#include "CNetworkManager.h"
 
 HWND GameInput::m_hWnd;
 
@@ -58,10 +59,29 @@ bool GameInput::GenerateRayforPicking(const XMFLOAT3& cameraPos, const XMFLOAT4X
 	return true;
 }
 
-void GameInput::Update(HWND hWnd)
+void GameInput::Update(HWND hWnd, SOCKET socket)
 { 
+	WSABUF	send_wsabuf;
+	char 	send_buffer[BUFSIZE];
+	WSABUF recv_wsabuf;
+	char	recv_buffer[BUFSIZE];
+	char	packet_buffer[BUFSIZE];
+	DWORD		in_packet_size = 0;
+	int		saved_packet_size = 0;
+	DWORD iobyte = 0;
+	DWORD ioflag = 0;
+	int retval;
+
+	retval = WSARecv(socket, &recv_wsabuf, 1, &iobyte, &ioflag, NULL, NULL);
+
 	// 키보드의 pKeyBuffer를 구한다.
 	::GetKeyboardState(m_pKeyBuffer);
+	retval = WSASend(socket, &send_wsabuf, 1, &iobyte, 0, NULL, NULL);
+
+	send_wsabuf.buf = send_buffer;
+	send_wsabuf.len = BUFSIZE;
+	recv_wsabuf.buf = recv_buffer;
+	recv_wsabuf.len = BUFSIZE;
 	 
 	POINT ptCursorPos;
 	/*마우스를 캡쳐했으면 마우스가 얼마만큼 이동하였는 가를 계산한다. 마우스 왼쪽 또는 오른쪽 버튼이 눌러질 때의
@@ -81,6 +101,8 @@ void GameInput::Update(HWND hWnd)
 
 		//마우스 커서의 위치를 마우스가 눌려졌던 위치로 설정한다.
 		::SetCursorPos(m_oldCursor.x, m_oldCursor.y);
+
+		retval = WSASend(socket, &send_wsabuf, 1, &iobyte, 0, NULL, NULL);
 
 	}
 	

@@ -12,6 +12,7 @@ class CGameFramework
 private:
 	HINSTANCE m_hInstance;
 	HWND m_hWnd;
+	SOCKET m_socket;
 	
 	//int m_nWndClientWidth{ 0 };	 
 	//int m_nWndClientHeight{ 0 };
