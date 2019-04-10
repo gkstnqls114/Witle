@@ -25,8 +25,6 @@
 
 #include "GameFramework.h"
 
-#include "CNetworkManager.h"
-
 
 void CGameFramework::Render()
 {
@@ -501,7 +499,7 @@ void CGameFramework::ReleaseObjects()
 void CGameFramework::UpdateGamelogic(float fElapsedTime)
 {
 	if (m_pScene) {
-		GameInput::Update(m_hWnd, m_socket);
+		GameInput::Update(m_hWnd);
 		m_pScene->ProcessInput(m_hWnd, fElapsedTime);
 		m_pScene->Update(fElapsedTime);
 		m_pScene->AnimateObjects(fElapsedTime);

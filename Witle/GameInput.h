@@ -41,7 +41,6 @@ private:
 	~GameInput();
 
 	static HWND m_hWnd;
-	static SOCKET m_socket;
 
 	static UCHAR m_pKeyBuffer[256]; // 키보드의 input을 위한 멤버 변수
 
@@ -55,7 +54,7 @@ private:
 	static short m_WheelDelta; // 마우스 휠이 움직인 정도
 
 public: 
-	static void Update(HWND hWnd, SOCKET socket);
+	static void Update(HWND hWnd,SOCKET socket);
 	static void Reset();
 
 	static void SetHWND(HWND hwnd) { m_hWnd = hwnd; }
