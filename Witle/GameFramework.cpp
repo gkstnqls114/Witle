@@ -472,8 +472,8 @@ void CGameFramework::BuildObjects()
 	m_CommandList->Reset(m_CommandAllocator.Get(), NULL);
 	
 	///////////////////////////////////////////////////////////////////////////// 府家胶 积己
-	//m_pScene = new GameScene;
-	m_pScene = new LoadingScene;
+	m_pScene = new GameScene;
+	// m_pScene = new LoadingScene;
 	m_pScene->CreateRootSignature(m_d3dDevice.Get());
 
 	BuildTESTObjects();
@@ -598,12 +598,12 @@ void CGameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPA
 			if (!is_fullscreen)
 			{
 				is_fullscreen = TRUE;
-				GameScreen::ChangeFullScreen(800, 600);
+				GameScreen::ChangeFullScreen(GameScreen::GetWidth(), GameScreen::GetHeight());
 			}
 			else
 			{
 				is_fullscreen = FALSE;
-				GameScreen::ChangeWindowScreen(800, 600);
+				GameScreen::ChangeWindowScreen(GameScreen::GetWidth(), GameScreen::GetHeight());
 			} 
 			OnResizeBackBuffers();
 			break;
