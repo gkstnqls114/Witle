@@ -86,7 +86,6 @@ protected:
 	Texture*				m_GameObjectDiffuse{ nullptr };
 	Player*                 m_pPlayer{ nullptr };
 
-
 	CLoadedModelInfo *m_pTreeModel{ nullptr };
 	UINT					m_TreeCount{ 100 };
 	Texture*				m_TreeDiffuse{ nullptr };
@@ -113,6 +112,51 @@ protected:
 	MATERIAL					*m_pcbMappedMaterials{ nullptr };
 	//////////////////////////////////////  조명
 
+
+	///////////////////////////////////////////////////////////////////////// Player
 	GameObject *m_TESTQuadGameobject;
 	QuadTreeTerrainMesh         *m_TESTQuadTree{ nullptr };
+
+public:
+	SOCKET socket;
+
+	// 유저 정보 변수
+	BOOL mUsingID;			// 유저의 id 값이 사용되는지 판단
+	BOOL m_isLobby;			// 유저가 로비에 있는지 판단 (방 만들기)
+	BOOL m_isRoom;			// 유저가 방에 있는지 판단
+	BOOL m_isGameReady;		// 유저의 준비완료 여부
+	BOOL m_isGameAlive;		// 유저가 죽지않고 게임 중인지 판단
+	BOOL m_isGameDie;		// 유저가 죽었는지 판단
+	BOOL m_isGameRisporn;	// 유저가 죽었는지 판단
+	BOOL m_isGamePlay;		// 유저가 게임중인지
+
+	USHORT PlayerID;		// 유저들의 각 클라이언트 ID
+	INT GameRoomIndex;
+	INT InGame_PlayIndex;	//게임 플레이를 시작할 때 자신이 방에서 몇번째 플레이어인가
+	INT Score;				// 유저들의 점수
+	INT Kill_Count;
+	INT Death_Count;
+	INT Rank;
+	INT EndUI_List;
+	BOOL Attack_Buff;
+	BOOL Defence_Buff;
+
+	FLOAT PosX, PosY, PosZ;	// 플레이어의 위치
+	FLOAT RotY;			// 플레이어의 회전 각도
+	INT Select_model;
+	INT HP;
+	BOOL Allive;
+	BOOL WeaponType;
+	INT Combat_Atk;
+	INT Fire_Atk;
+	INT Defence;
+	FLOAT Speed;
+
+	OVERLAPPED_EX Player_OVERLAPPED;
+
+	VOID PlayerConnectInit(UINT id);	// 유저가 접속하면 OVERLAPPED 구조체 초기화
+	VOID PlayerDisconnect(UINT id);		// 유저가 게임을 나갔을때 OVERLAPPED 구조체 설정
+	VOID InitPlayer(UINT id);			// 유저의 게임정보 초기화(게임 플레이가 끝났을때)
+	VOID GamePlayInit(UINT id);			// 게임 플레이가 끝나면 방에 처음 들어간 상태로 만들어주기
+	///////////////////////////////////////////////////////////////////////// Player
 };

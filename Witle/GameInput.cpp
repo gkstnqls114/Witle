@@ -18,6 +18,17 @@ POINT GameInput::m_clickCursor{ -1, -1 }; // 한번 클릭했을 때 위치
 const float GameInput::m_DeltaValue = 3.0f; // 마우스 이동량 값 
 short GameInput::m_WheelDelta; // 마우스 휠이 움직인 정도
 
+WSABUF	send_wsabuf;
+char 	send_buffer[BUFSIZE];
+WSABUF  recv_wsabuf;
+char	recv_buffer[BUFSIZE];
+char	packet_buffer[BUFSIZE];
+DWORD	in_packet_size = 0;
+int		saved_packet_size = 0;
+DWORD iobyte = 0;
+DWORD ioflag = 0;
+int retval;
+
 GameInput::GameInput()
 {
 }
@@ -61,17 +72,6 @@ bool GameInput::GenerateRayforPicking(const XMFLOAT3& cameraPos, const XMFLOAT4X
 
 void GameInput::Update(HWND hWnd, SOCKET socket)
 { 
-	WSABUF	send_wsabuf;
-	char 	send_buffer[BUFSIZE];
-	WSABUF recv_wsabuf;
-	char	recv_buffer[BUFSIZE];
-	char	packet_buffer[BUFSIZE];
-	DWORD		in_packet_size = 0;
-	int		saved_packet_size = 0;
-	DWORD iobyte = 0;
-	DWORD ioflag = 0;
-	int retval;
-
 	retval = WSARecv(socket, &recv_wsabuf, 1, &iobyte, &ioflag, NULL, NULL);
 
 	// 키보드의 pKeyBuffer를 구한다.
