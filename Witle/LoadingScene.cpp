@@ -139,9 +139,9 @@ void LoadingScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommand
 	m_pBackGround = new Button("Background", pd3dDevice, pd3dCommandList, RECT{ 
 		0, 0,
 		static_cast<LONG>(GameScreen::GetWidth()), static_cast<LONG>(GameScreen::GetHeight())},
-		L"Image/Wittle_800x600.dds");
+		L"Image/Wittle_1280x720.dds");
 
-	LoadingScene::CreateShaderResourceViews(pd3dDevice, m_pBackGround->GetTexture(), ROOTPARAMETER_TEXTURE, true);
+	// LoadingScene::CreateShaderResourceViews(pd3dDevice, m_pBackGround->GetTexture(), ROOTPARAMETER_TEXTURE, true);
 }
 
 void LoadingScene::ReleaseObjects()
@@ -179,7 +179,7 @@ void LoadingScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	pd3dCommandList->RSSetViewports(1, &m_d3dViewport);
 	pd3dCommandList->RSSetScissorRects(1, &m_d3dScissorRect);
 
-	pd3dCommandList->SetDescriptorHeaps(1, &m_pd3dCbvSrvDescriptorHeap);
+	// pd3dCommandList->SetDescriptorHeaps(1, &m_pd3dCbvSrvDescriptorHeap);
 	m_pBackGround->Render(pd3dCommandList);
 }
 

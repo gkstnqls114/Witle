@@ -2,6 +2,8 @@
 #pragma once
 #include "ComponentBase.h"
 
+class MyDescriptorHeap;
+
 // Shape Class
 // 모델 안에 애니메이션 정보(정점 안에 들어가는 뼈대에 대한 정보)가 들어가지 않습니다.
 class Shape :

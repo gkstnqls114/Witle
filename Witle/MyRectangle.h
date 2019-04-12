@@ -15,7 +15,9 @@ class MyRectangle
 		RectVertex() {}
 		RectVertex(XMFLOAT3 p, XMFLOAT4 c, XMFLOAT2 u) : position(p), color(c), uv(u) {}
 	};
-
+	 
+	// 텍스쳐관련 정보
+	MyDescriptorHeap* m_pHeap{ nullptr };
 	Texture* m_pTexture{ nullptr };
 
 public: 

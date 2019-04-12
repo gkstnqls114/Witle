@@ -19,8 +19,8 @@ VS_SCREEN_OUTPUT VSScreen(VS_SCREEN_INPUT input, uint nVertexID : SV_VertexID)
     VS_SCREEN_OUTPUT output;
      
     // 해당 스크린 좌표를 투영 좌표계로 변환
-    float ProjectionX = 2 * input.position.x / 800.f - 1;
-    float ProjectionY = -2 * input.position.y / 600.f + 1;
+    float ProjectionX = 2 * input.position.x / 1280.f - 1;
+    float ProjectionY = -2 * input.position.y / 720.f + 1;
      
     output.position = float4(ProjectionX, ProjectionY, input.position.z, 1.f);
     output.uv = input.uv;

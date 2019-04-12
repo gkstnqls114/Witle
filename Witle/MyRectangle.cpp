@@ -3,6 +3,7 @@
 #include "Texture.h"
 #include "LoadingScene.h"
 #include "ShaderManager.h"
+#include "MyDescriptorHeap.h"
 #include "MyRectangle.h"
 
 #define RECTANGLE_VERTEX_COUNT 6
@@ -14,8 +15,11 @@ MyRectangle::MyRectangle(GameObject * pOwner, ID3D12Device * pd3dDevice, ID3D12G
 
 	if (filepath)
 	{
+		m_pHeap = new MyDescriptorHeap();
+		m_pHeap->CreateCbvSrvUavDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 1, 0);
 		m_pTexture = new Texture(1, RESOURCE_TEXTURE2D);
 		m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, filepath, 0);
+		m_pHeap->CreateShaderResourceViews(pd3dDevice, pd3dCommandList, m_pTexture, ROOTPARAMETER_TEXTURE, true);
 	}
 	
 	m_nVertexBufferViews = 1;
@@ -70,6 +74,7 @@ MyRectangle::~MyRectangle()
 void MyRectangle::Render(ID3D12GraphicsCommandList * pd3dCommandList)
 {
 	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, "ScreenShader");
+	m_pHeap->UpdateShaderVariable(pd3dCommandList);
 	m_pTexture->UpdateShaderVariables(pd3dCommandList);
 
 	pd3dCommandList->IASetPrimitiveTopology(m_d3dPrimitiveTopology);

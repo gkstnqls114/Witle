@@ -142,7 +142,7 @@ void CGameFramework::RenderShadowMap()
 	float height = static_cast<float>(GameScreen::GetHeight());
 
 	// static_cast<GameScene*>(m_pScene)->TESTSetRootDescriptor(m_CommandList.Get());
-	m_TESTHeap_1->FirstUpdate(m_CommandList.Get());
+	m_TESTHeap_1->UpdateShaderVariable(m_CommandList.Get());
 
 	// 府家胶父 官槽促.. 
 	D3D12_GPU_DESCRIPTOR_HANDLE handle = m_TESTHeap_1->GetGPUSrvDescriptorStartHandle();
@@ -472,8 +472,8 @@ void CGameFramework::BuildObjects()
 	m_CommandList->Reset(m_CommandAllocator.Get(), NULL);
 	
 	///////////////////////////////////////////////////////////////////////////// 府家胶 积己
-	m_pScene = new GameScene;
-	// m_pScene = new LoadingScene;
+	// m_pScene = new GameScene;
+	m_pScene = new LoadingScene;
 	m_pScene->CreateRootSignature(m_d3dDevice.Get());
 
 	BuildTESTObjects();

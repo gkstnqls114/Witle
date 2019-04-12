@@ -9,7 +9,7 @@ Shape::Shape(GameObject* pOwner)
 }
 
 Shape::~Shape()
-{
+{ 
 	if (m_pxmf3Positions)
 	{
 		delete m_pxmf3Positions;
