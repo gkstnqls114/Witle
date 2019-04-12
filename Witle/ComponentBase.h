@@ -25,18 +25,3 @@ protected:
 	UINT m_ComponenetID{ 0 };
 	FamilyID m_FamilyID;
 };
-
-class ResourceComponentBase
-	: public ComponentBase
-{
-protected:
-	// ResourceBase	*m_ShaderVariables{ nullptr };
-
-public:
-	ResourceComponentBase(GameObject* pOwner) : ComponentBase(pOwner) {}
-	virtual ~ResourceComponentBase();
-
-	virtual void Update(float fTimeElapsed) = 0;
-
-	// const ResourceBase* const GetResource() const { return m_ShaderVariables; }
-};

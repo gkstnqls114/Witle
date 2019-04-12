@@ -52,4 +52,9 @@ Shader * ShaderManager::GetShader(const std::string & s) const
 {
 	return (*(m_Shaders.find(s))).second;
 }
+
+void ShaderManager::SetPSO(ID3D12GraphicsCommandList * pd3dCommandList, const std::string name) const
+{
+	pd3dCommandList->SetPipelineState(GetShader(name)->GetPSO());
+}
  

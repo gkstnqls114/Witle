@@ -1,10 +1,14 @@
 #pragma once
 #include "Scene.h"
 
+class MyReflexTree;
+class SunFlower;
+class Pillar;
+class Rock;
+
 class Player;
 class CPlayer;
 class Shader;
-class MyReflexTree;
 class ReflexTree;
 class CLoadedModelInfo;
 
@@ -12,9 +16,9 @@ class CameraObject;
 class Terrain;
 class GameObject;
 class LoadObject;
-class SkinnedStandardShader;
+class SkinnedShader;
 
-class QuadTreeTerrainMesh;
+class QuadtreeTerrain;
 
 struct LIGHTS;
 struct MATERIAL;
@@ -58,7 +62,7 @@ protected:
 
 	void BuildLightsAndMaterials(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList);
 	void RenderShadowMap(ID3D12GraphicsCommandList *pd3dCommandList);
-
+	 
 public:
 	GameScene();
 	virtual ~GameScene();
@@ -82,17 +86,11 @@ public:
 	void TESTSetRootDescriptor(ID3D12GraphicsCommandList *pd3dCommandList);
 	
 protected:
-	// fbx test
-	Texture*				m_GameObjectDiffuse{ nullptr };
+	// fbx test 
 	Player*                 m_pPlayer{ nullptr };
 
-
-	CLoadedModelInfo *m_pTreeModel{ nullptr };
-	UINT					m_TreeCount{ 100 };
-	Texture*				m_TreeDiffuse{ nullptr };
-	MyReflexTree**			m_Trees{ nullptr }; 
-	// fbx test
-
+	Player*                 m_pOtherPlayer{ nullptr };
+	  
 	Terrain*                m_Terrain{ nullptr };
 	CameraObject*           m_Camera{ nullptr };
 
@@ -112,7 +110,6 @@ protected:
 	ID3D12Resource				*m_pd3dcbMaterials{ nullptr };
 	MATERIAL					*m_pcbMappedMaterials{ nullptr };
 	//////////////////////////////////////  Α¶Έν
-
-	GameObject *m_TESTQuadGameobject;
-	QuadTreeTerrainMesh         *m_TESTQuadTree{ nullptr };
+	 
+	QuadtreeTerrain         *m_pQuadtreeTerrain{ nullptr };
 };

@@ -2,14 +2,14 @@
 #include "Camera.h"
 #include "GameScreen.h"
 
-UINT GameScreen::m_ClientWidth = 800;
-UINT GameScreen::m_ClientHeight = 600;
+UINT GameScreen::m_ClientWidth = 1280;
+UINT GameScreen::m_ClientHeight = 720;
 
-UINT GameScreen::m_Width = 800;
-UINT GameScreen::m_Height = 600;
+UINT GameScreen::m_Width = 1280;
+UINT GameScreen::m_Height = 720;
 
-UINT GameScreen::m_AnotherWidth = 800 / 4;
-UINT GameScreen::m_AnotherHeight = 600 / 4;
+UINT GameScreen::m_AnotherWidth = 1280 / 4;
+UINT GameScreen::m_AnotherHeight = 720 / 4;
 
 Camera* GameScreen::m_pMainCamera{ nullptr };
 IDXGISwapChain* GameScreen::m_pSwapChain{ nullptr };

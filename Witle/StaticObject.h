@@ -13,6 +13,7 @@ protected:
 public:
 	// GameObject::Update의 모든 구현은 파생된 게임 오브젝트마다 다르다.
 	virtual void Update(float fElapsedTime) override {};
+	virtual void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList, int nInstance) {};
 	 
 public:
 	StaticObject(const std::string &EntityID);
@@ -22,18 +23,79 @@ public:
 class LoadObject;
 class MyBOBox;
 
-class MyReflexTree : public StaticObject
+struct VS_SRV_INSTANCEINFO
 {
-	MyBOBox* m_MyBOBox{ nullptr };
+	XMFLOAT4X4 m_xmf4x4Transform;
+};
+
+class MyReflexTree : public StaticObject
+{  
+	MyBOBox* m_pMyBOBox{ nullptr };
 	LoadObject* m_LoadObject{ nullptr };
 
 public:
-	MyReflexTree(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, XMFLOAT3 position);
+	MyReflexTree(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, XMFLOAT3 position); 
 	virtual ~MyReflexTree() {};
-	 
+
+ 	virtual void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList, int nInstance) override;
 	void Render(ID3D12GraphicsCommandList *pd3dCommandList);
-	MyBOBox* GetBOBox() {
-		return m_MyBOBox
-			;
-	}
+	MyBOBox* GetBOBox() { return m_pMyBOBox;  }
+	  
+};
+
+class SunFlower : public StaticObject
+{ 
+	MyBOBox* m_pMyBOBox{ nullptr };
+	LoadObject* m_LoadObject{ nullptr };
+
+public:
+	SunFlower(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, XMFLOAT3 position);
+	virtual ~SunFlower() {};
+
+ 	void Render(ID3D12GraphicsCommandList *pd3dCommandList);
+	MyBOBox* GetBOBox() { return m_pMyBOBox; }
+	 
+};
+
+class Rock : public StaticObject
+{  
+	MyBOBox* m_pMyBOBox{ nullptr };
+	LoadObject* m_LoadObject{ nullptr };
+
+public:
+	Rock(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, XMFLOAT3 position);
+	virtual ~Rock() {};
+
+	void Render(ID3D12GraphicsCommandList *pd3dCommandList);
+	MyBOBox* GetBOBox() { return m_pMyBOBox; }
+	 
+};
+
+class Pillar : public StaticObject
+{ 
+	MyBOBox* m_pMyBOBox{ nullptr };
+	LoadObject* m_LoadObject{ nullptr };
+
+public:
+	Pillar(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, XMFLOAT3 position);
+	virtual ~Pillar() {};
+
+	void Render(ID3D12GraphicsCommandList *pd3dCommandList);
+	MyBOBox* GetBOBox() { return m_pMyBOBox; }
+
+};
+
+
+class Altar : public StaticObject
+{  
+	MyBOBox* m_pMyBOBox{ nullptr };
+	LoadObject* m_LoadObject{ nullptr };
+
+public:
+	Altar(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, XMFLOAT3 position);
+	virtual ~Altar() {};
+
+	void Render(ID3D12GraphicsCommandList *pd3dCommandList);
+	MyBOBox* GetBOBox() { return m_pMyBOBox; }
+
 };

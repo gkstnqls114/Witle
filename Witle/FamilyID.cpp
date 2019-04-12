@@ -8,6 +8,7 @@
 #define FAMILYID_FRUSTUM "Frustum"
 #define FAMILYID_TEST "TEST"
 #define FAMILYID_SKINNEDMESH "SkinnedMesh"
+#define FAMILYID_SHAPE "Shape"
 
 FamilyID & FamilyID::operator=(const FamilyID & other)
 {
@@ -72,6 +73,12 @@ void FamilyID::InitSkinnedMesh()
 	m_ID = FAMILYID_SKINNEDMESH;
 }
 
+void FamilyID::InitShape()
+{
+	assert(!(m_ID != "")); // 이미 한번 설정된 상태라면 더 이상 다시 설정할 수 없다.
+	m_ID = FAMILYID_SHAPE; 
+}
+
 bool FamilyID::isMesh() const
 {
 	if (m_ID == FAMILYID_MESH) return true;
@@ -105,6 +112,12 @@ bool FamilyID::isFrustum() const
 bool FamilyID::isSkinnedMesh() const
 {
 	if (m_ID == FAMILYID_SKINNEDMESH) return true;
+	return false;
+}
+
+bool FamilyID::isShape() const
+{
+	if (m_ID == FAMILYID_SHAPE) return true;
 	return false;
 }
 

@@ -6,7 +6,7 @@
 #include "Camera.h"
 
 Camera::Camera(GameObject* pOwner)
-	: ResourceComponentBase(pOwner)
+	: ComponentBase(pOwner)
 {
 	m_d3dViewport = D3D12_VIEWPORT{ 0.0f, 0.0f, static_cast<FLOAT>(GameScreen::GetWidth()) , static_cast<FLOAT>(GameScreen::GetHeight()), 0.0f, 1.0f };
 	m_d3dScissorRect = D3D12_RECT{ 0, 0, static_cast<LONG>(GameScreen::GetWidth()) ,static_cast<LONG>(GameScreen::GetHeight()) };
@@ -14,7 +14,7 @@ Camera::Camera(GameObject* pOwner)
 }
 
 Camera::Camera(GameObject* pOwner, Camera *pCamera)
-	: ResourceComponentBase(pOwner)
+	: ComponentBase(pOwner)
 {
 	if (pCamera)
 	{

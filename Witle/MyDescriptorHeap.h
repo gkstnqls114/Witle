@@ -30,7 +30,7 @@ public:
 
 	void CreateUnorderedAccessViews(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, Texture *pTexture, UINT nRootParameterStartIndex, bool bAutoIncrement) ;
 
-	void FirstUpdate(ID3D12GraphicsCommandList *pd3dCommandList) const {
+	void UpdateShaderVariable(ID3D12GraphicsCommandList *pd3dCommandList) const {
 		pd3dCommandList->SetDescriptorHeaps(1, &m_pd3dCbvSrvUavDescriptorHeap);
 	 }
 

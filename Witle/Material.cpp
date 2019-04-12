@@ -2,7 +2,7 @@
 #include "Material.h"
 
 Material::Material(GameObject* pOwner)
-	: ResourceComponentBase(pOwner)
+	: ComponentBase(pOwner)
 {
 
 }

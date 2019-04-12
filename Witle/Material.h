@@ -2,7 +2,7 @@
 #include "ComponentBase.h"
 
 class Material
-	: public ResourceComponentBase
+	: public ComponentBase
 {
 private:
 	XMFLOAT4						m_xmf4Ambient;

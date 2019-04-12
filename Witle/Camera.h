@@ -13,7 +13,7 @@ class GameObject;
 // 가장 기본적인 카메라입니다.
 // 카메라 자신의 Position을 기준으로 이동하고 회전합니다.
 class Camera
-	: public ResourceComponentBase
+	: public ComponentBase
 {
 private:
 	struct VS_CB_CAMERA_INFO
@@ -30,9 +30,9 @@ protected:
 	XMFLOAT3		m_At				{ 0.0f, 0.0f, 1.0f }; // Position + Offset = At
 	XMFLOAT3		m_Offset			{ 0.0f, 0.0f, 1.0f }; // Offset = At - Position
 
-	float			m_fPitch{ 0.0f };
-	float			m_fRoll{ 0.0f };
-	float			m_fYaw{ 0.0f };
+	float			m_fPitch{ 0.0f }; // x축
+	float			m_fRoll{ 0.0f };  // z축
+	float			m_fYaw{ 0.0f };   // y축
 
 	float			m_fTimeLag{ 0.0f };
 
