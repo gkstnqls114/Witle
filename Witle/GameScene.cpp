@@ -475,7 +475,7 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	int retval, id = 0;
 
 	unsigned long recv_flag = 0;
-	retval = WSARecv(socket, &PlayerID[id].Player_OVERLAPPED.wsabuf, 1, NULL, &recv_flag, &PlayerID[id].Player_OVERLAPPED.overapped, NULL);
+	// retval = WSARecv(socket, &PlayerID[id].Player_OVERLAPPED.wsabuf, 1, NULL, &recv_flag, &PlayerID[id].Player_OVERLAPPED.overapped, NULL);
 
 	//Server //////////////////////////////////////////////////////////////////////////////////////////
 
@@ -495,7 +495,6 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 		m_Trees[x]->Render(pd3dCommandList);
 	}
 	////////////////////////////// Model Render
-
 }
 
 void GameScene::ReleaseUploadBuffers()
@@ -508,7 +507,6 @@ void GameScene::ReleaseUploadBuffers()
 	if (m_Terrain) m_Terrain->ReleaseUploadBuffers();
 	if (m_TESTQuadTree) m_TESTQuadTree->ReleaseUploadBuffers();
 }
-
 
 ID3D12RootSignature* GameScene::CreateGraphicsRootSignature(ID3D12Device *pd3dDevice)
 {
@@ -657,7 +655,6 @@ void GameScene::BuildLightsAndMaterials(ID3D12Device *pd3dDevice, ID3D12Graphics
 	LightManager::m_pLights->m_pLights[3].fFalloff = 8.0f;
 	LightManager::m_pLights->m_pLights[3].fPhi = (float)cos(XMConvertToRadians(90.0f));
 	LightManager::m_pLights->m_pLights[3].fTheta = (float)cos(XMConvertToRadians(30.0f));
-
 
 	UINT ncbElementBytes = ((sizeof(LIGHTS) + 255) & ~255); //256ÀÇ ¹è¼ö
 	m_pd3dcbLights = d3dUtil::CreateBufferResource(pd3dDevice, pd3dCommandList, NULL, ncbElementBytes, D3D12_HEAP_TYPE_UPLOAD, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, NULL);
