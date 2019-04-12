@@ -39,10 +39,11 @@ struct OVERLAPPED_EX
 
 struct ClientID {
 	USHORT PlayerID;
+	OVERLAPPED_EX Player_OVERLAPPED;
+	BOOL mUsingID;			// 유저의 id 값이 사용되는지 판단 (검사후 만약 유저가 중간에 나갔다면 해당 유저를 m_isEscape상태로 만들 것)
 };
 
 struct PlayerState {
-	BOOL mUsingID;			// 유저의 id 값이 사용되는지 판단 (검사후 만약 유저가 중간에 나갔다면 해당 유저를 m_isEscape상태로 만들 것)
 	BOOL m_isLobby;			// 유저가 로비에 있는지 판단 (방 만들기)
 	BOOL m_isRoom;			// 유저가 방에 있는지 판단
 	BOOL m_isGameReady;		// 유저의 준비완료 여부
@@ -56,7 +57,7 @@ struct PlayerState {
 enum SceneType {
 	LobbyScene,
 	RoomScene,
-	GameScene,
+	GamePlayerScene,
 	ResponScene,			// 플레이어가 리스폰 될시 화면을 어ㅔ 해주는게 나을까? 사이퍼즈처럼 다른 사람 볼 수 있도록...
 	GameResult
 };

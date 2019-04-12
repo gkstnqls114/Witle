@@ -47,8 +47,8 @@ D3D12_CPU_DESCRIPTOR_HANDLE	GameScene::m_d3dSrvCPUDescriptorNextHandle;
 D3D12_GPU_DESCRIPTOR_HANDLE	GameScene::m_d3dSrvGPUDescriptorNextHandle;
 
 //////////////////////////////////////////////////
-extern ClientID PlayerID;
-extern Player m_pPlayer[MAXPLAYER];
+extern ClientID PlayerID[MAXPLAYER];
+//extern Player m_pPlayer[MAXPLAYER];
 //////////////////////////////////////////////////
 
 GameScene::GameScene()
@@ -171,17 +171,17 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	m_pPlayer = new Player("Player", pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, nullptr);
 	m_GameObjectDiffuse = new Texture(1, RESOURCE_TEXTURE2D);
 	m_GameObjectDiffuse->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/ReflexTree_Diffuse.dds", 0);
-	 
+
 	// Trees
-	m_Trees = new MyReflexTree* [m_TreeCount];
+	m_Trees = new MyReflexTree*[m_TreeCount];
 	for (int x = 0; x < m_TreeCount; ++x)
 	{
 		m_Trees[x] = new MyReflexTree(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, XMFLOAT3(rand() % (257 * int(xmf3Scale.x)), 0, rand() % (257 * int(xmf3Scale.z))));
 		// m_Trees[x] = new ReflexTree(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, XMFLOAT3(200, 0, 200));
 	}
-	m_TreeDiffuse = new Texture(1, RESOURCE_TEXTURE2D); 
+	m_TreeDiffuse = new Texture(1, RESOURCE_TEXTURE2D);
 	m_TreeDiffuse->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/ReflexTree_Diffuse.dds", 0);
-	
+
 	// 해당 터레인을 플레이어 콜백으로 설정
 	m_pPlayer->SetUpdatedContext(m_Terrain);
 
@@ -211,7 +211,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	m_lookAboveCamera->GetCamera()->SetViewport(GBuffer_Viewport);
 	m_lookAboveCamera->GetCamera()->GenerateProjectionMatrix(0.01f, CAMERA_FAR, float(GameScreen::GetWidth()) / float(GameScreen::GetHeight()), 60.0f);
 	//m_lookAboveCamera->GetCamera()->SetAt(XMFLOAT3(xmf3Scale.x * 257 / 2, 0.f, xmf3Scale.y * 257 / 2)); 
-	m_lookAboveCamera->GetCamera()->SetAt(XMFLOAT3(xmf3Scale.x * 257 / 2, 2000.f, xmf3Scale.z * 257 / 2)); 
+	m_lookAboveCamera->GetCamera()->SetAt(XMFLOAT3(xmf3Scale.x * 257 / 2, 2000.f, xmf3Scale.z * 257 / 2));
 	m_lookAboveCamera->GetCamera()->SetOffset(XMFLOAT3(0.0f, 0.f, 10.f));
 	m_lookAboveCamera->GetCamera()->Rotate(90.f, 0.f, 0.f);
 #endif
@@ -227,7 +227,7 @@ void GameScene::ReleaseObjects()
 {
 	if (m_pPlayer)
 	{
-		m_pPlayer->ReleaseObjects(); 
+		m_pPlayer->ReleaseObjects();
 		delete m_pPlayer;
 		m_pPlayer = nullptr;
 	}
@@ -250,7 +250,7 @@ void GameScene::ReleaseObjects()
 		m_Terrain->ReleaseObjects();
 		delete m_Terrain;
 		m_Terrain = nullptr;
-	} 
+	}
 	if (m_TESTQuadTree)
 	{
 		delete m_TESTQuadTree;
@@ -264,11 +264,11 @@ bool GameScene::ProcessInput(HWND hWnd, float ElapsedTime)
 
 	// 키보드 처리
 	if (GameInput::IsKeydownUP())
-	{ 
+	{
 		dwDirection |= DIR_FORWARD;
 	}
 	if (GameInput::IsKeydownDOWN())
-	{ 
+	{
 		dwDirection |= DIR_BACKWARD;
 	}
 	if (GameInput::IsKeydownLEFT())
@@ -279,7 +279,7 @@ bool GameScene::ProcessInput(HWND hWnd, float ElapsedTime)
 	{
 		dwDirection |= DIR_RIGHT;
 	}
-	if(GameInput::IsKeydownW())
+	if (GameInput::IsKeydownW())
 	{
 		dwDirection |= DIR_UP;
 	}
@@ -314,14 +314,14 @@ bool GameScene::ProcessInput(HWND hWnd, float ElapsedTime)
 	{
 		XMFLOAT3 Veclocity = m_pPlayer->GetVelocity();
 		if (Vector3::Length(Veclocity) > 0.f)
-		{ 
+		{
 			float fLength = Vector3::Length(Veclocity);
 			float fDeceleration = (3000.f * ElapsedTime); //해당상수는 Friction
 			if (fDeceleration > fLength) fDeceleration = fLength;
 			m_pPlayer->MoveVelocity(Vector3::ScalarProduct(Veclocity, -fDeceleration, true));
-		} 
+		}
 	}
-	
+
 	if ((GameInput::GetcDeltaX() != 0.0f) || (GameInput::GetcDeltaY() != 0.0f))
 	{
 		if (GameInput::GetcDeltaX() || GameInput::GetcDeltaY())
@@ -331,7 +331,7 @@ bool GameScene::ProcessInput(HWND hWnd, float ElapsedTime)
 			m_Camera->GetCamera()->Rotate(GameInput::GetcDeltaY(), GameInput::GetcDeltaX(), 0.0f);
 			m_pPlayer->Rotate(0.0f, GameInput::GetcDeltaX(), 0.0f);
 		}
-		
+
 	}
 
 	return true;
@@ -342,13 +342,13 @@ void GameScene::Update(float fElapsedTime)
 {
 
 	// 충돌체크 ///////////////////////// 
-	BoundingOrientedBox AlreadyBBox = m_pPlayer->CalculateAlreadyBoundingBox(fElapsedTime); 
+	BoundingOrientedBox AlreadyBBox = m_pPlayer->CalculateAlreadyBoundingBox(fElapsedTime);
 	XMFLOAT3 AlreadyPositon{ AlreadyBBox.Center.x, AlreadyBBox.Center.y, AlreadyBBox.Center.z };
 	for (int i = 0; i < m_TreeCount; ++i)
 	{
 		bool isAlreadyCollide = Collision::isCollide(AlreadyBBox, m_Trees[i]->GetBOBox()->GetBOBox());
 		if (isAlreadyCollide)
-		{ 
+		{
 			bool isUseSliding = false;
 			for (int x = 0; x < 4; ++x)
 			{
@@ -363,11 +363,11 @@ void GameScene::Update(float fElapsedTime)
 						Vector3::Sliding(m_Trees[i]->GetBOBox()->GetPlane(x), m_pPlayer->GetVelocity())
 					);
 
-					isUseSliding = true; 
+					isUseSliding = true;
 				}
-			} 
-			 
-			if(!isUseSliding)
+			}
+
+			if (!isUseSliding)
 			{
 				m_pPlayer->MoveVelocity(Vector3::ScalarProduct(m_pPlayer->GetVelocity(), -1, false));
 			}
@@ -380,7 +380,7 @@ void GameScene::Update(float fElapsedTime)
 	{
 		m_pPlayer->Update(fElapsedTime); //Velocity를 통해 pos 이동
 	}
-	 
+
 
 
 	// light update
@@ -403,7 +403,7 @@ void GameScene::LastUpdate(float fElapsedTime)
 	if (m_Camera)
 	{
 		m_Camera->LastUpdate(fElapsedTime);
-	} 
+	}
 
 	// 카메라 프러스텀과 쿼드트리 지형 렌더링 체크
 	m_Camera->GetFrustum()->TESTCheck(m_TESTQuadTree->GetRootNode());
@@ -434,7 +434,7 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	pd3dCommandList->SetGraphicsRootSignature(m_pd3dGraphicsRootSignature);
 
 	// 클라 화면 설정
-	m_Camera->SetViewportsAndScissorRects(pd3dCommandList); 
+	m_Camera->SetViewportsAndScissorRects(pd3dCommandList);
 	m_Camera->GetCamera()->UpdateShaderVariables(pd3dCommandList, ROOTPARAMETER_CAMERA);
 
 	//  조명
@@ -448,8 +448,8 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Terrain")->GetPSO());
 	pd3dCommandList->SetDescriptorHeaps(1, &m_pd3dCbvSrvDescriptorHeap);
 
-	pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_WORLD,  16, &matrix, 0);
-	m_Terrain->UpdateShaderVariables(pd3dCommandList); 
+	pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_WORLD, 16, &matrix, 0);
+	m_Terrain->UpdateShaderVariables(pd3dCommandList);
 
 	// TerrainMesh Render
 	Mesh* terrainMesh = m_Terrain->GetComponent<Mesh>("TerrainMesh");
@@ -457,23 +457,35 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 
 
 #ifdef CHECK_SUBVIEWS
-	m_lookAboveCamera->SetViewportsAndScissorRects(pd3dCommandList); 
+	m_lookAboveCamera->SetViewportsAndScissorRects(pd3dCommandList);
 	m_lookAboveCamera->GetCamera()->UpdateShaderVariables(pd3dCommandList, ROOTPARAMETER_CAMERA);
 
 	m_TESTQuadTree->TESTRender(m_TESTQuadTree->GetRootNode(), pd3dCommandList);
 #endif
 
-	//////////////////////////////////////////////
+	//Server //////////////////////////////////////////////////////////////////////////////////////////
+	// WSARecv( 소켓, 
+	//			받은 데이터가 저장할 버퍼,
+	//			버퍼개수, 
+	//			받은 데이터 크기 ==> NULL,
+	//			동작옵션,
+	//			lpOverlapped,
+	//			lpCompletionRoutine)
 
-	//////////////////////////////////////////////
+	int retval, id = 0;
+
+	unsigned long recv_flag = 0;
+	retval = WSARecv(socket, &PlayerID[id].Player_OVERLAPPED.wsabuf, 1, NULL, &recv_flag, &PlayerID[id].Player_OVERLAPPED.overapped, NULL);
+
+	//Server //////////////////////////////////////////////////////////////////////////////////////////
 
 	////////////////////////////// Model Render
 	// PSO 설정
-	
+
 	// 클라 화면 설정
 	m_Camera->SetViewportsAndScissorRects(pd3dCommandList);
 	m_Camera->GetCamera()->UpdateShaderVariables(pd3dCommandList, ROOTPARAMETER_CAMERA);
-	
+
 	pd3dCommandList->SetDescriptorHeaps(1, &m_pd3dCbvSrvDescriptorHeap);
 	m_GameObjectDiffuse->UpdateShaderVariables(pd3dCommandList);
 
@@ -481,7 +493,7 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	for (int x = 0; x < m_TreeCount; ++x)
 	{
 		m_Trees[x]->Render(pd3dCommandList);
-	} 
+	}
 	////////////////////////////// Model Render
 
 }
@@ -511,7 +523,7 @@ ID3D12RootSignature* GameScene::CreateGraphicsRootSignature(ID3D12Device *pd3dDe
 	pRootParameters[ROOTPARAMETER_MATERIALS] = d3dUtil::CreateRootParameterCBV(2);       // b2: Materials
 	pRootParameters[ROOTPARAMETER_LIGHTS] = d3dUtil::CreateRootParameterCBV(3);          // b3: Lights
 	pRootParameters[ROOTPARAMETER_COLOR] = d3dUtil::CreateRootParameterConstants(3, 4);  // b4: Color
-	
+
 	D3D12_DESCRIPTOR_RANGE pTextureDescriptorRanges[3];
 	pTextureDescriptorRanges[0] = d3dUtil::CreateDescriptorRangeSRV(1, 0); //t0: gtxtTexture
 	pTextureDescriptorRanges[1] = d3dUtil::CreateDescriptorRangeSRV(1, 1); //t1: gtxtTerrainBaseTexture
@@ -521,7 +533,7 @@ ID3D12RootSignature* GameScene::CreateGraphicsRootSignature(ID3D12Device *pd3dDe
 	pRootParameters[ROOTPARAMETER_TEXTURE] = d3dUtil::CreateRootParameterTable(1, &pTextureDescriptorRanges[0], D3D12_SHADER_VISIBILITY_PIXEL);
 	pRootParameters[ROOTPARAMETER_TEXTUREBASE] = d3dUtil::CreateRootParameterTable(1, &pTextureDescriptorRanges[1], D3D12_SHADER_VISIBILITY_PIXEL);
 	pRootParameters[ROOTPARAMETER_TEXTUREDETAIL] = d3dUtil::CreateRootParameterTable(1, &pTextureDescriptorRanges[2], D3D12_SHADER_VISIBILITY_PIXEL);
-	
+
 	D3D12_DESCRIPTOR_RANGE pd3dDescriptorRanges[8];
 	pd3dDescriptorRanges[0] = d3dUtil::CreateDescriptorRangeSRV(1, 6);  //t6: gtxtAlbedoTexture
 	pd3dDescriptorRanges[1] = d3dUtil::CreateDescriptorRangeSRV(1, 7);  //t7: gtxtSpecularTexture
@@ -531,7 +543,7 @@ ID3D12RootSignature* GameScene::CreateGraphicsRootSignature(ID3D12Device *pd3dDe
 	pd3dDescriptorRanges[5] = d3dUtil::CreateDescriptorRangeSRV(1, 11); //t11: gtxtEmissionTexture
 	pd3dDescriptorRanges[6] = d3dUtil::CreateDescriptorRangeSRV(1, 12); //t12: gtxtEmissionTexture
 	pd3dDescriptorRanges[7] = d3dUtil::CreateDescriptorRangeSRV(1, 13); //t13: gtxtSkyBoxTexture
-	
+
 	pRootParameters[ROOTPARAMETER_ALBEDO] = d3dUtil::CreateRootParameterTable(1, &pd3dDescriptorRanges[0], D3D12_SHADER_VISIBILITY_PIXEL);
 	pRootParameters[ROOTPARAMETER_SPECULAR] = d3dUtil::CreateRootParameterTable(1, &pd3dDescriptorRanges[1], D3D12_SHADER_VISIBILITY_PIXEL);
 	pRootParameters[ROOTPARAMETER_NORMAL] = d3dUtil::CreateRootParameterTable(1, &pd3dDescriptorRanges[2], D3D12_SHADER_VISIBILITY_PIXEL);
@@ -565,9 +577,9 @@ ID3D12RootSignature* GameScene::CreateGraphicsRootSignature(ID3D12Device *pd3dDe
 	D3D12_ROOT_SIGNATURE_FLAGS d3dRootSignatureFlags =
 		D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT |
 		D3D12_ROOT_SIGNATURE_FLAG_DENY_HULL_SHADER_ROOT_ACCESS |
-		D3D12_ROOT_SIGNATURE_FLAG_DENY_DOMAIN_SHADER_ROOT_ACCESS  ;
-		// D3D12_ROOT_SIGNATURE_FLAG_DENY_GEOMETRY_SHADER_ROOT_ACCESS;
-		//D3D12_ROOT_SIGNATURE_FLAG_DENY_PIXEL_SHADER_ROOT_ACCESS;
+		D3D12_ROOT_SIGNATURE_FLAG_DENY_DOMAIN_SHADER_ROOT_ACCESS;
+	// D3D12_ROOT_SIGNATURE_FLAG_DENY_GEOMETRY_SHADER_ROOT_ACCESS;
+	//D3D12_ROOT_SIGNATURE_FLAG_DENY_PIXEL_SHADER_ROOT_ACCESS;
 
 	D3D12_ROOT_SIGNATURE_DESC d3dRootSignatureDesc;
 	::ZeroMemory(&d3dRootSignatureDesc, sizeof(D3D12_ROOT_SIGNATURE_DESC));
@@ -580,10 +592,10 @@ ID3D12RootSignature* GameScene::CreateGraphicsRootSignature(ID3D12Device *pd3dDe
 	ID3DBlob *pd3dSignatureBlob = nullptr;
 	ID3DBlob *pd3dErrorBlob = nullptr;
 	hResult = ::D3D12SerializeRootSignature(&d3dRootSignatureDesc, D3D_ROOT_SIGNATURE_VERSION_1, &pd3dSignatureBlob, &pd3dErrorBlob);
-	assert(hResult == S_OK); 
+	assert(hResult == S_OK);
 
 	hResult = pd3dDevice->CreateRootSignature(0, pd3dSignatureBlob->GetBufferPointer(), pd3dSignatureBlob->GetBufferSize(), IID_PPV_ARGS(&pd3dGraphicsRootSignature));
-	assert(hResult == S_OK); 
+	assert(hResult == S_OK);
 
 	if (pd3dSignatureBlob) pd3dSignatureBlob->Release();
 	if (pd3dErrorBlob) pd3dErrorBlob->Release();
@@ -612,7 +624,7 @@ void GameScene::BuildLightsAndMaterials(ID3D12Device *pd3dDevice, ID3D12Graphics
 	LightManager::m_pLights->m_pLights[0].Position = XMFLOAT3(0.0f, 0.0f, 0.0f);
 	LightManager::m_pLights->m_pLights[0].Direction = XMFLOAT3(0.0f, 0.0f, 0.0f);
 	LightManager::m_pLights->m_pLights[0].Attenuation = XMFLOAT3(1.0f, 0.001f, 0.0001f);
-	
+
 	LightManager::m_pLights->m_pLights[1].bEnable = false;
 	LightManager::m_pLights->m_pLights[1].nType = LIGHT_TYPE::SPOT_LIGHT;
 	LightManager::m_pLights->m_pLights[1].fRange = 50.0f;
@@ -632,7 +644,7 @@ void GameScene::BuildLightsAndMaterials(ID3D12Device *pd3dDevice, ID3D12Graphics
 	LightManager::m_pLights->m_pLights[2].Diffuse = XMFLOAT4(0.4f, 0.4f, 0.4f, 1.0f);
 	LightManager::m_pLights->m_pLights[2].Specular = XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f);
 	LightManager::m_pLights->m_pLights[2].Direction = XMFLOAT3(0.0f, 0.0f, 1.0f);
-	
+
 	LightManager::m_pLights->m_pLights[3].bEnable = false;
 	LightManager::m_pLights->m_pLights[3].nType = LIGHT_TYPE::SPOT_LIGHT;
 	LightManager::m_pLights->m_pLights[3].fRange = 60.0f;
@@ -646,7 +658,7 @@ void GameScene::BuildLightsAndMaterials(ID3D12Device *pd3dDevice, ID3D12Graphics
 	LightManager::m_pLights->m_pLights[3].fPhi = (float)cos(XMConvertToRadians(90.0f));
 	LightManager::m_pLights->m_pLights[3].fTheta = (float)cos(XMConvertToRadians(30.0f));
 
-	 
+
 	UINT ncbElementBytes = ((sizeof(LIGHTS) + 255) & ~255); //256의 배수
 	m_pd3dcbLights = d3dUtil::CreateBufferResource(pd3dDevice, pd3dCommandList, NULL, ncbElementBytes, D3D12_HEAP_TYPE_UPLOAD, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, NULL);
 
@@ -658,7 +670,7 @@ void GameScene::BuildLightsAndMaterials(ID3D12Device *pd3dDevice, ID3D12Graphics
 	::ZeroMemory(m_pMaterials, sizeof(MATERIAL));
 
 	*m_pMaterials = { XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 5.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f) };
-	
+
 	CreateConstantBuffer(pd3dDevice, pd3dCommandList, m_pd3dcbMaterials, sizeof(MATERIAL), (void **)&m_pcbMappedMaterials);
 
 	UINT ncbMaterialBytes = ((sizeof(MATERIAL) + 255) & ~255); //256의 배수
