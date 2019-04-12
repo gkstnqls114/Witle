@@ -53,6 +53,18 @@ D3D12_ROOT_PARAMETER d3dUtil::CreateRootParameterCBV(UINT ShaderRegister, UINT R
 	return d3dRootParameter;
 }
 
+D3D12_ROOT_PARAMETER d3dUtil::CreateRootParameterSRV(UINT ShaderRegister, UINT RegisterSpace, D3D12_SHADER_VISIBILITY ShaderVisibility)
+{
+	D3D12_ROOT_PARAMETER d3dRootParameter;
+
+	d3dRootParameter.ParameterType = D3D12_ROOT_PARAMETER_TYPE_SRV;
+	d3dRootParameter.Descriptor.ShaderRegister = ShaderRegister;
+	d3dRootParameter.Descriptor.RegisterSpace = RegisterSpace;
+	d3dRootParameter.ShaderVisibility = ShaderVisibility;
+
+	return d3dRootParameter;
+}
+
 D3D12_ROOT_PARAMETER d3dUtil::CreateRootParameterTable(UINT NumDescriptorRanges, D3D12_DESCRIPTOR_RANGE* pDescriptorRanges, D3D12_SHADER_VISIBILITY ShaderVisibility)
 {
 	D3D12_ROOT_PARAMETER d3dRootParameter;

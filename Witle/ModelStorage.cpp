@@ -1,6 +1,5 @@
 #include "stdafx.h"
-#include "Object.h"
-#include "LoadedModelInfo.h"
+#include "Object.h" 
 #include "ModelStorage.h"
 
 ModelStorage* ModelStorage::m_Instance{ nullptr };
@@ -18,12 +17,18 @@ ModelStorage * ModelStorage::GetInstance()
 void ModelStorage::CreateModels(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature)
 {
 	if (m_isCreate) return;
-	m_ModelStorage["ReflexTree"] = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/ReflexTree.bin");
+
+	m_ModelStorage["ReflexTree"] = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/ReflexTree.bin", NULL);
+	m_ModelStorage["Rock"] = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/Rock.bin", NULL);
+	m_ModelStorage["Pillar"] = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/Pillar.bin", NULL);
+	m_ModelStorage["Sunflower"] = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/Sunflower.bin", NULL);
 	m_isCreate = true;
 }
 
 LoadObject * ModelStorage::GetRootObject(std::string name)
 {
+	if (!m_ModelStorage[name]) return nullptr;
+
 	LoadObject* newRootObject = new LoadObject;
 	LoadObject::CopyWorldMatrix(newRootObject, m_ModelStorage[name]->m_pModelRootObject);
 

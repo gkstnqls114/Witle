@@ -1,16 +1,42 @@
 #pragma once
 
+namespace FileRead
+{
+	static int ReadStringFromFile(FILE *pInFile, char *pstrToken)
+	{
+		int nStrLength = 0;
+		UINT nReads = 0;
+		nReads = (UINT)::fread(&nStrLength, sizeof(int), 1, pInFile);
+		nReads = (UINT)::fread(pstrToken, sizeof(char), nStrLength, pInFile);
+		pstrToken[nStrLength] = '\0';
+		return(nStrLength);
+	}
 
+	static float ReadFloatFromFile(FILE *pInFile)
+	{
+		float fValue = 0;
+		UINT nReads = (UINT)::fread(&fValue, sizeof(float), 1, pInFile);
+		return(fValue);
+	}
+
+	static int ReadIntegerFromFile(FILE *pInFile)
+	{
+		int nValue = 0;
+		UINT nReads = (UINT)::fread(&nValue, sizeof(int), 1, pInFile);
+		return(nValue);
+	}
+}
 // 유용한 함수들이 모여있는 클래스
 class d3dUtil
 {
 public:
 	d3dUtil();
 	~d3dUtil();
-	
+
 	static D3D12_DESCRIPTOR_RANGE CreateDescriptorRangeSRV(UINT NumDescriptors, UINT BaseShaderRegister, UINT RegisterSpace = 0);
 	static D3D12_ROOT_PARAMETER CreateRootParameterConstants(UINT Num32BitValues, UINT ShaderRegister, UINT RegisterSpace = 0, D3D12_SHADER_VISIBILITY ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL);
 	static D3D12_ROOT_PARAMETER CreateRootParameterCBV(UINT ShaderRegister, UINT RegisterSpace = 0, D3D12_SHADER_VISIBILITY ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL);
+	static D3D12_ROOT_PARAMETER CreateRootParameterSRV(UINT ShaderRegister, UINT RegisterSpace = 0, D3D12_SHADER_VISIBILITY ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL);
 	static D3D12_ROOT_PARAMETER CreateRootParameterTable(UINT NumDescriptorRanges, D3D12_DESCRIPTOR_RANGE* pDescriptorRanges, D3D12_SHADER_VISIBILITY ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL);
 
 	static ID3D12Resource* CreateBufferResource(ID3D12Device *pd3dDevice,
@@ -40,10 +66,11 @@ public:
 		d3dResourceBarrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
 		pd3dCommandList->ResourceBarrier(1, &d3dResourceBarrier);
 	}
-	
+
 	static UINT CalcConstantBufferByteSize(UINT byteSize);
 
 	static UINT gnCbvSrvDescriptorIncrementSize;
+
 	static int ReadStringFromFile(FILE *pInFile, char *pstrToken)
 	{
 		int nStrLength = 0;
@@ -56,7 +83,7 @@ public:
 #endif // DEBUG
 
 		return(nStrLength);
-	} 
+	}
 
 	static float ReadFloatFromFile(FILE *pInFile)
 	{

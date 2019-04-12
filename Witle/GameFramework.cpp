@@ -4,24 +4,29 @@
 #include "ShaderManager.h"
 #include "GameTimer.h"
 #include "GameInput.h"
+#include "GameScreen.h" 
 
+#include "StandardShader.h"
+#include "TerrainShader.h"
+#include "SkinnedShader.h"
+#include "HorizonBlurShader.h"
+#include "VerticalBlurShader.h"
+#include "InstancingStandardShader.h"
 #include "TESTShader.h"
+#include "ScreenShader.h"
 #include "CubeShader.h"
 
 #ifdef _SHOW_BOUNDINGBOX
 #include "LineShader.h"
 #endif // _SHOW_BOUNDINGBOX
-
-#include "TESTLoadFBXShader.h"
-#include "TerrainShader.h"
-#include "SkinnedStandardShader.h"
-#include "HorizonBlurShader.h"
-#include "VerticalBlurShader.h"
+ 
+#include "Object.h"
 #include "Texture.h"
 #include "MyDescriptorHeap.h"
 
-#include "GameScreen.h" 
 #include "GameScene.h"
+#include "RoomScene.h"
+#include "LoadingScene.h"
 
 #include "GameFramework.h"
 
@@ -87,6 +92,8 @@ bool CGameFramework::OnCreate(HINSTANCE hInstance, HWND hMainWnd)
 
 void CGameFramework::OnDestroy()
 {
+	GameScreen::ChangeWindowScreen(GameScreen::GetWidth(), GameScreen::GetHeight());
+
 	ReleaseObjects();
 
 	::CloseHandle(m_hFenceEvent);
@@ -135,7 +142,7 @@ void CGameFramework::RenderShadowMap()
 	float height = static_cast<float>(GameScreen::GetHeight());
 
 	// static_cast<GameScene*>(m_pScene)->TESTSetRootDescriptor(m_CommandList.Get());
-	m_TESTHeap_1->FirstUpdate(m_CommandList.Get());
+	m_TESTHeap_1->UpdateShaderVariable(m_CommandList.Get());
 
 	// 리소스만 바꾼다.. 
 	D3D12_GPU_DESCRIPTOR_HANDLE handle = m_TESTHeap_1->GetGPUSrvDescriptorStartHandle();
@@ -466,11 +473,14 @@ void CGameFramework::BuildObjects()
 	
 	///////////////////////////////////////////////////////////////////////////// 리소스 생성
 	m_pScene = new GameScene;
-	if (m_pScene) m_pScene->BuildObjects(m_d3dDevice.Get(), m_CommandList.Get());
-	
+	// m_pScene = new LoadingScene;
+	// m_pScene = new RoomScene;
+	m_pScene->CreateRootSignature(m_d3dDevice.Get());
+
 	BuildTESTObjects();
 	BuildShaders();
 
+	m_pScene->BuildObjects(m_d3dDevice.Get(), m_CommandList.Get());
 	///////////////////////////////////////////////////////////////////////////// 리소스 생성
 
 	hResult = m_CommandList->Close();
@@ -538,9 +548,9 @@ void CGameFramework::MoveToNextFrame()
 
 void CGameFramework::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam)
 {
-	//if (m_pScene) {
-	//	m_pScene->OnProcessingMouseMessage(hWnd, nMessageID, wParam, lParam);
-	//}
+	if (m_pScene) {
+		m_pScene->OnProcessingMouseMessage(hWnd, nMessageID, wParam, lParam);
+	}
 
 	switch (nMessageID)
 	{
@@ -568,8 +578,13 @@ void CGameFramework::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM
 	}
 }
 
+static BOOL is_fullscreen = FALSE;
 void CGameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam)
 {
+	if (m_pScene) {
+		m_pScene->OnProcessingKeyboardMessage(hWnd, nMessageID, wParam, lParam, 0.f);
+	}
+
 	switch (nMessageID)
 	{
 	case WM_KEYUP:
@@ -580,15 +595,17 @@ void CGameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPA
 			break;
 		
 		case VK_F1:
-		{
-			if (GameScreen::GetHeight() == 540)
+		{ 
+			if (!is_fullscreen)
 			{
-				GameScreen::ChangeWindowScreen(800, 600);
+				is_fullscreen = TRUE;
+				GameScreen::ChangeFullScreen(GameScreen::GetWidth(), GameScreen::GetHeight());
 			}
 			else
 			{
-				GameScreen::ChangeWindowScreen(960, 540);
-			}
+				is_fullscreen = FALSE;
+				GameScreen::ChangeWindowScreen(GameScreen::GetWidth(), GameScreen::GetHeight());
+			} 
 			OnResizeBackBuffers();
 			break;
 		}
@@ -610,7 +627,7 @@ void CGameFramework::RenderOnSwapchain()
 	m_CommandList->ClearDepthStencilView(m_ShadowMapCPUHandle, D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, NULL);
 
 	// 하단에 테스트용으로 보일 리소스들을 렌더한다.
-	RenderShadowMap();
+	// RenderShadowMap();
 	
 	// 기본 게임 장면을 렌더한다.
 	RenderSwapChain();
@@ -620,6 +637,8 @@ void CGameFramework::RenderOnSwapchain()
 
 void CGameFramework::BuildShaders()
 {
+	CMaterial::PrepareShaders(m_d3dDevice.Get(), m_CommandList.Get(), m_pScene->GetGraphicsRootSignature());
+
 	Shader* pCubeShader = new CubeShader();
 	pCubeShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
 	ShaderManager::GetInstance()->InsertShader("Cube", pCubeShader);
@@ -627,14 +646,22 @@ void CGameFramework::BuildShaders()
 	Shader* pTerrainShader = new TerrainShader();
 	pTerrainShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
 	ShaderManager::GetInstance()->InsertShader("Terrain", pTerrainShader);
-
-	Shader* pStandardShader = new SkinnedStandardShader();
+	 
+	Shader* pStandardShader = new StandardShader();
 	pStandardShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
-	ShaderManager::GetInstance()->InsertShader("Standard", pStandardShader);
+	ShaderManager::GetInstance()->InsertShader("StandardShader", pStandardShader);
 
-	Shader* pLoadFBXShader = new TESTLoadFBXShader();
-	pLoadFBXShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
-	ShaderManager::GetInstance()->InsertShader("LoadFBX", pLoadFBXShader);
+	Shader* pInstancingStandardShader = new InstancingStandardShader();
+	pInstancingStandardShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
+	ShaderManager::GetInstance()->InsertShader("InstancingStandardShader", pInstancingStandardShader);
+
+	Shader* pSkinnedShader = new SkinnedShader();
+	pSkinnedShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
+	ShaderManager::GetInstance()->InsertShader("SkinnedShader", pSkinnedShader);
+	
+	Shader* pScreenShader = new ScreenShader();
+	pScreenShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
+	ShaderManager::GetInstance()->InsertShader("ScreenShader", pScreenShader);
 
 #ifdef _SHOW_BOUNDINGBOX
 	Shader* pLineShader = new LineShader();
@@ -741,23 +768,7 @@ void CGameFramework::OnResizeBackBuffers()
 	if (m_DepthStencilBuffer) {
 		m_DepthStencilBuffer->Release();
 	}
-
-	if (m_pShadowMap) {
-		m_pShadowMap->Release();
-	}
-
-	for (int i = 0; i < m_GBuffersCount; ++i)
-	{
-		if (m_GBuffers[i])
-		{
-			m_GBuffers[i]->Release();
-		}
-	}
-	if (m_TESTHeap_1)
-	{
-		delete m_TESTHeap_1;
-		m_TESTHeap_1 = nullptr;
-	}
+	 
 
 #ifdef _WITH_ONLY_RESIZE_BACKBUFFERS
 	DXGI_SWAP_CHAIN_DESC SwapChainDesc;
@@ -773,8 +784,7 @@ void CGameFramework::OnResizeBackBuffers()
 #endif
 
 	CreateRenderTargetView();
-	CreateDepthStencilView();
-	CreateGBufferView();
+	CreateDepthStencilView(); 
 	
 	m_CommandList->Close();
 	

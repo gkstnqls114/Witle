@@ -156,6 +156,8 @@
   <ItemGroup>
     <ClInclude Include="Avoidance.h" />
     <ClInclude Include="BasicCam.h" />
+    <ClInclude Include="Broom.h" />
+    <ClInclude Include="Button.h" />
     <ClInclude Include="CameraObject.h" />
     <ClInclude Include="CMesh.h" />
     <ClInclude Include="Collision.h" />
@@ -166,12 +168,14 @@
     <ClInclude Include="FamilyID.h" />
     <ClInclude Include="GameScreen.h" />
     <ClInclude Include="HorizonBlurShader.h" />
+    <ClInclude Include="InstancingStandardShader.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="LightManager.h" />
     <ClInclude Include="LightObject.h" />
     <ClInclude Include="LineCube.h" />
     <ClInclude Include="LineShader.h" />
-    <ClInclude Include="LoadedModelInfo.h" />
+    <ClInclude Include="LoadingScene.h" />
+    <ClInclude Include="LobbyScene.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="MyBOBox.h" />
     <ClInclude Include="MyConstants.h" />
@@ -197,32 +201,39 @@
     <ClInclude Include="MyStructs.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="PlayerMovement.h" />
+    <ClInclude Include="PlayerStatus.h" />
     <ClInclude Include="PointLight.h" />
-    <ClInclude Include="QuadTreeTerrainMesh.h" />
+    <ClInclude Include="QuadtreeTerrain.h" />
+    <ClInclude Include="MyRectangle.h" />
+    <ClInclude Include="RoomScene.h" />
+    <ClInclude Include="ScreenShader.h" />
     <ClInclude Include="ShaderManager.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="Shader.h" />
+    <ClInclude Include="Shape.h" />
     <ClInclude Include="Shield.h" />
     <ClInclude Include="Skill.h" />
     <ClInclude Include="SkillRestraint.h" />
     <ClInclude Include="SkinnedMesh.h" />
-    <ClInclude Include="SkinnedStandardShader.h" />
+    <ClInclude Include="SkinnedShader.h" />
     <ClInclude Include="SkyPlane.h" />
     <ClInclude Include="Sniping.h" />
     <ClInclude Include="SpeedReduction.h" />
     <ClInclude Include="SpotLight.h" />
     <ClInclude Include="StandardShader.h" />
     <ClInclude Include="StaticObject.h" />
+    <ClInclude Include="StaticObjectStorage.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="GameScene.h" />
     <ClInclude Include="Terrain.h" />
     <ClInclude Include="TerrainMesh.h" />
     <ClInclude Include="SkinnedMeshRenderer.h" />
-    <ClInclude Include="TESTLoadFBXShader.h" />
+    <ClInclude Include="TerrainObjectID.h" />
     <ClInclude Include="TESTShader.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="VerticalBlurShader.h" />
@@ -237,6 +248,8 @@
   <ItemGroup>
     <ClCompile Include="Avoidance.cpp" />
     <ClCompile Include="BasicCam.cpp" />
+    <ClCompile Include="Broom.cpp" />
+    <ClCompile Include="Button.cpp" />
     <ClCompile Include="CameraObject.cpp" />
     <ClCompile Include="CMesh.cpp" />
     <ClCompile Include="Collision.cpp" />
@@ -259,12 +272,14 @@
     <ClCompile Include="GameTimer.cpp" />
     <ClCompile Include="HeightMapImage.cpp" />
     <ClCompile Include="HorizonBlurShader.cpp" />
+    <ClCompile Include="InstancingStandardShader.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="LightManager.cpp" />
     <ClCompile Include="LightObject.cpp" />
     <ClCompile Include="LineCube.cpp" />
     <ClCompile Include="LineShader.cpp" />
-    <ClCompile Include="LoadedModelInfo.cpp" />
+    <ClCompile Include="LoadingScene.cpp" />
+    <ClCompile Include="LobbyScene.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="MeshRenderer.cpp" />
@@ -275,23 +290,30 @@
     <ClCompile Include="MyRigidbody.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PlayerMovement.cpp" />
+    <ClCompile Include="PlayerStatus.cpp" />
     <ClCompile Include="PointLight.cpp" />
-    <ClCompile Include="QuadTreeTerrainMesh.cpp" />
+    <ClCompile Include="QuadtreeTerrain.cpp" />
+    <ClCompile Include="MyRectangle.cpp" />
+    <ClCompile Include="RoomScene.cpp" />
+    <ClCompile Include="ScreenShader.cpp" />
     <ClCompile Include="ShaderManager.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="Shape.cpp" />
     <ClCompile Include="Shield.cpp" />
     <ClCompile Include="Skill.cpp" />
     <ClCompile Include="SkillRestraint.cpp" />
     <ClCompile Include="SkinnedMesh.cpp" />
-    <ClCompile Include="SkinnedStandardShader.cpp" />
+    <ClCompile Include="SkinnedShader.cpp" />
     <ClCompile Include="Sniping.cpp" />
     <ClCompile Include="SpeedReduction.cpp" />
     <ClCompile Include="SpotLight.cpp" />
     <ClCompile Include="StandardShader.cpp" />
     <ClCompile Include="StaticObject.cpp" />
+    <ClCompile Include="StaticObjectStorage.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -302,7 +324,7 @@
     <ClCompile Include="Terrain.cpp" />
     <ClCompile Include="TerrainMesh.cpp" />
     <ClCompile Include="SkinnedMeshRenderer.cpp" />
-    <ClCompile Include="TESTLoadFBXShader.cpp" />
+    <ClCompile Include="TerrainObjectID.cpp" />
     <ClCompile Include="TESTShader.cpp" />
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="VerticalBlurShader.cpp" />
@@ -332,6 +354,7 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compute</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="CubeShader.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compute</ShaderType>
@@ -349,6 +372,7 @@
     </FxCompile>
     <FxCompile Include="Light.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="LineShader.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
@@ -362,6 +386,18 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
       </ExcludedFromBuild>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">VS</EntryPointName>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="ScreenShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">VSScreen</EntryPointName>
     </FxCompile>
     <FxCompile Include="ShowTextureShader.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compute</ShaderType>
@@ -373,6 +409,7 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compute</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="SkinnedAnimationShader.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
@@ -388,9 +425,10 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
       </ExcludedFromBuild>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">VSSkinnedAnimationStandard</EntryPointName>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="StandardShader.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Geometry</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Geometry</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0</ShaderModel>
@@ -398,7 +436,10 @@
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Geometry</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </ExcludedFromBuild>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">VSStandard</EntryPointName>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="TerrainShader.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Geometry</ShaderType>
@@ -413,19 +454,6 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
-    <FxCompile Include="TESTLoadFBXShader.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compute</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Compute</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compute</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-      </ExcludedFromBuild>
-      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">VS</EntryPointName>
-    </FxCompile>
     <FxCompile Include="Variables.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compute</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
@@ -435,6 +463,8 @@
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compute</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -79,9 +79,6 @@
     <Filter Include="02.Component\MyRigidbody">
       <UniqueIdentifier>{ea387169-77ab-4066-8583-c032c53a4038}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.Component\PlayerMovement">
-      <UniqueIdentifier>{9ec62c01-4c38-4a62-9a19-4ca89e5c286c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="03.GameObject\Camera">
       <UniqueIdentifier>{c697f733-6c27-408a-a499-af08ff3180ec}</UniqueIdentifier>
     </Filter>
@@ -99,9 +96,6 @@
     </Filter>
     <Filter Include="11.Event">
       <UniqueIdentifier>{3f9358d8-bf33-46cb-8896-0fad7507622f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.Component\Mesh\QuadTreeTerrainMesh">
-      <UniqueIdentifier>{711330f0-9106-4126-b083-880c2df6277b}</UniqueIdentifier>
     </Filter>
     <Filter Include="HLSL">
       <UniqueIdentifier>{8071701e-797b-47cb-9dab-2e0e157a4b18}</UniqueIdentifier>
@@ -175,9 +169,6 @@
     <Filter Include="05.Shader\StandardShader">
       <UniqueIdentifier>{de0113f4-cf07-4caa-90d1-0142948e989e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="05.Shader\TESTLoadFBXShader">
-      <UniqueIdentifier>{225397ac-3fb8-4611-951b-655a6891efa9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="05.Shader\LineShader">
       <UniqueIdentifier>{fda23db5-9c9d-46fa-abe2-a357f294f44c}</UniqueIdentifier>
     </Filter>
@@ -198,6 +189,54 @@
     </Filter>
     <Filter Include="13.Storage\ModelStorage">
       <UniqueIdentifier>{6f721a66-4caa-4e6f-b8e2-a51b09ac77f4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Shader\InstancingStandardShader">
+      <UniqueIdentifier>{3f982932-7ab3-47f3-9f5c-fe5b5329e354}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="13.Storage\StaticObjectStorage">
+      <UniqueIdentifier>{d8ca9f62-bada-44fd-a0d4-807e00dae610}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="99.etc\ID\FamilyID">
+      <UniqueIdentifier>{c058a8e0-f7c8-4e83-ad16-f15713affe96}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="99.etc\ID\TerrainObjectID">
+      <UniqueIdentifier>{dd631a4a-4f0b-4012-957b-e1b304c15f34}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.Scene\LoadingScene">
+      <UniqueIdentifier>{812fe0ce-fb65-4796-a546-9adef1eba558}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.Scene\LobbyScene">
+      <UniqueIdentifier>{033ba113-a22a-419b-8d84-91a47f23756e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.Scene\RoomScene">
+      <UniqueIdentifier>{0cb84e77-e644-46e4-adeb-bac56c763ceb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\Shape">
+      <UniqueIdentifier>{e049cf3c-d529-4adb-a560-648f593ee5bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameObject\Button">
+      <UniqueIdentifier>{03be92de-946d-46c5-9be8-52173edf3c04}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\Shape\MyRectangle">
+      <UniqueIdentifier>{d4a57115-6c92-4d13-abe2-811676fc65d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Shader\ScreenShader">
+      <UniqueIdentifier>{e11c642f-3db6-462a-afa9-ea97701a5168}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="99.etc\TextureManager">
+      <UniqueIdentifier>{336fca6f-fc21-4c05-a804-c9e60309ed49}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\ForPlayer">
+      <UniqueIdentifier>{312e3404-8af8-4767-bcd1-0890bedfebe4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\ForPlayer\PlayerMovement">
+      <UniqueIdentifier>{9ec62c01-4c38-4a62-9a19-4ca89e5c286c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\ForPlayer\PlayerStatus">
+      <UniqueIdentifier>{a15bc817-37c9-4328-8056-352a1ebe9b63}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="12.Skill\Broom">
+      <UniqueIdentifier>{20d5a4b8-c8a4-495a-98e6-3397c27f571d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -321,9 +360,6 @@
     <ClInclude Include="MyConstants.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="QuadTreeTerrainMesh.h">
-      <Filter>02.Component\Mesh\QuadTreeTerrainMesh</Filter>
-    </ClInclude>
     <ClInclude Include="MyFrustum.h">
       <Filter>02.Component\MyFrustum</Filter>
     </ClInclude>
@@ -341,9 +377,6 @@
     </ClInclude>
     <ClInclude Include="PointLight.h">
       <Filter>02.Component\Light\PointLight</Filter>
-    </ClInclude>
-    <ClInclude Include="FamilyID.h">
-      <Filter>99.etc\ID</Filter>
     </ClInclude>
     <ClInclude Include="Material.h">
       <Filter>02.Component\Material</Filter>
@@ -396,9 +429,6 @@
     <ClInclude Include="WICTextureLoader12.h">
       <Filter>99.etc</Filter>
     </ClInclude>
-    <ClInclude Include="SkinnedStandardShader.h">
-      <Filter>05.Shader\SkinnedStandardShader</Filter>
-    </ClInclude>
     <ClInclude Include="StandardShader.h">
       <Filter>05.Shader\StandardShader</Filter>
     </ClInclude>
@@ -413,12 +443,6 @@
     </ClInclude>
     <ClInclude Include="CPlayer.h">
       <Filter>99.etc</Filter>
-    </ClInclude>
-    <ClInclude Include="LoadedModelInfo.h">
-      <Filter>99.etc</Filter>
-    </ClInclude>
-    <ClInclude Include="TESTLoadFBXShader.h">
-      <Filter>05.Shader\TESTLoadFBXShader</Filter>
     </ClInclude>
     <ClInclude Include="LineShader.h">
       <Filter>05.Shader\LineShader</Filter>
@@ -437,6 +461,54 @@
     </ClInclude>
     <ClInclude Include="StaticObject.h">
       <Filter>03.GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="SkinnedShader.h">
+      <Filter>05.Shader\SkinnedStandardShader</Filter>
+    </ClInclude>
+    <ClInclude Include="InstancingStandardShader.h">
+      <Filter>05.Shader\InstancingStandardShader</Filter>
+    </ClInclude>
+    <ClInclude Include="StaticObjectStorage.h">
+      <Filter>13.Storage\StaticObjectStorage</Filter>
+    </ClInclude>
+    <ClInclude Include="FamilyID.h">
+      <Filter>99.etc\ID\FamilyID</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainObjectID.h">
+      <Filter>99.etc\ID\TerrainObjectID</Filter>
+    </ClInclude>
+    <ClInclude Include="LoadingScene.h">
+      <Filter>04.Scene\LoadingScene</Filter>
+    </ClInclude>
+    <ClInclude Include="LobbyScene.h">
+      <Filter>04.Scene\LobbyScene</Filter>
+    </ClInclude>
+    <ClInclude Include="RoomScene.h">
+      <Filter>04.Scene\RoomScene</Filter>
+    </ClInclude>
+    <ClInclude Include="QuadtreeTerrain.h">
+      <Filter>03.GameObject\Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="Shape.h">
+      <Filter>02.Component\Shape</Filter>
+    </ClInclude>
+    <ClInclude Include="Button.h">
+      <Filter>03.GameObject\Button</Filter>
+    </ClInclude>
+    <ClInclude Include="MyRectangle.h">
+      <Filter>02.Component\Shape\MyRectangle</Filter>
+    </ClInclude>
+    <ClInclude Include="ScreenShader.h">
+      <Filter>05.Shader\ScreenShader</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerStatus.h">
+      <Filter>02.Component\ForPlayer\PlayerStatus</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerMovement.h">
+      <Filter>02.Component\ForPlayer\PlayerMovement</Filter>
+    </ClInclude>
+    <ClInclude Include="Broom.h">
+      <Filter>12.Skill\Broom</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -542,9 +614,6 @@
     <ClCompile Include="Event.cpp">
       <Filter>11.Event</Filter>
     </ClCompile>
-    <ClCompile Include="QuadTreeTerrainMesh.cpp">
-      <Filter>02.Component\Mesh\QuadTreeTerrainMesh</Filter>
-    </ClCompile>
     <ClCompile Include="MyFrustum.cpp">
       <Filter>02.Component\MyFrustum</Filter>
     </ClCompile>
@@ -562,9 +631,6 @@
     </ClCompile>
     <ClCompile Include="PointLight.cpp">
       <Filter>02.Component\Light\PointLight</Filter>
-    </ClCompile>
-    <ClCompile Include="FamilyID.cpp">
-      <Filter>99.etc\ID</Filter>
     </ClCompile>
     <ClCompile Include="Material.cpp">
       <Filter>02.Component\Material</Filter>
@@ -617,9 +683,6 @@
     <ClCompile Include="WICTextureLoader12.cpp">
       <Filter>99.etc</Filter>
     </ClCompile>
-    <ClCompile Include="SkinnedStandardShader.cpp">
-      <Filter>05.Shader\SkinnedStandardShader</Filter>
-    </ClCompile>
     <ClCompile Include="StandardShader.cpp">
       <Filter>05.Shader\StandardShader</Filter>
     </ClCompile>
@@ -634,12 +697,6 @@
     </ClCompile>
     <ClCompile Include="CPlayer.cpp">
       <Filter>99.etc</Filter>
-    </ClCompile>
-    <ClCompile Include="LoadedModelInfo.cpp">
-      <Filter>99.etc</Filter>
-    </ClCompile>
-    <ClCompile Include="TESTLoadFBXShader.cpp">
-      <Filter>05.Shader\TESTLoadFBXShader</Filter>
     </ClCompile>
     <ClCompile Include="LineShader.cpp">
       <Filter>05.Shader\LineShader</Filter>
@@ -658,6 +715,54 @@
     </ClCompile>
     <ClCompile Include="StaticObject.cpp">
       <Filter>03.GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="SkinnedShader.cpp">
+      <Filter>05.Shader\SkinnedStandardShader</Filter>
+    </ClCompile>
+    <ClCompile Include="InstancingStandardShader.cpp">
+      <Filter>05.Shader\InstancingStandardShader</Filter>
+    </ClCompile>
+    <ClCompile Include="StaticObjectStorage.cpp">
+      <Filter>13.Storage\StaticObjectStorage</Filter>
+    </ClCompile>
+    <ClCompile Include="FamilyID.cpp">
+      <Filter>99.etc\ID\FamilyID</Filter>
+    </ClCompile>
+    <ClCompile Include="TerrainObjectID.cpp">
+      <Filter>99.etc\ID\TerrainObjectID</Filter>
+    </ClCompile>
+    <ClCompile Include="LoadingScene.cpp">
+      <Filter>04.Scene\LoadingScene</Filter>
+    </ClCompile>
+    <ClCompile Include="LobbyScene.cpp">
+      <Filter>04.Scene\LobbyScene</Filter>
+    </ClCompile>
+    <ClCompile Include="RoomScene.cpp">
+      <Filter>04.Scene\RoomScene</Filter>
+    </ClCompile>
+    <ClCompile Include="QuadtreeTerrain.cpp">
+      <Filter>03.GameObject\Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="Shape.cpp">
+      <Filter>02.Component\Shape</Filter>
+    </ClCompile>
+    <ClCompile Include="Button.cpp">
+      <Filter>03.GameObject\Button</Filter>
+    </ClCompile>
+    <ClCompile Include="MyRectangle.cpp">
+      <Filter>02.Component\Shape\MyRectangle</Filter>
+    </ClCompile>
+    <ClCompile Include="ScreenShader.cpp">
+      <Filter>05.Shader\ScreenShader</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerStatus.cpp">
+      <Filter>02.Component\ForPlayer\PlayerStatus</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerMovement.cpp">
+      <Filter>02.Component\ForPlayer\PlayerMovement</Filter>
+    </ClCompile>
+    <ClCompile Include="Broom.cpp">
+      <Filter>12.Skill\Broom</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -698,10 +803,10 @@
     <FxCompile Include="Variables.hlsl">
       <Filter>HLSL</Filter>
     </FxCompile>
-    <FxCompile Include="TESTLoadFBXShader.hlsl">
+    <FxCompile Include="LineShader.hlsl">
       <Filter>HLSL</Filter>
     </FxCompile>
-    <FxCompile Include="LineShader.hlsl">
+    <FxCompile Include="ScreenShader.hlsl">
       <Filter>HLSL</Filter>
     </FxCompile>
   </ItemGroup>

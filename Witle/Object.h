@@ -3,9 +3,26 @@
 //-----------------------------------------------------------------------------
 
 #pragma once
-#include "GameObject.h"
-#include "CMesh.h"
 
+#include "CMesh.h" 
+
+#define DIR_FORWARD					0x01
+#define DIR_BACKWARD				0x02
+#define DIR_LEFT					0x04
+#define DIR_RIGHT					0x08
+#define DIR_UP						0x10
+#define DIR_DOWN					0x20
+
+class Shader;
+class CStandardShader;
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+#define RESOURCE_TEXTURE2D			0x01
+#define RESOURCE_TEXTURE2D_ARRAY	0x02	//[]
+#define RESOURCE_TEXTURE2DARRAY		0x03
+#define RESOURCE_TEXTURE_CUBE		0x04
+#define RESOURCE_BUFFER				0x05
 
 struct SRVROOTARGUMENTINFO
 {
@@ -45,7 +62,7 @@ public:
 	void UpdateShaderVariable(ID3D12GraphicsCommandList *pd3dCommandList, int nIndex);
 	void ReleaseShaderVariables();
 
-	void LoadTextureFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, const wchar_t *pszFileName, UINT nIndex, bool bIsDDSFile=true);
+	void LoadTextureFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, const wchar_t *pszFileName, UINT nIndex, bool bIsDDSFile = true);
 
 	int GetTextures() { return(m_nTextures); }
 	ID3D12Resource *GetTexture(int nIndex) { return(m_ppd3dTextures[nIndex]); }
@@ -56,7 +73,14 @@ public:
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
-class CLoadedModelInfo;
+#define MATERIAL_ALBEDO_MAP			0x01
+#define MATERIAL_SPECULAR_MAP		0x02
+#define MATERIAL_NORMAL_MAP			0x04
+#define MATERIAL_METALLIC_MAP		0x08
+#define MATERIAL_EMISSION_MAP		0x10
+#define MATERIAL_DETAIL_ALBEDO_MAP	0x20
+#define MATERIAL_DETAIL_NORMAL_MAP	0x40
+
 class LoadObject;
 
 class CMaterial
@@ -68,19 +92,21 @@ public:
 private:
 	int								m_nReferences = 0;
 
+	static Shader					*m_pWireFrameShader;
+	static Shader					*m_pSkinnedAnimationWireFrameShader;
+
 public:
 	void AddRef() { m_nReferences++; }
 	void Release() { if (--m_nReferences <= 0) delete this; }
 
 public:
-	// CShader							*m_pShader = NULL;
 
 	XMFLOAT4						m_xmf4AlbedoColor = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
 	XMFLOAT4						m_xmf4EmissiveColor = XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
 	XMFLOAT4						m_xmf4SpecularColor = XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
 	XMFLOAT4						m_xmf4AmbientColor = XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
 
-	// void SetShader(CShader *pShader);
+	void SetShader(Shader *pShader);
 	void SetMaterialType(UINT nType) { m_nType |= nType; }
 	void SetTexture(CTexture *pTexture, UINT nTexture = 0);
 
@@ -89,6 +115,8 @@ public:
 	virtual void ReleaseUploadBuffers();
 
 public:
+	Shader							*m_pShader = NULL;
+
 	UINT							m_nType = 0x00;
 
 	float							m_fGlossiness = 0.0f;
@@ -99,30 +127,40 @@ public:
 
 public:
 	int 							m_nTextures = 0;
-	_TCHAR							(*m_ppstrTextureNames)[64] = NULL;
+	_TCHAR(*m_ppstrTextureNames)[64] = NULL;
 	CTexture						**m_ppTextures = NULL; //0:Albedo, 1:Specular, 2:Metallic, 3:Normal, 4:Emission, 5:DetailAlbedo, 6:DetailNormal
 
-	void LoadTextureFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, UINT nType, UINT nRootParameter, _TCHAR *pwstrTextureName, CTexture **ppTexture, LoadObject *pParent, FILE *pInFile);
+	void LoadTextureFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, UINT nType, UINT nRootParameter, _TCHAR *pwstrTextureName, CTexture **ppTexture, LoadObject *pParent, FILE *pInFile, Shader *pShader);
 
 public:
-	//static CShader					*m_pStandardShader;
-	//static CShader					*m_pSkinnedAnimationShader;
-
-	//static void PrepareShaders(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature);
-
-	//void SetStandardShader() { CMaterial::SetShader(m_pStandardShader); }
-	//void SetSkinnedAnimationShader() { CMaterial::SetShader(m_pSkinnedAnimationShader); }
+	static void PrepareShaders(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature);
+	 
+	void SetWireFrameShader() {  
+		 
+		CMaterial::SetShader(m_pWireFrameShader);
+	}
+	void SetSkinnedAnimationWireFrameShader() { 
+		SetShader(m_pSkinnedAnimationWireFrameShader); 
+	}
 };
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
+#define SKINNED_ANIMATION_BONES		128
+
+#define ANIMATION_TYPE_ONCE			0
+#define ANIMATION_TYPE_LOOP			1
+#define ANIMATION_TYPE_PINGPONG		2
+
+#define ANIMATION_CALLBACK_EPSILON	0.015f
 
 struct CALLBACKKEY
 {
-   float  							m_fTime = 0.0f;
-   void  							*m_pCallbackData = NULL;
+	float  							m_fTime = 0.0f;
+	void  							*m_pCallbackData = NULL;
 };
 
+#define _WITH_ANIMATION_INTERPOLATION
 
 class CAnimationCallbackHandler
 {
@@ -134,33 +172,57 @@ public:
 	virtual void HandleCallback(void *pCallbackData) { }
 };
 
+class CAnimationCurve
+{
+public:
+	CAnimationCurve(int nKeys);
+	~CAnimationCurve();
+
+public:
+	int								m_nKeys = 0;
+
+	float							*m_pfKeyTimes = NULL;
+	float							*m_pfKeyValues = NULL;
+
+public:
+	float GetValueByLinearInterpolation(float fPosition);
+};
+
+class CAnimationLayer
+{
+public:
+	CAnimationLayer();
+	~CAnimationLayer();
+
+public:
+	float							m_fWeight = 1.0f;
+
+	int								m_nAnimatedBoneFrames = 0;
+	LoadObject						**m_ppAnimatedBoneFrameCaches = NULL; //[m_nAnimatedBoneFrames]
+
+	CAnimationCurve					*(*m_ppAnimationCurves)[9] = NULL;
+
+public:
+	void LoadAnimationKeyValues(int nBoneFrame, int nCurve, FILE *pInFile);
+
+	XMFLOAT4X4 GetSRT(int nBoneFrame, float fPosition);
+};
+
 class CAnimationSet
 {
 public:
-	CAnimationSet(float fLength, int nFramesPerSecond, int nKeyFrameTransforms, int nSkinningBones, char *pstrName);
+	CAnimationSet(float fStartTime, float fEndTime, char *pstrName);
 	~CAnimationSet();
 
 public:
 	char							m_pstrAnimationSetName[64];
 
+	int								m_nAnimationLayers = 0;
+	CAnimationLayer					*m_pAnimationLayers = NULL;
+
+	float							m_fStartTime = 0.0f;
+	float							m_fEndTime = 0.0f;
 	float							m_fLength = 0.0f;
-	int								m_nFramesPerSecond = 0; //m_fTicksPerSecond
-
-	int								m_nKeyFrames = 0;
-	float							*m_pfKeyFrameTimes = NULL;
-	XMFLOAT4X4						**m_ppxmf4x4KeyFrameTransforms = NULL;
-
-#ifdef _WITH_ANIMATION_SRT
-	int								m_nKeyFrameScales = 0;
-	float							*m_pfKeyFrameScaleTimes = NULL;
-	XMFLOAT3						**m_ppxmf3KeyFrameScales = NULL;
-	int								m_nKeyFrameRotations = 0;
-	float							*m_pfKeyFrameRotationTimes = NULL;
-	XMFLOAT4						**m_ppxmf4KeyFrameRotations = NULL;
-	int								m_nKeyFrameTranslations = 0;
-	float							*m_pfKeyFrameTranslationTimes = NULL;
-	XMFLOAT3						**m_ppxmf3KeyFrameTranslations = NULL;
-#endif
 
 	float 							m_fPosition = 0.0f;
 	int 							m_nType = ANIMATION_TYPE_LOOP; //Once, Loop, PingPong
@@ -173,13 +235,37 @@ public:
 public:
 	void SetPosition(float fTrackPosition);
 
-	XMFLOAT4X4 GetSRT(int nBone);
+	void Animate(float fTrackPosition, float fTrackWeight);
 
 	void SetCallbackKeys(int nCallbackKeys);
 	void SetCallbackKey(int nKeyIndex, float fTime, void *pData);
 	void SetAnimationCallbackHandler(CAnimationCallbackHandler *pCallbackHandler);
 
 	void *GetCallbackData();
+
+};
+
+class CAnimationSets
+{
+private:
+	int								m_nReferences = 0;
+
+public:
+	void AddRef() { m_nReferences++; }
+	void Release() { if (--m_nReferences <= 0) delete this; }
+
+public:
+	CAnimationSets(int nAnimationSets);
+	~CAnimationSets();
+
+public:
+	int								m_nAnimationSets = 0;
+	CAnimationSet					**m_ppAnimationSets = NULL;
+
+public:
+	void SetCallbackKeys(int nAnimationSet, int nCallbackKeys);
+	void SetCallbackKey(int nAnimationSet, int nKeyIndex, float fTime, void *pData);
+	void SetAnimationCallbackHandler(int nAnimationSet, CAnimationCallbackHandler *pCallbackHandler);
 };
 
 class CAnimationTrack
@@ -205,32 +291,23 @@ public:
 	void SetPosition(float fPosition) { m_fPosition = fPosition; }
 };
 
-
-
-class CAnimationSets
+class CLoadedModelInfo
 {
-private:
-	int								m_nReferences = 0;
+public:
+	CLoadedModelInfo() { }
+	~CLoadedModelInfo();
 
 public:
-	void AddRef() { m_nReferences++; }
-	void Release() { if (--m_nReferences <= 0) delete this; }
+	LoadObject						*m_pModelRootObject = NULL;
+
+	CAnimationSets					*m_pAnimationSets = NULL;
+
+	int 							m_nSkinnedMeshes = 0;
+	CSkinnedMesh					**m_ppSkinnedMeshes = NULL; //[SkinnedMeshes], Skinned Mesh Cache
 
 public:
-	CAnimationSets(int nAnimationSets);
-	~CAnimationSets();
-
-public:
-	int								m_nAnimationSets = 0;
-	CAnimationSet					**m_ppAnimationSets = NULL;
-
-public:
-	void SetCallbackKeys(int nAnimationSet, int nCallbackKeys);
-	void SetCallbackKey(int nAnimationSet, int nKeyIndex, float fTime, void *pData);
-	void SetAnimationCallbackHandler(int nAnimationSet, CAnimationCallbackHandler *pCallbackHandler);
+	void PrepareSkinning();
 };
-
-
 
 class CAnimationController
 {
@@ -244,13 +321,10 @@ public:
 	int 							m_nAnimationTracks = 0;
 	CAnimationTrack 				*m_pAnimationTracks = NULL;
 
+	CAnimationSets					*m_pAnimationSets = NULL;
+
 	int 							m_nSkinnedMeshes = 0;
-
-	CAnimationSets					**m_ppAnimationSets = NULL;
 	CSkinnedMesh					**m_ppSkinnedMeshes = NULL; //[SkinnedMeshes], Skinned Mesh Cache
-
-	int								*m_pnAnimatedBoneFrames = NULL;
-	LoadObject						***m_pppAnimatedBoneFrameCaches = NULL; //[SkinnedMeshes][Bones]
 
 	ID3D12Resource					**m_ppd3dcbSkinningBoneTransforms = NULL; //[SkinnedMeshes]
 	XMFLOAT4X4						**m_ppcbxmf4x4MappedSkinningBoneTransforms = NULL;
@@ -264,21 +338,17 @@ public:
 	void SetTrackSpeed(int nAnimationTrack, float fSpeed);
 	void SetTrackWeight(int nAnimationTrack, float fWeight);
 
-	void SetCallbackKeys(int nSkinnedMesh, int nAnimationSet, int nCallbackKeys);
-	void SetCallbackKey(int nSkinnedMesh, int nAnimationSet, int nKeyIndex, float fTime, void *pData);
-	void SetAnimationCallbackHandler(int nSkinnedMesh, int nAnimationSet, CAnimationCallbackHandler *pCallbackHandler);
+	void SetCallbackKeys(int nAnimationSet, int nCallbackKeys);
+	void SetCallbackKey(int nAnimationSet, int nKeyIndex, float fTime, void *pData);
+	void SetAnimationCallbackHandler(int nAnimationSet, CAnimationCallbackHandler *pCallbackHandler);
 
 	void AdvanceTime(float fElapsedTime, LoadObject *pRootGameObject);
 };
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
-
-class MyBOBox;
-
-class LoadObject 
+class LoadObject
 {
-
 private:
 	int								m_nReferences = 0;
 
@@ -290,26 +360,27 @@ public:
 	LoadObject();
 	LoadObject(int nMaterials);
 	virtual ~LoadObject();
-	
-	MyBOBox* m_MyBOBox{ nullptr };
 
 public:
-	CMesh							*m_pMesh = NULL;
 	char							m_pstrFrameName[64];
 
+	CMesh							*m_pMesh = NULL;
 
 	int								m_nMaterials = 0;
 	CMaterial						**m_ppMaterials = NULL;
 
 	XMFLOAT4X4						m_xmf4x4ToParent;
-	XMFLOAT4X4						m_xmf4x4World = Matrix4x4::Identity();
+	XMFLOAT4X4						m_xmf4x4World;
 
 	LoadObject 					*m_pParent = NULL;
 	LoadObject 					*m_pChild = NULL;
 	LoadObject 					*m_pSibling = NULL;
 
 	void SetMesh(CMesh *pMesh);
-
+	void SetShader(Shader *pShader);
+	void SetShader(int nMaterial, Shader *pShader);
+	void SetWireFrameShader();
+	void SetSkinnedAnimationWireFrameShader();
 	void SetMaterial(int nMaterial, CMaterial *pMaterial);
 
 	void SetChild(LoadObject *pChild, bool bReferenceUpdate = false);
@@ -321,9 +392,11 @@ public:
 
 	virtual void OnPrepareRender() { }
 	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList);
+	virtual void RenderInstancing(ID3D12GraphicsCommandList *pd3dCommandList, int InstanceCount);
 
 	virtual void CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
 	virtual void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList);
+	virtual void UpdateShaderVariablesForInstancing(ID3D12GraphicsCommandList *pd3dCommandList, XMFLOAT4X4* pStartWorld, int nWorldCount);
 	virtual void ReleaseShaderVariables();
 
 	virtual void UpdateShaderVariable(ID3D12GraphicsCommandList *pd3dCommandList, XMFLOAT4X4 *pxmf4x4World);
@@ -350,93 +423,104 @@ public:
 
 	LoadObject *GetParent() { return(m_pParent); }
 	void UpdateTransform(XMFLOAT4X4 *pxmf4x4Parent = NULL);
-	LoadObject *FindFrame(const char *pstrFrameName);
-
-	CTexture *FindReplicatedTexture(_TCHAR *pstrTextureName);
+	LoadObject *FindFrame(char *pstrFrameName);
 
 	UINT GetMeshType() { return((m_pMesh) ? m_pMesh->GetType() : 0x00); }
 
-
 public:
-	static void CopyWorldMatrix(LoadObject* copy, LoadObject* copyed);
-
 	CAnimationController 			*m_pSkinnedAnimationController = NULL;
 
 	CSkinnedMesh *FindSkinnedMesh(char *pstrSkinnedMeshName);
+	void FindAndSetSkinnedMesh(CSkinnedMesh **ppSkinnedMeshes, int *pnSkinnedMesh);
 
 	void SetTrackAnimationSet(int nAnimationTrack, int nAnimationSet);
 	void SetTrackAnimationPosition(int nAnimationTrack, float fPosition);
 
-	void LoadMaterialsFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, LoadObject *pParent, FILE *pInFile);
-
 	static void LoadAnimationFromFile(FILE *pInFile, CLoadedModelInfo *pLoadedModel);
-	static LoadObject *LoadFrameHierarchyFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, LoadObject *pParent, FILE *pInFile, int *pnSkinnedMeshes);
+	static LoadObject *LoadFrameHierarchyFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, LoadObject *pParent, FILE *pInFile, Shader *pShader, int *pnSkinnedMeshes);
 
-	static CLoadedModelInfo *LoadGeometryAndAnimationFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, const char *pstrFileName);
+	static CLoadedModelInfo *LoadGeometryAndAnimationFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, const char *pstrFileName, Shader *pShader);
 
 	static void PrintFrameInfo(LoadObject *pGameObject, LoadObject *pParent);
 
-	// 내가 추가
-	MyBOBox* GetBOBox() { return m_MyBOBox; } 
+	static void LoadObject::CopyWorldMatrix(LoadObject* copy, LoadObject* copyed)
+	{
+		strcpy(copy->m_pstrFrameName, copyed->m_pstrFrameName);
+
+		copy->m_pMesh = copyed->m_pMesh;
+		copy->m_nMaterials = copyed->m_nMaterials;
+		copy->m_ppMaterials = copyed->m_ppMaterials;
+
+		copy->m_xmf4x4ToParent = copyed->m_xmf4x4ToParent;
+		copy->m_xmf4x4World = copyed->m_xmf4x4World;
+
+		if (copyed->m_pParent) copy->m_pSibling = copyed->m_pParent;
+		if (copyed->m_pSibling)
+		{
+			copy->m_pSibling = new LoadObject;
+			CopyWorldMatrix(copy->m_pSibling, copyed->m_pSibling);
+		}
+		if (copyed->m_pChild)
+		{
+			copy->m_pChild = new LoadObject;
+			CopyWorldMatrix(copy->m_pChild, copyed->m_pChild);
+		}
+	}
 };
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
-class CSuperCobraObject : public LoadObject
+class CHeightMapTerrain : public LoadObject
 {
 public:
-	CSuperCobraObject(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature);
-	virtual ~CSuperCobraObject();
+	CHeightMapTerrain(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, LPCTSTR pFileName, int nWidth, int nLength, XMFLOAT3 xmf3Scale, XMFLOAT4 xmf4Color);
+	virtual ~CHeightMapTerrain();
 
 private:
-	LoadObject					*m_pMainRotorFrame = NULL;
-	LoadObject					*m_pTailRotorFrame = NULL;
+	CHeightMapImage				*m_pHeightMapImage;
+
+	int							m_nWidth;
+	int							m_nLength;
+
+	XMFLOAT3					m_xmf3Scale;
 
 public:
-	virtual void OnPrepareAnimate();
-	virtual void Animate(float fTimeElapsed);
+	float GetHeight(float x, float z, bool bReverseQuad = false) { return(m_pHeightMapImage->GetHeight(x, z, bReverseQuad) * m_xmf3Scale.y); } //World
+	XMFLOAT3 GetNormal(float x, float z) { return(m_pHeightMapImage->GetHeightMapNormal(int(x / m_xmf3Scale.x), int(z / m_xmf3Scale.z))); }
+
+	int GetHeightMapWidth() { return(m_pHeightMapImage->GetHeightMapWidth()); }
+	int GetHeightMapLength() { return(m_pHeightMapImage->GetHeightMapLength()); }
+
+	XMFLOAT3 GetScale() { return(m_xmf3Scale); }
+	float GetWidth() { return(m_nWidth * m_xmf3Scale.x); }
+	float GetLength() { return(m_nLength * m_xmf3Scale.z); }
 };
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
-class CGunshipObject : public LoadObject
+class CSkyBox : public LoadObject
 {
 public:
-	CGunshipObject(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature);
-	virtual ~CGunshipObject();
+	CSkyBox(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature);
+	virtual ~CSkyBox();
 
-private:
-	LoadObject					*m_pMainRotorFrame = NULL;
-	LoadObject					*m_pTailRotorFrame = NULL;
-
-public:
-	virtual void OnPrepareAnimate();
-	virtual void Animate(float fTimeElapsed);
+	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList);
 };
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
-class CMi24Object : public LoadObject
-{
-public:
-	CMi24Object(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature);
-	virtual ~CMi24Object();
-
-private:
-	LoadObject					*m_pMainRotorFrame = NULL;
-	LoadObject					*m_pTailRotorFrame = NULL;
-
-public:
-	virtual void OnPrepareAnimate();
-	virtual void Animate(float fTimeElapsed);
-};
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-
 class CAngrybotObject : public LoadObject
 {
 public:
 	CAngrybotObject(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, CLoadedModelInfo *pModel, int nAnimationTracks);
 	virtual ~CAngrybotObject();
+};
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+class CElvenWitchObject : public LoadObject
+{
+public:
+	CElvenWitchObject(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, CLoadedModelInfo *pModel, int nAnimationTracks);
+	virtual ~CElvenWitchObject();
 };

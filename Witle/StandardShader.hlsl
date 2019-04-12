@@ -38,7 +38,7 @@ Texture2D gtxtDetailNormalTexture : register(t12);
 SamplerState gssWrap : register(s0);
 
 #include "Light.hlsl"
-
+ 
 struct VS_STANDARD_INPUT
 {
 	float3 position : POSITION;
@@ -73,9 +73,9 @@ VS_STANDARD_OUTPUT VSStandard(VS_STANDARD_INPUT input)
 }
 
 float4 PSStandard(VS_STANDARD_OUTPUT input) : SV_TARGET
-{
+{ 
 	// 임시로 사용할 컬러 색깔
-	float TESTColor = float4(1.f, 1.f, 1.f, 1.f);
+	float4 TESTColor = float4(1.f, 1.f, 1.f, 1.f);
 	//float4 cAlbedoColor = float4(0.0f, 0.0f, 0.0f, 1.0f);
 	//if (gnTexturesMask & MATERIAL_ALBEDO_MAP) cAlbedoColor = gtxtAlbedoTexture.Sample(gssWrap, input.uv);
 	//float4 cSpecularColor = float4(0.0f, 0.0f, 0.0f, 1.0f);
@@ -101,4 +101,37 @@ float4 PSStandard(VS_STANDARD_OUTPUT input) : SV_TARGET
 	//}
 	float4 cIllumination = Lighting(input.positionW, normalW);
 	return(lerp(TESTColor, cIllumination, 0.5f));
+}
+ 
+
+// Instancing ////////////////////////////////////////////////////////////
+struct VS_INSTANCING_OUTPUT
+{
+	float3 position : POSITION;
+	float2 uv : TEXCOORD;
+	float3 normal : NORMAL;
+	float3 tangent : TANGENT;
+	float3 bitangent : BITANGENT;
+};
+
+//인스턴싱 데이터를 위한 구조체
+struct INSTANCING_TRANSFORM
+{
+	matrix m_mtxWorld; 
+};
+
+StructuredBuffer<INSTANCING_TRANSFORM> gmtxInstancingWorld : register(t14);
+
+VS_STANDARD_OUTPUT VSStandardInstancing(VS_INSTANCING_OUTPUT input, uint nInstanceID : SV_InstanceID)
+{
+	VS_STANDARD_OUTPUT output;
+
+    output.positionW = mul(float4(input.position, 1.0f), gmtxInstancingWorld[nInstanceID].m_mtxWorld).xyz;
+    output.normalW = mul(input.normal, (float3x3) gmtxInstancingWorld[nInstanceID].m_mtxWorld);
+    output.tangentW = mul(input.tangent, (float3x3) gmtxInstancingWorld[nInstanceID].m_mtxWorld);
+    output.bitangentW = mul(input.bitangent, (float3x3) gmtxInstancingWorld[nInstanceID].m_mtxWorld);
+    output.position = mul(mul(float4(output.positionW, 1.0f), gmtxView), gmtxProjection);
+    output.uv = input.uv;
+	 
+	return(output);
 }

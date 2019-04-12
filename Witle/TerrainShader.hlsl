@@ -1,45 +1,4 @@
-
-// 루트 상수
-cbuffer cbGameObjectInfo : register(b0)
-{
-	matrix gmtxWorld : packoffset(c0);
-}
-
-// 상수 버퍼
-cbuffer cbGameObjectInfo : register(b1)
-{
-	matrix gmtxView : packoffset(c0);
-	matrix gmtxProjection : packoffset(c4);
-	float3 gvCameraPosition : packoffset(c8);
-}
-
-SamplerState gWrapSamplerState : register(s0);
-
-Texture2D gtxtTexture : register(t0);
-Texture2D gtxtTerrainBaseTexture : register(t1);
-Texture2D gtxtTerrainDetailTexture : register(t2);
-
-
-#define MAX_VERTEX_INFLUENCES			4
-#define SKINNED_ANIMATION_BONES			128
-
-cbuffer cbBoneOffsets : register(b7)
-{
-	float4x4 gpmtxBoneOffsets[SKINNED_ANIMATION_BONES];
-};
-
-cbuffer cbBoneTransforms : register(b8)
-{
-	float4x4 gpmtxBoneTransforms[SKINNED_ANIMATION_BONES];
-};
-
-Texture2D gtxtAlbedoTexture : register(t6);
-Texture2D gtxtSpecularTexture : register(t7);
-Texture2D gtxtNormalTexture : register(t8);
-Texture2D gtxtMetallicTexture : register(t9);
-Texture2D gtxtEmissionTexture : register(t10);
-Texture2D gtxtDetailAlbedoTexture : register(t11);
-Texture2D gtxtDetailNormalTexture : register(t12);
+#include "Variables.hlsl"
 
 struct VS_TERRAIN_INPUT
 {
