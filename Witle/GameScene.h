@@ -90,8 +90,9 @@ protected:
 	// fbx test
 	Texture*				m_GameObjectDiffuse{ nullptr };
 	Player*                 m_pPlayer{ nullptr };
-	 
 
+	Player*                 m_pOtherPlayer{ nullptr };
+	 
 	int TerrainIndex = 0;
 	Terrain*                m_Terrain{ nullptr };
 	CameraObject*           m_Camera{ nullptr };

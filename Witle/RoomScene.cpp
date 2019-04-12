@@ -143,13 +143,13 @@ void RoomScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 		      static_cast<LONG>(GameScreen::GetWidth()) - 25, static_cast<LONG>(GameScreen::GetHeight()) - 25} , nullptr, nullptr);
 
 	m_pCharacterAppearanceButton_1 = new Button("CharacterAppearanceButton_1", pd3dDevice, pd3dCommandList,
-		POINT{ 300, 100 }, 200, 200, 
+		POINT{ static_cast<LONG>(GameScreen::GetWidth()) - 500,  static_cast<LONG>(GameScreen::GetHeight()) - 250 }, 200, 200,
 		L"Image/CharacterAppearance1_ON.dds",
 		L"Image/CharacterAppearance1_OFF.dds"
 	);
 
 	m_pCharacterAppearanceButton_2 = new Button("CharacterAppearanceButton_2", pd3dDevice, pd3dCommandList,
-		POINT{100, 100}, 200, 200,
+		POINT{ static_cast<LONG>(GameScreen::GetWidth()) - 200,  static_cast<LONG>(GameScreen::GetHeight()) - 250 }, 200, 200,
 		L"Image/CharacterAppearance2_ON.dds",
 		L"Image/CharacterAppearance2_OFF.dds"
 	);
@@ -161,10 +161,17 @@ void RoomScene::ReleaseObjects()
 }
 
 bool RoomScene::ProcessInput(HWND hWnd, float ElapsedTime)
-{
-	m_pCharacterAppearanceButton_1->CheckClick(GameInput::GetClickcursor());
-	m_pCharacterAppearanceButton_2->CheckClick(GameInput::GetClickcursor());
+{ 
+	if (m_pCharacterAppearanceButton_1->CheckClickTRUE(GameInput::GetClickcursor()))
+	{
+		m_pCharacterAppearanceButton_2->IsNotClick();
+	}
 
+	if(m_pCharacterAppearanceButton_2->CheckClickTRUE(GameInput::GetClickcursor()))
+	{
+		m_pCharacterAppearanceButton_1->IsNotClick(); 
+	}
+	 
 	return true;
 }
 

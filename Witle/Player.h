@@ -4,13 +4,15 @@
 class Camera;
 class LoadObject;
 class MyBOBox;
+class PlayerStatus;
 
 // CHeightMapTerrain ¿‘¥œ¥Ÿ.
 class Player :
 	public GameObject
-{
-	MyBOBox* m_MyBOBox{ nullptr };
-	LoadObject* m_pLoadObject{ nullptr };
+{ 
+	PlayerStatus*	m_pPlayerStatus{ nullptr };
+	MyBOBox*		m_pMyBOBox{ nullptr };
+	LoadObject*		m_pLoadObject{ nullptr };
 
 	XMFLOAT3 m_xmf3Velocity = XMFLOAT3(0.0f, 0.0f, 0.0f);
 	XMFLOAT3 m_xmf3Gravity = XMFLOAT3(0.0f, 0.0f, 0.0f); 
@@ -58,7 +60,7 @@ public:
 	/////////////////////// Get
 	AXIS GetCoorAxis() { return m_Transform.GetCoorAxis(); }
 	XMFLOAT3 GetVelocity() const { return m_xmf3Velocity; };
-	MyBOBox* GetBOBox() { return m_MyBOBox; }
+	MyBOBox* GetBOBox() { return m_pMyBOBox; }
 	/////////////////////// Get
 
 	/////////////////////// Set	

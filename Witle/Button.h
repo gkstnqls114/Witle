@@ -22,8 +22,14 @@ public:
 	Button(const std::string& entityID, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, POINT center, float width, float height, const wchar_t * ON_filepath, const wchar_t * OFF_filepath);
 	virtual ~Button();
 
-	void CheckClick(POINT clickcursor);
 	virtual void Update(float fElapsedTime) override;
+
+	bool CheckClick(POINT clickcursor);
+	bool CheckClickTRUE(POINT clickcursor);
+
+	void IsNotClick() { m_isClick = false; };
+	void IsClick() { m_isClick = true; };
+	bool GetisClick() const { return m_isClick; }
 	void Render(ID3D12GraphicsCommandList *pd3dCommandList);
 
 	Texture* GetTexture(bool isON);

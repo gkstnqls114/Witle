@@ -169,9 +169,12 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 
 	// 테스트할 모델 오브젝트
 	m_pPlayer = new Player("Player", pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_pOtherPlayer = new Player("OtherPlayer", pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_pOtherPlayer->GetTransform().SetPosition(0, 0, 1000);
 	m_GameObjectDiffuse = new Texture(1, RESOURCE_TEXTURE2D);
 	m_GameObjectDiffuse->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/ReflexTree_Diffuse.dds", 0);
 	 
+	
 	//테스트 쿼드트리 터레인 생성 
 	m_pQuadtreeTerrain = new QuadtreeTerrain(pd3dDevice, pd3dCommandList, 257, 257, xmf3Scale, xmf4Color, m_Terrain->GetHeightMapImage());
 
@@ -215,6 +218,11 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 
 void GameScene::ReleaseObjects()
 {
+	if (m_pOtherPlayer)
+	{
+		delete m_pOtherPlayer;
+		m_pOtherPlayer = nullptr;
+	}
 	if (m_pPlayer)
 	{
 		// m_pPlayer->ReleaseObjects(); 
@@ -371,7 +379,7 @@ void GameScene::Update(float fElapsedTime)
 	{
 		m_pPlayer->Update(fElapsedTime); //Velocity를 통해 pos 이동
 	}
-	 
+	m_pOtherPlayer->Update(fElapsedTime);
 
 
 	// light update
@@ -411,6 +419,7 @@ void GameScene::TESTSetRootDescriptor(ID3D12GraphicsCommandList * pd3dCommandLis
 
 void GameScene::AnimateObjects(float fTimeElapsed)
 { 
+	m_pOtherPlayer->Animate(fTimeElapsed);
 	if (m_pPlayer) m_pPlayer->Animate(fTimeElapsed);
 }
 
@@ -457,10 +466,12 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	pd3dCommandList->SetDescriptorHeaps(1, &m_pd3dCbvSrvDescriptorHeap);
 	m_GameObjectDiffuse->UpdateShaderVariables(pd3dCommandList);
 	m_pPlayer->Render(pd3dCommandList); 
+	m_pOtherPlayer->Render(pd3dCommandList);
 }
 
 void GameScene::ReleaseUploadBuffers()
 { 
+	if (m_pOtherPlayer) m_pOtherPlayer->ReleaseUploadBuffers();
 	if (m_pPlayer) m_pPlayer->ReleaseUploadBuffers();
 	if (m_Terrain) m_Terrain->ReleaseUploadBuffers();
 	if (m_pQuadtreeTerrain) m_pQuadtreeTerrain->ReleaseUploadBuffers();

@@ -79,9 +79,6 @@
     <Filter Include="02.Component\MyRigidbody">
       <UniqueIdentifier>{ea387169-77ab-4066-8583-c032c53a4038}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.Component\PlayerMovement">
-      <UniqueIdentifier>{9ec62c01-4c38-4a62-9a19-4ca89e5c286c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="03.GameObject\Camera">
       <UniqueIdentifier>{c697f733-6c27-408a-a499-af08ff3180ec}</UniqueIdentifier>
     </Filter>
@@ -228,6 +225,15 @@
     </Filter>
     <Filter Include="99.etc\TextureManager">
       <UniqueIdentifier>{336fca6f-fc21-4c05-a804-c9e60309ed49}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\ForPlayer">
+      <UniqueIdentifier>{312e3404-8af8-4767-bcd1-0890bedfebe4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\ForPlayer\PlayerMovement">
+      <UniqueIdentifier>{9ec62c01-4c38-4a62-9a19-4ca89e5c286c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\ForPlayer\PlayerStatus">
+      <UniqueIdentifier>{a15bc817-37c9-4328-8056-352a1ebe9b63}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -492,6 +498,9 @@
     <ClInclude Include="ScreenShader.h">
       <Filter>05.Shader\ScreenShader</Filter>
     </ClInclude>
+    <ClInclude Include="PlayerStatus.h">
+      <Filter>02.Component\ForPlayer\PlayerStatus</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -736,6 +745,9 @@
     </ClCompile>
     <ClCompile Include="ScreenShader.cpp">
       <Filter>05.Shader\ScreenShader</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerStatus.cpp">
+      <Filter>02.Component\ForPlayer\PlayerStatus</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

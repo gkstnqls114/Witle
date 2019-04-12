@@ -4,6 +4,7 @@
 #include "Object.h"
 #include "ShaderManager.h" 
 #include "Transform.h"
+#include "PlayerStatus.h"
 #include "GameTimer.h"
 #include "FollowCam.h"
 #include "Terrain.h"
@@ -56,7 +57,7 @@ XMFLOAT3 Player::CalculateAlreadyVelocity(float fTimeElapsed)
 BoundingOrientedBox Player::CalculateAlreadyBoundingBox(float fTimeElapsed)
 {
 	XMFLOAT3 AlreadyVelocity = CalculateAlreadyVelocity(fTimeElapsed);
-	BoundingOrientedBox AlreadyBBox = m_MyBOBox->GetBOBox();
+	BoundingOrientedBox AlreadyBBox = m_pMyBOBox->GetBOBox();
 	AlreadyBBox.Center = Vector3::Add(AlreadyBBox.Center, AlreadyVelocity);
 	return AlreadyBBox;
 }
@@ -99,8 +100,10 @@ Player::Player(const std::string & entityID, ID3D12Device * pd3dDevice, ID3D12Gr
 
 	XMFLOAT3 center{ 0.f, 75.f, 0.f };
 	XMFLOAT3 extents{ 25.f, 75.f, 25.f };
-	m_MyBOBox = new MyBOBox(pd3dDevice, pd3dCommandList, center, extents);
+	m_pMyBOBox = new MyBOBox(pd3dDevice, pd3dCommandList, center, extents);
 	 
+	m_pPlayerStatus = new PlayerStatus();
+
 	SetUpdatedContext(pContext); 
 }
 
@@ -150,13 +153,13 @@ void Player::Animate(float fElapsedTime)
 	m_pLoadObject->m_xmf4x4ToParent =  
 		Matrix4x4::Multiply(XMMatrixRotationX(-90.0f), m_Transform.GetWorldMatrix());
 	 
-	if(m_pLoadObject) m_pLoadObject->Animate(fElapsedTime);
+	m_pLoadObject->Animate(fElapsedTime);
 }
 
 void Player::Render(ID3D12GraphicsCommandList * pd3dCommandList)
 {
 #ifdef _SHOW_BOUNDINGBOX
-	m_MyBOBox->Render(pd3dCommandList, m_Transform.GetWorldMatrix());
+	m_pMyBOBox->Render(pd3dCommandList, m_Transform.GetWorldMatrix());
 #endif // _SHOW_BOUNDINGBOX
 
  	if(m_pLoadObject) m_pLoadObject->Render(pd3dCommandList);
@@ -175,7 +178,7 @@ void Player::SetTrackAnimationSet(ULONG dwDirection)
 void Player::Move(const XMFLOAT3 & xmf3Shift)
 {
 	m_Transform.Move(xmf3Shift);
-	m_MyBOBox->Move(xmf3Shift);
+	m_pMyBOBox->Move(xmf3Shift);
 }
 
 void Player::MoveVelocity(const XMFLOAT3 & xmf3Shift)
@@ -186,5 +189,5 @@ void Player::MoveVelocity(const XMFLOAT3 & xmf3Shift)
 void Player::Rotate(float x, float y, float z)
 {
 	m_Transform.Rotate(x, y, z);
- 	m_MyBOBox->Rotate(m_fRoll, m_fYaw, m_fPitch);
+ 	m_pMyBOBox->Rotate(m_fRoll, m_fYaw, m_fPitch);
 }

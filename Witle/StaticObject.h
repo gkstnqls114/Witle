@@ -30,7 +30,7 @@ struct VS_SRV_INSTANCEINFO
 
 class MyReflexTree : public StaticObject
 {  
-	MyBOBox* m_MyBOBox{ nullptr };
+	MyBOBox* m_pMyBOBox{ nullptr };
 	LoadObject* m_LoadObject{ nullptr };
 
 public:
@@ -39,13 +39,13 @@ public:
 
  	virtual void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList, int nInstance) override;
 	void Render(ID3D12GraphicsCommandList *pd3dCommandList);
-	MyBOBox* GetBOBox() { return m_MyBOBox;  }
+	MyBOBox* GetBOBox() { return m_pMyBOBox;  }
 	  
 };
 
 class SunFlower : public StaticObject
 { 
-	MyBOBox* m_MyBOBox{ nullptr };
+	MyBOBox* m_pMyBOBox{ nullptr };
 	LoadObject* m_LoadObject{ nullptr };
 
 public:
@@ -53,13 +53,13 @@ public:
 	virtual ~SunFlower() {};
 
  	void Render(ID3D12GraphicsCommandList *pd3dCommandList);
-	MyBOBox* GetBOBox() { return m_MyBOBox; }
+	MyBOBox* GetBOBox() { return m_pMyBOBox; }
 	 
 };
 
 class Rock : public StaticObject
 {  
-	MyBOBox* m_MyBOBox{ nullptr };
+	MyBOBox* m_pMyBOBox{ nullptr };
 	LoadObject* m_LoadObject{ nullptr };
 
 public:
@@ -67,13 +67,13 @@ public:
 	virtual ~Rock() {};
 
 	void Render(ID3D12GraphicsCommandList *pd3dCommandList);
-	MyBOBox* GetBOBox() { return m_MyBOBox; }
+	MyBOBox* GetBOBox() { return m_pMyBOBox; }
 	 
 };
 
 class Pillar : public StaticObject
 { 
-	MyBOBox* m_MyBOBox{ nullptr };
+	MyBOBox* m_pMyBOBox{ nullptr };
 	LoadObject* m_LoadObject{ nullptr };
 
 public:
@@ -81,14 +81,14 @@ public:
 	virtual ~Pillar() {};
 
 	void Render(ID3D12GraphicsCommandList *pd3dCommandList);
-	MyBOBox* GetBOBox() { return m_MyBOBox; }
+	MyBOBox* GetBOBox() { return m_pMyBOBox; }
 
 };
 
 
 class Altar : public StaticObject
 {  
-	MyBOBox* m_MyBOBox{ nullptr };
+	MyBOBox* m_pMyBOBox{ nullptr };
 	LoadObject* m_LoadObject{ nullptr };
 
 public:
@@ -96,6 +96,6 @@ public:
 	virtual ~Altar() {};
 
 	void Render(ID3D12GraphicsCommandList *pd3dCommandList);
-	MyBOBox* GetBOBox() { return m_MyBOBox; }
+	MyBOBox* GetBOBox() { return m_pMyBOBox; }
 
 };

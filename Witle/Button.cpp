@@ -35,13 +35,24 @@ Button::~Button()
 
 }
 
-void Button::CheckClick(POINT clickcursor)
+bool Button::CheckClick(POINT clickcursor)
 {
-	if (clickcursor.x < m_rect.left)return;
-	if (clickcursor.x > m_rect.right)return;
-	if (clickcursor.y < m_rect.top)return;
-	if (clickcursor.y > m_rect.bottom)return;
+	if (clickcursor.x < m_rect.left)return false;
+	if (clickcursor.x > m_rect.right)return false;
+	if (clickcursor.y < m_rect.top)return false;
+	if (clickcursor.y > m_rect.bottom)return false;
 	m_isClick = !m_isClick;
+	return true;
+}
+
+bool Button::CheckClickTRUE(POINT clickcursor)
+{
+	if (clickcursor.x < m_rect.left)return false;
+	if (clickcursor.x > m_rect.right)return false;
+	if (clickcursor.y < m_rect.top)return false;
+	if (clickcursor.y > m_rect.bottom)return false;
+	m_isClick = true;
+	return true;
 }
 
 void Button::Update(float fElapsedTime)

@@ -31,6 +31,7 @@ public:
 	
 	//////////////////////////////////////////////// Get
 	void SetPosition(const XMFLOAT3& pos) { m_Position = pos; }
+	void SetPosition(float x, float y, float z) { m_Position = XMFLOAT3(x, y, z); }
 	void SetRight(const XMFLOAT3& right) { m_Right = right; }
 	void SetUp(const XMFLOAT3& up) { m_Up = up; }
 	void SetLook(const XMFLOAT3& look) { m_Look = look; }
