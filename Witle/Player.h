@@ -6,16 +6,19 @@ class LoadObject;
 class MyBOBox;
 class PlayerStatus;
 class PlayerMovement;
+class Broom;
 
 // CHeightMapTerrain ¿‘¥œ¥Ÿ.
 class Player :
 	public GameObject
-{ 
+{  
 	PlayerMovement* m_pPlayerMovement{ nullptr };
 	PlayerStatus*	m_pPlayerStatus{ nullptr };
 	MyBOBox*		m_pMyBOBox{ nullptr };
 	LoadObject*		m_pLoadObject{ nullptr };
 	 
+	Broom* m_pBroom{ nullptr };
+
 	LPVOID m_pPlayerUpdatedContext { nullptr };
 	LPVOID m_pCameraUpdatedContext { nullptr };
 

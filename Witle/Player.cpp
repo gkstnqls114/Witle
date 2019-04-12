@@ -9,6 +9,7 @@
 #include "PlayerStatus.h"
 #include "GameTimer.h"
 #include "FollowCam.h"
+#include "Broom.h"
 #include "Terrain.h"
 #include "Player.h"
 
@@ -107,6 +108,8 @@ Player::Player(const std::string & entityID, ID3D12Device * pd3dDevice, ID3D12Gr
 	m_pPlayerStatus = new PlayerStatus(this, pd3dDevice, pd3dCommandList);
 	m_pPlayerMovement = new PlayerMovement(this);
 
+	m_pBroom = new Broom(m_pPlayerMovement);
+
 	SetUpdatedContext(pContext); 
 }
 
@@ -137,6 +140,8 @@ void Player::ReleaseMemberUploadBuffers()
 
 void Player::Update(float fElapsedTime)
 { 
+	m_pBroom->Update(fElapsedTime);
+
 	// 이동량을 계산한다. 
 	m_pPlayerMovement->Update(fElapsedTime);
 	
@@ -248,7 +253,7 @@ void Player::ProcessInput(float fTimeElapsed)
 
 		/*플레이어를 dwDirection 방향으로 이동한다(실제로는 속도 벡터를 변경한다). 이동 거리는 시간에 비례하도록 한다.
 		플레이어의 이동 속력은 (20m/초)로 가정한다.*/
-		float fDistance = 2000.0f * fTimeElapsed; // 1초당 최대 속력 20m으로 가정, 현재 1 = 1cm
+		float fDistance = m_pPlayerMovement->m_fDistance * fTimeElapsed; // 1초당 최대 속력 20m으로 가정, 현재 1 = 1cm
 
 		if (dwDirection & DIR_FORWARD) xmf3Shift = Vector3::Add(xmf3Shift, axis.look, fDistance);
 		if (dwDirection & DIR_BACKWARD) xmf3Shift = Vector3::Add(xmf3Shift, axis.look, -fDistance);
@@ -266,17 +271,18 @@ void Player::ProcessInput(float fTimeElapsed)
 		if (Vector3::Length(Veclocity) > 0.f)
 		{
 			float fLength = Vector3::Length(Veclocity);
-			float fDeceleration = (3000.f * fTimeElapsed); //해당상수는 Friction
+			float fDeceleration = (m_pPlayerMovement->m_fFriction * fTimeElapsed); //해당상수는 Friction
 			if (fDeceleration > fLength) fDeceleration = fLength;
 			MoveVelocity(Vector3::ScalarProduct(Veclocity, -fDeceleration, true));
 		}
 	}
+
 	SetTrackAnimationSet(dwDirection);
 }
 
 void Player::UseSkill_Broom()
 {
-
+	m_pBroom->Use();
 }
 
 XMFLOAT3 Player::GetVelocity() const

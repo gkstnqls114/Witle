@@ -4,10 +4,14 @@
 class Broom
 	: public Skill
 {
+	PlayerMovement* m_pPlayerMovement{ nullptr };
+
+private:
+	virtual void DoNotUse() override;
 
 public:
-	Broom();
+	Broom(PlayerMovement* playerStatus);
 	virtual ~Broom();
 
-	
+	virtual void Use() override;
 };

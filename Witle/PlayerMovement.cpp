@@ -26,3 +26,17 @@ void PlayerMovement::Update(float fTimeElapsed)
 	fLength = sqrtf(m_xmf3Velocity.y * m_xmf3Velocity.y);
 	if (fLength > m_fMaxVelocityY) m_xmf3Velocity.y *= (fMaxVelocityY / fLength);
 }
+
+void PlayerMovement::BroomMode()
+{ 
+	m_fMaxVelocityXZ = 5000.0f;
+	m_fFriction = 3000.0f;
+	m_fDistance = 5000.f;
+}
+
+void PlayerMovement::RunMode()
+{
+	m_fMaxVelocityXZ = 2000.0f;
+	m_fFriction = 1700.0f;
+	m_fDistance = 2000.f;
+}
