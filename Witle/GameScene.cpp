@@ -30,7 +30,9 @@
 
 #include "GameScene.h"
 
-#include "CNetworkManager.h" // Server
+//////////////////////////////////////////////////
+#include "CNetworkManager.h"
+//////////////////////////////////////////////////
 
 ID3D12DescriptorHeap*		GameScene::m_pd3dCbvSrvDescriptorHeap;
 
@@ -44,7 +46,10 @@ D3D12_GPU_DESCRIPTOR_HANDLE	GameScene::m_d3dCbvGPUDescriptorNextHandle;
 D3D12_CPU_DESCRIPTOR_HANDLE	GameScene::m_d3dSrvCPUDescriptorNextHandle;
 D3D12_GPU_DESCRIPTOR_HANDLE	GameScene::m_d3dSrvGPUDescriptorNextHandle;
 
-GameScene PlayerID[1000];
+//////////////////////////////////////////////////
+extern ClientID PlayerID;
+extern Player m_pPlayer[MAXPLAYER];
+//////////////////////////////////////////////////
 
 GameScene::GameScene()
 {
@@ -458,26 +463,9 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	m_TESTQuadTree->TESTRender(m_TESTQuadTree->GetRootNode(), pd3dCommandList);
 #endif
 
-	int id;
-	int retval;
+	//////////////////////////////////////////////
 
-	// 클라이언트 고유의 ID 받기
-	// WSARecv( 소켓, 
-		//			받은 데이터가 저장할 버퍼,
-		//			버퍼개수, 
-		//			받은 데이터 크기 ==> NULL,
-		//			동작옵션,
-		//			lpOverlapped,
-		//			lpCompletionRoutine)
-	unsigned long recv_flag = 0;
-
-	retval = WSARecv(socket,
-		&PlayerID[id].Player_OVERLAPPED.wsabuf,
-		1,
-		NULL,
-		&recv_flag,
-		&Player[id].Player_OVERLAPPED.overapped,
-		NULL);
+	//////////////////////////////////////////////
 
 	////////////////////////////// Model Render
 	// PSO 설정
