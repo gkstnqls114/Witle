@@ -501,6 +501,9 @@
     <ClInclude Include="PlayerStatus.h">
       <Filter>02.Component\ForPlayer\PlayerStatus</Filter>
     </ClInclude>
+    <ClInclude Include="PlayerMovement.h">
+      <Filter>02.Component\ForPlayer\PlayerMovement</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -748,6 +751,9 @@
     </ClCompile>
     <ClCompile Include="PlayerStatus.cpp">
       <Filter>02.Component\ForPlayer\PlayerStatus</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerMovement.cpp">
+      <Filter>02.Component\ForPlayer\PlayerMovement</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

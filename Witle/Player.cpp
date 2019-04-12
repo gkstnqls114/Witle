@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "PlayerMovement.h"
 #include "MyBOBox.h" 
 #include "Shader.h"
 #include "Object.h"
@@ -31,24 +32,24 @@ void Player::OnPlayerUpdateCallback(float fTimeElapsed)
 	{
 		XMFLOAT3 xmf3PlayerVelocity = GetVelocity();
 		xmf3PlayerVelocity.y = 0.0f;
-		m_xmf3Velocity = xmf3PlayerVelocity;
+		m_pPlayerMovement->m_xmf3Velocity = xmf3PlayerVelocity;
 		xmf3PlayerPosition.y = fHeight;
 		m_Transform.SetPosition(xmf3PlayerPosition);
 	}
 }
 XMFLOAT3 Player::CalculateAlreadyVelocity(float fTimeElapsed)
 {
-	XMFLOAT3 AlreadyVelocity = Vector3::Add(m_xmf3Velocity, m_xmf3Gravity);
+	XMFLOAT3 AlreadyVelocity = Vector3::Add(m_pPlayerMovement->m_xmf3Velocity, m_pPlayerMovement->m_xmf3Gravity);
 	float fLength = sqrtf(AlreadyVelocity.x * AlreadyVelocity.x + AlreadyVelocity.z * AlreadyVelocity.z);
-	float fMaxVelocityXZ = m_fMaxVelocityXZ;
-	if (fLength > m_fMaxVelocityXZ)
+	float fMaxVelocityXZ = m_pPlayerMovement->m_fMaxVelocityXZ;
+	if (fLength > m_pPlayerMovement->m_fMaxVelocityXZ)
 	{
 		AlreadyVelocity.x *= (fMaxVelocityXZ / fLength);
 		AlreadyVelocity.z *= (fMaxVelocityXZ / fLength);
 	}
-	float fMaxVelocityY = m_fMaxVelocityY;
+	float fMaxVelocityY = m_pPlayerMovement->m_fMaxVelocityY;
 	fLength = sqrtf(AlreadyVelocity.y * AlreadyVelocity.y);
-	if (fLength > m_fMaxVelocityY) AlreadyVelocity.y *= (fMaxVelocityY / fLength);
+	if (fLength > m_pPlayerMovement->m_fMaxVelocityY) AlreadyVelocity.y *= (fMaxVelocityY / fLength);
 
 	XMFLOAT3 xmf3Velocity = Vector3::ScalarProduct(AlreadyVelocity, fTimeElapsed, false);
 
@@ -103,32 +104,52 @@ Player::Player(const std::string & entityID, ID3D12Device * pd3dDevice, ID3D12Gr
 	m_pMyBOBox = new MyBOBox(pd3dDevice, pd3dCommandList, center, extents);
 	 
 	m_pPlayerStatus = new PlayerStatus(this, pd3dDevice, pd3dCommandList);
+	m_pPlayerMovement = new PlayerMovement(this);
 
 	SetUpdatedContext(pContext); 
 }
 
 Player::~Player()
 {
+	ReleaseMembers();
 	m_pPlayerUpdatedContext = nullptr;
 	m_pCameraUpdatedContext = nullptr;
+}
+
+void Player::ReleaseMembers()
+{
+	if (m_pPlayerStatus)
+	{
+		delete m_pPlayerStatus;
+		m_pPlayerStatus = nullptr;
+	}
+	if (m_pPlayerMovement)
+	{
+		delete m_pPlayerMovement;
+		m_pPlayerMovement = nullptr;
+	}
+}
+
+void Player::ReleaseMemberUploadBuffers()
+{
 }
 
 void Player::Update(float fElapsedTime)
 { 
 	// 이동량을 계산한다. 
-	m_xmf3Velocity = Vector3::Add(m_xmf3Velocity, m_xmf3Gravity);
-	float fLength = sqrtf(m_xmf3Velocity.x * m_xmf3Velocity.x + m_xmf3Velocity.z * m_xmf3Velocity.z);
-	float fMaxVelocityXZ = m_fMaxVelocityXZ;
-	if (fLength > m_fMaxVelocityXZ)
+	m_pPlayerMovement->m_xmf3Velocity = Vector3::Add(m_pPlayerMovement->m_xmf3Velocity, m_pPlayerMovement->m_xmf3Gravity);
+	float fLength = sqrtf(m_pPlayerMovement->m_xmf3Velocity.x * m_pPlayerMovement->m_xmf3Velocity.x + m_pPlayerMovement->m_xmf3Velocity.z * m_pPlayerMovement->m_xmf3Velocity.z);
+	float fMaxVelocityXZ = m_pPlayerMovement->m_fMaxVelocityXZ;
+	if (fLength > m_pPlayerMovement->m_fMaxVelocityXZ)
 	{
-		m_xmf3Velocity.x *= (fMaxVelocityXZ / fLength);
-		m_xmf3Velocity.z *= (fMaxVelocityXZ / fLength);
+		m_pPlayerMovement->m_xmf3Velocity.x *= (fMaxVelocityXZ / fLength);
+		m_pPlayerMovement->m_xmf3Velocity.z *= (fMaxVelocityXZ / fLength);
 	}
-	float fMaxVelocityY = m_fMaxVelocityY;
-	fLength = sqrtf(m_xmf3Velocity.y * m_xmf3Velocity.y);
-	if (fLength > m_fMaxVelocityY) m_xmf3Velocity.y *= (fMaxVelocityY / fLength);
+	float fMaxVelocityY = m_pPlayerMovement->m_fMaxVelocityY;
+	fLength = sqrtf(m_pPlayerMovement->m_xmf3Velocity.y * m_pPlayerMovement->m_xmf3Velocity.y);
+	if (fLength > m_pPlayerMovement->m_fMaxVelocityY) m_pPlayerMovement->m_xmf3Velocity.y *= (fMaxVelocityY / fLength);
 
-	XMFLOAT3 xmf3Velocity = Vector3::ScalarProduct(m_xmf3Velocity, fElapsedTime, false);
+	XMFLOAT3 xmf3Velocity = Vector3::ScalarProduct(m_pPlayerMovement->m_xmf3Velocity, fElapsedTime, false);
 	
 	Move(xmf3Velocity); // 이동량만큼 움직인다.
 	 
@@ -191,11 +212,21 @@ void Player::Move(const XMFLOAT3 & xmf3Shift)
 
 void Player::MoveVelocity(const XMFLOAT3 & xmf3Shift)
 {
-	m_xmf3Velocity = Vector3::Add(m_xmf3Velocity, xmf3Shift);
+	m_pPlayerMovement->m_xmf3Velocity = Vector3::Add(m_pPlayerMovement->m_xmf3Velocity, xmf3Shift);
 }
 
 void Player::Rotate(float x, float y, float z)
 {
 	m_Transform.Rotate(x, y, z);
- 	m_pMyBOBox->Rotate(m_fRoll, m_fYaw, m_fPitch);
+ 	m_pMyBOBox->Rotate(m_pPlayerMovement->m_fRoll, m_pPlayerMovement->m_fYaw, m_pPlayerMovement->m_fPitch);
+}
+
+XMFLOAT3 Player::GetVelocity() const
+{
+	return m_pPlayerMovement->m_xmf3Velocity;
+}
+
+void Player::SetVelocity(const XMFLOAT3 & velocity)
+{
+	m_pPlayerMovement->m_xmf3Velocity = velocity;
 }
