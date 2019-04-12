@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "GameInput.h"
 #include "GameScreen.h"
 #include "d3dUtil.h" 
 #include "Button.h"
@@ -139,8 +140,19 @@ void RoomScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 
 	m_pStartButton = new Button("StartButton", pd3dDevice, pd3dCommandList, 
 		RECT{ static_cast<LONG>(GameScreen::GetWidth()) - 250, static_cast<LONG>(GameScreen::GetHeight()) - 100,
-		      static_cast<LONG>(GameScreen::GetWidth()) - 25, static_cast<LONG>(GameScreen::GetHeight()) - 25} , nullptr);
+		      static_cast<LONG>(GameScreen::GetWidth()) - 25, static_cast<LONG>(GameScreen::GetHeight()) - 25} , nullptr, nullptr);
 
+	m_pCharacterAppearanceButton_1 = new Button("CharacterAppearanceButton_1", pd3dDevice, pd3dCommandList,
+		POINT{ 300, 100 }, 200, 200, 
+		L"Image/CharacterAppearance1_ON.dds",
+		L"Image/CharacterAppearance1_OFF.dds"
+	);
+
+	m_pCharacterAppearanceButton_2 = new Button("CharacterAppearanceButton_2", pd3dDevice, pd3dCommandList,
+		POINT{100, 100}, 200, 200,
+		L"Image/CharacterAppearance2_ON.dds",
+		L"Image/CharacterAppearance2_OFF.dds"
+	);
 }
 
 void RoomScene::ReleaseObjects()
@@ -150,15 +162,15 @@ void RoomScene::ReleaseObjects()
 
 bool RoomScene::ProcessInput(HWND hWnd, float ElapsedTime)
 {
-
+	m_pCharacterAppearanceButton_1->CheckClick(GameInput::GetClickcursor());
+	m_pCharacterAppearanceButton_2->CheckClick(GameInput::GetClickcursor());
 
 	return true;
 }
 
 // ProcessInput에 의한 right, up, look, pos 를 월드변환 행렬에 갱신한다.
 void RoomScene::Update(float fElapsedTime)
-{
-
+{ 
 }
 
 void RoomScene::LastUpdate(float fElapsedTime)
@@ -178,6 +190,8 @@ void RoomScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	pd3dCommandList->RSSetViewports(1, &m_d3dViewport);
 	pd3dCommandList->RSSetScissorRects(1, &m_d3dScissorRect);
 	 
+	m_pCharacterAppearanceButton_1->Render(pd3dCommandList);
+	m_pCharacterAppearanceButton_2->Render(pd3dCommandList);
 	m_pStartButton->Render(pd3dCommandList);
 }
 

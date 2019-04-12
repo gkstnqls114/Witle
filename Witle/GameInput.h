@@ -72,6 +72,7 @@ public:
 	static void ReleaseCapture();
 	static float GetcDeltaX() { return m_cDeltaX; }
 	static float GetcDeltaY() { return m_cDeltaY; }
+	static POINT GetClickcursor() { return m_clickCursor; }
 
 	static bool GenerateRayforPicking(const XMFLOAT3& cameraPos, const XMFLOAT4X4 & view, const XMFLOAT4X4 & projection, RAY& ray);
 

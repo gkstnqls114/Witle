@@ -473,7 +473,8 @@ void CGameFramework::BuildObjects()
 	
 	///////////////////////////////////////////////////////////////////////////// 府家胶 积己
 	// m_pScene = new GameScene;
-	m_pScene = new LoadingScene;
+	// m_pScene = new LoadingScene;
+	m_pScene = new RoomScene;
 	m_pScene->CreateRootSignature(m_d3dDevice.Get());
 
 	BuildTESTObjects();

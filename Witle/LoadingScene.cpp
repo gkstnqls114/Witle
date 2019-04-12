@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "GameInput.h"
 #include "d3dUtil.h" 
 #include "Button.h"
 #include "GameScreen.H"
@@ -139,7 +140,7 @@ void LoadingScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommand
 	m_pBackGround = new Button("Background", pd3dDevice, pd3dCommandList, RECT{ 
 		0, 0,
 		static_cast<LONG>(GameScreen::GetWidth()), static_cast<LONG>(GameScreen::GetHeight())},
-		L"Image/Wittle_1280x720.dds");
+		nullptr, L"Image/Wittle_1280x720.dds");
 
 	// LoadingScene::CreateShaderResourceViews(pd3dDevice, m_pBackGround->GetTexture(), ROOTPARAMETER_TEXTURE, true);
 }
@@ -151,7 +152,6 @@ void LoadingScene::ReleaseObjects()
 
 bool LoadingScene::ProcessInput(HWND hWnd, float ElapsedTime)
 {
-
 
 	return true;
 }

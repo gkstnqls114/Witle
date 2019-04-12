@@ -70,4 +70,6 @@ private:
 	D3D12_RECT		m_d3dScissorRect;
 
 	Button* m_pStartButton{ nullptr };
+	Button* m_pCharacterAppearanceButton_1{ nullptr };
+	Button* m_pCharacterAppearanceButton_2{ nullptr };
 };
