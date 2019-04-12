@@ -21,6 +21,6 @@ public:
 	PlayerMovement(GameObject* pOwner);
 	virtual ~PlayerMovement();
 
-	virtual void Update(float) override {};
+	virtual void Update(float) override;
 
 };

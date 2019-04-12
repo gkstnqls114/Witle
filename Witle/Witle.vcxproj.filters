@@ -235,6 +235,9 @@
     <Filter Include="02.Component\ForPlayer\PlayerStatus">
       <UniqueIdentifier>{a15bc817-37c9-4328-8056-352a1ebe9b63}</UniqueIdentifier>
     </Filter>
+    <Filter Include="12.Skill\Broom">
+      <UniqueIdentifier>{20d5a4b8-c8a4-495a-98e6-3397c27f571d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -504,6 +507,9 @@
     <ClInclude Include="PlayerMovement.h">
       <Filter>02.Component\ForPlayer\PlayerMovement</Filter>
     </ClInclude>
+    <ClInclude Include="Broom.h">
+      <Filter>12.Skill\Broom</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -754,6 +760,9 @@
     </ClCompile>
     <ClCompile Include="PlayerMovement.cpp">
       <Filter>02.Component\ForPlayer\PlayerMovement</Filter>
+    </ClCompile>
+    <ClCompile Include="Broom.cpp">
+      <Filter>12.Skill\Broom</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

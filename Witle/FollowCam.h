@@ -7,6 +7,7 @@ class FollowCam :
 	public Camera
 {
 	const GameObject		*m_pTarget{ nullptr };
+	XMFLOAT3				 m_distanceAt{ 0.f, 0.f, 0.f };
 
 private:
 	virtual void MoveSmoothly(float fTimeElapsed, const XMFLOAT3& xmf3LookAt) override;
@@ -27,6 +28,7 @@ public:
 	virtual void LastUpdate(float fTimeElapsed) override;
 
 	void SetLookAt(const XMFLOAT3 & xmf3LookAt);
+	void SetdistanceAt(const XMFLOAT3 & at) { m_distanceAt = at; }
 	virtual void Rotate(float x, float y, float z) override;
 
 	virtual void ZoomIn(float val);

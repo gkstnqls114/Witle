@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "PlayerMovement.h"
 #include "MyBOBox.h" 
+#include "GameInput.h"
 #include "Shader.h"
 #include "Object.h"
 #include "ShaderManager.h" 
@@ -137,21 +138,10 @@ void Player::ReleaseMemberUploadBuffers()
 void Player::Update(float fElapsedTime)
 { 
 	// 이동량을 계산한다. 
-	m_pPlayerMovement->m_xmf3Velocity = Vector3::Add(m_pPlayerMovement->m_xmf3Velocity, m_pPlayerMovement->m_xmf3Gravity);
-	float fLength = sqrtf(m_pPlayerMovement->m_xmf3Velocity.x * m_pPlayerMovement->m_xmf3Velocity.x + m_pPlayerMovement->m_xmf3Velocity.z * m_pPlayerMovement->m_xmf3Velocity.z);
-	float fMaxVelocityXZ = m_pPlayerMovement->m_fMaxVelocityXZ;
-	if (fLength > m_pPlayerMovement->m_fMaxVelocityXZ)
-	{
-		m_pPlayerMovement->m_xmf3Velocity.x *= (fMaxVelocityXZ / fLength);
-		m_pPlayerMovement->m_xmf3Velocity.z *= (fMaxVelocityXZ / fLength);
-	}
-	float fMaxVelocityY = m_pPlayerMovement->m_fMaxVelocityY;
-	fLength = sqrtf(m_pPlayerMovement->m_xmf3Velocity.y * m_pPlayerMovement->m_xmf3Velocity.y);
-	if (fLength > m_pPlayerMovement->m_fMaxVelocityY) m_pPlayerMovement->m_xmf3Velocity.y *= (fMaxVelocityY / fLength);
-
-	XMFLOAT3 xmf3Velocity = Vector3::ScalarProduct(m_pPlayerMovement->m_xmf3Velocity, fElapsedTime, false);
+	m_pPlayerMovement->Update(fElapsedTime);
 	
-	Move(xmf3Velocity); // 이동량만큼 움직인다.
+	// 이동량만큼 움직인다.
+	Move(Vector3::ScalarProduct(m_pPlayerMovement->m_xmf3Velocity, fElapsedTime, false));
 	 
 	// 플레이어 콜백
 	// OnPlayerUpdateCallback(fElapsedTime);
@@ -166,10 +156,8 @@ void Player::Update(float fElapsedTime)
 }
 
 void Player::SubstractHP(int sub)
-{
-	std::cout << "Hp 감소 ... " << m_pPlayerStatus->m_HP << " -> ";
-	m_pPlayerStatus->m_HP -= sub;
-	std::cout << m_pPlayerStatus->m_HP << std::endl;
+{ 
+	m_pPlayerStatus->m_HP -= sub; 
 }
 
 void Player::Animate(float fElapsedTime)
@@ -179,7 +167,7 @@ void Player::Animate(float fElapsedTime)
 
 	//// 위치가 안맞아서 재조정 
 	m_pLoadObject->m_xmf4x4ToParent =  
-		Matrix4x4::Multiply(XMMatrixRotationX(-90.0f), m_Transform.GetWorldMatrix());
+		Matrix4x4::Multiply(XMMatrixRotationX(29.8f), m_Transform.GetWorldMatrix());
 	 
 	m_pLoadObject->Animate(fElapsedTime);
 }
@@ -219,6 +207,76 @@ void Player::Rotate(float x, float y, float z)
 {
 	m_Transform.Rotate(x, y, z);
  	m_pMyBOBox->Rotate(m_pPlayerMovement->m_fRoll, m_pPlayerMovement->m_fYaw, m_pPlayerMovement->m_fPitch);
+}
+
+void Player::ProcessInput(float fTimeElapsed)
+{
+	DWORD dwDirection = 0;
+
+	// 키보드 처리
+	if (GameInput::IsKeydownUP())
+	{
+		dwDirection |= DIR_FORWARD;
+	}
+	if (GameInput::IsKeydownDOWN())
+	{
+		dwDirection |= DIR_BACKWARD;
+	}
+	if (GameInput::IsKeydownLEFT())
+	{
+		dwDirection |= DIR_LEFT;
+	}
+	if (GameInput::IsKeydownRIGHT())
+	{
+		dwDirection |= DIR_RIGHT;
+	}
+	if (GameInput::IsKeydownW())
+	{
+		dwDirection |= DIR_UP;
+	}
+	if (GameInput::IsKeydownS())
+	{
+		dwDirection |= DIR_DOWN;
+	}
+
+	// 만약 키보드 상하좌우 움직인다면...
+	if (dwDirection != 0)
+	{ 
+		AXIS axis = AXIS{ m_Transform.GetCoorAxis() };
+
+		XMFLOAT3 xmf3Shift = XMFLOAT3(0.f, 0.f, 0.f); // 이동량
+
+		/*플레이어를 dwDirection 방향으로 이동한다(실제로는 속도 벡터를 변경한다). 이동 거리는 시간에 비례하도록 한다.
+		플레이어의 이동 속력은 (20m/초)로 가정한다.*/
+		float fDistance = 2000.0f * fTimeElapsed; // 1초당 최대 속력 20m으로 가정, 현재 1 = 1cm
+
+		if (dwDirection & DIR_FORWARD) xmf3Shift = Vector3::Add(xmf3Shift, axis.look, fDistance);
+		if (dwDirection & DIR_BACKWARD) xmf3Shift = Vector3::Add(xmf3Shift, axis.look, -fDistance);
+		if (dwDirection & DIR_RIGHT) xmf3Shift = Vector3::Add(xmf3Shift, axis.right, fDistance);
+		if (dwDirection & DIR_LEFT) xmf3Shift = Vector3::Add(xmf3Shift, axis.right, -fDistance);
+		if (dwDirection & DIR_UP) xmf3Shift = Vector3::Add(xmf3Shift, axis.up, fDistance);
+		if (dwDirection & DIR_DOWN) xmf3Shift = Vector3::Add(xmf3Shift, axis.up, -fDistance);
+
+		//플레이어의 이동량 벡터를 xmf3Shift 벡터만큼 더한다.  
+		MoveVelocity(xmf3Shift);
+	}
+	else
+	{
+		XMFLOAT3 Veclocity = GetVelocity();
+		if (Vector3::Length(Veclocity) > 0.f)
+		{
+			float fLength = Vector3::Length(Veclocity);
+			float fDeceleration = (3000.f * fTimeElapsed); //해당상수는 Friction
+			if (fDeceleration > fLength) fDeceleration = fLength;
+			MoveVelocity(Vector3::ScalarProduct(Veclocity, -fDeceleration, true));
+		}
+	}
+	SetTrackAnimationSet(dwDirection);
+}
+
+void Player::UseSkill_Broom()
+{
+
 }
 
 XMFLOAT3 Player::GetVelocity() const

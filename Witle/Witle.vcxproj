@@ -156,6 +156,7 @@
   <ItemGroup>
     <ClInclude Include="Avoidance.h" />
     <ClInclude Include="BasicCam.h" />
+    <ClInclude Include="Broom.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="CameraObject.h" />
     <ClInclude Include="CMesh.h" />
@@ -247,6 +248,7 @@
   <ItemGroup>
     <ClCompile Include="Avoidance.cpp" />
     <ClCompile Include="BasicCam.cpp" />
+    <ClCompile Include="Broom.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="CameraObject.cpp" />
     <ClCompile Include="CMesh.cpp" />

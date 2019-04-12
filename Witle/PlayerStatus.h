@@ -9,7 +9,7 @@ class PlayerStatus
 	MyRectangle* m_pHpBar;
 
 public:
-	int m_HP{ 0 };
+	int m_HP{ 1000 };
 
 public:
 	PlayerStatus(GameObject* pOwner, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);

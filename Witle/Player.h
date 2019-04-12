@@ -15,8 +15,7 @@ class Player :
 	PlayerStatus*	m_pPlayerStatus{ nullptr };
 	MyBOBox*		m_pMyBOBox{ nullptr };
 	LoadObject*		m_pLoadObject{ nullptr };
-
-
+	 
 	LPVOID m_pPlayerUpdatedContext { nullptr };
 	LPVOID m_pCameraUpdatedContext { nullptr };
 
@@ -49,6 +48,12 @@ public:
 	void MoveVelocity(const XMFLOAT3& xmf3Shift);
 	void Move(float fxOffset = 0.0f, float fyOffset = 0.0f, float fzOffset = 0.0f);
 	void Rotate(float x, float y, float z);
+
+	void ProcessInput(float fTimeElapsed);
+
+	/////////////////////// Skill
+	void UseSkill_Broom();
+	/////////////////////// Skill
 
 	/////////////////////// Get
 	AXIS GetCoorAxis() { return m_Transform.GetCoorAxis(); }

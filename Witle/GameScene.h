@@ -62,8 +62,7 @@ protected:
 
 	void BuildLightsAndMaterials(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList);
 	void RenderShadowMap(ID3D12GraphicsCommandList *pd3dCommandList);
-
-
+	 
 public:
 	GameScene();
 	virtual ~GameScene();
@@ -87,13 +86,11 @@ public:
 	void TESTSetRootDescriptor(ID3D12GraphicsCommandList *pd3dCommandList);
 	
 protected:
-	// fbx test
-	Texture*				m_GameObjectDiffuse{ nullptr };
+	// fbx test 
 	Player*                 m_pPlayer{ nullptr };
 
 	Player*                 m_pOtherPlayer{ nullptr };
-	 
-	int TerrainIndex = 0;
+	  
 	Terrain*                m_Terrain{ nullptr };
 	CameraObject*           m_Camera{ nullptr };
 
