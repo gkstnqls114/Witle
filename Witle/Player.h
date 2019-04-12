@@ -47,6 +47,7 @@ public:
 	BoundingOrientedBox CalculateAlreadyBoundingBox(float fTimeElapsed);
 	XMFLOAT3 CalculateAlreadyPosition(float fTimeElapsed);
 
+	void SubstractHP(int sub);
 	void Animate(float fElapsedTime);
 	void Render(ID3D12GraphicsCommandList *pd3dCommandList);
   
@@ -64,12 +65,11 @@ public:
 	/////////////////////// Get
 
 	/////////////////////// Set	
-	void SetVelocity(const XMFLOAT3& velocity)
-	{ m_xmf3Velocity = velocity; };
+	void SetVelocity(const XMFLOAT3& velocity) { m_xmf3Velocity = velocity; };
 	void SetUpdatedContext(LPVOID pContext)
 	{ 
 		m_pCameraUpdatedContext = pContext;
 		m_pPlayerUpdatedContext = pContext;
-	}
+	} 
 	/////////////////////// Set
 };

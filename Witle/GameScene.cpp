@@ -263,11 +263,11 @@ bool GameScene::ProcessInput(HWND hWnd, float ElapsedTime)
 
 	// 키보드 처리
 	if (GameInput::IsKeydownUP())
-	{ 
+	{
 		dwDirection |= DIR_FORWARD;
 	}
 	if (GameInput::IsKeydownDOWN())
-	{ 
+	{
 		dwDirection |= DIR_BACKWARD;
 	}
 	if (GameInput::IsKeydownLEFT())
@@ -278,7 +278,7 @@ bool GameScene::ProcessInput(HWND hWnd, float ElapsedTime)
 	{
 		dwDirection |= DIR_RIGHT;
 	}
-	if(GameInput::IsKeydownW())
+	if (GameInput::IsKeydownW())
 	{
 		dwDirection |= DIR_UP;
 	}
@@ -291,7 +291,7 @@ bool GameScene::ProcessInput(HWND hWnd, float ElapsedTime)
 	if (dwDirection != 0)
 	{
 		// AXIS axis = m_pPlayer->GetTransform().GetCoorAxis();
-		AXIS axis = AXIS{ m_pPlayer->GetCoorAxis()};
+		AXIS axis = AXIS{ m_pPlayer->GetCoorAxis() };
 
 		XMFLOAT3 xmf3Shift = XMFLOAT3(0.f, 0.f, 0.f); // 이동량
 
@@ -307,21 +307,21 @@ bool GameScene::ProcessInput(HWND hWnd, float ElapsedTime)
 		if (dwDirection & DIR_DOWN) xmf3Shift = Vector3::Add(xmf3Shift, axis.up, -fDistance);
 
 		//플레이어의 이동량 벡터를 xmf3Shift 벡터만큼 더한다.  
-		m_pPlayer->MoveVelocity(xmf3Shift); 
+		m_pPlayer->MoveVelocity(xmf3Shift);
 	}
 	else
 	{
 		XMFLOAT3 Veclocity = m_pPlayer->GetVelocity();
 		if (Vector3::Length(Veclocity) > 0.f)
-		{ 
+		{
 			float fLength = Vector3::Length(Veclocity);
 			float fDeceleration = (3000.f * ElapsedTime); //해당상수는 Friction
-			if (fDeceleration > fLength) fDeceleration = fLength; 
+			if (fDeceleration > fLength) fDeceleration = fLength;
 			m_pPlayer->MoveVelocity(Vector3::ScalarProduct(Veclocity, -fDeceleration, true));
-		} 
+		}
 	}
 	m_pPlayer->SetTrackAnimationSet(dwDirection);
-	
+
 	if ((GameInput::GetcDeltaX() != 0.0f) || (GameInput::GetcDeltaY() != 0.0f))
 	{
 		if (GameInput::GetcDeltaX() || GameInput::GetcDeltaY())
@@ -331,7 +331,24 @@ bool GameScene::ProcessInput(HWND hWnd, float ElapsedTime)
 			m_Camera->GetCamera()->Rotate(GameInput::GetcDeltaY(), GameInput::GetcDeltaX(), 0.0f);
 			m_pPlayer->Rotate(0.0f, GameInput::GetcDeltaX(), 0.0f);
 		}
-		
+
+	}
+	 
+	Camera* pCamera = m_Camera->GetCamera();
+	RAY pickRay;
+	bool isPick = GameInput::GenerateRayforPicking(m_Camera->GetTransform().GetPosition(), pCamera->GetViewMatrix(), pCamera->GetProjectionMatrix(), pickRay);
+	if (isPick)
+	{ 
+		XMFLOAT3* pickColor;
+		float dist;
+
+		auto world = m_pOtherPlayer->GetTransform().GetWorldMatrix();
+		BoundingOrientedBox box = m_pOtherPlayer->GetBOBox()->GetBOBox();
+		box.Transform(box, XMLoadFloat4x4(&world));
+		if (box.Intersects(XMLoadFloat3(&pickRay.origin), XMLoadFloat3(&pickRay.direction), dist))
+		{ 
+			m_pOtherPlayer->SubstractHP(100);
+		} 
 	}
 
 	return true;
@@ -403,7 +420,7 @@ void GameScene::LastUpdate(float fElapsedTime)
 	if (m_Camera)
 	{
 		m_Camera->LastUpdate(fElapsedTime);
-	} 
+	}  
 
 	// 카메라 프러스텀과 쿼드트리 지형 렌더링 체크
 	m_Camera->GetFrustum()->CheckRendering(m_pQuadtreeTerrain->GetRootNode()); 

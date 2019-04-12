@@ -102,7 +102,7 @@ Player::Player(const std::string & entityID, ID3D12Device * pd3dDevice, ID3D12Gr
 	XMFLOAT3 extents{ 25.f, 75.f, 25.f };
 	m_pMyBOBox = new MyBOBox(pd3dDevice, pd3dCommandList, center, extents);
 	 
-	m_pPlayerStatus = new PlayerStatus();
+	m_pPlayerStatus = new PlayerStatus(this, pd3dDevice, pd3dCommandList);
 
 	SetUpdatedContext(pContext); 
 }
@@ -144,6 +144,13 @@ void Player::Update(float fElapsedTime)
 	//m_pLoadObject->SetTrackAnimationSet(0, ::IsZero(fLength) ? 0 : 1); // 만약에 fLength가 0이 아니라면... 즉 움직인다면...
 }
 
+void Player::SubstractHP(int sub)
+{
+	std::cout << "Hp 감소 ... " << m_pPlayerStatus->m_HP << " -> ";
+	m_pPlayerStatus->m_HP -= sub;
+	std::cout << m_pPlayerStatus->m_HP << std::endl;
+}
+
 void Player::Animate(float fElapsedTime)
 {
 	// 반드시 트랜스폼 업데이트..! 
@@ -162,7 +169,8 @@ void Player::Render(ID3D12GraphicsCommandList * pd3dCommandList)
 	m_pMyBOBox->Render(pd3dCommandList, m_Transform.GetWorldMatrix());
 #endif // _SHOW_BOUNDINGBOX
 
- 	if(m_pLoadObject) m_pLoadObject->Render(pd3dCommandList);
+	m_pLoadObject->Render(pd3dCommandList);
+	m_pPlayerStatus->Render(pd3dCommandList);
 }
  
 void Player::SetTrackAnimationSet(ULONG dwDirection)
