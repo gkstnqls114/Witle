@@ -219,30 +219,22 @@ void Player::ProcessInput(float fTimeElapsed)
 	DWORD dwDirection = 0;
 
 	// 키보드 처리
-	if (GameInput::IsKeydownUP())
+	if (GameInput::IsKeydownW())
 	{
 		dwDirection |= DIR_FORWARD;
 	}
-	if (GameInput::IsKeydownDOWN())
+	if (GameInput::IsKeydownS())
 	{
 		dwDirection |= DIR_BACKWARD;
 	}
-	if (GameInput::IsKeydownLEFT())
+	if (GameInput::IsKeydownA())
 	{
 		dwDirection |= DIR_LEFT;
 	}
-	if (GameInput::IsKeydownRIGHT())
+	if (GameInput::IsKeydownD())
 	{
 		dwDirection |= DIR_RIGHT;
-	}
-	if (GameInput::IsKeydownW())
-	{
-		dwDirection |= DIR_UP;
-	}
-	if (GameInput::IsKeydownS())
-	{
-		dwDirection |= DIR_DOWN;
-	}
+	} 
 
 	// 만약 키보드 상하좌우 움직인다면...
 	if (dwDirection != 0)

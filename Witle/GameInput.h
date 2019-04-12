@@ -65,7 +65,9 @@ public:
 	static bool IsKeydownUP() { return (m_pKeyBuffer[VK_UP] & 0xF0); };
 	static bool IsKeydownDOWN() { return (m_pKeyBuffer[VK_DOWN] & 0xF0); };
 	static bool IsKeydownW() { return (m_pKeyBuffer[MYVK_W] & 0xF0); };
+	static bool IsKeydownA() { return (m_pKeyBuffer[MYVK_A] & 0xF0); };
 	static bool IsKeydownS() { return (m_pKeyBuffer[MYVK_S] & 0xF0); };
+	static bool IsKeydownD() { return (m_pKeyBuffer[MYVK_D] & 0xF0); };
 
 	static void SetCapture(HWND hWnd);
 	static void RotateWheel(WPARAM wParam);
