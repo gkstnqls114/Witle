@@ -384,6 +384,7 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	// 스카이박스 렌더
 	m_SkyBox->Render(pd3dCommandList);
 
+
 	//  조명
 	D3D12_GPU_VIRTUAL_ADDRESS d3dcbLightsGpuVirtualAddress = m_pd3dcbLights->GetGPUVirtualAddress();
 	pd3dCommandList->SetGraphicsRootConstantBufferView(ROOTPARAMETER_LIGHTS, d3dcbLightsGpuVirtualAddress); //Lights
