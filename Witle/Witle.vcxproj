@@ -163,7 +163,6 @@
     <ClInclude Include="Collision.h" />
     <ClInclude Include="ComponentBase.h" />
     <ClInclude Include="ComputeShader.h" />
-    <ClInclude Include="CPlayer.h" />
     <ClInclude Include="DirectionalLight.h" />
     <ClInclude Include="FamilyID.h" />
     <ClInclude Include="GameScreen.h" />
@@ -221,6 +220,7 @@
     <ClInclude Include="SkinnedMesh.h" />
     <ClInclude Include="SkinnedShader.h" />
     <ClInclude Include="SkyBox.h" />
+    <ClInclude Include="SkyBoxShader.h" />
     <ClInclude Include="SkyPlane.h" />
     <ClInclude Include="Sniping.h" />
     <ClInclude Include="SpeedReduction.h" />
@@ -256,7 +256,6 @@
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="ComponentBase.cpp" />
     <ClCompile Include="ComputeShader.cpp" />
-    <ClCompile Include="CPlayer.cpp" />
     <ClCompile Include="CubeMesh.cpp" />
     <ClCompile Include="CubeShader.cpp" />
     <ClCompile Include="d3dUtil.cpp" />
@@ -310,6 +309,7 @@
     <ClCompile Include="SkinnedMesh.cpp" />
     <ClCompile Include="SkinnedShader.cpp" />
     <ClCompile Include="SkyBox.cpp" />
+    <ClCompile Include="SkyBoxShader.cpp" />
     <ClCompile Include="Sniping.cpp" />
     <ClCompile Include="SpeedReduction.cpp" />
     <ClCompile Include="SpotLight.cpp" />
@@ -438,7 +438,7 @@
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compute</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
-      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">VSSkyBox</EntryPointName>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">VS</EntryPointName>
     </FxCompile>
     <FxCompile Include="StandardShader.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>

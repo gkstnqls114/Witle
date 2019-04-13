@@ -241,6 +241,9 @@
     <Filter Include="03.GameObject\SkyBox">
       <UniqueIdentifier>{39eb9218-df4a-4b92-945f-2e30e8fc9f60}</UniqueIdentifier>
     </Filter>
+    <Filter Include="05.Shader\SkyBoxShader">
+      <UniqueIdentifier>{e0d12ac8-8b08-42e1-acbe-f56e4be352c5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -444,9 +447,6 @@
     <ClInclude Include="MyDescriptorHeap.h">
       <Filter>07.Resource</Filter>
     </ClInclude>
-    <ClInclude Include="CPlayer.h">
-      <Filter>99.etc</Filter>
-    </ClInclude>
     <ClInclude Include="LineShader.h">
       <Filter>05.Shader\LineShader</Filter>
     </ClInclude>
@@ -515,6 +515,9 @@
     </ClInclude>
     <ClInclude Include="SkyBox.h">
       <Filter>03.GameObject\SkyBox</Filter>
+    </ClInclude>
+    <ClInclude Include="SkyBoxShader.h">
+      <Filter>05.Shader\SkyBoxShader</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -701,9 +704,6 @@
     <ClCompile Include="MyDescriptorHeap.cpp">
       <Filter>07.Resource</Filter>
     </ClCompile>
-    <ClCompile Include="CPlayer.cpp">
-      <Filter>99.etc</Filter>
-    </ClCompile>
     <ClCompile Include="LineShader.cpp">
       <Filter>05.Shader\LineShader</Filter>
     </ClCompile>
@@ -772,6 +772,9 @@
     </ClCompile>
     <ClCompile Include="SkyBox.cpp">
       <Filter>03.GameObject\SkyBox</Filter>
+    </ClCompile>
+    <ClCompile Include="SkyBoxShader.cpp">
+      <Filter>05.Shader\SkyBoxShader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

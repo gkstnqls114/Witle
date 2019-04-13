@@ -11,7 +11,7 @@ struct VS_SKYBOX_CUBEMAP_OUTPUT
     float4 position : SV_POSITION;
 };
 
-VS_SKYBOX_CUBEMAP_OUTPUT VSSkyBox(VS_SKYBOX_CUBEMAP_INPUT input)
+VS_SKYBOX_CUBEMAP_OUTPUT VS(VS_SKYBOX_CUBEMAP_INPUT input)
 {
     VS_SKYBOX_CUBEMAP_OUTPUT output;
 
@@ -22,7 +22,7 @@ VS_SKYBOX_CUBEMAP_OUTPUT VSSkyBox(VS_SKYBOX_CUBEMAP_INPUT input)
 }
 
 
-float4 PSSkyBox(VS_SKYBOX_CUBEMAP_OUTPUT input) : SV_TARGET
+float4 PS(VS_SKYBOX_CUBEMAP_OUTPUT input) : SV_TARGET
 {
     float4 cColor = gtxtSkyCubeTexture.Sample(gssClamp, input.positionL);
 

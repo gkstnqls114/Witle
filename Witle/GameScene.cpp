@@ -6,8 +6,8 @@
 #include "MeshRenderer.h"
 #include "ShaderManager.h"
 #include "GameScreen.h"
-
-#include "StaticObject.h"
+ 
+#include "SkyBox.h"
 #include "MyBOBox.h"
 #include "Collision.h"
 #include "Object.h" //교수님코드 
@@ -158,6 +158,9 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 
 	// 모든 모델 오브젝트 빌드
 	ModelStorage::GetInstance()->CreateModels(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+
+	// 스카이 박스 생성
+	m_SkyBox = new SkyBox(pd3dDevice, pd3dCommandList, 1000.F, 1000.F, 1000.F);
 
 	// 터레인 생성 
 	XMFLOAT3 xmf3Scale(39.0625f * 3.f, 1.0f, 39.0625f * 3.f);
@@ -390,6 +393,7 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	// TerrainMesh Render
 	Mesh* terrainMesh = m_Terrain->GetComponent<Mesh>("TerrainMesh");
 	m_pQuadtreeTerrain->Render(pd3dCommandList);
+	m_SkyBox->Render(pd3dCommandList);
 
 #ifdef CHECK_SUBVIEWS
 	m_lookAboveCamera->SetViewportsAndScissorRects(pd3dCommandList); 

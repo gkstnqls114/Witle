@@ -6,6 +6,7 @@
 #include "GameInput.h"
 #include "GameScreen.h" 
 
+#include "SkyBoxShader.h"
 #include "StandardShader.h"
 #include "TerrainShader.h"
 #include "SkinnedShader.h"
@@ -663,6 +664,9 @@ void CGameFramework::BuildShaders()
 	pScreenShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
 	ShaderManager::GetInstance()->InsertShader("ScreenShader", pScreenShader);
 
+	Shader* pSkyBoxShader = new SkyBoxShader();
+	pSkyBoxShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
+	ShaderManager::GetInstance()->InsertShader("SkyBoxShader", pSkyBoxShader);
 #ifdef _SHOW_BOUNDINGBOX
 	Shader* pLineShader = new LineShader();
 	pLineShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
