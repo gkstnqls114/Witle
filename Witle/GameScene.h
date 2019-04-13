@@ -6,8 +6,8 @@ class SunFlower;
 class Pillar;
 class Rock;
 
-class Player;
-class CPlayer;
+class SkyBox;
+class Player; 
 class Shader;
 class ReflexTree;
 class CLoadedModelInfo;
@@ -93,15 +93,14 @@ protected:
 	  
 	Terrain*                m_Terrain{ nullptr };
 	CameraObject*           m_Camera{ nullptr };
+	
+	SkyBox*					m_SkyBox{ nullptr };
 
 #ifdef CHECK_SUBVIEWS
 	CameraObject*			m_lookAboveCamera{ nullptr };
 #endif
-
-	XMFLOAT4X4              matrix{ Matrix4x4::Identity() };
-
+	 
 	//////////////////////////////////////  Α¶Έν
-
 	ID3D12Resource				*m_pd3dcbLights{ nullptr };
 	LIGHTS						*m_pcbMappedLights{ nullptr };
 

@@ -1,42 +1,4 @@
-
-// 루트 상수
-cbuffer cbGameObjectInfo : register(b0)
-{
-	matrix gmtxWorld : packoffset(c0);
-}
-
-// 상수 버퍼
-cbuffer cbCameraInfo : register(b1)
-{
-	matrix gmtxView : packoffset(c0);
-	matrix gmtxProjection : packoffset(c4);
-	float3 gvCameraPosition : packoffset(c8);
-}
-
-// 루트 상수
-cbuffer cbGameObjectInfo : register(b4)
-{
-	float3 testcolor: packoffset(c0);
-}
-
-#define MATERIAL_ALBEDO_MAP			0x01
-#define MATERIAL_SPECULAR_MAP		0x02
-#define MATERIAL_NORMAL_MAP			0x04
-#define MATERIAL_METALLIC_MAP		0x08
-#define MATERIAL_EMISSION_MAP		0x10
-#define MATERIAL_DETAIL_ALBEDO_MAP	0x20
-#define MATERIAL_DETAIL_NORMAL_MAP	0x40
-
-Texture2D gtxtAlbedoTexture : register(t6);
-Texture2D gtxtSpecularTexture : register(t7);
-Texture2D gtxtNormalTexture : register(t8);
-Texture2D gtxtMetallicTexture : register(t9);
-Texture2D gtxtEmissionTexture : register(t10);
-Texture2D gtxtDetailAlbedoTexture : register(t11);
-Texture2D gtxtDetailNormalTexture : register(t12);
-
-SamplerState gssWrap : register(s0);
-
+#include "Variables.hlsl"
 #include "Light.hlsl"
  
 struct VS_STANDARD_INPUT
@@ -113,14 +75,6 @@ struct VS_INSTANCING_OUTPUT
 	float3 tangent : TANGENT;
 	float3 bitangent : BITANGENT;
 };
-
-//인스턴싱 데이터를 위한 구조체
-struct INSTANCING_TRANSFORM
-{
-	matrix m_mtxWorld; 
-};
-
-StructuredBuffer<INSTANCING_TRANSFORM> gmtxInstancingWorld : register(t14);
 
 VS_STANDARD_OUTPUT VSStandardInstancing(VS_INSTANCING_OUTPUT input, uint nInstanceID : SV_InstanceID)
 {

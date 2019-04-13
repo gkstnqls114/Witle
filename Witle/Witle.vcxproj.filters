@@ -238,6 +238,9 @@
     <Filter Include="12.Skill\Broom">
       <UniqueIdentifier>{20d5a4b8-c8a4-495a-98e6-3397c27f571d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.GameObject\SkyBox">
+      <UniqueIdentifier>{39eb9218-df4a-4b92-945f-2e30e8fc9f60}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -510,6 +513,9 @@
     <ClInclude Include="Broom.h">
       <Filter>12.Skill\Broom</Filter>
     </ClInclude>
+    <ClInclude Include="SkyBox.h">
+      <Filter>03.GameObject\SkyBox</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -764,6 +770,9 @@
     <ClCompile Include="Broom.cpp">
       <Filter>12.Skill\Broom</Filter>
     </ClCompile>
+    <ClCompile Include="SkyBox.cpp">
+      <Filter>03.GameObject\SkyBox</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Witle.rc">
@@ -807,6 +816,9 @@
       <Filter>HLSL</Filter>
     </FxCompile>
     <FxCompile Include="ScreenShader.hlsl">
+      <Filter>HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="SkyBoxShader.hlsl">
       <Filter>HLSL</Filter>
     </FxCompile>
   </ItemGroup>
