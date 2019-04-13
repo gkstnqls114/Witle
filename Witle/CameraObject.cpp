@@ -45,10 +45,10 @@ void CameraObject::SetViewportsAndScissorRects(ID3D12GraphicsCommandList *pd3dCo
 
 void CameraObject::ChangeCamera(Camera * pNewCamera)
 {
-	if (m_pCameraComponent)
-	{
-		delete m_pCameraComponent;
-	}
+	//if (m_pCameraComponent)
+	//{
+	//	delete m_pCameraComponent;
+	//}
 
 	m_pCameraComponent = pNewCamera;
 }

@@ -92,6 +92,8 @@ protected:
 	Player*                 m_pOtherPlayer{ nullptr };
 	  
 	Terrain*                m_Terrain{ nullptr };
+	Camera*					m_pTESTBasicComponent{ nullptr };
+	Camera*					m_pTESTSnipeComponent{ nullptr };
 	CameraObject*           m_Camera{ nullptr };
 	
 	SkyBox*					m_SkyBox{ nullptr };
