@@ -160,7 +160,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	ModelStorage::GetInstance()->CreateModels(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 
 	// 스카이 박스 생성
-	m_SkyBox = new SkyBox(pd3dDevice, pd3dCommandList, 1000.F, 1000.F, 1000.F);
+	m_SkyBox = new SkyBox(pd3dDevice, pd3dCommandList, 3000.F, 3000.F, 3000.F);
 
 	// 터레인 생성 
 	XMFLOAT3 xmf3Scale(39.0625f * 3.f, 1.0f, 39.0625f * 3.f);
@@ -172,6 +172,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	m_pPlayer = new Player("Player", pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 	m_pOtherPlayer = new Player("OtherPlayer", pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 	m_pOtherPlayer->GetTransform().SetPosition(0, 0, 1000); 
+	m_SkyBox->SetpPlayerTransform(&m_pPlayer->GetTransform());
 
 	// 테스트 쿼드트리 터레인 생성 
 	m_pQuadtreeTerrain = new QuadtreeTerrain(pd3dDevice, pd3dCommandList, 257, 257, xmf3Scale, xmf4Color, m_Terrain->GetHeightMapImage());
@@ -324,6 +325,8 @@ void GameScene::Update(float fElapsedTime)
 	m_pPlayer->Update(fElapsedTime); //Velocity를 통해 pos 이동
 	m_pOtherPlayer->Update(fElapsedTime);
 	 
+	m_SkyBox->Update(fElapsedTime);
+
 	// light update
 	::memcpy(m_pcbMappedLights, LightManager::m_pLights, sizeof(LIGHTS));
 	// material update
@@ -378,6 +381,9 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	m_Camera->SetViewportsAndScissorRects(pd3dCommandList); 
 	m_Camera->GetCamera()->UpdateShaderVariables(pd3dCommandList, ROOTPARAMETER_CAMERA);
 
+	// 스카이박스 렌더
+	m_SkyBox->Render(pd3dCommandList);
+
 	//  조명
 	D3D12_GPU_VIRTUAL_ADDRESS d3dcbLightsGpuVirtualAddress = m_pd3dcbLights->GetGPUVirtualAddress();
 	pd3dCommandList->SetGraphicsRootConstantBufferView(ROOTPARAMETER_LIGHTS, d3dcbLightsGpuVirtualAddress); //Lights
@@ -393,7 +399,6 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	// TerrainMesh Render
 	Mesh* terrainMesh = m_Terrain->GetComponent<Mesh>("TerrainMesh");
 	m_pQuadtreeTerrain->Render(pd3dCommandList);
-	m_SkyBox->Render(pd3dCommandList);
 
 #ifdef CHECK_SUBVIEWS
 	m_lookAboveCamera->SetViewportsAndScissorRects(pd3dCommandList); 

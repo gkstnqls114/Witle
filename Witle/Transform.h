@@ -50,6 +50,11 @@ public:
 	void Move(const XMFLOAT3& xmf3Shift, bool bUpdateVelocity); 
 
 	void Move(const XMFLOAT3& vMove); // vMove만큼 Position 에서 움직인다.
-
+	
+	Transform& operator=(const Transform& pTr)
+	{
+		SetTransform(pTr.m_Right, pTr.m_Up, pTr.m_Look, pTr.m_Position);
+		return *this;
+	}
 };
 

@@ -49,6 +49,11 @@ SkyBox::~SkyBox()
 {
 
 }
+void SkyBox::Update(float fElapsedTime)
+{
+	m_Transform = *m_pPlayerTransform;
+	m_LoadObject->UpdateTransform(m_Transform.GetpWorldMatrix());
+}
 
 void SkyBox::Render(ID3D12GraphicsCommandList * pd3dCommandList)
 {
