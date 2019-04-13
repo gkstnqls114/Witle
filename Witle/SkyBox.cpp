@@ -40,8 +40,7 @@ SkyBox::SkyBox(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandL
 	CMaterial *pSkyBoxMaterial = new CMaterial(1);
 	// pSkyBoxMaterial->SetTexture(pSkyBoxTexture);
 	// pSkyBoxMaterial->SetShader(ShaderManager::GetInstance()->SetShader(pd3dCommandList, "SkyBoxShader"));
-
-
+	 
 	m_LoadObject->SetMaterial(0, pSkyBoxMaterial);
 }
 
@@ -51,7 +50,8 @@ SkyBox::~SkyBox()
 }
 void SkyBox::Update(float fElapsedTime)
 {
-	m_Transform = *m_pPlayerTransform;
+	m_Transform.SetPosition(m_pPlayerTransform->GetPosition());
+	m_Transform.Update(fElapsedTime);
 	m_LoadObject->UpdateTransform(m_Transform.GetpWorldMatrix());
 }
 
