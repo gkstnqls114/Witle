@@ -48,7 +48,11 @@ void CameraObject::ChangeCamera(Camera * pNewCamera)
 	//if (m_pCameraComponent)
 	//{
 	//	delete m_pCameraComponent;
-	//}
+	//} 
+	float deltaPitch = m_pCameraComponent->GetPitch() - pNewCamera->GetPitch();
+	float deltaYaw = m_pCameraComponent->GetYaw() - pNewCamera->GetYaw();
+	float deltaRoll = m_pCameraComponent->GetRoll() - pNewCamera->GetRoll();
 
 	m_pCameraComponent = pNewCamera;
+	m_pCameraComponent->Rotate(deltaPitch, deltaYaw, deltaRoll);
 }

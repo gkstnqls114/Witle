@@ -201,7 +201,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	m_pTESTBasicComponent->GenerateProjectionMatrix(0.01f, CAMERA_FAR, float(GameScreen::GetWidth()) / float(GameScreen::GetHeight()), 60.0f);
 
 	m_pTESTSnipeComponent->CreateShaderVariables(pd3dDevice, pd3dCommandList);
-	m_pTESTSnipeComponent->SetOffset(XMFLOAT3(0, 0, 300.f));
+	m_pTESTSnipeComponent->SetOffset(XMFLOAT3(0, 0, 50.f));
 	static_cast<FollowCam *>(m_pTESTSnipeComponent)->SetdistanceAt(XMFLOAT3(0.f, 150.f, 0));
 	m_pTESTSnipeComponent->SetViewport(0, 0, GameScreen::GetWidth(), GameScreen::GetHeight(), 0.0f, 1.0f);
 	m_pTESTSnipeComponent->SetScissorRect(0, 0, GameScreen::GetWidth(), GameScreen::GetHeight());
