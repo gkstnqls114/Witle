@@ -10,7 +10,8 @@ HWND GameInput::m_hWnd;
 
 UCHAR GameInput::m_pKeyBuffer[256];
 
-
+bool GameInput::m_isDragRotate{ true };
+ 
 POINT GameInput::m_moveCursor;        // 한번 클릭했을 때 위치
 POINT GameInput::m_moveOldCursor{ -1, -1};     // 이전 프레임에서의 마우스 위치 
 float GameInput::m_moveDeltaX = 0.0f; // 마우스를 누른 상태로 x축으로 움직인 마우스 이동량  
@@ -66,13 +67,10 @@ bool GameInput::GenerateRayforPicking(const XMFLOAT3& cameraPos, const XMFLOAT4X
 	return true;
 }
 
-void GameInput::Update(HWND hWnd)
-{ 
-	// 키보드의 pKeyBuffer를 구한다.
-	::GetKeyboardState(m_pKeyBuffer);
-	 
+void GameInput::UpdateMouseDragRotate(HWND hWnd)
+{
 	POINT ptCursorPos;
-	
+
 	// 마우스를 캡쳐했으면 마우스가 얼마만큼 이동하였는 가를 계산한다.
 	// 마우스 왼쪽 또는 오른쪽 버튼이 눌러질 때의 메시지(WM_LBUTTONDOWN, WM_RBUTTONDOWN)를 처리할 때 
 	// 마우스를 캡쳐하였다. 그러므로 마우스가 캡쳐된 것은 마우스 버튼이 눌려진 상태를 의미한다.
@@ -91,10 +89,25 @@ void GameInput::Update(HWND hWnd)
 		//마우스 커서의 위치를 마우스가 눌려졌던 위치로 설정한다.
 		::SetCursorPos(m_downOldCursor.x, m_downOldCursor.y);
 	}
-	else
-	{
-	}
-	
+}
+
+void GameInput::UpdateMouseMoveRotate(HWND hWnd)
+{
+}
+
+void GameInput::Update(HWND hWnd)
+{ 
+	// 키보드의 pKeyBuffer를 구한다.
+	::GetKeyboardState(m_pKeyBuffer);
+	 
+	//if (m_isDragRotate)
+	//{ 
+	//	UpdateMouseDragRotate(hWnd);
+	//}
+	//else
+	//{
+	//	UpdateMouseMoveRotate(hWnd);
+	//} 
 }
 
 void GameInput::Reset()
@@ -102,31 +115,30 @@ void GameInput::Reset()
 	m_downClickCursor.x = -1;
 	m_downClickCursor.y = -1;
 	m_moveDeltaX = 0.f;
-	m_moveDeltaY = 0.f;
+	m_moveDeltaY = 0.f; 
+	::SetCursorPos(m_moveOldCursor.x, m_moveOldCursor.y);
+	 m_moveCursor = m_moveOldCursor;
 }
 
 void GameInput::SetHWND(HWND hwnd)
 {
-	m_hWnd = hwnd; 
+	m_hWnd = hwnd;
 }
 
 void GameInput::MouseMove(LPARAM lParam)
-{  
-	if (m_moveOldCursor.x == -1 && m_moveOldCursor.y == -1) // 초기값인 경우
-	{
-		::GetCursorPos(&m_moveCursor);
-		m_moveOldCursor = m_moveCursor;
+{     
+	::GetCursorPos(&m_moveCursor);
+	  
+	if (m_moveCursor.x == m_moveOldCursor.x && m_moveCursor.y == m_moveOldCursor.y) return;
+
+	if ((m_moveOldCursor.x == -1 && m_moveOldCursor.y == -1)) // 초기값의 경우
+	{ 
+		m_moveOldCursor = m_moveCursor; 
 	}
 	else
-	{
-		::GetCursorPos(&m_moveCursor);
-
+	{ 
 		m_moveDeltaX = (float)(m_moveCursor.x - m_moveOldCursor.x) / m_DeltaValueX;
-		m_moveDeltaY = (float)(m_moveCursor.y - m_moveOldCursor.y) / m_DeltaValueY;
-
-		//마우스 커서의 위치를 마우스가 눌려졌던 위치로 설정한다.
-		m_moveOldCursor = m_moveCursor;
-
+		m_moveDeltaY = (float)(m_moveCursor.y - m_moveOldCursor.y) / m_DeltaValueY; 
 	}
 }
 

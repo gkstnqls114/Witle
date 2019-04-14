@@ -44,6 +44,8 @@ private:
 
 	static UCHAR m_pKeyBuffer[256]; // 키보드의 input을 위한 멤버 변수
 
+	static bool m_isDragRotate;
+
 	static RAY m_PickingRay;
 	static short m_WheelDelta; // 마우스 휠이 움직인 정도
 	static const float m_DeltaValueX; // 마우스 이동량 값
@@ -53,11 +55,15 @@ private:
 	static POINT m_downOldCursor; // 이전 프레임에서의 마우스 위치 
 	static float m_downDeltaX; // 마우스를 누른 상태로 x축으로 움직인 마우스 이동량  
 	static float m_downDeltaY; // 마우스를 누른 상태로 y축으로 움직인 마우스 이동량
-
+	 
 	static POINT m_moveCursor; // 한번 클릭했을 때 위치
 	static POINT m_moveOldCursor; // 이전 프레임에서의 마우스 위치 
 	static float m_moveDeltaX; // 마우스를 누르지 않은 상태로 x축으로 움직인 마우스 이동량
 	static float m_moveDeltaY; // 마우스를 누르지 않은 상태로 y축으로 움직인 마우스 이동량
+
+private:
+	static void UpdateMouseDragRotate(HWND hWnd);
+	static void UpdateMouseMoveRotate(HWND hWnd);
 
 public: 
 	static void Update(HWND hWnd);
