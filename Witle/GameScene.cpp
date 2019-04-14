@@ -264,14 +264,14 @@ bool GameScene::ProcessInput(HWND hWnd, float fElapsedTime)
 {
 	m_pPlayer->ProcessInput(fElapsedTime);
 
-	if ((GameInput::GetcDeltaX() != 0.0f) || (GameInput::GetcDeltaY() != 0.0f))
+	if ((GameInput::GetmoveDeltaX() != 0.0f) || (GameInput::GetmoveDeltaY() != 0.0f))
 	{
-		if (GameInput::GetcDeltaX() || GameInput::GetcDeltaY())
+		if (GameInput::GetmoveDeltaX() || GameInput::GetmoveDeltaY())
 		{
 			// 플레이어와 카메라 똑같이 rotate...
 			// 순서 의존적이므로 변경 금지
-			m_Camera->GetCamera()->Rotate(GameInput::GetcDeltaY(), GameInput::GetcDeltaX(), 0.0f);
-			m_pPlayer->Rotate(0.0f, GameInput::GetcDeltaX(), 0.0f);
+			m_Camera->GetCamera()->Rotate(GameInput::GetmoveDeltaY(), GameInput::GetmoveDeltaX(), 0.0f);
+			m_pPlayer->Rotate(0.0f, GameInput::GetmoveDeltaX(), 0.0f);
 		} 
 	}
 	

@@ -571,7 +571,8 @@ void CGameFramework::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM
 		break;
 	case WM_RBUTTONUP:
 		break;
-	case WM_MOUSEMOVE:
+	case WM_MOUSEMOVE: 
+		GameInput::MouseMove(lParam);
 		break;
 
 	default:
