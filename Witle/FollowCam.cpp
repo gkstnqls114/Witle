@@ -91,9 +91,7 @@ void FollowCam::LastUpdate(float fTimeElapsed)
 	RegenerateViewMatrix();
 }
 
-#define MAX_PITCH 360
-#define MAX_YAW   360
-#define MAX_ROLL  360
+#define MAX_PITCH 10.f 
 void FollowCam::Rotate(float x, float y, float z)
 { 
 	XMFLOAT3 right = m_pTarget->GetTransform().GetRight();
@@ -105,15 +103,23 @@ void FollowCam::Rotate(float x, float y, float z)
 	m_fRoll += z;
 	 
 	if (x != 0.0f)
-	{
-		XMMATRIX xmmtxRotate = XMMatrixRotationAxis(XMLoadFloat3(&right), XMConvertToRadians(x));
-		m_pOwner->GetTransform().SetLook(Vector3::TransformNormal(m_pTarget->GetTransform().GetLook(), xmmtxRotate));
-		m_pOwner->GetTransform().SetUp(Vector3::TransformNormal(m_pTarget->GetTransform().GetUp(), xmmtxRotate));
+	{ 
+		if (fabs(m_fPitch) > MAX_PITCH)
+		{
+			if (m_fPitch < 0)m_fPitch = -MAX_PITCH;
+			if (m_fPitch > 0) m_fPitch = MAX_PITCH;
+		}
+		else
+		{ 
+			XMMATRIX xmmtxRotate = XMMatrixRotationAxis(XMLoadFloat3(&right), XMConvertToRadians(x));
+			m_pOwner->GetTransform().SetLook(Vector3::TransformNormal(m_pTarget->GetTransform().GetLook(), xmmtxRotate));
+			m_pOwner->GetTransform().SetUp(Vector3::TransformNormal(m_pTarget->GetTransform().GetUp(), xmmtxRotate));
 
-		m_Offset = Vector3::TransformCoord(m_Offset, xmmtxRotate);
+			m_Offset = Vector3::TransformCoord(m_Offset, xmmtxRotate);
+		}
 	}
 	if (y != 0.0f)
-	{
+	{ 
 		XMMATRIX xmmtxRotate = XMMatrixRotationAxis(XMLoadFloat3(&up), XMConvertToRadians(y));
 		m_pOwner->GetTransform().SetLook(Vector3::TransformNormal(m_pTarget->GetTransform().GetLook(), xmmtxRotate));
 		m_pOwner->GetTransform().SetRight(Vector3::TransformNormal(m_pTarget->GetTransform().GetRight(), xmmtxRotate));

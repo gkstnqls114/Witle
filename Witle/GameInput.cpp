@@ -22,8 +22,8 @@ float GameInput::m_downDeltaY = 0.0f; // 마우스를 누른 상태로 y축으로 움직인 마�
 POINT GameInput::m_downOldCursor; // 이전 프레임에서의 마우스 위치
 POINT GameInput::m_downClickCursor{ -1, -1 }; // 한번 클릭했을 때 위치
 
-const float GameInput::m_DeltaValueX = 3.0f; // 마우스 이동량 값 
-const float GameInput::m_DeltaValueY = 3.0f; // 마우스 이동량 값 
+const float GameInput::m_DeltaValueX = 10.0f; // 마우스 이동량 값 
+const float GameInput::m_DeltaValueY = 10.0f; // 마우스 이동량 값 
 short GameInput::m_WheelDelta; // 마우스 휠이 움직인 정도
 
 GameInput::GameInput()

@@ -147,7 +147,10 @@ void Player::Update(float fElapsedTime)
 	m_pPlayerMovement->Update(fElapsedTime);
 	
 	// 이동량만큼 움직인다.
-	Move(Vector3::ScalarProduct(m_pPlayerMovement->m_xmf3Velocity, fElapsedTime, false));
+	if (m_pBroom->GetisUsing())
+	{
+		Move(Vector3::ScalarProduct(m_pPlayerMovement->m_xmf3Velocity, fElapsedTime, false));
+	}
 	 
 	// 플레이어 콜백
 	// OnPlayerUpdateCallback(fElapsedTime);
@@ -220,33 +223,12 @@ void Player::Rotate(float x, float y, float z)
 void Player::ProcessInput(float fTimeElapsed)
 {
 	DWORD dwDirection = 0;
-
-	// 키보드 처리
-	if (GameInput::IsKeydownUP())
-	{
-		dwDirection |= DIR_FORWARD;
-	}
-	if (GameInput::IsKeydownDOWN())
-	{
-		dwDirection |= DIR_BACKWARD;
-	}
-	if (GameInput::IsKeydownLEFT())
-	{
-		dwDirection |= DIR_LEFT;
-	}
-	if (GameInput::IsKeydownRIGHT())
-	{
-		dwDirection |= DIR_RIGHT;
-	}
-	if (GameInput::IsKeydownW())
-	{
-		dwDirection |= DIR_UP;
-	}
-	if (GameInput::IsKeydownS())
-	{
-		dwDirection |= DIR_DOWN;
-	}
-
+	 
+	if (GameInput::IsKeydownW()) dwDirection |= DIR_FORWARD;
+	if (GameInput::IsKeydownS()) dwDirection |= DIR_BACKWARD;
+	if (GameInput::IsKeydownA()) dwDirection |= DIR_LEFT;
+	if (GameInput::IsKeydownD()) dwDirection |= DIR_RIGHT;
+	 
 	// 만약 키보드 상하좌우 움직인다면...
 	if (dwDirection != 0)
 	{ 
@@ -262,11 +244,16 @@ void Player::ProcessInput(float fTimeElapsed)
 		if (dwDirection & DIR_BACKWARD) xmf3Shift = Vector3::Add(xmf3Shift, axis.look, -fDistance);
 		if (dwDirection & DIR_RIGHT) xmf3Shift = Vector3::Add(xmf3Shift, axis.right, fDistance);
 		if (dwDirection & DIR_LEFT) xmf3Shift = Vector3::Add(xmf3Shift, axis.right, -fDistance);
-		if (dwDirection & DIR_UP) xmf3Shift = Vector3::Add(xmf3Shift, axis.up, fDistance);
-		if (dwDirection & DIR_DOWN) xmf3Shift = Vector3::Add(xmf3Shift, axis.up, -fDistance);
-
-		//플레이어의 이동량 벡터를 xmf3Shift 벡터만큼 더한다.  
-		MoveVelocity(xmf3Shift);
+		
+		//플레이어의 이동량 벡터를 xmf3Shift 벡터만큼 더한다. 
+		if (m_pBroom->GetisUsing())
+		{
+			MoveVelocity(xmf3Shift);
+		}
+		else
+		{
+			Move(xmf3Shift);
+		}
 	}
 	else
 	{
