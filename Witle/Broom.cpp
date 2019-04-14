@@ -20,7 +20,7 @@ Broom::~Broom()
 {
 }
 
-void Broom::Use()
+void Broom::DoUse()
 {
 	m_isUsing = true;
 	m_pPlayerMovement->BroomMode();

@@ -1,11 +1,7 @@
 #pragma once
 #include "Scene.h"
-
-class MyReflexTree;
-class SunFlower;
-class Pillar;
-class Rock;
-
+ 
+class Sniping;
 class SkyBox;
 class Player; 
 class Shader;
@@ -87,13 +83,12 @@ public:
 	
 protected:
 	// fbx test 
+	Sniping*				m_Sniping{ nullptr };
 	Player*                 m_pPlayer{ nullptr };
 
 	Player*                 m_pOtherPlayer{ nullptr };
 	  
-	Terrain*                m_Terrain{ nullptr };
-	Camera*					m_pTESTBasicComponent{ nullptr };
-	Camera*					m_pTESTSnipeComponent{ nullptr };
+	Terrain*                m_Terrain{ nullptr }; 
 	CameraObject*           m_Camera{ nullptr };
 	
 	SkyBox*					m_SkyBox{ nullptr };

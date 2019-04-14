@@ -44,11 +44,7 @@ void CameraObject::SetViewportsAndScissorRects(ID3D12GraphicsCommandList *pd3dCo
 }
 
 void CameraObject::ChangeCamera(Camera * pNewCamera)
-{
-	//if (m_pCameraComponent)
-	//{
-	//	delete m_pCameraComponent;
-	//} 
+{ 
 	float deltaPitch = m_pCameraComponent->GetPitch() - pNewCamera->GetPitch();
 	float deltaYaw = m_pCameraComponent->GetYaw() - pNewCamera->GetYaw();
 	float deltaRoll = m_pCameraComponent->GetRoll() - pNewCamera->GetRoll();

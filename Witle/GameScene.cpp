@@ -8,6 +8,7 @@
 #include "GameScreen.h"
  
 #include "SkyBox.h"
+#include "Sniping.h"
 #include "MyBOBox.h"
 #include "Collision.h"
 #include "Object.h" //교수님코드 
@@ -129,12 +130,19 @@ bool GameScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM w
 			m_pPlayer->UseSkill_Broom();
 			break;
 
-		case '2': // 스킬 빗자루 ()
-			m_Camera->ChangeCamera(m_pTESTSnipeComponent);
+		case '2': 
+			if (m_Sniping->GetisUsing())
+			{
+				m_Sniping->DoNotUse();
+			}
+			else
+			{
+				m_Sniping->DoUse();
+			}
 			break;
 
 		case '3': // 스킬 빗자루 ()
-			m_Camera->ChangeCamera(m_pTESTBasicComponent);
+			// m_Camera->ChangeCamera(m_pTESTBasicComponent);
 
 			break;
 		case 'W':
@@ -188,29 +196,10 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 
 	// 카메라
 	m_Camera = new CameraObject("Camera"); 
-	m_pTESTBasicComponent = new FollowCam(m_Camera, m_pPlayer);
-	m_pTESTSnipeComponent = new FollowCam(m_Camera, m_pPlayer);
-	GameScreen::SetCamera(m_pTESTBasicComponent);
-	
-	// TEST
-	m_pTESTBasicComponent->CreateShaderVariables(pd3dDevice, pd3dCommandList);
-	m_pTESTBasicComponent->SetOffset(XMFLOAT3(0, 0, 300.f));
-	static_cast<FollowCam *>(m_pTESTBasicComponent)->SetdistanceAt(XMFLOAT3(0.f, 150.f, 0));
-	m_pTESTBasicComponent->SetViewport(0, 0, GameScreen::GetWidth(), GameScreen::GetHeight(), 0.0f, 1.0f);
-	m_pTESTBasicComponent->SetScissorRect(0, 0, GameScreen::GetWidth(), GameScreen::GetHeight());
-	m_pTESTBasicComponent->GenerateProjectionMatrix(0.01f, CAMERA_FAR, float(GameScreen::GetWidth()) / float(GameScreen::GetHeight()), 60.0f);
-
-	m_pTESTSnipeComponent->CreateShaderVariables(pd3dDevice, pd3dCommandList);
-	m_pTESTSnipeComponent->SetOffset(XMFLOAT3(0, 0, 50.f));
-	static_cast<FollowCam *>(m_pTESTSnipeComponent)->SetdistanceAt(XMFLOAT3(0.f, 150.f, 0));
-	m_pTESTSnipeComponent->SetViewport(0, 0, GameScreen::GetWidth(), GameScreen::GetHeight(), 0.0f, 1.0f);
-	m_pTESTSnipeComponent->SetScissorRect(0, 0, GameScreen::GetWidth(), GameScreen::GetHeight());
-	m_pTESTSnipeComponent->GenerateProjectionMatrix(0.01f, 3000.f, float(GameScreen::GetWidth()) / float(GameScreen::GetHeight()), 60.0f);
-
-	m_Camera->ChangeCamera(m_pTESTBasicComponent);
-
-	
-	
+	m_Sniping = new Sniping(m_Camera, m_pPlayer, pd3dDevice, pd3dCommandList);
+	m_pPlayer->SetSniping(m_Sniping);
+	m_Camera->ChangeCamera(m_Sniping->GetBaseCamera());
+	 
 #ifdef CHECK_SUBVIEWS
 	m_lookAboveCamera = new CameraObject("LookAboveCamera");
 

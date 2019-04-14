@@ -3,6 +3,7 @@
 
 class MyRectangle;
 
+// HP 관련 정보
 class PlayerStatus
 	: ComponentBase
 {

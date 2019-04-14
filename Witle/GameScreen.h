@@ -16,8 +16,7 @@ private:
 
 	static UINT m_AnotherWidth;
 	static UINT m_AnotherHeight;
-
-	static Camera* m_pMainCamera;
+	 
 	static IDXGISwapChain* m_pSwapChain;
 
 public:
@@ -33,7 +32,6 @@ public:
 	static void SetScreen(UINT width, UINT height) {
 		m_ClientWidth = width;  m_ClientHeight = height;
 	};
-
-	static void SetCamera(Camera* pCamera) { m_pMainCamera = pCamera; }
+	 
 	static void SetSwapChain(IDXGISwapChain* pSwapChain) { m_pSwapChain = pSwapChain; }
 };

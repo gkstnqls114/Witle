@@ -119,6 +119,7 @@ Player::~Player()
 	m_pPlayerUpdatedContext = nullptr;
 	m_pCameraUpdatedContext = nullptr;
 }
+ 
 
 void Player::ReleaseMembers()
 {
@@ -179,12 +180,14 @@ void Player::Animate(float fElapsedTime)
 
 void Player::Render(ID3D12GraphicsCommandList * pd3dCommandList)
 {
+	if (!m_isRendering) return;
+
 #ifdef _SHOW_BOUNDINGBOX
 	m_pMyBOBox->Render(pd3dCommandList, m_Transform.GetWorldMatrix());
 #endif // _SHOW_BOUNDINGBOX
 
 	m_pLoadObject->Render(pd3dCommandList);
-	m_pPlayerStatus->Render(pd3dCommandList);
+	// m_pPlayerStatus->Render(pd3dCommandList);
 }
  
 void Player::SetTrackAnimationSet(ULONG dwDirection)
@@ -282,7 +285,7 @@ void Player::ProcessInput(float fTimeElapsed)
 
 void Player::UseSkill_Broom()
 {
-	m_pBroom->Use();
+	m_pBroom->DoUse();
 }
 
 XMFLOAT3 Player::GetVelocity() const
