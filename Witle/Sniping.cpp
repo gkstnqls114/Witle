@@ -15,8 +15,8 @@ Sniping::Sniping(CameraObject* pCamera, Player* pPlayer, ID3D12Device * pd3dDevi
 
 	// 기본 카메라 컴포넌트 
 	m_pBaseCameraComponent->CreateShaderVariables(pd3dDevice, pd3dCommandList);
-	m_pBaseCameraComponent->SetOffset(XMFLOAT3(0, 0, 300.f));
-	static_cast<FollowCam *>(m_pBaseCameraComponent)->SetdistanceAt(XMFLOAT3(0.f, 150.f, 0));
+	m_pBaseCameraComponent->SetOffset(XMFLOAT3(0.f, 0.f, 450.f));
+	static_cast<FollowCam *>(m_pBaseCameraComponent)->SetdistanceAt(XMFLOAT3(0.f, 200.f, 0));
 	m_pBaseCameraComponent->SetViewport(0, 0, GameScreen::GetWidth(), GameScreen::GetHeight(), 0.0f, 1.0f);
 	m_pBaseCameraComponent->SetScissorRect(0, 0, GameScreen::GetWidth(), GameScreen::GetHeight());
 	m_pBaseCameraComponent->GenerateProjectionMatrix(0.01f, CAMERA_FAR, float(GameScreen::GetWidth()) / float(GameScreen::GetHeight()), 60.0f);

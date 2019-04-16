@@ -33,6 +33,7 @@ private:
 public:
 	CylinderMesh(GameObject* pOwner, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, float bottomRadius, float topRadius, float height, int sliceCount, int stackCount);
 	virtual ~CylinderMesh();
+	void CreateTexture(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandListconst, const wchar_t *pszFileName);
 
 	virtual void Update(float ElapsedTime) override {};
 	void Render(ID3D12GraphicsCommandList *commandList);

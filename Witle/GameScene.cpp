@@ -134,11 +134,11 @@ bool GameScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM w
 		break;
 	case WM_KEYDOWN:
 		switch (wParam) {
-		case '1': // 스킬 빗자루 ()
+		case '1': // 스킬 빗자루
 			m_pPlayer->UseSkill_Broom();
 			break;
 
-		case '2': 
+		case '2': // 스킬 스나이핑
 			if (m_Sniping->GetisUsing())
 			{
 				m_Sniping->DoNotUse();
@@ -149,9 +149,9 @@ bool GameScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM w
 			}
 			break;
 
-		case '3': // 스킬 빗자루 ()
-			// m_Camera->ChangeCamera(m_pTESTBasicComponent);
-
+		case '3': // 스킬 광역 공격
+			m_WideareaMagic->DoUse(); 
+			m_WideareaMagic->SetPosition(m_pPlayer->GetTransform().GetPosition());
 			break;
 		case 'W':
 		case 'w':  
@@ -184,8 +184,8 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	// 모든 모델 오브젝트 빌드
 	ModelStorage::GetInstance()->CreateModels(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 
-	m_AimPoint = new Widget("AimPoint", pd3dDevice, pd3dCommandList, POINT{ int(GameScreen::GetWidth()) / 2, int(GameScreen::GetHeight()) / 2 }, 257.f, 257.f, L"Image/AimPoint.dds");
-	m_WideareaMagic = new WideareaMagic(pd3dDevice, pd3dCommandList) ;
+	m_AimPoint = new Widget("AimPoint", pd3dDevice, pd3dCommandList, POINT{ int(GameScreen::GetWidth()) / 2, int(GameScreen::GetHeight()) / 2 }, 100.f, 100.f, L"Image/AimPoint.dds");
+	m_WideareaMagic = new WideareaMagic(pd3dDevice, pd3dCommandList);
 
 	// 스카이 박스 생성
 	m_SkyBox = new SkyBox(pd3dDevice, pd3dCommandList, 3000.F, 3000.F, 3000.F);
@@ -350,6 +350,7 @@ void GameScene::Update(float fElapsedTime)
 	m_pOtherPlayer->Update(fElapsedTime);
 	 
 	m_SkyBox->Update(fElapsedTime);
+	m_WideareaMagic->Update(fElapsedTime);
 
 	// light update
 	::memcpy(m_pcbMappedLights, LightManager::m_pLights, sizeof(LIGHTS));
@@ -440,9 +441,7 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	m_pPlayer->Render(pd3dCommandList); 
 	m_pOtherPlayer->Render(pd3dCommandList);
 
-	//// Aim point Render
-
-
+	//// Aim point Render 
 }
 
 void GameScene::ReleaseUploadBuffers()

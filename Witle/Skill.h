@@ -22,7 +22,7 @@ public:
 	virtual ~Skill();
 
 	bool GetisUsing() const { return m_isUsing; }
-	void Update(float fTimeElapsed);
+	virtual void Update(float fTimeElapsed);
 	virtual void DoNotUse() override = 0;
 	virtual void DoUse() override = 0;
 };
