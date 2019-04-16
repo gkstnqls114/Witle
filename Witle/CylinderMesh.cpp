@@ -160,7 +160,9 @@ CylinderMesh::CylinderMesh(GameObject* pOwner, ID3D12Device * pd3dDevice, ID3D12
 	m_pVertexBufferViews[0].BufferLocation = m_pPositionBuffer->GetGPUVirtualAddress();
 	m_pVertexBufferViews[0].StrideInBytes = m_nStride;
 	m_pVertexBufferViews[0].SizeInBytes = m_nStride * m_vertexCount;
-	 
+	
+	delete[] pVertices;
+	delete[] pControlPointVertices;
 }
 
 CylinderMesh::~CylinderMesh()

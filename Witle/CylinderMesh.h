@@ -11,7 +11,7 @@ private:
 		XMFLOAT3						position;
 		XMFLOAT4						diffuse;
 		XMFLOAT3						normal;
-		// XMFLOAT2						uv;
+		XMFLOAT2						uv;
 
 	public:
 		CylinderVertex() { position = XMFLOAT3(0.0f, 0.0f, 0.0f); diffuse = XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f); }

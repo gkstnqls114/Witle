@@ -11,6 +11,7 @@ private:
 		XMFLOAT3						m_xmf3Position;
 		XMFLOAT4						m_xmf4Diffuse;
 		XMFLOAT3						m_xmf4Normal;
+		XMFLOAT2						uv;
 
 	public:
 		CubeVertex() { m_xmf3Position = XMFLOAT3(0.0f, 0.0f, 0.0f); m_xmf4Diffuse = XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f); }
