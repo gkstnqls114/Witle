@@ -29,5 +29,6 @@ void WideareaMagic::DoUse()
 
 void WideareaMagic::Render(ID3D12GraphicsCommandList* commandList)
 {
+	if (!m_isUsing) return; 
 	m_CylinderMesh->Render(commandList);
 }

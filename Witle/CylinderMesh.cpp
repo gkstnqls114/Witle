@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "d3dUtil.h"
+#include "MyDescriptorHeap.h"
+#include "Texture.h"
 #include "ShaderManager.h"
 #include "CylinderMesh.h"
 
@@ -177,6 +179,9 @@ void CylinderMesh::Render(ID3D12GraphicsCommandList * commandList)
 { 
 	ShaderManager::GetInstance()->SetPSO(commandList, "Cube");
 	commandList->IASetPrimitiveTopology( GetPrimitiveTopology());
+
+	if (m_Heap) m_Heap->UpdateShaderVariable(commandList);
+	if (m_Texture) m_Texture->UpdateShaderVariables(commandList);
 
 	D3D12_VERTEX_BUFFER_VIEW pVertexBufferViews[] = { GetVertexBufferView(0) };
 	commandList->IASetVertexBuffers(0, _countof(pVertexBufferViews), pVertexBufferViews);

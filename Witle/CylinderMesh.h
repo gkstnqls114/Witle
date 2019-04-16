@@ -1,6 +1,8 @@
 #pragma once
 #include "Mesh.h"
 
+class Texture;
+class MyDescriptorHeap;
 class CylinderMesh :
 	public Mesh
 {
@@ -20,6 +22,8 @@ private:
 		~CylinderVertex() { }
 	};
 
+	MyDescriptorHeap * m_Heap{ nullptr };
+	Texture*           m_Texture{ nullptr };
 private:
 	void CalculateTriangleListVertexNormals(XMFLOAT3 *pxmf3Normals, XMFLOAT3 *pxmf3Positions, int nVertices);
 	void CalculateTriangleListVertexNormals(XMFLOAT3 *pxmf3Normals, XMFLOAT3 *pxmf3Positions, UINT nVertices, UINT *pnIndices, UINT nIndices);

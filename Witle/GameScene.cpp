@@ -6,13 +6,17 @@
 #include "Sniping.h" 
 //// Skill header //////////////////////////
 
+//// GameObject header //////////////////////////
+#include "SkyBox.h"
+#include "Widget.h"
+//// GameObject header //////////////////////////
+
 #include "ModelStorage.h"
 #include "LightManager.h"
 #include "MeshRenderer.h"
 #include "ShaderManager.h"
 #include "GameScreen.h"
  
-#include "SkyBox.h"
 #include "MyBOBox.h"
 #include "Collision.h"
 #include "Object.h" //교수님코드 
@@ -180,6 +184,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	// 모든 모델 오브젝트 빌드
 	ModelStorage::GetInstance()->CreateModels(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 
+	m_AimPoint = new Widget("AimPoint", pd3dDevice, pd3dCommandList, POINT{ int(GameScreen::GetWidth()) / 2, int(GameScreen::GetHeight()) / 2 }, 257.f, 257.f, L"Image/AimPoint.dds");
 	m_WideareaMagic = new WideareaMagic(pd3dDevice, pd3dCommandList) ;
 
 	// 스카이 박스 생성
@@ -228,6 +233,9 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 
 void GameScene::ReleaseObjects()
 {
+	if (m_AimPoint)
+	{
+	}
 	if (m_pOtherPlayer)
 	{
 		delete m_pOtherPlayer;
@@ -399,7 +407,8 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 
 	// 스카이박스 렌더
 	m_SkyBox->Render(pd3dCommandList);
-
+	
+	m_AimPoint->Render(pd3dCommandList);
 
 	//  조명
 	D3D12_GPU_VIRTUAL_ADDRESS d3dcbLightsGpuVirtualAddress = m_pd3dcbLights->GetGPUVirtualAddress();
@@ -430,6 +439,10 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	pd3dCommandList->SetDescriptorHeaps(1, &m_pd3dCbvSrvDescriptorHeap); 
 	m_pPlayer->Render(pd3dCommandList); 
 	m_pOtherPlayer->Render(pd3dCommandList);
+
+	//// Aim point Render
+
+
 }
 
 void GameScene::ReleaseUploadBuffers()

@@ -250,6 +250,9 @@
     <Filter Include="02.Component\Mesh\CylinderMesh">
       <UniqueIdentifier>{f7fc59e2-8d4d-4f17-8d4e-c1eb04a2d1e9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.GameObject\Widget">
+      <UniqueIdentifier>{e0e3c899-458d-4083-b5d8-67bfebe3527e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -531,6 +534,9 @@
     <ClInclude Include="CylinderMesh.h">
       <Filter>02.Component\Mesh\CylinderMesh</Filter>
     </ClInclude>
+    <ClInclude Include="Widget.h">
+      <Filter>03.GameObject\Widget</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -793,6 +799,9 @@
     </ClCompile>
     <ClCompile Include="CylinderMesh.cpp">
       <Filter>02.Component\Mesh\CylinderMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Widget.cpp">
+      <Filter>03.GameObject\Widget</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

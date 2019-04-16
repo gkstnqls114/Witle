@@ -6,6 +6,7 @@ class Sniping;
 class WideareaMagic;
 //// Skill ////////////////
 
+class Widget;
 class SkyBox;
 class Player; 
 class Shader;
@@ -87,7 +88,8 @@ public:
 	void TESTSetRootDescriptor(ID3D12GraphicsCommandList *pd3dCommandList);
 	
 protected:
-	// fbx test 
+	Widget*					m_AimPoint{ nullptr };
+
 	Sniping*				m_Sniping{ nullptr };
 	WideareaMagic*          m_WideareaMagic{ nullptr };
 	Player*                 m_pPlayer{ nullptr };

@@ -243,6 +243,7 @@
     <ClInclude Include="vertices.h" />
     <ClInclude Include="WICTextureLoader12.h" />
     <ClInclude Include="WideareaMagic.h" />
+    <ClInclude Include="Widget.h" />
     <ClInclude Include="Witle.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TerrainShader.h" />
@@ -336,6 +337,7 @@
     <ClCompile Include="VerticalBlurShader.cpp" />
     <ClCompile Include="WICTextureLoader12.cpp" />
     <ClCompile Include="WideareaMagic.cpp" />
+    <ClCompile Include="Widget.cpp" />
     <ClCompile Include="Witle.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TerrainShader.cpp" />

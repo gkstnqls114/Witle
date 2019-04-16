@@ -7,7 +7,7 @@ class GameObject;
 class WideareaMagic :
 	public Skill
 {
-	GameObject* m_GameObject;
+	GameObject* m_GameObject{ nullptr };
 	CylinderMesh* m_CylinderMesh{ nullptr };
 
 public:
