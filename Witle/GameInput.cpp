@@ -116,6 +116,7 @@ void GameInput::Reset()
 	m_downClickCursor.y = -1;
 	m_moveDeltaX = 0.f;
 	m_moveDeltaY = 0.f; 
+	if (m_moveOldCursor.x == -1 && m_moveOldCursor.y == -1) return; // 초기값이라면 넘어감.
 	::SetCursorPos(m_moveOldCursor.x, m_moveOldCursor.y);
 	 m_moveCursor = m_moveOldCursor;
 }

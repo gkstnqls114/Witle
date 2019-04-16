@@ -10,7 +10,8 @@ enum MESH_TYPE_ID
 {
 	CUBE_MESH,
 	TERRAIN_MESH,
-	QUADTREE_TERRAIN_MESH
+	QUADTREE_TERRAIN_MESH,
+	CYLINDER_MESH
 };
 
 enum SHAPE_TYPE_ID
@@ -26,6 +27,7 @@ enum LIGHT_TYPE
 };
 //// Enum Type ////////////////////////////////////
 
+#define PI				    3.141592
 
 #define EPSILON				1.0e-10f
 

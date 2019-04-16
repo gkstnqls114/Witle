@@ -272,7 +272,7 @@ void QuadtreeTerrain::LastUpdate(float fElapsedTime)
 
 }
 
-int const * QuadtreeTerrain::GetIDs(const XMFLOAT3 & position) const
+const int * QuadtreeTerrain::GetIDs(const XMFLOAT3 & position) const
 {
 	int* pIDs = new int[QUAD];
 	for (int x = 0; x < QUAD; ++x)

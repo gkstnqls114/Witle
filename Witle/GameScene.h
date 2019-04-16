@@ -20,6 +20,8 @@ struct LIGHTS;
 struct MATERIAL;
 struct MATERIALS;
 
+class CylinderMesh;
+
 class GameScene
 	: public Scene
 {
@@ -93,6 +95,7 @@ protected:
 	
 	SkyBox*					m_SkyBox{ nullptr };
 
+	CylinderMesh*            m_TEST;
 #ifdef CHECK_SUBVIEWS
 	CameraObject*			m_lookAboveCamera{ nullptr };
 #endif

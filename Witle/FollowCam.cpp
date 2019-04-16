@@ -106,7 +106,7 @@ void FollowCam::Rotate(float x, float y, float z)
 	{ 
 		if (fabs(m_fPitch) > MAX_PITCH)
 		{
-			if (m_fPitch < 0)m_fPitch = -MAX_PITCH;
+			if(m_fPitch < 0)m_fPitch = -MAX_PITCH;
 			if (m_fPitch > 0) m_fPitch = MAX_PITCH;
 		}
 		else

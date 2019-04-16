@@ -244,6 +244,12 @@
     <Filter Include="05.Shader\SkyBoxShader">
       <UniqueIdentifier>{e0d12ac8-8b08-42e1-acbe-f56e4be352c5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="13.Storage\SoundManager">
+      <UniqueIdentifier>{6e5565ad-e180-4212-b1e8-f920bfb6effd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\Mesh\CylinderMesh">
+      <UniqueIdentifier>{f7fc59e2-8d4d-4f17-8d4e-c1eb04a2d1e9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -519,6 +525,12 @@
     <ClInclude Include="SkyBoxShader.h">
       <Filter>05.Shader\SkyBoxShader</Filter>
     </ClInclude>
+    <ClInclude Include="SoundManager.h">
+      <Filter>13.Storage\SoundManager</Filter>
+    </ClInclude>
+    <ClInclude Include="CylinderMesh.h">
+      <Filter>02.Component\Mesh\CylinderMesh</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -775,6 +787,12 @@
     </ClCompile>
     <ClCompile Include="SkyBoxShader.cpp">
       <Filter>05.Shader\SkyBoxShader</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundManager.cpp">
+      <Filter>13.Storage\SoundManager</Filter>
+    </ClCompile>
+    <ClCompile Include="CylinderMesh.cpp">
+      <Filter>02.Component\Mesh\CylinderMesh</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

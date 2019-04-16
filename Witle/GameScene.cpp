@@ -25,8 +25,9 @@
 #include "Player.h"
 #include "CameraObject.h"
 #include "QuadTreeTerrain.h"
-#include "BasicCam.h"
  
+#include "CylinderMesh.h"
+
 #include "GameScene.h"
 
 ID3D12DescriptorHeap*		GameScene::m_pd3dCbvSrvDescriptorHeap;
@@ -176,6 +177,8 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	// 모든 모델 오브젝트 빌드
 	ModelStorage::GetInstance()->CreateModels(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 
+	m_TEST = new CylinderMesh(m_pPlayer, pd3dDevice, pd3dCommandList, 1, 100, 100 ) ;
+
 	// 스카이 박스 생성
 	m_SkyBox = new SkyBox(pd3dDevice, pd3dCommandList, 3000.F, 3000.F, 3000.F);
 
@@ -279,8 +282,7 @@ bool GameScene::ProcessInput(HWND hWnd, float fElapsedTime)
 	RAY pickRay;
 	bool isPick = GameInput::GenerateRayforPicking(m_Camera->GetTransform().GetPosition(), pCamera->GetViewMatrix(), pCamera->GetProjectionMatrix(), pickRay);
 	if (isPick)
-	{ 
-		XMFLOAT3* pickColor;
+	{  
 		float dist;
 
 		auto world = m_pOtherPlayer->GetTransform().GetWorldMatrix();
@@ -407,11 +409,11 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	pd3dCommandList->SetDescriptorHeaps(1, &m_pd3dCbvSrvDescriptorHeap); 
 	pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_WORLD,  16, &Matrix4x4::Identity(), 0);
 	m_Terrain->UpdateShaderVariables(pd3dCommandList); 
-
+	 
 	// TerrainMesh Render
 	Mesh* terrainMesh = m_Terrain->GetComponent<Mesh>("TerrainMesh");
 	m_pQuadtreeTerrain->Render(pd3dCommandList);
-
+	m_TEST->Render(pd3dCommandList);
 #ifdef CHECK_SUBVIEWS
 	m_lookAboveCamera->SetViewportsAndScissorRects(pd3dCommandList); 
 	m_lookAboveCamera->GetCamera()->UpdateShaderVariables(pd3dCommandList, ROOTPARAMETER_CAMERA);

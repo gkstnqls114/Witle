@@ -112,7 +112,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>libfbxsdk-md.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libfbxsdk-md.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <AdditionalLibraryDirectories>C:\Program Files\Autodesk\FBX\FBX SDK\2019.0\lib\vs2015\x64\debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
@@ -163,6 +163,7 @@
     <ClInclude Include="Collision.h" />
     <ClInclude Include="ComponentBase.h" />
     <ClInclude Include="ComputeShader.h" />
+    <ClInclude Include="CylinderMesh.h" />
     <ClInclude Include="DirectionalLight.h" />
     <ClInclude Include="FamilyID.h" />
     <ClInclude Include="GameScreen.h" />
@@ -223,6 +224,7 @@
     <ClInclude Include="SkyBoxShader.h" />
     <ClInclude Include="SkyPlane.h" />
     <ClInclude Include="Sniping.h" />
+    <ClInclude Include="SoundManager.h" />
     <ClInclude Include="SpeedReduction.h" />
     <ClInclude Include="SpotLight.h" />
     <ClInclude Include="StandardShader.h" />
@@ -258,6 +260,7 @@
     <ClCompile Include="ComputeShader.cpp" />
     <ClCompile Include="CubeMesh.cpp" />
     <ClCompile Include="CubeShader.cpp" />
+    <ClCompile Include="CylinderMesh.cpp" />
     <ClCompile Include="d3dUtil.cpp" />
     <ClCompile Include="DDSTextureLoader12.cpp" />
     <ClCompile Include="DirectionalLight.cpp" />
@@ -311,6 +314,7 @@
     <ClCompile Include="SkyBox.cpp" />
     <ClCompile Include="SkyBoxShader.cpp" />
     <ClCompile Include="Sniping.cpp" />
+    <ClCompile Include="SoundManager.cpp" />
     <ClCompile Include="SpeedReduction.cpp" />
     <ClCompile Include="SpotLight.cpp" />
     <ClCompile Include="StandardShader.cpp" />
