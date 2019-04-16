@@ -27,7 +27,7 @@ private:
 	void CalculateVertexNormals(XMFLOAT3 *pxmf3Normals, XMFLOAT3 *pxmf3Positions, int nVertices, UINT *pnIndices, int nIndices);
 
 public:
-	CylinderMesh(GameObject* pOwner, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, int slides, float radius, float height);
+	CylinderMesh(GameObject* pOwner, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, float bottomRadius, float topRadius, float height, int sliceCount, int stackCount);
 	virtual ~CylinderMesh();
 
 	virtual void Update(float ElapsedTime) override {};

@@ -90,7 +90,7 @@ void CylinderMesh::CalculateVertexNormals(XMFLOAT3 * pxmf3Normals, XMFLOAT3 * px
 	}
 }
 
-CylinderMesh::CylinderMesh(GameObject* pOwner, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, int sides, float radius, float height)
+CylinderMesh::CylinderMesh(GameObject* pOwner, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, float bottomRadius, float topRadius, float height, int sliceCount, int stackCount)
 	:Mesh(pOwner)
 {
 	m_ComponenetID = MESH_TYPE_ID::CYLINDER_MESH;
@@ -98,25 +98,60 @@ CylinderMesh::CylinderMesh(GameObject* pOwner, ID3D12Device * pd3dDevice, ID3D12
 	m_nVertexBufferViews = 1;
 	m_pVertexBufferViews = new D3D12_VERTEX_BUFFER_VIEW[m_nVertexBufferViews];
 
-	m_vertexCount = 2 * sides + 2;
-	m_nStride = sizeof(CylinderVertex);
-	 
 	m_d3dPrimitiveTopology = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
-	  
-	CylinderVertex* pVertices;
-	pVertices = new CylinderVertex[m_vertexCount]; 
-	for (DWORD i = 0; i < sides; i++)
-	{
-		FLOAT theta = (2 * PI * i) / (sides - 1);
 
-		pVertices[2 * i + 0].position = XMFLOAT3(radius*sinf(theta), -height, radius*cosf(theta));
-		pVertices[2 * i + 0].diffuse = XMFLOAT4(1, 1, 1, 1);
-		// pVertices[2 * i + 0].uv = {((FLOAT)i) / (sides - 1), 1.f};
-		 
-		pVertices[2 * i + 1].position = XMFLOAT3(radius*sinf(theta), height, radius*cosf(theta));
-		pVertices[2 * i + 1].diffuse = XMFLOAT4(1, 1, 1, 1);
-		// pVertices[2 * i + 1].uv = { ((FLOAT)i) / (sides - 1) , 0.f };
-	}
+	m_nStride = sizeof(CylinderVertex);
+
+	float stackHeight = height / stackCount;
+	float radiusStep = (topRadius - bottomRadius) / stackCount;
+	int ringCount = stackCount + 1;
+
+	CylinderVertex* pControlPointVertices;
+	pControlPointVertices = new CylinderVertex[ringCount * (sliceCount + 1) + 1];
+	int index = 0;
+	for (int i = 0; i < ringCount; i++) {
+		float y = -0.5f*height + i * stackHeight;
+		float r = bottomRadius + i * radiusStep;
+		float dTheta = 2.0f* float(PI) / float(sliceCount);
+		for (int j = 0; j <= sliceCount; j++) {
+
+			float c = cos(j*dTheta);
+			float s = sin(j*dTheta);
+
+			XMFLOAT3 v( r*c, y, r*s );
+			XMFLOAT2 uv ((float)j / sliceCount, 1.0f - (float)i / stackCount);
+			XMFLOAT3 t (-s, 0.0f, c);
+
+			int dr = bottomRadius - topRadius;
+			XMFLOAT3 bitangent (dr*c, -height, dr*s);
+
+			XMFLOAT3 n = Vector3::CrossProduct(t, bitangent);
+			n = Vector3::Normalize(n);
+
+			pControlPointVertices[index++] = CylinderVertex(v, n);
+			// ret.Vertices.Add(new Vertex(v, n, t, uv)); 
+		}
+	} 
+
+	m_vertexCount = stackCount * sliceCount * 6 + 1;
+	CylinderVertex* pVertices;
+	pVertices = new CylinderVertex[m_vertexCount];
+
+	int k = 0;
+	int ringVertexCount = sliceCount + 1;
+	for (int i = 0; i < stackCount; i++) {
+		for (int j = 0; j < sliceCount; j++) {
+			pVertices[k++] = pControlPointVertices[i * ringVertexCount + j];
+			pVertices[k++] = pControlPointVertices[(i + 1) * ringVertexCount + j];
+			pVertices[k++] = pControlPointVertices[(i + 1) * ringVertexCount + j + 1]; 
+
+			pVertices[k++] = pControlPointVertices[i * ringVertexCount + j];
+			pVertices[k++] = pControlPointVertices[(i + 1) * ringVertexCount + j + 1];
+			pVertices[k++] = pControlPointVertices[i * ringVertexCount + j + 1];
+		}
+	}  
+	// BuildCylinderTopCap(topRadius, height, sliceCount, ref ret);
+	// BuildCylinderBottomCap(bottomRadius, height, sliceCount, ref ret);
 	  
 	m_pPositionBuffer = d3dUtil::CreateBufferResource(pd3dDevice, pd3dCommandList, pVertices,
 		m_nStride * m_vertexCount, D3D12_HEAP_TYPE_DEFAULT,
@@ -125,7 +160,7 @@ CylinderMesh::CylinderMesh(GameObject* pOwner, ID3D12Device * pd3dDevice, ID3D12
 	m_pVertexBufferViews[0].BufferLocation = m_pPositionBuffer->GetGPUVirtualAddress();
 	m_pVertexBufferViews[0].StrideInBytes = m_nStride;
 	m_pVertexBufferViews[0].SizeInBytes = m_nStride * m_vertexCount;
-
+	 
 }
 
 CylinderMesh::~CylinderMesh()

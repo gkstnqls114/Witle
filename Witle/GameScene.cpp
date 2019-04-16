@@ -177,7 +177,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	// 모든 모델 오브젝트 빌드
 	ModelStorage::GetInstance()->CreateModels(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 
-	m_TEST = new CylinderMesh(m_pPlayer, pd3dDevice, pd3dCommandList, 1, 100, 100 ) ;
+	m_TEST = new CylinderMesh(m_pPlayer, pd3dDevice, pd3dCommandList, 100, 100, 100, 10, 10) ;
 
 	// 스카이 박스 생성
 	m_SkyBox = new SkyBox(pd3dDevice, pd3dCommandList, 3000.F, 3000.F, 3000.F);
