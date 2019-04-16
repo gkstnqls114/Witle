@@ -1,5 +1,10 @@
 #include "stdafx.h"
 #include "d3dUtil.h"
+ 
+//// Skill header //////////////////////////
+#include "WideareaMagic.h"
+#include "Sniping.h" 
+//// Skill header //////////////////////////
 
 #include "ModelStorage.h"
 #include "LightManager.h"
@@ -8,7 +13,6 @@
 #include "GameScreen.h"
  
 #include "SkyBox.h"
-#include "Sniping.h"
 #include "MyBOBox.h"
 #include "Collision.h"
 #include "Object.h" //교수님코드 
@@ -26,7 +30,6 @@
 #include "CameraObject.h"
 #include "QuadTreeTerrain.h"
  
-#include "CylinderMesh.h"
 
 #include "GameScene.h"
 
@@ -177,7 +180,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	// 모든 모델 오브젝트 빌드
 	ModelStorage::GetInstance()->CreateModels(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 
-	m_TEST = new CylinderMesh(m_pPlayer, pd3dDevice, pd3dCommandList, 100, 100, 100, 10, 10) ;
+	m_WideareaMagic = new WideareaMagic(pd3dDevice, pd3dCommandList) ;
 
 	// 스카이 박스 생성
 	m_SkyBox = new SkyBox(pd3dDevice, pd3dCommandList, 3000.F, 3000.F, 3000.F);
@@ -413,7 +416,7 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	// TerrainMesh Render
 	Mesh* terrainMesh = m_Terrain->GetComponent<Mesh>("TerrainMesh");
 	m_pQuadtreeTerrain->Render(pd3dCommandList);
-	m_TEST->Render(pd3dCommandList);
+	m_WideareaMagic->Render(pd3dCommandList);
 #ifdef CHECK_SUBVIEWS
 	m_lookAboveCamera->SetViewportsAndScissorRects(pd3dCommandList); 
 	m_lookAboveCamera->GetCamera()->UpdateShaderVariables(pd3dCommandList, ROOTPARAMETER_CAMERA);

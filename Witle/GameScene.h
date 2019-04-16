@@ -1,7 +1,11 @@
 #pragma once
 #include "Scene.h"
  
+//// Skill ////////////////
 class Sniping;
+class WideareaMagic;
+//// Skill ////////////////
+
 class SkyBox;
 class Player; 
 class Shader;
@@ -20,7 +24,6 @@ struct LIGHTS;
 struct MATERIAL;
 struct MATERIALS;
 
-class CylinderMesh;
 
 class GameScene
 	: public Scene
@@ -86,6 +89,7 @@ public:
 protected:
 	// fbx test 
 	Sniping*				m_Sniping{ nullptr };
+	WideareaMagic*          m_WideareaMagic{ nullptr };
 	Player*                 m_pPlayer{ nullptr };
 
 	Player*                 m_pOtherPlayer{ nullptr };
@@ -95,7 +99,6 @@ protected:
 	
 	SkyBox*					m_SkyBox{ nullptr };
 
-	CylinderMesh*            m_TEST;
 #ifdef CHECK_SUBVIEWS
 	CameraObject*			m_lookAboveCamera{ nullptr };
 #endif
