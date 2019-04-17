@@ -287,7 +287,7 @@ int StaticObjectStorage::GetObjectAllCount(int index)
 	return result;
 }
 
-XMFLOAT4X4* StaticObjectStorage::GetWorldMatrix(int index, const std::string & name)
+XMFLOAT4X4* StaticObjectStorage::GetpWorldMatrixs(int index, const std::string & name)
 { 
 	return m_StaticObjectStorage[name][index].TransformList.begin()._Ptr; 
 }

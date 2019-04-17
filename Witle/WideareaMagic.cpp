@@ -54,7 +54,7 @@ void WideareaMagic::Render(ID3D12GraphicsCommandList* commandList)
 	if (!m_isUsing) return; 
 
 #ifdef _SHOW_BOUNDINGBOX
-	m_MyBSphere->Render(commandList, m_GameObject->GetTransform().GetWorldMatrix());
+	m_MyBSphere->Render(commandList, m_GameObject->GetTransform().GetpWorldMatrixs());
 #endif
 	UpdateShaderVariable(commandList, m_GameObject->GetTransform().GetpWorldMatrix());	
 	m_CylinderMesh->Render(commandList);

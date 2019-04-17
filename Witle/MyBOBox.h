@@ -27,6 +27,7 @@ public:
 	// 공전이 아닌 자전을 수행한다.
 	void Rotate(float roll, float yaw, float pitch); 
 	void Move(const XMFLOAT3& xmf3Shift);
+	void SetPosition(const XMFLOAT3& pos);
 	
 	const BoundingOrientedBox& GetBOBox() const { return m_BOBox; }
 	// 해당 포지션을 통해 이동한 새로운 bobox를 갖고온다.

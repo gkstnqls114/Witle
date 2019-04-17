@@ -44,7 +44,7 @@ public:
 	int GetObjectCount(int index, const std::string& name);
 	int GetObjectAllCount(int index);
 
-	XMFLOAT4X4* GetWorldMatrix(int index, const std::string& name);
+	XMFLOAT4X4* GetpWorldMatrixs(int index, const std::string& name);
 
 	void CreateInfo(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, const QuadtreeTerrain const * pTerrain);
 	

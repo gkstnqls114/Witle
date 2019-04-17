@@ -304,7 +304,7 @@ bool GameScene::ProcessInput(HWND hWnd, float fElapsedTime)
 	{  
 		float dist;
 
-		auto world = m_pOtherPlayer->GetTransform().GetWorldMatrix();
+		auto world = m_pOtherPlayer->GetTransform().GetpWorldMatrixs();
 		BoundingOrientedBox box = m_pOtherPlayer->GetBOBox()->GetBOBox();
 		box.Transform(box, XMLoadFloat4x4(&world));
 		if (box.Intersects(XMLoadFloat3(&pickRay.origin), XMLoadFloat3(&pickRay.direction), dist))
@@ -333,7 +333,7 @@ void GameScene::Update(float fElapsedTime)
 		for (const auto& name : ModelStorage::GetInstance()->m_NameList)
 		{
 			MyBOBox* box = ModelStorage::GetInstance()->GetBOBox(name);
-			XMFLOAT4X4* pWorldMatrix = StaticObjectStorage::GetInstance(m_pQuadtreeTerrain)->GetWorldMatrix(m_PlayerTerrainIndex[terrainIndex], name);
+			XMFLOAT4X4* pWorldMatrix = StaticObjectStorage::GetInstance(m_pQuadtreeTerrain)->GetpWorldMatrixs(m_PlayerTerrainIndex[terrainIndex], name);
 			 
 			// 트레인 조각 내부 오브젝트 개수만큼 충돌 체크
 			for (int i = 0; i < StaticObjectStorage::GetInstance(m_pQuadtreeTerrain)->GetObjectCount(m_PlayerTerrainIndex[terrainIndex], name); ++i)
@@ -355,17 +355,17 @@ void GameScene::Update(float fElapsedTime)
 						bool isFront = Plane::IsFront(worldBox.GetPlane(x), AlreadyPositon);
 						if (isIntersect && isFront)
 						{ 
-							//m_pPlayer->SetVelocity(
-							//	Vector3::Sliding(m_Trees[i]->GetBOBox()->GetPlane(x), m_pPlayer->GetVelocity())
-							//);
-
-							isUseSliding = true;
+							m_pPlayer->SetVelocity(
+								Vector3::Sliding(worldBox.GetPlane(x), m_pPlayer->GetVelocity())
+							);
+							 
+							isUseSliding = true; 
 						}
 					}
 
 					if (!isUseSliding)
 					{ 
-						//m_pPlayer->MoveVelocity(Vector3::ScalarProduct(m_pPlayer->GetVelocity(), -1, false));
+						m_pPlayer->MoveVelocity(Vector3::ScalarProduct(m_pPlayer->GetVelocity(), -1, false));
 					}
 				}
 			} 

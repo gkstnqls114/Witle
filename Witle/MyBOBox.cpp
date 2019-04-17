@@ -59,6 +59,11 @@ void MyBOBox::Move(const XMFLOAT3 & xmf3Shift)
 	m_BOBox.Center = Vector3::Add(m_BOBox.Center, xmf3Shift);
 }
 
+void MyBOBox::SetPosition(const XMFLOAT3 & pos)
+{
+	m_BOBox.Center = pos;
+}
+
 MyBOBox MyBOBox::GetBOBox(const XMFLOAT3& position)
 {
 	MyBOBox newBoBox;

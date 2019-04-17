@@ -147,10 +147,10 @@ void Player::Update(float fElapsedTime)
 	m_pPlayerMovement->Update(fElapsedTime);
 	
 	// 이동량만큼 움직인다.
-	if (m_pBroom->GetisUsing())
-	{
+	//if (m_pBroom->GetisUsing())
+	//{
 		Move(Vector3::ScalarProduct(m_pPlayerMovement->m_xmf3Velocity, fElapsedTime, false));
-	}
+	//}
 	 
 	// 플레이어 콜백
 	// OnPlayerUpdateCallback(fElapsedTime);
@@ -176,7 +176,7 @@ void Player::Animate(float fElapsedTime)
 
 	//// 위치가 안맞아서 재조정 
 	m_pLoadObject->m_xmf4x4ToParent =  
-		Matrix4x4::Multiply(XMMatrixRotationX(29.8f), m_Transform.GetWorldMatrix());
+		Matrix4x4::Multiply(XMMatrixRotationX(29.8f), m_Transform.GetpWorldMatrixs());
 	 
 	m_pLoadObject->Animate(fElapsedTime);
 }
@@ -186,7 +186,7 @@ void Player::Render(ID3D12GraphicsCommandList * pd3dCommandList)
 	if (!m_isRendering) return;
 
 #ifdef _SHOW_BOUNDINGBOX
-	m_pMyBOBox->Render(pd3dCommandList, m_Transform.GetWorldMatrix());
+	m_pMyBOBox->Render(pd3dCommandList, m_Transform.GetpWorldMatrixs());
 #endif // _SHOW_BOUNDINGBOX
 
 	m_pLoadObject->Render(pd3dCommandList);
@@ -246,14 +246,14 @@ void Player::ProcessInput(float fTimeElapsed)
 		if (dwDirection & DIR_LEFT) xmf3Shift = Vector3::Add(xmf3Shift, axis.right, -fDistance);
 		
 		//플레이어의 이동량 벡터를 xmf3Shift 벡터만큼 더한다. 
-		if (m_pBroom->GetisUsing())
-		{
+		//if (m_pBroom->GetisUsing())
+		//{
 			MoveVelocity(xmf3Shift);
-		}
-		else
-		{
-			Move(xmf3Shift);
-		}
+		//}
+		//else
+		//{
+		//	Move(xmf3Shift);
+		//}
 	}
 	else
 	{
