@@ -3,12 +3,14 @@
 
 class CylinderMesh;
 class GameObject;
+class MyBSphere;
 
 class WideareaMagic :
 	public Skill
 {
 	const float rotateValue = 30.f;
 	GameObject* m_GameObject{ nullptr };
+	MyBSphere* m_MyBSphere{ nullptr };
 	CylinderMesh* m_CylinderMesh{ nullptr };
 
 public:

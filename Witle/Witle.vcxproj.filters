@@ -253,6 +253,9 @@
     <Filter Include="03.GameObject\Widget">
       <UniqueIdentifier>{e0e3c899-458d-4083-b5d8-67bfebe3527e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.Component\MyBSphere">
+      <UniqueIdentifier>{d3c2de43-9e69-4539-914d-08d0eeb57b16}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -537,6 +540,9 @@
     <ClInclude Include="Widget.h">
       <Filter>03.GameObject\Widget</Filter>
     </ClInclude>
+    <ClInclude Include="MyBSphere.h">
+      <Filter>02.Component\MyBSphere</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -802,6 +808,9 @@
     </ClCompile>
     <ClCompile Include="Widget.cpp">
       <Filter>03.GameObject\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="MyBSphere.cpp">
+      <Filter>02.Component\MyBSphere</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

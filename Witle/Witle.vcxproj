@@ -178,6 +178,7 @@
     <ClInclude Include="LobbyScene.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="MyBOBox.h" />
+    <ClInclude Include="MyBSphere.h" />
     <ClInclude Include="MyConstants.h" />
     <ClInclude Include="CubeMesh.h" />
     <ClInclude Include="CubeShader.h" />
@@ -289,6 +290,7 @@
     <ClCompile Include="MeshRenderer.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="MyBOBox.cpp" />
+    <ClCompile Include="MyBSphere.cpp" />
     <ClCompile Include="MyDescriptorHeap.cpp" />
     <ClCompile Include="MyFrustum.cpp" />
     <ClCompile Include="MyRigidbody.cpp" />
