@@ -516,3 +516,13 @@ void LineCube::Render(ID3D12GraphicsCommandList * pd3dCommandList, const XMFLOAT
 
 	pd3dCommandList->DrawInstanced(m_vertexCount, 1, m_nOffset, 0); 
 }
+
+void LineCube::RenderInstancing(ID3D12GraphicsCommandList * pd3dCommandList, int Instancingcount)
+{
+	pd3dCommandList->IASetPrimitiveTopology(m_d3dPrimitiveTopology);
+
+	D3D12_VERTEX_BUFFER_VIEW pVertexBufferViews[1] = { m_pVertexBufferViews[0] };
+	pd3dCommandList->IASetVertexBuffers(m_nSlot, 1, pVertexBufferViews);
+
+	pd3dCommandList->DrawInstanced(m_vertexCount, Instancingcount, m_nOffset, 0);
+}

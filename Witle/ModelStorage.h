@@ -27,4 +27,8 @@ public:
 	void CreateModels(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature);
 	LoadObject * GetRootObject(std::string name);
 	MyBOBox * GetBOBox(std::string name);
+#ifdef _SHOW_BOUNDINGBOX
+	void RenderBOBoxInstancing(ID3D12GraphicsCommandList * pd3dCommandList, const std::string& name, int InstancingCount);
+#endif // _SHOW_BOUNDINGBOX
+
 };

@@ -47,6 +47,10 @@ void MyBOBox::Render(ID3D12GraphicsCommandList * pd3dCommandList, const XMFLOAT4
 		m_pLineCube->Render(pd3dCommandList, xmf4x4World, true);
 	}
 }
+void MyBOBox::RenderInstancing(ID3D12GraphicsCommandList * pd3dCommandList, int InstancingCount)
+{
+	if (m_pLineCube) m_pLineCube->RenderInstancing(pd3dCommandList, InstancingCount);
+}
 #endif
 
 void MyBOBox::Rotate(float roll, float yaw, float pitch)

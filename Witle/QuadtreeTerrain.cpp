@@ -39,8 +39,11 @@ void QuadtreeTerrain::RenderTerrainObjects(ID3D12GraphicsCommandList * pd3dComma
 		if (m_pReafNodes[i]->isRendering)
 		{
 			StaticObjectStorage::GetInstance(this)->Render(pd3dCommandList, m_pReafNodes[i]->id);
+
 		}
 	}
+
+
 }
 
 void QuadtreeTerrain::RecursiveRender(const QUAD_TREE_NODE * node, ID3D12GraphicsCommandList * pd3dCommandList)
