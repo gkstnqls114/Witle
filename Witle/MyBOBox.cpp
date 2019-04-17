@@ -17,6 +17,16 @@ MyBOBox::MyBOBox(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dComm
 	m_BoBoxPlane[3] = Plane::Plane(Vector3::Add(center, XMFLOAT3(0.f, 0.f, -extents.z)), XMFLOAT3(0.f, 0.f, -1.f)); // +z¸é normal (0, 0, -1)
 }
 
+MyBOBox::MyBOBox(const MyBOBox & other)
+{
+	m_pLineCube = nullptr;
+	m_BOBox = other.m_BOBox;
+	for (int i = 0; i < 4; ++i)
+	{
+		m_BoBoxPlane[i] = other.m_BoBoxPlane[i];
+	}
+}
+
 MyBOBox::~MyBOBox()
 { 
 #ifdef _SHOW_BOUNDINGBOX
@@ -47,4 +57,12 @@ void MyBOBox::Rotate(float roll, float yaw, float pitch)
 void MyBOBox::Move(const XMFLOAT3 & xmf3Shift)
 {
 	m_BOBox.Center = Vector3::Add(m_BOBox.Center, xmf3Shift);
+}
+
+MyBOBox MyBOBox::GetBOBox(const XMFLOAT3& position)
+{
+	MyBOBox newBoBox;
+	newBoBox.m_BOBox.Center = Vector3::Add(m_BOBox.Center, position);
+	newBoBox.m_BOBox.Orientation = m_BOBox.Orientation;
+	return newBoBox;
 }

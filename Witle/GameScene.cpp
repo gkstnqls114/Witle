@@ -11,10 +11,14 @@
 #include "Widget.h"
 //// GameObject header //////////////////////////
 
+//// Manager header //////////////////////////
 #include "ModelStorage.h"
 #include "LightManager.h"
 #include "MeshRenderer.h"
 #include "ShaderManager.h"
+#include "StaticObjectStorage.h" 
+//// Manager header //////////////////////////
+
 #include "GameScreen.h"
  
 #include "MyBOBox.h"
@@ -126,7 +130,11 @@ bool GameScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM w
 		switch (wParam)
 		{
 		case VK_F1:
+			// 플레이어 1으로 변경
+			break;
 		case VK_F2:
+			// 플레이어 2으로 변경
+			break;
 		case VK_F3:
 			break;
 
@@ -278,14 +286,14 @@ bool GameScene::ProcessInput(HWND hWnd, float fElapsedTime)
 {
 	m_pPlayer->ProcessInput(fElapsedTime);
 
-	if ((GameInput::GetmoveDeltaX() != 0.0f) || (GameInput::GetmoveDeltaY() != 0.0f))
+	if ((GameInput::GetDeltaX() != 0.0f) || (GameInput::GetDeltaY() != 0.0f))
 	{
-		if (GameInput::GetmoveDeltaX() || GameInput::GetmoveDeltaY())
+		if (GameInput::GetDeltaX() || GameInput::GetDeltaY())
 		{ 
 			// 플레이어와 카메라 똑같이 rotate...
 			// 순서 의존적이므로 변경 금지
-			m_Camera->GetCamera()->Rotate(GameInput::GetmoveDeltaY(), GameInput::GetmoveDeltaX(), 0.0f);
-			m_pPlayer->Rotate(0.0f, GameInput::GetmoveDeltaX(), 0.0f);
+			m_Camera->GetCamera()->Rotate(GameInput::GetDeltaY(), GameInput::GetDeltaX(), 0.0f);
+			m_pPlayer->Rotate(0.0f, GameInput::GetDeltaX(), 0.0f);
 		} 
 	}
 	
@@ -312,43 +320,68 @@ bool GameScene::ProcessInput(HWND hWnd, float fElapsedTime)
 void GameScene::Update(float fElapsedTime)
 { 
 	// 충돌체크 ///////////////////////// 
-	//BoundingOrientedBox AlreadyBBox = m_pPlayer->CalculateAlreadyBoundingBox(fElapsedTime); 
-	//XMFLOAT3 AlreadyPositon{ AlreadyBBox.Center.x, AlreadyBBox.Center.y, AlreadyBBox.Center.z };
-	//for (int i = 0; i < m_TreeCount; ++i)
-	//{
-	//	bool isAlreadyCollide = Collision::isCollide(AlreadyBBox, m_Trees[i]->GetBOBox()->GetBOBox());
-	//	if (isAlreadyCollide)
-	//	{ 
-	//		bool isUseSliding = false;
-	//		for (int x = 0; x < 4; ++x)
-	//		{
-	//			bool isIntersect = Plane::Intersect(m_Trees[i]->GetBOBox()->GetPlane(x), AlreadyPositon, m_pPlayer->GetVelocity());
-	//			bool isFront = Plane::IsFront(m_Trees[i]->GetBOBox()->GetPlane(x), AlreadyPositon);
-	//			if (isIntersect && isFront)
-	//			{
-	//				std::cout << x << " ... intersect! ";
-	//				//슬라이딩벡터
+	BoundingOrientedBox AlreadyPlayerBBox = m_pPlayer->CalculateAlreadyBoundingBox(fElapsedTime); 
+	XMFLOAT3 AlreadyPositon{ AlreadyPlayerBBox.Center.x, AlreadyPlayerBBox.Center.y, AlreadyPlayerBBox.Center.z };
 
-	//				m_pPlayer->SetVelocity(
-	//					Vector3::Sliding(m_Trees[i]->GetBOBox()->GetPlane(x), m_pPlayer->GetVelocity())
-	//				);
+	// 현재 플레이어가 위치한 터레인 조각 위의 오브젝트들..
+	for (int terrainIndex = 0; terrainIndex < QUAD; ++terrainIndex)
+	{
+		if (m_PlayerTerrainIndex == nullptr) continue;
+		if (m_PlayerTerrainIndex[terrainIndex] == -1) continue;
 
-	//				isUseSliding = true; 
-	//			}
-	//		} 
-	//		 
-	//		if(!isUseSliding)
-	//		{
-	//			m_pPlayer->MoveVelocity(Vector3::ScalarProduct(m_pPlayer->GetVelocity(), -1, false));
-	//		}
-	//		std::cout << std::endl;
-	//	}
-	//}
+		// 각 모델의 bo box와 트랜스폼을 갖고온다.
+		for (const auto& name : ModelStorage::GetInstance()->m_NameList)
+		{
+			MyBOBox* box = ModelStorage::GetInstance()->GetBOBox(name);
+			XMFLOAT4X4* pWorldMatrix = StaticObjectStorage::GetInstance(m_pQuadtreeTerrain)->GetWorldMatrix(m_PlayerTerrainIndex[terrainIndex], name);
+			 
+			// 트레인 조각 내부 오브젝트 개수만큼 충돌 체크
+			for (int i = 0; i < StaticObjectStorage::GetInstance(m_pQuadtreeTerrain)->GetObjectCount(m_PlayerTerrainIndex[terrainIndex], name); ++i)
+			{
+				//월드 행렬 갖고온다.
+
+				// 모델 충돌박스를 월드행렬 곱한다. 일단 현재는 포지션으로 이동
+				MyBOBox worldBox = *box;
+				worldBox.Move(XMFLOAT3(pWorldMatrix[i]._41, pWorldMatrix[i]._42, pWorldMatrix[i]._43));
+				 
+				// 이동한 박스를 통해 충돌한다.
+				bool isAlreadyCollide = Collision::isCollide(AlreadyPlayerBBox, worldBox.GetBOBox());
+				if (isAlreadyCollide)
+				{
+					bool isUseSliding = false;
+					for (int x = 0; x < 4; ++x) //  plane 면
+					{
+						bool isIntersect = Plane::Intersect(worldBox.GetPlane(x), AlreadyPositon, m_pPlayer->GetVelocity());
+						bool isFront = Plane::IsFront(worldBox.GetPlane(x), AlreadyPositon);
+						if (isIntersect && isFront)
+						{ 
+							//m_pPlayer->SetVelocity(
+							//	Vector3::Sliding(m_Trees[i]->GetBOBox()->GetPlane(x), m_pPlayer->GetVelocity())
+							//);
+
+							isUseSliding = true;
+						}
+					}
+
+					if (!isUseSliding)
+					{ 
+						//m_pPlayer->MoveVelocity(Vector3::ScalarProduct(m_pPlayer->GetVelocity(), -1, false));
+					}
+				}
+			} 
+		}
+	}
 	// 충돌체크 /////////////////////////
-	 
+	if (m_PlayerTerrainIndex) delete[] m_PlayerTerrainIndex;
+
 	m_pPlayer->Update(fElapsedTime); //Velocity를 통해 pos 이동
 	m_pOtherPlayer->Update(fElapsedTime);
-	 
+	
+	m_PlayerTerrainIndex = m_pQuadtreeTerrain->GetIndex(m_pPlayer->GetTransform().GetPosition());
+	
+	// 움직인 위치를 통해 터레인 조각 위치 구한다.
+	m_pPlayer;
+
 	m_SkyBox->Update(fElapsedTime);
 	m_WideareaMagic->Update(fElapsedTime);
 

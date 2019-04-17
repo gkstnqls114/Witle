@@ -155,6 +155,37 @@ void QuadtreeTerrain::RecursiveCalculateIDs(QUAD_TREE_NODE * node, const XMFLOAT
 	}
 }
 
+void QuadtreeTerrain::CalculateIndex(const XMFLOAT3 position, int * pIndices) const
+{
+	for (int i = 0; i < m_ReafNodeCount; ++i)
+	{
+		QUAD_TREE_NODE* node = m_pReafNodes[i];
+		// 포지션이 해당 메쉬에 맞는지 확인한다. 
+		// x, z 사이에 있는지 검사한다.
+		float minX = node->boundingBox.Center.x - node->boundingBox.Extents.x;
+		float maxX = node->boundingBox.Center.x + node->boundingBox.Extents.x;
+		bool isIntervenedX = (minX <= position.x) && (position.x <= maxX);
+
+		float minZ = node->boundingBox.Center.z - node->boundingBox.Extents.z;
+		float maxZ = node->boundingBox.Center.z + node->boundingBox.Extents.z;
+		bool isIntervenedZ = (minZ <= position.z) && (position.z <= maxZ);
+
+		if (isIntervenedX && isIntervenedZ)
+		{
+			// 만약 속한다면 해당 ID를 채운다.
+			assert(!(pIndices[QUAD - 1] != -1)); // 만약 마지막이 채워져 있다면 오류이다.
+			for (int x = 0; x < QUAD; ++x)
+			{
+				if (pIndices[x] == -1)
+				{
+					pIndices[x] = i;
+					break;
+				}
+			}
+		}
+	} 
+}
+
 void QuadtreeTerrain::RecursiveCreateTerrain(QUAD_TREE_NODE * node, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList,
 	int xStart, int zStart, int nBlockWidth, int nBlockLength,
 	 HeightMapImage * pContext)
@@ -272,7 +303,7 @@ void QuadtreeTerrain::LastUpdate(float fElapsedTime)
 
 }
 
-const int * QuadtreeTerrain::GetIDs(const XMFLOAT3 & position) const
+int * const  QuadtreeTerrain::GetIDs(const XMFLOAT3 & position) const
 {
 	int* pIDs = new int[QUAD];
 	for (int x = 0; x < QUAD; ++x)
@@ -283,6 +314,19 @@ const int * QuadtreeTerrain::GetIDs(const XMFLOAT3 & position) const
 	RecursiveCalculateIDs(m_pRootNode, position, pIDs);
 
 	return pIDs;
+}
+
+int * const QuadtreeTerrain::GetIndex(const XMFLOAT3 & position) const
+{
+	int* pIndeics = new int[QUAD];
+	for (int x = 0; x < QUAD; ++x)
+	{
+		pIndeics[x] = -1; // -1로 리셋. -1이라면 존재하지 않는 것.
+	}
+
+	CalculateIndex(position, pIndeics);
+
+	return pIndeics;
 }
 
 void QuadtreeTerrain::Render(ID3D12GraphicsCommandList *pd3dCommandList)
@@ -300,4 +344,9 @@ void QuadtreeTerrain::Render(int index, ID3D12GraphicsCommandList * pd3dCommandL
 	pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Terrain")->GetPSO());
 	gMeshRenderer.Render(pd3dCommandList, m_pReafNodes[index]->terrainMesh);
 	StaticObjectStorage::GetInstance(this)->Render(pd3dCommandList, index);
+}
+
+QUAD_TREE_NODE * QuadtreeTerrain::GetReafNodeByID(int id)
+{
+	return nullptr;
 }

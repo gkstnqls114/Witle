@@ -270,6 +270,28 @@ StaticObjectStorage * StaticObjectStorage::GetInstance(const QuadtreeTerrain con
 	return m_Instance;
 }
 
+int StaticObjectStorage::GetObjectCount(int index, const std::string & name)
+{
+	return m_StaticObjectStorage[name][index].TerrainObjectCount;
+}
+
+int StaticObjectStorage::GetObjectAllCount(int index)
+{
+	int result = 0;
+
+	for (auto& info : m_StaticObjectStorage)
+	{
+		result += info.second[index].TerrainObjectCount;
+	} 
+
+	return result;
+}
+
+XMFLOAT4X4* StaticObjectStorage::GetWorldMatrix(int index, const std::string & name)
+{ 
+	return m_StaticObjectStorage[name][index].TransformList.begin()._Ptr; 
+}
+
 void StaticObjectStorage::CreateInfo(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, const QuadtreeTerrain const * pTerrain)
 {
 	if (m_isCreate) return;

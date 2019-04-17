@@ -10,7 +10,7 @@ HWND GameInput::m_hWnd;
 
 UCHAR GameInput::m_pKeyBuffer[256];
 
-bool GameInput::m_isDragRotate{ true };
+const bool GameInput::m_isDragRotate{ true };
  
 POINT GameInput::m_moveCursor;        // 한번 클릭했을 때 위치
 POINT GameInput::m_moveOldCursor{ -1, -1};     // 이전 프레임에서의 마우스 위치 
@@ -100,14 +100,10 @@ void GameInput::Update(HWND hWnd)
 	// 키보드의 pKeyBuffer를 구한다.
 	::GetKeyboardState(m_pKeyBuffer);
 	 
-	//if (m_isDragRotate)
-	//{ 
-	//	UpdateMouseDragRotate(hWnd);
-	//}
-	//else
-	//{
-	//	UpdateMouseMoveRotate(hWnd);
-	//} 
+	if (m_isDragRotate)
+	{ 
+		UpdateMouseDragRotate(hWnd);
+	} 
 }
 
 void GameInput::Reset()
@@ -116,9 +112,12 @@ void GameInput::Reset()
 	m_downClickCursor.y = -1;
 	m_moveDeltaX = 0.f;
 	m_moveDeltaY = 0.f; 
-	if (m_moveOldCursor.x == -1 && m_moveOldCursor.y == -1) return; // 초기값이라면 넘어감.
-	::SetCursorPos(m_moveOldCursor.x, m_moveOldCursor.y);
-	 m_moveCursor = m_moveOldCursor;
+	if (!m_isDragRotate)
+	{ 
+		if (m_moveOldCursor.x == -1 && m_moveOldCursor.y == -1) return; // 초기값이라면 넘어감.
+		::SetCursorPos(m_moveOldCursor.x, m_moveOldCursor.y);
+		m_moveCursor = m_moveOldCursor;
+	}
 }
 
 void GameInput::SetHWND(HWND hwnd)
@@ -128,18 +127,21 @@ void GameInput::SetHWND(HWND hwnd)
 
 void GameInput::MouseMove(LPARAM lParam)
 {     
-	::GetCursorPos(&m_moveCursor);
-	  
-	if (m_moveCursor.x == m_moveOldCursor.x && m_moveCursor.y == m_moveOldCursor.y) return;
+	if (!m_isDragRotate)
+	{
+		::GetCursorPos(&m_moveCursor);
 
-	if ((m_moveOldCursor.x == -1 && m_moveOldCursor.y == -1)) // 초기값의 경우
-	{ 
-		m_moveOldCursor = m_moveCursor; 
-	}
-	else
-	{ 
-		m_moveDeltaX = (float)(m_moveCursor.x - m_moveOldCursor.x) / m_DeltaValueX;
-		m_moveDeltaY = (float)(m_moveCursor.y - m_moveOldCursor.y) / m_DeltaValueY; 
+		if (m_moveCursor.x == m_moveOldCursor.x && m_moveCursor.y == m_moveOldCursor.y) return;
+
+		if ((m_moveOldCursor.x == -1 && m_moveOldCursor.y == -1)) // 초기값의 경우
+		{
+			m_moveOldCursor = m_moveCursor;
+		}
+		else
+		{
+			m_moveDeltaX = (float)(m_moveCursor.x - m_moveOldCursor.x) / m_DeltaValueX;
+			m_moveDeltaY = (float)(m_moveCursor.y - m_moveOldCursor.y) / m_DeltaValueY;
+		}
 	}
 }
 

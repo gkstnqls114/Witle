@@ -41,10 +41,10 @@ private:
 	~GameInput();
 
 	static HWND m_hWnd;
-
+	  
 	static UCHAR m_pKeyBuffer[256]; // 키보드의 input을 위한 멤버 변수
 
-	static bool m_isDragRotate;
+	static const bool m_isDragRotate;
 
 	static RAY m_PickingRay;
 	static short m_WheelDelta; // 마우스 휠이 움직인 정도
@@ -64,6 +64,11 @@ private:
 private:
 	static void UpdateMouseDragRotate(HWND hWnd);
 	static void UpdateMouseMoveRotate(HWND hWnd);
+	 
+	static float GetdownDeltaX() { return m_downDeltaX; }
+	static float GetdownDeltaY() { return m_downDeltaY; }
+	static float GetmoveDeltaX() { return m_moveDeltaX; };
+	static float GetmoveDeltaY() { return m_moveDeltaY; };
 
 public: 
 	static void Update(HWND hWnd);
@@ -85,10 +90,19 @@ public:
 	static void SetCapture(HWND hWnd);
 	static void RotateWheel(WPARAM wParam);
 	static void ReleaseCapture();
-	static float GetdownDeltaX() { return m_downDeltaX; }
-	static float GetdownDeltaY() { return m_downDeltaY; }
-	static float GetmoveDeltaX() { return m_moveDeltaX; };
-	static float GetmoveDeltaY() { return m_moveDeltaY; };
+
+	static float GetDeltaX() 
+	{
+		if (m_isDragRotate) return GetdownDeltaX();
+		else  return GetmoveDeltaX();
+	}
+	static float GetDeltaY() 
+	{
+		if (m_isDragRotate) return GetdownDeltaY();
+		else return GetmoveDeltaY();
+	}
+
+
 	static POINT GetdownClickcursor() { return m_downClickCursor; }
 
 

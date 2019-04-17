@@ -90,6 +90,7 @@ public:
 protected:
 	Widget*					m_AimPoint{ nullptr };
 
+	int*					m_PlayerTerrainIndex{ nullptr };
 	Sniping*				m_Sniping{ nullptr };
 	WideareaMagic*          m_WideareaMagic{ nullptr };
 	Player*                 m_pPlayer{ nullptr };
