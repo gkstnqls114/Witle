@@ -1,9 +1,15 @@
 #pragma once
+#include "GameObject.h"
 
 class PlayerStatus;
 
 class ISkill
+	: public GameObject
 {  
+protected:
+	ISkill(const std::string& entityID) : GameObject(entityID) {};
+	~ISkill() {};
+
 public:
 	virtual void DoNotUse() = 0;
 	virtual void DoUse() = 0; 
@@ -18,7 +24,7 @@ protected:
 	float m_SkillTime      { 0.f }; // 스킬 사용 중인 시간
 
 public:
-	Skill() {};
+	Skill() : ISkill("Skill") {};
 	virtual ~Skill();
 
 	bool GetisUsing() const { return m_isUsing; }

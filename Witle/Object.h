@@ -347,6 +347,8 @@ public:
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
+
+
 class LoadObject
 {
 private:
@@ -356,8 +358,10 @@ public:
 	void AddRef();
 	void Release();
 
-public:
+private:
 	LoadObject();
+
+public:
 	LoadObject(int nMaterials);
 	virtual ~LoadObject();
 
@@ -497,30 +501,4 @@ public:
 };
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-class CSkyBox : public LoadObject
-{
-public:
-	CSkyBox(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature);
-	virtual ~CSkyBox();
-
-	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList);
-};
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-class CAngrybotObject : public LoadObject
-{
-public:
-	CAngrybotObject(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, CLoadedModelInfo *pModel, int nAnimationTracks);
-	virtual ~CAngrybotObject();
-};
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-class CElvenWitchObject : public LoadObject
-{
-public:
-	CElvenWitchObject(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, CLoadedModelInfo *pModel, int nAnimationTracks);
-	virtual ~CElvenWitchObject();
-};
+// 

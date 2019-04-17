@@ -97,7 +97,7 @@ Player::Player(const std::string & entityID, ID3D12Device * pd3dDevice, ID3D12Gr
 { 
 	CLoadedModelInfo *pPlayerModel = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/Angrybot.bin", NULL);
 	m_pLoadObject = pPlayerModel->m_pModelRootObject;
-
+	 
 	m_pLoadObject->m_pSkinnedAnimationController = new CAnimationController(pd3dDevice, pd3dCommandList, 1, pPlayerModel);
 	m_pLoadObject->m_pSkinnedAnimationController->SetTrackAnimationSet(0, 0);
 
@@ -107,9 +107,7 @@ Player::Player(const std::string & entityID, ID3D12Device * pd3dDevice, ID3D12Gr
 	 
 	m_pPlayerStatus = new PlayerStatus(this, pd3dDevice, pd3dCommandList);
 	m_pPlayerMovement = new PlayerMovement(this);
-
-	// m_pBroom = new Broom(m_pPlayerMovement);
-
+	 
 	SetUpdatedContext(pContext); 
 }
 
@@ -174,9 +172,12 @@ void Player::Animate(float fElapsedTime)
 	// 반드시 트랜스폼 업데이트..! 
 	m_Transform.Update(fElapsedTime);
 
-	//// 위치가 안맞아서 재조정 
-	m_pLoadObject->m_xmf4x4ToParent =  
-		Matrix4x4::Multiply(XMMatrixRotationX(29.8f), m_Transform.GetpWorldMatrixs());
+	//// 위치가 안맞아서 재조정  
+	float fPitch = -90.f;
+	float fYaw = 0.f;
+	float fRoll = 0.f;
+	XMMATRIX mtxRotate = XMMatrixRotationRollPitchYaw(XMConvertToRadians(fPitch), XMConvertToRadians(fYaw), XMConvertToRadians(fRoll));
+	m_pLoadObject->m_xmf4x4ToParent = Matrix4x4::Multiply(mtxRotate, m_Transform.GetpWorldMatrixs());
 	 
 	m_pLoadObject->Animate(fElapsedTime);
 }

@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "Object.h" 
+#include "Object.h"  
 #include "MyBOBox.h"
 #include "ModelStorage.h"
 
@@ -24,7 +24,7 @@ void ModelStorage::CreateModels(ID3D12Device * pd3dDevice, ID3D12GraphicsCommand
 	m_NameList.push_back("Rock");
 	m_NameList.push_back("Pillar");
 	m_NameList.push_back("Sunflower");
-
+	 
 	// ¸ðµ¨ ¸ñ·Ï
 	m_ModelStorage["ReflexTree"].loadmodelInfo = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/ReflexTree.bin", NULL);
 	m_ModelStorage["Rock"].loadmodelInfo = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/Rock.bin", NULL);
@@ -40,11 +40,37 @@ void ModelStorage::CreateModels(ID3D12Device * pd3dDevice, ID3D12GraphicsCommand
 	m_isCreate = true;
 }
 
+void ModelStorage::ReleaseUploadBuffers()
+{
+	for (auto& model : m_ModelStorage)
+	{
+		model.second.loadmodelInfo->m_pModelRootObject->ReleaseUploadBuffers();
+	}
+	for (auto& model : m_ModelStorage)
+	{
+		model.second.modelBOBox->ReleaseUploadBuffers();
+	}
+}
+
+void ModelStorage::ReleaseObjects()
+{
+	for (auto& model : m_ModelStorage)
+	{
+		delete model.second.loadmodelInfo;
+		model.second.loadmodelInfo = nullptr;
+	}
+	for (auto& model : m_ModelStorage)
+	{
+		delete model.second.modelBOBox;
+		model.second.modelBOBox = nullptr;
+	}
+}
+
 LoadObject * ModelStorage::GetRootObject(std::string name)
 {
 	if (!m_ModelStorage[name].loadmodelInfo) return nullptr;
 
-	LoadObject* newRootObject = new LoadObject;
+	LoadObject* newRootObject = new LoadObject(1);
 	LoadObject::CopyWorldMatrix(newRootObject, m_ModelStorage[name].loadmodelInfo->m_pModelRootObject);
 
 	return newRootObject;

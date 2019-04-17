@@ -10,7 +10,6 @@ class Widget
 	RECT m_rect;
 	MyRectangle* m_AimPoint{ nullptr };
 	 
-
 private:
 	virtual void ReleaseMembers() override;
 	virtual void ReleaseMemberUploadBuffers() override;

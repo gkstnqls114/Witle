@@ -36,9 +36,13 @@ MyBOBox::~MyBOBox()
 	}
 #endif
 }
-
-
+ 
 #ifdef _SHOW_BOUNDINGBOX
+void MyBOBox::ReleaseUploadBuffers()
+{
+	m_pLineCube->ReleaseUploadBuffers();
+}
+
 void MyBOBox::Render(ID3D12GraphicsCommandList * pd3dCommandList, const XMFLOAT4X4& xmf4x4World)
 {
 	if (m_pLineCube)

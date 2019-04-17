@@ -198,6 +198,7 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="MyDescriptorHeap.h" />
     <ClInclude Include="MyFrustum.h" />
+    <ClInclude Include="MyNames.h" />
     <ClInclude Include="MyRigidbody.h" />
     <ClInclude Include="MyStructs.h" />
     <ClInclude Include="Object.h" />
@@ -239,6 +240,7 @@
     <ClInclude Include="SkinnedMeshRenderer.h" />
     <ClInclude Include="TerrainObjectID.h" />
     <ClInclude Include="TESTShader.h" />
+    <ClInclude Include="TextureStorage.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="VerticalBlurShader.h" />
     <ClInclude Include="vertices.h" />
@@ -335,6 +337,7 @@
     <ClCompile Include="SkinnedMeshRenderer.cpp" />
     <ClCompile Include="TerrainObjectID.cpp" />
     <ClCompile Include="TESTShader.cpp" />
+    <ClCompile Include="TextureStorage.cpp" />
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="VerticalBlurShader.cpp" />
     <ClCompile Include="WICTextureLoader12.cpp" />

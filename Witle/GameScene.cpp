@@ -188,10 +188,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 
 	// 디스크립터 힙 설정
 	GameScene::CreateCbvSrvDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 3);
-
-	// 모든 모델 오브젝트 빌드
-	ModelStorage::GetInstance()->CreateModels(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
-
+	 
 	m_AimPoint = new Widget("AimPoint", pd3dDevice, pd3dCommandList, POINT{ int(GameScreen::GetWidth()) / 2, int(GameScreen::GetHeight()) / 2 }, 100.f, 100.f, L"Image/AimPoint.dds");
 	m_WideareaMagic = new WideareaMagic(pd3dDevice, pd3dCommandList);
 
@@ -241,16 +238,33 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 
 void GameScene::ReleaseObjects()
 {
+	if (m_Sniping)
+	{
+		m_Sniping->ReleaseObjects();
+		delete m_Sniping;
+		m_Sniping = nullptr;
+	}
+	if (m_WideareaMagic)
+	{
+		m_WideareaMagic->ReleaseObjects();
+		delete m_WideareaMagic;
+		m_WideareaMagic = nullptr;
+	}
 	if (m_AimPoint)
 	{
+		m_AimPoint->ReleaseObjects();
+		delete m_AimPoint;
+		m_AimPoint = nullptr;
 	}
 	if (m_pOtherPlayer)
 	{
+		m_pOtherPlayer->ReleaseObjects();
 		delete m_pOtherPlayer;
 		m_pOtherPlayer = nullptr;
 	}
 	if (m_pPlayer)
 	{ 
+		m_pPlayer->ReleaseObjects();
 		delete m_pPlayer;
 		m_pPlayer = nullptr;
 	}
@@ -516,6 +530,10 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 
 void GameScene::ReleaseUploadBuffers()
 { 
+	if (m_AimPoint)m_AimPoint->ReleaseUploadBuffers();
+	if (m_Sniping) m_Sniping->ReleaseUploadBuffers();
+	if (m_WideareaMagic) m_WideareaMagic->ReleaseUploadBuffers();
+	if (m_SkyBox) m_SkyBox->ReleaseUploadBuffers();
 	if (m_pOtherPlayer) m_pOtherPlayer->ReleaseUploadBuffers();
 	if (m_pPlayer) m_pPlayer->ReleaseUploadBuffers();
 	if (m_Terrain) m_Terrain->ReleaseUploadBuffers();

@@ -261,8 +261,7 @@ UINT QuadtreeTerrain::CalculateVertex(UINT widht, UINT length)
 
 QuadtreeTerrain::QuadtreeTerrain(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, int nWidth, int nLength, XMFLOAT3 xmf3Scale, XMFLOAT4 xmf4Color, HeightMapImage * pContext)
 	: GameObject("QuadTreeTerrain")
-{
-
+{ 
 	m_widthTotal = nWidth;
 	m_lengthTotal = nLength;
 	m_xmf3Scale = xmf3Scale;

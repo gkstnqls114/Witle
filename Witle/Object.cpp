@@ -588,10 +588,12 @@ void LoadObject::SetShader(int nMaterial, Shader *pShader)
 
 void LoadObject::SetWireFrameShader()
 {
-	assert(!(m_ppMaterials));
-	m_nMaterials = 1;
-	m_ppMaterials = new CMaterial*[m_nMaterials];
-	m_ppMaterials[0] = NULL;
+	if (m_nMaterials == 0)
+	{
+		m_nMaterials = 1;
+		m_ppMaterials = new CMaterial*[m_nMaterials];
+		m_ppMaterials[0] = NULL;
+	}
 	CMaterial *pMaterial = new CMaterial(0);
 	pMaterial->SetWireFrameShader();
 	SetMaterial(0, pMaterial);
@@ -599,10 +601,12 @@ void LoadObject::SetWireFrameShader()
 
 void LoadObject::SetSkinnedAnimationWireFrameShader()
 {
-	assert(!(m_ppMaterials));
-	m_nMaterials = 1;
-	m_ppMaterials = new CMaterial*[m_nMaterials];
-	m_ppMaterials[0] = NULL;
+	if (m_nMaterials == 0)
+	{
+		m_nMaterials = 1;
+		m_ppMaterials = new CMaterial*[m_nMaterials];
+		m_ppMaterials[0] = NULL;
+	}
 	CMaterial *pMaterial = new CMaterial(0);
 	pMaterial->SetSkinnedAnimationWireFrameShader();
 	SetMaterial(0, pMaterial);
@@ -610,6 +614,7 @@ void LoadObject::SetSkinnedAnimationWireFrameShader()
 
 void LoadObject::SetMaterial(int nMaterial, CMaterial *pMaterial)
 {
+	assert(!(m_ppMaterials[nMaterial] != NULL));
 	//if (m_ppMaterials[nMaterial]) m_ppMaterials[nMaterial]->Release();
 	m_ppMaterials[nMaterial] = pMaterial;
 	//if (m_ppMaterials[nMaterial]) m_ppMaterials[nMaterial]->AddRef();
@@ -693,7 +698,7 @@ void LoadObject::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 				{ 
 					if (m_ppMaterials[i]->m_pShader)
 					{ 
-						//m_ppMaterials[i]->m_pShader->Render(pd3dCommandList);
+						// m_ppMaterials[i]->m_pShader->Render(pd3dCommandList);
 						m_ppMaterials[i]->m_pShader->OnPrepareRender(pd3dCommandList);
 					} 
 					m_ppMaterials[i]->UpdateShaderVariable(pd3dCommandList);
@@ -864,7 +869,7 @@ LoadObject *LoadObject::LoadFrameHierarchyFromFile(ID3D12Device *pd3dDevice, ID3
 
 	int nFrame = ::ReadIntegerFromFile(pInFile);
 
-	LoadObject *pGameObject = new LoadObject();
+	LoadObject *pGameObject = new LoadObject(1);
 	::ReadStringFromFile(pInFile, pGameObject->m_pstrFrameName);
 
 	for (; ; )
@@ -1147,76 +1152,4 @@ CHeightMapTerrain::~CHeightMapTerrain(void)
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// 
-CSkyBox::CSkyBox(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature) : LoadObject(1)
-{
-	CSkyBoxMesh *pSkyBoxMesh = new CSkyBoxMesh(pd3dDevice, pd3dCommandList, 20.0f, 20.0f, 2.0f);
-	SetMesh(pSkyBoxMesh);
-
-	CreateShaderVariables(pd3dDevice, pd3dCommandList);
-
-	CTexture *pSkyBoxTexture = new CTexture(1, RESOURCE_TEXTURE_CUBE, 0);
-	pSkyBoxTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"SkyBox/SkyBox_0.dds", 0);
-
-	//CSkyBoxShader *pSkyBoxShader = new CSkyBoxShader();
-	//pSkyBoxShader->CreateShader(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature);
-	//pSkyBoxShader->CreateShaderVariables(pd3dDevice, pd3dCommandList);
-
-	//CScene::CreateShaderResourceViews(pd3dDevice, pSkyBoxTexture, 10, false);
-
-	//CMaterial *pSkyBoxMaterial = new CMaterial(1);
-	//pSkyBoxMaterial->SetTexture(pSkyBoxTexture);
-	//pSkyBoxMaterial->SetShader(pSkyBoxShader);
-
-	//SetMaterial(0, pSkyBoxMaterial);
-}
-
-CSkyBox::~CSkyBox()
-{
-}
-
-void CSkyBox::Render(ID3D12GraphicsCommandList *pd3dCommandList)
-{
-	//XMFLOAT3 xmf3CameraPos = pCamera->GetPosition();
-	//SetPosition(xmf3CameraPos.x, xmf3CameraPos.y, xmf3CameraPos.z);
-
-	//LoadObject::Render(pd3dCommandList, pCamera);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-CAngrybotObject::CAngrybotObject(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, CLoadedModelInfo *pModel, int nAnimationTracks)
-{
-	CLoadedModelInfo *pAngrybotModel = pModel;
-	if (!pAngrybotModel) pAngrybotModel = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/Player.bin", NULL);
-
-	SetChild(pAngrybotModel->m_pModelRootObject, true);
-	m_pSkinnedAnimationController = new CAnimationController(pd3dDevice, pd3dCommandList, nAnimationTracks, pAngrybotModel);
-	m_pSkinnedAnimationController->SetTrackAnimationSet(0, 0);
-
-	Rotate(-90.0f, 0.0f, 0.0f);
-	SetScale(0.2f, 0.2f, 0.2f);
-}
-
-CAngrybotObject::~CAngrybotObject()
-{
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-CElvenWitchObject::CElvenWitchObject(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, CLoadedModelInfo *pModel, int nAnimationTracks)
-{
-	CLoadedModelInfo *pElvenWitchModel = pModel;
-	if (!pElvenWitchModel) pElvenWitchModel = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/Elven_Witch.bin", NULL);
-
-	SetChild(pElvenWitchModel->m_pModelRootObject, true);
-	m_pSkinnedAnimationController = new CAnimationController(pd3dDevice, pd3dCommandList, nAnimationTracks, pElvenWitchModel);
-
-	Rotate(-90.0f, 0.0f, 0.0f);
-	SetScale(0.0025f, 0.0025f, 0.0025f);
-}
-
-CElvenWitchObject::~CElvenWitchObject()
-{
-}
-
+//  

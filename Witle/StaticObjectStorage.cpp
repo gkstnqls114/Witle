@@ -39,7 +39,7 @@ void StaticObjectStorage::LoadTerrainObjectFromFile(ID3D12Device * pd3dDevice, I
 	m_StaticObjectStorage[ROCK] = new TerrainObjectInfo[TerrainPieceCount];
 	m_StaticObjectStorage[PILLAR] = new TerrainObjectInfo[TerrainPieceCount];
 	m_StaticObjectStorage[SUNFLOWER] = new TerrainObjectInfo[TerrainPieceCount];
-	m_StaticObjectStorage[ALTER] = new TerrainObjectInfo[TerrainPieceCount];
+	// m_StaticObjectStorage[ALTER] = new TerrainObjectInfo[TerrainPieceCount];
 
 	for (; ; )
 	{

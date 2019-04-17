@@ -1,11 +1,25 @@
 #include "stdafx.h"
 #include "d3dUtil.h"
 
-#include "ShaderManager.h"
+//// GameBase ////////////////////////// 
 #include "GameTimer.h"
 #include "GameInput.h"
 #include "GameScreen.h" 
+//// GameBase ////////////////////////// 
 
+//// Manager ////////////////////////// 
+#include "ShaderManager.h"
+#include "ModelStorage.h"
+#include "TextureStorage.h"
+//// Manager ////////////////////////// 
+
+//// Scene ////////////////////////// 
+#include "GameScene.h"
+#include "RoomScene.h"
+#include "LoadingScene.h"
+//// Scene ////////////////////////// 
+
+//// Shader ////////////////////////// 
 #include "SkyBoxShader.h"
 #include "StandardShader.h"
 #include "TerrainShader.h"
@@ -16,6 +30,7 @@
 #include "TESTShader.h"
 #include "ScreenShader.h"
 #include "CubeShader.h"
+//// Shader ////////////////////////// 
 
 #ifdef _SHOW_BOUNDINGBOX
 #include "LineShader.h"
@@ -24,11 +39,7 @@
 #include "Object.h"
 #include "Texture.h"
 #include "MyDescriptorHeap.h"
-
-#include "GameScene.h"
-#include "RoomScene.h"
-#include "LoadingScene.h"
-
+ 
 #include "GameFramework.h"
 
 
@@ -473,11 +484,16 @@ void CGameFramework::BuildObjects()
 	m_CommandList->Reset(m_CommandAllocator.Get(), NULL);
 	
 	///////////////////////////////////////////////////////////////////////////// 리소스 생성
+	// 루트 시그니처 위해 장면 먼저 생성
 	m_pScene = new GameScene;
 	// m_pScene = new LoadingScene;
 	// m_pScene = new RoomScene;
-	m_pScene->CreateRootSignature(m_d3dDevice.Get());
+	m_pScene->CreateRootSignature(m_d3dDevice.Get()); 
 
+	// 루트 시그니처를 통해 모든 오브젝트 갖고온다.
+	TextureStorage::GetInstance()->CreateTextures(m_d3dDevice.Get(), m_CommandList.Get());
+	ModelStorage::GetInstance()->CreateModels(m_d3dDevice.Get(), m_CommandList.Get(), m_pScene->GetGraphicsRootSignature());
+	 
 	BuildTESTObjects();
 	BuildShaders();
 
@@ -493,18 +509,24 @@ void CGameFramework::BuildObjects()
 
 	///////////////////////////////////////////////////////////////////////////// 업로드 힙 릴리즈
 	if (m_pScene) m_pScene->ReleaseUploadBuffers(); 
+
+	TextureStorage::GetInstance()->ReleaseUploadBuffers();
+	ModelStorage::GetInstance()->ReleaseUploadBuffers();
 	///////////////////////////////////////////////////////////////////////////// 업로드 힙 릴리즈
 
 	CGameTimer::GetInstance()->Reset();
 }
 
 void CGameFramework::ReleaseObjects()
-{
+{ 
 	if (m_pScene) { 
 		m_pScene->ReleaseObjects();
 		delete m_pScene;
 		m_pScene = nullptr;
 	}
+
+	TextureStorage::GetInstance()->ReleaseObjects();
+	ModelStorage::GetInstance()->ReleaseObjects();
 }
 
 void CGameFramework::UpdateGamelogic(float fElapsedTime)

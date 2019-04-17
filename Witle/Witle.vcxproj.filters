@@ -124,9 +124,6 @@
     <Filter Include="05.Shader\TESTShader">
       <UniqueIdentifier>{fbd787c7-444a-4e68-98f3-306d0a71a446}</UniqueIdentifier>
     </Filter>
-    <Filter Include="99.etc\LightManager">
-      <UniqueIdentifier>{8d004bf1-b8cc-4fd5-b0d1-58af214d6d24}</UniqueIdentifier>
-    </Filter>
     <Filter Include="12.Skill">
       <UniqueIdentifier>{0f80f977-3e90-4509-87ff-01987697acb0}</UniqueIdentifier>
     </Filter>
@@ -184,17 +181,8 @@
     <Filter Include="02.Component\MyBOBox">
       <UniqueIdentifier>{e8a14a7d-6bcb-4984-b8cf-189fb6ec9d20}</UniqueIdentifier>
     </Filter>
-    <Filter Include="13.Storage">
-      <UniqueIdentifier>{ef16f092-5f62-4c3c-9ce6-0b84f633136a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="13.Storage\ModelStorage">
-      <UniqueIdentifier>{6f721a66-4caa-4e6f-b8e2-a51b09ac77f4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="05.Shader\InstancingStandardShader">
       <UniqueIdentifier>{3f982932-7ab3-47f3-9f5c-fe5b5329e354}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="13.Storage\StaticObjectStorage">
-      <UniqueIdentifier>{d8ca9f62-bada-44fd-a0d4-807e00dae610}</UniqueIdentifier>
     </Filter>
     <Filter Include="99.etc\ID\FamilyID">
       <UniqueIdentifier>{c058a8e0-f7c8-4e83-ad16-f15713affe96}</UniqueIdentifier>
@@ -223,9 +211,6 @@
     <Filter Include="05.Shader\ScreenShader">
       <UniqueIdentifier>{e11c642f-3db6-462a-afa9-ea97701a5168}</UniqueIdentifier>
     </Filter>
-    <Filter Include="99.etc\TextureManager">
-      <UniqueIdentifier>{336fca6f-fc21-4c05-a804-c9e60309ed49}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.Component\ForPlayer">
       <UniqueIdentifier>{312e3404-8af8-4767-bcd1-0890bedfebe4}</UniqueIdentifier>
     </Filter>
@@ -244,9 +229,6 @@
     <Filter Include="05.Shader\SkyBoxShader">
       <UniqueIdentifier>{e0d12ac8-8b08-42e1-acbe-f56e4be352c5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="13.Storage\SoundManager">
-      <UniqueIdentifier>{6e5565ad-e180-4212-b1e8-f920bfb6effd}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.Component\Mesh\CylinderMesh">
       <UniqueIdentifier>{f7fc59e2-8d4d-4f17-8d4e-c1eb04a2d1e9}</UniqueIdentifier>
     </Filter>
@@ -255,6 +237,24 @@
     </Filter>
     <Filter Include="02.Component\MyBSphere">
       <UniqueIdentifier>{d3c2de43-9e69-4539-914d-08d0eeb57b16}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="13.Storage/Manager">
+      <UniqueIdentifier>{ef16f092-5f62-4c3c-9ce6-0b84f633136a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="13.Storage/Manager\ModelStorage">
+      <UniqueIdentifier>{6f721a66-4caa-4e6f-b8e2-a51b09ac77f4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="13.Storage/Manager\StaticObjectStorage">
+      <UniqueIdentifier>{d8ca9f62-bada-44fd-a0d4-807e00dae610}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="13.Storage/Manager\SoundManager">
+      <UniqueIdentifier>{6e5565ad-e180-4212-b1e8-f920bfb6effd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="13.Storage/Manager\LightManager">
+      <UniqueIdentifier>{8d004bf1-b8cc-4fd5-b0d1-58af214d6d24}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="13.Storage/Manager\TextureStorage">
+      <UniqueIdentifier>{336fca6f-fc21-4c05-a804-c9e60309ed49}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -406,7 +406,7 @@
       <Filter>05.Shader\TESTShader</Filter>
     </ClInclude>
     <ClInclude Include="LightManager.h">
-      <Filter>99.etc\LightManager</Filter>
+      <Filter>13.Storage/Manager\LightManager</Filter>
     </ClInclude>
     <ClInclude Include="Skill.h">
       <Filter>12.Skill</Filter>
@@ -472,7 +472,7 @@
       <Filter>02.Component\MyBOBox</Filter>
     </ClInclude>
     <ClInclude Include="ModelStorage.h">
-      <Filter>13.Storage\ModelStorage</Filter>
+      <Filter>13.Storage/Manager\ModelStorage</Filter>
     </ClInclude>
     <ClInclude Include="StaticObject.h">
       <Filter>03.GameObject</Filter>
@@ -484,7 +484,7 @@
       <Filter>05.Shader\InstancingStandardShader</Filter>
     </ClInclude>
     <ClInclude Include="StaticObjectStorage.h">
-      <Filter>13.Storage\StaticObjectStorage</Filter>
+      <Filter>13.Storage/Manager\StaticObjectStorage</Filter>
     </ClInclude>
     <ClInclude Include="FamilyID.h">
       <Filter>99.etc\ID\FamilyID</Filter>
@@ -532,7 +532,7 @@
       <Filter>05.Shader\SkyBoxShader</Filter>
     </ClInclude>
     <ClInclude Include="SoundManager.h">
-      <Filter>13.Storage\SoundManager</Filter>
+      <Filter>13.Storage/Manager\SoundManager</Filter>
     </ClInclude>
     <ClInclude Include="CylinderMesh.h">
       <Filter>02.Component\Mesh\CylinderMesh</Filter>
@@ -542,6 +542,12 @@
     </ClInclude>
     <ClInclude Include="MyBSphere.h">
       <Filter>02.Component\MyBSphere</Filter>
+    </ClInclude>
+    <ClInclude Include="MyNames.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureStorage.h">
+      <Filter>13.Storage/Manager\TextureStorage</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -675,7 +681,7 @@
       <Filter>05.Shader\TESTShader</Filter>
     </ClCompile>
     <ClCompile Include="LightManager.cpp">
-      <Filter>99.etc\LightManager</Filter>
+      <Filter>13.Storage/Manager\LightManager</Filter>
     </ClCompile>
     <ClCompile Include="Skill.cpp">
       <Filter>12.Skill</Filter>
@@ -741,7 +747,7 @@
       <Filter>02.Component\MyBOBox</Filter>
     </ClCompile>
     <ClCompile Include="ModelStorage.cpp">
-      <Filter>13.Storage\ModelStorage</Filter>
+      <Filter>13.Storage/Manager\ModelStorage</Filter>
     </ClCompile>
     <ClCompile Include="StaticObject.cpp">
       <Filter>03.GameObject</Filter>
@@ -753,7 +759,7 @@
       <Filter>05.Shader\InstancingStandardShader</Filter>
     </ClCompile>
     <ClCompile Include="StaticObjectStorage.cpp">
-      <Filter>13.Storage\StaticObjectStorage</Filter>
+      <Filter>13.Storage/Manager\StaticObjectStorage</Filter>
     </ClCompile>
     <ClCompile Include="FamilyID.cpp">
       <Filter>99.etc\ID\FamilyID</Filter>
@@ -801,7 +807,7 @@
       <Filter>05.Shader\SkyBoxShader</Filter>
     </ClCompile>
     <ClCompile Include="SoundManager.cpp">
-      <Filter>13.Storage\SoundManager</Filter>
+      <Filter>13.Storage/Manager\SoundManager</Filter>
     </ClCompile>
     <ClCompile Include="CylinderMesh.cpp">
       <Filter>02.Component\Mesh\CylinderMesh</Filter>
@@ -811,6 +817,9 @@
     </ClCompile>
     <ClCompile Include="MyBSphere.cpp">
       <Filter>02.Component\MyBSphere</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureStorage.cpp">
+      <Filter>13.Storage/Manager\TextureStorage</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
