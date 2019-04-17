@@ -67,4 +67,8 @@ void MyBOBox::SetPosition(const XMFLOAT3 & pos)
 {
 	m_BOBox.Center = pos;
 }
- 
+
+void MyBOBox::Move(float x, float y, float z)
+{
+	Move(XMFLOAT3(x, y, z));
+}
