@@ -11,10 +11,7 @@ protected:
 #endif
 	BoundingOrientedBox m_BOBox;
 	XMFLOAT4 m_BoBoxPlane[4]; // 평면
-
-private:
-	MyBOBox() {};
-
+	 
 public:
 	MyBOBox(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, XMFLOAT3 center, XMFLOAT3 extents, XMFLOAT4 quaternion = XMFLOAT4(0.f, 0.f, 0.f, 1.f));
 	MyBOBox(const MyBOBox& other);
@@ -30,10 +27,11 @@ public:
 	void Move(const XMFLOAT3& xmf3Shift);
 	void SetPosition(const XMFLOAT3& pos);
 	
-	const BoundingOrientedBox& GetBOBox() const { return m_BOBox; }
-	// 해당 포지션을 통해 이동한 새로운 bobox를 갖고온다.
-	MyBOBox GetBOBox(const XMFLOAT3& position); 
-	const XMFLOAT4 GetPlane(int index) { return m_BoBoxPlane[index]; }
+	const BoundingOrientedBox& GetBOBox() const { return m_BOBox; } 
+	const XMFLOAT4 GetPlane(int index) const { 
+		assert(!(index < 0 && index >= 4));
+		return m_BoBoxPlane[index]; 
+	}
 
 	// LineCube는 그리지 않는다.
 	MyBOBox operator=(const MyBOBox& other)

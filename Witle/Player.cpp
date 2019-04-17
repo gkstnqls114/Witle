@@ -108,7 +108,7 @@ Player::Player(const std::string & entityID, ID3D12Device * pd3dDevice, ID3D12Gr
 	m_pPlayerStatus = new PlayerStatus(this, pd3dDevice, pd3dCommandList);
 	m_pPlayerMovement = new PlayerMovement(this);
 
-	m_pBroom = new Broom(m_pPlayerMovement);
+	// m_pBroom = new Broom(m_pPlayerMovement);
 
 	SetUpdatedContext(pContext); 
 }
@@ -141,7 +141,7 @@ void Player::ReleaseMemberUploadBuffers()
 
 void Player::Update(float fElapsedTime)
 { 
-	m_pBroom->Update(fElapsedTime);
+	// m_pBroom->Update(fElapsedTime);
 
 	// 이동량을 계산한다. 
 	m_pPlayerMovement->Update(fElapsedTime);
@@ -272,7 +272,7 @@ void Player::ProcessInput(float fTimeElapsed)
 
 void Player::UseSkill_Broom()
 {
-	m_pBroom->DoUse();
+	// m_pBroom->DoUse();
 }
 
 XMFLOAT3 Player::GetVelocity() const

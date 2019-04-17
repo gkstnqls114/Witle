@@ -14,7 +14,7 @@ MyBOBox::MyBOBox(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dComm
 	m_BoBoxPlane[0] = Plane::Plane(Vector3::Add(center, XMFLOAT3(extents.x, 0.f, 0.f)), XMFLOAT3(1.f, 0.f, 0.f)); // +x면 normal (1, 0, 0)
 	m_BoBoxPlane[1] = Plane::Plane(Vector3::Add(center, XMFLOAT3(-extents.x, 0.f, 0.f)), XMFLOAT3(-1.f, 0.f, 0.f)); // -x면 normal (-1, 0, 0)
 	m_BoBoxPlane[2] = Plane::Plane(Vector3::Add(center, XMFLOAT3(0.f, 0.f, extents.z)), XMFLOAT3(0.f, 0.f, 1.f)); // +z면 normal (0, 0, 1)
-	m_BoBoxPlane[3] = Plane::Plane(Vector3::Add(center, XMFLOAT3(0.f, 0.f, -extents.z)), XMFLOAT3(0.f, 0.f, -1.f)); // +z면 normal (0, 0, -1)
+	m_BoBoxPlane[3] = Plane::Plane(Vector3::Add(center, XMFLOAT3(0.f, 0.f, -extents.z)), XMFLOAT3(0.f, 0.f, -1.f)); // -z면 normal (0, 0, -1)
 }
 
 MyBOBox::MyBOBox(const MyBOBox & other)
@@ -67,11 +67,4 @@ void MyBOBox::SetPosition(const XMFLOAT3 & pos)
 {
 	m_BOBox.Center = pos;
 }
-
-MyBOBox MyBOBox::GetBOBox(const XMFLOAT3& position)
-{
-	MyBOBox newBoBox;
-	newBoBox.m_BOBox.Center = Vector3::Add(m_BOBox.Center, position);
-	newBoBox.m_BOBox.Orientation = m_BOBox.Orientation;
-	return newBoBox;
-}
+ 

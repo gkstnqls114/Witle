@@ -350,23 +350,24 @@ void GameScene::Update(float fElapsedTime)
 				{
 					bool isUseSliding = false;
 					for (int x = 0; x < 4; ++x) //  plane ¸é
-					{
+					{ 
 						bool isIntersect = Plane::Intersect(worldBox.GetPlane(x), AlreadyPositon, m_pPlayer->GetVelocity());
-						bool isFront = Plane::IsFront(worldBox.GetPlane(x), AlreadyPositon);
-						if (isIntersect && isFront)
+						// bool isFront = Plane::IsFront(worldBox.GetPlane(x), AlreadyPositon);
+						if (isIntersect /*&& isFront*/)
 						{ 
-							m_pPlayer->SetVelocity(
-								Vector3::Sliding(worldBox.GetPlane(x), m_pPlayer->GetVelocity())
+							m_pPlayer->SetVelocity
+							(
+								Vector3::Sliding(XMFLOAT3(worldBox.GetPlane(x).x, worldBox.GetPlane(x).y, worldBox.GetPlane(x).z), m_pPlayer->GetVelocity())
 							);
 							 
 							isUseSliding = true; 
 						}
 					}
 
-					if (!isUseSliding)
-					{ 
-						m_pPlayer->MoveVelocity(Vector3::ScalarProduct(m_pPlayer->GetVelocity(), -1, false));
-					}
+					//if (!isUseSliding)
+					//{ 
+					//	m_pPlayer->MoveVelocity(Vector3::ScalarProduct(m_pPlayer->GetVelocity(), -1, false));
+					//}
 				}
 			} 
 		}
