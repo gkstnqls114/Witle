@@ -131,6 +131,7 @@ private:
 
 	void BuildShaders();
 	void BuildTESTObjects();
+	 
 
 public:
 	CGameFramework();
@@ -150,8 +151,7 @@ public:
 	LRESULT CALLBACK OnProcessingWindowMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam);
 	
 private: 
-	short m_MouseWheelData{ 0 }; // 120: 휠을 올렸을때, -120: 휠을 내렸을때, 한번 휠을 올리거나 내리면 그 상태로 계속 저장되므로 0으로 다시 만들어줘야함
-	 
+	
 	Scene *m_pScene{ nullptr };
 	
 	// 블러를 위한 컴퓨트

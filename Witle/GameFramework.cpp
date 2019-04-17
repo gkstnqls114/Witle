@@ -93,7 +93,7 @@ bool CGameFramework::OnCreate(HINSTANCE hInstance, HWND hMainWnd)
 	CreateRtvAndDsvDescriptorHeaps();
 	CreateSwapChain();
 	
-	CreateRWResourceViews();
+	// CreateRWResourceViews();
 	 
 	BuildObjects();
 	 
@@ -496,7 +496,7 @@ void CGameFramework::BuildObjects()
 	 
 	BuildTESTObjects();
 	BuildShaders();
-
+	   
 	m_pScene->BuildObjects(m_d3dDevice.Get(), m_CommandList.Get());
 	///////////////////////////////////////////////////////////////////////////// 府家胶 积己
 
@@ -525,8 +525,15 @@ void CGameFramework::ReleaseObjects()
 		m_pScene = nullptr;
 	}
 
+	// CMaterial::ReleaseShaders();
 	TextureStorage::GetInstance()->ReleaseObjects();
 	ModelStorage::GetInstance()->ReleaseObjects();
+	ShaderManager::GetInstance()->ReleaseObjects();
+
+	ShaderManager::ReleaseInstance();
+	TextureStorage::ReleaseInstance();
+	ModelStorage::ReleaseInstance();
+	 
 }
 
 void CGameFramework::UpdateGamelogic(float fElapsedTime)
@@ -699,17 +706,13 @@ void CGameFramework::BuildShaders()
 
 void CGameFramework::BuildTESTObjects()
 {
-	m_horizenShader = new HorizonBlurShader();
-	m_horizenShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
+	//m_horizenShader = new HorizonBlurShader();
+	//m_horizenShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
 
-	m_verticalShader = new VerticalBlurShader();
-	m_verticalShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
-
-	Shader* pTESTShader = new TESTShader();
-	pTESTShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
-	ShaderManager::GetInstance()->InsertShader("TEST", pTESTShader);
+	//m_verticalShader = new VerticalBlurShader();
+	//m_verticalShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
 }
-
+ 
 void CGameFramework::RenderOnGbuffer()
 {
 	for (int i = 0; i < m_GBuffersCount; i++) { 

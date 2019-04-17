@@ -22,6 +22,12 @@ public:
 		}
 		return m_Instance;
 	}
+	static void ReleaseInstance()
+	{
+		delete m_Instance;
+		m_Instance = nullptr;
+	}
+
 
 	void ReleaseUploadBuffers();
 	void ReleaseObjects();

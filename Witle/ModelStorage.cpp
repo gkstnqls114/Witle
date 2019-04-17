@@ -7,14 +7,14 @@ ModelStorage* ModelStorage::m_Instance{ nullptr };
 
 ModelStorage * ModelStorage::GetInstance()
 {
-	if(!m_Instance)
+	if(nullptr == m_Instance)
 	{
 		m_Instance = new ModelStorage();
 	}
 
 	return m_Instance;
 }
-
+ 
 void ModelStorage::CreateModels(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature)
 {
 	if (m_isCreate) return;
@@ -44,26 +44,25 @@ void ModelStorage::ReleaseUploadBuffers()
 {
 	for (auto& model : m_ModelStorage)
 	{
-		model.second.loadmodelInfo->m_pModelRootObject->ReleaseUploadBuffers();
-	}
-	for (auto& model : m_ModelStorage)
-	{
-		model.second.modelBOBox->ReleaseUploadBuffers();
-	}
+		 model.second.loadmodelInfo->m_pModelRootObject->ReleaseUploadBuffers();
+		 model.second.modelBOBox->ReleaseUploadBuffers();
+	} 
 }
 
 void ModelStorage::ReleaseObjects()
-{
+{ 
 	for (auto& model : m_ModelStorage)
 	{
+		// model.second.loadmodelInfo->ReleaseObjects();
 		delete model.second.loadmodelInfo;
-		model.second.loadmodelInfo = nullptr;
-	}
-	for (auto& model : m_ModelStorage)
-	{
+		model.second.loadmodelInfo = nullptr; 
+		  
+		// model.second.modelBOBox->ReleaseObjects();
 		delete model.second.modelBOBox;
 		model.second.modelBOBox = nullptr;
 	}
+
+	m_ModelStorage.clear(); 
 }
 
 LoadObject * ModelStorage::GetRootObject(std::string name)

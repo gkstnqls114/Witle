@@ -29,6 +29,7 @@ void TextureStorage::ReleaseObjects()
 		delete texture.second;
 		texture.second = nullptr;
 	}
+	m_TextureStorage.clear();
 }
 
 void TextureStorage::CreateTextures(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList)

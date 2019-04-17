@@ -11,6 +11,11 @@ MyDescriptorHeap::MyDescriptorHeap()
 
 MyDescriptorHeap::~MyDescriptorHeap()
 {
+	ReleaseObjects();
+}
+
+void MyDescriptorHeap::ReleaseObjects()
+{
 	if (m_pd3dCbvSrvUavDescriptorHeap)
 	{
 		m_pd3dCbvSrvUavDescriptorHeap->Release();
