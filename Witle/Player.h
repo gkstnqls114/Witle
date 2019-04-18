@@ -20,7 +20,7 @@ class Player :
 	MyBOBox*		m_pMyBOBox{ nullptr };
 	LoadObject*		m_pLoadObject{ nullptr };
 	 
-	// Broom* m_pBroom{ nullptr };
+	Broom* m_pBroom{ nullptr };
 	Sniping* m_pSniping{ nullptr };
 
 	LPVOID m_pPlayerUpdatedContext { nullptr };

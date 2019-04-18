@@ -108,6 +108,8 @@ Player::Player(const std::string & entityID, ID3D12Device * pd3dDevice, ID3D12Gr
 	m_pPlayerStatus = new PlayerStatus(this, pd3dDevice, pd3dCommandList);
 	m_pPlayerMovement = new PlayerMovement(this);
 	 
+	m_pBroom = new Broom(m_pPlayerMovement);
+
 	SetUpdatedContext(pContext); 
 }
 
@@ -139,16 +141,16 @@ void Player::ReleaseMemberUploadBuffers()
 
 void Player::Update(float fElapsedTime)
 { 
-	// m_pBroom->Update(fElapsedTime);
+	m_pBroom->Update(fElapsedTime);
 
 	// 이동량을 계산한다. 
 	m_pPlayerMovement->Update(fElapsedTime);
 	
 	// 이동량만큼 움직인다.
-	//if (m_pBroom->GetisUsing())
-	//{
+	if (m_pBroom->GetisUsing())
+	{
 		Move(Vector3::ScalarProduct(m_pPlayerMovement->m_xmf3Velocity, fElapsedTime, false));
-	//}
+	}
 	 
 	// 플레이어 콜백
 	// OnPlayerUpdateCallback(fElapsedTime);
@@ -247,14 +249,14 @@ void Player::ProcessInput(float fTimeElapsed)
 		if (dwDirection & DIR_LEFT) xmf3Shift = Vector3::Add(xmf3Shift, axis.right, -fDistance);
 		
 		//플레이어의 이동량 벡터를 xmf3Shift 벡터만큼 더한다. 
-		//if (m_pBroom->GetisUsing())
-		//{
+		if (m_pBroom->GetisUsing())
+		{
 			MoveVelocity(xmf3Shift);
-		//}
-		//else
-		//{
-		//	Move(xmf3Shift);
-		//}
+		}
+		else
+		{
+			Move(xmf3Shift);
+		}
 	}
 	else
 	{
@@ -273,7 +275,7 @@ void Player::ProcessInput(float fTimeElapsed)
 
 void Player::UseSkill_Broom()
 {
-	// m_pBroom->DoUse();
+	m_pBroom->DoUse();
 }
 
 XMFLOAT3 Player::GetVelocity() const
