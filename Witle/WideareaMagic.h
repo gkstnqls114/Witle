@@ -31,5 +31,6 @@ public:
 	virtual void Update(float fTimeElapsed) override;
 
 	void Render(ID3D12GraphicsCommandList* commandList);
+	BoundingSphere* GetBSphere();
 };
 

@@ -182,7 +182,7 @@ void CMesh::LoadMeshFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList
 						m_pxmf2TextureCoords0 = new XMFLOAT2[nTextureCoords];
 						nReads = (UINT)::fread(m_pxmf2TextureCoords0, sizeof(XMFLOAT2), nTextureCoords, pInFile);
 
-						UINT ncbElementBytes = ((sizeof(XMFLOAT2) * m_nVertices + 255) & ~255); //256의 배수
+						UINT ncbElementBytes = (sizeof(XMFLOAT2) * m_nVertices);
 						m_pd3dTextureCoord0Buffer = d3dUtil::CreateBufferResource(pd3dDevice, pd3dCommandList, m_pxmf2TextureCoords0, ncbElementBytes, D3D12_HEAP_TYPE_DEFAULT, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, &m_pd3dTextureCoord0UploadBuffer);
 
 						m_d3dTextureCoord0BufferView.BufferLocation = m_pd3dTextureCoord0Buffer->GetGPUVirtualAddress();
@@ -241,7 +241,7 @@ void CMesh::LoadMeshFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList
 						m_pxmf3Normals = new XMFLOAT3[nNormals];
 						nReads = (UINT)::fread(m_pxmf3Normals, sizeof(XMFLOAT3), nNormals, pInFile);
 
-						UINT ncbElementBytes = ((sizeof(XMFLOAT3) * m_nVertices + 255) & ~255); //256의 배수
+						UINT ncbElementBytes = (sizeof(XMFLOAT3) * m_nVertices); 
 						m_pd3dNormalBuffer = d3dUtil::CreateBufferResource(pd3dDevice, pd3dCommandList, m_pxmf3Normals, ncbElementBytes, D3D12_HEAP_TYPE_DEFAULT, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, &m_pd3dNormalUploadBuffer);
 
 						m_d3dNormalBufferView.BufferLocation = m_pd3dNormalBuffer->GetGPUVirtualAddress();

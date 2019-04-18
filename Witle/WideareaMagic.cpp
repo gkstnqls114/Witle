@@ -9,10 +9,16 @@ WideareaMagic::WideareaMagic(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList
 {
 	m_GameObject = new GameObject("Magic");
 	m_CylinderMesh = new CylinderMesh(m_GameObject, pd3dDevice, pd3dCommandList, 100, 100, 300, 10, 10);
+	
 	m_CylinderMesh->CreateTexture(pd3dDevice, pd3dCommandList, L"Image/CharacterAppearance1_OFF.dds");
 	m_GameObject->InsertComponent("Mesh", m_CylinderMesh);
 
 	m_MyBSphere = new MyBSphere(pd3dDevice, pd3dCommandList, XMFLOAT3{ 0, 0, 0 }, 100);
+}
+
+BoundingSphere* WideareaMagic::GetBSphere()
+{
+	return nullptr;
 }
 
 void WideareaMagic::SetPosition(XMFLOAT3 pos)

@@ -158,6 +158,37 @@ void QuadtreeTerrain::RecursiveCalculateIDs(QUAD_TREE_NODE * node, const XMFLOAT
 	}
 }
 
+void QuadtreeTerrain::CalculateIDs(const XMFLOAT3 position, int * pIDs) const
+{
+	for (int i = 0; i < m_ReafNodeCount; ++i)
+	{
+		QUAD_TREE_NODE* node = m_pReafNodes[i];
+		// 포지션이 해당 메쉬에 맞는지 확인한다. 
+		// x, z 사이에 있는지 검사한다.
+		float minX = node->boundingBox.Center.x - node->boundingBox.Extents.x;
+		float maxX = node->boundingBox.Center.x + node->boundingBox.Extents.x;
+		bool isIntervenedX = (minX <= position.x) && (position.x <= maxX);
+
+		float minZ = node->boundingBox.Center.z - node->boundingBox.Extents.z;
+		float maxZ = node->boundingBox.Center.z + node->boundingBox.Extents.z;
+		bool isIntervenedZ = (minZ <= position.z) && (position.z <= maxZ);
+
+		if (isIntervenedX && isIntervenedZ)
+		{
+			// 만약 속한다면 해당 ID를 채운다.
+			assert(!(pIDs[QUAD - 1] != -1)); // 만약 마지막이 채워져 있다면 오류이다.
+			for (int x = 0; x < QUAD; ++x)
+			{
+				if (pIDs[x] == -1)
+				{
+					pIDs[x] = node->id;
+					break;
+				}
+			}
+		}
+	}
+}
+
 void QuadtreeTerrain::CalculateIndex(const XMFLOAT3 position, int * pIndices) const
 {
 	for (int i = 0; i < m_ReafNodeCount; ++i)
@@ -313,7 +344,7 @@ int * const  QuadtreeTerrain::GetIDs(const XMFLOAT3 & position) const
 		pIDs[x] = -1; // -1로 리셋. -1이라면 존재하지 않는 것.
 	}
 	
-	RecursiveCalculateIDs(m_pRootNode, position, pIDs);
+	CalculateIDs(position, pIDs);
 
 	return pIDs;
 }

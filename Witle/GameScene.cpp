@@ -423,17 +423,11 @@ void GameScene::Update(float fElapsedTime)
 	//		} 
 	//	}
 	//}
-	// 충돌체크 /////////////////////////
-	if (m_PlayerTerrainIndex) delete[] m_PlayerTerrainIndex;
+	// 충돌체크 ///////////////////////// 
 
 	m_pPlayer->Update(fElapsedTime); //Velocity를 통해 pos 이동
 	m_pOtherPlayer->Update(fElapsedTime);
-	
-	m_PlayerTerrainIndex = m_pQuadtreeTerrain->GetIndex(m_pPlayer->GetTransform().GetPosition());
-	
-	// 움직인 위치를 통해 터레인 조각 위치 구한다.
-	m_pPlayer;
-
+	 
 	m_SkyBox->Update(fElapsedTime);
 	m_WideareaMagic->Update(fElapsedTime);
 
@@ -463,6 +457,13 @@ void GameScene::LastUpdate(float fElapsedTime)
 	m_Camera->GetFrustum()->CheckRendering(m_pQuadtreeTerrain->GetRootNode()); 
 	m_pQuadtreeTerrain->LastUpdate(fElapsedTime);
 	// 순서변경X 
+
+	// 이동한 플레이어 데미지 체크
+	//if (Collision::isCollide(m_WideareaMagic->GetBSphere(), m_pPlayer->GetBOBox()))
+	//{
+
+	//}
+	
 }
 
 void GameScene::TESTSetRootDescriptor(ID3D12GraphicsCommandList * pd3dCommandList)

@@ -12,6 +12,10 @@ public:
 	{
 		return a.Intersects(b);
 	}
-
+	   
+	static bool isCollide(const BoundingSphere& a, const BoundingOrientedBox& b)
+	{
+		return a.Intersects(b);
+	}
 
 };

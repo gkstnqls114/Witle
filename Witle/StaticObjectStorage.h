@@ -25,12 +25,14 @@ private:
 		std::vector<XMFLOAT4X4> TransformList;
 	};
 	 
-	bool m_isCreate = false; 
+	bool m_isCreate = false;  
 	std::map<std::string, LoadObject*> m_StaticObjectModelsStorage; // 모델 이름은 반드시 클래스에 맞춘다.
 	std::map<std::string, TerrainObjectInfo*> m_StaticObjectStorage; // 모델 이름은 반드시 클래스에 맞춘다.
 	void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList, int count, XMFLOAT4X4* transforms);
 
 private:
+	bool LoadTransform(char* name, char* comp_name, const int* terrainIDs, XMFLOAT3 pos);
+
 	void LoadTerrainObjectFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, const char *pstrFileName, const QuadtreeTerrain const * pTerrain);
 	void LoadNameAndPositionFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, FILE *pInFile, const QuadtreeTerrain const * pTerrain);
 	void CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList);
