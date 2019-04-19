@@ -11,6 +11,7 @@
 #include "ShaderManager.h"
 #include "ModelStorage.h"
 #include "TextureStorage.h"
+#include "StaticObjectStorage.h"
 //// Manager ////////////////////////// 
 
 //// Scene ////////////////////////// 
@@ -526,11 +527,14 @@ void CGameFramework::ReleaseObjects()
 		m_pScene = nullptr;
 	}
 	 
-	CMaterial::ReleaseShaders();
+
+	CMaterial::ReleaseShaders(); 
+	StaticObjectStorage::GetInstance()->ReleaseObjects();
 	TextureStorage::GetInstance()->ReleaseObjects();
 	ModelStorage::GetInstance()->ReleaseObjects();
 	ShaderManager::GetInstance()->ReleaseObjects();
 
+	StaticObjectStorage::ReleaseInstance();
 	ShaderManager::ReleaseInstance();
 	TextureStorage::ReleaseInstance();
 	ModelStorage::ReleaseInstance();

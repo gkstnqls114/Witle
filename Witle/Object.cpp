@@ -485,6 +485,11 @@ void CAnimationController::SetTrackWeight(int nAnimationTrack, float fWeight)
 
 void CAnimationController::ReleaseObjects()
 {  
+	if (m_pAnimationTracks)
+	{ 
+		delete[] m_pAnimationTracks;
+		m_pAnimationTracks = NULL;
+	}
 	if (m_ppd3dcbSkinningBoneTransforms)
 	{ 
 		for (int i = 0; i < m_nSkinnedMeshes; i++)

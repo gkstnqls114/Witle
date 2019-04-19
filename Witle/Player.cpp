@@ -123,6 +123,12 @@ Player::~Player()
 
 void Player::ReleaseMembers()
 {
+	if (m_pBroom)
+	{ 
+		m_pBroom->ReleaseObjects();
+		delete m_pBroom;
+		m_pBroom = nullptr;
+	}
 	if (m_PlayerModel)
 	{
 		m_PlayerModel->ReleaseObjects();
@@ -194,7 +200,7 @@ void Player::Animate(float fElapsedTime)
 	XMMATRIX mtxRotate = XMMatrixRotationRollPitchYaw(XMConvertToRadians(fPitch), XMConvertToRadians(fYaw), XMConvertToRadians(fRoll));
 	m_pLoadObject->m_xmf4x4ToParent = Matrix4x4::Multiply(mtxRotate, m_Transform.GetpWorldMatrixs());
 	 
-	// m_pLoadObject->Animate(fElapsedTime);
+	m_pLoadObject->Animate(fElapsedTime);
 }
 
 void Player::Render(ID3D12GraphicsCommandList * pd3dCommandList)
@@ -213,10 +219,10 @@ void Player::SetTrackAnimationSet(ULONG dwDirection)
 { 
 	m_pLoadObject->SetTrackAnimationSet(0, ANIMATION_IDLE);
 
-	if (dwDirection & DIR_FORWARD)	m_pLoadObject->SetTrackAnimationSet(0, ANIMATION_FORWARD);
-	if (dwDirection & DIR_BACKWARD) m_pLoadObject->SetTrackAnimationSet(0, ANIMATION_BACKWARD);
-	if (dwDirection & DIR_RIGHT) m_pLoadObject->SetTrackAnimationSet(0, ANIMATION_RIGHT);
-	if (dwDirection & DIR_LEFT) m_pLoadObject->SetTrackAnimationSet(0, ANIMATION_LEFT); 
+	//if (dwDirection & DIR_FORWARD)	m_pLoadObject->SetTrackAnimationSet(0, ANIMATION_FORWARD);
+	//if (dwDirection & DIR_BACKWARD) m_pLoadObject->SetTrackAnimationSet(0, ANIMATION_BACKWARD);
+	//if (dwDirection & DIR_RIGHT) m_pLoadObject->SetTrackAnimationSet(0, ANIMATION_RIGHT);
+	//if (dwDirection & DIR_LEFT) m_pLoadObject->SetTrackAnimationSet(0, ANIMATION_LEFT); 
 }
 
 void Player::Move(const XMFLOAT3 & xmf3Shift)

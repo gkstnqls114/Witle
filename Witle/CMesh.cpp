@@ -684,23 +684,20 @@ CSkinnedMesh::~CSkinnedMesh()
 	if (m_pxmf4x4BindPoseBoneOffsets) delete[] m_pxmf4x4BindPoseBoneOffsets;
 	if (m_pd3dcbBindPoseBoneOffsets) m_pd3dcbBindPoseBoneOffsets->Release();
 
-	if (m_ppstrSkinningBoneNames) delete[] m_ppstrSkinningBoneNames;
+	if (m_ppstrSkinningBoneNames)
+	{  
+		delete[] m_ppstrSkinningBoneNames;
+		m_ppstrSkinningBoneNames = NULL;
+	}
 
 	if (m_pd3dBoneIndexBuffer) m_pd3dBoneIndexBuffer->Release();
 	if (m_pd3dBoneWeightBuffer) m_pd3dBoneWeightBuffer->Release();
 
-	//if (m_ppSkinningBoneFrameCaches)
-	//{
-	//	for (int i = 0; i < m_nSkinningBones; ++i)
-	//	{
-	//		m_ppSkinningBoneFrameCaches[i]->ReleaseObjects();
-	//		delete m_ppSkinningBoneFrameCaches[i];
-	//		m_ppSkinningBoneFrameCaches[i] = NULL;
-	//	}
-	//	 
-	//	delete m_ppSkinningBoneFrameCaches;
-	//	m_ppSkinningBoneFrameCaches = NULL;
-	//}
+	if (m_ppSkinningBoneFrameCaches)
+	{ 
+		delete[] m_ppSkinningBoneFrameCaches;
+		m_ppSkinningBoneFrameCaches = NULL;
+	}
 
 	ReleaseShaderVariables();
 }
@@ -746,7 +743,7 @@ void CSkinnedMesh::ReleaseUploadBuffers()
 
 void CSkinnedMesh::PrepareSkinning(LoadObject *pModelRootObject)
 {
-	m_ppSkinningBoneFrameCaches = new LoadObject*[m_nSkinningBones];
+	// m_ppSkinningBoneFrameCaches = new LoadObject*[m_nSkinningBones];
 	for (int j = 0; j < m_nSkinningBones; j++)
 	{
 		m_ppSkinningBoneFrameCaches[j] = pModelRootObject->FindFrame(m_ppstrSkinningBoneNames[j]);

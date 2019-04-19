@@ -42,7 +42,10 @@ public:
 
 public:
 	static StaticObjectStorage* GetInstance(const QuadtreeTerrain const * pTerrain);
+	static StaticObjectStorage* GetInstance( );
+	static void ReleaseInstance();
 
+	void ReleaseObjects();
 	int GetObjectCount(int index, const std::string& name);
 	int GetObjectAllCount(int index);
 

@@ -216,7 +216,7 @@ public:
 	int								m_nSkinningBones = 0;
 
 	char(*m_ppstrSkinningBoneNames)[64];
-	LoadObject						**m_ppSkinningBoneFrameCaches = NULL;
+	LoadObject						**m_ppSkinningBoneFrameCaches = NULL; //포인터를 담기만 한다. 내부에서 동적할당X
 
 	XMFLOAT4X4						*m_pxmf4x4BindPoseBoneOffsets = NULL;
 

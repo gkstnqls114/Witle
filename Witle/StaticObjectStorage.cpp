@@ -35,7 +35,9 @@ bool StaticObjectStorage::LoadTransform(char * name, char * comp_name, const int
 			TestObject->UpdateTransform(NULL);
 
 			m_StaticObjectStorage[comp_name][terrainIDs[x]].TransformList.emplace_back(TestObject->m_pChild->m_xmf4x4World);
+			 
 			delete TestObject;
+			TestObject = nullptr;
 
 			result = true;
 		}
@@ -226,6 +228,61 @@ StaticObjectStorage * StaticObjectStorage::GetInstance(const QuadtreeTerrain con
 	}
 
 	return m_Instance;
+}
+
+StaticObjectStorage * StaticObjectStorage::GetInstance()
+{ 
+	if (!m_Instance)
+	{
+		m_Instance = new StaticObjectStorage();
+	}
+
+	return m_Instance;
+}
+
+void StaticObjectStorage::ReleaseInstance()
+{
+	if (m_Instance)
+	{ 
+		delete m_Instance;
+		m_Instance = nullptr;
+	}
+}
+
+void StaticObjectStorage::ReleaseObjects()
+{
+	for (auto& model : m_StaticObjectModelsStorage)
+	{
+		delete model.second;
+		model.second = nullptr;
+	}
+	m_StaticObjectModelsStorage.clear();
+	 
+	for (auto& loadobj : m_StaticObjectStorage)
+	{ 
+		// loadobj.first는 이름입니다.
+
+		if (loadobj.second->m_pd3dcbGameObjects)
+		{
+			loadobj.second->m_pd3dcbGameObjects->Unmap(0, NULL);
+			loadobj.second->m_pd3dcbGameObjects = nullptr;
+		}
+
+		//if (loadobj.second->m_pcbMappedGameObjects)
+		//{
+		//	delete[] loadobj.second->m_pcbMappedGameObjects;
+		//	loadobj.second->m_pcbMappedGameObjects = nullptr; 
+		//}
+
+		loadobj.second->TransformList.clear();
+
+		if (loadobj.second)
+		{
+			delete[] loadobj.second;
+			loadobj.second = nullptr;
+		}
+	}
+	m_StaticObjectStorage.clear();
 }
 
 int StaticObjectStorage::GetObjectCount(int index, const std::string & name)
