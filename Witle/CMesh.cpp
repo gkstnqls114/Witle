@@ -15,7 +15,36 @@ CMesh::CMesh(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandLis
 
 CMesh::~CMesh()
 {
-	if (m_pd3dPositionBuffer) m_pd3dPositionBuffer->Release();
+	if (m_pd3dPositionBuffer)
+	{
+		m_pd3dPositionBuffer->Release();
+		m_pd3dPositionBuffer = nullptr;
+	}
+	if (m_pd3dTextureCoord0Buffer)
+	{
+		m_pd3dTextureCoord0Buffer->Release();
+		m_pd3dTextureCoord0Buffer = nullptr;
+	} 
+	if (m_pd3dTextureCoord1Buffer)
+	{
+		m_pd3dTextureCoord1Buffer->Release();
+		m_pd3dTextureCoord1Buffer = nullptr;
+	} 
+	if (m_pd3dNormalBuffer)
+	{
+		m_pd3dNormalBuffer->Release();
+		m_pd3dNormalBuffer = nullptr;
+	} 
+	if (m_pd3dTangentBuffer)
+	{
+		m_pd3dTangentBuffer->Release();
+		m_pd3dTangentBuffer = nullptr;
+	} 
+	if (m_pd3dBiTangentBuffer)
+	{
+		m_pd3dBiTangentBuffer->Release();
+		m_pd3dBiTangentBuffer = nullptr;
+	}
 
 	if (m_nSubMeshes > 0)
 	{
@@ -31,6 +60,7 @@ CMesh::~CMesh()
 		if (m_ppnSubSetIndices) delete[] m_ppnSubSetIndices;
 	}
 
+	if (m_pxmf4Colors) delete[] m_pxmf4Colors;
 	if (m_pxmf3Positions) delete[] m_pxmf3Positions;
 	if (m_pxmf2TextureCoords0) delete[] m_pxmf2TextureCoords0;
 	if (m_pxmf2TextureCoords1) delete[] m_pxmf2TextureCoords1;
@@ -41,8 +71,36 @@ CMesh::~CMesh()
 
 void CMesh::ReleaseUploadBuffers()
 {
-	if (m_pd3dPositionUploadBuffer) m_pd3dPositionUploadBuffer->Release();
-	m_pd3dPositionUploadBuffer = NULL;
+	if (m_pd3dPositionUploadBuffer)
+	{
+		m_pd3dPositionUploadBuffer->Release();
+		m_pd3dPositionUploadBuffer = NULL;
+	}
+	if (m_pd3dTextureCoord0UploadBuffer)
+	{
+		m_pd3dTextureCoord0UploadBuffer->Release();
+		m_pd3dTextureCoord0UploadBuffer = NULL;
+	}
+	if (m_pd3dTextureCoord1UploadBuffer)
+	{
+		m_pd3dTextureCoord1UploadBuffer->Release();
+		m_pd3dTextureCoord1UploadBuffer = NULL;
+	}
+	if (m_pd3dNormalUploadBuffer)
+	{
+		m_pd3dNormalUploadBuffer->Release();
+		m_pd3dNormalUploadBuffer = NULL;
+	}
+	if (m_pd3dTangentUploadBuffer)
+	{
+		m_pd3dTangentUploadBuffer->Release();
+		m_pd3dTangentUploadBuffer = NULL;
+	}
+	if (m_pd3dBiTangentUploadBuffer)
+	{
+		m_pd3dBiTangentUploadBuffer->Release();
+		m_pd3dBiTangentUploadBuffer = NULL;
+	}
 
 	if ((m_nSubMeshes > 0) && m_ppd3dSubSetIndexUploadBuffers)
 	{
@@ -615,6 +673,7 @@ CSkyBoxMesh::~CSkyBoxMesh()
 //
 CSkinnedMesh::CSkinnedMesh(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList) : CMesh(pd3dDevice, pd3dCommandList)
 {
+
 }
 
 CSkinnedMesh::~CSkinnedMesh()

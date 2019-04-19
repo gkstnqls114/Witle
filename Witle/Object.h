@@ -135,16 +135,11 @@ private:
 	CTexture						**m_ppTextures = NULL; //0:Albedo, 1:Specular, 2:Metallic, 3:Normal, 4:Emission, 5:DetailAlbedo, 6:DetailNormal
 
 public:
+	static void ReleaseShaders();
 	static void PrepareShaders(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature);
 	 
-	void SetWireFrameShader() {  
-		 
-		CMaterial::SetShader(m_pWireFrameShader);
-	}
-	void SetSkinnedAnimationWireFrameShader() 
-	{ 
-		SetShader(m_pSkinnedAnimationWireFrameShader); 
-	}
+	void SetWireFrameShader();
+	void SetSkinnedAnimationWireFrameShader();
 };
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -309,6 +304,7 @@ public:
 	CSkinnedMesh					**m_ppSkinnedMeshes = nullptr; //[SkinnedMeshes], Skinned Mesh Cache
 
 public:
+	void ReleaseUploadBuffers();
 	void ReleaseObjects();
 	void PrepareSkinning();
 };

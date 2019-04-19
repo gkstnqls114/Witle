@@ -153,6 +153,23 @@ void CMaterial::ReleaseUploadBuffers()
 Shader *CMaterial::m_pWireFrameShader = NULL;
 Shader *CMaterial::m_pSkinnedAnimationWireFrameShader = NULL;
 
+void CMaterial::ReleaseShaders()
+{
+	if (m_pWireFrameShader)
+	{
+		m_pWireFrameShader->ReleaseObjects();
+		delete m_pWireFrameShader;
+		m_pWireFrameShader = nullptr;
+	}
+
+	if (m_pSkinnedAnimationWireFrameShader)
+	{
+		m_pSkinnedAnimationWireFrameShader->ReleaseObjects();
+		delete m_pSkinnedAnimationWireFrameShader;
+		m_pSkinnedAnimationWireFrameShader = nullptr;
+	}
+}
+
 void CMaterial::PrepareShaders(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature)
 {
 	m_pWireFrameShader = new StandardShader();
@@ -160,6 +177,16 @@ void CMaterial::PrepareShaders(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandLi
 
 	m_pSkinnedAnimationWireFrameShader = new SkinnedShader();
 	m_pSkinnedAnimationWireFrameShader->CreateShader(pd3dDevice, pd3dGraphicsRootSignature); 
+}
+
+void CMaterial::SetWireFrameShader()
+{ 
+	CMaterial::SetShader(m_pWireFrameShader);
+}
+
+void CMaterial::SetSkinnedAnimationWireFrameShader()
+{
+	SetShader(m_pSkinnedAnimationWireFrameShader);
 }
 
 void CMaterial::UpdateShaderVariable(ID3D12GraphicsCommandList *pd3dCommandList)
@@ -513,6 +540,14 @@ CLoadedModelInfo::~CLoadedModelInfo()
 
 }
 
+void CLoadedModelInfo::ReleaseUploadBuffers()
+{
+	if (m_pModelRootObject)
+	{
+		m_pModelRootObject->ReleaseUploadBuffers();
+	}
+}
+
 void CLoadedModelInfo::ReleaseObjects()
 {
 	if (m_pAnimationSets)
@@ -821,7 +856,7 @@ void LoadObject::ReleaseObjects()
 		m_pSkinnedAnimationController = nullptr;
 	}
 	if (m_pMesh)
-	{
+	{ 
 		delete m_pMesh;
 		m_pMesh = nullptr;
 	}

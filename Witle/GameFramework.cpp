@@ -513,7 +513,8 @@ void CGameFramework::BuildObjects()
 
 	///////////////////////////////////////////////////////////////////////////// 업로드 힙 릴리즈
 	if (m_pScene) m_pScene->ReleaseUploadBuffers(); 
-	 
+
+	m_pReleaseTest->ReleaseUploadBuffers();
 	TextureStorage::GetInstance()->ReleaseUploadBuffers();
 	ModelStorage::GetInstance()->ReleaseUploadBuffers();
 	///////////////////////////////////////////////////////////////////////////// 업로드 힙 릴리즈
@@ -529,11 +530,15 @@ void CGameFramework::ReleaseObjects()
 		m_pScene = nullptr;
 	}
 	
-	m_pReleaseTest->ReleaseObjects();
-	delete m_pReleaseTest;
-	m_pReleaseTest = nullptr;
+	if (m_pReleaseTest)
+	{
+		m_pReleaseTest->ReleaseObjects();
+		delete m_pReleaseTest;
+		m_pReleaseTest = nullptr;
 
-	// CMaterial::ReleaseShaders();
+	}
+
+	CMaterial::ReleaseShaders();
 	TextureStorage::GetInstance()->ReleaseObjects();
 	ModelStorage::GetInstance()->ReleaseObjects();
 	ShaderManager::GetInstance()->ReleaseObjects();
