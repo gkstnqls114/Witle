@@ -4,7 +4,6 @@
 class DirectionalLight
 	: public Light
 {
-private: 
 
 public:
 	DirectionalLight(GameObject * pOwner);

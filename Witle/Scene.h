@@ -34,8 +34,7 @@ public:
 
 	ID3D12RootSignature* GetGraphicsRootSignature() const { return m_pd3dGraphicsRootSignature; }
 
-protected:
-
+protected: 
 	ID3D12RootSignature* m_pd3dGraphicsRootSignature{ nullptr }; // 루트 시그니처
-	
+	 
 };

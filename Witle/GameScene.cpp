@@ -238,9 +238,28 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 
 void GameScene::ReleaseObjects()
 {
-	if (m_Sniping)
+	delete LightManager::m_pLights;
+	LightManager::m_pLights = nullptr;
+
+	delete m_pMaterials;
+	m_pMaterials = nullptr;
+	m_pd3dcbLights->Unmap(0, NULL);
+	m_pd3dcbLights->Release();
+	m_pd3dcbLights = NULL;
+	if (m_SkyBox)
 	{
-		m_Sniping->ReleaseObjects();
+		m_SkyBox->ReleaseObjects();
+		delete m_SkyBox;
+		m_SkyBox = nullptr;
+	}
+	if (m_PlayerTerrainIndex)
+	{
+		delete[] m_PlayerTerrainIndex;
+		m_PlayerTerrainIndex = nullptr;
+	} 
+	if (m_Sniping)
+	{ 
+		m_Sniping->ReleaseObjects(); 
 		delete m_Sniping;
 		m_Sniping = nullptr;
 	}
@@ -251,19 +270,19 @@ void GameScene::ReleaseObjects()
 		m_WideareaMagic = nullptr;
 	}
 	if (m_AimPoint)
-	{
+	{ 
 		m_AimPoint->ReleaseObjects();
 		delete m_AimPoint;
 		m_AimPoint = nullptr;
 	}
 	if (m_pOtherPlayer)
 	{
-		m_pOtherPlayer->ReleaseObjects();
+		m_pOtherPlayer->ReleaseObjects(); 
 		delete m_pOtherPlayer;
 		m_pOtherPlayer = nullptr;
 	}
 	if (m_pPlayer)
-	{ 
+	{
 		m_pPlayer->ReleaseObjects();
 		delete m_pPlayer;
 		m_pPlayer = nullptr;
@@ -277,19 +296,19 @@ void GameScene::ReleaseObjects()
 	}
 #endif
 	if (m_Camera)
-	{
+	{ 
 		m_Camera->ReleaseObjects();
 		delete m_Camera;
 		m_Camera = nullptr;
 	}
 	if (m_Terrain)
-	{
-		m_Terrain->ReleaseObjects();
+	{ 
+		m_Terrain->ReleaseObjects(); 
 		delete m_Terrain;
 		m_Terrain = nullptr;
 	} 
 	if (m_pQuadtreeTerrain)
-	{
+	{  
 		m_pQuadtreeTerrain->ReleaseObjects();
 		delete m_pQuadtreeTerrain;
 		m_pQuadtreeTerrain = nullptr;
@@ -530,7 +549,8 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 }
 
 void GameScene::ReleaseUploadBuffers()
-{ 
+{  
+	if (m_SkyBox) m_SkyBox->ReleaseUploadBuffers();
 	if (m_AimPoint)m_AimPoint->ReleaseUploadBuffers();
 	if (m_Sniping) m_Sniping->ReleaseUploadBuffers();
 	if (m_WideareaMagic) m_WideareaMagic->ReleaseUploadBuffers();

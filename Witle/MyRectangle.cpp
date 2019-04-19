@@ -8,6 +8,31 @@
 
 #define RECTANGLE_VERTEX_COUNT 6
  
+void MyRectangle::ReleaseObjects()
+{
+	if (m_pHeap)
+	{
+		m_pHeap->ReleaseObjects();
+		delete m_pHeap;
+		m_pHeap = nullptr;
+	}
+	if (m_pTexture)
+	{
+		delete m_pTexture;
+		m_pTexture = nullptr;
+	}
+	if (m_pPositionBuffer)
+	{
+		m_pPositionBuffer->Release();
+		m_pPositionBuffer = nullptr;
+	}
+}
+
+void MyRectangle::ReleaseUploadBuffers()
+{
+	if(m_pTexture) m_pTexture->ReleaseUploadBuffers();
+}
+
 MyRectangle::MyRectangle(GameObject * pOwner, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, RECT rect, const wchar_t * filepath)
 	:Shape(pOwner) 
 {

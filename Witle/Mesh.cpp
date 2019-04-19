@@ -38,6 +38,10 @@ Mesh::~Mesh()
 	}
 }
 
+void Mesh::ReleaseObjects()
+{
+}
+
 void Mesh::ReleaseUploadBuffers()
 {
 	if (m_pPositionUploadBuffer)

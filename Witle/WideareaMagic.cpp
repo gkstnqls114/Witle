@@ -6,13 +6,10 @@
 
 
 WideareaMagic::WideareaMagic(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList)
-{
-	m_GameObject = new GameObject("Magic");
-	m_CylinderMesh = new CylinderMesh(m_GameObject, pd3dDevice, pd3dCommandList, 100, 100, 300, 10, 10);
-	
+{ 
+	m_CylinderMesh = new CylinderMesh(this, pd3dDevice, pd3dCommandList, 100, 100, 300, 10, 10);
 	m_CylinderMesh->CreateTexture(pd3dDevice, pd3dCommandList, L"Image/CharacterAppearance1_OFF.dds");
-	m_GameObject->InsertComponent("Mesh", m_CylinderMesh);
-
+	 
 	m_MyBSphere = new MyBSphere(pd3dDevice, pd3dCommandList, XMFLOAT3{ 0, 0, 0 }, 100);
 }
 
@@ -23,7 +20,7 @@ BoundingSphere* WideareaMagic::GetBSphere()
 
 void WideareaMagic::SetPosition(XMFLOAT3 pos)
 {
-	m_GameObject->GetTransform().SetPosition(pos);
+	m_Transform.SetPosition(pos);
 }
 
 void WideareaMagic::Update(float fTimeElapsed)
@@ -36,12 +33,34 @@ void WideareaMagic::Update(float fTimeElapsed)
 
 	//m_SkillTime += fTimeElapsed;
 	//std::cout << m_SkillTime << std::endl;
-	m_GameObject->GetTransform().Rotate(0.f, rotateValue * fTimeElapsed, 0.f);
-	m_GameObject->GetTransform().Update(fTimeElapsed);
+	m_Transform.Rotate(0.f, rotateValue * fTimeElapsed, 0.f);
+	m_Transform.Update(fTimeElapsed);
 }
 
 WideareaMagic::~WideareaMagic()
 {
+}
+
+void WideareaMagic::ReleaseMembers()
+{ 
+	if (m_MyBSphere)
+	{
+		m_MyBSphere->ReleaseObjects();
+		delete m_MyBSphere;
+		m_MyBSphere = nullptr;
+	}
+	if (m_CylinderMesh)
+	{
+		m_CylinderMesh->ReleaseObjects();
+		delete m_CylinderMesh;
+		m_CylinderMesh = nullptr;
+	}
+}
+
+void WideareaMagic::ReleaseMemberUploadBuffers()
+{
+	if (m_MyBSphere) m_MyBSphere->ReleaseUploadBuffers(); 
+	if (m_CylinderMesh) m_CylinderMesh->ReleaseUploadBuffers(); 
 }
 
 void WideareaMagic::DoNotUse()
@@ -60,8 +79,8 @@ void WideareaMagic::Render(ID3D12GraphicsCommandList* commandList)
 	if (!m_isUsing) return; 
 
 #ifdef _SHOW_BOUNDINGBOX
-	m_MyBSphere->Render(commandList, m_GameObject->GetTransform().GetpWorldMatrixs());
+	m_MyBSphere->Render(commandList, m_Transform.GetpWorldMatrixs());
 #endif
-	UpdateShaderVariable(commandList, m_GameObject->GetTransform().GetpWorldMatrix());	
+	UpdateShaderVariable(commandList, m_Transform.GetpWorldMatrix());
 	m_CylinderMesh->Render(commandList);
 }

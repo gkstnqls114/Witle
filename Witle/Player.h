@@ -2,6 +2,7 @@
 #include "GameObject.h"
 
 class Camera;
+class CLoadedModelInfo;
 class LoadObject;
 class MyBOBox;
 class PlayerStatus;
@@ -12,13 +13,14 @@ class Sniping;
 // CHeightMapTerrain 입니다.
 class Player :
 	public GameObject
-{  
+{
 	bool m_isRendering{ true };
 
-	PlayerMovement* m_pPlayerMovement{ nullptr };
-	PlayerStatus*	m_pPlayerStatus{ nullptr };
-	MyBOBox*		m_pMyBOBox{ nullptr };
-	LoadObject*		m_pLoadObject{ nullptr };
+	PlayerMovement*    m_pPlayerMovement{ nullptr };
+	PlayerStatus*	   m_pPlayerStatus{ nullptr };
+	MyBOBox*		   m_pMyBOBox{ nullptr };
+	CLoadedModelInfo*  m_PlayerModel {nullptr };
+	LoadObject*		   m_pLoadObject{ nullptr }; // delete 금지
 	 
 	Broom* m_pBroom{ nullptr };
 	Sniping* m_pSniping{ nullptr };

@@ -95,10 +95,10 @@ XMFLOAT3 Player::CalculateAlreadyPosition(float fTimeElapsed)
 Player::Player(const std::string & entityID, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void * pContext)
 	: GameObject(entityID)
 { 
-	CLoadedModelInfo *pPlayerModel = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/Angrybot.bin", NULL);
-	m_pLoadObject = pPlayerModel->m_pModelRootObject;
+	m_PlayerModel = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/Angrybot.bin", NULL);
+	m_pLoadObject = m_PlayerModel->m_pModelRootObject;
 	 
-	m_pLoadObject->m_pSkinnedAnimationController = new CAnimationController(pd3dDevice, pd3dCommandList, 1, pPlayerModel);
+	m_pLoadObject->m_pSkinnedAnimationController = new CAnimationController(pd3dDevice, pd3dCommandList, 1, m_PlayerModel);
 	m_pLoadObject->m_pSkinnedAnimationController->SetTrackAnimationSet(0, 0);
 
 	XMFLOAT3 center{ 0.f, 75.f, 0.f };
@@ -123,6 +123,17 @@ Player::~Player()
 
 void Player::ReleaseMembers()
 {
+	if (m_PlayerModel)
+	{
+		m_PlayerModel->ReleaseObjects();
+		delete m_PlayerModel;
+		m_PlayerModel = nullptr;
+	}
+	if (m_pMyBOBox)
+	{
+		delete m_pMyBOBox;
+		m_pMyBOBox = nullptr;
+	}
 	if (m_pPlayerStatus)
 	{
 		delete m_pPlayerStatus;
@@ -137,6 +148,8 @@ void Player::ReleaseMembers()
 
 void Player::ReleaseMemberUploadBuffers()
 {
+	if (m_pLoadObject) m_pLoadObject->ReleaseUploadBuffers();
+	
 }
 
 void Player::Update(float fElapsedTime)
@@ -181,7 +194,7 @@ void Player::Animate(float fElapsedTime)
 	XMMATRIX mtxRotate = XMMatrixRotationRollPitchYaw(XMConvertToRadians(fPitch), XMConvertToRadians(fYaw), XMConvertToRadians(fRoll));
 	m_pLoadObject->m_xmf4x4ToParent = Matrix4x4::Multiply(mtxRotate, m_Transform.GetpWorldMatrixs());
 	 
-	m_pLoadObject->Animate(fElapsedTime);
+	// m_pLoadObject->Animate(fElapsedTime);
 }
 
 void Player::Render(ID3D12GraphicsCommandList * pd3dCommandList)

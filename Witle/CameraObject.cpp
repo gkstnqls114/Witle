@@ -6,12 +6,12 @@
 
 void CameraObject::ReleaseMembers()
 {
-	if (m_pCameraComponent)
-	{
-		m_pCameraComponent->ReleaseShaderVariables();
-		delete m_pCameraComponent;
-		m_pCameraComponent = nullptr;
-	}
+	//if (m_pCameraComponent)
+	//{
+	//	m_pCameraComponent->ReleaseShaderVariables();
+	//	delete m_pCameraComponent;
+	//	m_pCameraComponent = nullptr;
+	//}
 	if (m_pFrustum)
 	{
 		delete m_pFrustum;

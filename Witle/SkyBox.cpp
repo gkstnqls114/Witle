@@ -8,8 +8,21 @@
 
 void SkyBox::ReleaseMembers()
 {
+	if (m_Heap)
+	{
+		m_Heap->ReleaseObjects();
+		delete m_Heap;
+		m_Heap = nullptr;
+	}
+	if (m_Texture)
+	{
+		m_Texture->ReleaseShaderVariables();
+		delete m_Texture;
+		m_Texture = nullptr;
+	}
 	if (m_LoadObject)
 	{
+		m_LoadObject->ReleaseObjects();
 		delete m_LoadObject;
 		m_LoadObject = nullptr;
 	}
@@ -17,6 +30,7 @@ void SkyBox::ReleaseMembers()
 
 void SkyBox::ReleaseMemberUploadBuffers()
 {
+	if (m_Texture) m_Texture->ReleaseUploadBuffers();
 	if(m_LoadObject) m_LoadObject->ReleaseUploadBuffers();
 }
 

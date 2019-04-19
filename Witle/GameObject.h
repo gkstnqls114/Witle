@@ -27,19 +27,22 @@ protected:
 	Transform m_Transform; //월드변환을 위한 좌표계
 	ComponentBase* GetComponent(const std::string& id) const;
 
-private:
-	virtual void ReleaseMembers() override {};
-	virtual void ReleaseMemberUploadBuffers() override {};
+protected:
+	virtual void ReleaseMembers() = 0;
+	virtual void ReleaseMemberUploadBuffers()  = 0;
 
+private:
 	void ReleaseComponents();
 	void ReleaseComponentUploadBuffers();
 	 
+
 public:
 	GameObject(const std::string& entityID);
 	virtual ~GameObject();
 
 	virtual void Update(float fElapsedTime) override {};
 
+	// delete 이전에 반드시 호출
 	void ReleaseObjects();
 	void ReleaseUploadBuffers();
 

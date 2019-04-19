@@ -374,14 +374,26 @@ void CAnimationSet::SetAnimationCallbackHandler(CAnimationCallbackHandler *pCall
 //
 CAnimationSets::CAnimationSets(int nAnimationSets)
 {
+	if (nAnimationSets <= 0) return;
 	m_nAnimationSets = nAnimationSets;
 	m_ppAnimationSets = new CAnimationSet*[nAnimationSets];
 }
 
 CAnimationSets::~CAnimationSets()
 {
-	for (int i = 0; i < m_nAnimationSets; i++) if (m_ppAnimationSets[i]) delete m_ppAnimationSets[i];
-	if (m_ppAnimationSets) delete[] m_ppAnimationSets;
+	if (m_ppAnimationSets)
+	{
+		for (int i = 0; i < m_nAnimationSets; i++)
+		{
+			if (m_ppAnimationSets[i])
+			{
+				delete m_ppAnimationSets[i];
+				m_ppAnimationSets[i] = NULL;
+			}
+		}
+		delete[] m_ppAnimationSets;
+		m_ppAnimationSets = NULL;
+	}
 }
 
 void CAnimationSets::SetCallbackKeys(int nAnimationSet, int nCallbackKeys)
@@ -472,25 +484,22 @@ void CAnimationController::SetTrackWeight(int nAnimationTrack, float fWeight)
 }
 
 void CAnimationController::ReleaseObjects()
-{
-	 
-	if (m_pAnimationSets)
-	{
-		m_pAnimationSets->Release();
-		m_pAnimationSets = NULL;
-	}
-
-	for (int i = 0; i < m_nSkinnedMeshes; i++)
-	{
-		m_ppd3dcbSkinningBoneTransforms[i]->Unmap(0, NULL);
-		m_ppd3dcbSkinningBoneTransforms[i]->Release();
-		m_ppd3dcbSkinningBoneTransforms[i] = NULL;
-	}
+{  
 	if (m_ppd3dcbSkinningBoneTransforms)
-	{
+	{ 
+		for (int i = 0; i < m_nSkinnedMeshes; i++)
+		{
+			if (m_ppd3dcbSkinningBoneTransforms[i])
+			{
+				m_ppd3dcbSkinningBoneTransforms[i]->Unmap(0, NULL);
+				m_ppd3dcbSkinningBoneTransforms[i]->Release();
+				m_ppd3dcbSkinningBoneTransforms[i] = NULL;
+			}
+		}
 		delete[] m_ppd3dcbSkinningBoneTransforms;
 		m_ppd3dcbSkinningBoneTransforms = NULL;
 	}
+
 	if (m_ppcbxmf4x4MappedSkinningBoneTransforms)
 	{
 		delete[] m_ppcbxmf4x4MappedSkinningBoneTransforms;
@@ -537,7 +546,7 @@ void CAnimationController::AdvanceTime(float fTimeElapsed, LoadObject *pRootGame
 //
 CLoadedModelInfo::~CLoadedModelInfo()
 {
-
+	ReleaseObjects();
 }
 
 void CLoadedModelInfo::ReleaseUploadBuffers()
@@ -551,8 +560,8 @@ void CLoadedModelInfo::ReleaseUploadBuffers()
 void CLoadedModelInfo::ReleaseObjects()
 {
 	if (m_pAnimationSets)
-	{
-		m_pAnimationSets->Release();
+	{ 
+		delete m_pAnimationSets;
 		m_pAnimationSets = nullptr;
 	}
 	if (m_pModelRootObject)
@@ -856,7 +865,7 @@ void LoadObject::ReleaseObjects()
 		m_pSkinnedAnimationController = nullptr;
 	}
 	if (m_pMesh)
-	{ 
+	{  
 		delete m_pMesh;
 		m_pMesh = nullptr;
 	}
@@ -1074,9 +1083,7 @@ void LoadObject::LoadAnimationFromFile(FILE *pInFile, CLoadedModelInfo *pLoadedM
 		::ReadStringFromFile(pInFile, pstrToken);
 		if (!strcmp(pstrToken, "<AnimationSets>:"))
 		{
-			nAnimationSets = ::ReadIntegerFromFile(pInFile);
-			//일단 idle, 그외로 구성해보자..
-			// 현재 idle 애니메이션은 총 75프레임
+			nAnimationSets = ::ReadIntegerFromFile(pInFile); 
 			pLoadedModel->m_pAnimationSets = new CAnimationSets(nAnimationSets);
 		}
 		else if (!strcmp(pstrToken, "<AnimationSet>:"))

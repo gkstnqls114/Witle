@@ -689,6 +689,19 @@ CSkinnedMesh::~CSkinnedMesh()
 	if (m_pd3dBoneIndexBuffer) m_pd3dBoneIndexBuffer->Release();
 	if (m_pd3dBoneWeightBuffer) m_pd3dBoneWeightBuffer->Release();
 
+	//if (m_ppSkinningBoneFrameCaches)
+	//{
+	//	for (int i = 0; i < m_nSkinningBones; ++i)
+	//	{
+	//		m_ppSkinningBoneFrameCaches[i]->ReleaseObjects();
+	//		delete m_ppSkinningBoneFrameCaches[i];
+	//		m_ppSkinningBoneFrameCaches[i] = NULL;
+	//	}
+	//	 
+	//	delete m_ppSkinningBoneFrameCaches;
+	//	m_ppSkinningBoneFrameCaches = NULL;
+	//}
+
 	ReleaseShaderVariables();
 }
 

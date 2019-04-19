@@ -15,6 +15,9 @@ public:
 	MyBSphere(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, XMFLOAT3 center, float radius);
 	virtual ~MyBSphere();
 
+	void ReleaseObjects();
+	void ReleaseUploadBuffers();
+	 
 #ifdef _SHOW_BOUNDINGBOX 
 	void Render(ID3D12GraphicsCommandList * pd3dCommandList, const XMFLOAT4X4& xmf4x4World);
 #endif // _SHOW_BOUNDINGBOX

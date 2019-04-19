@@ -14,10 +14,8 @@ class SkyBox
 
 	Transform* m_pPlayerTransform{ nullptr };
 
-protected:
-	// 컴포넌트가 아닌, 게임오브젝트 내에서 동적할당된 멤버변수를 해제한다.
-	virtual void ReleaseMembers();
-	// 컴포넌트가 아닌, 게임오브젝트 내에서 동적할당된 업로드 힙을 해제한다.
+protected: 
+	virtual void ReleaseMembers(); 
 	virtual void ReleaseMemberUploadBuffers();
 
 public:

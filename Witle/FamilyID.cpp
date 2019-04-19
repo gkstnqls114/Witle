@@ -22,7 +22,7 @@ FamilyID::FamilyID()
 
 FamilyID::~FamilyID()
 {
-	assert(!(m_ID == ""));
+	// assert(!(m_ID == ""));
 }
 
 void FamilyID::InitTEST()

@@ -92,6 +92,34 @@ void CylinderMesh::CalculateVertexNormals(XMFLOAT3 * pxmf3Normals, XMFLOAT3 * px
 	}
 }
 
+void CylinderMesh::ReleaseObjects()
+{
+	Mesh::ReleaseObjects();
+
+	if (m_Heap)
+	{
+		m_Heap->ReleaseObjects();
+		delete m_Heap;
+		m_Heap = nullptr;
+	}
+	if (m_Texture)
+	{
+		delete m_Texture;
+		m_Texture = nullptr;
+	}
+	if (m_pVertexBufferViews)
+	{
+		delete[] m_pVertexBufferViews;
+		m_pVertexBufferViews = nullptr;
+	}
+}
+
+void CylinderMesh::ReleaseUploadBuffers()
+{
+	Mesh::ReleaseUploadBuffers();
+	if(m_Texture) m_Texture->ReleaseUploadBuffers();
+}
+
 CylinderMesh::CylinderMesh(GameObject* pOwner, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, float bottomRadius, float topRadius, float height, int sliceCount, int stackCount)
 	:Mesh(pOwner)
 {
@@ -170,10 +198,6 @@ CylinderMesh::CylinderMesh(GameObject* pOwner, ID3D12Device * pd3dDevice, ID3D12
 
 CylinderMesh::~CylinderMesh()
 {
-	if (m_pVertexBufferViews) {
-		delete[] m_pVertexBufferViews;
-		m_pVertexBufferViews = nullptr;
-	} 
 }
 
 void CylinderMesh::CreateTexture(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, const wchar_t *pszFileName)

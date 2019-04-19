@@ -6,6 +6,10 @@ class Broom
 {
 	PlayerMovement* m_pPlayerMovement{ nullptr };
 
+protected:
+	virtual void ReleaseMembers() override;
+	virtual void ReleaseMemberUploadBuffers() override;
+
 private:
 	virtual void DoNotUse() override;
 

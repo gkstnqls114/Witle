@@ -9,7 +9,11 @@ class ISkill
 protected:
 	ISkill(const std::string& entityID) : GameObject(entityID) {};
 	~ISkill() {};
-
+	 
+protected:
+	virtual void ReleaseMembers() = 0;
+	virtual void ReleaseMemberUploadBuffers() = 0;
+	 
 public:
 	virtual void DoNotUse() = 0;
 	virtual void DoUse() = 0; 
@@ -22,6 +26,10 @@ protected:
 	bool  m_isUsing        { false }; // 스킬을 현재 사용주인
 	float m_CooldownTime   { 0.f }; // 재사용 대기시간
 	float m_SkillTime      { 0.f }; // 스킬 사용 중인 시간
+
+protected:
+	virtual void ReleaseMembers() = 0;
+	virtual void ReleaseMemberUploadBuffers() = 0;
 
 public:
 	Skill() : ISkill("Skill") {};

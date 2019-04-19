@@ -25,6 +25,13 @@ private:
 	ID3D12Resource					*m_pd3dcbCamera{ nullptr };
 	VS_CB_CAMERA_INFO				*m_pcbMappedCamera{ nullptr };
 
+private:
+	void ReleaseShaderVariables();
+
+public:
+	virtual void ReleaseObjects() override;
+	virtual void ReleaseUploadBuffers() override;
+
 protected:
 
 	XMFLOAT3		m_At				{ 0.0f, 0.0f, 1.0f }; // Position + Offset = At
@@ -59,7 +66,6 @@ public:
 	
 	void CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
 	void UpdateShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList, int parameterIndex);
-	void ReleaseShaderVariables();
 
 	virtual void Teleport(const XMFLOAT3& pos); // right, up, look을 유지한 상태로 position, at만 이동한다.
 	virtual void Move(const XMFLOAT3& Shift);

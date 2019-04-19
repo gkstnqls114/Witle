@@ -22,6 +22,13 @@ class Light
 	: public ComponentBase
 {
 private:
+	static void ReleaseShaderVariables();
+
+public:
+	virtual void ReleaseObjects() override {};
+	virtual void ReleaseUploadBuffers() override {};
+
+private:
 	struct VS_CB_LIGHTS_INFO
 	{
 		LIGHT					m_pLights[MAX_LIGHTS];
@@ -43,7 +50,6 @@ public:
 
 	static void CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
 	static void UpdateShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList, int parameterIndex);
-	static void ReleaseShaderVariables();
 
 	virtual void Update(float fTimeElapsed) = 0;
 

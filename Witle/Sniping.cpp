@@ -5,8 +5,31 @@
 #include "CameraObject.h"
 #include "Sniping.h"
  
+void Sniping::ReleaseMembers()
+{
+	if (m_pBaseCameraComponent)
+	{
+		m_pBaseCameraComponent->ReleaseObjects(); 
+		delete m_pBaseCameraComponent;
+		m_pBaseCameraComponent = nullptr;
+	}
+
+	if (m_pSnipingCameraComponent)
+	{
+		m_pSnipingCameraComponent->ReleaseObjects(); 
+		delete m_pSnipingCameraComponent;
+		m_pSnipingCameraComponent = nullptr;
+	}
+}
+
+void Sniping::ReleaseMemberUploadBuffers()
+{
+	if (m_pBaseCameraComponent) m_pBaseCameraComponent->ReleaseUploadBuffers();
+	if (m_pSnipingCameraComponent) m_pSnipingCameraComponent->ReleaseUploadBuffers();
+}
+
 Sniping::Sniping(CameraObject* pCamera, Player* pPlayer, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList)
-{ 
+{  
 	m_pCameraObject = pCamera;
 	m_pPlayer = pPlayer;
 

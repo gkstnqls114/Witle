@@ -21,6 +21,11 @@ class Transform :
 	XMFLOAT4X4 m_transformWorld { Matrix4x4::Identity() };
 
 	void SetTransform(const XMFLOAT3& right, const XMFLOAT3& up, const XMFLOAT3& look, const XMFLOAT3& pos);
+
+public:
+	virtual void ReleaseObjects() override {};
+	virtual void ReleaseUploadBuffers() override {};
+	 
 public:
 	Transform(GameObject* pOwner);
 	virtual ~Transform();

@@ -19,6 +19,10 @@ public:
 	float m_fYaw = 0.0f;
 
 public:
+	virtual void ReleaseObjects() override {};
+	virtual void ReleaseUploadBuffers() override {};
+
+public:
 	PlayerMovement(GameObject* pOwner);
 	virtual ~PlayerMovement();
 

@@ -295,7 +295,7 @@ public:
 	CLoadedModelInfo() { }
 	~CLoadedModelInfo();
 
-public:
+public: 
 	LoadObject						*m_pModelRootObject = nullptr;
 
 	CAnimationSets					*m_pAnimationSets = nullptr;
@@ -463,7 +463,7 @@ public:
 
 		if (copyed->m_pParent) copy->m_pSibling = copyed->m_pParent;
 		if (copyed->m_pSibling)
-		{
+		{ 
 			copy->m_pSibling = new LoadObject;
 			CopyWorldMatrix(copy->m_pSibling, copyed->m_pSibling);
 		}

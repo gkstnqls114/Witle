@@ -22,6 +22,20 @@ MyBSphere::~MyBSphere()
 #endif
 }
 
+void MyBSphere::ReleaseObjects()
+{
+#ifdef _SHOW_BOUNDINGBOX
+	if(m_pLineCube) m_pLineCube->ReleaseObjects();
+#endif // _SHOW_BOUNDINGBOX 
+}
+
+void MyBSphere::ReleaseUploadBuffers()
+{
+#ifdef _SHOW_BOUNDINGBOX
+	if (m_pLineCube) m_pLineCube->ReleaseUploadBuffers();
+#endif // _SHOW_BOUNDINGBOX 
+}
+
 
 #ifdef _SHOW_BOUNDINGBOX
 void MyBSphere::Render(ID3D12GraphicsCommandList * pd3dCommandList, const XMFLOAT4X4& xmf4x4World)
