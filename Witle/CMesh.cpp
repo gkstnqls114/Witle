@@ -32,6 +32,11 @@ CMesh::~CMesh()
 	}
 
 	if (m_pxmf3Positions) delete[] m_pxmf3Positions;
+	if (m_pxmf2TextureCoords0) delete[] m_pxmf2TextureCoords0;
+	if (m_pxmf2TextureCoords1) delete[] m_pxmf2TextureCoords1;
+	if (m_pxmf3Normals) delete[] m_pxmf3Normals;
+	if (m_pxmf3Tangents) delete[] m_pxmf3Tangents;
+	if (m_pxmf3BiTangents) delete[] m_pxmf3BiTangents;
 }
 
 void CMesh::ReleaseUploadBuffers()

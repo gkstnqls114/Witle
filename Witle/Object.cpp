@@ -104,20 +104,26 @@ void CTexture::LoadTextureFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsComma
 //
 CMaterial::CMaterial(int nTextures)
 {
-	m_nTextures = nTextures;
+	if (nTextures > 0)
+	{
+		m_nTextures = nTextures;
+		m_ppTextures = new CTexture*[m_nTextures];
+		for (int i = 0; i < m_nTextures; i++) m_ppTextures[i] = NULL;
 
-	m_ppTextures = new CTexture*[m_nTextures];
-	m_ppstrTextureNames = new _TCHAR[m_nTextures][64];
-	for (int i = 0; i < m_nTextures; i++) m_ppTextures[i] = NULL;
-	for (int i = 0; i < m_nTextures; i++) m_ppstrTextureNames[i][0] = '\0';
+		m_ppstrTextureNames = new _TCHAR[m_nTextures][64];
+		for (int i = 0; i < m_nTextures; i++) m_ppstrTextureNames[i][0] = '\0';
+	}
 }
 
 CMaterial::~CMaterial()
-{ 
-
+{  
+	assert(!(m_nTextures == 0 && m_ppTextures != NULL));
 	if (m_nTextures > 0)
 	{
-		for (int i = 0; i < m_nTextures; i++) if (m_ppTextures[i]) m_ppTextures[i]->Release();
+		for (int i = 0; i < m_nTextures; i++)
+		{
+			if (m_ppTextures[i]) m_ppTextures[i]->Release();
+		}
 		delete[] m_ppTextures;
 
 		if (m_ppstrTextureNames) delete[] m_ppstrTextureNames;
@@ -395,19 +401,7 @@ CAnimationController::CAnimationController(ID3D12Device *pd3dDevice, ID3D12Graph
 
 CAnimationController::~CAnimationController()
 {
-	if (m_pAnimationTracks) delete[] m_pAnimationTracks;
-
-	if (m_pAnimationSets) m_pAnimationSets->Release();
-
-	for (int i = 0; i < m_nSkinnedMeshes; i++)
-	{
-		m_ppd3dcbSkinningBoneTransforms[i]->Unmap(0, NULL);
-		m_ppd3dcbSkinningBoneTransforms[i]->Release();
-	}
-	if (m_ppd3dcbSkinningBoneTransforms) delete[] m_ppd3dcbSkinningBoneTransforms;
-	if (m_ppcbxmf4x4MappedSkinningBoneTransforms) delete[] m_ppcbxmf4x4MappedSkinningBoneTransforms;
-
-	if (m_ppSkinnedMeshes) delete[] m_ppSkinnedMeshes;
+	ReleaseObjects(); 
 }
 
 void CAnimationController::SetCallbackKeys(int nAnimationSet, int nCallbackKeys)
@@ -450,6 +444,39 @@ void CAnimationController::SetTrackWeight(int nAnimationTrack, float fWeight)
 	if (m_pAnimationTracks) m_pAnimationTracks[nAnimationTrack].SetWeight(fWeight);
 }
 
+void CAnimationController::ReleaseObjects()
+{
+	 
+	if (m_pAnimationSets)
+	{
+		m_pAnimationSets->Release();
+		m_pAnimationSets = NULL;
+	}
+
+	for (int i = 0; i < m_nSkinnedMeshes; i++)
+	{
+		m_ppd3dcbSkinningBoneTransforms[i]->Unmap(0, NULL);
+		m_ppd3dcbSkinningBoneTransforms[i]->Release();
+		m_ppd3dcbSkinningBoneTransforms[i] = NULL;
+	}
+	if (m_ppd3dcbSkinningBoneTransforms)
+	{
+		delete[] m_ppd3dcbSkinningBoneTransforms;
+		m_ppd3dcbSkinningBoneTransforms = NULL;
+	}
+	if (m_ppcbxmf4x4MappedSkinningBoneTransforms)
+	{
+		delete[] m_ppcbxmf4x4MappedSkinningBoneTransforms;
+		m_ppcbxmf4x4MappedSkinningBoneTransforms = NULL;
+	}
+
+	if (m_ppSkinnedMeshes)
+	{
+		delete[] m_ppSkinnedMeshes;
+		m_ppSkinnedMeshes = NULL;
+	} 
+}
+
 void CAnimationController::UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList)
 {
 	for (int i = 0; i < m_nSkinnedMeshes; i++)
@@ -483,7 +510,28 @@ void CAnimationController::AdvanceTime(float fTimeElapsed, LoadObject *pRootGame
 //
 CLoadedModelInfo::~CLoadedModelInfo()
 {
-	if (m_ppSkinnedMeshes) delete[] m_ppSkinnedMeshes;
+
+}
+
+void CLoadedModelInfo::ReleaseObjects()
+{
+	if (m_pAnimationSets)
+	{
+		m_pAnimationSets->Release();
+		m_pAnimationSets = nullptr;
+	}
+	if (m_pModelRootObject)
+	{
+		m_pModelRootObject->ReleaseObjects();
+		delete m_pModelRootObject;
+		m_pModelRootObject = nullptr;
+	}
+	if (m_ppSkinnedMeshes)
+	{
+		delete[] m_ppSkinnedMeshes;
+		m_ppSkinnedMeshes = nullptr;
+	}
+
 }
 
 void CLoadedModelInfo::PrepareSkinning()
@@ -521,10 +569,18 @@ LoadObject::~LoadObject()
 	{
 		for (int i = 0; i < m_nMaterials; i++)
 		{
-			if (m_ppMaterials[i]) m_ppMaterials[i]->Release();
+			if (m_ppMaterials[i])
+			{
+				m_ppMaterials[i]->Release();
+				m_ppMaterials[i] = NULL;
+			}
 		}
 	}
-	if (m_ppMaterials) delete[] m_ppMaterials;
+	if (m_ppMaterials)
+	{
+		delete[] m_ppMaterials;
+		m_ppMaterials = NULL;
+	}
 
 	if (m_pSkinnedAnimationController) delete m_pSkinnedAnimationController;
 }
@@ -756,6 +812,35 @@ void LoadObject::ReleaseShaderVariables()
 {
 }
 
+void LoadObject::ReleaseObjects()
+{
+	if (m_pSkinnedAnimationController)
+	{
+		m_pSkinnedAnimationController->ReleaseObjects();
+		delete m_pSkinnedAnimationController;
+		m_pSkinnedAnimationController = nullptr;
+	}
+	if (m_pMesh)
+	{
+		delete m_pMesh;
+		m_pMesh = nullptr;
+	}
+
+	m_pParent = nullptr;
+	if (m_pChild)
+	{
+		m_pChild->ReleaseObjects();
+		delete m_pChild;
+		m_pChild = nullptr;
+	}
+	if (m_pSibling)
+	{
+		m_pSibling->ReleaseObjects();
+		delete m_pSibling;
+		m_pSibling = nullptr;
+	}
+}
+
 void LoadObject::ReleaseUploadBuffers()
 {
 	if (m_pMesh) m_pMesh->ReleaseUploadBuffers();
@@ -957,7 +1042,7 @@ void LoadObject::LoadAnimationFromFile(FILE *pInFile, CLoadedModelInfo *pLoadedM
 			nAnimationSets = ::ReadIntegerFromFile(pInFile);
 			//일단 idle, 그외로 구성해보자..
 			// 현재 idle 애니메이션은 총 75프레임
-			pLoadedModel->m_pAnimationSets = new CAnimationSets(5);
+			pLoadedModel->m_pAnimationSets = new CAnimationSets(nAnimationSets);
 		}
 		else if (!strcmp(pstrToken, "<AnimationSet>:"))
 		{
@@ -969,10 +1054,11 @@ void LoadObject::LoadAnimationFromFile(FILE *pInFile, CLoadedModelInfo *pLoadedM
 			float fEndTime = ::ReadFloatFromFile(pInFile);
 
 			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[0] = new CAnimationSet(fStartTime,						   fStartTime + SECOND_PER_FRAME * 75.f, pstrToken);
-			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[1] = new CAnimationSet(fStartTime + SECOND_PER_FRAME * 76.f, fStartTime + SECOND_PER_FRAME * 95.f, pstrToken);
+			/*pLoadedModel->m_pAnimationSets->m_ppAnimationSets[1] = new CAnimationSet(fStartTime + SECOND_PER_FRAME * 76.f, fStartTime + SECOND_PER_FRAME * 95.f, pstrToken);
 			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[2] = new CAnimationSet(fStartTime + SECOND_PER_FRAME * 96.f, fStartTime + SECOND_PER_FRAME * 115.f, pstrToken);
 			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[3] = new CAnimationSet(fStartTime + SECOND_PER_FRAME * 116.f, fStartTime + SECOND_PER_FRAME * 135.f, pstrToken);
 			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[4] = new CAnimationSet(fStartTime + SECOND_PER_FRAME * 136.f, fEndTime,						 pstrToken);
+			*/
 			CAnimationSet *pAnimationSet = pLoadedModel->m_pAnimationSets->m_ppAnimationSets[nAnimationSet];
 
 			::ReadStringFromFile(pInFile, pstrToken);
@@ -981,11 +1067,11 @@ void LoadObject::LoadAnimationFromFile(FILE *pInFile, CLoadedModelInfo *pLoadedM
 				pAnimationSet->m_nAnimationLayers = ::ReadIntegerFromFile(pInFile);
 				pAnimationSet->m_pAnimationLayers = new CAnimationLayer[pAnimationSet->m_nAnimationLayers];
 
-				for (int i = 1; i < 5; ++i)
-				{
-					pLoadedModel->m_pAnimationSets->m_ppAnimationSets[i]->m_nAnimationLayers = 1;
-					pLoadedModel->m_pAnimationSets->m_ppAnimationSets[i]->m_pAnimationLayers = pAnimationSet->m_pAnimationLayers;
-				}
+				//for (int i = 1; i < 5; ++i)
+				//{
+				//	pLoadedModel->m_pAnimationSets->m_ppAnimationSets[i]->m_nAnimationLayers = 1;
+				//	pLoadedModel->m_pAnimationSets->m_ppAnimationSets[i]->m_pAnimationLayers = pAnimationSet->m_pAnimationLayers;
+				//}
 
 				for (int i = 0; i < pAnimationSet->m_nAnimationLayers; i++)
 				{

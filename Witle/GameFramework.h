@@ -6,6 +6,8 @@ class Texture;
 class ComputeShader;
 class MyDescriptorHeap;
 
+class CLoadedModelInfo;
+
 class CGameFramework
 {
 
@@ -153,7 +155,9 @@ public:
 private: 
 	
 	Scene *m_pScene{ nullptr };
-	
+
+	CLoadedModelInfo* m_pReleaseTest{ nullptr };
+
 	// 블러를 위한 컴퓨트
 	ComputeShader* m_horizenShader{ nullptr };
 	ComputeShader* m_verticalShader{ nullptr };

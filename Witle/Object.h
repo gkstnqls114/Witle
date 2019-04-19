@@ -126,11 +126,13 @@ public:
 	float							m_fGlossyReflection = 0.0f;
 
 public:
-	int 							m_nTextures = 0;
 	_TCHAR(*m_ppstrTextureNames)[64] = NULL;
-	CTexture						**m_ppTextures = NULL; //0:Albedo, 1:Specular, 2:Metallic, 3:Normal, 4:Emission, 5:DetailAlbedo, 6:DetailNormal
 
 	void LoadTextureFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, UINT nType, UINT nRootParameter, _TCHAR *pwstrTextureName, CTexture **ppTexture, LoadObject *pParent, FILE *pInFile, Shader *pShader);
+
+private:
+	int 							m_nTextures = 0;
+	CTexture						**m_ppTextures = NULL; //0:Albedo, 1:Specular, 2:Metallic, 3:Normal, 4:Emission, 5:DetailAlbedo, 6:DetailNormal
 
 public:
 	static void PrepareShaders(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature);
@@ -139,7 +141,8 @@ public:
 		 
 		CMaterial::SetShader(m_pWireFrameShader);
 	}
-	void SetSkinnedAnimationWireFrameShader() { 
+	void SetSkinnedAnimationWireFrameShader() 
+	{ 
 		SetShader(m_pSkinnedAnimationWireFrameShader); 
 	}
 };
@@ -298,14 +301,15 @@ public:
 	~CLoadedModelInfo();
 
 public:
-	LoadObject						*m_pModelRootObject = NULL;
+	LoadObject						*m_pModelRootObject = nullptr;
 
-	CAnimationSets					*m_pAnimationSets = NULL;
+	CAnimationSets					*m_pAnimationSets = nullptr;
 
 	int 							m_nSkinnedMeshes = 0;
-	CSkinnedMesh					**m_ppSkinnedMeshes = NULL; //[SkinnedMeshes], Skinned Mesh Cache
+	CSkinnedMesh					**m_ppSkinnedMeshes = nullptr; //[SkinnedMeshes], Skinned Mesh Cache
 
 public:
+	void ReleaseObjects();
 	void PrepareSkinning();
 };
 
@@ -330,6 +334,8 @@ public:
 	XMFLOAT4X4						**m_ppcbxmf4x4MappedSkinningBoneTransforms = NULL;
 
 public:
+	void ReleaseObjects();
+
 	void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList);
 
 	void SetTrackAnimationSet(int nAnimationTrack, int nAnimationSet);
@@ -406,6 +412,7 @@ public:
 	virtual void UpdateShaderVariable(ID3D12GraphicsCommandList *pd3dCommandList, XMFLOAT4X4 *pxmf4x4World);
 	virtual void UpdateShaderVariable(ID3D12GraphicsCommandList *pd3dCommandList, CMaterial *pMaterial);
 
+	virtual void ReleaseObjects();
 	virtual void ReleaseUploadBuffers();
 
 	XMFLOAT3 GetPosition();

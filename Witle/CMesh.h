@@ -68,10 +68,7 @@ protected:
 	ID3D12Resource					**m_ppd3dSubSetIndexBuffers = NULL;
 	ID3D12Resource					**m_ppd3dSubSetIndexUploadBuffers = NULL;
 	D3D12_INDEX_BUFFER_VIEW			*m_pd3dSubSetIndexBufferViews = NULL;
-
-
-	//
-
+ 
 	XMFLOAT4						*m_pxmf4Colors = NULL;
 	XMFLOAT3						*m_pxmf3Normals = NULL;
 	XMFLOAT3						*m_pxmf3Tangents = NULL;

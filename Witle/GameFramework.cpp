@@ -491,13 +491,17 @@ void CGameFramework::BuildObjects()
 	m_pScene->CreateRootSignature(m_d3dDevice.Get()); 
 
 	// 루트 시그니처를 통해 모든 오브젝트 갖고온다.
-	TextureStorage::GetInstance()->CreateTextures(m_d3dDevice.Get(), m_CommandList.Get());
-	ModelStorage::GetInstance()->CreateModels(m_d3dDevice.Get(), m_CommandList.Get(), m_pScene->GetGraphicsRootSignature());
+	// TextureStorage::GetInstance()->CreateTextures(m_d3dDevice.Get(), m_CommandList.Get());
+	// ModelStorage::GetInstance()->CreateModels(m_d3dDevice.Get(), m_CommandList.Get(), m_pScene->GetGraphicsRootSignature());
 	 
-	BuildTESTObjects();
-	BuildShaders();
-	   
-	m_pScene->BuildObjects(m_d3dDevice.Get(), m_CommandList.Get());
+	m_pReleaseTest = LoadObject::LoadGeometryAndAnimationFromFile(m_d3dDevice.Get(), m_CommandList.Get(), m_pScene->GetGraphicsRootSignature(), "Model/TreeOne.bin", NULL);
+
+	// BuildTESTObjects();
+	// BuildShaders();
+	
+	delete m_pScene;
+	m_pScene = nullptr;
+	// m_pScene->BuildObjects(m_d3dDevice.Get(), m_CommandList.Get());
 	///////////////////////////////////////////////////////////////////////////// 리소스 생성
 
 	hResult = m_CommandList->Close();
@@ -509,7 +513,7 @@ void CGameFramework::BuildObjects()
 
 	///////////////////////////////////////////////////////////////////////////// 업로드 힙 릴리즈
 	if (m_pScene) m_pScene->ReleaseUploadBuffers(); 
-
+	 
 	TextureStorage::GetInstance()->ReleaseUploadBuffers();
 	ModelStorage::GetInstance()->ReleaseUploadBuffers();
 	///////////////////////////////////////////////////////////////////////////// 업로드 힙 릴리즈
@@ -524,6 +528,10 @@ void CGameFramework::ReleaseObjects()
 		delete m_pScene;
 		m_pScene = nullptr;
 	}
+	
+	m_pReleaseTest->ReleaseObjects();
+	delete m_pReleaseTest;
+	m_pReleaseTest = nullptr;
 
 	// CMaterial::ReleaseShaders();
 	TextureStorage::GetInstance()->ReleaseObjects();
