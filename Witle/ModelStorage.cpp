@@ -84,7 +84,7 @@ void ModelStorage::ReleaseObjects()
 { 
 	for (auto& model : m_ModelStorage)
 	{
-		// model.second.loadmodelInfo->ReleaseObjects();
+		model.second.loadmodelInfo->ReleaseObjects();
 		delete model.second.loadmodelInfo;
 		model.second.loadmodelInfo = nullptr; 
 		  
@@ -101,7 +101,7 @@ LoadObject * ModelStorage::GetRootObject(std::string name)
 {
 	if (!m_ModelStorage[name].loadmodelInfo) return nullptr;
 
-	LoadObject* newRootObject = new LoadObject(1);
+	LoadObject* newRootObject = new LoadObject(0);
 	LoadObject::CopyWorldMatrix(newRootObject, m_ModelStorage[name].loadmodelInfo->m_pModelRootObject);
 
 	return newRootObject;

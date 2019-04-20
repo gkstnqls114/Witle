@@ -632,6 +632,17 @@ LoadObject::~LoadObject()
 	}
 
 	if (m_pSkinnedAnimationController) delete m_pSkinnedAnimationController;
+
+	if (m_pChild)
+	{
+		delete m_pChild;
+		m_pChild = nullptr;
+	}
+	if (m_pSibling)
+	{
+		delete m_pSibling;
+		m_pSibling = nullptr;
+	}
 }
 
 void LoadObject::AddRef()
@@ -720,9 +731,9 @@ void LoadObject::SetSkinnedAnimationWireFrameShader()
 void LoadObject::SetMaterial(int nMaterial, CMaterial *pMaterial)
 {
 	assert(!(m_ppMaterials[nMaterial] != NULL));
-	//if (m_ppMaterials[nMaterial]) m_ppMaterials[nMaterial]->Release();
+	if (m_ppMaterials[nMaterial]) m_ppMaterials[nMaterial]->Release();
 	m_ppMaterials[nMaterial] = pMaterial;
-	//if (m_ppMaterials[nMaterial]) m_ppMaterials[nMaterial]->AddRef();
+	if (m_ppMaterials[nMaterial]) m_ppMaterials[nMaterial]->AddRef();
 }
 
 CSkinnedMesh *LoadObject::FindSkinnedMesh(char *pstrSkinnedMeshName)

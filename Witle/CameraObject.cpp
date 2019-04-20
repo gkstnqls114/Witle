@@ -22,7 +22,7 @@ void CameraObject::ReleaseMembers()
 CameraObject::CameraObject(const std::string & entityID)
 	:GameObject(entityID)
 {
-	m_pCameraComponent = new BasicCam(this);
+	// m_pCameraComponent = new BasicCam(this);
 	m_pFrustum = new MyFrustum(this);
 }
 
@@ -45,9 +45,20 @@ void CameraObject::SetViewportsAndScissorRects(ID3D12GraphicsCommandList *pd3dCo
 
 void CameraObject::ChangeCamera(Camera * pNewCamera)
 { 
-	float deltaPitch = m_pCameraComponent->GetPitch() - pNewCamera->GetPitch();
-	float deltaYaw = m_pCameraComponent->GetYaw() - pNewCamera->GetYaw();
-	float deltaRoll = m_pCameraComponent->GetRoll() - pNewCamera->GetRoll();
+	float deltaPitch, deltaYaw, deltaRoll = 0.f;
+
+	if (m_pCameraComponent)
+	{ 
+		deltaPitch = m_pCameraComponent->GetPitch() - pNewCamera->GetPitch();
+		deltaYaw = m_pCameraComponent->GetYaw() - pNewCamera->GetYaw();
+		deltaRoll = m_pCameraComponent->GetRoll() - pNewCamera->GetRoll();
+	}
+	else
+	{ 
+		deltaPitch = pNewCamera->GetPitch();
+		deltaYaw = pNewCamera->GetYaw();
+		deltaRoll = pNewCamera->GetRoll();
+	}
 
 	m_pCameraComponent = pNewCamera;
 	m_pCameraComponent->Rotate(deltaPitch, deltaYaw, deltaRoll);

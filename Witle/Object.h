@@ -97,7 +97,13 @@ private:
 
 public:
 	void AddRef() { m_nReferences++; }
-	void Release() { if (--m_nReferences <= 0) delete this; }
+	void Release() 
+	{ 
+		if (--m_nReferences <= 0)
+		{
+			delete this;
+		}
+	}
 
 public:
 
@@ -361,6 +367,10 @@ public:
 	void Release();
 
 private:
+	int								m_nMaterials = 0;
+	CMaterial						**m_ppMaterials = NULL;
+
+private:
 	LoadObject();
 
 public:
@@ -371,10 +381,7 @@ public:
 	char							m_pstrFrameName[64];
 
 	CMesh							*m_pMesh = NULL;
-
-	int								m_nMaterials = 0;
-	CMaterial						**m_ppMaterials = NULL;
-
+	 
 	XMFLOAT4X4						m_xmf4x4ToParent;
 	XMFLOAT4X4						m_xmf4x4World;
 
@@ -454,14 +461,29 @@ public:
 	{
 		strcpy(copy->m_pstrFrameName, copyed->m_pstrFrameName);
 
-		copy->m_pMesh = copyed->m_pMesh;
-		copy->m_nMaterials = copyed->m_nMaterials;
-		copy->m_ppMaterials = copyed->m_ppMaterials;
+		if (copyed->m_pMesh)
+		{
+			copy->SetMesh(copyed->m_pMesh);
+		}
+		if (copyed->m_nMaterials > 0)
+		{  
+			assert(!(copy->m_nMaterials != 0 && copy->m_nMaterials != copyed->m_nMaterials));
+			if (copy->m_nMaterials == 0)
+			{
+				copy->m_ppMaterials = new CMaterial*[copyed->m_nMaterials];
+				for (int i = 0; i < copyed->m_nMaterials; ++i) copy->m_ppMaterials[i] = NULL;
+			} 
+			copy->m_nMaterials = copyed->m_nMaterials;
+			for (int i = 0; i < copyed->m_nMaterials; ++i)
+			{
+				copy->SetMaterial(i, copy->m_ppMaterials[i]);
+			}
+		}
 
 		copy->m_xmf4x4ToParent = copyed->m_xmf4x4ToParent;
 		copy->m_xmf4x4World = copyed->m_xmf4x4World;
 
-		if (copyed->m_pParent) copy->m_pSibling = copyed->m_pParent;
+		if (copyed->m_pParent) copy->m_pParent = copyed->m_pParent;
 		if (copyed->m_pSibling)
 		{ 
 			copy->m_pSibling = new LoadObject;
