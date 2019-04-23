@@ -342,9 +342,6 @@
     <ClInclude Include="SkinnedMeshRenderer.h">
       <Filter>10.Renderer\SkinnedMeshRenderer</Filter>
     </ClInclude>
-    <ClInclude Include="vertices.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="Texture.h">
       <Filter>07.Resource\Texture</Filter>
     </ClInclude>

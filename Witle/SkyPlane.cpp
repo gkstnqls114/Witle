@@ -4,7 +4,7 @@
 SkyPlane::SkyPlane(GameObject* pOwner)
 	:Mesh(pOwner)
 {
-	CTextureVertex;
+
 }
 
 SkyPlane::~SkyPlane()

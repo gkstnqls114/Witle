@@ -5,23 +5,6 @@
 // 전처리문을 정의하는 헤더 파일
 // 
 
-// 모델 이름 정의 
-// 숲 지형
-#define TREE_1 "TreeOne"
-#define TREE_2 "TreeTwo"
-#define TREE_3 "TreeThree"
-#define BUSH "bush"
-
-// 유적 지형
-#define BROKENPILLA "BrokenPilla"
-#define REED "Reed"
-#define RUIN_ARCH "RuinArch"
-#define RUIN_BROKENPILLA "Ruin_BrokenPillar"
-#define RUIN_PILLAR "RuinPillar"
-#define RUIN_SQUARE "Ruin_Square" 
-
-#define SUNFLOWER "Sunflower"
-#define ALTER "Altar"
 
 //// Enum Type ////////////////////////////////////
 enum MESH_TYPE_ID

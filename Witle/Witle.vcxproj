@@ -243,7 +243,6 @@
     <ClInclude Include="TextureStorage.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="VerticalBlurShader.h" />
-    <ClInclude Include="vertices.h" />
     <ClInclude Include="WICTextureLoader12.h" />
     <ClInclude Include="WideareaMagic.h" />
     <ClInclude Include="Widget.h" />

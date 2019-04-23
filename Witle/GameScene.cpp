@@ -471,7 +471,7 @@ void GameScene::Update(float fElapsedTime)
 	// light update
 	if(m_pcbMappedLights) ::memcpy(m_pcbMappedLights, LightManager::m_pLights, sizeof(LIGHTS));
 	// material update
-	// ::memcpy(m_pcbMappedMaterials, m_pMaterials, sizeof(MATERIAL));
+	::memcpy(m_pcbMappedMaterials, m_pMaterials, sizeof(MATERIAL));
 }
 
 void GameScene::LastUpdate(float fElapsedTime)
