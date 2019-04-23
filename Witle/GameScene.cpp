@@ -192,7 +192,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	m_AimPoint = new Widget("AimPoint", pd3dDevice, pd3dCommandList, POINT{ int(GameScreen::GetWidth()) / 2, int(GameScreen::GetHeight()) / 2 }, 100.f, 100.f, L"Image/AimPoint.dds");
 	m_WideareaMagic = new WideareaMagic(pd3dDevice, pd3dCommandList);
 
-	// 스카이 박스 생성
+	//// 스카이 박스 생성
 	m_SkyBox = new SkyBox(pd3dDevice, pd3dCommandList, 3000.F, 3000.F, 3000.F);
 
 	// 터레인 생성 
@@ -202,19 +202,19 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	m_Terrain = new Terrain("Terrain", pd3dDevice, pd3dCommandList, L"Image/HeightMap.raw", 257, 257, 257, 257, xmf3Scale, xmf4Color);
 	
 	// 테스트할 모델 오브젝트
-	m_pPlayer = new Player("Player", pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	 m_pPlayer = new Player("Player", pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 	m_pOtherPlayer = new Player("OtherPlayer", pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 	m_pOtherPlayer->GetTransform().SetPosition(0, 0, 1000); 
 	m_SkyBox->SetpPlayerTransform(&m_pPlayer->GetTransform());
 
-	// 테스트 쿼드트리 터레인 생성 
+	//// 테스트 쿼드트리 터레인 생성 
 	m_pQuadtreeTerrain = new QuadtreeTerrain(pd3dDevice, pd3dCommandList, 257, 257, xmf3Scale, xmf4Color, m_Terrain->GetHeightMapImage());
 
 	// 카메라
-	m_Camera = new CameraObject("Camera"); 
+	m_Camera = new CameraObject("Camera");  
 	m_Sniping = new Sniping(m_Camera, m_pPlayer, pd3dDevice, pd3dCommandList);
-	m_pPlayer->SetSniping(m_Sniping);
-	m_Camera->ChangeCamera(m_Sniping->GetBaseCamera());
+	 m_pPlayer->SetSniping(m_Sniping);
+	 m_Camera->ChangeCamera(m_Sniping->GetBaseCamera());
 	 
 #ifdef CHECK_SUBVIEWS
 	m_lookAboveCamera = new CameraObject("LookAboveCamera");
@@ -237,15 +237,33 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 }
 
 void GameScene::ReleaseObjects()
-{
+{  
+	if (m_pd3dCbvSrvDescriptorHeap)
+	{
+		m_pd3dCbvSrvDescriptorHeap->Release();
+		m_pd3dCbvSrvDescriptorHeap = nullptr;
+	}
+
 	delete LightManager::m_pLights;
 	LightManager::m_pLights = nullptr;
 
 	delete m_pMaterials;
 	m_pMaterials = nullptr;
-	m_pd3dcbLights->Unmap(0, NULL);
-	m_pd3dcbLights->Release();
-	m_pd3dcbLights = NULL;
+
+	if (m_pd3dcbLights)
+	{
+		m_pd3dcbLights->Unmap(0, NULL);
+		m_pd3dcbLights->Release();
+		m_pd3dcbLights = NULL;
+	}
+
+	if (m_pd3dcbMaterials)
+	{
+		m_pd3dcbMaterials->Unmap(0, NULL);
+		m_pd3dcbMaterials->Release();
+		m_pd3dcbMaterials = NULL;
+	}
+
 	if (m_SkyBox)
 	{
 		m_SkyBox->ReleaseObjects();
@@ -316,7 +334,7 @@ void GameScene::ReleaseObjects()
 }
 
 bool GameScene::ProcessInput(HWND hWnd, float fElapsedTime)
-{
+{ 
 	m_pPlayer->ProcessInput(fElapsedTime);
 
 	if ((GameInput::GetDeltaX() != 0.0f) || (GameInput::GetDeltaY() != 0.0f))
@@ -333,7 +351,7 @@ bool GameScene::ProcessInput(HWND hWnd, float fElapsedTime)
 	Camera* pCamera = m_Camera->GetCamera();
 	RAY pickRay;
 	bool isPick = GameInput::GenerateRayforPicking(m_Camera->GetTransform().GetPosition(), pCamera->GetViewMatrix(), pCamera->GetProjectionMatrix(), pickRay);
-	if (isPick)
+	if (isPick && m_pOtherPlayer)
 	{  
 		float dist;
 
@@ -444,16 +462,16 @@ void GameScene::Update(float fElapsedTime)
 	//}
 	// 충돌체크 ///////////////////////// 
 
-	m_pPlayer->Update(fElapsedTime); //Velocity를 통해 pos 이동
-	m_pOtherPlayer->Update(fElapsedTime);
+	if(m_pPlayer) m_pPlayer->Update(fElapsedTime); //Velocity를 통해 pos 이동
+	if(m_pOtherPlayer) m_pOtherPlayer->Update(fElapsedTime);
 	 
-	m_SkyBox->Update(fElapsedTime);
-	m_WideareaMagic->Update(fElapsedTime);
+	if(m_SkyBox) m_SkyBox->Update(fElapsedTime);
+	if(m_WideareaMagic) m_WideareaMagic->Update(fElapsedTime);
 
 	// light update
-	::memcpy(m_pcbMappedLights, LightManager::m_pLights, sizeof(LIGHTS));
+	if(m_pcbMappedLights) ::memcpy(m_pcbMappedLights, LightManager::m_pLights, sizeof(LIGHTS));
 	// material update
-	::memcpy(m_pcbMappedMaterials, m_pMaterials, sizeof(MATERIAL));
+	// ::memcpy(m_pcbMappedMaterials, m_pMaterials, sizeof(MATERIAL));
 }
 
 void GameScene::LastUpdate(float fElapsedTime)
@@ -467,14 +485,11 @@ void GameScene::LastUpdate(float fElapsedTime)
 	 
 	// player update 이후에 camera update
 	// 순서변경X
-	if (m_Camera)
-	{
-		m_Camera->LastUpdate(fElapsedTime);
-	}  
+	if (m_Camera) m_Camera->LastUpdate(fElapsedTime);
 
 	// 카메라 프러스텀과 쿼드트리 지형 렌더링 체크
-	m_Camera->GetFrustum()->CheckRendering(m_pQuadtreeTerrain->GetRootNode()); 
-	m_pQuadtreeTerrain->LastUpdate(fElapsedTime);
+	if (m_Camera && m_pQuadtreeTerrain) m_Camera->GetFrustum()->CheckRendering(m_pQuadtreeTerrain->GetRootNode());
+	if (m_pQuadtreeTerrain) m_pQuadtreeTerrain->LastUpdate(fElapsedTime);
 	// 순서변경X 
 
 	// 이동한 플레이어 데미지 체크
@@ -493,12 +508,12 @@ void GameScene::TESTSetRootDescriptor(ID3D12GraphicsCommandList * pd3dCommandLis
 
 void GameScene::AnimateObjects(float fTimeElapsed)
 { 
-	m_pOtherPlayer->Animate(fTimeElapsed);
+	if(m_pOtherPlayer) m_pOtherPlayer->Animate(fTimeElapsed);
 	if (m_pPlayer) m_pPlayer->Animate(fTimeElapsed);
 }
 
 void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
-{
+{ 
 	RenderShadowMap(pd3dCommandList);
 
 	// 렌더링
@@ -512,8 +527,8 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	m_Camera->GetCamera()->UpdateShaderVariables(pd3dCommandList, ROOTPARAMETER_CAMERA);
 
 	// 스카이박스 렌더
-	m_SkyBox->Render(pd3dCommandList); 
-	m_AimPoint->Render(pd3dCommandList); 
+	if(m_SkyBox) m_SkyBox->Render(pd3dCommandList);
+	if(m_AimPoint) m_AimPoint->Render(pd3dCommandList);
 
 	//  조명
 	D3D12_GPU_VIRTUAL_ADDRESS d3dcbLightsGpuVirtualAddress = m_pd3dcbLights->GetGPUVirtualAddress();
@@ -523,14 +538,17 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	pd3dCommandList->SetGraphicsRootConstantBufferView(ROOTPARAMETER_MATERIALS, d3dcbMaterialsGpuVirtualAddress);
 
 	// 터레인
-	pd3dCommandList->SetDescriptorHeaps(1, &m_pd3dCbvSrvDescriptorHeap); 
-	pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_WORLD,  16, &Matrix4x4::Identity(), 0);
-	m_Terrain->UpdateShaderVariables(pd3dCommandList); 
-	 
-	// TerrainMesh Render
-	Mesh* terrainMesh = m_Terrain->GetComponent<Mesh>("TerrainMesh");
-	m_pQuadtreeTerrain->Render(pd3dCommandList);
-	m_WideareaMagic->Render(pd3dCommandList);
+	if (m_Terrain)
+	{ 
+		pd3dCommandList->SetDescriptorHeaps(1, &m_pd3dCbvSrvDescriptorHeap);
+		pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_WORLD, 16, &Matrix4x4::Identity(), 0);
+		m_Terrain->UpdateShaderVariables(pd3dCommandList);
+
+		// TerrainMesh Render
+		Mesh* terrainMesh = m_Terrain->GetComponent<Mesh>("TerrainMesh");
+		m_pQuadtreeTerrain->Render(pd3dCommandList);
+	}
+	if(m_WideareaMagic) m_WideareaMagic->Render(pd3dCommandList);
 #ifdef CHECK_SUBVIEWS
 	m_lookAboveCamera->SetViewportsAndScissorRects(pd3dCommandList); 
 	m_lookAboveCamera->GetCamera()->UpdateShaderVariables(pd3dCommandList, ROOTPARAMETER_CAMERA);
@@ -542,14 +560,14 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	// PSO 설정
 	 
 	pd3dCommandList->SetDescriptorHeaps(1, &m_pd3dCbvSrvDescriptorHeap); 
-	m_pPlayer->Render(pd3dCommandList); 
-	m_pOtherPlayer->Render(pd3dCommandList);
+	if(m_pPlayer) m_pPlayer->Render(pd3dCommandList);
+	if(m_pOtherPlayer) m_pOtherPlayer->Render(pd3dCommandList);
 
 	//// Aim point Render 
 }
 
 void GameScene::ReleaseUploadBuffers()
-{  
+{   
 	if (m_SkyBox) m_SkyBox->ReleaseUploadBuffers();
 	if (m_AimPoint)m_AimPoint->ReleaseUploadBuffers();
 	if (m_Sniping) m_Sniping->ReleaseUploadBuffers();
@@ -674,7 +692,7 @@ ID3D12RootSignature* GameScene::CreateGraphicsRootSignature(ID3D12Device *pd3dDe
 
 void GameScene::BuildLightsAndMaterials(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList)
 {
-	////////////////////////////// 조명
+	//////////////////////////// 조명
 	LightManager::m_pLights = new LIGHTS;
 	::ZeroMemory(static_cast<void*>(LightManager::m_pLights), sizeof(LIGHTS));
 	for (int x = 0; x < MAX_LIGHTS; ++x)
@@ -732,9 +750,9 @@ void GameScene::BuildLightsAndMaterials(ID3D12Device *pd3dDevice, ID3D12Graphics
 	m_pd3dcbLights = d3dUtil::CreateBufferResource(pd3dDevice, pd3dCommandList, NULL, ncbElementBytes, D3D12_HEAP_TYPE_UPLOAD, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, NULL);
 
 	m_pd3dcbLights->Map(0, NULL, (void **)&m_pcbMappedLights);
-	////////////////////////////// 조명
+	//////////////////////////// 조명
 
-	////////////////////////////// 재질
+	//////////////////////////// 재질
 	m_pMaterials = new MATERIAL;
 	::ZeroMemory(m_pMaterials, sizeof(MATERIAL));
 
@@ -746,7 +764,7 @@ void GameScene::BuildLightsAndMaterials(ID3D12Device *pd3dDevice, ID3D12Graphics
 	m_pd3dcbMaterials = d3dUtil::CreateBufferResource(pd3dDevice, pd3dCommandList, NULL, ncbMaterialBytes, D3D12_HEAP_TYPE_UPLOAD, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, NULL);
 
 	m_pd3dcbMaterials->Map(0, NULL, (void **)&m_pcbMappedMaterials);
-	////////////////////////////// 재질
+	//////////////////////////// 재질
 }
 
 void GameScene::RenderShadowMap(ID3D12GraphicsCommandList * pd3dCommandList)

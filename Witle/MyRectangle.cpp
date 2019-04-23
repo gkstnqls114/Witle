@@ -10,6 +10,7 @@
  
 void MyRectangle::ReleaseObjects()
 {
+	Shape::ReleaseObjects();
 	if (m_pHeap)
 	{
 		m_pHeap->ReleaseObjects();
@@ -18,18 +19,16 @@ void MyRectangle::ReleaseObjects()
 	}
 	if (m_pTexture)
 	{
+		m_pTexture->ReleaseObjects();
 		delete m_pTexture;
 		m_pTexture = nullptr;
-	}
-	if (m_pPositionBuffer)
-	{
-		m_pPositionBuffer->Release();
-		m_pPositionBuffer = nullptr;
-	}
+	} 
 }
 
 void MyRectangle::ReleaseUploadBuffers()
 {
+	Shape::ReleaseUploadBuffers();
+
 	if(m_pTexture) m_pTexture->ReleaseUploadBuffers();
 }
 

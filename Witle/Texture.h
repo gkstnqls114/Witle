@@ -46,7 +46,7 @@ public:
 	const D3D12_GPU_DESCRIPTOR_HANDLE GetHandler() const { return m_pRootArgumentInfos->m_d3dSrvGpuDescriptorHandle; }
 
 	void ReleaseUploadBuffers();
-
-
+	void ReleaseObjects();
+	 
 
 };

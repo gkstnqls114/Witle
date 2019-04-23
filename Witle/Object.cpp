@@ -186,7 +186,7 @@ void CMaterial::SetWireFrameShader()
 
 void CMaterial::SetSkinnedAnimationWireFrameShader()
 {
-	SetShader(m_pSkinnedAnimationWireFrameShader);
+	CMaterial::SetShader(m_pSkinnedAnimationWireFrameShader);
 }
 
 void CMaterial::UpdateShaderVariable(ID3D12GraphicsCommandList *pd3dCommandList)
@@ -563,7 +563,7 @@ void CLoadedModelInfo::ReleaseUploadBuffers()
 }
 
 void CLoadedModelInfo::ReleaseObjects()
-{
+{ 
 	if (m_pAnimationSets)
 	{ 
 		delete m_pAnimationSets;

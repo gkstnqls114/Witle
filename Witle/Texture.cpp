@@ -82,6 +82,11 @@ void Texture::ReleaseUploadBuffers()
 	}
 }
 
+void Texture::ReleaseObjects()
+{
+	ReleaseShaderVariables();
+}
+
 void Texture::LoadTextureFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, const wchar_t *pszFileName, UINT nIndex)
 {
 	m_ppd3dTextures[nIndex] = d3dUtil::CreateTextureResourceFromFile(pd3dDevice, pd3dCommandList, pszFileName, &m_ppd3dTextureUploadBuffers[nIndex], D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);

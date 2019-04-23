@@ -10,6 +10,11 @@ Shape::Shape(GameObject* pOwner)
 
 Shape::~Shape()
 { 
+	ReleaseObjects();
+}
+
+void Shape::ReleaseObjects()
+{ 
 	if (m_pxmf3Positions)
 	{
 		delete m_pxmf3Positions;

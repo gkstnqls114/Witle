@@ -98,6 +98,7 @@ void QuadtreeTerrain::RecursiveReleaseObjects(QUAD_TREE_NODE * node)
 {
 	if (node->terrainMesh)
 	{
+		node->terrainMesh->ReleaseObjects();
 		delete node->terrainMesh;
 		node->terrainMesh = nullptr;
 	}

@@ -18,6 +18,7 @@ public:
 	virtual ~MyBOBox();
 
 #ifdef _SHOW_BOUNDINGBOX 
+	void ReleaseObjects();
 	void ReleaseUploadBuffers();
 	void Render(ID3D12GraphicsCommandList * pd3dCommandList, const XMFLOAT4X4& xmf4x4World);
 	void RenderInstancing(ID3D12GraphicsCommandList * pd3dCommandList, int InstancingCount);

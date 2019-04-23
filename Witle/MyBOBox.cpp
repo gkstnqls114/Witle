@@ -38,6 +38,10 @@ MyBOBox::~MyBOBox()
 }
  
 #ifdef _SHOW_BOUNDINGBOX
+void MyBOBox::ReleaseObjects()
+{
+	m_pLineCube->ReleaseObjects();
+}
 void MyBOBox::ReleaseUploadBuffers()
 {
 	m_pLineCube->ReleaseUploadBuffers();

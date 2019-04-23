@@ -11,7 +11,7 @@ MyDescriptorHeap::MyDescriptorHeap()
 
 MyDescriptorHeap::~MyDescriptorHeap()
 {
-	ReleaseObjects();
+
 }
 
 void MyDescriptorHeap::ReleaseObjects()

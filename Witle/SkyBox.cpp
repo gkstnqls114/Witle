@@ -63,7 +63,7 @@ SkyBox::~SkyBox()
 
 }
 void SkyBox::Update(float fElapsedTime)
-{
+{ 
 	m_Transform.SetPosition(m_pPlayerTransform->GetPosition());
 	m_Transform.Update(fElapsedTime);
 	m_LoadObject->UpdateTransform(m_Transform.GetpWorldMatrix());

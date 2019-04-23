@@ -45,6 +45,7 @@ public:
 	virtual ~Shape();
 
 	virtual void Update(float fTimeElapsed) override {};
+	void ReleaseObjects();
 	void ReleaseUploadBuffers();
 
 	/////////////////////////////////////////////////////////////////////////// Get

@@ -114,8 +114,7 @@ Player::Player(const std::string & entityID, ID3D12Device * pd3dDevice, ID3D12Gr
 }
 
 Player::~Player()
-{
-	ReleaseMembers();
+{ 
 	m_pPlayerUpdatedContext = nullptr;
 	m_pCameraUpdatedContext = nullptr;
 }
@@ -123,11 +122,18 @@ Player::~Player()
 
 void Player::ReleaseMembers()
 {
+	m_pPlayerUpdatedContext = nullptr;
+	m_pCameraUpdatedContext = nullptr;
 	if (m_pBroom)
 	{ 
 		m_pBroom->ReleaseObjects();
 		delete m_pBroom;
 		m_pBroom = nullptr;
+	}
+	if (m_pLoadObject)
+	{
+		m_pLoadObject->ReleaseObjects(); 
+		m_pLoadObject = nullptr;
 	}
 	if (m_PlayerModel)
 	{
@@ -137,16 +143,19 @@ void Player::ReleaseMembers()
 	}
 	if (m_pMyBOBox)
 	{
+		m_pMyBOBox->ReleaseObjects();
 		delete m_pMyBOBox;
 		m_pMyBOBox = nullptr;
 	}
 	if (m_pPlayerStatus)
 	{
+		m_pPlayerStatus->ReleaseObjects();
 		delete m_pPlayerStatus;
 		m_pPlayerStatus = nullptr;
 	}
 	if (m_pPlayerMovement)
 	{
+		m_pPlayerMovement->ReleaseObjects();
 		delete m_pPlayerMovement;
 		m_pPlayerMovement = nullptr;
 	}
@@ -155,7 +164,8 @@ void Player::ReleaseMembers()
 void Player::ReleaseMemberUploadBuffers()
 {
 	if (m_pLoadObject) m_pLoadObject->ReleaseUploadBuffers();
-	
+	if (m_PlayerModel)m_PlayerModel->ReleaseUploadBuffers();
+	if (m_pMyBOBox)m_pMyBOBox->ReleaseUploadBuffers();
 }
 
 void Player::Update(float fElapsedTime)

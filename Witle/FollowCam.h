@@ -8,7 +8,7 @@ class FollowCam :
 {
 	const GameObject		*m_pTarget{ nullptr };
 	XMFLOAT3				 m_distanceAt{ 0.f, 0.f, 0.f };
-
+	 
 private:
 	virtual void MoveSmoothly(float fTimeElapsed, const XMFLOAT3& xmf3LookAt) override;
 

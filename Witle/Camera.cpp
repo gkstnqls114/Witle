@@ -12,6 +12,7 @@ void Camera::ReleaseObjects()
 
 void Camera::ReleaseUploadBuffers()
 {
+
 }
 
 Camera::Camera(GameObject* pOwner)
