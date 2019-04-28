@@ -34,16 +34,19 @@ void TextureStorage::ReleaseObjects()
 
 void TextureStorage::CreateTextures(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList)
 {
+	m_TextureStorage[TREE_1] = new Texture();
+	m_TextureStorage[TREE_1]->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/TreeOne_Diffuse.dds", 0);
 
+	m_TextureStorage[TREE_2] = new Texture();
+	m_TextureStorage[TREE_2]->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/TreeTwo_Diffuse.dds", 0);
+
+	m_TextureStorage[TREE_3] = new Texture();
+	m_TextureStorage[TREE_3]->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/TreeThree_Diffuse.dds", 0);
 }
-
-void TextureStorage::InsertTexture(const std::string& name, Texture * texture)
+ 
+Texture * const TextureStorage::GetTexture(const std::string & name)
 {
-	m_TextureStorage[name] = texture;
-}
-
-const Texture * TextureStorage::GetTexture(const std::string & name)
-{
+	if (m_TextureStorage.find(name) == m_TextureStorage.end()) return nullptr;
 	return m_TextureStorage[name];
 }
  

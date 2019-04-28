@@ -366,8 +366,8 @@ int * const QuadtreeTerrain::GetIndex(const XMFLOAT3 & position) const
 void QuadtreeTerrain::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 {
 	pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Terrain")->GetPSO());
-	RecursiveRender(m_pRootNode, pd3dCommandList);
-	RenderTerrainObjects(pd3dCommandList);
+	RecursiveRender(m_pRootNode, pd3dCommandList); // 지형 렌더
+	RenderTerrainObjects(pd3dCommandList); // 지형 오브젝트 렌더
 }
 
 void QuadtreeTerrain::Render(int index, ID3D12GraphicsCommandList * pd3dCommandList)

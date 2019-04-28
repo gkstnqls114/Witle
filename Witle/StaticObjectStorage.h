@@ -2,6 +2,7 @@
  
 class QuadtreeTerrain;
 class LoadObject;
+class Texture;
 
 struct VS_SRV_INSTANCEINFO;
 /*
@@ -18,15 +19,20 @@ private:
 	 
 	struct TerrainObjectInfo
 	{ 
-		ID3D12Resource* m_pd3dcbGameObjects{ nullptr };
-		VS_SRV_INSTANCEINFO* m_pcbMappedGameObjects{ nullptr };
-		int         TerrainObjectCount = 0; // 터레인 조각 위에 배치되는 오브젝트의 개수
-		//XMFLOAT4X4* pTerrainObjectsTransform; // 터레인 조각 위에 배치되는 오브젝트의 월드 행렬
-		std::vector<XMFLOAT4X4> TransformList;
+		ID3D12Resource* m_pd3dcbGameObjects{ nullptr };         // 인스턴싱을 위해 사용되는 정보
+		VS_SRV_INSTANCEINFO* m_pcbMappedGameObjects{ nullptr }; // 인스턴싱을 위해 사용되는 정보
+		int         TerrainObjectCount{ 0 };					// 터레인 조각 위에 배치되는 오브젝트의 개수
+		std::vector<XMFLOAT4X4> TransformList;                  // 터레인 조각 위에 배치되는 오브젝트의 월드 행렬
 	};
 	 
+	struct RenderInfo // 그림을 그리기 위해 필요한 모델/텍스쳐정보
+	{
+		LoadObject* pLoadObject{ nullptr };
+		Texture* pTexture{ nullptr };
+	};
+
 	bool m_isCreate = false;  
-	std::map<std::string, LoadObject*> m_StaticObjectModelsStorage; // 모델 이름은 반드시 클래스에 맞춘다.
+	std::map<std::string, RenderInfo> m_StaticObjectModelsStorage; // 모델 이름은 반드시 클래스에 맞춘다.
 	std::map<std::string, TerrainObjectInfo*> m_StaticObjectStorage; // 모델 이름은 반드시 클래스에 맞춘다.
 	void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList, int count, XMFLOAT4X4* transforms);
 

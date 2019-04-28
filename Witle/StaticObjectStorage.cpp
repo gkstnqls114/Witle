@@ -2,7 +2,9 @@
 #include "d3dUtil.h"
 
 #include "StaticObject.h"
+#include "Texture.h"
 #include "ModelStorage.h"
+#include "TextureStorage.h"
 #include "ShaderManager.h"
 #include "Shader.h"
  
@@ -187,7 +189,8 @@ void StaticObjectStorage::CreateShaderVariables(ID3D12Device * pd3dDevice, ID3D1
 	//인스턴스 정보를 저장할 정점 버퍼를 업로드 힙 유형으로 생성한다. 
 	for (auto& info : m_StaticObjectStorage)
 	{ 
-		m_StaticObjectModelsStorage[info.first] = ModelStorage::GetInstance()->GetRootObject(info.first);
+		m_StaticObjectModelsStorage[info.first].pLoadObject = ModelStorage::GetInstance()->GetRootObject(info.first);
+		m_StaticObjectModelsStorage[info.first].pTexture = TextureStorage::GetInstance()->GetTexture(info.first);
 		
 		for (int iTerrainPiece = 0; iTerrainPiece < TerrainPieceCount; ++iTerrainPiece)
 		{
@@ -253,8 +256,8 @@ void StaticObjectStorage::ReleaseObjects()
 {
 	for (auto& model : m_StaticObjectModelsStorage)
 	{
-		delete model.second;
-		model.second = nullptr;
+		delete model.second.pLoadObject;
+		model.second.pLoadObject = nullptr;
 	}
 	m_StaticObjectModelsStorage.clear();
 	 
@@ -322,12 +325,19 @@ void StaticObjectStorage::CreateInfo(ID3D12Device * pd3dDevice, ID3D12GraphicsCo
  
 void StaticObjectStorage::Render(ID3D12GraphicsCommandList * pd3dCommandList, int index)
 {  
+	// info.first = 모델 이름
+	// info.second = TerrainObjectInfo라는 모델 정보
+
 	for (auto& info : m_StaticObjectStorage)
-	{
+	{ 
 		if (info.second[index].TerrainObjectCount == 0) continue;
 
-		pd3dCommandList->SetGraphicsRootShaderResourceView(ROOTPARAMETER_INSTANCING, info.second[index].m_pd3dcbGameObjects->GetGPUVirtualAddress());
+		pd3dCommandList->SetGraphicsRootShaderResourceView(ROOTPARAMETER_INSTANCING, info.second[index].m_pd3dcbGameObjects->GetGPUVirtualAddress()); // 인스턴싱 쉐이더 리소스 뷰
 		 
-		m_StaticObjectModelsStorage[info.first]->RenderInstancing(pd3dCommandList, info.second[index].TerrainObjectCount);
+		if (m_StaticObjectModelsStorage[info.first].pTexture)
+		{
+			m_StaticObjectModelsStorage[info.first].pTexture->UpdateShaderVariables(pd3dCommandList);
+		}
+		m_StaticObjectModelsStorage[info.first].pLoadObject->RenderInstancing(pd3dCommandList, info.second[index].TerrainObjectCount);
 	}  
 }

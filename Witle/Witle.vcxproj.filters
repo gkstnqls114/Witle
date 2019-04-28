@@ -160,9 +160,6 @@
     <Filter Include="02.Component\SkinnedMesh">
       <UniqueIdentifier>{9d47c2f1-aa91-4941-8058-09e473ae1b0f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="05.Shader\SkinnedStandardShader">
-      <UniqueIdentifier>{5994879b-c065-48e2-a58e-486b84ad26e6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="05.Shader\StandardShader">
       <UniqueIdentifier>{de0113f4-cf07-4caa-90d1-0142948e989e}</UniqueIdentifier>
     </Filter>
@@ -255,6 +252,9 @@
     </Filter>
     <Filter Include="13.Storage/Manager\TextureStorage">
       <UniqueIdentifier>{336fca6f-fc21-4c05-a804-c9e60309ed49}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Shader\SkinnedShader.cpp">
+      <UniqueIdentifier>{5994879b-c065-48e2-a58e-486b84ad26e6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -475,7 +475,7 @@
       <Filter>03.GameObject</Filter>
     </ClInclude>
     <ClInclude Include="SkinnedShader.h">
-      <Filter>05.Shader\SkinnedStandardShader</Filter>
+      <Filter>05.Shader\SkinnedShader.cpp</Filter>
     </ClInclude>
     <ClInclude Include="InstancingStandardShader.h">
       <Filter>05.Shader\InstancingStandardShader</Filter>
@@ -750,7 +750,7 @@
       <Filter>03.GameObject</Filter>
     </ClCompile>
     <ClCompile Include="SkinnedShader.cpp">
-      <Filter>05.Shader\SkinnedStandardShader</Filter>
+      <Filter>05.Shader\SkinnedShader.cpp</Filter>
     </ClCompile>
     <ClCompile Include="InstancingStandardShader.cpp">
       <Filter>05.Shader\InstancingStandardShader</Filter>

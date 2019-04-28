@@ -1026,7 +1026,7 @@ LoadObject *LoadObject::LoadFrameHierarchyFromFile(ID3D12Device *pd3dDevice, ID3
 		}
 		else if (!strcmp(pstrToken, "<Mesh>:"))
 		{
-			CMesh *pMesh = new CMesh(pd3dDevice, pd3dCommandList);
+			CMesh *pMesh = new CMesh(pd3dDevice, pd3dCommandList); 
 			pMesh->LoadMeshFromFile(pd3dDevice, pd3dCommandList, pInFile);
 			pGameObject->SetMesh(pMesh);
 			 

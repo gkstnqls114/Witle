@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Object.h"  
 #include "MyBOBox.h"
+#include "TextureStorage.h"
 #include "ModelStorage.h"
 
 ModelStorage* ModelStorage::m_Instance{ nullptr };
@@ -40,12 +41,14 @@ void ModelStorage::CreateModels(ID3D12Device * pd3dDevice, ID3D12GraphicsCommand
 	m_NameList.push_back(SUNFLOWER);
 	 
 	 // ¸ðµ¨ ¸ñ·Ï
+
 	m_ModelStorage[TREE_1].loadmodelInfo = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/TreeOne.bin", NULL);
 	m_ModelStorage[TREE_2].loadmodelInfo = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/TreeTwo.bin", NULL);
 	m_ModelStorage[TREE_3].loadmodelInfo = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/TreeThree.bin", NULL);
 	m_ModelStorage[REED].loadmodelInfo = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/Bush.bin", NULL);
 	m_ModelStorage[BROKENPILLA].loadmodelInfo = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/BrokenPilla.bin", NULL);
 	m_ModelStorage[BUSH].loadmodelInfo = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/Reed.bin", NULL);
+	
 	m_ModelStorage[RUIN_ARCH].loadmodelInfo = LoadObject::LoadGeometryAndAnimationFromFile
 	(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/ruin_Arch.bin", NULL);
 	m_ModelStorage[RUIN_BROKENPILLA].loadmodelInfo = LoadObject::LoadGeometryAndAnimationFromFile
@@ -67,7 +70,7 @@ void ModelStorage::CreateModels(ID3D12Device * pd3dDevice, ID3D12GraphicsCommand
 	m_ModelStorage[RUIN_PILLAR].modelBOBox = new MyBOBox(pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 0.F, 0.F }, XMFLOAT3{ 400.F, 400.F, 400.F });
 	m_ModelStorage[RUIN_SQUARE].modelBOBox = new MyBOBox(pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 0.F, 0.F }, XMFLOAT3{ 400.F, 400.F, 400.F });
 	m_ModelStorage[SUNFLOWER].modelBOBox = new MyBOBox(pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 0.F, 0.F }, XMFLOAT3{ 400.F, 400.F, 400.F });
-
+	 
 	m_isCreate = true;
 }
 
@@ -75,8 +78,8 @@ void ModelStorage::ReleaseUploadBuffers()
 {
 	for (auto& model : m_ModelStorage)
 	{
-		 model.second.loadmodelInfo->m_pModelRootObject->ReleaseUploadBuffers();
-		 model.second.modelBOBox->ReleaseUploadBuffers();
+		if(model.second.loadmodelInfo) model.second.loadmodelInfo->m_pModelRootObject->ReleaseUploadBuffers();
+		if(model.second.modelBOBox) model.second.modelBOBox->ReleaseUploadBuffers();
 	} 
 }
 
@@ -88,7 +91,7 @@ void ModelStorage::ReleaseObjects()
 		delete model.second.loadmodelInfo;
 		model.second.loadmodelInfo = nullptr; 
 		  
-		// model.second.modelBOBox->ReleaseObjects();
+		model.second.modelBOBox->ReleaseObjects();
 		delete model.second.modelBOBox;
 		model.second.modelBOBox = nullptr;
 	}

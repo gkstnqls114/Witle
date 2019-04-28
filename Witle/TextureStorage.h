@@ -33,6 +33,5 @@ public:
 	void ReleaseObjects();
 
 	void CreateTextures(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList);
-	void InsertTexture(const std::string& name, Texture* texture); 
-	const Texture* GetTexture(const std::string& name);
+	Texture* const GetTexture(const std::string& name);
 };

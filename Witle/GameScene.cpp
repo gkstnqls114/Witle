@@ -549,6 +549,8 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 		m_pQuadtreeTerrain->Render(pd3dCommandList);
 	}
 	if(m_WideareaMagic) m_WideareaMagic->Render(pd3dCommandList);
+
+
 #ifdef CHECK_SUBVIEWS
 	m_lookAboveCamera->SetViewportsAndScissorRects(pd3dCommandList); 
 	m_lookAboveCamera->GetCamera()->UpdateShaderVariables(pd3dCommandList, ROOTPARAMETER_CAMERA);
