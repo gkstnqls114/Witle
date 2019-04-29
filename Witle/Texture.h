@@ -4,8 +4,6 @@ class MyDescriptorHeap;
 
 class Texture 
 {
-	MyDescriptorHeap* m_Heap;
-
 	struct SRVROOTARGUMENTINFO
 	{
 		UINT							m_nRootParameterIndex{ 0 };

@@ -327,7 +327,7 @@ void StaticObjectStorage::Render(ID3D12GraphicsCommandList * pd3dCommandList, in
 {  
 	// info.first = ¸ðµ¨ ÀÌ¸§
 	// info.second = TerrainObjectInfo¶ó´Â ¸ðµ¨ Á¤º¸
-
+	 
 	for (auto& info : m_StaticObjectStorage)
 	{ 
 		if (info.second[index].TerrainObjectCount == 0) continue;

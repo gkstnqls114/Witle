@@ -528,7 +528,6 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 
 	// 스카이박스 렌더
 	if(m_SkyBox) m_SkyBox->Render(pd3dCommandList);
-	if(m_AimPoint) m_AimPoint->Render(pd3dCommandList);
 
 	//  조명
 	D3D12_GPU_VIRTUAL_ADDRESS d3dcbLightsGpuVirtualAddress = m_pd3dcbLights->GetGPUVirtualAddress();
@@ -548,7 +547,7 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 		Mesh* terrainMesh = m_Terrain->GetComponent<Mesh>("TerrainMesh");
 		m_pQuadtreeTerrain->Render(pd3dCommandList);
 	}
-	if(m_WideareaMagic) m_WideareaMagic->Render(pd3dCommandList);
+	// if(m_WideareaMagic) m_WideareaMagic->Render(pd3dCommandList);
 
 
 #ifdef CHECK_SUBVIEWS
@@ -566,6 +565,8 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	if(m_pOtherPlayer) m_pOtherPlayer->Render(pd3dCommandList);
 
 	//// Aim point Render 
+	if(m_AimPoint) m_AimPoint->Render(pd3dCommandList);
+
 }
 
 void GameScene::ReleaseUploadBuffers()

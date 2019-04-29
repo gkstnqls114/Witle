@@ -4,6 +4,7 @@
 #include "ShaderManager.h"
 #include "Shader.h"
 #include "MeshRenderer.h"
+#include "TextureStorage.h"
 #include "StaticObjectStorage.h"
 #include "HeightMapImage.h"
 #include "MyFrustum.h"
@@ -34,6 +35,10 @@ void QuadtreeTerrain::ReleaseMemberUploadBuffers()
 void QuadtreeTerrain::RenderTerrainObjects(ID3D12GraphicsCommandList * pd3dCommandList)
 {
 	pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("InstancingStandardShader")->GetPSO());
+	
+	// 설명자 힙 설정
+	TextureStorage::GetInstance()->SetHeap(pd3dCommandList);
+
 	for (int i = 0; i < m_ReafNodeCount; ++i)
 	{
 		if (m_pReafNodes[i]->isRendering)
@@ -41,9 +46,7 @@ void QuadtreeTerrain::RenderTerrainObjects(ID3D12GraphicsCommandList * pd3dComma
 			StaticObjectStorage::GetInstance(this)->Render(pd3dCommandList, m_pReafNodes[i]->id);
 
 		}
-	}
-
-
+	} 
 }
 
 void QuadtreeTerrain::RecursiveRender(const QUAD_TREE_NODE * node, ID3D12GraphicsCommandList * pd3dCommandList)

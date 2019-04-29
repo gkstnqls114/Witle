@@ -49,7 +49,7 @@ private:
 
 	int m_ReafNodeCount = 0;
 	QUAD_TREE_NODE** m_pReafNodes{ nullptr };
-
+ 
 private:  
 	void RenderTerrainObjects(ID3D12GraphicsCommandList *pd3dCommandList);
 	void RecursiveRender(const QUAD_TREE_NODE* node, ID3D12GraphicsCommandList *pd3dCommandList);

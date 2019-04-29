@@ -30,7 +30,7 @@ private:
 		LoadObject* pLoadObject{ nullptr };
 		Texture* pTexture{ nullptr };
 	};
-
+	 
 	bool m_isCreate = false;  
 	std::map<std::string, RenderInfo> m_StaticObjectModelsStorage; // 모델 이름은 반드시 클래스에 맞춘다.
 	std::map<std::string, TerrainObjectInfo*> m_StaticObjectStorage; // 모델 이름은 반드시 클래스에 맞춘다.

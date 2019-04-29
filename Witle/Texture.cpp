@@ -50,9 +50,7 @@ void Texture::SetSampler(int nIndex, D3D12_GPU_DESCRIPTOR_HANDLE d3dSamplerGpuDe
 }
 
 void Texture::UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList)
-{
-	if (m_Heap) m_Heap->UpdateShaderVariable(pd3dCommandList);
-
+{ 
 	if (m_nTextureType == RESOURCE_TEXTURE2D_ARRAY)
 	{
 		pd3dCommandList->SetGraphicsRootDescriptorTable(m_pRootArgumentInfos[0].m_nRootParameterIndex, m_pRootArgumentInfos[0].m_d3dSrvGpuDescriptorHandle);
@@ -67,8 +65,7 @@ void Texture::UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList)
 }
 
 void Texture::UpdateShaderVariable(ID3D12GraphicsCommandList *pd3dCommandList, int nIndex)
-{
-	if (m_Heap) m_Heap->UpdateShaderVariable(pd3dCommandList);
+{ 
 	pd3dCommandList->SetGraphicsRootDescriptorTable(m_pRootArgumentInfos[nIndex].m_nRootParameterIndex, m_pRootArgumentInfos[nIndex].m_d3dSrvGpuDescriptorHandle);
 }
 
@@ -94,14 +91,7 @@ void Texture::ReleaseObjects()
 void Texture::LoadTextureFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, const wchar_t *pszFileName, UINT nIndex)
 {
 	m_ppd3dTextures[nIndex] = d3dUtil::CreateTextureResourceFromFile(pd3dDevice, pd3dCommandList, pszFileName, &m_ppd3dTextureUploadBuffers[nIndex], D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
-
-	assert(!(m_Heap != nullptr));
-	if (m_nTextures == 1)
-	{
-		m_Heap = new MyDescriptorHeap();
-		m_Heap->CreateCbvSrvUavDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, m_nTextures, 0);
-		m_Heap->CreateShaderResourceViews(pd3dDevice, pd3dCommandList, this, ROOTPARAMETER_TEXTURE, true, 0);
-	} 
+	 
 }
 
 void Texture::LoadTextureFromFile(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, const wchar_t * pszFileName, UINT nIndex, bool bIsDDSFile)
@@ -110,13 +100,6 @@ void Texture::LoadTextureFromFile(ID3D12Device * pd3dDevice, ID3D12GraphicsComma
 		m_ppd3dTextures[nIndex] = d3dUtil::CreateTextureResourceFromDDSFile(pd3dDevice, pd3dCommandList, pszFileName, &(m_ppd3dTextureUploadBuffers[nIndex]), D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 	else
 		m_ppd3dTextures[nIndex] = d3dUtil::CreateTextureResourceFromWICFile(pd3dDevice, pd3dCommandList, pszFileName, &(m_ppd3dTextureUploadBuffers[nIndex]), D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
-	 
-	assert(!(m_Heap != nullptr));
-	if (m_nTextures == 1 && m_Heap == nullptr)
-	{
-		m_Heap = new MyDescriptorHeap();
-		m_Heap->CreateCbvSrvUavDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, m_nTextures, 0);
-		m_Heap->CreateShaderResourceViews(pd3dDevice, pd3dCommandList, this, ROOTPARAMETER_TEXTURE, true, 0);
-	}
+	  
 }
 
