@@ -1,23 +1,4 @@
-
-// 루트 상수
-cbuffer cbGameObjectInfo : register(b0)
-{
-	matrix gmtxWorld : packoffset(c0);
-}
-
-// 상수 버퍼
-cbuffer cbCameraInfo : register(b1)
-{
-	matrix gmtxView : packoffset(c0);
-	matrix gmtxProjection : packoffset(c4);
-	float3 gvCameraPosition : packoffset(c8);
-}
-
-// 루트 상수
-cbuffer cbGameObjectInfo : register(b4)
-{
-	float3 testcolor: packoffset(c0);
-}
+#include "Variables.hlsl"
 
 struct VertexIn
 {
@@ -42,7 +23,17 @@ VertexOut VS(VertexIn input)
 	return(output); 
 }
 
+VertexOut VSInstancing(VertexIn input, uint nInstanceID : SV_InstanceID)
+{ 
+    VertexOut output;
+    float3  positionW = mul(float4(input.position, 1.0f), gmtxInstancingWorld[nInstanceID].m_mtxWorld).xyz;
+    
+    output.position = mul(mul(float4(positionW, 1.0f), gmtxView), gmtxProjection);
+    output.color = input.color;
+    return (output);
+}
+
 float4 PS(VertexOut input) : SV_TARGET
 {
-	return input.color;
+    return float4(1, 0,0,1);
 }

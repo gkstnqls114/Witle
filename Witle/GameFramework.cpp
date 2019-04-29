@@ -31,6 +31,7 @@
 #include "TESTShader.h"
 #include "ScreenShader.h"
 #include "CubeShader.h"
+#include "InstancingLineShader.h"
 //// Shader ////////////////////////// 
 
 #ifdef _SHOW_BOUNDINGBOX
@@ -706,6 +707,10 @@ void CGameFramework::BuildShaders()
 	Shader* pLineShader = new LineShader();
 	pLineShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
 	ShaderManager::GetInstance()->InsertShader("Line", pLineShader);
+	 
+	Shader* pInstancingLineShader = new InstancingLineShader();
+	pInstancingLineShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
+	ShaderManager::GetInstance()->InsertShader("InstancingLine", pInstancingLineShader);
 #endif
 }
 

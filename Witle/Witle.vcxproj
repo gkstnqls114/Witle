@@ -168,6 +168,7 @@
     <ClInclude Include="FamilyID.h" />
     <ClInclude Include="GameScreen.h" />
     <ClInclude Include="HorizonBlurShader.h" />
+    <ClInclude Include="InstancingLineShader.h" />
     <ClInclude Include="InstancingStandardShader.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="LightManager.h" />
@@ -278,6 +279,7 @@
     <ClCompile Include="GameTimer.cpp" />
     <ClCompile Include="HeightMapImage.cpp" />
     <ClCompile Include="HorizonBlurShader.cpp" />
+    <ClCompile Include="InstancingLineShader.cpp" />
     <ClCompile Include="InstancingStandardShader.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="LightManager.cpp" />

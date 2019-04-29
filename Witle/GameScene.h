@@ -116,6 +116,8 @@ protected:
 	ID3D12Resource				*m_pd3dcbMaterials{ nullptr };
 	MATERIAL					*m_pcbMappedMaterials{ nullptr };
 	//////////////////////////////////////  조명
-	 
-	QuadtreeTerrain         *m_pQuadtreeTerrain{ nullptr };
+	
+	// 충돌체크할 테스트 오브젝트 
+	MyBOBox*					m_CollisionTEST{ nullptr };
+	QuadtreeTerrain			    *m_pQuadtreeTerrain{ nullptr };
 };

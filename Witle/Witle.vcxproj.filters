@@ -256,6 +256,9 @@
     <Filter Include="05.Shader\SkinnedShader.cpp">
       <UniqueIdentifier>{5994879b-c065-48e2-a58e-486b84ad26e6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="05.Shader\InstancingLineShader">
+      <UniqueIdentifier>{dec58fac-56cc-4d74-892c-99c5b6a8fe70}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -546,6 +549,9 @@
     <ClInclude Include="TextureStorage.h">
       <Filter>13.Storage/Manager\TextureStorage</Filter>
     </ClInclude>
+    <ClInclude Include="InstancingLineShader.h">
+      <Filter>05.Shader\InstancingLineShader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -817,6 +823,9 @@
     </ClCompile>
     <ClCompile Include="TextureStorage.cpp">
       <Filter>13.Storage/Manager\TextureStorage</Filter>
+    </ClCompile>
+    <ClCompile Include="InstancingLineShader.cpp">
+      <Filter>05.Shader\InstancingLineShader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -61,4 +61,5 @@ public:
 	
 	// 인스턴싱을 통해 렌더합니다.
 	void Render(ID3D12GraphicsCommandList * pd3dCommandList, int index);
+	void RenderBOBox(ID3D12GraphicsCommandList * pd3dCommandList, int index);
 };

@@ -43,10 +43,22 @@ void QuadtreeTerrain::RenderTerrainObjects(ID3D12GraphicsCommandList * pd3dComma
 	{
 		if (m_pReafNodes[i]->isRendering)
 		{
-			StaticObjectStorage::GetInstance(this)->Render(pd3dCommandList, m_pReafNodes[i]->id);
-
+			StaticObjectStorage::GetInstance(this)->Render(pd3dCommandList, m_pReafNodes[i]->id); 
 		}
 	} 
+	 
+#ifdef _SHOW_BOUNDINGBOX
+	 pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("InstancingLine")->GetPSO());
+
+	for (int i = 0; i < m_ReafNodeCount; ++i)
+	{
+		if (m_pReafNodes[i]->isRendering)
+		{
+			StaticObjectStorage::GetInstance(this)->RenderBOBox(pd3dCommandList, m_pReafNodes[i]->id);
+		}
+	}
+#endif // 	  
+
 }
 
 void QuadtreeTerrain::RecursiveRender(const QUAD_TREE_NODE * node, ID3D12GraphicsCommandList * pd3dCommandList)

@@ -146,7 +146,7 @@ void StaticObjectStorage::LoadNameAndPositionFromFile(ID3D12Device * pd3dDevice,
 			LoadTransform(name, TREE_1, terrainIDs, XMFLOAT3{ transform._41, transform._42, transform._43 });
 			LoadTransform(name, TREE_2, terrainIDs, XMFLOAT3{ transform._41, transform._42, transform._43 });
 			LoadTransform(name, TREE_3, terrainIDs, XMFLOAT3{ transform._41, transform._42, transform._43 });
-			bool isTrue = LoadTransform(name, BUSH, terrainIDs, XMFLOAT3{ transform._41, transform._42, transform._43 });
+			LoadTransform(name, BUSH, terrainIDs, XMFLOAT3{ transform._41, transform._42, transform._43 });
 			LoadTransform(name, BROKENPILLA, terrainIDs, XMFLOAT3{ transform._41, transform._42, transform._43 });
 			LoadTransform(name, REED, terrainIDs, XMFLOAT3{ transform._41, transform._42, transform._43 });
 			LoadTransform(name, RUIN_ARCH, terrainIDs, XMFLOAT3{ transform._41, transform._42, transform._43 });
@@ -341,3 +341,19 @@ void StaticObjectStorage::Render(ID3D12GraphicsCommandList * pd3dCommandList, in
 		m_StaticObjectModelsStorage[info.first].pLoadObject->RenderInstancing(pd3dCommandList, info.second[index].TerrainObjectCount);
 	}  
 }
+
+void StaticObjectStorage::RenderBOBox(ID3D12GraphicsCommandList * pd3dCommandList, int index)
+{
+	// info.first = ¸ðµ¨ ÀÌ¸§
+	// info.second = TerrainObjectInfo¶ó´Â ¸ðµ¨ Á¤º¸
+
+	for (auto& info : m_StaticObjectStorage)
+	{
+		if (info.second[index].TerrainObjectCount == 0) continue;
+
+		pd3dCommandList->SetGraphicsRootShaderResourceView(ROOTPARAMETER_INSTANCING, info.second[index].m_pd3dcbGameObjects->GetGPUVirtualAddress()); // ÀÎ½ºÅÏ½Ì ½¦ÀÌ´õ ¸®¼Ò½º ºä
+		 
+		ModelStorage::GetInstance()->RenderBOBoxInstancing(pd3dCommandList, info.first, info.second[index].TerrainObjectCount);
+	}
+}
+
