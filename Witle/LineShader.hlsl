@@ -12,6 +12,13 @@ struct VertexOut
 	float4 color : COLOR;
 };
 
+static matrix Identity =
+{
+    { 1, 0, 0, 0 },
+    { 0, 1, 0, 0 },
+    { 0, 0, 1, 0 },
+    { 0, 0, 0, 1 }
+};
 VertexOut VS(VertexIn input)
 {
 	VertexOut output;
@@ -26,7 +33,12 @@ VertexOut VS(VertexIn input)
 VertexOut VSInstancing(VertexIn input, uint nInstanceID : SV_InstanceID)
 { 
     VertexOut output;
-    float3  positionW = mul(float4(input.position, 1.0f), gmtxInstancingWorld[nInstanceID].m_mtxWorld).xyz;
+    //  gmtxInstancingWorld[nInstanceID].m_mtxWorld에서 SCALE 행렬도 사용하는 듯
+    matrix newWorld = Identity; 
+    newWorld._41 = gmtxInstancingWorld[nInstanceID].m_mtxWorld._41;
+    newWorld._43 = gmtxInstancingWorld[nInstanceID].m_mtxWorld._43;
+
+    float3 positionW = mul(float4(input.position, 1.0f), newWorld).xyz;
     
     output.position = mul(mul(float4(positionW, 1.0f), gmtxView), gmtxProjection);
     output.color = input.color;

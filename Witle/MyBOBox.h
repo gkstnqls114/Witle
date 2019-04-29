@@ -30,7 +30,7 @@ public:
 	void Move(float x, float y, float z);
 	void SetPosition(const XMFLOAT3& pos);
 	
-	const BoundingOrientedBox& GetBOBox() const { return m_BOBox; } 
+	BoundingOrientedBox GetBOBox() const { return m_BOBox; } 
 	const XMFLOAT4 GetPlane(int index) const { 
 		assert(!(index < 0 && index >= 4));
 		return m_BoBoxPlane[index]; 

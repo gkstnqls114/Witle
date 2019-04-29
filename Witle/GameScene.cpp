@@ -380,34 +380,34 @@ void GameScene::Update(float fElapsedTime)
 	//
 	//for (int i = 0; i < TreeCount; ++i)
 	//{   
-	//	bool isAlreadyCollide = Collision::isCollide(AlreadyPlayerBBox, m_CollisionTEST->GetBOBox());
-	//	if (isAlreadyCollide)
-	//	{
-	//		std::cout << "COLLIDE" << std::endl;
+		bool isAlreadyCollide = Collision::isCollide(AlreadyPlayerBBox, m_CollisionTEST->GetBOBox());
+		if (isAlreadyCollide)
+		{
+			std::cout << "TEST COLLIDE ~~ " << std::endl;
 
-	//		bool isUseSliding = false;
-	//		for (int x = 0; x < 4; ++x)
-	//		{
-	//			bool isIntersect = Plane::Intersect(m_CollisionTEST->GetPlane(x),
-	//				AlreadyPositon, m_pPlayer->GetVelocity());
+			bool isUseSliding = false;
+			for (int x = 0; x < 4; ++x)
+			{
+				bool isIntersect = Plane::Intersect(m_CollisionTEST->GetPlane(x),
+					AlreadyPositon, m_pPlayer->GetVelocity());
 
-	//			bool isFront = Plane::IsFront(m_CollisionTEST->GetPlane(x), AlreadyPositon);
-	//			if (isIntersect && isFront)
-	//			{
-	//				std::cout << x << " ... intersect! (" << TreeCount<< ")" << std::endl;
-	//				//슬라이딩벡터
+				bool isFront = Plane::IsFront(m_CollisionTEST->GetPlane(x), AlreadyPositon);
+				if (isIntersect && isFront)
+				{ 
+					//슬라이딩벡터
 
-	//				m_pPlayer->SetVelocity(
-	//					Vector3::Sliding(XMFLOAT3(
-	//						m_CollisionTEST->
-	//						GetPlane(x).x, m_CollisionTEST->GetPlane(x).y, 
-	//						m_CollisionTEST->GetPlane(x).z),
-	//						m_pPlayer->GetVelocity())
-	//				);
+					m_pPlayer->SetVelocity(
+						Vector3::Sliding(XMFLOAT3(
+							m_CollisionTEST->
+							GetPlane(x).x, m_CollisionTEST->GetPlane(x).y,
+							m_CollisionTEST->GetPlane(x).z),
+							m_pPlayer->GetVelocity())
+					);
 
-	//				isUseSliding = true;
-	//			}
-	//		}
+					isUseSliding = true;
+				}
+			}
+		}
 
 	//		//if (!isUseSliding)
 	//		//{
@@ -417,41 +417,41 @@ void GameScene::Update(float fElapsedTime)
 	//}
 
 	// 현재 플레이어가 위치한 터레인 조각 위의 오브젝트들..
-	for (int terrainIndex = 0; terrainIndex < QUAD; ++terrainIndex)
+	for (int terrainIndex = 0; terrainIndex < 1; ++terrainIndex)
 	{
-		if (m_PlayerTerrainIndex == nullptr) continue;
-		if (m_PlayerTerrainIndex[terrainIndex] == -1) continue;
+		//if (m_PlayerTerrainIndex == nullptr) continue;
+		//if (m_PlayerTerrainIndex[terrainIndex] == -1) continue;
 
 		// 각 모델의 bo box와 트랜스폼을 갖고온다.
 		for (const auto& name : ModelStorage::GetInstance()->m_NameList)
 		{
 			MyBOBox* box = ModelStorage::GetInstance()->GetBOBox(name);
-			XMFLOAT4X4* pWorldMatrix = StaticObjectStorage::GetInstance(m_pQuadtreeTerrain)->GetpWorldMatrixs(m_PlayerTerrainIndex[terrainIndex], name);
+			 XMFLOAT4X4* pWorldMatrix = StaticObjectStorage::GetInstance(m_pQuadtreeTerrain)->GetpWorldMatrixs(0, name);
 			 
 			// 트레인 조각 내부 오브젝트 개수만큼 충돌 체크
-			for (int i = 0; i < StaticObjectStorage::GetInstance(m_pQuadtreeTerrain)->GetObjectCount(m_PlayerTerrainIndex[terrainIndex], name); ++i)
+			for (int i = 0; i < StaticObjectStorage::GetInstance(m_pQuadtreeTerrain)->GetObjectCount(0, name); ++i)
 			{
 				//월드 행렬 갖고온다.
 
 				// 모델 충돌박스를 월드행렬 곱한다. 일단 현재는 포지션으로 이동
-				MyBOBox worldBox = *box;
-				worldBox.Move(XMFLOAT3(pWorldMatrix[i]._41, pWorldMatrix[i]._42, pWorldMatrix[i]._43));
+				BoundingOrientedBox worldBox = box->GetBOBox();
+				worldBox.Center = Vector3::Add(worldBox.Center, XMFLOAT3(pWorldMatrix[i]._41, 0, pWorldMatrix[i]._43));
 				 
 				// 이동한 박스를 통해 충돌한다.
-				bool isAlreadyCollide = Collision::isCollide(AlreadyPlayerBBox, worldBox.GetBOBox());
+				bool isAlreadyCollide = Collision::isCollide(AlreadyPlayerBBox, worldBox);
 				if (isAlreadyCollide)
 				{
-					 std::cout << "COLLIDE" << std::endl;
+					 std::cout << "COLLIDE"  ;
 					bool isUseSliding = false;
 					for (int x = 0; x < 4; ++x) //  plane 면
 					{ 
-						bool isIntersect = Plane::Intersect(worldBox.GetPlane(x), AlreadyPositon, m_pPlayer->GetVelocity());
+						bool isIntersect = Plane::Intersect(box->GetPlane(x), AlreadyPositon, m_pPlayer->GetVelocity());
 						// bool isFront = Plane::IsFront(worldBox.GetPlane(x), AlreadyPositon);
 						if (isIntersect /*&& isFront*/)
 						{ 
 							m_pPlayer->SetVelocity
 							(
-								Vector3::Sliding(XMFLOAT3(worldBox.GetPlane(x).x, worldBox.GetPlane(x).y, worldBox.GetPlane(x).z), m_pPlayer->GetVelocity())
+								Vector3::Sliding(XMFLOAT3(box->GetPlane(x).x, box->GetPlane(x).y, box->GetPlane(x).z), m_pPlayer->GetVelocity())
 							);
 							 
 							isUseSliding = true; 
@@ -466,6 +466,7 @@ void GameScene::Update(float fElapsedTime)
 			} 
 		}
 	}
+	 
 	// 충돌체크 ///////////////////////// 
 
 	if(m_pPlayer) m_pPlayer->Update(fElapsedTime); //Velocity를 통해 pos 이동
