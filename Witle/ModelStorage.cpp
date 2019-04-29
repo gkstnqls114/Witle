@@ -91,9 +91,12 @@ void ModelStorage::ReleaseObjects()
 		delete model.second.loadmodelInfo;
 		model.second.loadmodelInfo = nullptr; 
 		  
-		model.second.modelBOBox->ReleaseObjects();
-		delete model.second.modelBOBox;
-		model.second.modelBOBox = nullptr;
+		if (model.second.modelBOBox)
+		{ 
+			model.second.modelBOBox->ReleaseObjects();
+			delete model.second.modelBOBox;
+			model.second.modelBOBox = nullptr;
+		}
 	}
 
 	m_ModelStorage.clear(); 

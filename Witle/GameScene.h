@@ -62,6 +62,7 @@ protected:
 	//그래픽 루트 시그너쳐를 생성한다.
 	virtual ID3D12RootSignature* CreateGraphicsRootSignature(ID3D12Device *pd3dDevice) override; 
 
+	void UpdateCollision(float fElapsedTime);
 	void BuildLightsAndMaterials(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList);
 	void RenderShadowMap(ID3D12GraphicsCommandList *pd3dCommandList);
 	 
@@ -117,7 +118,6 @@ protected:
 	MATERIAL					*m_pcbMappedMaterials{ nullptr };
 	//////////////////////////////////////  조명
 	
-	// 충돌체크할 테스트 오브젝트 
-	MyBOBox*					m_CollisionTEST{ nullptr };
+	// 충돌체크할 테스트 오브젝트  
 	QuadtreeTerrain			    *m_pQuadtreeTerrain{ nullptr };
 };
