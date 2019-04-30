@@ -620,36 +620,35 @@ void GameScene::UpdateCollision(float fElapsedTime)
 		//월드 행렬 갖고온다.
 
 		// 모델 충돌박스를 월드행렬 곱한다. 일단 현재는 포지션으로 이동
-		BoundingOrientedBox worldBox = box->GetBOBox();
-		worldBox.Center = Vector3::Add(worldBox.Center, XMFLOAT3(pWorldMatrix[i]._41, 0, pWorldMatrix[i]._43));
+		MyBOBox worldBox = *box;
+		worldBox.Move(XMFLOAT3(pWorldMatrix[i]._41, 0, pWorldMatrix[i]._43));
+
+		// 만약 충돌 박스 내부에 들어가 있으면 충돌 체크를 하지 않는다.
+		// if (Collision::isIn(worldBox, m_pPlayer->GetTransform().GetPosition())) break;
 
 		// 이동한 박스를 통해 충돌한다.
-		bool isAlreadyCollide = Collision::isCollide(AlreadyPlayerBBox, worldBox);
+		bool isAlreadyCollide = Collision::isCollide(AlreadyPlayerBBox, worldBox.GetBOBox());
 		if (isAlreadyCollide)
-		{
-			bool isUseSliding = false;
+		{ 
+			bool isIntersect[4] = { false, false, false, false };
+			bool isFront[4] = { false, false, false, false };
 			for (int x = 0; x < 4; ++x) //  plane 면
-			{ 
-				bool isIntersect = Plane::Intersect(box->GetPlane(x), Vector3::Length(worldBox.Center), AlreadyPositon, m_pPlayer->GetVelocity());
-				bool isFront_1 = Plane::IsFront(box->GetPlane(x), Vector3::Length(worldBox.Center), AlreadyPositon);
-				if (isIntersect && (isFront_1 ))
-				{
-					std::cout << i << "번째 " << x << "면" << std::endl;
-					isUseSliding = true;
+			{  
+				float d = Plane::CaculateD(box->GetPlane(x), worldBox.GetPosOnPlane(x));
+				isIntersect[x] = Plane::Intersect(box->GetPlaneNormal(x), d, AlreadyPositon, m_pPlayer->GetVelocity());
+				isFront[x] = Plane::IsFront(box->GetPlaneNormal(x), d, AlreadyPositon);
+				
+				if (isIntersect[x] && isFront[x])
+				{ 
 					m_pPlayer->SetVelocity
 					(
 						Vector3::Sliding(box->GetPlaneNormal(x), m_pPlayer->GetVelocity())
-					); 
+					);
 					break;
 				}
-			} 
-			 
-			// 만약 부딪혔는데... 슬라이딩 벡터로 움직이지 않는다면..
 
-			if (!isUseSliding)
-			{
-				m_pPlayer->MoveVelocity(Vector3::ScalarProduct(m_pPlayer->GetVelocity(), -1, false));
-			}
+			} 
+			  
 		}
 	}
 

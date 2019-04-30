@@ -39,6 +39,29 @@ public:
 		return m_BoBoxPlane[index]; 
 	}
 
+	const XMFLOAT3 GetPosOnPlane(int index)
+	{
+		assert(!(index < 0 && index >= 4)); 
+		switch (index)
+		{
+		case 0:
+			return Vector3::Add(m_BOBox.Center, XMFLOAT3(m_BOBox.Extents.x, 0.f, 0.f));
+			break;
+
+		case 1:
+			return Vector3::Add(m_BOBox.Center, XMFLOAT3(-m_BOBox.Extents.x, 0.f, 0.f));
+			break;
+
+		case 2:
+			return Vector3::Add(m_BOBox.Center, XMFLOAT3(0.f, 0.f, m_BOBox.Extents.z));
+			break;
+
+		case 3:
+			return Vector3::Add(m_BOBox.Center, XMFLOAT3(0.f, 0.f, -m_BOBox.Extents.z));
+			break;
+		}
+	}
+
 	const XMFLOAT3 GetPlaneNormal(int index) const
 	{
 		assert(!(index < 0 && index >= 4));
