@@ -175,11 +175,9 @@ void Player::Update(float fElapsedTime)
 	// 이동량을 계산한다. 
 	m_pPlayerMovement->Update(fElapsedTime);
 	
-	// 이동량만큼 움직인다.
-	if (m_pBroom->GetisUsing())
-	{
-		Move(Vector3::ScalarProduct(m_pPlayerMovement->m_xmf3Velocity, fElapsedTime, false));
-	}
+	// 이동량만큼 움직인다. 
+	 Move(Vector3::ScalarProduct(m_pPlayerMovement->m_xmf3Velocity, fElapsedTime, false));
+	 
 	 
 	// 플레이어 콜백
 	// OnPlayerUpdateCallback(fElapsedTime);
@@ -243,7 +241,7 @@ void Player::Move(const XMFLOAT3 & xmf3Shift)
 
 void Player::MoveVelocity(const XMFLOAT3 & xmf3Shift)
 {
-	m_pPlayerMovement->m_xmf3Velocity = Vector3::Add(m_pPlayerMovement->m_xmf3Velocity, xmf3Shift);
+	m_pPlayerMovement->MoveVelocity(xmf3Shift);
 }
 
 void Player::Rotate(float x, float y, float z)
@@ -278,25 +276,11 @@ void Player::ProcessInput(float fTimeElapsed)
 		if (dwDirection & DIR_LEFT) xmf3Shift = Vector3::Add(xmf3Shift, axis.right, -fDistance);
 		
 		//플레이어의 이동량 벡터를 xmf3Shift 벡터만큼 더한다. 
-		if (m_pBroom->GetisUsing())
-		{
-			MoveVelocity(xmf3Shift);
-		}
-		else
-		{
-			Move(xmf3Shift);
-		}
+		m_pPlayerMovement->MoveVelocity(xmf3Shift);
 	}
 	else
 	{
-		XMFLOAT3 Veclocity = GetVelocity();
-		if (Vector3::Length(Veclocity) > 0.f)
-		{
-			float fLength = Vector3::Length(Veclocity);
-			float fDeceleration = (m_pPlayerMovement->m_fFriction * fTimeElapsed); //해당상수는 Friction
-			if (fDeceleration > fLength) fDeceleration = fLength;
-			MoveVelocity(Vector3::ScalarProduct(Veclocity, -fDeceleration, true));
-		}
+		m_pPlayerMovement->ReduceVelocity(fTimeElapsed);
 	}
 
 	SetTrackAnimationSet(dwDirection);

@@ -6,6 +6,8 @@ class PlayerMovement
 	: public ComponentBase
 {
 public: 
+	bool m_isBroomMode{ false };
+
 	XMFLOAT3 m_xmf3Velocity = XMFLOAT3(0.0f, 0.0f, 0.0f);
 	XMFLOAT3 m_xmf3Gravity = XMFLOAT3(0.0f, 0.0f, 0.0f);
 	float m_fMaxVelocityY{ 400.0f };
@@ -27,6 +29,9 @@ public:
 	virtual ~PlayerMovement();
 
 	virtual void Update(float) override;
+
+	void MoveVelocity(const XMFLOAT3 & xmf3Shift);
+	void ReduceVelocity(float);
 
 	void BroomMode();
 	void RunMode();
