@@ -59,16 +59,14 @@ XMFLOAT3 Player::CalculateAlreadyVelocity(float fTimeElapsed)
 }
 BoundingOrientedBox Player::CalculateAlreadyBoundingBox(float fTimeElapsed)
 {
-	XMFLOAT3 AlreadyVelocity = CalculateAlreadyVelocity(fTimeElapsed);
+	XMFLOAT3 AlreadyPosition = Vector3::Add(m_Transform.GetPosition(), m_pPlayerMovement->AlreadyUpdate(fTimeElapsed));
 	BoundingOrientedBox AlreadyBBox = m_pMyBOBox->GetBOBox();
-	AlreadyBBox.Center = Vector3::Add(AlreadyBBox.Center, AlreadyVelocity);
+	AlreadyBBox.Center = AlreadyPosition;
 	return AlreadyBBox;
 }
 XMFLOAT3 Player::CalculateAlreadyPosition(float fTimeElapsed)
 {
-	XMFLOAT3 AlreadyVelocity = CalculateAlreadyVelocity(fTimeElapsed);
-	XMFLOAT3 AlreadyPosition = m_Transform.GetPosition();
-	AlreadyPosition = Vector3::Add(AlreadyPosition, AlreadyVelocity);
+	XMFLOAT3 AlreadyPosition = Vector3::Add(m_Transform.GetPosition(), m_pPlayerMovement->AlreadyUpdate(fTimeElapsed));
 	return AlreadyPosition;
 }
 

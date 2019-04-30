@@ -29,6 +29,7 @@ public:
 	virtual ~PlayerMovement();
 
 	virtual void Update(float) override;
+	XMFLOAT3 AlreadyUpdate(float);
 
 	void MoveVelocity(const XMFLOAT3 & xmf3Shift);
 	void ReduceVelocity(float);

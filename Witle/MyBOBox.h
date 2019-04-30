@@ -31,11 +31,20 @@ public:
 	void SetPosition(const XMFLOAT3& pos);
 	
 	BoundingOrientedBox GetBOBox() const { return m_BOBox; } 
-	const XMFLOAT4 GetPlane(int index) const { 
+
+	// 0: +X 면, 1: -X면, 2: +Z면, 3: -Z면
+	const XMFLOAT4 GetPlane(int index) const
+	{ 
 		assert(!(index < 0 && index >= 4));
 		return m_BoBoxPlane[index]; 
 	}
 
+	const XMFLOAT3 GetPlaneNormal(int index) const
+	{
+		assert(!(index < 0 && index >= 4));
+		return XMFLOAT3{ m_BoBoxPlane[index].x, m_BoBoxPlane[index].y, m_BoBoxPlane[index].z };
+	}
+	 
 	// LineCube는 그리지 않는다.
 	MyBOBox operator=(const MyBOBox& other)
 	{  
