@@ -236,12 +236,7 @@ void Player::Move(const XMFLOAT3 & xmf3Shift)
 	m_Transform.Move(xmf3Shift);
 	m_pMyBOBox->Move(xmf3Shift);
 }
-
-void Player::MoveVelocity(const XMFLOAT3 & xmf3Shift)
-{
-	m_pPlayerMovement->MoveVelocity(xmf3Shift);
-}
-
+ 
 void Player::Rotate(float x, float y, float z)
 {
 	m_Transform.Rotate(x, y, z);
@@ -259,22 +254,9 @@ void Player::ProcessInput(float fTimeElapsed)
 	 
 	// 만약 키보드 상하좌우 움직인다면...
 	if (dwDirection != 0)
-	{ 
-		AXIS axis = AXIS{ m_Transform.GetCoorAxis() };
-
-		XMFLOAT3 xmf3Shift = XMFLOAT3(0.f, 0.f, 0.f); // 이동량
-
-		/*플레이어를 dwDirection 방향으로 이동한다(실제로는 속도 벡터를 변경한다). 이동 거리는 시간에 비례하도록 한다.
-		플레이어의 이동 속력은 (20m/초)로 가정한다.*/
-		float fDistance = m_pPlayerMovement->m_fDistance * fTimeElapsed; // 1초당 최대 속력 20m으로 가정, 현재 1 = 1cm
-
-		if (dwDirection & DIR_FORWARD) xmf3Shift = Vector3::Add(xmf3Shift, axis.look, fDistance);
-		if (dwDirection & DIR_BACKWARD) xmf3Shift = Vector3::Add(xmf3Shift, axis.look, -fDistance);
-		if (dwDirection & DIR_RIGHT) xmf3Shift = Vector3::Add(xmf3Shift, axis.right, fDistance);
-		if (dwDirection & DIR_LEFT) xmf3Shift = Vector3::Add(xmf3Shift, axis.right, -fDistance);
-		
+	{  
 		//플레이어의 이동량 벡터를 xmf3Shift 벡터만큼 더한다. 
-		m_pPlayerMovement->MoveVelocity(xmf3Shift);
+		m_pPlayerMovement->MoveVelocity(dwDirection, fTimeElapsed);
 	}
 	else
 	{

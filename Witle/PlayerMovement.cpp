@@ -1,5 +1,11 @@
 #include "stdafx.h"
+#include "GameObject.h"
 #include "PlayerMovement.h"
+
+void PlayerMovement::MoveVelocity(const XMFLOAT3 & xmf3Shift)
+{
+	m_xmf3Velocity = Vector3::Add(m_xmf3Velocity, xmf3Shift);
+}
 
 PlayerMovement::PlayerMovement(GameObject * pOwner)
 	:ComponentBase(pOwner)
@@ -49,9 +55,22 @@ XMFLOAT3 PlayerMovement::AlreadyUpdate(float fTimeElapsed)
 	return xmf3Velocity;
 }
 
-void PlayerMovement::MoveVelocity(const XMFLOAT3 & xmf3Shift)
+void PlayerMovement::MoveVelocity(DWORD dwDirection, float fTimeElapsed)
 {
-	m_xmf3Velocity = Vector3::Add(m_xmf3Velocity, xmf3Shift);
+	AXIS axis = AXIS{ m_pOwner->GetTransform().GetCoorAxis() };
+
+	XMFLOAT3 xmf3Shift = XMFLOAT3(0.f, 0.f, 0.f); // 이동량
+
+	/*플레이어를 dwDirection 방향으로 이동한다(실제로는 속도 벡터를 변경한다). 이동 거리는 시간에 비례하도록 한다.
+	플레이어의 이동 속력은 (20m/초)로 가정한다.*/
+	float fDistance = m_fDistance * fTimeElapsed; // 1초당 최대 속력 20m으로 가정, 현재 1 = 1cm
+
+	if (dwDirection & DIR_FORWARD) xmf3Shift = Vector3::Add(xmf3Shift, axis.look, fDistance);
+	if (dwDirection & DIR_BACKWARD) xmf3Shift = Vector3::Add(xmf3Shift, axis.look, -fDistance);
+	if (dwDirection & DIR_RIGHT) xmf3Shift = Vector3::Add(xmf3Shift, axis.right, fDistance);
+	if (dwDirection & DIR_LEFT) xmf3Shift = Vector3::Add(xmf3Shift, axis.right, -fDistance);
+
+	MoveVelocity(xmf3Shift);
 }
 
 void PlayerMovement::ReduceVelocity(float fTimeElapsed)
@@ -70,7 +89,7 @@ void PlayerMovement::ReduceVelocity(float fTimeElapsed)
 		MoveVelocity(Vector3::ScalarProduct(m_xmf3Velocity, -fDeceleration, true));
 	}
 	else
-	{ 
+	{  
 		MoveVelocity(Vector3::ScalarProduct(m_xmf3Velocity, -0.2f, false));
 	}
 }

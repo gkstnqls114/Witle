@@ -20,6 +20,9 @@ public:
 	float m_fRoll = 0.0f;
 	float m_fYaw = 0.0f;
 
+private:
+	void MoveVelocity(const XMFLOAT3& shift);
+
 public:
 	virtual void ReleaseObjects() override {};
 	virtual void ReleaseUploadBuffers() override {};
@@ -31,7 +34,7 @@ public:
 	virtual void Update(float) override;
 	XMFLOAT3 AlreadyUpdate(float);
 
-	void MoveVelocity(const XMFLOAT3 & xmf3Shift);
+	void MoveVelocity(DWORD dwDirection , float );
 	void ReduceVelocity(float);
 
 	void BroomMode();
