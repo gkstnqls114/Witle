@@ -452,8 +452,10 @@ public:
 
 	static void LoadAnimationFromFile(FILE *pInFile, CLoadedModelInfo *pLoadedModel);
 	static LoadObject *LoadFrameHierarchyFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, LoadObject *pParent, FILE *pInFile, Shader *pShader, int *pnSkinnedMeshes);
-
 	static CLoadedModelInfo *LoadGeometryAndAnimationFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, const char *pstrFileName, Shader *pShader);
+
+	static void LoadAnimationFromFile_forPlayer(FILE *pInFile, CLoadedModelInfo *pLoadedModel);
+	static CLoadedModelInfo *LoadGeometryAndAnimationFromFile_forPlayer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, const char *pstrFileName, Shader *pShader);
 
 	static void PrintFrameInfo(LoadObject *pGameObject, LoadObject *pParent);
 
