@@ -5,6 +5,16 @@
 #include "GameObject.h"
 #include "Camera.h"
 
+void Camera::ReleaseObjects()
+{
+	ReleaseShaderVariables();
+}
+
+void Camera::ReleaseUploadBuffers()
+{
+
+}
+
 Camera::Camera(GameObject* pOwner)
 	: ComponentBase(pOwner)
 {

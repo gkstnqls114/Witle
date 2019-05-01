@@ -37,6 +37,17 @@ void ShaderManager::ReleaseInstance()
 	}
 }
 
+void ShaderManager::ReleaseObjects()
+{
+	for (auto& shader : m_Shaders)
+	{ 
+		shader.second->ReleaseObjects();
+		delete shader.second;
+		shader.second = nullptr;
+	}
+	m_Shaders.clear();
+}
+
 bool ShaderManager::InsertShader(const std::string& s, Shader * pso)
 {
 	auto pair = m_Shaders.insert(std::pair<std::string, Shader*>(s, pso));

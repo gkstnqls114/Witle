@@ -13,5 +13,14 @@ public:
 		return a.Intersects(b);
 	}
 
+	static bool isIn(const  BoundingOrientedBox& a, const XMFLOAT3& point)
+	{
+		return a.Contains(Vector3::XMFloat3ToVector(point)) == CONTAINS;
+	}
+	   
+	static bool isCollide(const BoundingSphere& a, const BoundingOrientedBox& b)
+	{
+		return a.Intersects(b);
+	}
 
 };

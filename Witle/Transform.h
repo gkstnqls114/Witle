@@ -21,6 +21,11 @@ class Transform :
 	XMFLOAT4X4 m_transformWorld { Matrix4x4::Identity() };
 
 	void SetTransform(const XMFLOAT3& right, const XMFLOAT3& up, const XMFLOAT3& look, const XMFLOAT3& pos);
+
+public:
+	virtual void ReleaseObjects() override {};
+	virtual void ReleaseUploadBuffers() override {};
+	 
 public:
 	Transform(GameObject* pOwner);
 	virtual ~Transform();
@@ -38,7 +43,7 @@ public:
 	//////////////////////////////////////////////// Get
 
 	//////////////////////////////////////////////// Get
-	const XMFLOAT4X4& GetWorldMatrix() const { return m_transformWorld; }
+	const XMFLOAT4X4& GetpWorldMatrixs() const { return m_transformWorld; }
 	XMFLOAT4X4* GetpWorldMatrix()  { return &m_transformWorld; }
 	const XMFLOAT3& GetRight() const { return m_Right; }
 	const XMFLOAT3& GetUp() const { return m_Up; }
@@ -50,6 +55,11 @@ public:
 	void Move(const XMFLOAT3& xmf3Shift, bool bUpdateVelocity); 
 
 	void Move(const XMFLOAT3& vMove); // vMove만큼 Position 에서 움직인다.
-
+	
+	Transform& operator=(const Transform& pTr)
+	{
+		SetTransform(pTr.m_Right, pTr.m_Up, pTr.m_Look, pTr.m_Position);
+		return *this;
+	}
 };
 

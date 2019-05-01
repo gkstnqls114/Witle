@@ -1,42 +1,4 @@
-
-// 루트 상수
-cbuffer cbGameObjectInfo : register(b0)
-{
-	matrix gmtxWorld : packoffset(c0);
-}
-
-// 상수 버퍼
-cbuffer cbCameraInfo : register(b1)
-{
-	matrix gmtxView : packoffset(c0);
-	matrix gmtxProjection : packoffset(c4);
-	float3 gvCameraPosition : packoffset(c8);
-}
-
-// 루트 상수
-cbuffer cbGameObjectInfo : register(b4)
-{
-	float3 testcolor: packoffset(c0);
-}
-
-#define MATERIAL_ALBEDO_MAP			0x01
-#define MATERIAL_SPECULAR_MAP		0x02
-#define MATERIAL_NORMAL_MAP			0x04
-#define MATERIAL_METALLIC_MAP		0x08
-#define MATERIAL_EMISSION_MAP		0x10
-#define MATERIAL_DETAIL_ALBEDO_MAP	0x20
-#define MATERIAL_DETAIL_NORMAL_MAP	0x40
-
-Texture2D gtxtAlbedoTexture : register(t6);
-Texture2D gtxtSpecularTexture : register(t7);
-Texture2D gtxtNormalTexture : register(t8);
-Texture2D gtxtMetallicTexture : register(t9);
-Texture2D gtxtEmissionTexture : register(t10);
-Texture2D gtxtDetailAlbedoTexture : register(t11);
-Texture2D gtxtDetailNormalTexture : register(t12);
-
-SamplerState gssWrap : register(s0);
-
+#include "Variables.hlsl"
 #include "Light.hlsl"
  
 struct VS_STANDARD_INPUT
@@ -75,7 +37,7 @@ VS_STANDARD_OUTPUT VSStandard(VS_STANDARD_INPUT input)
 float4 PSStandard(VS_STANDARD_OUTPUT input) : SV_TARGET
 { 
 	// 임시로 사용할 컬러 색깔
-	float4 TESTColor = float4(1.f, 1.f, 1.f, 1.f);
+    float4 TESTColor = gtxtTexture.Sample(gWrapSamplerState, input.uv);
 	//float4 cAlbedoColor = float4(0.0f, 0.0f, 0.0f, 1.0f);
 	//if (gnTexturesMask & MATERIAL_ALBEDO_MAP) cAlbedoColor = gtxtAlbedoTexture.Sample(gssWrap, input.uv);
 	//float4 cSpecularColor = float4(0.0f, 0.0f, 0.0f, 1.0f);
@@ -99,8 +61,9 @@ float4 PSStandard(VS_STANDARD_OUTPUT input) : SV_TARGET
 	//{
 		normalW = normalize(input.normalW);
 	//}
-	float4 cIllumination = Lighting(input.positionW, normalW);
-	return(lerp(TESTColor, cIllumination, 0.5f));
+	//float4 cIllumination = Lighting(input.positionW, normalW);
+	//return(lerp(TESTColor, cIllumination, 0.5f));
+    return TESTColor;
 }
  
 
@@ -113,14 +76,6 @@ struct VS_INSTANCING_OUTPUT
 	float3 tangent : TANGENT;
 	float3 bitangent : BITANGENT;
 };
-
-//인스턴싱 데이터를 위한 구조체
-struct INSTANCING_TRANSFORM
-{
-	matrix m_mtxWorld; 
-};
-
-StructuredBuffer<INSTANCING_TRANSFORM> gmtxInstancingWorld : register(t14);
 
 VS_STANDARD_OUTPUT VSStandardInstancing(VS_INSTANCING_OUTPUT input, uint nInstanceID : SV_InstanceID)
 {

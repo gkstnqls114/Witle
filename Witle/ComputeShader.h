@@ -19,10 +19,10 @@ public:
 
 	virtual void						OnPrepareRender(ID3D12GraphicsCommandList *pd3dCommandList);
 
-	ID3D12PipelineState*  GetPSO() const { return m_pd3dPipelineState; }
+	ID3D12PipelineState*  GetPSO() const { return m_PipelineState; }
 
 protected:
-	ID3D12PipelineState*			m_pd3dPipelineState{ nullptr };
+	ID3D12PipelineState*			m_PipelineState{ nullptr };
 
 	ID3D12RootSignature				*m_pd3dGraphicsRootSignature{ nullptr };
 };

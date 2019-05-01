@@ -32,7 +32,10 @@ protected:
 
 	UINT							m_nStartIndex = 0;
 	int								m_nBaseVertex = 0;
-
+	 
+public:
+	virtual void ReleaseObjects() override;
+	virtual void ReleaseUploadBuffers() override;
 
 protected:
 	Mesh() {};
@@ -40,8 +43,7 @@ protected:
 public:
 	Mesh(GameObject* pOwner);
 	virtual ~Mesh();
-
-	void ReleaseUploadBuffers();
+	 
 
 	/////////////////////////////////////////////////////////////////////////// Get
 	UINT GetVertexCount() const { return m_vertexCount; }

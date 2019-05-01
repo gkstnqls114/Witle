@@ -18,6 +18,7 @@ public:
 	static ShaderManager* GetInstance();
 	static void ReleaseInstance();
 
+	void ReleaseObjects();
 	bool InsertShader(const std::string& s, Shader* pso);
 	Shader * GetShader(const std::string & s) const;
 

@@ -2,6 +2,14 @@
 #include "PlayerMovement.h"
 #include "Broom.h"
 
+void Broom::ReleaseMembers()
+{
+}
+
+void Broom::ReleaseMemberUploadBuffers()
+{
+}
+
 void Broom::DoNotUse()
 {
 	m_SkillTime = 0.f;
@@ -20,7 +28,7 @@ Broom::~Broom()
 {
 }
 
-void Broom::Use()
+void Broom::DoUse()
 {
 	m_isUsing = true;
 	m_pPlayerMovement->BroomMode();

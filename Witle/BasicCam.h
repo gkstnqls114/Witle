@@ -5,6 +5,7 @@ class BasicCam
 	:public Camera
 {
 
+
 public:
 	BasicCam(GameObject* pOwner);
 	virtual ~BasicCam();

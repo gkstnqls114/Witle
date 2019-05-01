@@ -5,6 +5,7 @@
 #pragma once
 
 #include "CMesh.h" 
+#pragma warning(disable:4996);
 
 #define DIR_FORWARD					0x01
 #define DIR_BACKWARD				0x02
@@ -97,7 +98,13 @@ private:
 
 public:
 	void AddRef() { m_nReferences++; }
-	void Release() { if (--m_nReferences <= 0) delete this; }
+	void Release() 
+	{ 
+		if (--m_nReferences <= 0)
+		{
+			delete this;
+		}
+	}
 
 public:
 
@@ -126,22 +133,20 @@ public:
 	float							m_fGlossyReflection = 0.0f;
 
 public:
-	int 							m_nTextures = 0;
 	_TCHAR(*m_ppstrTextureNames)[64] = NULL;
-	CTexture						**m_ppTextures = NULL; //0:Albedo, 1:Specular, 2:Metallic, 3:Normal, 4:Emission, 5:DetailAlbedo, 6:DetailNormal
 
 	void LoadTextureFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, UINT nType, UINT nRootParameter, _TCHAR *pwstrTextureName, CTexture **ppTexture, LoadObject *pParent, FILE *pInFile, Shader *pShader);
 
+private:
+	int 							m_nTextures = 0;
+	CTexture						**m_ppTextures = NULL; //0:Albedo, 1:Specular, 2:Metallic, 3:Normal, 4:Emission, 5:DetailAlbedo, 6:DetailNormal
+
 public:
+	static void ReleaseShaders();
 	static void PrepareShaders(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature);
 	 
-	void SetWireFrameShader() {  
-		 
-		CMaterial::SetShader(m_pWireFrameShader);
-	}
-	void SetSkinnedAnimationWireFrameShader() { 
-		SetShader(m_pSkinnedAnimationWireFrameShader); 
-	}
+	void SetWireFrameShader();
+	void SetSkinnedAnimationWireFrameShader();
 };
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -297,15 +302,17 @@ public:
 	CLoadedModelInfo() { }
 	~CLoadedModelInfo();
 
-public:
-	LoadObject						*m_pModelRootObject = NULL;
+public: 
+	LoadObject						*m_pModelRootObject = nullptr;
 
-	CAnimationSets					*m_pAnimationSets = NULL;
+	CAnimationSets					*m_pAnimationSets = nullptr;
 
 	int 							m_nSkinnedMeshes = 0;
-	CSkinnedMesh					**m_ppSkinnedMeshes = NULL; //[SkinnedMeshes], Skinned Mesh Cache
+	CSkinnedMesh					**m_ppSkinnedMeshes = nullptr; //[SkinnedMeshes], Skinned Mesh Cache
 
 public:
+	void ReleaseUploadBuffers();
+	void ReleaseObjects();
 	void PrepareSkinning();
 };
 
@@ -330,6 +337,8 @@ public:
 	XMFLOAT4X4						**m_ppcbxmf4x4MappedSkinningBoneTransforms = NULL;
 
 public:
+	void ReleaseObjects();
+
 	void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList);
 
 	void SetTrackAnimationSet(int nAnimationTrack, int nAnimationSet);
@@ -347,6 +356,8 @@ public:
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
+
+
 class LoadObject
 {
 private:
@@ -356,8 +367,14 @@ public:
 	void AddRef();
 	void Release();
 
-public:
+private:
+	int								m_nMaterials = 0;
+	CMaterial						**m_ppMaterials = NULL;
+
+private:
 	LoadObject();
+
+public:
 	LoadObject(int nMaterials);
 	virtual ~LoadObject();
 
@@ -365,10 +382,7 @@ public:
 	char							m_pstrFrameName[64];
 
 	CMesh							*m_pMesh = NULL;
-
-	int								m_nMaterials = 0;
-	CMaterial						**m_ppMaterials = NULL;
-
+	 
 	XMFLOAT4X4						m_xmf4x4ToParent;
 	XMFLOAT4X4						m_xmf4x4World;
 
@@ -402,6 +416,7 @@ public:
 	virtual void UpdateShaderVariable(ID3D12GraphicsCommandList *pd3dCommandList, XMFLOAT4X4 *pxmf4x4World);
 	virtual void UpdateShaderVariable(ID3D12GraphicsCommandList *pd3dCommandList, CMaterial *pMaterial);
 
+	virtual void ReleaseObjects();
 	virtual void ReleaseUploadBuffers();
 
 	XMFLOAT3 GetPosition();
@@ -438,25 +453,42 @@ public:
 
 	static void LoadAnimationFromFile(FILE *pInFile, CLoadedModelInfo *pLoadedModel);
 	static LoadObject *LoadFrameHierarchyFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, LoadObject *pParent, FILE *pInFile, Shader *pShader, int *pnSkinnedMeshes);
-
 	static CLoadedModelInfo *LoadGeometryAndAnimationFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, const char *pstrFileName, Shader *pShader);
+
+	static void LoadAnimationFromFile_forPlayer(FILE *pInFile, CLoadedModelInfo *pLoadedModel);
+	static CLoadedModelInfo *LoadGeometryAndAnimationFromFile_forPlayer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, const char *pstrFileName, Shader *pShader);
 
 	static void PrintFrameInfo(LoadObject *pGameObject, LoadObject *pParent);
 
-	static void LoadObject::CopyWorldMatrix(LoadObject* copy, LoadObject* copyed)
+	static void CopyWorldMatrix(LoadObject* copy, LoadObject* copyed)
 	{
 		strcpy(copy->m_pstrFrameName, copyed->m_pstrFrameName);
 
-		copy->m_pMesh = copyed->m_pMesh;
-		copy->m_nMaterials = copyed->m_nMaterials;
-		copy->m_ppMaterials = copyed->m_ppMaterials;
+		if (copyed->m_pMesh)
+		{
+			copy->SetMesh(copyed->m_pMesh);
+		}
+		if (copyed->m_nMaterials > 0)
+		{  
+			assert(!(copy->m_nMaterials != 0 && copy->m_nMaterials != copyed->m_nMaterials));
+			if (copy->m_nMaterials == 0)
+			{
+				copy->m_ppMaterials = new CMaterial*[copyed->m_nMaterials];
+				for (int i = 0; i < copyed->m_nMaterials; ++i) copy->m_ppMaterials[i] = NULL;
+			} 
+			copy->m_nMaterials = copyed->m_nMaterials;
+			for (int i = 0; i < copyed->m_nMaterials; ++i)
+			{
+				copy->SetMaterial(i, copy->m_ppMaterials[i]);
+			}
+		}
 
 		copy->m_xmf4x4ToParent = copyed->m_xmf4x4ToParent;
 		copy->m_xmf4x4World = copyed->m_xmf4x4World;
 
-		if (copyed->m_pParent) copy->m_pSibling = copyed->m_pParent;
+		if (copyed->m_pParent) copy->m_pParent = copyed->m_pParent;
 		if (copyed->m_pSibling)
-		{
+		{ 
 			copy->m_pSibling = new LoadObject;
 			CopyWorldMatrix(copy->m_pSibling, copyed->m_pSibling);
 		}
@@ -497,30 +529,4 @@ public:
 };
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-class CSkyBox : public LoadObject
-{
-public:
-	CSkyBox(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature);
-	virtual ~CSkyBox();
-
-	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList);
-};
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-class CAngrybotObject : public LoadObject
-{
-public:
-	CAngrybotObject(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, CLoadedModelInfo *pModel, int nAnimationTracks);
-	virtual ~CAngrybotObject();
-};
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-class CElvenWitchObject : public LoadObject
-{
-public:
-	CElvenWitchObject(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, CLoadedModelInfo *pModel, int nAnimationTracks);
-	virtual ~CElvenWitchObject();
-};
+// 

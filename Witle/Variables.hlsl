@@ -14,6 +14,7 @@ cbuffer cbGameObjectInfo : register(b1)
 }
 
 SamplerState gWrapSamplerState : register(s0);
+SamplerState gssClamp          : register(s1);
 
 Texture2D gtxtTexture : register(t0);
 Texture2D gtxtTerrainBaseTexture : register(t1);
@@ -47,3 +48,12 @@ Texture2D gtxtMetallicTexture : register(t9);
 Texture2D gtxtEmissionTexture : register(t10);
 Texture2D gtxtDetailAlbedoTexture : register(t11);
 Texture2D gtxtDetailNormalTexture : register(t12);
+TextureCube gtxtSkyCubeTexture : register(t13);
+ 
+//인스턴싱 데이터를 위한 구조체
+struct INSTANCING_TRANSFORM
+{
+    matrix m_mtxWorld;
+};
+
+StructuredBuffer<INSTANCING_TRANSFORM> gmtxInstancingWorld : register(t14);

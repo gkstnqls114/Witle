@@ -41,23 +41,41 @@ private:
 	~GameInput();
 
 	static HWND m_hWnd;
-
+	  
 	static UCHAR m_pKeyBuffer[256]; // 키보드의 input을 위한 멤버 변수
 
-	static RAY m_PickingRay;
+	static const bool m_isDragRotate;
 
-	static POINT m_clickCursor; // 한번 클릭했을 때 위치
-	static const float m_DeltaValue; // 마우스 이동량 값
-	static float m_cDeltaX; // 마우스를 누른 상태로 x축으로 움직인 마우스 이동량  
-	static float m_cDeltaY; // 마우스를 누른 상태로 y축으로 움직인 마우스 이동량
-	static POINT m_oldCursor; // 이전 프레임에서의 마우스 위치 
+	static RAY m_PickingRay;
 	static short m_WheelDelta; // 마우스 휠이 움직인 정도
+	static const float m_DeltaValueX; // 마우스 이동량 값
+	static const float m_DeltaValueY; // 마우스 이동량 값 
+
+	static POINT m_downClickCursor; // 한번 클릭했을 때 위치
+	static POINT m_downOldCursor; // 이전 프레임에서의 마우스 위치 
+	static float m_downDeltaX; // 마우스를 누른 상태로 x축으로 움직인 마우스 이동량  
+	static float m_downDeltaY; // 마우스를 누른 상태로 y축으로 움직인 마우스 이동량
+	 
+	static POINT m_moveCursor; // 한번 클릭했을 때 위치
+	static POINT m_moveOldCursor; // 이전 프레임에서의 마우스 위치 
+	static float m_moveDeltaX; // 마우스를 누르지 않은 상태로 x축으로 움직인 마우스 이동량
+	static float m_moveDeltaY; // 마우스를 누르지 않은 상태로 y축으로 움직인 마우스 이동량
+
+private:
+	static void UpdateMouseDragRotate(HWND hWnd);
+	static void UpdateMouseMoveRotate(HWND hWnd);
+	 
+	static float GetdownDeltaX() { return m_downDeltaX; }
+	static float GetdownDeltaY() { return m_downDeltaY; }
+	static float GetmoveDeltaX() { return m_moveDeltaX; };
+	static float GetmoveDeltaY() { return m_moveDeltaY; };
 
 public: 
 	static void Update(HWND hWnd);
 	static void Reset();
 
-	static void SetHWND(HWND hwnd) { m_hWnd = hwnd; }
+	static void SetHWND(HWND hwnd);
+	static void MouseMove(LPARAM lParam);
 
 	// 키가 눌렸는지 확인하는 상태
 	static bool IsKeydownRIGHT() { return (m_pKeyBuffer[VK_RIGHT] & 0xF0); };
@@ -66,13 +84,27 @@ public:
 	static bool IsKeydownDOWN() { return (m_pKeyBuffer[VK_DOWN] & 0xF0); };
 	static bool IsKeydownW() { return (m_pKeyBuffer[MYVK_W] & 0xF0); };
 	static bool IsKeydownS() { return (m_pKeyBuffer[MYVK_S] & 0xF0); };
+	static bool IsKeydownA() { return (m_pKeyBuffer[MYVK_A] & 0xF0); };
+	static bool IsKeydownD() { return (m_pKeyBuffer[MYVK_D] & 0xF0); };
 
 	static void SetCapture(HWND hWnd);
 	static void RotateWheel(WPARAM wParam);
 	static void ReleaseCapture();
-	static float GetcDeltaX() { return m_cDeltaX; }
-	static float GetcDeltaY() { return m_cDeltaY; }
-	static POINT GetClickcursor() { return m_clickCursor; }
+
+	static float GetDeltaX() 
+	{
+		if (m_isDragRotate) return GetdownDeltaX();
+		else  return GetmoveDeltaX();
+	}
+	static float GetDeltaY() 
+	{
+		if (m_isDragRotate) return GetdownDeltaY();
+		else return GetmoveDeltaY();
+	}
+
+
+	static POINT GetdownClickcursor() { return m_downClickCursor; }
+
 
 	static bool GenerateRayforPicking(const XMFLOAT3& cameraPos, const XMFLOAT4X4 & view, const XMFLOAT4X4 & projection, RAY& ray);
 

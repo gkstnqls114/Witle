@@ -221,7 +221,7 @@ CubeMesh::CubeMesh(GameObject* pOwner, ID3D12Device * pd3dDevice, ID3D12Graphics
 	m_pVertexBufferViews[0].BufferLocation = m_pPositionBuffer->GetGPUVirtualAddress();
 	m_pVertexBufferViews[0].StrideInBytes = m_nStride;
 	m_pVertexBufferViews[0].SizeInBytes = m_nStride * m_vertexCount;
-
+	 
 }
 
 CubeMesh::~CubeMesh()

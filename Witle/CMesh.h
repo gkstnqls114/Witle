@@ -68,10 +68,7 @@ protected:
 	ID3D12Resource					**m_ppd3dSubSetIndexBuffers = NULL;
 	ID3D12Resource					**m_ppd3dSubSetIndexUploadBuffers = NULL;
 	D3D12_INDEX_BUFFER_VIEW			*m_pd3dSubSetIndexBufferViews = NULL;
-
-
-	//
-
+ 
 	XMFLOAT4						*m_pxmf4Colors = NULL;
 	XMFLOAT3						*m_pxmf3Normals = NULL;
 	XMFLOAT3						*m_pxmf3Tangents = NULL;
@@ -219,7 +216,7 @@ public:
 	int								m_nSkinningBones = 0;
 
 	char(*m_ppstrSkinningBoneNames)[64];
-	LoadObject						**m_ppSkinningBoneFrameCaches = NULL;
+	LoadObject						**m_ppSkinningBoneFrameCaches = NULL; //포인터를 담기만 한다. 내부에서 동적할당X
 
 	XMFLOAT4X4						*m_pxmf4x4BindPoseBoneOffsets = NULL;
 

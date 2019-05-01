@@ -13,11 +13,9 @@
 #include "Terrain.h"
 #include "Player.h"
 
-#define ANIMATION_IDLE 0
-#define ANIMATION_FORWARD 1
-#define ANIMATION_BACKWARD 2
-#define ANIMATION_LEFT 3
-#define ANIMATION_RIGHT 4
+
+
+
 
 void Player::OnPlayerUpdateCallback(float fTimeElapsed)
 {
@@ -59,16 +57,14 @@ XMFLOAT3 Player::CalculateAlreadyVelocity(float fTimeElapsed)
 }
 BoundingOrientedBox Player::CalculateAlreadyBoundingBox(float fTimeElapsed)
 {
-	XMFLOAT3 AlreadyVelocity = CalculateAlreadyVelocity(fTimeElapsed);
+	XMFLOAT3 AlreadyPosition = Vector3::Add(m_Transform.GetPosition(), m_pPlayerMovement->AlreadyUpdate(fTimeElapsed));
 	BoundingOrientedBox AlreadyBBox = m_pMyBOBox->GetBOBox();
-	AlreadyBBox.Center = Vector3::Add(AlreadyBBox.Center, AlreadyVelocity);
+	AlreadyBBox.Center = AlreadyPosition;
 	return AlreadyBBox;
 }
 XMFLOAT3 Player::CalculateAlreadyPosition(float fTimeElapsed)
 {
-	XMFLOAT3 AlreadyVelocity = CalculateAlreadyVelocity(fTimeElapsed);
-	XMFLOAT3 AlreadyPosition = m_Transform.GetPosition();
-	AlreadyPosition = Vector3::Add(AlreadyPosition, AlreadyVelocity);
+	XMFLOAT3 AlreadyPosition = Vector3::Add(m_Transform.GetPosition(), m_pPlayerMovement->AlreadyUpdate(fTimeElapsed));
 	return AlreadyPosition;
 }
 
@@ -95,10 +91,10 @@ XMFLOAT3 Player::CalculateAlreadyPosition(float fTimeElapsed)
 Player::Player(const std::string & entityID, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void * pContext)
 	: GameObject(entityID)
 { 
-	CLoadedModelInfo *pPlayerModel = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/Angrybot.bin", NULL);
-	m_pLoadObject = pPlayerModel->m_pModelRootObject;
-
-	m_pLoadObject->m_pSkinnedAnimationController = new CAnimationController(pd3dDevice, pd3dCommandList, 1, pPlayerModel);
+	m_PlayerModel = LoadObject::LoadGeometryAndAnimationFromFile_forPlayer(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/Chracter.bin", NULL);
+	m_pLoadObject = m_PlayerModel->m_pModelRootObject;
+	 
+	m_pLoadObject->m_pSkinnedAnimationController = new CAnimationController(pd3dDevice, pd3dCommandList, 1, m_PlayerModel);
 	m_pLoadObject->m_pSkinnedAnimationController->SetTrackAnimationSet(0, 0);
 
 	XMFLOAT3 center{ 0.f, 75.f, 0.f };
@@ -107,28 +103,57 @@ Player::Player(const std::string & entityID, ID3D12Device * pd3dDevice, ID3D12Gr
 	 
 	m_pPlayerStatus = new PlayerStatus(this, pd3dDevice, pd3dCommandList);
 	m_pPlayerMovement = new PlayerMovement(this);
-
+	 
 	m_pBroom = new Broom(m_pPlayerMovement);
 
+	m_Transform.SetPosition(0.f, 75.f ,0.f);
+	
 	SetUpdatedContext(pContext); 
 }
 
 Player::~Player()
-{
-	ReleaseMembers();
+{ 
 	m_pPlayerUpdatedContext = nullptr;
 	m_pCameraUpdatedContext = nullptr;
 }
+ 
 
 void Player::ReleaseMembers()
 {
+	m_pPlayerUpdatedContext = nullptr;
+	m_pCameraUpdatedContext = nullptr;
+	if (m_pBroom)
+	{ 
+		m_pBroom->ReleaseObjects();
+		delete m_pBroom;
+		m_pBroom = nullptr;
+	}
+	if (m_pLoadObject)
+	{
+		m_pLoadObject->ReleaseObjects(); 
+		m_pLoadObject = nullptr;
+	}
+	if (m_PlayerModel)
+	{
+		//m_PlayerModel->ReleaseObjects();
+		//delete m_PlayerModel;
+		//m_PlayerModel = nullptr;
+	}
+	if (m_pMyBOBox)
+	{
+		m_pMyBOBox->ReleaseObjects();
+		delete m_pMyBOBox;
+		m_pMyBOBox = nullptr;
+	}
 	if (m_pPlayerStatus)
 	{
+		m_pPlayerStatus->ReleaseObjects();
 		delete m_pPlayerStatus;
 		m_pPlayerStatus = nullptr;
 	}
 	if (m_pPlayerMovement)
 	{
+		m_pPlayerMovement->ReleaseObjects();
 		delete m_pPlayerMovement;
 		m_pPlayerMovement = nullptr;
 	}
@@ -136,6 +161,9 @@ void Player::ReleaseMembers()
 
 void Player::ReleaseMemberUploadBuffers()
 {
+	if (m_pLoadObject) m_pLoadObject->ReleaseUploadBuffers();
+	if (m_PlayerModel)m_PlayerModel->ReleaseUploadBuffers();
+	if (m_pMyBOBox)m_pMyBOBox->ReleaseUploadBuffers();
 }
 
 void Player::Update(float fElapsedTime)
@@ -145,8 +173,9 @@ void Player::Update(float fElapsedTime)
 	// 이동량을 계산한다. 
 	m_pPlayerMovement->Update(fElapsedTime);
 	
-	// 이동량만큼 움직인다.
-	Move(Vector3::ScalarProduct(m_pPlayerMovement->m_xmf3Velocity, fElapsedTime, false));
+	// 이동량만큼 움직인다. 
+	 Move(Vector3::ScalarProduct(m_pPlayerMovement->m_xmf3Velocity, fElapsedTime, false));
+	 
 	 
 	// 플레이어 콜백
 	// OnPlayerUpdateCallback(fElapsedTime);
@@ -170,31 +199,36 @@ void Player::Animate(float fElapsedTime)
 	// 반드시 트랜스폼 업데이트..! 
 	m_Transform.Update(fElapsedTime);
 
-	//// 위치가 안맞아서 재조정 
-	m_pLoadObject->m_xmf4x4ToParent =  
-		Matrix4x4::Multiply(XMMatrixRotationX(29.8f), m_Transform.GetWorldMatrix());
+	//// 위치가 안맞아서 재조정  
+	float fPitch = -90.f;
+	float fYaw = 0.f;
+	float fRoll = 0.f;
+	XMMATRIX mtxRotate = XMMatrixRotationRollPitchYaw(XMConvertToRadians(fPitch), XMConvertToRadians(fYaw), XMConvertToRadians(fRoll));
+	m_pLoadObject->m_xmf4x4ToParent = Matrix4x4::Multiply(mtxRotate, m_Transform.GetpWorldMatrixs());
 	 
 	m_pLoadObject->Animate(fElapsedTime);
 }
 
 void Player::Render(ID3D12GraphicsCommandList * pd3dCommandList)
 {
+	if (!m_isRendering) return;
+
 #ifdef _SHOW_BOUNDINGBOX
-	m_pMyBOBox->Render(pd3dCommandList, m_Transform.GetWorldMatrix());
+	m_pMyBOBox->Render(pd3dCommandList, m_Transform.GetpWorldMatrixs());
 #endif // _SHOW_BOUNDINGBOX
 
 	m_pLoadObject->Render(pd3dCommandList);
-	m_pPlayerStatus->Render(pd3dCommandList);
+	// m_pPlayerStatus->Render(pd3dCommandList);
 }
  
 void Player::SetTrackAnimationSet(ULONG dwDirection)
 { 
-	m_pLoadObject->SetTrackAnimationSet(0, ANIMATION_IDLE);
+	m_pLoadObject->SetTrackAnimationSet(0, ANIMATION_IDLE.ID);
 
-	if (dwDirection & DIR_FORWARD)	m_pLoadObject->SetTrackAnimationSet(0, ANIMATION_FORWARD);
-	if (dwDirection & DIR_BACKWARD) m_pLoadObject->SetTrackAnimationSet(0, ANIMATION_BACKWARD);
-	if (dwDirection & DIR_RIGHT) m_pLoadObject->SetTrackAnimationSet(0, ANIMATION_RIGHT);
-	if (dwDirection & DIR_LEFT) m_pLoadObject->SetTrackAnimationSet(0, ANIMATION_LEFT); 
+	if (dwDirection & DIR_FORWARD)	m_pLoadObject->SetTrackAnimationSet(0, ANIMATION_FORWARD.ID);
+	if (dwDirection & DIR_BACKWARD) m_pLoadObject->SetTrackAnimationSet(0, ANIMATION_BACKWARD.ID);
+	if (dwDirection & DIR_RIGHT) m_pLoadObject->SetTrackAnimationSet(0, ANIMATION_RIGHT.ID);
+	if (dwDirection & DIR_LEFT) m_pLoadObject->SetTrackAnimationSet(0, ANIMATION_LEFT.ID); 
 }
 
 void Player::Move(const XMFLOAT3 & xmf3Shift)
@@ -202,12 +236,7 @@ void Player::Move(const XMFLOAT3 & xmf3Shift)
 	m_Transform.Move(xmf3Shift);
 	m_pMyBOBox->Move(xmf3Shift);
 }
-
-void Player::MoveVelocity(const XMFLOAT3 & xmf3Shift)
-{
-	m_pPlayerMovement->m_xmf3Velocity = Vector3::Add(m_pPlayerMovement->m_xmf3Velocity, xmf3Shift);
-}
-
+ 
 void Player::Rotate(float x, float y, float z)
 {
 	m_Transform.Rotate(x, y, z);
@@ -217,64 +246,21 @@ void Player::Rotate(float x, float y, float z)
 void Player::ProcessInput(float fTimeElapsed)
 {
 	DWORD dwDirection = 0;
-
-	// 키보드 처리
-	if (GameInput::IsKeydownUP())
-	{
-		dwDirection |= DIR_FORWARD;
-	}
-	if (GameInput::IsKeydownDOWN())
-	{
-		dwDirection |= DIR_BACKWARD;
-	}
-	if (GameInput::IsKeydownLEFT())
-	{
-		dwDirection |= DIR_LEFT;
-	}
-	if (GameInput::IsKeydownRIGHT())
-	{
-		dwDirection |= DIR_RIGHT;
-	}
-	if (GameInput::IsKeydownW())
-	{
-		dwDirection |= DIR_UP;
-	}
-	if (GameInput::IsKeydownS())
-	{
-		dwDirection |= DIR_DOWN;
-	}
-
+	 
+	if (GameInput::IsKeydownW()) dwDirection |= DIR_FORWARD;
+	if (GameInput::IsKeydownS()) dwDirection |= DIR_BACKWARD;
+	if (GameInput::IsKeydownA()) dwDirection |= DIR_LEFT;
+	if (GameInput::IsKeydownD()) dwDirection |= DIR_RIGHT;
+	 
 	// 만약 키보드 상하좌우 움직인다면...
 	if (dwDirection != 0)
-	{ 
-		AXIS axis = AXIS{ m_Transform.GetCoorAxis() };
-
-		XMFLOAT3 xmf3Shift = XMFLOAT3(0.f, 0.f, 0.f); // 이동량
-
-		/*플레이어를 dwDirection 방향으로 이동한다(실제로는 속도 벡터를 변경한다). 이동 거리는 시간에 비례하도록 한다.
-		플레이어의 이동 속력은 (20m/초)로 가정한다.*/
-		float fDistance = m_pPlayerMovement->m_fDistance * fTimeElapsed; // 1초당 최대 속력 20m으로 가정, 현재 1 = 1cm
-
-		if (dwDirection & DIR_FORWARD) xmf3Shift = Vector3::Add(xmf3Shift, axis.look, fDistance);
-		if (dwDirection & DIR_BACKWARD) xmf3Shift = Vector3::Add(xmf3Shift, axis.look, -fDistance);
-		if (dwDirection & DIR_RIGHT) xmf3Shift = Vector3::Add(xmf3Shift, axis.right, fDistance);
-		if (dwDirection & DIR_LEFT) xmf3Shift = Vector3::Add(xmf3Shift, axis.right, -fDistance);
-		if (dwDirection & DIR_UP) xmf3Shift = Vector3::Add(xmf3Shift, axis.up, fDistance);
-		if (dwDirection & DIR_DOWN) xmf3Shift = Vector3::Add(xmf3Shift, axis.up, -fDistance);
-
-		//플레이어의 이동량 벡터를 xmf3Shift 벡터만큼 더한다.  
-		MoveVelocity(xmf3Shift);
+	{  
+		//플레이어의 이동량 벡터를 xmf3Shift 벡터만큼 더한다. 
+		m_pPlayerMovement->MoveVelocity(dwDirection, fTimeElapsed);
 	}
 	else
 	{
-		XMFLOAT3 Veclocity = GetVelocity();
-		if (Vector3::Length(Veclocity) > 0.f)
-		{
-			float fLength = Vector3::Length(Veclocity);
-			float fDeceleration = (m_pPlayerMovement->m_fFriction * fTimeElapsed); //해당상수는 Friction
-			if (fDeceleration > fLength) fDeceleration = fLength;
-			MoveVelocity(Vector3::ScalarProduct(Veclocity, -fDeceleration, true));
-		}
+		m_pPlayerMovement->ReduceVelocity(fTimeElapsed);
 	}
 
 	SetTrackAnimationSet(dwDirection);
@@ -282,7 +268,7 @@ void Player::ProcessInput(float fTimeElapsed)
 
 void Player::UseSkill_Broom()
 {
-	m_pBroom->Use();
+	m_pBroom->DoUse();
 }
 
 XMFLOAT3 Player::GetVelocity() const

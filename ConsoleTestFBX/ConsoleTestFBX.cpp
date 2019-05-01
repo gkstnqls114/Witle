@@ -114,7 +114,7 @@ int main(int argc, char** argv) {
 	// SDKManager를 사용해 fbx임포터 객체 생성
 	FbxImporter* lImporter = FbxImporter::Create(lSdkManager, "");
 
-	// Use the first argument as the filename for the importer.
+	// DoUse the first argument as the filename for the importer.
 	if (!lImporter->Initialize(lFilename, -1, lSdkManager->GetIOSettings())) {
 		printf("Call to FbxImporter::Initialize() failed.\n");
 		printf("Error returned: %s\n\n", lImporter->GetStatus().GetErrorString());

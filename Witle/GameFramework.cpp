@@ -1,11 +1,27 @@
 #include "stdafx.h"
 #include "d3dUtil.h"
 
-#include "ShaderManager.h"
+//// GameBase ////////////////////////// 
 #include "GameTimer.h"
 #include "GameInput.h"
 #include "GameScreen.h" 
+//// GameBase ////////////////////////// 
 
+//// Manager ////////////////////////// 
+#include "ShaderManager.h"
+#include "ModelStorage.h"
+#include "TextureStorage.h"
+#include "StaticObjectStorage.h"
+//// Manager ////////////////////////// 
+
+//// Scene ////////////////////////// 
+#include "GameScene.h"
+#include "RoomScene.h"
+#include "LoadingScene.h"
+//// Scene ////////////////////////// 
+
+//// Shader ////////////////////////// 
+#include "SkyBoxShader.h"
 #include "StandardShader.h"
 #include "TerrainShader.h"
 #include "SkinnedShader.h"
@@ -15,6 +31,8 @@
 #include "TESTShader.h"
 #include "ScreenShader.h"
 #include "CubeShader.h"
+#include "InstancingLineShader.h"
+//// Shader ////////////////////////// 
 
 #ifdef _SHOW_BOUNDINGBOX
 #include "LineShader.h"
@@ -23,11 +41,7 @@
 #include "Object.h"
 #include "Texture.h"
 #include "MyDescriptorHeap.h"
-
-#include "GameScene.h"
-#include "RoomScene.h"
-#include "LoadingScene.h"
-
+ 
 #include "GameFramework.h"
 
 
@@ -81,7 +95,7 @@ bool CGameFramework::OnCreate(HINSTANCE hInstance, HWND hMainWnd)
 	CreateRtvAndDsvDescriptorHeaps();
 	CreateSwapChain();
 	
-	CreateRWResourceViews();
+	// CreateRWResourceViews();
 	 
 	BuildObjects();
 	 
@@ -472,14 +486,19 @@ void CGameFramework::BuildObjects()
 	m_CommandList->Reset(m_CommandAllocator.Get(), NULL);
 	
 	///////////////////////////////////////////////////////////////////////////// 리소스 생성
+	// 루트 시그니처 위해 장면 먼저 생성
 	m_pScene = new GameScene;
 	// m_pScene = new LoadingScene;
 	// m_pScene = new RoomScene;
-	m_pScene->CreateRootSignature(m_d3dDevice.Get());
+	m_pScene->CreateRootSignature(m_d3dDevice.Get()); 
 
+	// 루트 시그니처를 통해 모든 오브젝트 갖고온다.
+	TextureStorage::GetInstance()->CreateTextures(m_d3dDevice.Get(), m_CommandList.Get());
+	ModelStorage::GetInstance()->CreateModels(m_d3dDevice.Get(), m_CommandList.Get(), m_pScene->GetGraphicsRootSignature());
+	  
 	BuildTESTObjects();
 	BuildShaders();
-
+	 
 	m_pScene->BuildObjects(m_d3dDevice.Get(), m_CommandList.Get());
 	///////////////////////////////////////////////////////////////////////////// 리소스 생성
 
@@ -492,18 +511,35 @@ void CGameFramework::BuildObjects()
 
 	///////////////////////////////////////////////////////////////////////////// 업로드 힙 릴리즈
 	if (m_pScene) m_pScene->ReleaseUploadBuffers(); 
+	 
+	TextureStorage::GetInstance()->ReleaseUploadBuffers();
+	ModelStorage::GetInstance()->ReleaseUploadBuffers();
 	///////////////////////////////////////////////////////////////////////////// 업로드 힙 릴리즈
 
 	CGameTimer::GetInstance()->Reset();
 }
 
 void CGameFramework::ReleaseObjects()
-{
-	if (m_pScene) { 
+{ 
+	if (m_pScene)
+	{ 
 		m_pScene->ReleaseObjects();
 		delete m_pScene;
 		m_pScene = nullptr;
 	}
+	 
+
+	CMaterial::ReleaseShaders(); 
+	StaticObjectStorage::GetInstance()->ReleaseObjects();
+	TextureStorage::GetInstance()->ReleaseObjects();
+	ModelStorage::GetInstance()->ReleaseObjects();
+	ShaderManager::GetInstance()->ReleaseObjects();
+
+	StaticObjectStorage::ReleaseInstance();
+	ShaderManager::ReleaseInstance();
+	TextureStorage::ReleaseInstance();
+	ModelStorage::ReleaseInstance();
+	 
 }
 
 void CGameFramework::UpdateGamelogic(float fElapsedTime)
@@ -570,7 +606,8 @@ void CGameFramework::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM
 		break;
 	case WM_RBUTTONUP:
 		break;
-	case WM_MOUSEMOVE:
+	case WM_MOUSEMOVE: 
+		GameInput::MouseMove(lParam);
 		break;
 
 	default:
@@ -663,26 +700,29 @@ void CGameFramework::BuildShaders()
 	pScreenShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
 	ShaderManager::GetInstance()->InsertShader("ScreenShader", pScreenShader);
 
+	Shader* pSkyBoxShader = new SkyBoxShader();
+	pSkyBoxShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
+	ShaderManager::GetInstance()->InsertShader("SkyBoxShader", pSkyBoxShader);
 #ifdef _SHOW_BOUNDINGBOX
 	Shader* pLineShader = new LineShader();
 	pLineShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
 	ShaderManager::GetInstance()->InsertShader("Line", pLineShader);
+	 
+	Shader* pInstancingLineShader = new InstancingLineShader();
+	pInstancingLineShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
+	ShaderManager::GetInstance()->InsertShader("InstancingLine", pInstancingLineShader);
 #endif
 }
 
 void CGameFramework::BuildTESTObjects()
 {
-	m_horizenShader = new HorizonBlurShader();
-	m_horizenShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
+	//m_horizenShader = new HorizonBlurShader();
+	//m_horizenShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
 
-	m_verticalShader = new VerticalBlurShader();
-	m_verticalShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
-
-	Shader* pTESTShader = new TESTShader();
-	pTESTShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
-	ShaderManager::GetInstance()->InsertShader("TEST", pTESTShader);
+	//m_verticalShader = new VerticalBlurShader();
+	//m_verticalShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
 }
-
+ 
 void CGameFramework::RenderOnGbuffer()
 {
 	for (int i = 0; i < m_GBuffersCount; i++) { 

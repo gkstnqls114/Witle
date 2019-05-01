@@ -4,7 +4,16 @@
 class GameObject;
 class ResourceBase;
 
+class IComponentBase
+{
+public:
+	virtual void Update(float fTimeElapsed) = 0;
+	virtual void ReleaseObjects() = 0;
+	virtual void ReleaseUploadBuffers() = 0;
+};
+
 class ComponentBase
+	: public IComponentBase
 {
 protected:
 	ComponentBase() {}
@@ -12,12 +21,13 @@ protected:
 public:
 	ComponentBase(GameObject* pOwner) : m_pOwner(pOwner) {}
 	virtual ~ComponentBase();
-	 
-	virtual void Update(float fTimeElapsed) = 0;
-	 
+	  
 	int GetComponentID() const { return m_ComponenetID; };
 	const FamilyID& GetFamilyID() const { return m_FamilyID; };
 
+	virtual void Update(float fTimeElapsed) override {};
+	virtual void ReleaseObjects() = 0;
+	virtual void ReleaseUploadBuffers() = 0;
 	
 protected: 
 	GameObject* const m_pOwner{ nullptr };

@@ -7,9 +7,9 @@ ComputeShader::ComputeShader()
 
 ComputeShader::~ComputeShader()
 {
-	if (m_pd3dPipelineState)
+	if (m_PipelineState)
 	{
-		m_pd3dPipelineState->Release();
+		m_PipelineState->Release();
 	}
 }
 
@@ -41,7 +41,7 @@ void ComputeShader::CreatePipelineState(ID3D12Device * pd3dDevice, ID3D12RootSig
 	computepipelinestateDESC.Flags = D3D12_PIPELINE_STATE_FLAG_NONE;
 	computepipelinestateDESC.NodeMask = 0; // ´ÜÀÏ gpu : 0
 
-	pd3dDevice->CreateComputePipelineState(&computepipelinestateDESC, IID_PPV_ARGS(&m_pd3dPipelineState));
+	pd3dDevice->CreateComputePipelineState(&computepipelinestateDESC, IID_PPV_ARGS(&m_PipelineState));
 
 	if (pd3dComputeShaderBlob) pd3dComputeShaderBlob->Release();
 
@@ -54,5 +54,5 @@ D3D12_SHADER_BYTECODE ComputeShader::CreateComputeShader(ID3DBlob ** ppd3dShader
 
 void ComputeShader::OnPrepareRender(ID3D12GraphicsCommandList * pd3dCommandList)
 {
-	pd3dCommandList->SetPipelineState(m_pd3dPipelineState);
+	pd3dCommandList->SetPipelineState(m_PipelineState);
 }

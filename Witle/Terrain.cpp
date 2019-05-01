@@ -5,7 +5,7 @@
 #include "Terrain.h"
 
 void Terrain::ReleaseMemberUploadBuffers()
-{
+{ 
 	if(m_ResourceBase) m_ResourceBase->ReleaseUploadBuffers();
 }
 

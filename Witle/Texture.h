@@ -1,12 +1,13 @@
 #pragma once 
 
+class MyDescriptorHeap;
 
 class Texture 
 {
 	struct SRVROOTARGUMENTINFO
 	{
-		UINT							m_nRootParameterIndex = 0;
-		D3D12_GPU_DESCRIPTOR_HANDLE		m_d3dSrvGpuDescriptorHandle;
+		UINT							m_nRootParameterIndex{ 0 };
+		D3D12_GPU_DESCRIPTOR_HANDLE		m_d3dSrvGpuDescriptorHandle{ NULL };
 	};
 public:
 	Texture(int nTextureResources = 1, UINT nResourceType = RESOURCE_TEXTURE2D, int nSamplers = 0);
@@ -46,7 +47,7 @@ public:
 	const D3D12_GPU_DESCRIPTOR_HANDLE GetHandler() const { return m_pRootArgumentInfos->m_d3dSrvGpuDescriptorHandle; }
 
 	void ReleaseUploadBuffers();
-
-
+	void ReleaseObjects();
+	 
 
 };

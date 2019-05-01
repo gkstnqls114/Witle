@@ -1,13 +1,14 @@
 #pragma once
 #include "Scene.h"
+ 
+//// Skill ////////////////
+class Sniping;
+class WideareaMagic;
+//// Skill ////////////////
 
-class MyReflexTree;
-class SunFlower;
-class Pillar;
-class Rock;
-
-class Player;
-class CPlayer;
+class Widget;
+class SkyBox;
+class Player; 
 class Shader;
 class ReflexTree;
 class CLoadedModelInfo;
@@ -23,6 +24,7 @@ class QuadtreeTerrain;
 struct LIGHTS;
 struct MATERIAL;
 struct MATERIALS;
+
 
 class GameScene
 	: public Scene
@@ -60,6 +62,7 @@ protected:
 	//그래픽 루트 시그너쳐를 생성한다.
 	virtual ID3D12RootSignature* CreateGraphicsRootSignature(ID3D12Device *pd3dDevice) override; 
 
+	void UpdateCollision(float fElapsedTime);
 	void BuildLightsAndMaterials(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList);
 	void RenderShadowMap(ID3D12GraphicsCommandList *pd3dCommandList);
 	 
@@ -86,22 +89,26 @@ public:
 	void TESTSetRootDescriptor(ID3D12GraphicsCommandList *pd3dCommandList);
 	
 protected:
-	// fbx test 
+
+	Widget*					m_AimPoint{ nullptr };
+
+	int*					m_PlayerTerrainIndex{ nullptr };
+	Sniping*				m_Sniping{ nullptr };
+	WideareaMagic*          m_WideareaMagic{ nullptr };
 	Player*                 m_pPlayer{ nullptr };
 
 	Player*                 m_pOtherPlayer{ nullptr };
 	  
-	Terrain*                m_Terrain{ nullptr };
+	Terrain*                m_Terrain{ nullptr }; 
 	CameraObject*           m_Camera{ nullptr };
+	
+	SkyBox*					m_SkyBox{ nullptr };
 
 #ifdef CHECK_SUBVIEWS
 	CameraObject*			m_lookAboveCamera{ nullptr };
 #endif
-
-	XMFLOAT4X4              matrix{ Matrix4x4::Identity() };
-
+	 
 	//////////////////////////////////////  조명
-
 	ID3D12Resource				*m_pd3dcbLights{ nullptr };
 	LIGHTS						*m_pcbMappedLights{ nullptr };
 
@@ -110,6 +117,7 @@ protected:
 	ID3D12Resource				*m_pd3dcbMaterials{ nullptr };
 	MATERIAL					*m_pcbMappedMaterials{ nullptr };
 	//////////////////////////////////////  조명
-	 
-	QuadtreeTerrain         *m_pQuadtreeTerrain{ nullptr };
+	
+	// 충돌체크할 테스트 오브젝트  
+	QuadtreeTerrain			    *m_pQuadtreeTerrain{ nullptr };
 };

@@ -5,12 +5,14 @@
 // 전처리문을 정의하는 헤더 파일
 // 
 
+
 //// Enum Type ////////////////////////////////////
 enum MESH_TYPE_ID
 {
 	CUBE_MESH,
 	TERRAIN_MESH,
-	QUADTREE_TERRAIN_MESH
+	QUADTREE_TERRAIN_MESH,
+	CYLINDER_MESH
 };
 
 enum SHAPE_TYPE_ID
@@ -26,6 +28,7 @@ enum LIGHT_TYPE
 };
 //// Enum Type ////////////////////////////////////
 
+#define PI				    3.141592
 
 #define EPSILON				1.0e-10f
 
@@ -49,7 +52,7 @@ enum LIGHT_TYPE
 
 
 //// Root Parameter Index /////////////////////////////////////////// 
-#define ROOTPATAMETER_COUNT 18
+#define ROOTPATAMETER_COUNT 19
 
 const UINT ROOTPARAMETER_WORLD = 0;
 const UINT ROOTPARAMETER_CAMERA = 1;
@@ -69,6 +72,8 @@ const UINT ROOTPARAMETER_EMISSION_1 = 14;
 const UINT ROOTPARAMETER_EMISSION_2 = 15;
 const UINT ROOTPARAMETER_COLOR = 16;
 const UINT ROOTPARAMETER_INSTANCING = 17;
+const UINT ROOTPARAMETER_SKYBOX = 18;
+
 //// Root Parameter Index /////////////////////////////////////////// 
 
 
@@ -154,3 +159,27 @@ const UINT ROOTPARAMETER_INSTANCING = 17;
 
 //정점의 색상을 무작위로(Random) 설정하기 위해 사용한다. 각 정점의 색상은 난수(Random Number)를 생성하여 지정한다.
 #define RANDOM_COLOR XMFLOAT4{rand() / float(RAND_MAX), rand() / float(RAND_MAX), rand() / float(RAND_MAX), rand() / float(RAND_MAX)}
+
+//// Load Player Animation /////////////////////////////////////////// 
+#define SECOND_PER_FRAME float(1.f/30.f) // 1 프레임당 몇초인가?
+
+struct ANIMATION_INFO
+{
+	int ID{ -1 };
+	float StartTime{ -1 };
+	float EndTime{ -1 };
+};
+
+#define NUM_ANIMATIONE 9
+
+const ANIMATION_INFO ANIMATION_IDLE         { 0, 0.f * SECOND_PER_FRAME,   30.f * SECOND_PER_FRAME };
+const ANIMATION_INFO ANIMATION_FORWARD      { 1, 31.f * SECOND_PER_FRAME,  63.f * SECOND_PER_FRAME };
+const ANIMATION_INFO ANIMATION_BACKWARD     { 2, 64.f * SECOND_PER_FRAME,  104.f * SECOND_PER_FRAME };
+const ANIMATION_INFO ANIMATION_RIGHT         { 3, 105.f * SECOND_PER_FRAME, 137.f * SECOND_PER_FRAME };
+const ANIMATION_INFO ANIMATION_LEFT        { 4, 138.f * SECOND_PER_FRAME, 170.f * SECOND_PER_FRAME };
+const ANIMATION_INFO ANIMATION_ATTACK       { 5, 171.f * SECOND_PER_FRAME, 191.f * SECOND_PER_FRAME };
+const ANIMATION_INFO ANIMATION_BROOMPREPARE { 6, 192.f * SECOND_PER_FRAME, 230.f * SECOND_PER_FRAME };
+const ANIMATION_INFO ANIMATION_BROOMIDLE    { 7, 231.f * SECOND_PER_FRAME, 261.f * SECOND_PER_FRAME };
+const ANIMATION_INFO ANIMATION_BROOMFORWARD { 8, 262.f * SECOND_PER_FRAME, 292.f * SECOND_PER_FRAME };
+ 
+//// Load Player Animation /////////////////////////////////////////// 

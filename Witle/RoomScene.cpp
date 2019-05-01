@@ -162,12 +162,12 @@ void RoomScene::ReleaseObjects()
 
 bool RoomScene::ProcessInput(HWND hWnd, float ElapsedTime)
 { 
-	if (m_pCharacterAppearanceButton_1->CheckClickTRUE(GameInput::GetClickcursor()))
+	if (m_pCharacterAppearanceButton_1->CheckClickTRUE(GameInput::GetdownClickcursor()))
 	{
 		m_pCharacterAppearanceButton_2->IsNotClick();
 	}
 
-	if(m_pCharacterAppearanceButton_2->CheckClickTRUE(GameInput::GetClickcursor()))
+	if(m_pCharacterAppearanceButton_2->CheckClickTRUE(GameInput::GetdownClickcursor()))
 	{
 		m_pCharacterAppearanceButton_1->IsNotClick(); 
 	}

@@ -2,22 +2,28 @@
 #include "GameObject.h"
 
 class Camera;
+class CLoadedModelInfo;
 class LoadObject;
 class MyBOBox;
 class PlayerStatus;
 class PlayerMovement;
 class Broom;
+class Sniping;
 
 // CHeightMapTerrain 입니다.
 class Player :
 	public GameObject
-{  
-	PlayerMovement* m_pPlayerMovement{ nullptr };
-	PlayerStatus*	m_pPlayerStatus{ nullptr };
-	MyBOBox*		m_pMyBOBox{ nullptr };
-	LoadObject*		m_pLoadObject{ nullptr };
+{
+	bool m_isRendering{ true };
+
+	PlayerMovement*    m_pPlayerMovement{ nullptr };
+	PlayerStatus*	   m_pPlayerStatus{ nullptr };
+	MyBOBox*		   m_pMyBOBox{ nullptr };
+	CLoadedModelInfo*  m_PlayerModel {nullptr };
+	LoadObject*		   m_pLoadObject{ nullptr }; // delete 금지
 	 
 	Broom* m_pBroom{ nullptr };
+	Sniping* m_pSniping{ nullptr };
 
 	LPVOID m_pPlayerUpdatedContext { nullptr };
 	LPVOID m_pCameraUpdatedContext { nullptr };
@@ -36,6 +42,10 @@ private:
 public:
 	Player(const std::string& entityID, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext = NULL);
 	virtual ~Player();
+
+	void SetSniping(Sniping* sniping) { m_pSniping = sniping; }
+	void DoNotRendering() { m_isRendering = false; }
+	void DoRendering() { m_isRendering = true; }
 
 	XMFLOAT3 CalculateAlreadyVelocity(float fTimeElapsed);
 	BoundingOrientedBox CalculateAlreadyBoundingBox(float fTimeElapsed);
