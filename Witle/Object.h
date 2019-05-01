@@ -5,6 +5,7 @@
 #pragma once
 
 #include "CMesh.h" 
+#pragma warning(disable:4996);
 
 #define DIR_FORWARD					0x01
 #define DIR_BACKWARD				0x02
@@ -459,7 +460,7 @@ public:
 
 	static void PrintFrameInfo(LoadObject *pGameObject, LoadObject *pParent);
 
-	static void LoadObject::CopyWorldMatrix(LoadObject* copy, LoadObject* copyed)
+	static void CopyWorldMatrix(LoadObject* copy, LoadObject* copyed)
 	{
 		strcpy(copy->m_pstrFrameName, copyed->m_pstrFrameName);
 
