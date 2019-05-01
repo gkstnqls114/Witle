@@ -61,16 +61,29 @@ void PlayerMovement::MoveVelocity(DWORD dwDirection, float fTimeElapsed)
 
 	XMFLOAT3 xmf3Shift = XMFLOAT3(0.f, 0.f, 0.f); // 이동량
 
-	/*플레이어를 dwDirection 방향으로 이동한다(실제로는 속도 벡터를 변경한다). 이동 거리는 시간에 비례하도록 한다.
-	플레이어의 이동 속력은 (20m/초)로 가정한다.*/
+	// 플레이어를 dwDirection 방향으로 이동한다(실제로는 속도 벡터를 변경한다).
+	// 이동 거리는 시간에 비례하도록 한다. 플레이어의 이동 속력은 (20m/초)로 가정한다.
 	float fDistance = m_fDistance * fTimeElapsed; // 1초당 최대 속력 20m으로 가정, 현재 1 = 1cm
 
-	if (dwDirection & DIR_FORWARD) xmf3Shift = Vector3::Add(xmf3Shift, axis.look, fDistance);
-	if (dwDirection & DIR_BACKWARD) xmf3Shift = Vector3::Add(xmf3Shift, axis.look, -fDistance);
-	if (dwDirection & DIR_RIGHT) xmf3Shift = Vector3::Add(xmf3Shift, axis.right, fDistance);
-	if (dwDirection & DIR_LEFT) xmf3Shift = Vector3::Add(xmf3Shift, axis.right, -fDistance);
+	if (m_isBroomMode) // 만약 빗자루 모드일 경우...
+	{ 
+		if (dwDirection & DIR_FORWARD) xmf3Shift = Vector3::Add(xmf3Shift, axis.look, fDistance);
+		if (dwDirection & DIR_BACKWARD) xmf3Shift = Vector3::Add(xmf3Shift, axis.look, -fDistance);
+		if (dwDirection & DIR_RIGHT) xmf3Shift = Vector3::Add(xmf3Shift, axis.right, fDistance);
+		if (dwDirection & DIR_LEFT) xmf3Shift = Vector3::Add(xmf3Shift, axis.right, -fDistance);
 
-	MoveVelocity(xmf3Shift);
+		MoveVelocity(xmf3Shift);
+	}
+	else
+	{ 
+		if (dwDirection & DIR_FORWARD) xmf3Shift = Vector3::Add(xmf3Shift, axis.look, m_fMaxVelocityXZ - 500);
+		if (dwDirection & DIR_BACKWARD) xmf3Shift = Vector3::Add(xmf3Shift, axis.look, -m_fMaxVelocityXZ + 500);
+		if (dwDirection & DIR_RIGHT) xmf3Shift = Vector3::Add(xmf3Shift, axis.right, m_fMaxVelocityXZ - 500);
+		if (dwDirection & DIR_LEFT) xmf3Shift = Vector3::Add(xmf3Shift, axis.right, -m_fMaxVelocityXZ + 500);
+
+		m_xmf3Velocity = xmf3Shift;
+	}
+
 }
 
 void PlayerMovement::ReduceVelocity(float fTimeElapsed)
@@ -107,5 +120,5 @@ void PlayerMovement::RunMode()
 	m_isBroomMode = false;
 	m_fMaxVelocityXZ = 2000.0f; // 1초당 20m
 	m_fFriction = 100000.0f;
-	m_fDistance = 10000.f;
+	m_fDistance = 0.f;
 }
