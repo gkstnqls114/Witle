@@ -106,7 +106,7 @@ Player::Player(const std::string & entityID, ID3D12Device * pd3dDevice, ID3D12Gr
 	 
 	m_pBroom = new Broom(m_pPlayerMovement);
 
-	m_Transform.SetPosition(0.f, 150.f ,0.f);
+	m_Transform.SetPosition(0.f, 75.f ,0.f);
 	
 	SetUpdatedContext(pContext); 
 }
@@ -135,9 +135,9 @@ void Player::ReleaseMembers()
 	}
 	if (m_PlayerModel)
 	{
-		m_PlayerModel->ReleaseObjects();
-		delete m_PlayerModel;
-		m_PlayerModel = nullptr;
+		//m_PlayerModel->ReleaseObjects();
+		//delete m_PlayerModel;
+		//m_PlayerModel = nullptr;
 	}
 	if (m_pMyBOBox)
 	{

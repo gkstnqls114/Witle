@@ -204,7 +204,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	// 테스트할 모델 오브젝트
 	 m_pPlayer = new Player("Player", pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 	m_pOtherPlayer = new Player("OtherPlayer", pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
-	m_pOtherPlayer->GetTransform().SetPosition(0, 0, 1000); 
+	m_pOtherPlayer->GetTransform().SetPosition(0, 75, 1000); 
 	m_SkyBox->SetpPlayerTransform(&m_pPlayer->GetTransform());
 
 	//// 테스트 쿼드트리 터레인 생성 
