@@ -13,11 +13,9 @@
 #include "Terrain.h"
 #include "Player.h"
 
-#define ANIMATION_IDLE 0
-#define ANIMATION_FORWARD 1
-#define ANIMATION_BACKWARD 2
-#define ANIMATION_LEFT 3
-#define ANIMATION_RIGHT 4
+
+
+
 
 void Player::OnPlayerUpdateCallback(float fTimeElapsed)
 {
@@ -108,6 +106,8 @@ Player::Player(const std::string & entityID, ID3D12Device * pd3dDevice, ID3D12Gr
 	 
 	m_pBroom = new Broom(m_pPlayerMovement);
 
+	m_Transform.SetPosition(0.f, 150.f ,0.f);
+	
 	SetUpdatedContext(pContext); 
 }
 
@@ -223,12 +223,12 @@ void Player::Render(ID3D12GraphicsCommandList * pd3dCommandList)
  
 void Player::SetTrackAnimationSet(ULONG dwDirection)
 { 
-	m_pLoadObject->SetTrackAnimationSet(0, ANIMATION_IDLE);
+	m_pLoadObject->SetTrackAnimationSet(0, ANIMATION_IDLE.ID);
 
-	//if (dwDirection & DIR_FORWARD)	m_pLoadObject->SetTrackAnimationSet(0, ANIMATION_FORWARD);
-	//if (dwDirection & DIR_BACKWARD) m_pLoadObject->SetTrackAnimationSet(0, ANIMATION_BACKWARD);
-	//if (dwDirection & DIR_RIGHT) m_pLoadObject->SetTrackAnimationSet(0, ANIMATION_RIGHT);
-	//if (dwDirection & DIR_LEFT) m_pLoadObject->SetTrackAnimationSet(0, ANIMATION_LEFT); 
+	if (dwDirection & DIR_FORWARD)	m_pLoadObject->SetTrackAnimationSet(0, ANIMATION_FORWARD.ID);
+	if (dwDirection & DIR_BACKWARD) m_pLoadObject->SetTrackAnimationSet(0, ANIMATION_BACKWARD.ID);
+	if (dwDirection & DIR_RIGHT) m_pLoadObject->SetTrackAnimationSet(0, ANIMATION_RIGHT.ID);
+	if (dwDirection & DIR_LEFT) m_pLoadObject->SetTrackAnimationSet(0, ANIMATION_LEFT.ID); 
 }
 
 void Player::Move(const XMFLOAT3 & xmf3Shift)

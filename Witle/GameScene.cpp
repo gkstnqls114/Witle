@@ -645,8 +645,6 @@ void GameScene::UpdateCollision(float fElapsedTime)
 						// 해당 교차점이 유한평면안에 존재하는지 확인한다. 
 						if (worldBox.IsIn(x, intersectionPoint))
 						{  
-							std::cout << x << " 면과 intersect" << std::endl;
-
 							m_pPlayer->SetVelocity
 							(
 								Vector3::Sliding(box->GetPlaneNormal(x), m_pPlayer->GetVelocity())

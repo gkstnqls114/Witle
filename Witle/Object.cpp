@@ -10,7 +10,6 @@
 #include "Object.h"
 #include "Scene.h"
 
-#define SECOND_PER_FRAME float(1.f/30.f) // 1 프레임당 몇초인가?
 
 using namespace FileRead;
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1266,7 +1265,7 @@ void LoadObject::LoadAnimationFromFile_forPlayer(FILE * pInFile, CLoadedModelInf
 		if (!strcmp(pstrToken, "<AnimationSets>:"))
 		{
 			nAnimationSets = ::ReadIntegerFromFile(pInFile);
-			pLoadedModel->m_pAnimationSets = new CAnimationSets(nAnimationSets);
+			pLoadedModel->m_pAnimationSets = new CAnimationSets(NUM_ANIMATIONE);
 		}
 		else if (!strcmp(pstrToken, "<AnimationSet>:"))
 		{
@@ -1277,12 +1276,16 @@ void LoadObject::LoadAnimationFromFile_forPlayer(FILE * pInFile, CLoadedModelInf
 			float fStartTime = ::ReadFloatFromFile(pInFile);
 			float fEndTime = ::ReadFloatFromFile(pInFile);
 
-			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[0] = new CAnimationSet(fStartTime, fEndTime, pstrToken);
-			/*pLoadedModel->m_pAnimationSets->m_ppAnimationSets[1] = new CAnimationSet(fStartTime + SECOND_PER_FRAME * 76.f, fStartTime + SECOND_PER_FRAME * 95.f, pstrToken);
-			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[2] = new CAnimationSet(fStartTime + SECOND_PER_FRAME * 96.f, fStartTime + SECOND_PER_FRAME * 115.f, pstrToken);
-			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[3] = new CAnimationSet(fStartTime + SECOND_PER_FRAME * 116.f, fStartTime + SECOND_PER_FRAME * 135.f, pstrToken);
-			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[4] = new CAnimationSet(fStartTime + SECOND_PER_FRAME * 136.f, fEndTime,						 pstrToken);
-			*/
+			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[ANIMATION_IDLE.ID] =         new CAnimationSet(ANIMATION_IDLE.StartTime,          ANIMATION_IDLE.EndTime, pstrToken);
+			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[ANIMATION_FORWARD.ID] =      new CAnimationSet(ANIMATION_FORWARD.StartTime,       ANIMATION_FORWARD.EndTime, pstrToken);
+			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[ANIMATION_BACKWARD.ID] =     new CAnimationSet(ANIMATION_BACKWARD.StartTime,      ANIMATION_BACKWARD.EndTime, pstrToken);
+			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[ANIMATION_LEFT.ID] =         new CAnimationSet(ANIMATION_LEFT.StartTime,          ANIMATION_LEFT.EndTime, pstrToken);
+			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[ANIMATION_RIGHT.ID] =        new CAnimationSet(ANIMATION_RIGHT.StartTime,         ANIMATION_RIGHT.EndTime, pstrToken);
+			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[ANIMATION_ATTACK.ID] =       new CAnimationSet(ANIMATION_ATTACK.StartTime,        ANIMATION_ATTACK.EndTime, pstrToken);
+			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[ANIMATION_BROOMPREPARE.ID] = new CAnimationSet(ANIMATION_BROOMPREPARE.StartTime,  ANIMATION_BROOMPREPARE.EndTime, pstrToken);
+			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[ANIMATION_BROOMIDLE.ID] =    new CAnimationSet(ANIMATION_BROOMIDLE.StartTime,     ANIMATION_BROOMIDLE.EndTime, pstrToken);
+			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[ANIMATION_BROOMFORWARD.ID] = new CAnimationSet(ANIMATION_BROOMFORWARD.StartTime,  ANIMATION_BROOMFORWARD.EndTime, pstrToken);
+			
 			CAnimationSet *pAnimationSet = pLoadedModel->m_pAnimationSets->m_ppAnimationSets[nAnimationSet];
 
 			::ReadStringFromFile(pInFile, pstrToken);
@@ -1291,11 +1294,11 @@ void LoadObject::LoadAnimationFromFile_forPlayer(FILE * pInFile, CLoadedModelInf
 				pAnimationSet->m_nAnimationLayers = ::ReadIntegerFromFile(pInFile);
 				pAnimationSet->m_pAnimationLayers = new CAnimationLayer[pAnimationSet->m_nAnimationLayers];
 
-				//for (int i = 1; i < 5; ++i)
-				//{
-				//	pLoadedModel->m_pAnimationSets->m_ppAnimationSets[i]->m_nAnimationLayers = 1;
-				//	pLoadedModel->m_pAnimationSets->m_ppAnimationSets[i]->m_pAnimationLayers = pAnimationSet->m_pAnimationLayers;
-				//}
+				for (int i = 1; i < NUM_ANIMATIONE; ++i)
+				{
+					pLoadedModel->m_pAnimationSets->m_ppAnimationSets[i]->m_nAnimationLayers = 1;
+					pLoadedModel->m_pAnimationSets->m_ppAnimationSets[i]->m_pAnimationLayers = pAnimationSet->m_pAnimationLayers;
+				}
 
 				for (int i = 0; i < pAnimationSet->m_nAnimationLayers; i++)
 				{
