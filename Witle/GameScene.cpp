@@ -506,7 +506,7 @@ ID3D12RootSignature* GameScene::CreateGraphicsRootSignature(ID3D12Device *pd3dDe
 	pRootParameters[ROOTPARAMETER_CAMERA] = d3dUtil::CreateRootParameterCBV(1);          // b1: Camera
 	pRootParameters[ROOTPARAMETER_MATERIALS] = d3dUtil::CreateRootParameterCBV(2);       // b2: Materials
 	pRootParameters[ROOTPARAMETER_LIGHTS] = d3dUtil::CreateRootParameterCBV(3);          // b3: Lights
-	pRootParameters[ROOTPARAMETER_COLOR] = d3dUtil::CreateRootParameterConstants(3, 4);  // b4: Color
+	pRootParameters[ROOTPARAMETER_PICKINGPOINT] = d3dUtil::CreateRootParameterConstants(2, 4);  // b4: Color
 	
 	D3D12_DESCRIPTOR_RANGE pTextureDescriptorRanges[3];
 	pTextureDescriptorRanges[0] = d3dUtil::CreateDescriptorRangeSRV(1, 0); //t0: gtxtTexture
@@ -642,7 +642,7 @@ void GameScene::UpdateCollision(float fElapsedTime)
 					if (isIntersect && isFront)
 					{ 
 						// 해당 교차점이 유한평면안에 존재하는지 확인한다. 
-						if (worldBox.IsIn(x, intersectionPoint))
+						if (worldBox.IsIn(x, intersectionPoint)) //isIn 함수 나중에 수정해야함
 						{  
 							m_pPlayer->SetVelocity
 							(

@@ -7,6 +7,7 @@ class Texture;
 class Widget
 	: public GameObject
 {
+	XMFLOAT2 m_PickingPoint;
 	RECT m_rect;
 	MyRectangle* m_AimPoint{ nullptr };
 	 
@@ -22,6 +23,9 @@ public:
 	virtual void Update(float fElapsedTime) override;
 	  
 	void Render(ID3D12GraphicsCommandList *pd3dCommandList);
+
+	void MovePickingPoint(const XMFLOAT2& shift);
+	XMFLOAT2 GetPickingPoint() const { return m_PickingPoint; }
 
 	Texture* GetTexture();
 };

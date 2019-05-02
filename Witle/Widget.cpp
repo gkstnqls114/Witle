@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Texture.h"
+#include "GameScreen.h"
 #include "MyRectangle.h"
 #include "Widget.h"
 
@@ -21,6 +22,7 @@ void Widget::ReleaseMemberUploadBuffers()
 Widget::Widget(const std::string& entityID, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, RECT rect, const wchar_t * filepath)
 	:GameObject(entityID)
 {
+	m_PickingPoint = XMFLOAT2(GameScreen::GetWidth() / 2, GameScreen::GetHeight() / 2);
 	m_rect = rect;
 	m_AimPoint = new MyRectangle(this, pd3dDevice, pd3dCommandList, rect, filepath); 
 }
@@ -28,6 +30,7 @@ Widget::Widget(const std::string& entityID, ID3D12Device *pd3dDevice, ID3D12Grap
 Widget::Widget(const std::string& entityID, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, POINT center, float width, float height, const wchar_t * filepath)
 	:GameObject(entityID)
 {
+	m_PickingPoint = XMFLOAT2(GameScreen::GetWidth() / 2, GameScreen::GetHeight() / 2);
 	m_rect.left = static_cast<float>(center.x) - width / 2.f;
 	m_rect.right = static_cast<float>(center.x) + width / 2.f;
 	m_rect.top = static_cast<float>(center.y) - height / 2.f;
@@ -48,6 +51,11 @@ void Widget::Update(float fElapsedTime)
 void Widget::Render(ID3D12GraphicsCommandList * pd3dCommandList)
 {
 	m_AimPoint->Render(pd3dCommandList);
+}
+
+void Widget::MovePickingPoint(const XMFLOAT2 & shift)
+{
+	m_PickingPoint = Vector2::Add(m_PickingPoint, shift);
 }
 
 Texture * Widget::GetTexture()

@@ -89,7 +89,6 @@ public:
 	void TESTSetRootDescriptor(ID3D12GraphicsCommandList *pd3dCommandList);
 	
 protected:
-
 	Widget*					m_AimPoint{ nullptr };
 
 	int*					m_PlayerTerrainIndex{ nullptr };

@@ -15,7 +15,6 @@
 using namespace FileRead;
 
 StaticObjectStorage* StaticObjectStorage::m_Instance{ nullptr };
- 
 
 void StaticObjectStorage::UpdateShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList, int count, XMFLOAT4X4 * transforms)
 { 
