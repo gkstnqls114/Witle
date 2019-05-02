@@ -625,7 +625,11 @@ void CGameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPA
 
 	switch (nMessageID)
 	{
+	case WM_KEYDOWN:  
+		GameInput::NowKeyDown();
+		break;
 	case WM_KEYUP:
+		GameInput::NowKeyUp();
 		switch (wParam)
 		{
 		case VK_ESCAPE:
@@ -646,7 +650,7 @@ void CGameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPA
 			} 
 			OnResizeBackBuffers();
 			break;
-		}
+		} 
 		default:
 			break;
 		}

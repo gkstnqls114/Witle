@@ -63,6 +63,7 @@ protected:
 	virtual ID3D12RootSignature* CreateGraphicsRootSignature(ID3D12Device *pd3dDevice) override; 
 
 	void UpdateCollision(float fElapsedTime);
+	void ProcessPicking(float fElapsedTime);
 	void BuildLightsAndMaterials(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList);
 	void RenderShadowMap(ID3D12GraphicsCommandList *pd3dCommandList);
 	 

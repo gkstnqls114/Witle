@@ -59,7 +59,7 @@ Texture * Widget::GetTexture()
 AimPoint::AimPoint(const std::string & entityID, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, POINT center, float width, float height, const wchar_t * filepath)
 	: Widget(entityID, pd3dDevice, pd3dCommandList, POINT{0, 0}, width, height, filepath)
 {
-	m_PickingPoint = XMFLOAT2{ GameScreen::GetWidth() / 2, GameScreen::GetHeight() /2};
+	m_PickingPoint = XMFLOAT2{ GameScreen::GetWidth() / 2 , GameScreen::GetHeight() /2};
 }
 
 AimPoint::~AimPoint()

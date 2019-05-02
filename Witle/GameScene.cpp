@@ -335,8 +335,10 @@ void GameScene::ReleaseObjects()
 
 bool GameScene::ProcessInput(HWND hWnd, float fElapsedTime)
 { 
+	// 플레이어 이동에 대한 처리 (정확히는 이동이 아니라 가속도)
 	m_pPlayer->ProcessInput(fElapsedTime);
 
+	// 플레이어 회전에 대한 처리
 	if ((GameInput::GetDeltaX() != 0.0f) || (GameInput::GetDeltaY() != 0.0f))
 	{
 		if (GameInput::GetDeltaX() || GameInput::GetDeltaY())
@@ -348,21 +350,8 @@ bool GameScene::ProcessInput(HWND hWnd, float fElapsedTime)
 		} 
 	}
 	
-	Camera* pCamera = m_Camera->GetCamera();
-	RAY pickRay;
-	bool isPick = GameInput::GenerateRayforPicking(m_Camera->GetTransform().GetPosition(), pCamera->GetViewMatrix(), pCamera->GetProjectionMatrix(), pickRay);
-	if (isPick && m_pOtherPlayer)
-	{  
-		float dist;
-
-		auto world = m_pOtherPlayer->GetTransform().GetpWorldMatrixs();
-		BoundingOrientedBox box = m_pOtherPlayer->GetBOBox()->GetBOBox();
-		box.Transform(box, XMLoadFloat4x4(&world));
-		if (box.Intersects(XMLoadFloat3(&pickRay.origin), XMLoadFloat3(&pickRay.direction), dist))
-		{ 
-			m_pOtherPlayer->SubstractHP(100);
-		} 
-	}
+	// 피킹 처리
+	ProcessPicking(fElapsedTime);
 
 	return true;
 }
@@ -655,6 +644,37 @@ void GameScene::UpdateCollision(float fElapsedTime)
 			}
 		}
 	}  
+}
+
+void GameScene::ProcessPicking(float fElapsedTime)
+{
+	if (GameInput::GetDragMode()) // 만약 드래그로 회전한다면...
+	{
+		if (!GameInput::IsNowKeydownE()) return; // e를 누르지 않았다면 아무것도 실행하지 않는다.
+
+		std::cout << "공격" << std::endl;
+		//Camera* pCamera = m_Camera->GetCamera();
+		//RAY pickRay;
+		//bool isPick = GameInput::GenerateRayforPicking(m_Camera->GetTransform().GetPosition(), pCamera->GetViewMatrix(), pCamera->GetProjectionMatrix(), pickRay);
+		//if (isPick && m_pOtherPlayer)
+		//{
+		//	float dist;
+
+		//	auto world = m_pOtherPlayer->GetTransform().GetpWorldMatrixs();
+		//	BoundingOrientedBox box = m_pOtherPlayer->GetBOBox()->GetBOBox();
+		//	box.Transform(box, XMLoadFloat4x4(&world));
+		//	if (box.Intersects(XMLoadFloat3(&pickRay.origin), XMLoadFloat3(&pickRay.direction), dist))
+		//	{
+		//		m_pOtherPlayer->SubstractHP(100);
+		//	}
+		//}
+	}
+	else // 드래그로 회전하지 않는다면...
+	{
+		if (!GameInput::isNowClick()) return; // 클릭하지 않았다면 아무것도 실행하지 않는다.
+		 
+
+	}
 }
 
 void GameScene::BuildLightsAndMaterials(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList)
