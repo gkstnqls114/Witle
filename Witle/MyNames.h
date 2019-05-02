@@ -19,3 +19,9 @@
 
 #define SUNFLOWER "Sunflower"
 #define ALTAR "Altar"
+
+
+// 쉐이더 이름들
+
+#define SHADER_SCREEN "ScreenShader"
+#define SHADER_PICKINGPOINT "PikcingPointShader"

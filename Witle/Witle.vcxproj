@@ -203,6 +203,7 @@
     <ClInclude Include="MyRigidbody.h" />
     <ClInclude Include="MyStructs.h" />
     <ClInclude Include="Object.h" />
+    <ClInclude Include="PickingPointShader.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerMovement.h" />
     <ClInclude Include="PlayerStatus.h" />
@@ -298,6 +299,7 @@
     <ClCompile Include="MyFrustum.cpp" />
     <ClCompile Include="MyRigidbody.cpp" />
     <ClCompile Include="Object.cpp" />
+    <ClCompile Include="PickingPointShader.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerMovement.cpp" />
     <ClCompile Include="PlayerStatus.cpp" />
@@ -400,6 +402,17 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">VS</EntryPointName>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="PickingPointShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="ScreenShader.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>

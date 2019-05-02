@@ -32,6 +32,7 @@
 #include "ScreenShader.h"
 #include "CubeShader.h"
 #include "InstancingLineShader.h"
+#include "PickingPointShader.h"
 //// Shader ////////////////////////// 
 
 #ifdef _SHOW_BOUNDINGBOX
@@ -698,11 +699,16 @@ void CGameFramework::BuildShaders()
 	
 	Shader* pScreenShader = new ScreenShader();
 	pScreenShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
-	ShaderManager::GetInstance()->InsertShader("ScreenShader", pScreenShader);
+	ShaderManager::GetInstance()->InsertShader(SHADER_SCREEN, pScreenShader);
 
 	Shader* pSkyBoxShader = new SkyBoxShader();
 	pSkyBoxShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
 	ShaderManager::GetInstance()->InsertShader("SkyBoxShader", pSkyBoxShader);
+
+	Shader* pPickingPointShader = new PickingPointShader();
+	pPickingPointShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
+	ShaderManager::GetInstance()->InsertShader(SHADER_PICKINGPOINT, pPickingPointShader);
+
 #ifdef _SHOW_BOUNDINGBOX
 	Shader* pLineShader = new LineShader();
 	pLineShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());

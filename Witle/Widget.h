@@ -7,8 +7,9 @@ class Texture;
 class Widget
 	: public GameObject
 {
-	XMFLOAT2 m_PickingPoint;
 	RECT m_rect;
+
+protected:
 	MyRectangle* m_AimPoint{ nullptr };
 	 
 private:
@@ -22,10 +23,23 @@ public:
 
 	virtual void Update(float fElapsedTime) override;
 	  
-	void Render(ID3D12GraphicsCommandList *pd3dCommandList);
-
-	void MovePickingPoint(const XMFLOAT2& shift);
-	XMFLOAT2 GetPickingPoint() const { return m_PickingPoint; }
-
+	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList);
+	 
 	Texture* GetTexture();
+};
+
+class AimPoint
+	: public Widget
+{
+private:
+	XMFLOAT2 m_PickingPoint;
+	
+public:
+	AimPoint(const std::string& entityID, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, POINT center, float width, float height, const wchar_t * filepath);
+	virtual ~AimPoint();
+
+	XMFLOAT2 GetPickingPoint() const { return m_PickingPoint; }
+	void MovePickingPoint(const XMFLOAT2& shift);
+
+	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList) override;
 };

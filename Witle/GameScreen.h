@@ -8,28 +8,28 @@ private:
 	GameScreen();
 	~GameScreen();
 
-	static UINT m_ClientWidth;
-	static UINT m_ClientHeight;
+	static float m_ClientWidth;
+	static float m_ClientHeight;
 
-	static UINT m_Width;
-	static UINT m_Height;
+	static float m_Width;
+	static float m_Height;
 
-	static UINT m_AnotherWidth;
-	static UINT m_AnotherHeight;
+	static float m_AnotherWidth;
+	static float m_AnotherHeight;
 	 
 	static IDXGISwapChain* m_pSwapChain;
 
 public:
 
-	static UINT GetWidth() { return m_Width; }
-	static UINT GetHeight() { return m_Height; }
-	static UINT GetAnotherWidth() { return m_AnotherWidth; }
-	static UINT GetAnotherHeight() { return m_AnotherHeight; }
-	static UINT GetClientWidth() { return m_ClientWidth; }
-	static UINT GetClientHeight() { return m_ClientHeight; }
-	static bool ChangeWindowScreen(UINT width, UINT height);
-	static bool ChangeFullScreen(UINT width, UINT height);
-	static void SetScreen(UINT width, UINT height) {
+	static float GetWidth() { return m_Width; }
+	static float GetHeight() { return m_Height; }
+	static float GetAnotherWidth() { return m_AnotherWidth; }
+	static float GetAnotherHeight() { return m_AnotherHeight; }
+	static float GetClientWidth() { return m_ClientWidth; }
+	static float GetClientHeight() { return m_ClientHeight; }
+	static bool ChangeWindowScreen(float width, float height);
+	static bool ChangeFullScreen(float width, float height);
+	static void SetScreen(float width, float height) {
 		m_ClientWidth = width;  m_ClientHeight = height;
 	};
 	 
