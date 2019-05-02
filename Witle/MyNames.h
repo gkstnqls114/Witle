@@ -18,4 +18,4 @@
 #define RUIN_SQUARE "Ruin_Square" 
 
 #define SUNFLOWER "Sunflower"
-#define ALTER "Altar"
+#define ALTAR "Altar"

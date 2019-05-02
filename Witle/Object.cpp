@@ -1016,6 +1016,8 @@ LoadObject *LoadObject::LoadFrameHierarchyFromFile(ID3D12Device *pd3dDevice, ID3
 	LoadObject *pGameObject = new LoadObject(1);
 	::ReadStringFromFile(pInFile, pGameObject->m_pstrFrameName);
 
+	printf("%s\n", pGameObject->m_pstrFrameName);
+
 	for (; ; )
 	{
 		::ReadStringFromFile(pInFile, pstrToken);

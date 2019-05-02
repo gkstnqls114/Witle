@@ -45,16 +45,16 @@ void ModelStorage::CreateModels(ID3D12Device * pd3dDevice, ID3D12GraphicsCommand
 	m_ModelStorage[TREE_1].loadmodelInfo = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/TreeOne.bin", NULL);
 	m_ModelStorage[TREE_2].loadmodelInfo = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/TreeTwo.bin", NULL);
 	m_ModelStorage[TREE_3].loadmodelInfo = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/TreeThree.bin", NULL);
+	
+	m_ModelStorage[ALTAR].loadmodelInfo = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/Altar.bin", NULL);
+	
 	m_ModelStorage[REED].loadmodelInfo = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/Bush.bin", NULL);
 	m_ModelStorage[BROKENPILLA].loadmodelInfo = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/BrokenPilla.bin", NULL);
 	m_ModelStorage[BUSH].loadmodelInfo = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/Reed.bin", NULL);
 	
-	m_ModelStorage[RUIN_ARCH].loadmodelInfo = LoadObject::LoadGeometryAndAnimationFromFile
-	(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/ruin_Arch.bin", NULL);
-	m_ModelStorage[RUIN_BROKENPILLA].loadmodelInfo = LoadObject::LoadGeometryAndAnimationFromFile
-	(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/ruin_BrokenPillar.bin", NULL);
-	m_ModelStorage[RUIN_PILLAR].loadmodelInfo =
-		LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/ruin_Pillar.bin", NULL);
+	m_ModelStorage[RUIN_ARCH].loadmodelInfo = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/ruin_Arch.bin", NULL);
+	m_ModelStorage[RUIN_BROKENPILLA].loadmodelInfo = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/ruin_BrokenPillar.bin", NULL);
+	m_ModelStorage[RUIN_PILLAR].loadmodelInfo = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/ruin_Pillar.bin", NULL);
 	m_ModelStorage[RUIN_SQUARE].loadmodelInfo = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/ruin_Square.bin", NULL);
 	m_ModelStorage[SUNFLOWER].loadmodelInfo = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/Sunflower.bin", NULL);
 	

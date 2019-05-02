@@ -408,8 +408,7 @@ void GameScene::LastUpdate(float fElapsedTime)
 	//if (Collision::isCollide(m_WideareaMagic->GetBSphere(), m_pPlayer->GetBOBox()))
 	//{
 
-	//}
-	
+	//} 
 }
 
 void GameScene::TESTSetRootDescriptor(ID3D12GraphicsCommandList * pd3dCommandList)

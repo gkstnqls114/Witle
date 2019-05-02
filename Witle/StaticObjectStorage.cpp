@@ -72,7 +72,7 @@ void StaticObjectStorage::LoadTerrainObjectFromFile(ID3D12Device * pd3dDevice, I
 	m_StaticObjectStorage[RUIN_SQUARE] = new TerrainObjectInfo[TerrainPieceCount];
 
 	m_StaticObjectStorage[SUNFLOWER] = new TerrainObjectInfo[TerrainPieceCount]; 
-	// m_StaticObjectStorage[ALTER] = new TerrainObjectInfo[TerrainPieceCount];
+	m_StaticObjectStorage[ALTAR] = new TerrainObjectInfo[TerrainPieceCount];
 
 	for (; ; )
 	{
@@ -154,6 +154,7 @@ void StaticObjectStorage::LoadNameAndPositionFromFile(ID3D12Device * pd3dDevice,
 			LoadTransform(name, RUIN_PILLAR, terrainIDs, XMFLOAT3{ transform._41, transform._42, transform._43 });
 			LoadTransform(name, RUIN_SQUARE, terrainIDs, XMFLOAT3{ transform._41, transform._42, transform._43 });
 			LoadTransform(name, SUNFLOWER, terrainIDs, XMFLOAT3{ transform._41, transform._42, transform._43 });
+			LoadTransform(name, ALTAR, terrainIDs, XMFLOAT3{ transform._41, transform._42, transform._43 });
 			 
 			delete[]terrainIDs;
 		}
