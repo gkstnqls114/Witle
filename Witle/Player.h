@@ -15,6 +15,8 @@ class Player :
 	public GameObject
 {
 	bool m_isRendering{ true };
+	
+	// 공격 시 해당 범위안에 충돌박스
 
 	PlayerMovement*    m_pPlayerMovement{ nullptr };
 	PlayerStatus*	   m_pPlayerStatus{ nullptr };
@@ -24,7 +26,7 @@ class Player :
 	 
 	Broom* m_pBroom{ nullptr };
 	Sniping* m_pSniping{ nullptr };
-
+	 
 	LPVOID m_pPlayerUpdatedContext { nullptr };
 	LPVOID m_pCameraUpdatedContext { nullptr };
 

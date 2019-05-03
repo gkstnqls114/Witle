@@ -31,11 +31,9 @@ MyReflexTree::MyReflexTree(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *
 	m_LoadObject = ModelStorage::GetInstance()->GetRootObject("ReflexTree");
 
 	m_LoadObject->SetPosition(position);
-
-	XMFLOAT3 center{ -30.f, 100.f, 0.f };
+	 
 	XMFLOAT3 extents{ 100.f, 100.f, 100.f };
-	center = Vector3::Add(center, position);
-	m_pMyBOBox = new MyBOBox(pd3dDevice, pd3dCommandList, center, extents);
+	m_pMyBOBox = new MyBOBox(pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 0.F, 0.F }, extents);
   
 }
  

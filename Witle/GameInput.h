@@ -53,8 +53,6 @@ private:
 	static HWND m_hWnd;
 	  
 	static UCHAR m_pKeyBuffer[256]; // 키보드의 input(지속)을 위한 멤버 변수
-	static UCHAR m_pKeyDownBuffer[256]; // 키보드의 input(일시적)을 위한 멤버 변수 , 한프레임 지나면 사라짐
-	static UCHAR m_pKeyUpBuffer[256]; // 키보드의 input(일시적)을 검사하기 위한 멤버변수
 
 	static const bool m_DragMode;
 
@@ -91,10 +89,7 @@ public:
 	static void MouseMove(LPARAM lParam);
 	static void SetCapture(HWND hWnd);
 	static void ReleaseCapture();
-
-	static void NowKeyDown();
-	static void NowKeyUp();
-
+	 
 	//// Keyboard 관련 ///////////////////////////////////////////
 	// 키가 눌렸는지 확인하는 상태
 	static bool IsKeydownRIGHT() { return (m_pKeyBuffer[VK_RIGHT] & 0xF0); };
@@ -105,9 +100,8 @@ public:
 	static bool IsKeydownS() { return (m_pKeyBuffer[MYVK_S] & 0xF0); };
 	static bool IsKeydownA() { return (m_pKeyBuffer[MYVK_A] & 0xF0); };
 	static bool IsKeydownD() { return (m_pKeyBuffer[MYVK_D] & 0xF0); };
-
-	// up이 한번 되어있고, 누른 상태
-	static bool IsNowKeydownE() { return (m_pKeyBuffer[MYVK_E] & 0xF0) && (m_pKeyUpBuffer[MYVK_E] & 0xF0); };
+	static bool IsKeydownE() { return (m_pKeyBuffer[MYVK_E] & 0xF0); };
+	 
 	//// Keyboard 관련 ///////////////////////////////////////////
 
 

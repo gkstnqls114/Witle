@@ -8,6 +8,8 @@ MyBOBox::MyBOBox(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dComm
 {
 	m_BOBox = BoundingOrientedBox(center, extents, quaternion);
 #ifdef _SHOW_BOUNDINGBOX
+	m_world = Matrix4x4::Identity(); 
+	m_Offest = center;
 	m_pLineCube = new LineCube(pd3dDevice, pd3dCommandList, m_BOBox.Center, m_BOBox.Extents);
 #endif // DEBUG 
 	 
@@ -52,7 +54,7 @@ void MyBOBox::Render(ID3D12GraphicsCommandList * pd3dCommandList, const XMFLOAT4
 	if (m_pLineCube)
 	{
 		pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Line")->GetPSO());
-		m_pLineCube->Render(pd3dCommandList, xmf4x4World, true);
+		m_pLineCube->Render(pd3dCommandList, m_world, true);
 	}
 }
 void MyBOBox::RenderInstancing(ID3D12GraphicsCommandList * pd3dCommandList, int InstancingCount)
@@ -61,14 +63,29 @@ void MyBOBox::RenderInstancing(ID3D12GraphicsCommandList * pd3dCommandList, int 
 }
 #endif
 
+// 말이 Rotate지만, 실제로 roll, yaw, pitch에 맞춰서 축을 다시 설정하고 있다.
+// 기준이 되는 position 에 따라 공전 수행
 void MyBOBox::Rotate(float roll, float yaw, float pitch)
 {
 	m_BOBox.Orientation = Quaternion::ToQuaternion(roll, yaw, pitch);
+
+#ifdef _SHOW_BOUNDINGBOX
+	XMFLOAT4X4 rotate = Matrix4x4::RotateMatrix(roll, yaw, pitch);
+	XMFLOAT4X4 world = m_world;
+	m_world._41 = 0; m_world._42 = 0; m_world._43 = 0;
+	m_world = Matrix4x4::Multiply(m_world, rotate); // 해당 플레이어 위치에 대한 자전을 수행한다.
+#endif
 }
 
 void MyBOBox::Move(const XMFLOAT3 & xmf3Shift)
 {
 	m_BOBox.Center = Vector3::Add(m_BOBox.Center, xmf3Shift);
+
+#ifdef _SHOW_BOUNDINGBOX
+	m_world._41 = m_BOBox.Center.x;
+	m_world._42 = m_BOBox.Center.y;
+	m_world._43 = m_BOBox.Center.z;
+#endif
 }
 
 void MyBOBox::SetPosition(const XMFLOAT3 & pos)

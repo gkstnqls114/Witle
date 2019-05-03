@@ -1,6 +1,7 @@
 #pragma once
 #include "Skill.h"
 
+class MyBOBox;
 class Camera;
 class CameraObject;
 class Player;
@@ -8,14 +9,17 @@ class Player;
 // 스나이핑을 위한 카메라 컴포넌트를 관리한다.
 class Sniping :
 	public Skill
-{
+{ 
 	Player* m_pPlayer{ nullptr };
 	CameraObject* m_pCameraObject{ nullptr };
 
-	bool m_isConnectBase{ false };
-	bool m_isConnectSniping{ false };
+	// 기본 모드 
 	Camera* m_pBaseCameraComponent{ nullptr };
+	MyBOBox*		   m_BaseAttackBOBox{ nullptr };
+
+	// 스나이핑 모드 
 	Camera* m_pSnipingCameraComponent{ nullptr };
+	MyBOBox*		   m_SnipingAttackBOBox{ nullptr };
 
 protected:
 	virtual void ReleaseMembers() override;
@@ -34,7 +38,10 @@ public:
 	{ 
 		return m_pSnipingCameraComponent; 
 	}
-
+	
+	void Rotate(float x, float y, float z);
+	void Move(float x, float y, float z);
+	void Render(ID3D12GraphicsCommandList * pd3dCommandList);
 
 public:
 	virtual void DoNotUse() override;

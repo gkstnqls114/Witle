@@ -7,13 +7,15 @@ class MyBOBox
 { 
 protected:
 #ifdef _SHOW_BOUNDINGBOX
+	XMFLOAT4X4 m_world;
 	LineCube* m_pLineCube{ nullptr };
 #endif
 	BoundingOrientedBox m_BOBox;
+	XMFLOAT3 m_Offest; // Center + Offeset = Position
 	XMFLOAT4 m_BoBoxPlane[4]; // 0: +X, 1: -X, 2: +Z, 3: -Z
 	 
 public:
-	MyBOBox(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, XMFLOAT3 center, XMFLOAT3 extents, XMFLOAT4 quaternion = XMFLOAT4(0.f, 0.f, 0.f, 1.f));
+	MyBOBox(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, XMFLOAT3 extents, XMFLOAT3 Offset, XMFLOAT4 quaternion = XMFLOAT4(0.f, 0.f, 0.f, 1.f));
 	MyBOBox(const MyBOBox& other);
 	virtual ~MyBOBox();
 
@@ -25,7 +27,7 @@ public:
 #endif // _SHOW_BOUNDINGBOX
 
 	// 공전이 아닌 자전을 수행한다.
-	void Rotate(float roll, float yaw, float pitch); 
+	void Rotate(float roll, float yaw, float pitch);
 	void Move(const XMFLOAT3& xmf3Shift);
 	void Move(float x, float y, float z);
 	void SetPosition(const XMFLOAT3& pos);

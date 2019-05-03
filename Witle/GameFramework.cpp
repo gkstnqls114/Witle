@@ -625,11 +625,9 @@ void CGameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPA
 
 	switch (nMessageID)
 	{
-	case WM_KEYDOWN:  
-		GameInput::NowKeyDown();
+	case WM_KEYDOWN:   
 		break;
-	case WM_KEYUP:
-		GameInput::NowKeyUp();
+	case WM_KEYUP: 
 		switch (wParam)
 		{
 		case VK_ESCAPE:

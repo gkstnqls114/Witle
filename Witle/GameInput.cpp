@@ -9,10 +9,7 @@
 
 HWND GameInput::m_hWnd;
 
-UCHAR GameInput::m_pKeyBuffer[256];
-UCHAR GameInput::m_pKeyDownBuffer[256]; // 키보드의 input(일시적)을 위한 멤버 변수 , 한프레임 지나면 사라짐
-UCHAR GameInput::m_pKeyUpBuffer[256] { 0xF0 };
-
+UCHAR GameInput::m_pKeyBuffer[256]; 
 const bool GameInput::m_DragMode{ true };
  
 POINT GameInput::m_moveCursor;        // 한번 클릭했을 때 위치
@@ -144,25 +141,6 @@ void GameInput::RotateWheel(WPARAM wParam)
 void GameInput::ReleaseCapture()
 {
 	::ReleaseCapture();
-}
-
-void GameInput::NowKeyDown()
-{
-	::GetKeyboardState(m_pKeyDownBuffer);
-	for (int i = 0; i < 256; ++i)
-	{
-		m_pKeyUpBuffer[i] = 0;
-	}
-}
-
-void GameInput::NowKeyUp()
-{
-	UCHAR currKeyBuffer[256];
-	::GetKeyboardState(currKeyBuffer);
-	for (int i = 0; i < 256; ++i)
-	{
-		m_pKeyUpBuffer[i] = (m_pKeyDownBuffer[i]);
-	}
 }
  
 RAY RAY::GeneratePickingRay(const XMFLOAT3 & cameraPos, const XMFLOAT2 & ScreenPickingPoint, const XMFLOAT4X4 & view, const XMFLOAT4X4 & projection)

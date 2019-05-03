@@ -2,6 +2,7 @@
 #include "PlayerMovement.h"
 #include "MyBOBox.h" 
 #include "GameInput.h"
+#include "Sniping.h"
 #include "Shader.h"
 #include "Object.h"
 #include "ShaderManager.h" 
@@ -12,11 +13,7 @@
 #include "Broom.h"
 #include "Terrain.h"
 #include "Player.h"
-
-
-
-
-
+ 
 void Player::OnPlayerUpdateCallback(float fTimeElapsed)
 {
 	if (!m_pPlayerUpdatedContext) return;
@@ -96,11 +93,10 @@ Player::Player(const std::string & entityID, ID3D12Device * pd3dDevice, ID3D12Gr
 	 
 	m_pLoadObject->m_pSkinnedAnimationController = new CAnimationController(pd3dDevice, pd3dCommandList, 1, m_PlayerModel);
 	m_pLoadObject->m_pSkinnedAnimationController->SetTrackAnimationSet(0, 0);
-
-	XMFLOAT3 center{ 0.f, 75.f, 0.f };
-	XMFLOAT3 extents{ 25.f, 75.f, 25.f };
-	m_pMyBOBox = new MyBOBox(pd3dDevice, pd3dCommandList, center, extents);
 	 
+	XMFLOAT3 extents{ 25.f, 75.f, 25.f };
+	m_pMyBOBox = new MyBOBox(pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 0.F, 0.F }, extents);
+	
 	m_pPlayerStatus = new PlayerStatus(this, pd3dDevice, pd3dCommandList);
 	m_pPlayerMovement = new PlayerMovement(this);
 	 
@@ -117,7 +113,6 @@ Player::~Player()
 	m_pCameraUpdatedContext = nullptr;
 }
  
-
 void Player::ReleaseMembers()
 {
 	m_pPlayerUpdatedContext = nullptr;
@@ -138,7 +133,7 @@ void Player::ReleaseMembers()
 		//m_PlayerModel->ReleaseObjects();
 		//delete m_PlayerModel;
 		//m_PlayerModel = nullptr;
-	}
+	} 
 	if (m_pMyBOBox)
 	{
 		m_pMyBOBox->ReleaseObjects();
@@ -211,12 +206,12 @@ void Player::Animate(float fElapsedTime)
 
 void Player::Render(ID3D12GraphicsCommandList * pd3dCommandList)
 {
-	if (!m_isRendering) return;
-
 #ifdef _SHOW_BOUNDINGBOX
-	m_pMyBOBox->Render(pd3dCommandList, m_Transform.GetpWorldMatrixs());
+	if (m_pSniping) m_pSniping->Render(pd3dCommandList);
+	m_pMyBOBox->Render(pd3dCommandList, m_Transform.GetpWorldMatrixs()); 
 #endif // _SHOW_BOUNDINGBOX
 
+	if (!m_isRendering) return; //만약 스나이핑 모드라면 플레이어를 렌더링하지 않는다.
 	m_pLoadObject->Render(pd3dCommandList);
 	// m_pPlayerStatus->Render(pd3dCommandList);
 }
@@ -234,13 +229,17 @@ void Player::SetTrackAnimationSet(ULONG dwDirection)
 void Player::Move(const XMFLOAT3 & xmf3Shift)
 {
 	m_Transform.Move(xmf3Shift);
-	m_pMyBOBox->Move(xmf3Shift);
+	m_pMyBOBox->Move(xmf3Shift); 
+	// 만약 other player 인 경우 m_sniping을 없을 것이다.
+	if(m_pSniping) m_pSniping->Move(xmf3Shift.x, xmf3Shift.y, xmf3Shift.z);
 }
  
 void Player::Rotate(float x, float y, float z)
 {
 	m_Transform.Rotate(x, y, z);
- 	m_pMyBOBox->Rotate(m_pPlayerMovement->m_fRoll, m_pPlayerMovement->m_fYaw, m_pPlayerMovement->m_fPitch);
+	m_pMyBOBox->Rotate(m_pPlayerMovement->m_fRoll, m_pPlayerMovement->m_fYaw, m_pPlayerMovement->m_fPitch);
+	// 만약 other player 인 경우 m_sniping을 없을 것이다.
+	if (m_pSniping) m_pSniping->Rotate(0, y, z);
 }
 
 void Player::ProcessInput(float fTimeElapsed)
