@@ -9,7 +9,7 @@ MyBOBox::MyBOBox(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dComm
 	m_BOBox = BoundingOrientedBox(center, extents, quaternion);
 #ifdef _SHOW_BOUNDINGBOX
 	m_world = Matrix4x4::Identity(); 
-	m_Offest = center;
+	m_Pivot = center;
 	m_pLineCube = new LineCube(pd3dDevice, pd3dCommandList, m_BOBox.Center, m_BOBox.Extents);
 #endif // DEBUG 
 	 
@@ -72,8 +72,14 @@ void MyBOBox::Rotate(float roll, float yaw, float pitch)
 #ifdef _SHOW_BOUNDINGBOX
 	XMFLOAT4X4 rotate = Matrix4x4::RotateMatrix(roll, yaw, pitch);
 	XMFLOAT4X4 world = m_world;
-	m_world._41 = 0; m_world._42 = 0; m_world._43 = 0;
+	world._41 = m_Pivot.x; 
+	world._42 = m_Pivot.y;
+	world._43 = m_Pivot.z; // 회전중심을 피봇으로 맞추기위해서 설정.
 	m_world = Matrix4x4::Multiply(m_world, rotate); // 해당 플레이어 위치에 대한 자전을 수행한다.
+
+	m_world._41 = m_BOBox.Center.x;
+	m_world._42 = m_BOBox.Center.y;
+	m_world._43 = m_BOBox.Center.z;
 #endif
 }
 

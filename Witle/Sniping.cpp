@@ -60,7 +60,7 @@ Sniping::Sniping(CameraObject* pCamera, Player* pPlayer, ID3D12Device * pd3dDevi
 	m_pBaseCameraComponent->SetScissorRect(0, 0, GameScreen::GetWidth(), GameScreen::GetHeight());
 	m_pBaseCameraComponent->GenerateProjectionMatrix(0.01f, CAMERA_FAR, float(GameScreen::GetWidth()) / float(GameScreen::GetHeight()), 60.0f);
 
-	m_BaseAttackBOBox = new MyBOBox(pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 0.F, 0.F }, XMFLOAT3(30, 30, 600));
+	m_BaseAttackBOBox = new MyBOBox(pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, BaseCameraDistance, 0.F }, XMFLOAT3(30, 30, 600));
 
 	// 스나이핑 카메라 컴포넌트
 	m_pSnipingCameraComponent->CreateShaderVariables(pd3dDevice, pd3dCommandList);
@@ -71,7 +71,7 @@ Sniping::Sniping(CameraObject* pCamera, Player* pPlayer, ID3D12Device * pd3dDevi
 	m_pSnipingCameraComponent->SetScissorRect(0, 0, GameScreen::GetWidth(), GameScreen::GetHeight());
 	m_pSnipingCameraComponent->GenerateProjectionMatrix(0.01f, CAMERA_FAR * 1.5f, float(GameScreen::GetWidth()) / float(GameScreen::GetHeight()), 30.0f);
 
-	m_SnipingAttackBOBox = new MyBOBox(pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 0.F, 0.F }, XMFLOAT3(20, 20, 1000));
+	m_SnipingAttackBOBox = new MyBOBox(pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, SnipingCameraDistance, 0.F }, XMFLOAT3(20, 20, 1000));
 
 }
 
