@@ -6,7 +6,7 @@
  
 MyBOBox::MyBOBox(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, XMFLOAT3 center, XMFLOAT3 extents, XMFLOAT4 quaternion)
 {
-	m_BOBox = BoundingOrientedBox(center, extents, quaternion);
+	m_BOBox = BoundingOrientedBox(XMFLOAT3(0.F, 0.F, 0.F), extents, quaternion);
 #ifdef _SHOW_BOUNDINGBOX
 	m_world = Matrix4x4::Identity();
 	m_Pivot = center;
@@ -52,7 +52,7 @@ void MyBOBox::ReleaseUploadBuffers()
 	m_pLineCube->ReleaseUploadBuffers();
 }
 
-void MyBOBox::Render(ID3D12GraphicsCommandList * pd3dCommandList, const XMFLOAT4X4& xmf4x4World)
+void MyBOBox::Render(ID3D12GraphicsCommandList * pd3dCommandList)
 {
 	if (m_pLineCube)
 	{

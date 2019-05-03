@@ -34,6 +34,7 @@
 #define KEYUP_PRESSING   128 // 눌러진채로 떨어지지않은 상태
 #define KEYDOWN_PRESSING   129 // 토글키인상태에서 떨어지지않은 상태
 
+class Camera;
 
 struct RAY
 {
@@ -41,6 +42,7 @@ struct RAY
 	XMFLOAT3 direction{0.f, 0.f, 0.f};
 
 	static RAY GeneratePickingRay(const XMFLOAT3& cameraPos, const XMFLOAT2& ScreenPickingPoint, const XMFLOAT4X4 & view, const XMFLOAT4X4 & projection);
+	static RAY GeneratePickingRay(const XMFLOAT2& ScreenPickingPoint, Camera* pCamera);
 	static XMFLOAT3 GeneratePickingScreenOrigin(const XMFLOAT3& cameraPos, const XMFLOAT2& ScreenPickingPoint, const XMFLOAT4X4 & view, const XMFLOAT4X4 & projection);
 };
 

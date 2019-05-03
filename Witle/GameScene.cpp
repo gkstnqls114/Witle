@@ -204,7 +204,6 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	// 테스트할 모델 오브젝트
 	 m_pPlayer = new Player("Player", pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 	m_pOtherPlayer = new Player("OtherPlayer", pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
-	m_pOtherPlayer->GetTransform().SetPosition(0, 75, 1000); 
 	m_SkyBox->SetpPlayerTransform(&m_pPlayer->GetTransform());
 
 	//// 테스트 쿼드트리 터레인 생성 
@@ -388,8 +387,6 @@ void GameScene::LastUpdate(float fElapsedTime)
 	// player update 이후에 camera update
 	// 순서변경X
 	if (m_pMainCamera) m_pMainCamera->LastUpdate(fElapsedTime);
-	// 카메라 움직인 위치 맞추어서.. Sniping 충돌 박스도 움직임..
-	if (m_Sniping) m_Sniping->LastUpdate(fElapsedTime, m_AimPoint->GetPickingPoint());
 
 	// 카메라 프러스텀과 쿼드트리 지형 렌더링 체크
 	if (m_pMainCamera && m_pQuadtreeTerrain) m_pMainCamera->GetFrustum()->CheckRendering(m_pQuadtreeTerrain->GetRootNode());
@@ -450,7 +447,7 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 		Mesh* terrainMesh = m_Terrain->GetComponent<Mesh>("TerrainMesh");
 		m_pQuadtreeTerrain->Render(pd3dCommandList);
 	}
-	// if(m_WideareaMagic) m_WideareaMagic->Render(pd3dCommandList);
+	if(m_WideareaMagic) m_WideareaMagic->Render(pd3dCommandList);
 
 
 #ifdef CHECK_SUBVIEWS
@@ -465,7 +462,7 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	 
 	pd3dCommandList->SetDescriptorHeaps(1, &m_pd3dCbvSrvDescriptorHeap); 
 	if(m_pPlayer) m_pPlayer->Render(pd3dCommandList);
-	// if(m_pOtherPlayer) m_pOtherPlayer->Render(pd3dCommandList);
+	if(m_pOtherPlayer) m_pOtherPlayer->Render(pd3dCommandList);
 
 	//// Aim point Render 
 	if(m_AimPoint) m_AimPoint->Render(pd3dCommandList);
@@ -656,21 +653,55 @@ void GameScene::ProcessPicking(float fElapsedTime)
 		if (!GameInput::IsKeydownE()) return; // e를 누르지 않았다면 아무것도 실행하지 않는다.
 
 		std::cout << "공격" << std::endl;
-		//Camera* pCamera = m_pMainCamera->GetCamera();
-		//RAY pickRay;
-		//bool isPick = GameInput::GenerateRayforPicking(m_pMainCamera->GetTransform().GetPosition(), pCamera->GetViewMatrix(), pCamera->GetProjectionMatrix(), pickRay);
-		//if (isPick && m_pOtherPlayer)
-		//{
-		//	float dist;
 
-		//	auto world = m_pOtherPlayer->GetTransform().GetpWorldMatrixs();
-		//	BoundingOrientedBox box = m_pOtherPlayer->GetBOBox()->GetBOBox();
-		//	box.Transform(box, XMLoadFloat4x4(&world));
-		//	if (box.Intersects(XMLoadFloat3(&pickRay.origin), XMLoadFloat3(&pickRay.direction), dist))
-		//	{
-		//		m_pOtherPlayer->SubstractHP(100);
+		// 피킹 ray를 만든다.
+		RAY pickRay = RAY::GeneratePickingRay(m_AimPoint->GetPickingPoint(), m_pMainCamera->GetCamera());
+
+		// 다른 유저와 닿는지 확인한다.
+		float Playerdist;
+		bool isCollide = Collision::isCollide(m_pOtherPlayer->GetBOBox()->GetBOBox(), pickRay.origin, pickRay.direction, Playerdist);
+		 
+		// 닿지 않는다면 리턴한다.
+		if (!isCollide) return;
+		std::cout << "hp 감소" << std::endl;
+		m_pOtherPlayer->SubstractHP(10);
+
+		//// 피킹 ray에 닿는 오브젝트가 있는 지 확인한다.
+		//float dist = FLT_MAX;
+		//float temp;
+		//bool isCollideObject;
+		//for (const auto& name : ModelStorage::GetInstance()->m_NameList)
+		//{
+		//	MyBOBox* box = ModelStorage::GetInstance()->GetBOBox(name);
+		//	if (!box) continue; // 충돌박스가 없다면 다른 오브젝트를 검사하자.
+
+		//	XMFLOAT4X4* pWorldMatrix = StaticObjectStorage::GetInstance(m_pQuadtreeTerrain)->GetpWorldMatrixs(0, name);
+
+		//	// 트레인 조각 내부 오브젝트 개수만큼 충돌 체크
+		//	for (int i = 0; i < StaticObjectStorage::GetInstance(m_pQuadtreeTerrain)->GetObjectCount(0, name); ++i)
+		//	{ 
+		//		// 모델 충돌박스를 월드행렬 곱한다. 일단 현재는 포지션으로 이동
+		//		MyBOBox worldBox = *box;
+		//		worldBox.Move(XMFLOAT3(pWorldMatrix[i]._41, 0, pWorldMatrix[i]._43));
+
+		//		if (Collision::isCollide(worldBox.GetBOBox(), pickRay.origin, pickRay.direction, temp))
+		//		{
+		//			std::cout << "오브젝트와 부딪힘" << std::endl;
+		//			dist = fminf(temp, dist);
+		//			isCollideObject = true;
+		//		}
+		//		
 		//	}
 		//}
+
+
+		//// 제일 짧은 거리는?
+		//// 만약 그게 다른 유저라면 해당 유저의 hp를 감소시킨다.
+		//if (Playerdist < dist)
+		//{
+		//	std::cout << "hp 감소" << std::endl;
+		//	m_pOtherPlayer->SubstractHP(10);
+		//} 
 	}
 	else // 드래그로 회전하지 않는다면...
 	{

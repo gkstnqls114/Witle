@@ -4,6 +4,8 @@
 
 #include "stdafx.h"
 #include "GameScreen.h"
+#include "GameObject.h"
+#include "Camera.h"
 #include "GameInput.h"
 
 
@@ -166,6 +168,37 @@ RAY RAY::GeneratePickingRay(const XMFLOAT3 & cameraPos, const XMFLOAT2 & ScreenP
 
 	// 카메라 좌표계에서 월드 좌표계로 변환
 	XMFLOAT4X4 InverseView = Matrix4x4::Inverse(view);
+	ray.direction = Vector3::TransformCoord(ray.direction, InverseView);
+
+	// 카메라 위치에서부터 방향 벡터를 구한다
+	ray.direction = Vector3::Normalize(Vector3::Subtract(ray.direction, ray.origin));
+
+	return ray;
+}
+
+RAY RAY::GeneratePickingRay(const XMFLOAT2 & ScreenPickingPoint, Camera * pCamera)
+{
+	RAY ray;
+
+	ray.origin = pCamera->GetpOwner()->GetTransform().GetPosition();
+
+	// 왼쪽 상단이 (0, 0)로 표현되어있는 윈도우 좌표계의 클릭 커서를
+	// 화면 중심이 (0, 0)이며 각 축이 -1~1 로 표현되는, 즉 투영 좌표계로 변경한다.  
+	ray.direction.x = float(((2.0f * ScreenPickingPoint.x) / float(GameScreen::GetWidth())) - 1.0f);
+	ray.direction.y = float((-(2.0f * ScreenPickingPoint.y) / float(GameScreen::GetHeight())) + 1.0f);
+
+	//현재는 투영좌표계의 Direction 좌표
+	//즉 Direction의 x, y좌표는 -1과 1사이이다.
+
+	// 클릭 좌표를 투영좌표계에서 카메라 좌표계로 변경
+	ray.direction.x = ray.direction.x / pCamera->GetProjectionMatrix()._11;
+	ray.direction.y = ray.direction.y / pCamera->GetProjectionMatrix()._22;
+	ray.direction.z = 1.0f;
+
+	// 현재 카메라 좌표계...
+
+	// 카메라 좌표계에서 월드 좌표계로 변환
+	XMFLOAT4X4 InverseView = Matrix4x4::Inverse(pCamera->GetViewMatrix());
 	ray.direction = Vector3::TransformCoord(ray.direction, InverseView);
 
 	// 카메라 위치에서부터 방향 벡터를 구한다

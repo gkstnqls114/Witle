@@ -14,6 +14,10 @@
 #include "Terrain.h"
 #include "Player.h"
  
+static float playerOffestX = 0.f;
+static float playerOffestY = 50.f;
+static float playerOffestZ = 50.f;
+
 void Player::OnPlayerUpdateCallback(float fTimeElapsed)
 {
 	if (!m_pPlayerUpdatedContext) return;
@@ -95,14 +99,14 @@ Player::Player(const std::string & entityID, ID3D12Device * pd3dDevice, ID3D12Gr
 	m_pLoadObject->m_pSkinnedAnimationController->SetTrackAnimationSet(0, 0);
 	 
 	XMFLOAT3 extents{ 25.f, 75.f, 25.f };
-	m_pMyBOBox = new MyBOBox(pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 0.F, 0.F }, extents);
+	m_pMyBOBox = new MyBOBox(pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 75.F, 0.F }, extents);
 	
 	m_pPlayerStatus = new PlayerStatus(this, pd3dDevice, pd3dCommandList);
 	m_pPlayerMovement = new PlayerMovement(this);
 	 
 	m_pBroom = new Broom(m_pPlayerMovement);
 
-	m_Transform.SetPosition(0.f, 75.f ,0.f);
+	m_Transform.SetPosition(playerOffestX, playerOffestY, playerOffestZ);
 	
 	SetUpdatedContext(pContext); 
 }
@@ -169,9 +173,14 @@ void Player::Update(float fElapsedTime)
 	m_pPlayerMovement->Update(fElapsedTime);
 	
 	// 이동량만큼 움직인다. 
-	 Move(Vector3::ScalarProduct(m_pPlayerMovement->m_xmf3Velocity, fElapsedTime, false));
-	 
-	 
+	Move(Vector3::ScalarProduct(m_pPlayerMovement->m_xmf3Velocity, fElapsedTime, false));
+
+	m_pMyBOBox->SetPosition(XMFLOAT3(
+		m_Transform.GetPosition().x - playerOffestX, 
+		75.f,
+		m_Transform.GetPosition().z - playerOffestZ)
+	);
+	
 	// 플레이어 콜백
 	// OnPlayerUpdateCallback(fElapsedTime);
 	 
@@ -208,7 +217,7 @@ void Player::Render(ID3D12GraphicsCommandList * pd3dCommandList)
 {
 #ifdef _SHOW_BOUNDINGBOX
 	if (m_pSniping) m_pSniping->Render(pd3dCommandList);
-	m_pMyBOBox->Render(pd3dCommandList, m_Transform.GetpWorldMatrixs()); 
+	m_pMyBOBox->Render(pd3dCommandList); 
 #endif // _SHOW_BOUNDINGBOX
 
 	if (!m_isRendering) return; //만약 스나이핑 모드라면 플레이어를 렌더링하지 않는다.
@@ -229,7 +238,6 @@ void Player::SetTrackAnimationSet(ULONG dwDirection)
 void Player::Move(const XMFLOAT3 & xmf3Shift)
 {
 	m_Transform.Move(xmf3Shift);
-	m_pMyBOBox->Move(xmf3Shift);  
 }
  
 void Player::Rotate(float x, float y, float z)
