@@ -41,6 +41,7 @@ struct RAY
 	XMFLOAT3 direction{0.f, 0.f, 0.f};
 
 	static RAY GeneratePickingRay(const XMFLOAT3& cameraPos, const XMFLOAT2& ScreenPickingPoint, const XMFLOAT4X4 & view, const XMFLOAT4X4 & projection);
+	static XMFLOAT3 GeneratePickingScreenOrigin(const XMFLOAT3& cameraPos, const XMFLOAT2& ScreenPickingPoint, const XMFLOAT4X4 & view, const XMFLOAT4X4 & projection);
 };
 
 // ΩÃ±€≈Ê ∆–≈œ

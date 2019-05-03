@@ -14,12 +14,10 @@ class Sniping :
 	CameraObject* m_pCameraObject{ nullptr };
 
 	// 기본 모드 
-	Camera* m_pBaseCameraComponent{ nullptr };
-	MyBOBox*		   m_BaseAttackBOBox{ nullptr };
+	Camera* m_pBaseCameraComponent{ nullptr }; 
 
 	// 스나이핑 모드 
-	Camera* m_pSnipingCameraComponent{ nullptr };
-	MyBOBox*		   m_SnipingAttackBOBox{ nullptr };
+	Camera* m_pSnipingCameraComponent{ nullptr }; 
 
 protected:
 	virtual void ReleaseMembers() override;
@@ -39,8 +37,8 @@ public:
 		return m_pSnipingCameraComponent; 
 	}
 	
-	void Rotate(float x, float y, float z);
-	void Move(float x, float y, float z);
+	void Rotate(float x, float y, float z); 
+	void LastUpdate(float, const XMFLOAT2& ScreenPos); 
 	void Render(ID3D12GraphicsCommandList * pd3dCommandList);
 
 public:

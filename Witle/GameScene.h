@@ -25,6 +25,8 @@ struct LIGHTS;
 struct MATERIAL;
 struct MATERIALS;
 
+class AimPoint;
+
 
 class GameScene
 	: public Scene
@@ -90,7 +92,7 @@ public:
 	void TESTSetRootDescriptor(ID3D12GraphicsCommandList *pd3dCommandList);
 	
 protected:
-	Widget*					m_AimPoint{ nullptr };
+	AimPoint*					m_AimPoint{ nullptr };
 
 	int*					m_PlayerTerrainIndex{ nullptr };
 	Sniping*				m_Sniping{ nullptr };
@@ -100,7 +102,7 @@ protected:
 	Player*                 m_pOtherPlayer{ nullptr };
 	  
 	Terrain*                m_Terrain{ nullptr }; 
-	CameraObject*           m_Camera{ nullptr };
+	CameraObject*           m_pMainCamera{ nullptr }; // 실제로 화면에 그려지는 카메라
 	
 	SkyBox*					m_SkyBox{ nullptr };
 

@@ -211,10 +211,10 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	m_pQuadtreeTerrain = new QuadtreeTerrain(pd3dDevice, pd3dCommandList, 257, 257, xmf3Scale, xmf4Color, m_Terrain->GetHeightMapImage());
 
 	// 카메라
-	m_Camera = new CameraObject("Camera");  
-	m_Sniping = new Sniping(m_Camera, m_pPlayer, pd3dDevice, pd3dCommandList);
+	m_pMainCamera = new CameraObject("Camera");  
+	m_Sniping = new Sniping(m_pMainCamera, m_pPlayer, pd3dDevice, pd3dCommandList);
 	 m_pPlayer->SetSniping(m_Sniping);
-	 m_Camera->ChangeCamera(m_Sniping->GetBaseCamera());
+	 m_pMainCamera->ChangeCamera(m_Sniping->GetBaseCamera());
 	 
 #ifdef CHECK_SUBVIEWS
 	m_lookAboveCamera = new CameraObject("LookAboveCamera");
@@ -313,11 +313,11 @@ void GameScene::ReleaseObjects()
 		m_lookAboveCamera = nullptr;
 	}
 #endif
-	if (m_Camera)
+	if (m_pMainCamera)
 	{ 
-		m_Camera->ReleaseObjects();
-		delete m_Camera;
-		m_Camera = nullptr;
+		m_pMainCamera->ReleaseObjects();
+		delete m_pMainCamera;
+		m_pMainCamera = nullptr;
 	}
 	if (m_Terrain)
 	{ 
@@ -345,8 +345,9 @@ bool GameScene::ProcessInput(HWND hWnd, float fElapsedTime)
 		{ 
 			// 플레이어와 카메라 똑같이 rotate...
 			// 순서 의존적이므로 변경 금지
-			m_Camera->GetCamera()->Rotate(GameInput::GetDeltaY(), GameInput::GetDeltaX(), 0.0f);
+			m_pMainCamera->GetCamera()->Rotate(GameInput::GetDeltaY(), GameInput::GetDeltaX(), 0.0f);
 			m_pPlayer->Rotate(0.0f, GameInput::GetDeltaX(), 0.0f);
+			m_Sniping->Rotate(0.0f, GameInput::GetDeltaX(), 0.0f);
 		} 
 	}
 	
@@ -386,10 +387,12 @@ void GameScene::LastUpdate(float fElapsedTime)
 	 
 	// player update 이후에 camera update
 	// 순서변경X
-	if (m_Camera) m_Camera->LastUpdate(fElapsedTime);
+	if (m_pMainCamera) m_pMainCamera->LastUpdate(fElapsedTime);
+	// 카메라 움직인 위치 맞추어서.. Sniping 충돌 박스도 움직임..
+	if (m_Sniping) m_Sniping->LastUpdate(fElapsedTime, m_AimPoint->GetPickingPoint());
 
 	// 카메라 프러스텀과 쿼드트리 지형 렌더링 체크
-	if (m_Camera && m_pQuadtreeTerrain) m_Camera->GetFrustum()->CheckRendering(m_pQuadtreeTerrain->GetRootNode());
+	if (m_pMainCamera && m_pQuadtreeTerrain) m_pMainCamera->GetFrustum()->CheckRendering(m_pQuadtreeTerrain->GetRootNode());
 	if (m_pQuadtreeTerrain) m_pQuadtreeTerrain->LastUpdate(fElapsedTime);
 	// 순서변경X 
 
@@ -423,8 +426,8 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	pd3dCommandList->SetGraphicsRootSignature(m_pd3dGraphicsRootSignature);
 
 	// 클라 화면 설정
-	m_Camera->SetViewportsAndScissorRects(pd3dCommandList); 
-	m_Camera->GetCamera()->UpdateShaderVariables(pd3dCommandList, ROOTPARAMETER_CAMERA);
+	m_pMainCamera->SetViewportsAndScissorRects(pd3dCommandList); 
+	m_pMainCamera->GetCamera()->UpdateShaderVariables(pd3dCommandList, ROOTPARAMETER_CAMERA);
 
 	// 스카이박스 렌더
 	if(m_SkyBox) m_SkyBox->Render(pd3dCommandList);
@@ -653,9 +656,9 @@ void GameScene::ProcessPicking(float fElapsedTime)
 		if (!GameInput::IsKeydownE()) return; // e를 누르지 않았다면 아무것도 실행하지 않는다.
 
 		std::cout << "공격" << std::endl;
-		//Camera* pCamera = m_Camera->GetCamera();
+		//Camera* pCamera = m_pMainCamera->GetCamera();
 		//RAY pickRay;
-		//bool isPick = GameInput::GenerateRayforPicking(m_Camera->GetTransform().GetPosition(), pCamera->GetViewMatrix(), pCamera->GetProjectionMatrix(), pickRay);
+		//bool isPick = GameInput::GenerateRayforPicking(m_pMainCamera->GetTransform().GetPosition(), pCamera->GetViewMatrix(), pCamera->GetProjectionMatrix(), pickRay);
 		//if (isPick && m_pOtherPlayer)
 		//{
 		//	float dist;

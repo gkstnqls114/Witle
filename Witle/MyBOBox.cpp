@@ -8,8 +8,11 @@ MyBOBox::MyBOBox(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dComm
 {
 	m_BOBox = BoundingOrientedBox(center, extents, quaternion);
 #ifdef _SHOW_BOUNDINGBOX
-	m_world = Matrix4x4::Identity(); 
+	m_world = Matrix4x4::Identity();
 	m_Pivot = center;
+	m_world._41 = m_Pivot.x;
+	m_world._42 = m_Pivot.y;
+	m_world._43 = m_Pivot.z;
 	m_pLineCube = new LineCube(pd3dDevice, pd3dCommandList, m_BOBox.Center, m_BOBox.Extents);
 #endif // DEBUG 
 	 
@@ -97,6 +100,13 @@ void MyBOBox::Move(const XMFLOAT3 & xmf3Shift)
 void MyBOBox::SetPosition(const XMFLOAT3 & pos)
 {
 	m_BOBox.Center = pos;
+
+#ifdef _SHOW_BOUNDINGBOX
+	m_world._41 = m_BOBox.Center.x;
+	m_world._42 = m_BOBox.Center.y;
+	m_world._43 = m_BOBox.Center.z;
+#endif
+
 }
 
 bool MyBOBox::IsIn(int index, const XMFLOAT3 & intersectionPoint)

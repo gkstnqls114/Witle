@@ -229,17 +229,13 @@ void Player::SetTrackAnimationSet(ULONG dwDirection)
 void Player::Move(const XMFLOAT3 & xmf3Shift)
 {
 	m_Transform.Move(xmf3Shift);
-	m_pMyBOBox->Move(xmf3Shift); 
-	// 만약 other player 인 경우 m_sniping을 없을 것이다.
-	if(m_pSniping) m_pSniping->Move(xmf3Shift.x, xmf3Shift.y, xmf3Shift.z);
+	m_pMyBOBox->Move(xmf3Shift);  
 }
  
 void Player::Rotate(float x, float y, float z)
 {
 	m_Transform.Rotate(x, y, z);
 	m_pMyBOBox->Rotate(m_pPlayerMovement->m_fRoll, m_pPlayerMovement->m_fYaw, m_pPlayerMovement->m_fPitch);
-	// 만약 other player 인 경우 m_sniping을 없을 것이다.
-	if (m_pSniping) m_pSniping->Rotate(0, y, z);
 }
 
 void Player::ProcessInput(float fTimeElapsed)

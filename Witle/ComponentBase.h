@@ -29,6 +29,8 @@ public:
 	virtual void ReleaseObjects() = 0;
 	virtual void ReleaseUploadBuffers() = 0;
 	
+	const GameObject* GetpOwner() const { return m_pOwner; }
+
 protected: 
 	GameObject* const m_pOwner{ nullptr };
 	

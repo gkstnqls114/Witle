@@ -173,3 +173,31 @@ RAY RAY::GeneratePickingRay(const XMFLOAT3 & cameraPos, const XMFLOAT2 & ScreenP
 
 	return ray;
 }
+
+XMFLOAT3 RAY::GeneratePickingScreenOrigin(const XMFLOAT3 & cameraPos, const XMFLOAT2 & ScreenPickingPoint, const XMFLOAT4X4 & view, const XMFLOAT4X4 & projection)
+{ 
+	XMFLOAT3 origin = cameraPos;
+	XMFLOAT3 direction;
+
+	// 왼쪽 상단이 (0, 0)로 표현되어있는 윈도우 좌표계의 클릭 커서를
+	// 화면 중심이 (0, 0)이며 각 축이 -1~1 로 표현되는, 즉 투영 좌표계로 변경한다.  
+	direction.x = float(((2.0f * ScreenPickingPoint.x) / float(GameScreen::GetWidth())) - 1.0f);
+	direction.y = float((-(2.0f * ScreenPickingPoint.y) / float(GameScreen::GetHeight())) + 1.0f);
+
+	//현재는 투영좌표계의 Direction 좌표
+	//즉 Direction의 x, y좌표는 -1과 1사이이다.
+
+	// 클릭 좌표를 투영좌표계에서 카메라 좌표계로 변경
+	direction.x = direction.x / projection._11;
+	direction.y = direction.y / projection._22;
+	direction.z = 1.0f;
+
+	// 현재 카메라 좌표계...
+
+	// 카메라 좌표계에서 월드 좌표계로 변환
+	XMFLOAT4X4 InverseView = Matrix4x4::Inverse(view);
+	direction = Vector3::TransformCoord(direction, InverseView);
+
+	return direction;
+}
+ 
