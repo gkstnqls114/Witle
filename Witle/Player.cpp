@@ -247,7 +247,12 @@ void Player::Rotate(float x, float y, float z)
 }
 
 void Player::ProcessInput(float fTimeElapsed)
-{
+{ 
+	if (m_CurrAnimation == ANIMATION_ATTACK.ID)
+	{
+		return;
+	}
+
 	DWORD dwDirection = 0;
 	m_CurrAnimation = ANIMATION_IDLE.ID;
 

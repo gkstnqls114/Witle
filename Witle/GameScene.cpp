@@ -654,6 +654,7 @@ void GameScene::ProcessPicking(float fElapsedTime)
 		if (!GameInput::IsKeydownE()) return; // e를 누르지 않았다면 아무것도 실행하지 않는다.
 		
 		std::cout << "공격" << std::endl;
+		m_pPlayer->Attack();
 
 		// 피킹 ray를 만든다.
 		RAY pickRay = RAY::GeneratePickingRay(m_AimPoint->GetPickingPoint(), m_pMainCamera->GetCamera());
