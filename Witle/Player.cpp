@@ -15,7 +15,7 @@
 #include "Player.h"
  
 static float playerOffestX = 0.f;
-static float playerOffestY = 50.f;
+static float playerOffestY = 75.f;
 static float playerOffestZ = 50.f;
 
 void Player::OnPlayerUpdateCallback(float fTimeElapsed)
@@ -106,8 +106,8 @@ Player::Player(const std::string & entityID, ID3D12Device * pd3dDevice, ID3D12Gr
 	 
 	m_pBroom = new Broom(m_pPlayerMovement);
 
-	m_Transform.SetPosition(playerOffestX, playerOffestY, playerOffestZ);
-	
+	m_Transform.SetPosition(0, 75.f, 0.f);// 캐릭터가 중앙에 있지않아서 어쩔수없이 설정;
+
 	SetUpdatedContext(pContext); 
 }
 
@@ -175,14 +175,16 @@ void Player::Update(float fElapsedTime)
 	// 이동량만큼 움직인다. 
 	Move(Vector3::ScalarProduct(m_pPlayerMovement->m_xmf3Velocity, fElapsedTime, false));
 
-	m_pMyBOBox->SetPosition(XMFLOAT3(
-		m_Transform.GetPosition().x - playerOffestX, 
+	m_pMyBOBox->SetPosition(
+		XMFLOAT3(
+		m_Transform.GetPosition().x, 
 		75.f,
-		m_Transform.GetPosition().z - playerOffestZ)
+		m_Transform.GetPosition().z)
 	);
 	
 	// 플레이어 콜백
 	// OnPlayerUpdateCallback(fElapsedTime);
+	 
 	 
 	// 이동량 줄어든다.
 	//fLength = Vector3::Length(m_xmf3Velocity);
@@ -200,6 +202,9 @@ void Player::SubstractHP(int sub)
 
 void Player::Animate(float fElapsedTime)
 {
+	// animate 이전에 현재 설정된 애니메이션 수행하도록 설정
+	SetTrackAnimationSet();
+
 	// 반드시 트랜스폼 업데이트..! 
 	m_Transform.Update(fElapsedTime);
 
@@ -210,7 +215,7 @@ void Player::Animate(float fElapsedTime)
 	XMMATRIX mtxRotate = XMMatrixRotationRollPitchYaw(XMConvertToRadians(fPitch), XMConvertToRadians(fYaw), XMConvertToRadians(fRoll));
 	m_pLoadObject->m_xmf4x4ToParent = Matrix4x4::Multiply(mtxRotate, m_Transform.GetpWorldMatrixs());
 	 
-	m_pLoadObject->Animate(fElapsedTime);
+	m_pLoadObject->Animate(fElapsedTime); 
 }
 
 void Player::Render(ID3D12GraphicsCommandList * pd3dCommandList)
@@ -225,14 +230,9 @@ void Player::Render(ID3D12GraphicsCommandList * pd3dCommandList)
 	// m_pPlayerStatus->Render(pd3dCommandList);
 }
  
-void Player::SetTrackAnimationSet(ULONG dwDirection)
+void Player::SetTrackAnimationSet()
 { 
-	m_pLoadObject->SetTrackAnimationSet(0, ANIMATION_IDLE.ID);
-
-	if (dwDirection & DIR_FORWARD)	m_pLoadObject->SetTrackAnimationSet(0, ANIMATION_FORWARD.ID);
-	if (dwDirection & DIR_BACKWARD) m_pLoadObject->SetTrackAnimationSet(0, ANIMATION_BACKWARD.ID);
-	if (dwDirection & DIR_RIGHT) m_pLoadObject->SetTrackAnimationSet(0, ANIMATION_RIGHT.ID);
-	if (dwDirection & DIR_LEFT) m_pLoadObject->SetTrackAnimationSet(0, ANIMATION_LEFT.ID); 
+	m_pLoadObject->SetTrackAnimationSet(0, m_CurrAnimation);
 }
 
 void Player::Move(const XMFLOAT3 & xmf3Shift)
@@ -240,21 +240,52 @@ void Player::Move(const XMFLOAT3 & xmf3Shift)
 	m_Transform.Move(xmf3Shift);
 }
  
-void Player::Rotate(float x, float y, float z)
-{
-	m_Transform.Rotate(x, y, z);
+void Player::Rotate(float x, float y, float z) 
+{ 
+	m_Transform.Rotate(x, y, z); 
 	m_pMyBOBox->Rotate(m_pPlayerMovement->m_fRoll, m_pPlayerMovement->m_fYaw, m_pPlayerMovement->m_fPitch);
 }
 
 void Player::ProcessInput(float fTimeElapsed)
 {
 	DWORD dwDirection = 0;
-	 
-	if (GameInput::IsKeydownW()) dwDirection |= DIR_FORWARD;
-	if (GameInput::IsKeydownS()) dwDirection |= DIR_BACKWARD;
-	if (GameInput::IsKeydownA()) dwDirection |= DIR_LEFT;
-	if (GameInput::IsKeydownD()) dwDirection |= DIR_RIGHT;
-	 
+	m_CurrAnimation = ANIMATION_IDLE.ID;
+
+	bool isMove = false;
+	if (GameInput::IsKeydownW())
+	{
+		isMove = true;
+		m_CurrAnimation = ANIMATION_FORWARD.ID;
+		dwDirection |= DIR_FORWARD;
+	}
+	if (GameInput::IsKeydownS())
+	{
+		isMove = true;
+		m_CurrAnimation = ANIMATION_BACKWARD.ID;
+		dwDirection |= DIR_BACKWARD;
+	}
+	if (GameInput::IsKeydownA())
+	{
+		isMove = true;
+		m_CurrAnimation = ANIMATION_LEFT.ID;
+		dwDirection |= DIR_LEFT;
+	}
+	if (GameInput::IsKeydownD())
+	{
+		isMove = true;
+		m_CurrAnimation = ANIMATION_RIGHT.ID;
+		dwDirection |= DIR_RIGHT;
+	}
+
+	if (isMove && m_pBroom->GetisUsing())
+	{
+		m_CurrAnimation = ANIMATION_BROOMFORWARD.ID;
+	}
+	else if (!isMove && m_pBroom->GetisUsing())
+	{
+		m_CurrAnimation = ANIMATION_BROOMIDLE.ID;
+	}
+ 
 	// 만약 키보드 상하좌우 움직인다면...
 	if (dwDirection != 0)
 	{  
@@ -266,7 +297,19 @@ void Player::ProcessInput(float fTimeElapsed)
 		m_pPlayerMovement->ReduceVelocity(fTimeElapsed);
 	}
 
-	SetTrackAnimationSet(dwDirection);
+}
+
+bool Player::Attack()
+{
+	if (m_pBroom->GetisUsing())
+	{
+		return false;
+	}
+	else
+	{
+		m_CurrAnimation = ANIMATION_ATTACK.ID;
+		return true;
+	}
 }
 
 void Player::UseSkill_Broom()

@@ -336,6 +336,7 @@ bool GameScene::ProcessInput(HWND hWnd, float fElapsedTime)
 { 
 	// 플레이어 이동에 대한 처리 (정확히는 이동이 아니라 가속도)
 	m_pPlayer->ProcessInput(fElapsedTime);
+	// m_pOtherPlayer->Rotate(0.0f, 10.f, 0.0f);
 
 	// 플레이어 회전에 대한 처리
 	if ((GameInput::GetDeltaX() != 0.0f) || (GameInput::GetDeltaY() != 0.0f))
@@ -408,7 +409,7 @@ void GameScene::TESTSetRootDescriptor(ID3D12GraphicsCommandList * pd3dCommandLis
 
 void GameScene::AnimateObjects(float fTimeElapsed)
 { 
-	if(m_pOtherPlayer) m_pOtherPlayer->Animate(fTimeElapsed);
+	if (m_pOtherPlayer) m_pOtherPlayer->Animate(fTimeElapsed);
 	if (m_pPlayer) m_pPlayer->Animate(fTimeElapsed);
 }
 
@@ -651,7 +652,7 @@ void GameScene::ProcessPicking(float fElapsedTime)
 	if (GameInput::GetDragMode()) // 만약 드래그로 회전한다면...
 	{
 		if (!GameInput::IsKeydownE()) return; // e를 누르지 않았다면 아무것도 실행하지 않는다.
-
+		
 		std::cout << "공격" << std::endl;
 
 		// 피킹 ray를 만든다.

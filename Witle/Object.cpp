@@ -824,8 +824,14 @@ void LoadObject::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 		}
 	}
 
-	if (m_pSibling) m_pSibling->Render(pd3dCommandList);
-	if (m_pChild) m_pChild->Render(pd3dCommandList);
+	if (m_pSibling)
+	{
+		m_pSibling->Render(pd3dCommandList);
+	}
+	if (m_pChild)
+	{
+		m_pChild->Render(pd3dCommandList);
+	}
 }
 
 void LoadObject::RenderInstancing(ID3D12GraphicsCommandList * pd3dCommandList, int InstanceCount)
