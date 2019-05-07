@@ -64,7 +64,7 @@ private:
 	void RecursiveReleaseUploadBuffers(QUAD_TREE_NODE* node);
 	void RecursiveReleaseObjects(QUAD_TREE_NODE* node);
 	void RecursiveCalculateIDs(QUAD_TREE_NODE* node, const XMFLOAT3 position, int* pIDs) const;
-	void CalculateIDs(const XMFLOAT3 position, int* pIDs) const;
+	void CalculateIDs(const XMFLOAT3 position, XMINT4& pIDs) const;
 	void CalculateIndex(const XMFLOAT3 position, int* pIDs) const;
 
 	// 해당 함수를 재귀적으로 호출하며 터레인을 생성하는 함수입니다.
@@ -84,7 +84,7 @@ public:
 
 	QUAD_TREE_NODE* const GetRootNode() const { return m_pRootNode; }
 	// 해당 포지션에 속하는 리프노드의 아이디들을 리턴한다. 쿼드트리이므로 최대 4개가 존재한다.
-	int * const GetIDs(const XMFLOAT3& position) const;
+	XMINT4 const GetIDs(const XMFLOAT3& position) const;
 	int * const GetIndex(const XMFLOAT3& position) const;
 
 	void Render(ID3D12GraphicsCommandList *pd3dCommandList);

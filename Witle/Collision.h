@@ -29,6 +29,11 @@ public:
 	{
 		return a.Contains(Vector3::XMFloat3ToVector(point)) == CONTAINS;
 	}
+	 
+	static bool isIn(const  BoundingBox& a, const XMFLOAT3& point)
+	{
+		return a.Contains(Vector3::XMFloat3ToVector(point)) == CONTAINS;
+	}
 	   
 	static bool isCollide(const BoundingSphere& a, const BoundingOrientedBox& b)
 	{

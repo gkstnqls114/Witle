@@ -20,22 +20,28 @@ void StaticObjectStorage::UpdateShaderVariables(ID3D12GraphicsCommandList * pd3d
 { 
 }
 
-bool StaticObjectStorage::LoadTransform(char * name, char * comp_name, const int * terrainIDs, XMFLOAT3 pos)
+bool StaticObjectStorage::LoadTransform(char * name, char * comp_name, const XMINT4& IDs, const XMFLOAT3& pos)
 {
 	bool result = false;
 	if (!strcmp(name, comp_name))
 	{
-		for (int x = 0; x < 4; ++x)
+		for (int Ti = 0; Ti < 4; ++Ti)
 		{
-			if (terrainIDs[x] == -1) continue;
+			int terrainIDs = -1; 
+			if (Ti == 0) terrainIDs = IDs.x;
+			else if (Ti == 1) terrainIDs = IDs.y;
+			else if (Ti == 2) terrainIDs = IDs.z;
+			else if (Ti == 3) terrainIDs = IDs.w;
 
-			m_StaticObjectStorage[comp_name][terrainIDs[x]].TerrainObjectCount += 1;
+			if (terrainIDs == -1) continue;
+
+			m_StaticObjectStorage[comp_name][terrainIDs].TerrainObjectCount += 1;
 
 			LoadObject* TestObject = ModelStorage::GetInstance()->GetRootObject(comp_name);
 			TestObject->SetPosition(pos);
 			TestObject->UpdateTransform(NULL);
 
-			m_StaticObjectStorage[comp_name][terrainIDs[x]].TransformList.emplace_back(TestObject->m_pChild->m_xmf4x4World);
+			m_StaticObjectStorage[comp_name][terrainIDs].TransformList.emplace_back(TestObject->m_pChild->m_xmf4x4World);
 			 
 			delete TestObject;
 			TestObject = nullptr;
@@ -140,7 +146,7 @@ void StaticObjectStorage::LoadNameAndPositionFromFile(ID3D12Device * pd3dDevice,
 			// 그리고 위치 차이때문에 
 
 			XMFLOAT3 position{ transform._41, transform._42, transform._43 };
-			const int* terrainIDs = pTerrain->GetIDs(position);
+			XMINT4 terrainIDs = pTerrain->GetIDs(position);
 			 
 			LoadTransform(name, TREE_1, terrainIDs, XMFLOAT3{ transform._41, transform._42, transform._43 });
 			LoadTransform(name, TREE_2, terrainIDs, XMFLOAT3{ transform._41, transform._42, transform._43 });
@@ -155,7 +161,6 @@ void StaticObjectStorage::LoadNameAndPositionFromFile(ID3D12Device * pd3dDevice,
 			LoadTransform(name, SUNFLOWER, terrainIDs, XMFLOAT3{ transform._41, transform._42, transform._43 });
 			LoadTransform(name, ALTAR, terrainIDs, XMFLOAT3{ transform._41, transform._42, transform._43 });
 			 
-			delete[]terrainIDs;
 		}
 		else if (!strcmp(pstrToken, "<Children>:"))
 		{

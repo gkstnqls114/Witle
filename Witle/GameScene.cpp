@@ -347,8 +347,7 @@ void GameScene::ReleaseObjects()
 bool GameScene::ProcessInput(HWND hWnd, float fElapsedTime)
 { 
 	// 플레이어 이동에 대한 처리 (정확히는 이동이 아니라 가속도)
-	m_pPlayer->ProcessInput(fElapsedTime);
-	// m_pOtherPlayer->Rotate(0.0f, 10.f, 0.0f);
+	m_pPlayer->ProcessInput(fElapsedTime); 
 
 	// 플레이어 회전에 대한 처리
 	if ((GameInput::GetDeltaX() != 0.0f) || (GameInput::GetDeltaY() != 0.0f))
@@ -373,7 +372,7 @@ bool GameScene::ProcessInput(HWND hWnd, float fElapsedTime)
 void GameScene::Update(float fElapsedTime)
 { 
 	//// 순서 변경 X ////
-	// UpdateCollision(fElapsedTime);
+	UpdateCollision(fElapsedTime);
 
 	if(m_pPlayer) m_pPlayer->Update(fElapsedTime); //Velocity를 통해 pos 이동
 	if(m_pOtherPlayer) m_pOtherPlayer->Update(fElapsedTime);
@@ -441,10 +440,10 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 
 	// 클라 화면 설정
 	
-	m_pSkyCameraObj->SetViewportsAndScissorRects(pd3dCommandList);
-	m_pSkyCameraObj->GetCamera()->UpdateShaderVariables(pd3dCommandList, ROOTPARAMETER_CAMERA);
-	// m_pMainCamera->SetViewportsAndScissorRects(pd3dCommandList); 
-	// m_pMainCamera->GetCamera()->UpdateShaderVariables(pd3dCommandList, ROOTPARAMETER_CAMERA);
+	//m_pSkyCameraObj->SetViewportsAndScissorRects(pd3dCommandList);
+	//m_pSkyCameraObj->GetCamera()->UpdateShaderVariables(pd3dCommandList, ROOTPARAMETER_CAMERA);
+	 m_pMainCamera->SetViewportsAndScissorRects(pd3dCommandList); 
+	 m_pMainCamera->GetCamera()->UpdateShaderVariables(pd3dCommandList, ROOTPARAMETER_CAMERA);
 
 	// 스카이박스 렌더
 	if(m_SkyBox) m_SkyBox->Render(pd3dCommandList);
@@ -619,53 +618,71 @@ void GameScene::UpdateCollision(float fElapsedTime)
 	BoundingOrientedBox AlreadyPlayerBBox = m_pPlayer->CalculateAlreadyBoundingBox(fElapsedTime);
 	XMFLOAT3 AlreadyPositon{ AlreadyPlayerBBox.Center.x, AlreadyPlayerBBox.Center.y, AlreadyPlayerBBox.Center.z };
 	 
-	for (const auto& name : ModelStorage::GetInstance()->m_NameList)
-	{
-		MyBOBox* box = ModelStorage::GetInstance()->GetBOBox(name);
-		if (!box) continue; // 충돌박스가 없다면 다른 오브젝트를 검사하자.
+	XMINT4 IDs = m_pQuadtreeTerrain->GetIDs(AlreadyPositon);
 
-		XMFLOAT4X4* pWorldMatrix = StaticObjectStorage::GetInstance(m_pQuadtreeTerrain)->GetpWorldMatrixs(0, name);
+	// Ti: Terrain Index
+	for (int Ti = 0; Ti < 4; ++Ti)
+	{ 
+		int TerrainIndex = -1;
+		if (Ti == 0) TerrainIndex = IDs.x;
+		else if (Ti == 1) TerrainIndex = IDs.y;
+		else if (Ti == 2) TerrainIndex = IDs.z;
+		else if (Ti == 3) TerrainIndex = IDs.w;
 
-		// 트레인 조각 내부 오브젝트 개수만큼 충돌 체크
-		for (int i = 0; i < StaticObjectStorage::GetInstance(m_pQuadtreeTerrain)->GetObjectCount(0, name); ++i)
+		if (TerrainIndex == -1) continue;
+
+		for (const auto& name : ModelStorage::GetInstance()->m_NameList)
 		{
-			//월드 행렬 갖고온다.
+			MyBOBox* box = ModelStorage::GetInstance()->GetBOBox(name);
+			if (!box) continue; // 충돌박스가 없다면 다른 오브젝트를 검사하자.
 
-			// 모델 충돌박스를 월드행렬 곱한다. 일단 현재는 포지션으로 이동
-			MyBOBox worldBox = *box;
-			worldBox.Move(XMFLOAT3(pWorldMatrix[i]._41, 0, pWorldMatrix[i]._43));
-			 
-			// 이동한 박스를 통해 충돌한다.
-			bool isAlreadyCollide = Collision::isCollide(AlreadyPlayerBBox, worldBox.GetBOBox());
-			if (isAlreadyCollide)
-			{  
-				for (int x = 0; x < 4; ++x) //  plane 4 면에 대해 체크한다..
+			XMFLOAT4X4* pWorldMatrix = StaticObjectStorage::GetInstance(m_pQuadtreeTerrain)->GetpWorldMatrixs(TerrainIndex, name);
+
+			// 트레인 조각 내부 오브젝트 개수만큼 충돌 체크
+			for (int i = 0; i < StaticObjectStorage::GetInstance(m_pQuadtreeTerrain)->GetObjectCount(TerrainIndex, name); ++i)
+			{
+				//월드 행렬 갖고온다.
+
+				// 모델 충돌박스를 월드행렬 곱한다. 일단 현재는 포지션으로 이동
+				MyBOBox worldBox = *box;
+				worldBox.Move(XMFLOAT3(pWorldMatrix[i]._41, 0, pWorldMatrix[i]._43));
+
+				// 이동한 박스를 통해 충돌한다.
+				bool isAlreadyCollide = Collision::isCollide(AlreadyPlayerBBox, worldBox.GetBOBox());
+				if (isAlreadyCollide)
 				{
-					XMFLOAT3 intersectionPoint;
-					// 여기서 d란... 원점과 평면과의 거리를 의미한다. (양수/음수)
-					float d = Plane::CaculateD(box->GetPlane(x), worldBox.GetPosOnPlane(x));
-					// 시간에 따른 이동을 기준으로 하므로 velocity 는 프레임 시간을 곱한다.
-					bool isIntersect = Plane::Intersect(box->GetPlaneNormal(x), d, m_pPlayer->GetTransform().GetPosition(), Vector3::ScalarProduct(m_pPlayer->GetVelocity(), fElapsedTime, false), intersectionPoint);
-					bool isFront = Plane::IsFront(box->GetPlaneNormal(x), d, m_pPlayer->GetTransform().GetPosition()); // 업데이트 이전 위치
-					// 만약 무한한 평면에 교차했다면...
-					if (isIntersect && isFront)
-					{ 
-						// 해당 교차점이 유한평면안에 존재하는지 확인한다.
-						
-						// Collision::isIn(worldBox.GetBOBox(), intersectionPoint)
-						if (worldBox.IsIn(x, intersectionPoint)) //isIn 함수 나중에 수정해야함
-						{  
-							m_pPlayer->SetVelocity
-							(
-								Vector3::Sliding(box->GetPlaneNormal(x), m_pPlayer->GetVelocity())
-							);
-						} 
+					for (int x = 0; x < 4; ++x) //  plane 4 면에 대해 체크한다..
+					{
+						XMFLOAT3 intersectionPoint;
+						// 여기서 d란... 원점과 평면과의 거리를 의미한다. (양수/음수)
+						float d = Plane::CaculateD(box->GetPlane(x), worldBox.GetPosOnPlane(x));
+						// 시간에 따른 이동을 기준으로 하므로 velocity 는 프레임 시간을 곱한다.
+						bool isFront = Plane::IsFront(box->GetPlaneNormal(x), d, m_pPlayer->GetTransform().GetPosition()); // 업데이트 이전 위치
+						// 만약 무한한 평면에 교차했다면...
+						if (isFront)
+						{
+							bool isIntersect = Plane::Intersect(box->GetPlaneNormal(x), d, m_pPlayer->GetTransform().GetPosition(), Vector3::ScalarProduct(m_pPlayer->GetVelocity(), fElapsedTime, false), intersectionPoint);
+
+							if (isIntersect)
+							{
+								// 해당 교차점이 유한평면안에 존재하는지 확인한다.
+								// worldBox.IsIn(x, intersectionPoint)
+								// 
+								if (Collision::isIn(worldBox.GetBOBox(), intersectionPoint)) //isIn 함수 나중에 수정해야함
+								{
+									m_pPlayer->SetVelocity
+									(
+										Vector3::Sliding(box->GetPlaneNormal(x), m_pPlayer->GetVelocity())
+									);
+								}
+							}
+						}
 					}
+
 				}
-				 
 			}
 		}
-	}  
+	}
 }
 
 void GameScene::ProcessPicking(float fElapsedTime)
