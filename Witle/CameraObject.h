@@ -8,7 +8,6 @@ class CameraObject
 	:public GameObject
 {
 	Camera*      m_pCameraComponent{ nullptr };
-	MyFrustum*   m_pFrustum{ nullptr };
 
 protected:
 	// 컴포넌트가 아닌, 게임오브젝트 내에서 동적할당된 멤버변수를 해제한다.
@@ -27,5 +26,4 @@ public:
 	void ChangeCamera(Camera* pNewCamera);
 
 	Camera* GetCamera() const { return m_pCameraComponent; }
-	MyFrustum* GetFrustum() const { return m_pFrustum; }
 };

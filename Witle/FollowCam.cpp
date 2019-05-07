@@ -89,6 +89,8 @@ void FollowCam::LastUpdate(float fTimeElapsed)
 	m_pOwner->GetTransform().SetPosition(Vector3::Subtract(m_At, m_Offset));
 
 	RegenerateViewMatrix();
+
+
 }
 
 #define MAX_PITCH 10.f 

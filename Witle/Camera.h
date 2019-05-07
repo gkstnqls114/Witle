@@ -9,6 +9,7 @@ struct VS_CB_MYCAMERA_INFO
 };
 
 class GameObject;
+class MyFrustum;
 
 // 가장 기본적인 카메라입니다.
 // 카메라 자신의 Position을 기준으로 이동하고 회전합니다.
@@ -22,6 +23,8 @@ private:
 		XMFLOAT4X4						m_xmf4x4Projection;
 		XMFLOAT3						m_xmf3Position;
 	};
+	MyFrustum*   m_pFrustum{ nullptr };
+
 	ID3D12Resource					*m_pd3dcbCamera{ nullptr };
 	VS_CB_CAMERA_INFO				*m_pcbMappedCamera{ nullptr };
 
@@ -112,6 +115,8 @@ public:
 	XMFLOAT4X4 GetProjectionMatrix() const noexcept { return (m_xmf4x4Projection); }
 	D3D12_VIEWPORT GetViewport()	 const noexcept { return (m_d3dViewport); }
 	D3D12_RECT GetScissorRect()		 const noexcept { return (m_d3dScissorRect); }
+
+	MyFrustum* GetFrustum() const { return m_pFrustum; }
 	///////////////////////////////////////////////////////////////////////// Get
 
 	Camera& operator= (const Camera&);

@@ -37,6 +37,7 @@
 #include "Player.h"
 #include "CameraObject.h"
 #include "QuadTreeTerrain.h"
+#include "BasicCam.h"
  
 
 #include "GameScene.h"
@@ -185,7 +186,6 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	{
 		CreateRootSignature(pd3dDevice);
 	}
-	 
 	// 디스크립터 힙 설정
 	GameScene::CreateCbvSrvDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 3);
 	 
@@ -215,6 +215,18 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	 m_pPlayer->SetSniping(m_Sniping);
 	 m_pMainCamera->ChangeCamera(m_Sniping->GetBaseCamera());
 	 
+
+	 m_pSkyCameraObj = new CameraObject("SkyCamera");
+	 m_pSkyCamera = new BasicCam(m_pSkyCameraObj);
+	 m_pSkyCamera->CreateShaderVariables(pd3dDevice, pd3dCommandList);
+	 m_pSkyCamera->SetViewport(0, 0, GameScreen::GetWidth(), GameScreen::GetHeight(), 0.0f, 1.0f);
+	 m_pSkyCamera->SetScissorRect(0, 0, GameScreen::GetWidth(), GameScreen::GetHeight());
+	 m_pSkyCamera->GenerateProjectionMatrix(0.01f, 50000.F, float(GameScreen::GetWidth()) / float(GameScreen::GetHeight()), 60.0f);
+	 m_pSkyCamera->SetAt(XMFLOAT3(15000.f, 0.f, 15000.f));
+	 m_pSkyCamera->Rotate(90.F, 0.F, 0.F);
+	 m_pSkyCamera->SetOffset(XMFLOAT3(0.f, -30000.f, 0.f));
+	 m_pSkyCameraObj->ChangeCamera(m_pSkyCamera);
+
 #ifdef CHECK_SUBVIEWS
 	m_lookAboveCamera = new CameraObject("LookAboveCamera");
 
@@ -361,7 +373,7 @@ bool GameScene::ProcessInput(HWND hWnd, float fElapsedTime)
 void GameScene::Update(float fElapsedTime)
 { 
 	//// 순서 변경 X ////
-	UpdateCollision(fElapsedTime);
+	// UpdateCollision(fElapsedTime);
 
 	if(m_pPlayer) m_pPlayer->Update(fElapsedTime); //Velocity를 통해 pos 이동
 	if(m_pOtherPlayer) m_pOtherPlayer->Update(fElapsedTime);
@@ -388,9 +400,13 @@ void GameScene::LastUpdate(float fElapsedTime)
 	// player update 이후에 camera update
 	// 순서변경X
 	if (m_pMainCamera) m_pMainCamera->LastUpdate(fElapsedTime);
+	if (m_pSkyCameraObj) m_pSkyCameraObj->LastUpdate(fElapsedTime);
 
 	// 카메라 프러스텀과 쿼드트리 지형 렌더링 체크
-	if (m_pMainCamera && m_pQuadtreeTerrain) m_pMainCamera->GetFrustum()->CheckRendering(m_pQuadtreeTerrain->GetRootNode());
+	if (m_pMainCamera && m_pQuadtreeTerrain)
+	{
+		m_pMainCamera->GetCamera()->GetFrustum()->CheckRendering(m_pQuadtreeTerrain->GetRootNode());
+	}
 	if (m_pQuadtreeTerrain) m_pQuadtreeTerrain->LastUpdate(fElapsedTime);
 	// 순서변경X 
 
@@ -424,8 +440,11 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	pd3dCommandList->SetGraphicsRootSignature(m_pd3dGraphicsRootSignature);
 
 	// 클라 화면 설정
-	m_pMainCamera->SetViewportsAndScissorRects(pd3dCommandList); 
-	m_pMainCamera->GetCamera()->UpdateShaderVariables(pd3dCommandList, ROOTPARAMETER_CAMERA);
+	
+	m_pSkyCameraObj->SetViewportsAndScissorRects(pd3dCommandList);
+	m_pSkyCameraObj->GetCamera()->UpdateShaderVariables(pd3dCommandList, ROOTPARAMETER_CAMERA);
+	// m_pMainCamera->SetViewportsAndScissorRects(pd3dCommandList); 
+	// m_pMainCamera->GetCamera()->UpdateShaderVariables(pd3dCommandList, ROOTPARAMETER_CAMERA);
 
 	// 스카이박스 렌더
 	if(m_SkyBox) m_SkyBox->Render(pd3dCommandList);
@@ -631,7 +650,9 @@ void GameScene::UpdateCollision(float fElapsedTime)
 					// 만약 무한한 평면에 교차했다면...
 					if (isIntersect && isFront)
 					{ 
-						// 해당 교차점이 유한평면안에 존재하는지 확인한다. 
+						// 해당 교차점이 유한평면안에 존재하는지 확인한다.
+						
+						// Collision::isIn(worldBox.GetBOBox(), intersectionPoint)
 						if (worldBox.IsIn(x, intersectionPoint)) //isIn 함수 나중에 수정해야함
 						{  
 							m_pPlayer->SetVelocity
@@ -654,8 +675,7 @@ void GameScene::ProcessPicking(float fElapsedTime)
 		if (!GameInput::IsKeydownE()) return; // e를 누르지 않았다면 아무것도 실행하지 않는다.
 		
 		std::cout << "공격" << std::endl;
-		m_pPlayer->Attack();
-
+		
 		// 피킹 ray를 만든다.
 		RAY pickRay = RAY::GeneratePickingRay(m_AimPoint->GetPickingPoint(), m_pMainCamera->GetCamera());
 

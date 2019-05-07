@@ -39,8 +39,8 @@ private:
 	UINT m_widthTotal{ 0 };
 	UINT m_lengthTotal{ 0 };
 
-	const UINT m_lengthMin{ 128 + 1 }; // 나누어지는 픽셀 크기
-	const UINT m_widthMin{ 128 + 1 }; // 나누어지는 픽셀 크기
+	const UINT m_lengthMin{ 64 + 1 }; // 나누어지는 픽셀 크기
+	const UINT m_widthMin{ 64 + 1 }; // 나누어지는 픽셀 크기
 
 	XMFLOAT3 m_xmf3Scale{ 0.f, 0.f, 0.f };
 	XMFLOAT4 m_xmf4Color{ 1.f, 0.f, 0.f , 1.f};
@@ -50,8 +50,15 @@ private:
 	int m_ReafNodeCount = 0;
 	QUAD_TREE_NODE** m_pReafNodes{ nullptr };
  
-private:  
+private: 
+
+#ifdef _SHOW_BOUNDINGBOX
+	void RecursiveRenderTerrainObjects_BOBox(const QUAD_TREE_NODE* node, ID3D12GraphicsCommandList *pd3dCommandList);
+
+#endif 
+
 	void RenderTerrainObjects(ID3D12GraphicsCommandList *pd3dCommandList);
+	void RecursiveRenderTerrainObjects(const QUAD_TREE_NODE* node, ID3D12GraphicsCommandList *pd3dCommandList);
 	void RecursiveRender(const QUAD_TREE_NODE* node, ID3D12GraphicsCommandList *pd3dCommandList);
 	void RecursiveInitReafNodes(QUAD_TREE_NODE* node);
 	void RecursiveReleaseUploadBuffers(QUAD_TREE_NODE* node);

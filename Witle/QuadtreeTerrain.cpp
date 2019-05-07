@@ -7,6 +7,7 @@
 #include "TextureStorage.h"
 #include "StaticObjectStorage.h"
 #include "HeightMapImage.h"
+#include <unordered_set>
 #include "MyFrustum.h"
 #include "QuadTreeTerrain.h"
 
@@ -32,34 +33,62 @@ void QuadtreeTerrain::ReleaseMemberUploadBuffers()
 	RecursiveReleaseUploadBuffers(m_pRootNode);
 }
 
+void QuadtreeTerrain::RecursiveRenderTerrainObjects_BOBox(const QUAD_TREE_NODE * node, ID3D12GraphicsCommandList * pd3dCommandList)
+{
+	if (node->isRendering)
+	{
+		if (node->terrainMesh)
+		{
+			StaticObjectStorage::GetInstance(this)->RenderBOBox(pd3dCommandList, node->id);
+		}
+		else
+		{
+
+			if (node->children[0]->isRendering) RecursiveRenderTerrainObjects(node->children[0], pd3dCommandList);
+			if (node->children[1]->isRendering) RecursiveRenderTerrainObjects(node->children[1], pd3dCommandList);
+			if (node->children[2]->isRendering) RecursiveRenderTerrainObjects(node->children[2], pd3dCommandList);
+			if (node->children[3]->isRendering) RecursiveRenderTerrainObjects(node->children[3], pd3dCommandList);
+
+		}
+	}
+}
+
 void QuadtreeTerrain::RenderTerrainObjects(ID3D12GraphicsCommandList * pd3dCommandList)
 {
 	pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("InstancingStandardShader")->GetPSO());
 	
 	// 설명자 힙 설정
 	TextureStorage::GetInstance()->SetHeap(pd3dCommandList);
-
-	for (int i = 0; i < m_ReafNodeCount; ++i)
-	{
-		if (m_pReafNodes[i]->isRendering)
-		{
-			StaticObjectStorage::GetInstance(this)->Render(pd3dCommandList, m_pReafNodes[i]->id); 
-		}
-	} 
+	RecursiveRenderTerrainObjects(m_pRootNode, pd3dCommandList);
 	 
 #ifdef _SHOW_BOUNDINGBOX
 	 pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("InstancingLine")->GetPSO());
-
-	for (int i = 0; i < m_ReafNodeCount; ++i)
-	{
-		if (m_pReafNodes[i]->isRendering)
-		{
-			StaticObjectStorage::GetInstance(this)->RenderBOBox(pd3dCommandList, m_pReafNodes[i]->id);
-		}
-	}
+	 RecursiveRenderTerrainObjects_BOBox(m_pRootNode, pd3dCommandList);
 #endif // 	  
 
 }
+void QuadtreeTerrain::RecursiveRenderTerrainObjects(const QUAD_TREE_NODE * node, ID3D12GraphicsCommandList * pd3dCommandList)
+{ 
+	if (node->isRendering)
+	{
+		if (node->terrainMesh)
+		{
+			StaticObjectStorage::GetInstance(this)->Render(pd3dCommandList, node->id);
+
+		}
+		else
+		{
+
+			if (node->children[0]->isRendering) RecursiveRenderTerrainObjects(node->children[0], pd3dCommandList);
+			if (node->children[1]->isRendering) RecursiveRenderTerrainObjects(node->children[1], pd3dCommandList);
+			if (node->children[2]->isRendering) RecursiveRenderTerrainObjects(node->children[2], pd3dCommandList);
+			if (node->children[3]->isRendering) RecursiveRenderTerrainObjects(node->children[3], pd3dCommandList);
+
+		} 
+ 	} 
+}
+
+static std::unordered_set<int> set;
 
 void QuadtreeTerrain::RecursiveRender(const QUAD_TREE_NODE * node, ID3D12GraphicsCommandList * pd3dCommandList)
 {
@@ -68,6 +97,7 @@ void QuadtreeTerrain::RecursiveRender(const QUAD_TREE_NODE * node, ID3D12Graphic
 
 	if (node->terrainMesh)
 	{
+		set.insert(node->id);
 		gMeshRenderer.Render(pd3dCommandList, node->terrainMesh); 
 	}
 	else
@@ -260,6 +290,7 @@ void QuadtreeTerrain::RecursiveCreateTerrain(QUAD_TREE_NODE * node, ID3D12Device
 				float(nBlockWidth - 1) / 2.0f * m_xmf3Scale.x,
 				1000.f,
 				float(nBlockLength - 1) / 2.0f* m_xmf3Scale.z };
+		 
 
 		node->boundingBox = BoundingBox( center, extents); 
 		node->terrainMesh = new TerrainMesh(this, pd3dDevice, pd3dCommandList, xStart, zStart, m_widthMin, m_lengthMin, m_xmf3Scale, m_xmf4Color, pContext);
@@ -380,9 +411,11 @@ int * const QuadtreeTerrain::GetIndex(const XMFLOAT3 & position) const
 
 void QuadtreeTerrain::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 {
+
 	pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Terrain")->GetPSO());
-	RecursiveRender(m_pRootNode, pd3dCommandList); // 지형 렌더
+	// RecursiveRender(m_pRootNode, pd3dCommandList); // 지형 렌더
 	RenderTerrainObjects(pd3dCommandList); // 지형 오브젝트 렌더
+	 
 }
 
 void QuadtreeTerrain::Render(int index, ID3D12GraphicsCommandList * pd3dCommandList)
