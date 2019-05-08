@@ -8,6 +8,7 @@ class TerrainMesh;
 class HeightMapImage;
 class MyFrustum;
 class Mesh;
+class Terrain;
 
 struct INFO
 {
@@ -88,6 +89,7 @@ public:
 	int * const GetIndex(const XMFLOAT3& position) const;
 
 	void Render(ID3D12GraphicsCommandList *pd3dCommandList);
+	void Render(ID3D12GraphicsCommandList *pd3dCommandList, Terrain* pTerrain, ID3D12DescriptorHeap* pHeap);
 	void Render(int index, ID3D12GraphicsCommandList *pd3dCommandList);
 	static int GetTerrainPieceCount() { return gTreePieceCount; }
 	QUAD_TREE_NODE* GetReafNode(int index) { return m_pReafNodes[index]; }

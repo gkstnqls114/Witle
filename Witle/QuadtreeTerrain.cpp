@@ -10,6 +10,7 @@
 #include <unordered_set>
 #include "MyFrustum.h"
 #include "Collision.h"
+#include "Terrain.h"
 #include "QuadTreeTerrain.h"
 
 // 처음 아이디는 0으로 시작한다.
@@ -62,9 +63,7 @@ void QuadtreeTerrain::RenderTerrainObjects(ID3D12GraphicsCommandList * pd3dComma
 	
 	// 설명자 힙 설정
 	TextureStorage::GetInstance()->SetHeap(pd3dCommandList);
-	StaticObjectStorage::GetInstance(this)->RenderAll(pd3dCommandList);
-
-	// RecursiveRenderTerrainObjects(m_pRootNode, pd3dCommandList);
+	RecursiveRenderTerrainObjects(m_pRootNode, pd3dCommandList);
 	 
 #ifdef _SHOW_BOUNDINGBOX
 	 pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("InstancingLine")->GetPSO());
@@ -402,11 +401,24 @@ int * const QuadtreeTerrain::GetIndex(const XMFLOAT3 & position) const
 
 void QuadtreeTerrain::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 {
-
 	pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Terrain")->GetPSO());
-	RecursiveRender(m_pRootNode, pd3dCommandList); // 지형 렌더
+	RecursiveRender(m_pRootNode, pd3dCommandList); // 지형 렌더	 
+
 	RenderTerrainObjects(pd3dCommandList); // 지형 오브젝트 렌더
-	 
+}
+
+void QuadtreeTerrain::Render(ID3D12GraphicsCommandList * pd3dCommandList, Terrain * pTerrain, ID3D12DescriptorHeap* pHeap)
+{
+	// 지형 오브젝트 렌더
+	RenderTerrainObjects(pd3dCommandList);
+
+	// 지형 렌더
+	pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Terrain")->GetPSO());
+	pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_WORLD, 16, &Matrix4x4::Identity(), 0);
+	pd3dCommandList->SetDescriptorHeaps(1, &pHeap);
+	pTerrain->UpdateShaderVariables(pd3dCommandList);
+
+	RecursiveRender(m_pRootNode, pd3dCommandList); // 지형 렌더	 
 }
 
 void QuadtreeTerrain::Render(int index, ID3D12GraphicsCommandList * pd3dCommandList)

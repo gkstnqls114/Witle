@@ -92,7 +92,10 @@ public:
 	void TESTSetRootDescriptor(ID3D12GraphicsCommandList *pd3dCommandList);
 	
 protected:
-	AimPoint*					m_AimPoint{ nullptr };
+
+	bool					m_isSkyMode{ false };
+
+	AimPoint*				m_AimPoint{ nullptr };
 
 	int*					m_PlayerTerrainIndex{ nullptr };
 	Sniping*				m_Sniping{ nullptr };

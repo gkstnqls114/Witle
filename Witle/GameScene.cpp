@@ -137,6 +137,7 @@ bool GameScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM w
 			// 플레이어 2으로 변경
 			break;
 		case VK_F3:
+			m_isSkyMode = !m_isSkyMode;
 			break;
 
 		}
@@ -159,8 +160,8 @@ bool GameScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM w
 			break;
 
 		case '3': // 스킬 광역 공격
-			m_WideareaMagic->DoUse(); 
-			m_WideareaMagic->SetPosition(m_pPlayer->GetTransform().GetPosition());
+			// m_WideareaMagic->DoUse(); 
+			// m_WideareaMagic->SetPosition(m_pPlayer->GetTransform().GetPosition());
 			break;
 		case 'W':
 		case 'w':  
@@ -220,7 +221,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	 m_pSkyCamera->CreateShaderVariables(pd3dDevice, pd3dCommandList);
 	 m_pSkyCamera->SetViewport(0, 0, GameScreen::GetWidth(), GameScreen::GetHeight(), 0.0f, 1.0f);
 	 m_pSkyCamera->SetScissorRect(0, 0, GameScreen::GetWidth(), GameScreen::GetHeight());
-	 m_pSkyCamera->GenerateProjectionMatrix(0.01f, 50000.F, float(GameScreen::GetWidth()) / float(GameScreen::GetHeight()), 60.0f);
+	 m_pSkyCamera->GenerateProjectionMatrix(0.01f, 40000.F, float(GameScreen::GetWidth()) / float(GameScreen::GetHeight()), 60.0f);
 	 m_pSkyCamera->SetAt(XMFLOAT3(15000.f, 0.f, 15000.f));
 	 m_pSkyCamera->Rotate(90.F, 0.F, 0.F);
 	 m_pSkyCamera->SetOffset(XMFLOAT3(0.f, -30000.f, 0.f));
@@ -450,12 +451,17 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	// 그래픽 루트 시그니처 설정
 	pd3dCommandList->SetGraphicsRootSignature(m_pd3dGraphicsRootSignature);
 
-	// 클라 화면 설정
-	
-	//m_pSkyCameraObj->SetViewportsAndScissorRects(pd3dCommandList);
-	//m_pSkyCameraObj->GetCamera()->UpdateShaderVariables(pd3dCommandList, ROOTPARAMETER_CAMERA);
-	 m_pMainCamera->SetViewportsAndScissorRects(pd3dCommandList); 
-	 m_pMainCamera->GetCamera()->UpdateShaderVariables(pd3dCommandList, ROOTPARAMETER_CAMERA);
+	// 클라 화면 설정	
+	if (m_isSkyMode)
+	{
+		m_pSkyCameraObj->SetViewportsAndScissorRects(pd3dCommandList);
+		m_pSkyCameraObj->GetCamera()->UpdateShaderVariables(pd3dCommandList, ROOTPARAMETER_CAMERA);
+	}
+	else
+	{
+		m_pMainCamera->SetViewportsAndScissorRects(pd3dCommandList);
+		m_pMainCamera->GetCamera()->UpdateShaderVariables(pd3dCommandList, ROOTPARAMETER_CAMERA);
+	}
 
 	// 스카이박스 렌더
 	if(m_SkyBox) m_SkyBox->Render(pd3dCommandList);
@@ -467,16 +473,29 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	D3D12_GPU_VIRTUAL_ADDRESS d3dcbMaterialsGpuVirtualAddress = m_pd3dcbMaterials->GetGPUVirtualAddress();
 	pd3dCommandList->SetGraphicsRootConstantBufferView(ROOTPARAMETER_MATERIALS, d3dcbMaterialsGpuVirtualAddress);
 
+	pd3dCommandList->SetDescriptorHeaps(1, &m_pd3dCbvSrvDescriptorHeap);
+
+	if (m_pPlayer) m_pPlayer->Render(pd3dCommandList);
+	if (m_pOtherPlayer) m_pOtherPlayer->Render(pd3dCommandList);
+
 	// 터레인
 	if (m_Terrain)
 	{ 
-		pd3dCommandList->SetDescriptorHeaps(1, &m_pd3dCbvSrvDescriptorHeap);
-		pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_WORLD, 16, &Matrix4x4::Identity(), 0);
-		m_Terrain->UpdateShaderVariables(pd3dCommandList);
+		if (m_isSkyMode)
+		{ 
+			Mesh* terrainMesh = m_Terrain->GetComponent<Mesh>("TerrainMesh");
+			m_pQuadtreeTerrain->Render(pd3dCommandList, m_Terrain, m_pd3dCbvSrvDescriptorHeap);
+		}
+		else
+		{
+			pd3dCommandList->SetDescriptorHeaps(1, &m_pd3dCbvSrvDescriptorHeap);
+			pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_WORLD, 16, &Matrix4x4::Identity(), 0);
+			m_Terrain->UpdateShaderVariables(pd3dCommandList);
 
-		// TerrainMesh Render
-		Mesh* terrainMesh = m_Terrain->GetComponent<Mesh>("TerrainMesh");
-		m_pQuadtreeTerrain->Render(pd3dCommandList);
+			// TerrainMesh Render
+			Mesh* terrainMesh = m_Terrain->GetComponent<Mesh>("TerrainMesh");
+			m_pQuadtreeTerrain->Render(pd3dCommandList);
+		}
 	}
 	if(m_WideareaMagic) m_WideareaMagic->Render(pd3dCommandList);
 
@@ -491,13 +510,13 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	////////////////////////////// Model Render
 	// PSO 설정
 	 
-	pd3dCommandList->SetDescriptorHeaps(1, &m_pd3dCbvSrvDescriptorHeap); 
-	if (m_pPlayer) m_pPlayer->Render(pd3dCommandList);
-	if(m_pPlayer) m_pPlayer->RenderHpStatus(pd3dCommandList);
-	if(m_pOtherPlayer) m_pOtherPlayer->Render(pd3dCommandList);
 
 	//// Aim point Render 
-	if(m_AimPoint) m_AimPoint->Render(pd3dCommandList);
+	if (!m_isSkyMode)
+	{
+		if (m_pPlayer) m_pPlayer->RenderHpStatus(pd3dCommandList);
+		if(m_AimPoint) m_AimPoint->Render(pd3dCommandList);
+	}
 
 }
 
@@ -703,9 +722,7 @@ void GameScene::ProcessPicking(float fElapsedTime)
 	if (GameInput::GetDragMode()) // 만약 드래그로 회전한다면...
 	{
 		if (!GameInput::IsKeydownE()) return; // e를 누르지 않았다면 아무것도 실행하지 않는다.
-		
-		std::cout << "공격" << std::endl;
-		
+		 
 		// 피킹 ray를 만든다.
 		RAY pickRay = RAY::GeneratePickingRay(m_AimPoint->GetPickingPoint(), m_pMainCamera->GetCamera());
 
@@ -715,7 +732,7 @@ void GameScene::ProcessPicking(float fElapsedTime)
 		 
 		// 닿지 않는다면 리턴한다.
 		if (!isCollide) return;
-		std::cout << "hp 감소" << std::endl;
+
 		m_pOtherPlayer->SubstractHP(10);
 
 		//// 피킹 ray에 닿는 오브젝트가 있는 지 확인한다.
