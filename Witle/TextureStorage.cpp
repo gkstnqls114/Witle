@@ -25,6 +25,14 @@ void TextureStorage::ReleaseUploadBuffers()
 
 void TextureStorage::ReleaseObjects()
 {
+	if (m_Heap)
+	{
+		m_Heap->ReleaseObjects();
+
+		delete m_Heap;
+		m_Heap = nullptr;
+	}
+	
 	for (auto& texture : m_TextureStorage)
 	{
 		delete texture.second;

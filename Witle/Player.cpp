@@ -134,9 +134,9 @@ void Player::ReleaseMembers()
 	}
 	if (m_PlayerModel)
 	{
-		//m_PlayerModel->ReleaseObjects();
-		//delete m_PlayerModel;
-		//m_PlayerModel = nullptr;
+		m_PlayerModel->ReleaseObjects();
+		delete m_PlayerModel;
+		m_PlayerModel = nullptr;
 	} 
 	if (m_pMyBOBox)
 	{

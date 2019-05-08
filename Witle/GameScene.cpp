@@ -274,7 +274,18 @@ void GameScene::ReleaseObjects()
 		m_pd3dcbMaterials->Release();
 		m_pd3dcbMaterials = NULL;
 	}
-
+	if (m_pSkyCamera)
+	{
+		m_pSkyCamera->ReleaseObjects();
+		delete m_pSkyCamera;
+		m_pSkyCamera = nullptr;
+	}
+	if (m_pSkyCameraObj)
+	{
+		m_pSkyCameraObj->ReleaseObjects();
+		delete m_pSkyCameraObj;
+		m_pSkyCameraObj = nullptr;
+	}
 	if (m_SkyBox)
 	{
 		m_SkyBox->ReleaseObjects();

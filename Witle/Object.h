@@ -220,6 +220,8 @@ public:
 	~CAnimationSet();
 
 public:
+	void ReleaseObject();
+
 	char							m_pstrAnimationSetName[64];
 
 	int								m_nAnimationLayers = 0;

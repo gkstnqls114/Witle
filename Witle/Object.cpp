@@ -292,6 +292,11 @@ CAnimationSet::CAnimationSet(float fStartTime, float fEndTime, char *pstrName)
 
 CAnimationSet::~CAnimationSet()
 {
+
+}
+
+void CAnimationSet::ReleaseObject()
+{
 	if (m_pAnimationLayers) delete[] m_pAnimationLayers;
 
 	if (m_pCallbackKeys) delete[] m_pCallbackKeys;
@@ -382,10 +387,11 @@ CAnimationSets::~CAnimationSets()
 {
 	if (m_ppAnimationSets)
 	{
-		for (int i = 0; i < m_nAnimationSets; i++)
-		{
+		 for (int i = 0; i < m_nAnimationSets; i++)
+		 {
 			if (m_ppAnimationSets[i])
 			{
+				if (i == 0)m_ppAnimationSets[i]->ReleaseObject();
 				delete m_ppAnimationSets[i];
 				m_ppAnimationSets[i] = NULL;
 			}
