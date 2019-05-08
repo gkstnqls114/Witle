@@ -52,6 +52,38 @@ bool StaticObjectStorage::LoadTransform(char * name, char * comp_name, const XMI
 	return result;
 }
 
+bool StaticObjectStorage::LoadTransform(char * name, char * comp_name, const XMINT4 & IDs, const XMFLOAT4X4 & tr)
+{ 
+	bool result = false;
+	if (!strcmp(name, comp_name))
+	{
+		for (int Ti = 0; Ti < 4; ++Ti)
+		{
+			int terrainIDs = -1;
+			if (Ti == 0) terrainIDs = IDs.x;
+			else if (Ti == 1) terrainIDs = IDs.y;
+			else if (Ti == 2) terrainIDs = IDs.z;
+			else if (Ti == 3) terrainIDs = IDs.w;
+
+			if (terrainIDs == -1) continue;
+
+			m_StaticObjectStorage[comp_name][terrainIDs].TerrainObjectCount += 1;
+
+			LoadObject* TestObject = ModelStorage::GetInstance()->GetRootObject(comp_name);
+			TestObject->SetTransform(tr);
+			TestObject->UpdateTransform(NULL);
+
+			m_StaticObjectStorage[comp_name][terrainIDs].TransformList.emplace_back(TestObject->m_pChild->m_xmf4x4World);
+
+			delete TestObject;
+			TestObject = nullptr;
+
+			result = true;
+		}
+	}
+	return result;
+}
+
 void StaticObjectStorage::LoadTerrainObjectFromFile(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, const char * pstrFileName, const QuadtreeTerrain const * pTerrain)
 {
 	FILE *pInFile = NULL;
@@ -79,20 +111,31 @@ void StaticObjectStorage::LoadTerrainObjectFromFile(ID3D12Device * pd3dDevice, I
 	m_StaticObjectStorage[SUNFLOWER] = new TerrainObjectInfo[TerrainPieceCount]; 
 	m_StaticObjectStorage[ALTAR] = new TerrainObjectInfo[TerrainPieceCount];
 
+
 	for (; ; )
 	{
 		if (::ReadStringFromFile(pInFile, pstrToken))
 		{
 			if (!strcmp(pstrToken, "<Hierarchy>:"))
 			{
-				int nFrame = ::ReadIntegerFromFile(pInFile);
-				for (int i = 0; i < nFrame; ++i)
+				int nRootChild = ::ReadIntegerFromFile(pInFile); // 모든 오브젝트 개수
+
+				::ReadStringFromFile(pInFile, pstrToken); //<ObjectCount>: 
+				int nObjects = ::ReadIntegerFromFile(pInFile);
+				for (int i = 0; i < nObjects; ++i)
+				{  
+					::ReadStringFromFile(pInFile, pstrToken); // Object Name
+					::ReadIntegerFromFile(pInFile); // Object Count
+				}
+
+				for (int i = 0; i < nRootChild; ++i)
 				{
 					::ReadStringFromFile(pInFile, pstrToken);
 					if (!strcmp(pstrToken, "<Frame>:"))
 					{
 						LoadNameAndPositionFromFile(pd3dDevice, pd3dCommandList, pInFile, pTerrain);
 					}
+
 				}
 			}
 			else if (!strcmp(pstrToken, "</Hierarchy>"))
@@ -138,7 +181,7 @@ void StaticObjectStorage::LoadNameAndPositionFromFile(ID3D12Device * pd3dDevice,
 			nReads = (UINT)::fread(&temp, sizeof(XMFLOAT4X4), 1, pInFile);
 			XMFLOAT4X4 transform = Matrix4x4::Identity();
 			transform._41 =  -(temp._41) + 15000;
-			transform._42 = temp._42;
+			transform._42 = 0;
 			transform._43 =  -(temp._43) + 15000;
 
 			// 계산을 통해 몇번째 아이디인지 즉 어디의 리프노드에 존재하는 위치인지 알아낸다...
@@ -147,19 +190,19 @@ void StaticObjectStorage::LoadNameAndPositionFromFile(ID3D12Device * pd3dDevice,
 
 			XMFLOAT3 position{ transform._41, transform._42, transform._43 };
 			XMINT4 terrainIDs = pTerrain->GetIDs(position);
-			 
-			LoadTransform(name, TREE_1, terrainIDs, XMFLOAT3{ transform._41, transform._42, transform._43 });
-			LoadTransform(name, TREE_2, terrainIDs, XMFLOAT3{ transform._41, transform._42, transform._43 });
-			LoadTransform(name, TREE_3, terrainIDs, XMFLOAT3{ transform._41, transform._42, transform._43 });
-			LoadTransform(name, BUSH, terrainIDs, XMFLOAT3{ transform._41, transform._42, transform._43 });
-			LoadTransform(name, BROKENPILLA, terrainIDs, XMFLOAT3{ transform._41, transform._42, transform._43 });
-			LoadTransform(name, REED, terrainIDs, XMFLOAT3{ transform._41, transform._42, transform._43 });
-			LoadTransform(name, RUIN_ARCH, terrainIDs, XMFLOAT3{ transform._41, transform._42, transform._43 });
-			LoadTransform(name, RUIN_BROKENPILLA, terrainIDs, XMFLOAT3{ transform._41, transform._42, transform._43 });
-			LoadTransform(name, RUIN_PILLAR, terrainIDs, XMFLOAT3{ transform._41, transform._42, transform._43 });
-			LoadTransform(name, RUIN_SQUARE, terrainIDs, XMFLOAT3{ transform._41, transform._42, transform._43 });
-			LoadTransform(name, SUNFLOWER, terrainIDs, XMFLOAT3{ transform._41, transform._42, transform._43 });
-			LoadTransform(name, ALTAR, terrainIDs, XMFLOAT3{ transform._41, transform._42, transform._43 });
+		 
+			LoadTransform(name, TREE_1, terrainIDs,           position);
+			LoadTransform(name, TREE_2, terrainIDs,           position);
+			LoadTransform(name, TREE_3, terrainIDs,           position);
+			LoadTransform(name, BUSH, terrainIDs,             position);
+			LoadTransform(name, BROKENPILLA, terrainIDs,      position);
+			LoadTransform(name, REED, terrainIDs,             position);
+			LoadTransform(name, RUIN_ARCH, terrainIDs,        position);
+			LoadTransform(name, RUIN_BROKENPILLA, terrainIDs, position);
+			LoadTransform(name, RUIN_PILLAR, terrainIDs,      position);
+			LoadTransform(name, RUIN_SQUARE, terrainIDs,      position);
+			LoadTransform(name, SUNFLOWER, terrainIDs,        position);
+			LoadTransform(name, ALTAR, terrainIDs,            position);
 			 
 		}
 		else if (!strcmp(pstrToken, "<Children>:"))
@@ -328,6 +371,14 @@ void StaticObjectStorage::CreateInfo(ID3D12Device * pd3dDevice, ID3D12GraphicsCo
 	m_isCreate = true;
 }
  
+void StaticObjectStorage::RenderAll(ID3D12GraphicsCommandList * pd3dCommandList)
+{
+	for (int i = 0; i < TerrainPieceCount; ++i)
+	{
+		Render(pd3dCommandList, i);
+	}
+}
+
 void StaticObjectStorage::Render(ID3D12GraphicsCommandList * pd3dCommandList, int index)
 {  
 	// info.first = 모델 이름

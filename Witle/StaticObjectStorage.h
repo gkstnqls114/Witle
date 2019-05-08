@@ -38,6 +38,7 @@ private:
 
 private:
 	bool LoadTransform(char* name, char* comp_name, const XMINT4&, const XMFLOAT3& pos);
+	bool LoadTransform(char* name, char* comp_name, const XMINT4&, const XMFLOAT4X4& tr);
 
 	void LoadTerrainObjectFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, const char *pstrFileName, const QuadtreeTerrain const * pTerrain);
 	void LoadNameAndPositionFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, FILE *pInFile, const QuadtreeTerrain const * pTerrain);
@@ -60,6 +61,7 @@ public:
 	void CreateInfo(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, const QuadtreeTerrain const * pTerrain);
 	
 	// 인스턴싱을 통해 렌더합니다.
+	void RenderAll(ID3D12GraphicsCommandList * pd3dCommandList);
 	void Render(ID3D12GraphicsCommandList * pd3dCommandList, int index);
 	void RenderBOBox(ID3D12GraphicsCommandList * pd3dCommandList, int index);
 };

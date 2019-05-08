@@ -426,6 +426,7 @@ public:
 
 	void SetPosition(float x, float y, float z);
 	void SetPosition(XMFLOAT3 xmf3Position);
+	void SetTransform(const XMFLOAT4X4& tr);
 	void SetScale(float x, float y, float z);
 
 	void MoveStrafe(float fDistance = 1.0f);

@@ -933,6 +933,12 @@ void LoadObject::SetPosition(XMFLOAT3 xmf3Position)
 	SetPosition(xmf3Position.x, xmf3Position.y, xmf3Position.z);
 }
 
+void LoadObject::SetTransform(const XMFLOAT4X4 & tr)
+{
+	m_xmf4x4ToParent = tr;
+	UpdateTransform(NULL);
+}
+
 void LoadObject::SetScale(float x, float y, float z)
 {
 	XMMATRIX mtxScale = XMMatrixScaling(x, y, z);

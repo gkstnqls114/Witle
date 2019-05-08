@@ -62,7 +62,9 @@ void QuadtreeTerrain::RenderTerrainObjects(ID3D12GraphicsCommandList * pd3dComma
 	
 	// 설명자 힙 설정
 	TextureStorage::GetInstance()->SetHeap(pd3dCommandList);
-	RecursiveRenderTerrainObjects(m_pRootNode, pd3dCommandList);
+	StaticObjectStorage::GetInstance(this)->RenderAll(pd3dCommandList);
+
+	// RecursiveRenderTerrainObjects(m_pRootNode, pd3dCommandList);
 	 
 #ifdef _SHOW_BOUNDINGBOX
 	 pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("InstancingLine")->GetPSO());
