@@ -106,7 +106,7 @@ Player::Player(const std::string & entityID, ID3D12Device * pd3dDevice, ID3D12Gr
 	 
 	m_pBroom = new Broom(m_pPlayerMovement);
 
-	m_Transform.SetPosition(0, 75.f, 0.f);// 캐릭터가 중앙에 있지않아서 어쩔수없이 설정;
+	m_Transform.SetPosition(0, 70.f, 0.f);// 캐릭터가 중앙에 있지않아서 어쩔수없이 설정;
 
 	SetUpdatedContext(pContext); 
 }
@@ -227,7 +227,11 @@ void Player::Render(ID3D12GraphicsCommandList * pd3dCommandList)
 
 	if (!m_isRendering) return; //만약 스나이핑 모드라면 플레이어를 렌더링하지 않는다.
 	m_pLoadObject->Render(pd3dCommandList);
-	// m_pPlayerStatus->Render(pd3dCommandList);
+}
+
+void Player::RenderHpStatus(ID3D12GraphicsCommandList * pd3dCommandList)
+{
+	m_pPlayerStatus->Render(pd3dCommandList);
 }
  
 void Player::SetTrackAnimationSet()
@@ -254,8 +258,9 @@ void Player::ProcessInput(float fTimeElapsed)
 	}
 
 	DWORD dwDirection = 0;
-	m_CurrAnimation = ANIMATION_IDLE.ID;
-
+	// m_CurrAnimation = ANIMATION_IDLE.ID;
+	m_CurrAnimation = ANIMATION_FORWARD.ID;
+	 
 	bool isMove = false;
 	if (GameInput::IsKeydownW())
 	{

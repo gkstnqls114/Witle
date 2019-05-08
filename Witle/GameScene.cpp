@@ -212,10 +212,9 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	// 카메라
 	m_pMainCamera = new CameraObject("Camera");  
 	m_Sniping = new Sniping(m_pMainCamera, m_pPlayer, pd3dDevice, pd3dCommandList);
-	 m_pPlayer->SetSniping(m_Sniping);
-	 m_pMainCamera->ChangeCamera(m_Sniping->GetBaseCamera());
+	m_pPlayer->SetSniping(m_Sniping);
+	m_pMainCamera->ChangeCamera(m_Sniping->GetBaseCamera());
 	 
-
 	 m_pSkyCameraObj = new CameraObject("SkyCamera");
 	 m_pSkyCamera = new BasicCam(m_pSkyCameraObj);
 	 m_pSkyCamera->CreateShaderVariables(pd3dDevice, pd3dCommandList);
@@ -358,7 +357,9 @@ void GameScene::ReleaseObjects()
 bool GameScene::ProcessInput(HWND hWnd, float fElapsedTime)
 { 
 	// 플레이어 이동에 대한 처리 (정확히는 이동이 아니라 가속도)
-	m_pPlayer->ProcessInput(fElapsedTime); 
+	m_pPlayer->ProcessInput(fElapsedTime);
+	// m_pOtherPlayer->ProcessInput(fElapsedTime);
+	m_pOtherPlayer->Rotate(0.0f, 10.f, 0.f);
 
 	// 플레이어 회전에 대한 처리
 	if ((GameInput::GetDeltaX() != 0.0f) || (GameInput::GetDeltaY() != 0.0f))
@@ -491,7 +492,8 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	// PSO 설정
 	 
 	pd3dCommandList->SetDescriptorHeaps(1, &m_pd3dCbvSrvDescriptorHeap); 
-	if(m_pPlayer) m_pPlayer->Render(pd3dCommandList);
+	if (m_pPlayer) m_pPlayer->Render(pd3dCommandList);
+	if(m_pPlayer) m_pPlayer->RenderHpStatus(pd3dCommandList);
 	if(m_pOtherPlayer) m_pOtherPlayer->Render(pd3dCommandList);
 
 	//// Aim point Render 
