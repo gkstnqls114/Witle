@@ -222,6 +222,8 @@ public:
 public:
 	void ReleaseObject();
 
+	float m_fAccumulate = 0.f;
+
 	char							m_pstrAnimationSetName[64];
 
 	int								m_nAnimationLayers = 0;
@@ -290,6 +292,7 @@ public:
 	int 							m_nAnimationSet = 0;
 
 public:
+	
 	void SetAnimationSet(int nAnimationSet) { m_nAnimationSet = nAnimationSet; }
 
 	void SetEnable(bool bEnable) { m_bEnable = bEnable; }
@@ -342,7 +345,8 @@ public:
 	void ReleaseObjects();
 
 	void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList);
-
+	
+	bool IsTrackAnimationSetFinish(int nAnimationTrack, int nAnimationSet);
 	void SetTrackAnimationSet(int nAnimationTrack, int nAnimationSet);
 	void SetTrackEnable(int nAnimationTrack, bool bEnable);
 	void SetTrackPosition(int nAnimationTrack, float fPosition);
@@ -452,6 +456,7 @@ public:
 	void FindAndSetSkinnedMesh(CSkinnedMesh **ppSkinnedMeshes, int *pnSkinnedMesh);
 
 	void SetTrackAnimationSet(int nAnimationTrack, int nAnimationSet);
+	bool IsTrackAnimationSetFinish(int nAnimationTrack, int nAnimationSet);
 	void SetTrackAnimationPosition(int nAnimationTrack, float fPosition);
 
 	static void LoadAnimationFromFile(FILE *pInFile, CLoadedModelInfo *pLoadedModel);

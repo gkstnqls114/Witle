@@ -252,14 +252,18 @@ void Player::Rotate(float x, float y, float z)
 
 void Player::ProcessInput(float fTimeElapsed)
 { 
-	if (m_CurrAnimation == ANIMATION_ATTACK.ID)
+	if (m_isAttacking)
 	{
+		if (m_pLoadObject->IsTrackAnimationSetFinish(0, ANIMATION_ATTACK.ID))
+		{
+			m_isAttacking = false;
+		} 
 		return;
 	}
 
 	DWORD dwDirection = 0;
-	// m_CurrAnimation = ANIMATION_IDLE.ID;
-	m_CurrAnimation = ANIMATION_FORWARD.ID;
+	m_CurrAnimation = ANIMATION_IDLE.ID;
+	// m_CurrAnimation = ANIMATION_FORWARD.ID;
 	 
 	bool isMove = false;
 	if (GameInput::IsKeydownW())
@@ -317,6 +321,7 @@ bool Player::Attack()
 	}
 	else
 	{
+		m_isAttacking = true;
 		m_CurrAnimation = ANIMATION_ATTACK.ID;
 		return true;
 	}

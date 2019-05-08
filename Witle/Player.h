@@ -15,6 +15,7 @@ class Player :
 	public GameObject
 {
 	bool m_isRendering{ true };
+	bool m_isAttacking{ false };
 	
 	int m_CurrAnimation{ 0 }; // 현재 사용하는 애니메이션
 
@@ -22,7 +23,7 @@ class Player :
 	PlayerStatus*	   m_pPlayerStatus{ nullptr };
 	MyBOBox*		   m_pMyBOBox{ nullptr };
 	CLoadedModelInfo*  m_PlayerModel {nullptr };
-	LoadObject*		   m_pLoadObject{ nullptr }; // delete 금지
+	LoadObject*		   m_pLoadObject{ nullptr };
 	 
 	Broom* m_pBroom{ nullptr };
 	Sniping* m_pSniping{ nullptr };
@@ -79,6 +80,7 @@ public:
 	AXIS GetCoorAxis() { return m_Transform.GetCoorAxis(); }
 	XMFLOAT3 GetVelocity() const;
 	MyBOBox* GetBOBox() { return m_pMyBOBox; }
+	bool IsAttacking() const { return m_isAttacking; }
 	/////////////////////// Get
 
 	/////////////////////// Set	

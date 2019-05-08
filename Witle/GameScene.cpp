@@ -144,6 +144,9 @@ bool GameScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM w
 		break;
 	case WM_KEYDOWN:
 		switch (wParam) {
+		case 'E': 
+			break;
+
 		case '1': // 스킬 빗자루
 			m_pPlayer->UseSkill_Broom();
 			break;
@@ -723,7 +726,10 @@ void GameScene::ProcessPicking(float fElapsedTime)
 	if (GameInput::GetDragMode()) // 만약 드래그로 회전한다면...
 	{
 		if (!GameInput::IsKeydownE()) return; // e를 누르지 않았다면 아무것도 실행하지 않는다.
-		 
+		if (m_pPlayer->IsAttacking()) return;
+		
+		m_pPlayer->Attack();
+
 		// 피킹 ray를 만든다.
 		RAY pickRay = RAY::GeneratePickingRay(m_AimPoint->GetPickingPoint(), m_pMainCamera->GetCamera());
 
