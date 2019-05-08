@@ -651,17 +651,18 @@ void GameScene::UpdateCollision(float fElapsedTime)
 	XMFLOAT3 AlreadyPositon{ AlreadyPlayerBBox.Center.x, AlreadyPlayerBBox.Center.y, AlreadyPlayerBBox.Center.z };
 	 
 	XMINT4 IDs = m_pQuadtreeTerrain->GetIDs(AlreadyPositon);
+	int TerrainCount = m_pQuadtreeTerrain->GetTerrainPieceCount();
 
 	// Ti: Terrain Index
-	for (int Ti = 0; Ti < 4; ++Ti)
+	for (int Ti = 0; Ti < TerrainCount; ++Ti)
 	{ 
-		int TerrainIndex = -1;
-		if (Ti == 0) TerrainIndex = IDs.x;
-		else if (Ti == 1) TerrainIndex = IDs.y;
-		else if (Ti == 2) TerrainIndex = IDs.z;
-		else if (Ti == 3) TerrainIndex = IDs.w;
+		int TerrainIndex = Ti;
+		//if (Ti == 0) TerrainIndex = IDs.x;
+		//else if (Ti == 1) TerrainIndex = IDs.y;
+		//else if (Ti == 2) TerrainIndex = IDs.z;
+		//else if (Ti == 3) TerrainIndex = IDs.w;
 
-		if (TerrainIndex == -1) continue;
+		//if (TerrainIndex == -1) continue;
 
 		for (const auto& name : ModelStorage::GetInstance()->m_NameList)
 		{
