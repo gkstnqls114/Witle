@@ -653,7 +653,6 @@ void GameScene::UpdateCollision(float fElapsedTime)
 	BoundingOrientedBox AlreadyPlayerBBox = m_pPlayer->CalculateAlreadyBoundingBox(fElapsedTime);
 	XMFLOAT3 AlreadyPositon{ AlreadyPlayerBBox.Center.x, AlreadyPlayerBBox.Center.y, AlreadyPlayerBBox.Center.z };
 	
-
 	// ¿Ü°ûÃ³¸®
 	MyBOBox outside_box[4]{ 
 		{XMFLOAT3(-100, 0, 15000), XMFLOAT3(100, 3000, 30000)},

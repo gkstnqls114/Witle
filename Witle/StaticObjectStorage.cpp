@@ -168,7 +168,13 @@ void StaticObjectStorage::LoadNameAndPositionFromFile(ID3D12Device * pd3dDevice,
 
 			XMFLOAT4X4 temp;
 			nReads = (UINT)::fread(&temp, sizeof(XMFLOAT4X4), 1, pInFile);
-			XMFLOAT4X4 transform = Matrix4x4::Identity();
+
+			::ReadStringFromFile(pInFile, pstrToken); // <GlobalRotation>:
+			XMFLOAT4 rotationXYZ;
+			nReads = (UINT)::fread(&rotationXYZ, sizeof(XMFLOAT4), 1, pInFile);
+			XMFLOAT4X4 transform = Matrix4x4::RotateMatrix(0.f, rotationXYZ.z, rotationXYZ.y);
+			
+			// XMFLOAT4X4 transform = Matrix4x4::Identity();
 			transform._41 =  -(temp._41) + 15000;
 			transform._42 = 0;
 			transform._43 =  -(temp._43) + 15000;
@@ -181,7 +187,7 @@ void StaticObjectStorage::LoadNameAndPositionFromFile(ID3D12Device * pd3dDevice,
 			XMINT4 terrainIDs = pTerrain->GetIDs(position);
 		 
 			for (const auto& modelname : ModelStorage::GetInstance()->m_NameList)
-			{
+			{ 
 				bool isLocated = LoadTransform(name, modelname.c_str(), terrainIDs, transform);
 				if (isLocated) break;
 			} 

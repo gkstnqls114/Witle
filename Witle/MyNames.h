@@ -14,7 +14,7 @@
 // 유적 지형 
 #define REED "Reed"
 #define RUIN_ARCH "ruin_Arch"
-#define RUIN_BROKENPILLA "ruin_brokenPillar"
+#define RUIN_BROKENPILLA "ruin_brockenPillar"
 #define RUIN_PILLAR "ruin_Pillar"
 #define RUIN_SQUARE "ruin_Square" 
 
