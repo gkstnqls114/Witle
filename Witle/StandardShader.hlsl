@@ -66,9 +66,9 @@ float4 PSStandard(VS_STANDARD_OUTPUT input) : SV_TARGET
 	//{
 		normalW = normalize(input.normalW);
 	//}
-	//float4 cIllumination = Lighting(input.positionW, normalW);
-	//return(lerp(TESTColor, cIllumination, 0.5f));
-    return TESTColor;
+	float4 cIllumination = Lighting(input.positionW, normalW);
+	return(lerp(TESTColor, cIllumination, 0.5f));
+    // return TESTColor;
 }
  
 

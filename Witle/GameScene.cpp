@@ -363,7 +363,7 @@ bool GameScene::ProcessInput(HWND hWnd, float fElapsedTime)
 	// 플레이어 이동에 대한 처리 (정확히는 이동이 아니라 가속도)
 	m_pPlayer->ProcessInput(fElapsedTime);
 	// m_pOtherPlayer->ProcessInput(fElapsedTime);
-	m_pOtherPlayer->Rotate(0.0f, 10.f, 0.f);
+	// m_pOtherPlayer->Rotate(0.0f, 10.f, 0.f);
 
 	// 플레이어 회전에 대한 처리
 	if ((GameInput::GetDeltaX() != 0.0f) || (GameInput::GetDeltaY() != 0.0f))
@@ -652,7 +652,52 @@ void GameScene::UpdateCollision(float fElapsedTime)
 	// 충돌체크 ///////////////////////// 
 	BoundingOrientedBox AlreadyPlayerBBox = m_pPlayer->CalculateAlreadyBoundingBox(fElapsedTime);
 	XMFLOAT3 AlreadyPositon{ AlreadyPlayerBBox.Center.x, AlreadyPlayerBBox.Center.y, AlreadyPlayerBBox.Center.z };
-	 
+	
+
+	// 외곽처리
+	MyBOBox outside_box[4]{ 
+		{XMFLOAT3(-100, 0, 15000), XMFLOAT3(100, 3000, 30000)},
+		{XMFLOAT3(15000, 0, 30100), XMFLOAT3(30000, 3000, 200)},
+		{XMFLOAT3(30100, 0, 15000), XMFLOAT3(100, 3000, 30000)},
+		{XMFLOAT3(15000, 0, 100), XMFLOAT3(30000, 3000, 100)},
+	};
+
+	for (int i = 0; i < 4; ++i)
+	{  
+		// 이동한 박스를 통해 충돌한다.
+		bool isAlreadyCollide = Collision::isCollide(AlreadyPlayerBBox, outside_box[i].GetBOBox());
+		if (isAlreadyCollide)
+		{
+			for (int x = 0; x < 4; ++x) //  plane 4 면에 대해 체크한다..
+			{
+				XMFLOAT3 intersectionPoint;
+				// 여기서 d란... 원점과 평면과의 거리를 의미한다. (양수/음수)
+				float d = outside_box[i].GetPlane(x).w;
+				// 시간에 따른 이동을 기준으로 하므로 velocity 는 프레임 시간을 곱한다.
+				bool isFront = Plane::IsFront(outside_box[i].GetPlaneNormal(x), d, m_pPlayer->GetTransform().GetPosition()); // 업데이트 이전 위치
+				// 만약 무한한 평면에 교차했다면...
+				if (isFront)
+				{
+					bool isIntersect = Plane::Intersect(outside_box[i].GetPlaneNormal(x), d, m_pPlayer->GetTransform().GetPosition(), Vector3::ScalarProduct(m_pPlayer->GetVelocity(), fElapsedTime, false), intersectionPoint);
+
+					if (isIntersect)
+					{
+						// 해당 교차점이 유한평면안에 존재하는지 확인한다.
+						// outside_box[i].IsIn(x, intersectionPoint)
+						// 
+						if (Collision::isIn(outside_box[i].GetBOBox(), intersectionPoint)) //isIn 함수 나중에 수정해야함
+						{
+							m_pPlayer->SetVelocity
+							(
+								Vector3::Sliding(outside_box[i].GetPlaneNormal(x), m_pPlayer->GetVelocity())
+							);
+						}
+					}
+				}
+			}
+		}
+	}
+
 	XMINT4 IDs = m_pQuadtreeTerrain->GetIDs(AlreadyPositon);
 	int TerrainCount = m_pQuadtreeTerrain->GetTerrainPieceCount();
 
@@ -829,10 +874,10 @@ void GameScene::BuildLightsAndMaterials(ID3D12Device *pd3dDevice, ID3D12Graphics
 
 	LightManager::m_pLights->m_pLights[2].bEnable = true;
 	LightManager::m_pLights->m_pLights[2].nType = LIGHT_TYPE::DIRECTIONAL_LIGHT;
-	LightManager::m_pLights->m_pLights[2].Ambient = XMFLOAT4(0.f, 1.f, 0.2f, 1.0f);
+	LightManager::m_pLights->m_pLights[2].Ambient = XMFLOAT4(1.f, 0.8f, 0.8f, 1.0f);
 	LightManager::m_pLights->m_pLights[2].Diffuse = XMFLOAT4(0.4f, 0.4f, 0.4f, 1.0f);
 	LightManager::m_pLights->m_pLights[2].Specular = XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f);
-	LightManager::m_pLights->m_pLights[2].Direction = XMFLOAT3(0.0f, 0.0f, 1.0f);
+	LightManager::m_pLights->m_pLights[2].Direction = XMFLOAT3(0.0f, -1.0f, 0.0f);
 	
 	LightManager::m_pLights->m_pLights[3].bEnable = false;
 	LightManager::m_pLights->m_pLights[3].nType = LIGHT_TYPE::SPOT_LIGHT;

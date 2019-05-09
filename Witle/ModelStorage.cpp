@@ -51,36 +51,17 @@ void ModelStorage::CreateModels(ID3D12Device * pd3dDevice, ID3D12GraphicsCommand
 		path.append(".bin");
 		m_ModelStorage[name].loadmodelInfo = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, path.c_str(), NULL);
 	}
-	//m_ModelStorage[TREE_1].loadmodelInfo = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/TreeOne.bin", NULL);
-	//m_ModelStorage[TREE_BG_1].loadmodelInfo = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/TreeOne.bin", NULL);
-	//m_ModelStorage[TREE_2].loadmodelInfo = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/TreeTwo.bin", NULL);
-	//m_ModelStorage[TREE_3].loadmodelInfo = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/TreeThree.bin", NULL);
-	//m_ModelStorage[TREE_BG_3].loadmodelInfo = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/TreeThree.bin", NULL);
-	//
-	//m_ModelStorage[BUSH].loadmodelInfo = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/Altar.bin", NULL);
-	//
-	//m_ModelStorage[BROKENPILLA].loadmodelInfo = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/Bush.bin", NULL);
-	//m_ModelStorage[REED].loadmodelInfo = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/BrokenPilla.bin", NULL);
-	//m_ModelStorage[RUIN_ARCH].loadmodelInfo = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/Reed.bin", NULL);
-	//
-	//m_ModelStorage[RUIN_BROKENPILLA].loadmodelInfo = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/ruin_Arch.bin", NULL);
-	//m_ModelStorage[RUIN_PILLAR].loadmodelInfo = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/ruin_BrokenPillar.bin", NULL);
-	//m_ModelStorage[RUIN_SQUARE].loadmodelInfo = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/ruin_Pillar.bin", NULL);
-	//m_ModelStorage[SUNFLOWER].loadmodelInfo = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/ruin_Square.bin", NULL);
-	//m_ModelStorage[ALTAR_IN].loadmodelInfo = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/Sunflower.bin", NULL);
-	//m_ModelStorage[ALTAR_OUT].loadmodelInfo = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/Sunflower.bin", NULL);
-	
+
 	// 충돌박스 목록
 	m_ModelStorage[TREE_1].modelBOBox = new MyBOBox(pd3dDevice, pd3dCommandList, XMFLOAT3{0.F, 0.F, 0.F}, XMFLOAT3{ 100.F, 100.F, 100.F });
 	m_ModelStorage[TREE_2].modelBOBox = new MyBOBox(pd3dDevice, pd3dCommandList, XMFLOAT3{0.F, 0.F, 0.F},XMFLOAT3{ 200.F, 200.F, 200.F });
 	m_ModelStorage[TREE_3].modelBOBox = new MyBOBox(pd3dDevice, pd3dCommandList, XMFLOAT3{0.F, 0.F, 0.F},XMFLOAT3{ 300.F, 300.F, 300.F });
 	//m_ModelStorage[BUSH].modelBOBox = new MyBOBox(pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 0.F, 0.F },        XMFLOAT3{ 400.F, 400.F, 400.F });
-	//m_ModelStorage[BROKENPILLA].modelBOBox = new MyBOBox(pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 0.F, 0.F }, XMFLOAT3{ 400.F, 400.F, 400.F });
 	//m_ModelStorage[REED].modelBOBox = new MyBOBox(pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 0.F, 0.F }, XMFLOAT3{ 400.F, 400.F, 400.F });
-	//m_ModelStorage[RUIN_ARCH].modelBOBox = new MyBOBox(pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 0.F, 0.F }, XMFLOAT3{ 400.F, 400.F, 400.F });
-	//m_ModelStorage[RUIN_BROKENPILLA].modelBOBox = new MyBOBox(pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 0.F, 0.F }, XMFLOAT3{ 400.F, 400.F, 400.F });
-	//m_ModelStorage[RUIN_PILLAR].modelBOBox = new MyBOBox(pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 0.F, 0.F }, XMFLOAT3{ 400.F, 400.F, 400.F });
-	//m_ModelStorage[RUIN_SQUARE].modelBOBox = new MyBOBox(pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 0.F, 0.F }, XMFLOAT3{ 400.F, 400.F, 400.F });
+	m_ModelStorage[RUIN_ARCH].modelBOBox = new MyBOBox(pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 0.F, 0.F }, XMFLOAT3{ 200.F, 100.F, 100.F });
+	m_ModelStorage[RUIN_BROKENPILLA].modelBOBox = new MyBOBox(pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 0.F, 0.F }, XMFLOAT3{ 200.F, 100.F, 100.F });
+	m_ModelStorage[RUIN_PILLAR].modelBOBox = new MyBOBox(pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 0.F, 0.F }, XMFLOAT3{ 200.F, 100.F, 100.F });
+	m_ModelStorage[RUIN_SQUARE].modelBOBox = new MyBOBox(pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 0.F, 0.F }, XMFLOAT3{ 200.F, 100.F, 100.F });
 	//m_ModelStorage[SUNFLOWER].modelBOBox = new MyBOBox(pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 0.F, 0.F }, XMFLOAT3{ 400.F, 400.F, 400.F });
 	// 
 	m_isCreate = true;
@@ -118,23 +99,35 @@ void ModelStorage::ReleaseObjects()
 LoadObject * ModelStorage::GetRootObject(std::string name)
 {
 	if (!m_ModelStorage[name].loadmodelInfo) return nullptr;
+	std::string reName = name;
+	if (!strcmp(name.c_str(), TREE_BG_1))  reName = TREE_1;
+	if (!strcmp(name.c_str(), TREE_BG_3))  reName = TREE_3;
 
 	LoadObject* newRootObject = new LoadObject(0);
-	LoadObject::CopyWorldMatrix(newRootObject, m_ModelStorage[name].loadmodelInfo->m_pModelRootObject);
+	LoadObject::CopyWorldMatrix(newRootObject, m_ModelStorage[reName].loadmodelInfo->m_pModelRootObject);
 
 	return newRootObject;
 }
 
 MyBOBox * ModelStorage::GetBOBox(std::string name)
-{ 
-	if (!m_ModelStorage[name].modelBOBox) return nullptr;
-	 
-	return m_ModelStorage[name].modelBOBox;
+{
+	std::string reName = name;
+	if (!strcmp(name.c_str(), TREE_BG_1))  reName = TREE_1;
+	if (!strcmp(name.c_str(), TREE_BG_3))  reName = TREE_3;
+
+	if (!m_ModelStorage[reName].modelBOBox) return nullptr;
+
+	return m_ModelStorage[reName].modelBOBox;
 }
 #ifdef _SHOW_BOUNDINGBOX
 void ModelStorage::RenderBOBoxInstancing(ID3D12GraphicsCommandList * pd3dCommandList, const std::string& name, int InstancingCount)
 {
-	if (!m_ModelStorage[name].modelBOBox) return;
-	m_ModelStorage[name].modelBOBox->RenderInstancing(pd3dCommandList, InstancingCount);
+	std::string reName = name;
+	if (!strcmp(name.c_str(), TREE_BG_1))  reName = TREE_1;
+	if (!strcmp(name.c_str(), TREE_BG_3))  reName = TREE_3;
+
+	if (!m_ModelStorage[reName].modelBOBox) return;
+
+	m_ModelStorage[reName].modelBOBox->RenderInstancing(pd3dCommandList, InstancingCount);
 }
 #endif // _SHOW_BOUNDINGBOX

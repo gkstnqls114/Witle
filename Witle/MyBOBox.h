@@ -17,6 +17,7 @@ protected:
 public:
 	MyBOBox(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, XMFLOAT3 extents, XMFLOAT3 Offset, XMFLOAT4 quaternion = XMFLOAT4(0.f, 0.f, 0.f, 1.f));
 	MyBOBox(const MyBOBox& other);
+	MyBOBox(XMFLOAT3 center, XMFLOAT3 extents);
 	virtual ~MyBOBox();
 
 #ifdef _SHOW_BOUNDINGBOX 

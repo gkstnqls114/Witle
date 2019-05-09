@@ -182,20 +182,9 @@ void StaticObjectStorage::LoadNameAndPositionFromFile(ID3D12Device * pd3dDevice,
 		 
 			for (const auto& modelname : ModelStorage::GetInstance()->m_NameList)
 			{
-				bool isLocated = LoadTransform(name, modelname.c_str(), terrainIDs,           position);
+				bool isLocated = LoadTransform(name, modelname.c_str(), terrainIDs, transform);
 				if (isLocated) break;
-			}
-			//LoadTransform(name, TREE_2, terrainIDs,           position);
-			//LoadTransform(name, TREE_3, terrainIDs,           position);
-			//LoadTransform(name, BUSH, terrainIDs,             position);
-			//LoadTransform(name, BROKENPILLA, terrainIDs,      position);
-			//LoadTransform(name, REED, terrainIDs,             position);
-			//LoadTransform(name, RUIN_ARCH, terrainIDs,        position);
-			//LoadTransform(name, RUIN_BROKENPILLA, terrainIDs, position);
-			//LoadTransform(name, RUIN_PILLAR, terrainIDs,      position);
-			//LoadTransform(name, RUIN_SQUARE, terrainIDs,      position);
-			//LoadTransform(name, SUNFLOWER, terrainIDs,        position);
-			//LoadTransform(name, ALTAR, terrainIDs,            position);
+			} 
 			 
 		}
 		else if (!strcmp(pstrToken, "<Children>:"))
