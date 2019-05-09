@@ -5,20 +5,22 @@
 // 모델 이름 정의 
 // 숲 지형
 #define TREE_1 "TreeOne"
+#define TREE_BG_1 "TreeOne_Big"
 #define TREE_2 "TreeTwo"
 #define TREE_3 "TreeThree"
-#define BUSH "bush"
+#define TREE_BG_3 "TreeThree_Big"
+#define BUSH "Bush"
 
-// 유적 지형
-#define BROKENPILLA "BrokenPilla"
+// 유적 지형 
 #define REED "Reed"
-#define RUIN_ARCH "RuinArch"
-#define RUIN_BROKENPILLA "Ruin_BrokenPillar"
-#define RUIN_PILLAR "RuinPillar"
-#define RUIN_SQUARE "Ruin_Square" 
+#define RUIN_ARCH "ruin_Arch"
+#define RUIN_BROKENPILLA "ruin_brokenPillar"
+#define RUIN_PILLAR "ruin_Pillar"
+#define RUIN_SQUARE "ruin_Square" 
 
 #define SUNFLOWER "Sunflower"
-#define ALTAR "Altar"
+#define ALTAR_IN "Altar_in"
+#define ALTAR_OUT "Altar_out"
 
 
 // 쉐이더 이름들

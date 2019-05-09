@@ -38,6 +38,11 @@ float4 PSStandard(VS_STANDARD_OUTPUT input) : SV_TARGET
 { 
 	// 임시로 사용할 컬러 색깔
     float4 TESTColor = gtxtTexture.Sample(gWrapSamplerState, input.uv);
+   
+    if (TESTColor.a < 0.1 && TESTColor.r < 0.1 && TESTColor.g < 0.1 && TESTColor.b < 0.1)
+        TESTColor = float4(1.f, 1.f, 1.f, 1.f);
+    else if (TESTColor.a < 0.5) discard;
+    
 	//float4 cAlbedoColor = float4(0.0f, 0.0f, 0.0f, 1.0f);
 	//if (gnTexturesMask & MATERIAL_ALBEDO_MAP) cAlbedoColor = gtxtAlbedoTexture.Sample(gssWrap, input.uv);
 	//float4 cSpecularColor = float4(0.0f, 0.0f, 0.0f, 1.0f);

@@ -20,7 +20,7 @@ void StaticObjectStorage::UpdateShaderVariables(ID3D12GraphicsCommandList * pd3d
 { 
 }
 
-bool StaticObjectStorage::LoadTransform(char * name, char * comp_name, const XMINT4& IDs, const XMFLOAT3& pos)
+bool StaticObjectStorage::LoadTransform(char * name, const char * comp_name, const XMINT4& IDs, const XMFLOAT3& pos)
 {
 	bool result = false;
 	if (!strcmp(name, comp_name))
@@ -52,7 +52,7 @@ bool StaticObjectStorage::LoadTransform(char * name, char * comp_name, const XMI
 	return result;
 }
 
-bool StaticObjectStorage::LoadTransform(char * name, char * comp_name, const XMINT4 & IDs, const XMFLOAT4X4 & tr)
+bool StaticObjectStorage::LoadTransform(char * name, const char * comp_name, const XMINT4 & IDs, const XMFLOAT4X4 & tr)
 { 
 	bool result = false;
 	if (!strcmp(name, comp_name))
@@ -96,21 +96,10 @@ void StaticObjectStorage::LoadTerrainObjectFromFile(ID3D12Device * pd3dDevice, I
 	// 이름에 맞추어 구성해야하므로 하드코딩을 해야한다.
 	TerrainPieceCount = pTerrain->GetTerrainPieceCount();
 	 
-	m_StaticObjectStorage[TREE_1] = new TerrainObjectInfo[TerrainPieceCount];
-	m_StaticObjectStorage[TREE_2] = new TerrainObjectInfo[TerrainPieceCount];
-	m_StaticObjectStorage[TREE_3] = new TerrainObjectInfo[TerrainPieceCount];
-	m_StaticObjectStorage[BUSH] = new TerrainObjectInfo[TerrainPieceCount];
-	
-	m_StaticObjectStorage[BROKENPILLA] = new TerrainObjectInfo[TerrainPieceCount];
-	m_StaticObjectStorage[REED] = new TerrainObjectInfo[TerrainPieceCount];
-	m_StaticObjectStorage[RUIN_ARCH] = new TerrainObjectInfo[TerrainPieceCount];
-	m_StaticObjectStorage[RUIN_BROKENPILLA] = new TerrainObjectInfo[TerrainPieceCount];
-	m_StaticObjectStorage[RUIN_PILLAR] = new TerrainObjectInfo[TerrainPieceCount];
-	m_StaticObjectStorage[RUIN_SQUARE] = new TerrainObjectInfo[TerrainPieceCount];
-
-	m_StaticObjectStorage[SUNFLOWER] = new TerrainObjectInfo[TerrainPieceCount]; 
-	m_StaticObjectStorage[ALTAR] = new TerrainObjectInfo[TerrainPieceCount];
-
+	for (const auto& name : ModelStorage::GetInstance()->m_NameList)
+	{
+		m_StaticObjectStorage[name ] = new TerrainObjectInfo[TerrainPieceCount];
+	}
 
 	for (; ; )
 	{
@@ -191,18 +180,22 @@ void StaticObjectStorage::LoadNameAndPositionFromFile(ID3D12Device * pd3dDevice,
 			XMFLOAT3 position{ transform._41, transform._42, transform._43 };
 			XMINT4 terrainIDs = pTerrain->GetIDs(position);
 		 
-			LoadTransform(name, TREE_1, terrainIDs,           position);
-			LoadTransform(name, TREE_2, terrainIDs,           position);
-			LoadTransform(name, TREE_3, terrainIDs,           position);
-			LoadTransform(name, BUSH, terrainIDs,             position);
-			LoadTransform(name, BROKENPILLA, terrainIDs,      position);
-			LoadTransform(name, REED, terrainIDs,             position);
-			LoadTransform(name, RUIN_ARCH, terrainIDs,        position);
-			LoadTransform(name, RUIN_BROKENPILLA, terrainIDs, position);
-			LoadTransform(name, RUIN_PILLAR, terrainIDs,      position);
-			LoadTransform(name, RUIN_SQUARE, terrainIDs,      position);
-			LoadTransform(name, SUNFLOWER, terrainIDs,        position);
-			LoadTransform(name, ALTAR, terrainIDs,            position);
+			for (const auto& modelname : ModelStorage::GetInstance()->m_NameList)
+			{
+				bool isLocated = LoadTransform(name, modelname.c_str(), terrainIDs,           position);
+				if (isLocated) break;
+			}
+			//LoadTransform(name, TREE_2, terrainIDs,           position);
+			//LoadTransform(name, TREE_3, terrainIDs,           position);
+			//LoadTransform(name, BUSH, terrainIDs,             position);
+			//LoadTransform(name, BROKENPILLA, terrainIDs,      position);
+			//LoadTransform(name, REED, terrainIDs,             position);
+			//LoadTransform(name, RUIN_ARCH, terrainIDs,        position);
+			//LoadTransform(name, RUIN_BROKENPILLA, terrainIDs, position);
+			//LoadTransform(name, RUIN_PILLAR, terrainIDs,      position);
+			//LoadTransform(name, RUIN_SQUARE, terrainIDs,      position);
+			//LoadTransform(name, SUNFLOWER, terrainIDs,        position);
+			//LoadTransform(name, ALTAR, terrainIDs,            position);
 			 
 		}
 		else if (!strcmp(pstrToken, "<Children>:"))

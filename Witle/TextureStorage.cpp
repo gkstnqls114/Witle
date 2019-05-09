@@ -44,7 +44,7 @@ void TextureStorage::ReleaseObjects()
 void TextureStorage::CreateTextures(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList)
 {
 	m_Heap = new MyDescriptorHeap();
-	m_Heap->CreateCbvSrvUavDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 3, 0);
+	m_Heap->CreateCbvSrvUavDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 5, 0);
 	int heapIndex = 0;
 
 	m_TextureStorage[TREE_1] = new Texture();
@@ -58,6 +58,14 @@ void TextureStorage::CreateTextures(ID3D12Device * pd3dDevice, ID3D12GraphicsCom
 	m_TextureStorage[TREE_3] = new Texture();
 	m_TextureStorage[TREE_3]->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/TreeThree_Diffuse.dds", 0);
 	m_Heap->CreateShaderResourceViews(pd3dDevice, pd3dCommandList, m_TextureStorage[TREE_3], ROOTPARAMETER_TEXTURE, RESOURCE_TEXTURE2D, heapIndex++);
+
+	m_TextureStorage[REED] = new Texture();
+	m_TextureStorage[REED]->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/reed_AlphaDiffuse.dds", 0);
+	m_Heap->CreateShaderResourceViews(pd3dDevice, pd3dCommandList, m_TextureStorage[REED], ROOTPARAMETER_TEXTURE, RESOURCE_TEXTURE2D, heapIndex++);
+
+	m_TextureStorage[BUSH] = new Texture();
+	m_TextureStorage[BUSH]->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/Bush_AlphaDiffuse.dds", 0);
+	m_Heap->CreateShaderResourceViews(pd3dDevice, pd3dCommandList, m_TextureStorage[BUSH], ROOTPARAMETER_TEXTURE, RESOURCE_TEXTURE2D, heapIndex++);
 
 }
  

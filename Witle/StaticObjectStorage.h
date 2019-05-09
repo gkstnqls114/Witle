@@ -37,8 +37,8 @@ private:
 	void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList, int count, XMFLOAT4X4* transforms);
 
 private:
-	bool LoadTransform(char* name, char* comp_name, const XMINT4&, const XMFLOAT3& pos);
-	bool LoadTransform(char* name, char* comp_name, const XMINT4&, const XMFLOAT4X4& tr);
+	bool LoadTransform(char* name, const char* comp_name, const XMINT4&, const XMFLOAT3& pos);
+	bool LoadTransform(char* name, const char* comp_name, const XMINT4&, const XMFLOAT4X4& tr);
 
 	void LoadTerrainObjectFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, const char *pstrFileName, const QuadtreeTerrain const * pTerrain);
 	void LoadNameAndPositionFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, FILE *pInFile, const QuadtreeTerrain const * pTerrain);

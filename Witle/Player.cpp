@@ -92,7 +92,7 @@ XMFLOAT3 Player::CalculateAlreadyPosition(float fTimeElapsed)
 Player::Player(const std::string & entityID, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void * pContext)
 	: GameObject(entityID)
 { 
-	m_PlayerModel = LoadObject::LoadGeometryAndAnimationFromFile_forPlayer(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/Chracter.bin", NULL);
+	m_PlayerModel = LoadObject::LoadGeometryAndAnimationFromFile_forPlayer(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/Character.bin", NULL);
 	m_pLoadObject = m_PlayerModel->m_pModelRootObject;
 	 
 	m_pLoadObject->m_pSkinnedAnimationController = new CAnimationController(pd3dDevice, pd3dCommandList, 1, m_PlayerModel);
@@ -198,6 +198,7 @@ void Player::Update(float fElapsedTime)
 void Player::SubstractHP(int sub)
 { 
 	m_pPlayerStatus->m_HP -= sub; 
+	std::cout << m_pPlayerStatus->m_HP << std::endl;
 }
 
 void Player::Animate(float fElapsedTime)
@@ -325,6 +326,7 @@ bool Player::Attack()
 	}
 	else
 	{
+		m_pPlayerMovement->m_xmf3Velocity = XMFLOAT3(0.F, 0.F, 0.F);
 		m_isAttacking = true;
 		m_CurrAnimation = ANIMATION_ATTACK.ID;
 		return true;

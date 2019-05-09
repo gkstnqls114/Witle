@@ -739,9 +739,14 @@ void GameScene::ProcessPicking(float fElapsedTime)
 		 
 		// 닿지 않는다면 리턴한다.
 		if (!isCollide) return;
+		if (Playerdist > 3000.f)
+		{
+			std::cout << Playerdist << " ... " << std::endl;
+			return;
+		}
 
 		m_pOtherPlayer->SubstractHP(10);
-
+		
 		//// 피킹 ray에 닿는 오브젝트가 있는 지 확인한다.
 		//float dist = FLT_MAX;
 		//float temp;

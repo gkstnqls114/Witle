@@ -29,34 +29,46 @@ void ModelStorage::CreateModels(ID3D12Device * pd3dDevice, ID3D12GraphicsCommand
 
 	// 이름목록
 	m_NameList.push_back(TREE_1);
+	m_NameList.push_back(TREE_BG_1);
 	m_NameList.push_back(TREE_2);
 	m_NameList.push_back(TREE_3);
-	m_NameList.push_back(BUSH);
-	m_NameList.push_back(BROKENPILLA);
+	m_NameList.push_back(TREE_BG_3);
+	m_NameList.push_back(BUSH); 
 	m_NameList.push_back(REED);
 	m_NameList.push_back(RUIN_ARCH);
 	m_NameList.push_back(RUIN_BROKENPILLA);
 	m_NameList.push_back(RUIN_PILLAR);
 	m_NameList.push_back(RUIN_SQUARE);
 	m_NameList.push_back(SUNFLOWER);
+	m_NameList.push_back(ALTAR_IN);
+	m_NameList.push_back(ALTAR_OUT);
 	 
-	 // 모델 목록
-
-	m_ModelStorage[TREE_1].loadmodelInfo = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/TreeOne.bin", NULL);
-	m_ModelStorage[TREE_2].loadmodelInfo = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/TreeTwo.bin", NULL);
-	m_ModelStorage[TREE_3].loadmodelInfo = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/TreeThree.bin", NULL);
-	
-	m_ModelStorage[ALTAR].loadmodelInfo = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/Altar.bin", NULL);
-	
-	m_ModelStorage[REED].loadmodelInfo = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/Bush.bin", NULL);
-	m_ModelStorage[BROKENPILLA].loadmodelInfo = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/BrokenPilla.bin", NULL);
-	m_ModelStorage[BUSH].loadmodelInfo = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/Reed.bin", NULL);
-	
-	m_ModelStorage[RUIN_ARCH].loadmodelInfo = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/ruin_Arch.bin", NULL);
-	m_ModelStorage[RUIN_BROKENPILLA].loadmodelInfo = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/ruin_BrokenPillar.bin", NULL);
-	m_ModelStorage[RUIN_PILLAR].loadmodelInfo = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/ruin_Pillar.bin", NULL);
-	m_ModelStorage[RUIN_SQUARE].loadmodelInfo = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/ruin_Square.bin", NULL);
-	m_ModelStorage[SUNFLOWER].loadmodelInfo = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/Sunflower.bin", NULL);
+	 // 모델 목록 
+	for (const auto& name : m_NameList)
+	{
+		std::string path = "Model/";
+		path.append(name);
+		path.append(".bin");
+		m_ModelStorage[name].loadmodelInfo = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, path.c_str(), NULL);
+	}
+	//m_ModelStorage[TREE_1].loadmodelInfo = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/TreeOne.bin", NULL);
+	//m_ModelStorage[TREE_BG_1].loadmodelInfo = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/TreeOne.bin", NULL);
+	//m_ModelStorage[TREE_2].loadmodelInfo = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/TreeTwo.bin", NULL);
+	//m_ModelStorage[TREE_3].loadmodelInfo = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/TreeThree.bin", NULL);
+	//m_ModelStorage[TREE_BG_3].loadmodelInfo = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/TreeThree.bin", NULL);
+	//
+	//m_ModelStorage[BUSH].loadmodelInfo = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/Altar.bin", NULL);
+	//
+	//m_ModelStorage[BROKENPILLA].loadmodelInfo = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/Bush.bin", NULL);
+	//m_ModelStorage[REED].loadmodelInfo = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/BrokenPilla.bin", NULL);
+	//m_ModelStorage[RUIN_ARCH].loadmodelInfo = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/Reed.bin", NULL);
+	//
+	//m_ModelStorage[RUIN_BROKENPILLA].loadmodelInfo = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/ruin_Arch.bin", NULL);
+	//m_ModelStorage[RUIN_PILLAR].loadmodelInfo = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/ruin_BrokenPillar.bin", NULL);
+	//m_ModelStorage[RUIN_SQUARE].loadmodelInfo = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/ruin_Pillar.bin", NULL);
+	//m_ModelStorage[SUNFLOWER].loadmodelInfo = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/ruin_Square.bin", NULL);
+	//m_ModelStorage[ALTAR_IN].loadmodelInfo = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/Sunflower.bin", NULL);
+	//m_ModelStorage[ALTAR_OUT].loadmodelInfo = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/Sunflower.bin", NULL);
 	
 	// 충돌박스 목록
 	m_ModelStorage[TREE_1].modelBOBox = new MyBOBox(pd3dDevice, pd3dCommandList, XMFLOAT3{0.F, 0.F, 0.F}, XMFLOAT3{ 100.F, 100.F, 100.F });
