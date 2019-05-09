@@ -312,9 +312,15 @@ void *CAnimationSet::GetCallbackData()
 	return(NULL);
 }
 
-
+static bool isEnd = false;
+static float prevTime = 0.f;
+static float Accumulate = 0.f;
 void CAnimationSet::SetPosition(float fTrackPosition)
 {
+	float ElapsedTime = fTrackPosition - prevTime;
+	Accumulate = Accumulate + ElapsedTime;
+	// std::cout << fTrackPosition << " - " << prevTime << " = >" << ElapsedTime << " : " << Accumulate << std::endl;
+
 	switch (m_nType)
 	{
 	case ANIMATION_TYPE_LOOP:
@@ -323,16 +329,15 @@ void CAnimationSet::SetPosition(float fTrackPosition)
 		break;
 	}
 	case ANIMATION_TYPE_ONCE:
-	{      
-		if (m_fAccumulate > m_fEndTime)
+	{
+		if (Accumulate >= (m_fEndTime - m_fStartTime))
 		{
+			isEnd = false;
 			m_fPosition = m_fEndTime;
 		}
 		else
-		{
-			float val = ::fmod(fTrackPosition, m_fLength);
-			m_fPosition = m_fStartTime + val;
-			m_fAccumulate += val; 
+		{ 
+			m_fPosition = m_fStartTime + Accumulate;
 		}
 		break;
 	}
@@ -342,6 +347,8 @@ void CAnimationSet::SetPosition(float fTrackPosition)
 		break;
 	}
 	}
+
+	prevTime = fTrackPosition;
 
 	if (m_pAnimationCallbackHandler)
 	{
@@ -485,7 +492,7 @@ bool CAnimationController::IsTrackAnimationSetFinish(int nAnimationTrack, int nA
 		float fPos = m_pAnimationSets[0].m_ppAnimationSets[nAnimationSet]->m_fPosition;
 		float fEnd = m_pAnimationSets[0].m_ppAnimationSets[nAnimationSet]->m_fEndTime;
 		bool isEnd = fabsf(fPos - fEnd) < EPSILON;
-		if(isEnd) m_pAnimationSets[0].m_ppAnimationSets[nAnimationSet]->m_fAccumulate = 0.f;
+		if(isEnd) Accumulate = 0.f;
 
 		return isEnd;
 	}
@@ -500,6 +507,7 @@ void CAnimationController::SetTrackAnimationSet(int nAnimationTrack, int nAnimat
 	if (m_pAnimationTracks)
 	{
 		m_pAnimationTracks[nAnimationTrack].SetAnimationSet(nAnimationSet);
+		Accumulate = 0.f;
 	}
 }
 

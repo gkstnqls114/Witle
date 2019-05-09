@@ -236,7 +236,11 @@ void Player::RenderHpStatus(ID3D12GraphicsCommandList * pd3dCommandList)
  
 void Player::SetTrackAnimationSet()
 { 
-	m_pLoadObject->SetTrackAnimationSet(0, m_CurrAnimation);
+	if (m_CurrAnimation != m_PrevAnimation)
+	{
+		m_pLoadObject->SetTrackAnimationSet(0, m_CurrAnimation);
+		m_PrevAnimation = m_CurrAnimation;
+	}
 }
 
 void Player::Move(const XMFLOAT3 & xmf3Shift)

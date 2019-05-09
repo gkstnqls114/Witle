@@ -18,6 +18,7 @@ class Player :
 	bool m_isAttacking{ false };
 	
 	int m_CurrAnimation{ 0 }; // 현재 사용하는 애니메이션
+	int m_PrevAnimation{ 0 }; // 현재 사용하는 애니메이션
 
 	PlayerMovement*    m_pPlayerMovement{ nullptr };
 	PlayerStatus*	   m_pPlayerStatus{ nullptr };
