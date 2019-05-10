@@ -84,8 +84,7 @@ void FollowCam::LastUpdate(float fTimeElapsed)
 	// 벽과의 충돌 등...
 	
 	//Move, Rotate된 At과 카메라 좌표축(Right, Up, Look)을 기준으로 Position 재설정
-	m_At = m_pTarget->GetTransform().GetPosition();
-	m_At = Vector3::Add(m_At, m_distanceAt);
+	m_At = Vector3::Add(m_At, m_pTarget->GetTransform().GetPosition());
 	m_pOwner->GetTransform().SetPosition(Vector3::Subtract(m_At, m_Offset));
 
 	RegenerateViewMatrix();
@@ -116,7 +115,8 @@ void FollowCam::Rotate(float x, float y, float z)
 			XMMATRIX xmmtxRotate = XMMatrixRotationAxis(XMLoadFloat3(&right), XMConvertToRadians(x));
 			m_pOwner->GetTransform().SetLook(Vector3::TransformNormal(m_pTarget->GetTransform().GetLook(), xmmtxRotate));
 			m_pOwner->GetTransform().SetUp(Vector3::TransformNormal(m_pTarget->GetTransform().GetUp(), xmmtxRotate));
-
+			 
+			m_AtOffset = Vector3::TransformCoord(m_AtOffset, xmmtxRotate);
 			m_Offset = Vector3::TransformCoord(m_Offset, xmmtxRotate);
 		}
 	}
@@ -126,6 +126,7 @@ void FollowCam::Rotate(float x, float y, float z)
 		m_pOwner->GetTransform().SetLook(Vector3::TransformNormal(m_pTarget->GetTransform().GetLook(), xmmtxRotate));
 		m_pOwner->GetTransform().SetRight(Vector3::TransformNormal(m_pTarget->GetTransform().GetRight(), xmmtxRotate));
 
+		m_AtOffset = Vector3::TransformCoord(m_AtOffset, xmmtxRotate);
 		m_Offset = Vector3::TransformCoord(m_Offset, xmmtxRotate);
 	}
 	if (z != 0.0f)
@@ -134,6 +135,7 @@ void FollowCam::Rotate(float x, float y, float z)
 		m_pOwner->GetTransform().SetUp(Vector3::TransformNormal(m_pTarget->GetTransform().GetUp(), xmmtxRotate));
 		m_pOwner->GetTransform().SetRight(Vector3::TransformNormal(m_pTarget->GetTransform().GetRight(), xmmtxRotate));
 
+		m_AtOffset = Vector3::TransformCoord(m_AtOffset, xmmtxRotate);
 		m_Offset = Vector3::TransformCoord(m_Offset, xmmtxRotate); 
 	}
 

@@ -39,18 +39,14 @@ Sniping::Sniping(CameraObject* pCamera, Player* pPlayer, ID3D12Device * pd3dDevi
 
 	// 기본 카메라 컴포넌트 
 	m_pBaseCameraComponent->CreateShaderVariables(pd3dDevice, pd3dCommandList);
-	m_pBaseCameraComponent->SetOffset(XMFLOAT3(0.f, 0.f, 450.f));
-	float BaseCameraDistance = 200.f;
-	static_cast<FollowCam *>(m_pBaseCameraComponent)->SetdistanceAt(XMFLOAT3(0.f, BaseCameraDistance, 0));
+	m_pBaseCameraComponent->SetOffset(XMFLOAT3(0.f, 0.f, 450.f)); 
 	m_pBaseCameraComponent->SetViewport(0, 0, GameScreen::GetWidth(), GameScreen::GetHeight(), 0.0f, 1.0f);
 	m_pBaseCameraComponent->SetScissorRect(0, 0, GameScreen::GetWidth(), GameScreen::GetHeight());
 	m_pBaseCameraComponent->GenerateProjectionMatrix(0.01f, CAMERA_FAR, float(GameScreen::GetWidth()) / float(GameScreen::GetHeight()), 60.0f);
 	 
 	// 스나이핑 카메라 컴포넌트
 	m_pSnipingCameraComponent->CreateShaderVariables(pd3dDevice, pd3dCommandList);
-	m_pSnipingCameraComponent->SetOffset(XMFLOAT3(0, 0, 50.f));
-	float SnipingCameraDistance = 150.f;
-	static_cast<FollowCam *>(m_pSnipingCameraComponent)->SetdistanceAt(XMFLOAT3(0.f, SnipingCameraDistance, 0));
+	m_pSnipingCameraComponent->SetOffset(XMFLOAT3(0, 0, 50.f)); 
 	m_pSnipingCameraComponent->SetViewport(0, 0, GameScreen::GetWidth(), GameScreen::GetHeight(), 0.0f, 1.0f);
 	m_pSnipingCameraComponent->SetScissorRect(0, 0, GameScreen::GetWidth(), GameScreen::GetHeight());
 	m_pSnipingCameraComponent->GenerateProjectionMatrix(0.01f, CAMERA_FAR * 1.5f, float(GameScreen::GetWidth()) / float(GameScreen::GetHeight()), 30.0f);

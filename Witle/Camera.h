@@ -36,8 +36,8 @@ public:
 	virtual void ReleaseUploadBuffers() override;
 
 protected:
-
-	XMFLOAT3		m_At				{ 0.0f, 0.0f, 1.0f }; // Position + Offset = At
+	XMFLOAT3		m_AtOffset			{ 0.0f, 0.0f, 0.0f }; // Real At = At + AtOffset 
+	XMFLOAT3		m_At				{ 0.0f, 0.0f, 1.0f }; // At = Position + Offset 
 	XMFLOAT3		m_Offset			{ 0.0f, 0.0f, 1.0f }; // Offset = At - Position
 
 	float			m_fPitch{ 0.0f }; // x축
@@ -57,14 +57,14 @@ protected:
 	virtual void MoveSmoothly(float fTimeElapsed, const XMFLOAT3& xmf3LookAt) {}; 
 
 public:
-	Camera(GameObject* pOwner);
-	Camera(GameObject* pOwner, Camera *pCamera);
+	Camera(GameObject* pOwner, const XMFLOAT3& AtOffset = {0.f, 200.f, 0.f});
+	Camera(GameObject* pOwner,  Camera *pCamera);
 	virtual ~Camera();
 
 	// 하위 클래스에 구현해야하는 순수 가상 함수
 
 	virtual void LastUpdate(float fTimeElapsed) = 0;
-
+	
 	// 하위 클래스에 구현해야하는 순수 가상 함수
 	
 	void CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);

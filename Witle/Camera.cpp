@@ -21,10 +21,11 @@ void Camera::ReleaseUploadBuffers()
 
 }
 
-Camera::Camera(GameObject* pOwner)
+Camera::Camera(GameObject* pOwner, const XMFLOAT3& AtOffset)
 	: ComponentBase(pOwner)
 {
 	m_d3dViewport = D3D12_VIEWPORT{ 0.0f, 0.0f, static_cast<FLOAT>(GameScreen::GetWidth()) , static_cast<FLOAT>(GameScreen::GetHeight()), 0.0f, 1.0f };
+	m_AtOffset = AtOffset;
 	m_d3dScissorRect = D3D12_RECT{ 0, 0, static_cast<LONG>(GameScreen::GetWidth()) ,static_cast<LONG>(GameScreen::GetHeight()) };
 	m_FamilyID.InitCamera();
 	m_pFrustum = new MyFrustum(pOwner);
@@ -152,6 +153,7 @@ void Camera::SetViewportsAndScissorRects(ID3D12GraphicsCommandList *pd3dCommandL
 Camera & Camera::operator=(const Camera & camera)
 {
 	// TODO: 여기에 반환 구문을 삽입합니다.
+	m_AtOffset = camera.m_At;
 	m_At = camera.m_At;
 	m_Offset = camera.m_Offset;
 

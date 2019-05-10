@@ -18,7 +18,13 @@ cbuffer cbPickingPoint : register(b4)
 {
     float2 pickingPoint : packoffset(c0);
 }
- 
+
+// 루트 상수
+cbuffer cbHPpercentage : register(b5)
+{
+    float HPpercentage : packoffset(c0);
+}
+
 SamplerState gWrapSamplerState : register(s0);
 SamplerState gssClamp          : register(s1);
 

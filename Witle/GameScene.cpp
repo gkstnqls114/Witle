@@ -144,7 +144,35 @@ bool GameScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM w
 		break;
 	case WM_KEYDOWN:
 		switch (wParam) {
+		case 'Z':
+			// 카메라 거리가 걸어진다.
+			m_pMainCamera->GetCamera()->GetOffset();
+			break;
+
+		case 'X':
+			// 카메라 거리가 가까워진다.
+
+			break;
+
+		case VK_RIGHT:
+			// at을 옮긴다.
+			break;
+		
+		case VK_LEFT:
+			// at을 옮긴다.
+
+			break;
+
+		case VK_UP:
+			// at을 옮긴다.
+			m_pMainCamera->GetCamera()->GetOffset();
+			break;
+
+		case VK_DOWN:
+			break;
+
 		case 'E': 
+			m_pPlayer->SubstractHP(100);
 			break;
 
 		case '1': // 스킬 빗자루
@@ -550,6 +578,7 @@ ID3D12RootSignature* GameScene::CreateGraphicsRootSignature(ID3D12Device *pd3dDe
 	pRootParameters[ROOTPARAMETER_MATERIALS] = d3dUtil::CreateRootParameterCBV(2);       // b2: Materials
 	pRootParameters[ROOTPARAMETER_LIGHTS] = d3dUtil::CreateRootParameterCBV(3);          // b3: Lights
 	pRootParameters[ROOTPARAMETER_PICKINGPOINT] = d3dUtil::CreateRootParameterConstants(2, 4);  // b4: Color
+	pRootParameters[ROOTPARAMETER_HPPERCENTAGE] = d3dUtil::CreateRootParameterConstants(1, 5);  // b5: HP percentage
 	
 	D3D12_DESCRIPTOR_RANGE pTextureDescriptorRanges[3];
 	pTextureDescriptorRanges[0] = d3dUtil::CreateDescriptorRangeSRV(1, 0); //t0: gtxtTexture
