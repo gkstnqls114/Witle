@@ -92,7 +92,6 @@ public:
 	void TESTSetRootDescriptor(ID3D12GraphicsCommandList *pd3dCommandList);
 	
 protected:
-
 	bool					m_isSkyMode{ false };
 
 	AimPoint*				m_AimPoint{ nullptr };

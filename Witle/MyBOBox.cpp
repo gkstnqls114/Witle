@@ -34,7 +34,7 @@ MyBOBox::MyBOBox(const MyBOBox & other)
 
 MyBOBox::MyBOBox(XMFLOAT3 center, XMFLOAT3 extents)
 {
-	m_BOBox = BoundingOrientedBox(XMFLOAT3(0.F, 0.F, 0.F), extents, XMFLOAT4(0, 0, 0, 1)); 
+	m_BOBox = BoundingOrientedBox(center, extents, XMFLOAT4(0, 0, 0, 1));
 
 	m_BoBoxPlane[0] = Plane::Plane(Vector3::Add(center, XMFLOAT3(extents.x, 0.f, 0.f)), XMFLOAT3(1.f, 0.f, 0.f)); // +x¸é normal (1, 0, 0) 
 	m_BoBoxPlane[1] = Plane::Plane(Vector3::Add(center, XMFLOAT3(-extents.x, 0.f, 0.f)), XMFLOAT3(-1.f, 0.f, 0.f)); // -x¸é normal (-1, 0, 0)
