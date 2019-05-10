@@ -84,7 +84,8 @@ void FollowCam::LastUpdate(float fTimeElapsed)
 	// 벽과의 충돌 등...
 	
 	//Move, Rotate된 At과 카메라 좌표축(Right, Up, Look)을 기준으로 Position 재설정
-	m_At = Vector3::Add(m_At, m_pTarget->GetTransform().GetPosition());
+	m_At = m_pTarget->GetTransform().GetPosition();
+	m_At = Vector3::Add(m_At, m_AtOffset);
 	m_pOwner->GetTransform().SetPosition(Vector3::Subtract(m_At, m_Offset));
 
 	RegenerateViewMatrix();
@@ -92,7 +93,8 @@ void FollowCam::LastUpdate(float fTimeElapsed)
 
 }
 
-#define MAX_PITCH 10.f 
+#define MAX_PITCH 20.f 
+#define MIN_PITCH -15.f 
 void FollowCam::Rotate(float x, float y, float z)
 { 
 	XMFLOAT3 right = m_pTarget->GetTransform().GetRight();
@@ -104,18 +106,21 @@ void FollowCam::Rotate(float x, float y, float z)
 	m_fRoll += z;
 	 
 	if (x != 0.0f)
-	{ 
-		if (fabs(m_fPitch) > MAX_PITCH)
+	{
+		if (m_fPitch >= MAX_PITCH)
 		{
-			if(m_fPitch < 0)m_fPitch = -MAX_PITCH;
-			if (m_fPitch > 0) m_fPitch = MAX_PITCH;
+			m_fPitch = MAX_PITCH;
+		}
+		else if (m_fPitch <= MIN_PITCH)
+		{
+			m_fPitch = MIN_PITCH;
 		}
 		else
-		{ 
+		{
 			XMMATRIX xmmtxRotate = XMMatrixRotationAxis(XMLoadFloat3(&right), XMConvertToRadians(x));
 			m_pOwner->GetTransform().SetLook(Vector3::TransformNormal(m_pTarget->GetTransform().GetLook(), xmmtxRotate));
 			m_pOwner->GetTransform().SetUp(Vector3::TransformNormal(m_pTarget->GetTransform().GetUp(), xmmtxRotate));
-			 
+
 			m_AtOffset = Vector3::TransformCoord(m_AtOffset, xmmtxRotate);
 			m_Offset = Vector3::TransformCoord(m_Offset, xmmtxRotate);
 		}

@@ -36,6 +36,8 @@ public:
 	virtual void ReleaseUploadBuffers() override;
 
 protected:
+	XMFLOAT3		m_DebugAtOffset		{ 0.0f, 0.0f, 0.0f }; // Real At = At + AtOffset 
+
 	XMFLOAT3		m_AtOffset			{ 0.0f, 0.0f, 0.0f }; // Real At = At + AtOffset 
 	XMFLOAT3		m_At				{ 0.0f, 0.0f, 1.0f }; // At = Position + Offset 
 	XMFLOAT3		m_Offset			{ 0.0f, 0.0f, 1.0f }; // Offset = At - Position
@@ -65,11 +67,16 @@ public:
 
 	virtual void LastUpdate(float fTimeElapsed) = 0;
 	
-	// 하위 클래스에 구현해야하는 순수 가상 함수
-	
+	// 하위 클래스에 구현해야하는 순수 가상 함수 
 	void CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
 	void UpdateShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList, int parameterIndex);
 
+	// 해당 shift는 정 위치(0, 0, 1을 바라보는 경우)를 기준으로 설정.
+	// shift는 look, up, right 얼마만큼 이동할 것인지를 의미한다.
+	void MoveAtOffset(const XMFLOAT3& Shift);
+	void ZoomIn(float value);
+	void ZoomOut(float value);
+	
 	virtual void Teleport(const XMFLOAT3& pos); // right, up, look을 유지한 상태로 position, at만 이동한다.
 	virtual void Move(const XMFLOAT3& Shift);
 	virtual void Rotate(float x = 0.0f, float y = 0.0f, float z = 0.0f) = 0;
@@ -102,12 +109,13 @@ public:
     ///////////////////////////////////////////////////////////////////////// Set
 
 	///////////////////////////////////////////////////////////////////////// Get
-	XMFLOAT3 GetAt()             const noexcept { return (m_At); }
-	XMFLOAT3 GetOffset()         const noexcept { return (m_Offset); }
+	XMFLOAT3 GetAt()             const noexcept { return m_At; }
+	XMFLOAT3 GetOffset()         const noexcept { return m_Offset; }
+	XMFLOAT3 GetAtOffset()		 const noexcept { return m_AtOffset; }
 	 
-	float GetPitch() const noexcept { return (m_fPitch); }
-	float GetRoll()	 const noexcept { return (m_fRoll); }
-	float GetYaw()	 const noexcept { return (m_fYaw); }
+	float GetPitch() const noexcept { return m_fPitch; }
+	float GetRoll()	 const noexcept { return m_fRoll; }
+	float GetYaw()	 const noexcept { return m_fYaw; }
 
 	float GetTimeLag() const noexcept { return (m_fTimeLag); }
 

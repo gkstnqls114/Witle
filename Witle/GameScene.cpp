@@ -146,29 +146,38 @@ bool GameScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM w
 		switch (wParam) {
 		case 'Z':
 			// 카메라 거리가 걸어진다.
-			m_pMainCamera->GetCamera()->GetOffset();
+			m_pMainCamera->GetCamera()->ZoomOut(1.2);
 			break;
 
 		case 'X':
 			// 카메라 거리가 가까워진다.
-
+			m_pMainCamera->GetCamera()->ZoomIn(0.9);
 			break;
 
 		case VK_RIGHT:
-			// at을 옮긴다.
+			// at을 오른쪽으로 옮긴다.
+			m_pMainCamera->GetCamera()->MoveAtOffset(XMFLOAT3{10, 0, 0});
 			break;
 		
-		case VK_LEFT:
-			// at을 옮긴다.
-
+		case VK_LEFT: 
+			m_pMainCamera->GetCamera()->MoveAtOffset(XMFLOAT3{ -10, 0, 0 });
 			break;
 
 		case VK_UP:
 			// at을 옮긴다.
-			m_pMainCamera->GetCamera()->GetOffset();
+			m_pMainCamera->GetCamera()->MoveAtOffset(XMFLOAT3{ 0, 0, 10 });
 			break;
 
 		case VK_DOWN:
+			m_pMainCamera->GetCamera()->MoveAtOffset(XMFLOAT3{ 0, 0, -10 });
+			break;
+
+		case 'O':
+			m_pMainCamera->GetCamera()->MoveAtOffset(XMFLOAT3{ 0, 10, 0 });
+			break;
+
+		case 'L':
+			m_pMainCamera->GetCamera()->MoveAtOffset(XMFLOAT3{ 0, -10, 0 });
 			break;
 
 		case 'E': 
@@ -401,8 +410,7 @@ bool GameScene::ProcessInput(HWND hWnd, float fElapsedTime)
 			// 플레이어와 카메라 똑같이 rotate...
 			// 순서 의존적이므로 변경 금지
 			m_pMainCamera->GetCamera()->Rotate(GameInput::GetDeltaY(), GameInput::GetDeltaX(), 0.0f);
-			m_pPlayer->Rotate(0.0f, GameInput::GetDeltaX(), 0.0f);
-			m_Sniping->Rotate(0.0f, GameInput::GetDeltaX(), 0.0f);
+			m_pPlayer->Rotate(0.0f, GameInput::GetDeltaX(), 0.0f); 
 		} 
 	}
 	
