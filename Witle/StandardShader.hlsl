@@ -76,7 +76,7 @@ float4 PSStandard(VS_STANDARD_OUTPUT input) : SV_TARGET
 	float4 cIllumination = Lighting(input.positionW, normalW);
     float4 ContrastColor = lerp(TESTColor, cIllumination, 0.5f); // 명암처리된 픽셀 색깔
 
-    float4 fogColor = float4(0.5, 0.5, 0.5, 1.0f);
+    float4 fogColor = float4(0.0 / 255.0, 34.0 / 255.0, 102.0 / 255.0, 1.0f);
     
     float4 finalColor = input.fogFactor * ContrastColor + (1.0 - input.fogFactor) * fogColor;
 
@@ -111,11 +111,11 @@ VS_STANDARD_OUTPUT VSStandardInstancing(VS_INSTANCING_OUTPUT input, uint nInstan
       
     // f = (Zfar - Z) / (Zfar - Znear) = Zfar / (Zfar - Znear) + Z * (-1 / (Zfar - Znear))
     //포그 계수... 1: 투명하다 ~ 0: 탁하다
-    //float Z = length();
-    //float Zfar = 300.0;
-    //float Znear = 6000.0; 
-    // output.fogFactor = saturate((Zfar - gvCameraPosition.z) / (Zfar - Znear));
-    output.fogFactor = 1.f;
+    float Z = length(gvCameraPosition - output.positionW);
+    
+    float fogEnd = 10000;
+    float fogStart = 3000;
+    output.fogFactor = saturate((fogEnd - Z) / (fogEnd - fogStart));
     
 	return(output);
 }
