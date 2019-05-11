@@ -519,22 +519,9 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 
 	// ÅÍ·¹ÀÎ
 	if (m_Terrain)
-	{ 
-		if (m_isSkyMode)
-		{ 
-			Mesh* terrainMesh = m_Terrain->GetComponent<Mesh>("TerrainMesh");
-			m_pQuadtreeTerrain->Render(pd3dCommandList, m_Terrain, m_pd3dCbvSrvDescriptorHeap);
-		}
-		else
-		{
-			pd3dCommandList->SetDescriptorHeaps(1, &m_pd3dCbvSrvDescriptorHeap);
-			pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_WORLD, 16, &Matrix4x4::Identity(), 0);
-			m_Terrain->UpdateShaderVariables(pd3dCommandList);
-
-			// TerrainMesh Render
-			Mesh* terrainMesh = m_Terrain->GetComponent<Mesh>("TerrainMesh");
-			m_pQuadtreeTerrain->Render(pd3dCommandList);
-		}
+	{  
+		Mesh* terrainMesh = m_Terrain->GetComponent<Mesh>("TerrainMesh");
+		m_pQuadtreeTerrain->Render(pd3dCommandList, m_Terrain, m_pd3dCbvSrvDescriptorHeap); 
 	}
 	if(m_WideareaMagic) m_WideareaMagic->Render(pd3dCommandList);
 
