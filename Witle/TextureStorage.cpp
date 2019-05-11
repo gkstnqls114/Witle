@@ -15,6 +15,18 @@ TextureStorage::~TextureStorage()
 
 }
 
+void TextureStorage::CreateTexture(const std::string & name, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, int heapindex)
+{
+	m_TextureStorage[name] = new Texture();
+	std::wstring path = { L"Model/Textures/" };
+	std::wstring wname;
+	wname.assign(name.begin(), name.end()); 
+	path.append(wname);
+	path.append(L".dds");
+	m_TextureStorage[name]->LoadTextureFromFile(pd3dDevice, pd3dCommandList, path.c_str(), 0);
+	m_Heap->CreateShaderResourceViews(pd3dDevice, pd3dCommandList, m_TextureStorage[name], ROOTPARAMETER_TEXTURE, RESOURCE_TEXTURE2D, heapindex);
+}
+
 void TextureStorage::ReleaseUploadBuffers()
 {
 	for (auto& texture : m_TextureStorage)
@@ -35,6 +47,10 @@ void TextureStorage::ReleaseObjects()
 	
 	for (auto& texture : m_TextureStorage)
 	{
+		if (texture.first == TREE_BG_1) continue;
+		if (texture.first == TREE_BG_2) continue;
+		if (texture.first == TREE_BG_3) continue;
+		if (texture.first == BUSHSQUARE) continue;
 		delete texture.second;
 		texture.second = nullptr;
 	}
@@ -44,41 +60,35 @@ void TextureStorage::ReleaseObjects()
 void TextureStorage::CreateTextures(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList)
 {
 	m_Heap = new MyDescriptorHeap();
-	m_Heap->CreateCbvSrvUavDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 8, 0);
+	m_Heap->CreateCbvSrvUavDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 18, 0);
 	int heapIndex = 0;
+	CreateTexture(ALTAR_IN, pd3dDevice, pd3dCommandList, heapIndex++);
+	CreateTexture(ALTAR_OUT, pd3dDevice, pd3dCommandList, heapIndex++);
 
-	m_TextureStorage[TREE_1] = new Texture();
-	m_TextureStorage[TREE_1]->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/TreeOne_Diffuse.dds", 0);
-	m_Heap->CreateShaderResourceViews(pd3dDevice, pd3dCommandList, m_TextureStorage[TREE_1], ROOTPARAMETER_TEXTURE, RESOURCE_TEXTURE2D, heapIndex++);
+	CreateTexture(BUSH, pd3dDevice, pd3dCommandList, heapIndex++);
+	m_TextureStorage[BUSHSQUARE] = m_TextureStorage[BUSH];
+	// CreateTexture(BUSHSQUARE, pd3dDevice, pd3dCommandList, heapIndex++);
+	CreateTexture(Cliff, pd3dDevice, pd3dCommandList, heapIndex++);
+	CreateTexture(Flower, pd3dDevice, pd3dCommandList, heapIndex++);
+	CreateTexture(REED, pd3dDevice, pd3dCommandList, heapIndex++);
 
-	m_TextureStorage[TREE_BG_1] = new Texture();
-	m_TextureStorage[TREE_BG_1]->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/TreeOne_Diffuse.dds", 0);
-	m_Heap->CreateShaderResourceViews(pd3dDevice, pd3dCommandList, m_TextureStorage[TREE_BG_1], ROOTPARAMETER_TEXTURE, RESOURCE_TEXTURE2D, heapIndex++);
+	CreateTexture(RUIN_ARCH, pd3dDevice, pd3dCommandList, heapIndex++);
+	CreateTexture(RUIN_BROKENPILLA, pd3dDevice, pd3dCommandList, heapIndex++);
+	CreateTexture(RUIN_PILLAR, pd3dDevice, pd3dCommandList, heapIndex++);
+	CreateTexture(RUIN_SQUARE, pd3dDevice, pd3dCommandList, heapIndex++);
 
-	m_TextureStorage[TREE_2] = new Texture();
-	m_TextureStorage[TREE_2]->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/TreeTwo_Diffuse.dds", 0);
-	m_Heap->CreateShaderResourceViews(pd3dDevice, pd3dCommandList, m_TextureStorage[TREE_2], ROOTPARAMETER_TEXTURE, RESOURCE_TEXTURE2D, heapIndex++);
+	CreateTexture(SUNFLOWER, pd3dDevice, pd3dCommandList, heapIndex++);
 
-	m_TextureStorage[TREE_3] = new Texture();
-	m_TextureStorage[TREE_3]->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/TreeThree_Diffuse.dds", 0);
-	m_Heap->CreateShaderResourceViews(pd3dDevice, pd3dCommandList, m_TextureStorage[TREE_3], ROOTPARAMETER_TEXTURE, RESOURCE_TEXTURE2D, heapIndex++);
-
-	m_TextureStorage[TREE_BG_3] = new Texture();
-	m_TextureStorage[TREE_BG_3]->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/TreeThree_Diffuse.dds", 0);
-	m_Heap->CreateShaderResourceViews(pd3dDevice, pd3dCommandList, m_TextureStorage[TREE_BG_3], ROOTPARAMETER_TEXTURE, RESOURCE_TEXTURE2D, heapIndex++);
-
-	m_TextureStorage[REED] = new Texture();
-	m_TextureStorage[REED]->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/reed_AlphaDiffuse.dds", 0);
-	m_Heap->CreateShaderResourceViews(pd3dDevice, pd3dCommandList, m_TextureStorage[REED], ROOTPARAMETER_TEXTURE, RESOURCE_TEXTURE2D, heapIndex++);
-
-	m_TextureStorage[BUSH] = new Texture();
-	m_TextureStorage[BUSH]->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/Bush_AlphaDiffuse.dds", 0);
-	m_Heap->CreateShaderResourceViews(pd3dDevice, pd3dCommandList, m_TextureStorage[BUSH], ROOTPARAMETER_TEXTURE, RESOURCE_TEXTURE2D, heapIndex++);
-
-	m_TextureStorage[SUNFLOWER] = new Texture();
-	m_TextureStorage[SUNFLOWER]->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/Sunflower_Diffuse.dds", 0);
-	m_Heap->CreateShaderResourceViews(pd3dDevice, pd3dCommandList, m_TextureStorage[SUNFLOWER], ROOTPARAMETER_TEXTURE, RESOURCE_TEXTURE2D, heapIndex++);
-
+	CreateTexture(TREE_1, pd3dDevice, pd3dCommandList, heapIndex++);
+	m_TextureStorage[TREE_BG_1] = m_TextureStorage[TREE_1];
+	//CreateTexture(TREE_BG_1, pd3dDevice, pd3dCommandList, heapIndex++);
+	CreateTexture(TREE_3, pd3dDevice, pd3dCommandList, heapIndex++);
+	m_TextureStorage[TREE_BG_3] = m_TextureStorage[TREE_3];
+	// CreateTexture(TREE_BG_3, pd3dDevice, pd3dCommandList, heapIndex++);
+	CreateTexture(TREE_2, pd3dDevice, pd3dCommandList, heapIndex++);
+	m_TextureStorage[TREE_BG_2] = m_TextureStorage[TREE_2];
+	// CreateTexture(TREE_BG_2, pd3dDevice, pd3dCommandList, heapIndex++);
+	 
 }
  
 Texture * const TextureStorage::GetTexture(const std::string & name)

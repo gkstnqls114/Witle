@@ -28,22 +28,24 @@ void ModelStorage::CreateModels(ID3D12Device * pd3dDevice, ID3D12GraphicsCommand
 	if (m_isCreate) return;
 
 	// 이름목록
+	m_NameList.push_back(ALTAR_IN);
+	m_NameList.push_back(ALTAR_OUT);
+	m_NameList.push_back(BUSH);
+	m_NameList.push_back(BUSHSQUARE);
+	// m_NameList.push_back(Cliff);
+	m_NameList.push_back(Flower);
+	m_NameList.push_back(REED);
+	m_NameList.push_back(RUIN_ARCH);
+	m_NameList.push_back(RUIN_BROKENPILLA);
+	m_NameList.push_back(RUIN_PILLAR);
+	m_NameList.push_back(RUIN_SQUARE);
+	m_NameList.push_back(SUNFLOWER); 
 	m_NameList.push_back(TREE_1);
 	m_NameList.push_back(TREE_BG_1);
 	m_NameList.push_back(TREE_2);
+	m_NameList.push_back(TREE_BG_2);
 	m_NameList.push_back(TREE_3);
-	m_NameList.push_back(TREE_BG_3);
-	m_NameList.push_back(BUSH); 
-	m_NameList.push_back(REED);
-
-	m_NameList.push_back(RUIN_ARCH);
-	 m_NameList.push_back(RUIN_BROKENPILLA);
-	m_NameList.push_back(RUIN_PILLAR);
-	m_NameList.push_back(RUIN_SQUARE);
-	
-	m_NameList.push_back(SUNFLOWER);
-	m_NameList.push_back(ALTAR_IN);
-	m_NameList.push_back(ALTAR_OUT);
+	m_NameList.push_back(TREE_BG_3); 
 	 
 	 // 모델 목록 
 	for (const auto& name : m_NameList)
@@ -101,35 +103,24 @@ void ModelStorage::ReleaseObjects()
 LoadObject * ModelStorage::GetRootObject(std::string name)
 {
 	if (!m_ModelStorage[name].loadmodelInfo) return nullptr;
-	std::string reName = name;
-	if (!strcmp(name.c_str(), TREE_BG_1))  reName = TREE_1;
-	if (!strcmp(name.c_str(), TREE_BG_3))  reName = TREE_3;
 
 	LoadObject* newRootObject = new LoadObject(0);
-	LoadObject::CopyWorldMatrix(newRootObject, m_ModelStorage[reName].loadmodelInfo->m_pModelRootObject);
+	LoadObject::CopyWorldMatrix(newRootObject, m_ModelStorage[name].loadmodelInfo->m_pModelRootObject);
 
 	return newRootObject;
 }
 
 MyBOBox * ModelStorage::GetBOBox(std::string name)
-{
-	std::string reName = name;
-	if (!strcmp(name.c_str(), TREE_BG_1))  reName = TREE_1;
-	if (!strcmp(name.c_str(), TREE_BG_3))  reName = TREE_3;
+{ 
+	if (!m_ModelStorage[name].modelBOBox) return nullptr;
 
-	if (!m_ModelStorage[reName].modelBOBox) return nullptr;
-
-	return m_ModelStorage[reName].modelBOBox;
+	return m_ModelStorage[name].modelBOBox;
 }
 #ifdef _SHOW_BOUNDINGBOX
 void ModelStorage::RenderBOBoxInstancing(ID3D12GraphicsCommandList * pd3dCommandList, const std::string& name, int InstancingCount)
-{
-	std::string reName = name;
-	if (!strcmp(name.c_str(), TREE_BG_1))  reName = TREE_1;
-	if (!strcmp(name.c_str(), TREE_BG_3))  reName = TREE_3;
+{ 
+	if (!m_ModelStorage[name].modelBOBox) return;
 
-	if (!m_ModelStorage[reName].modelBOBox) return;
-
-	m_ModelStorage[reName].modelBOBox->RenderInstancing(pd3dCommandList, InstancingCount);
+	m_ModelStorage[name].modelBOBox->RenderInstancing(pd3dCommandList, InstancingCount);
 }
 #endif // _SHOW_BOUNDINGBOX
