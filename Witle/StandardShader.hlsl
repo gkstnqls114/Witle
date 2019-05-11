@@ -105,18 +105,17 @@ VS_STANDARD_OUTPUT VSStandardInstancing(VS_INSTANCING_OUTPUT input, uint nInstan
     output.position = mul(mul(float4(output.positionW, 1.0f), gmtxView), gmtxProjection);
     output.uv = input.uv;
     
-    
     // Zfar = 포그 시작 범위
     // Znear = 포그 끝 범위
-
     // Z = 뷰 좌표계에서의 정점의 거리
       
     // f = (Zfar - Z) / (Zfar - Znear) = Zfar / (Zfar - Znear) + Z * (-1 / (Zfar - Znear))
     //포그 계수... 1: 투명하다 ~ 0: 탁하다
     //float Z = length();
-    //output.fogFactor = saturate((fogEnd - gvCameraPosition.z) / (fogEnd - fogStart));
+    //float Zfar = 300.0;
+    //float Znear = 6000.0; 
+    // output.fogFactor = saturate((Zfar - gvCameraPosition.z) / (Zfar - Znear));
+    output.fogFactor = 1.f;
     
-    output.fogFactor = 0;
-
 	return(output);
 }
