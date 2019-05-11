@@ -256,16 +256,16 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	m_pPlayer->SetSniping(m_Sniping);
 	m_pMainCamera->ChangeCamera(m_Sniping->GetBaseCamera());
 	 
-	 m_pSkyCameraObj = new CameraObject("SkyCamera");
-	 m_pSkyCamera = new BasicCam(m_pSkyCameraObj);
-	 m_pSkyCamera->CreateShaderVariables(pd3dDevice, pd3dCommandList);
-	 m_pSkyCamera->SetViewport(0, 0, GameScreen::GetWidth(), GameScreen::GetHeight(), 0.0f, 1.0f);
-	 m_pSkyCamera->SetScissorRect(0, 0, GameScreen::GetWidth(), GameScreen::GetHeight());
-	 m_pSkyCamera->GenerateProjectionMatrix(0.01f, 40000.F, float(GameScreen::GetWidth()) / float(GameScreen::GetHeight()), 60.0f);
-	 m_pSkyCamera->SetAt(XMFLOAT3(15000.f, 0.f, 15000.f));
-	 m_pSkyCamera->Rotate(90.F, 0.F, 0.F);
-	 m_pSkyCamera->SetOffset(XMFLOAT3(0.f, -30000.f, 0.f));
-	 m_pSkyCameraObj->ChangeCamera(m_pSkyCamera);
+	m_pSkyCameraObj = new CameraObject("SkyCamera");
+	m_pSkyCamera = new BasicCam(m_pSkyCameraObj);
+	m_pSkyCamera->CreateShaderVariables(pd3dDevice, pd3dCommandList);
+	m_pSkyCamera->SetViewport(0, 0, GameScreen::GetWidth(), GameScreen::GetHeight(), 0.0f, 1.0f);
+	m_pSkyCamera->SetScissorRect(0, 0, GameScreen::GetWidth(), GameScreen::GetHeight());
+	m_pSkyCamera->GenerateProjectionMatrix(0.01f, 40000.F, float(GameScreen::GetWidth()) / float(GameScreen::GetHeight()), 60.0f);
+	m_pSkyCamera->SetAt(XMFLOAT3(15000.f, 0.f, 15000.f));
+	m_pSkyCamera->Rotate(90.F, 0.F, 0.F);
+	m_pSkyCamera->SetOffset(XMFLOAT3(0.f, -30000.f, 0.f));
+	m_pSkyCameraObj->ChangeCamera(m_pSkyCamera);
 
 #ifdef CHECK_SUBVIEWS
 	m_lookAboveCamera = new CameraObject("LookAboveCamera");
@@ -911,9 +911,9 @@ void GameScene::BuildLightsAndMaterials(ID3D12Device *pd3dDevice, ID3D12Graphics
 	LightManager::m_pLights->m_pLights[2].bEnable = true;
 	LightManager::m_pLights->m_pLights[2].nType = LIGHT_TYPE::DIRECTIONAL_LIGHT;
 	LightManager::m_pLights->m_pLights[2].Ambient = XMFLOAT4(1.f, 0.8f, 0.8f, 1.0f);
-	LightManager::m_pLights->m_pLights[2].Diffuse = XMFLOAT4(0.4f, 0.4f, 0.4f, 1.0f);
+	LightManager::m_pLights->m_pLights[2].Diffuse = XMFLOAT4(1.0f, 0.4f, 0.4f, 1.0f);
 	LightManager::m_pLights->m_pLights[2].Specular = XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f);
-	LightManager::m_pLights->m_pLights[2].Direction = XMFLOAT3(0.0f, -1.0f, 0.0f);
+	LightManager::m_pLights->m_pLights[2].Direction = XMFLOAT3(0.0f, 0.0f, 1.0f);
 	
 	LightManager::m_pLights->m_pLights[3].bEnable = false;
 	LightManager::m_pLights->m_pLights[3].nType = LIGHT_TYPE::SPOT_LIGHT;

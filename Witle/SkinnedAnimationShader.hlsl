@@ -84,8 +84,10 @@ VS_STANDARD_OUTPUT VSSkinnedAnimationStandard(VS_SKINNED_STANDARD_INPUT input)
 float4 PSStandard(VS_STANDARD_OUTPUT input) : SV_TARGET
 {  
 // 임시로 사용할 컬러 색깔
-	float4 TESTColor = float4(1.f, 1.f, 1.f, 1.f);
-
+    
+    float4 TESTColor = gtxtTexture.Sample(gWrapSamplerState, input.uv);
+    // float4 TESTColor = float4(1.f, 1.f, 1.f, 1.f);
+	
 	float3 normalW = float3(0.f, 0.f, 0.f);
 
 	normalW = normalize(input.normalW);
