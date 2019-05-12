@@ -544,6 +544,7 @@ ID3D12RootSignature* GameScene::CreateGraphicsRootSignature(ID3D12Device *pd3dDe
 	pRootParameters[ROOTPARAMETER_LIGHTS] = d3dUtil::CreateRootParameterCBV(3);          // b3: Lights
 	pRootParameters[ROOTPARAMETER_PICKINGPOINT] = d3dUtil::CreateRootParameterConstants(2, 4);  // b4: Color
 	pRootParameters[ROOTPARAMETER_HPPERCENTAGE] = d3dUtil::CreateRootParameterConstants(1, 5);  // b5: HP percentage
+	pRootParameters[ROOTPARAMETER_TIME] = d3dUtil::CreateRootParameterConstants(1, 6);  // b6: Elapsed Time
 	
 	D3D12_DESCRIPTOR_RANGE pTextureDescriptorRanges[3];
 	pTextureDescriptorRanges[0] = d3dUtil::CreateDescriptorRangeSRV(1, 0); //t0: gtxtTexture

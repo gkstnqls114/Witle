@@ -53,7 +53,7 @@ enum LIGHT_TYPE
 
 
 //// Root Parameter Index /////////////////////////////////////////// 
-#define ROOTPATAMETER_COUNT 20
+#define ROOTPATAMETER_COUNT 21
 
 const UINT ROOTPARAMETER_WORLD = 0;
 const UINT ROOTPARAMETER_CAMERA = 1;
@@ -75,6 +75,7 @@ const UINT ROOTPARAMETER_PICKINGPOINT = 16;
 const UINT ROOTPARAMETER_INSTANCING = 17;
 const UINT ROOTPARAMETER_SKYBOX = 18;
 const UINT ROOTPARAMETER_HPPERCENTAGE = 19;
+const UINT ROOTPARAMETER_TIME = 20;
 
 //// Root Parameter Index /////////////////////////////////////////// 
 
