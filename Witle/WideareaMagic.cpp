@@ -26,7 +26,7 @@ void WideareaMagic::SetPosition(XMFLOAT3 pos)
 void WideareaMagic::Update(float fTimeElapsed)
 {
 	if (!m_isUsing) return;
-	//if (m_CooldownTime < m_SkillTime)
+	//if (m_UsingTime < m_SkillTime)
 	//{
 	//	DoNotUse();
 	//}

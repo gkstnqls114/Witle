@@ -259,6 +259,15 @@
     <Filter Include="05.Shader\InstancingLineShader">
       <UniqueIdentifier>{dec58fac-56cc-4d74-892c-99c5b6a8fe70}</UniqueIdentifier>
     </Filter>
+    <Filter Include="05.Shader\PickingPointShader">
+      <UniqueIdentifier>{e1b1da95-c95f-47f7-aeb8-f808f2605157}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\Shape\EffectRect">
+      <UniqueIdentifier>{09688cfc-ab59-41c6-9ca9-d8ac58dbf341}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\Mesh\SphereMesh">
+      <UniqueIdentifier>{14d1cc8f-b36d-4c8c-984a-d00fe9374022}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -552,6 +561,15 @@
     <ClInclude Include="InstancingLineShader.h">
       <Filter>05.Shader\InstancingLineShader</Filter>
     </ClInclude>
+    <ClInclude Include="PickingPointShader.h">
+      <Filter>05.Shader\PickingPointShader</Filter>
+    </ClInclude>
+    <ClInclude Include="EffectRect.h">
+      <Filter>02.Component\Shape\EffectRect</Filter>
+    </ClInclude>
+    <ClInclude Include="SphereMesh.h">
+      <Filter>02.Component\Mesh\SphereMesh</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -827,6 +845,15 @@
     <ClCompile Include="InstancingLineShader.cpp">
       <Filter>05.Shader\InstancingLineShader</Filter>
     </ClCompile>
+    <ClCompile Include="PickingPointShader.cpp">
+      <Filter>05.Shader\PickingPointShader</Filter>
+    </ClCompile>
+    <ClCompile Include="EffectRect.cpp">
+      <Filter>02.Component\Shape\EffectRect</Filter>
+    </ClCompile>
+    <ClCompile Include="SphereMesh.cpp">
+      <Filter>02.Component\Mesh\SphereMesh</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Witle.rc">
@@ -873,6 +900,12 @@
       <Filter>HLSL</Filter>
     </FxCompile>
     <FxCompile Include="SkyBoxShader.hlsl">
+      <Filter>HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="PickingPointShader.hlsl">
+      <Filter>HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="BroomEffectShader.hlsl">
       <Filter>HLSL</Filter>
     </FxCompile>
   </ItemGroup>

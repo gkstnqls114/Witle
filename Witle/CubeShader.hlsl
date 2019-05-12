@@ -1,12 +1,6 @@
 #include "Variables.hlsl"
 #include "Light.hlsl"
 
-// 루트 상수
-cbuffer cbGameObjectInfo : register(b4)
-{
-	float3 testcolor: packoffset(c0);
-}
- 
 
 struct VertexIn
 {

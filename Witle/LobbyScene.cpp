@@ -183,7 +183,7 @@ ID3D12RootSignature* LobbyScene::CreateGraphicsRootSignature(ID3D12Device *pd3dD
 	pRootParameters[ROOTPARAMETER_CAMERA] = d3dUtil::CreateRootParameterCBV(1);          // b1: Camera
 	pRootParameters[ROOTPARAMETER_MATERIALS] = d3dUtil::CreateRootParameterCBV(2);       // b2: Materials
 	pRootParameters[ROOTPARAMETER_LIGHTS] = d3dUtil::CreateRootParameterCBV(3);          // b3: Lights
-	pRootParameters[ROOTPARAMETER_COLOR] = d3dUtil::CreateRootParameterConstants(3, 4);  // b4: Color
+	pRootParameters[ROOTPARAMETER_PICKINGPOINT] = d3dUtil::CreateRootParameterConstants(3, 4);  // b4: Color
 
 	D3D12_DESCRIPTOR_RANGE pTextureDescriptorRanges[3];
 	pTextureDescriptorRanges[0] = d3dUtil::CreateDescriptorRangeSRV(1, 0); //t0: gtxtTexture

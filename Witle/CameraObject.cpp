@@ -6,24 +6,14 @@
 
 void CameraObject::ReleaseMembers()
 {
-	//if (m_pCameraComponent)
-	//{
-	//	m_pCameraComponent->ReleaseShaderVariables();
-	//	delete m_pCameraComponent;
-	//	m_pCameraComponent = nullptr;
-	//}
-	if (m_pFrustum)
-	{
-		delete m_pFrustum;
-		m_pFrustum = nullptr;
-	}
+
 }
 
 CameraObject::CameraObject(const std::string & entityID)
 	:GameObject(entityID)
 {
 	// m_pCameraComponent = new BasicCam(this);
-	m_pFrustum = new MyFrustum(this);
+	// m_pFrustum = new MyFrustum(this);
 }
 
 CameraObject::~CameraObject()
@@ -37,7 +27,6 @@ void CameraObject::LastUpdate(float fElapsedTime)
 	m_pCameraComponent->LastUpdate(fElapsedTime);
 	m_Transform.Update(fElapsedTime); // Transform 
 	
-	m_pFrustum->GenerateFrustum(m_pCameraComponent->GetProjectionMatrix(), m_pCameraComponent->GetViewMatrix());
 }
 
 void CameraObject::SetViewportsAndScissorRects(ID3D12GraphicsCommandList *pd3dCommandList)

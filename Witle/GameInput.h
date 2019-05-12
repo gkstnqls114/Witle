@@ -27,10 +27,23 @@
 #define MYVK_Y 0x59
 #define MYVK_Z 0x5A
 
+#define MOUSE_NONE -1 
+
+#define KEYDOWN 1 // 해당 키가 한번 눌러졌다.
+#define KEYUP   0 // 해당 키가 토글키 상태 ( 1에서 한번더 누름)
+#define KEYUP_PRESSING   128 // 눌러진채로 떨어지지않은 상태
+#define KEYDOWN_PRESSING   129 // 토글키인상태에서 떨어지지않은 상태
+
+class Camera;
+
 struct RAY
 {
 	XMFLOAT3 origin{0.f, 0.f, 0.f};
 	XMFLOAT3 direction{0.f, 0.f, 0.f};
+
+	static RAY GeneratePickingRay(const XMFLOAT3& cameraPos, const XMFLOAT2& ScreenPickingPoint, const XMFLOAT4X4 & view, const XMFLOAT4X4 & projection);
+	static RAY GeneratePickingRay(const XMFLOAT2& ScreenPickingPoint, Camera* pCamera);
+	static XMFLOAT3 GeneratePickingScreenOrigin(const XMFLOAT3& cameraPos, const XMFLOAT2& ScreenPickingPoint, const XMFLOAT4X4 & view, const XMFLOAT4X4 & projection);
 };
 
 // 싱글톤 패턴
@@ -42,9 +55,9 @@ private:
 
 	static HWND m_hWnd;
 	  
-	static UCHAR m_pKeyBuffer[256]; // 키보드의 input을 위한 멤버 변수
+	static UCHAR m_pKeyBuffer[256]; // 키보드의 input(지속)을 위한 멤버 변수
 
-	static const bool m_isDragRotate;
+	static const bool m_DragMode;
 
 	static RAY m_PickingRay;
 	static short m_WheelDelta; // 마우스 휠이 움직인 정도
@@ -71,12 +84,16 @@ private:
 	static float GetmoveDeltaY() { return m_moveDeltaY; };
 
 public: 
-	static void Update(HWND hWnd);
+	static void Update(HWND hWnd); 
+
 	static void Reset();
 
 	static void SetHWND(HWND hwnd);
 	static void MouseMove(LPARAM lParam);
-
+	static void SetCapture(HWND hWnd);
+	static void ReleaseCapture();
+	 
+	//// Keyboard 관련 ///////////////////////////////////////////
 	// 키가 눌렸는지 확인하는 상태
 	static bool IsKeydownRIGHT() { return (m_pKeyBuffer[VK_RIGHT] & 0xF0); };
 	static bool IsKeydownLEFT() { return (m_pKeyBuffer[VK_LEFT] & 0xF0); };
@@ -86,26 +103,32 @@ public:
 	static bool IsKeydownS() { return (m_pKeyBuffer[MYVK_S] & 0xF0); };
 	static bool IsKeydownA() { return (m_pKeyBuffer[MYVK_A] & 0xF0); };
 	static bool IsKeydownD() { return (m_pKeyBuffer[MYVK_D] & 0xF0); };
+	static bool IsKeydownE() { return (m_pKeyBuffer[MYVK_E] & 0xF0); };
+	 
+	//// Keyboard 관련 ///////////////////////////////////////////
 
-	static void SetCapture(HWND hWnd);
+
+	//// Mouse 관련 ///////////////////////////////////////////
+	static bool isNowClick() { return !(m_downClickCursor.x == MOUSE_NONE && m_downClickCursor.y == MOUSE_NONE); };
 	static void RotateWheel(WPARAM wParam);
-	static void ReleaseCapture();
 
-	static float GetDeltaX() 
+	static float GetDeltaX()
 	{
-		if (m_isDragRotate) return GetdownDeltaX();
+		if (m_DragMode) return GetdownDeltaX();
 		else  return GetmoveDeltaX();
 	}
-	static float GetDeltaY() 
+	static float GetDeltaY()
 	{
-		if (m_isDragRotate) return GetdownDeltaY();
+		if (m_DragMode) return GetdownDeltaY();
 		else return GetmoveDeltaY();
 	}
-
+	static bool GetDragMode() { return m_DragMode; }
 
 	static POINT GetdownClickcursor() { return m_downClickCursor; }
-
-
 	static bool GenerateRayforPicking(const XMFLOAT3& cameraPos, const XMFLOAT4X4 & view, const XMFLOAT4X4 & projection, RAY& ray);
 
+	//// Mouse 관련 ///////////////////////////////////////////
+
+
+	
 };

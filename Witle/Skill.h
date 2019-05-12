@@ -23,13 +23,16 @@ class Skill
 	: public ISkill
 { 
 protected:
+	bool  m_isPrepare    { false }; // 스킬을 현재 사용주인
 	bool  m_isUsing        { false }; // 스킬을 현재 사용주인
-	float m_CooldownTime   { 0.f }; // 재사용 대기시간
+	float m_UsingTime   { 0.f }; // 재사용 대기시간
 	float m_SkillTime      { 0.f }; // 스킬 사용 중인 시간
 
 protected:
 	virtual void ReleaseMembers() = 0;
 	virtual void ReleaseMemberUploadBuffers() = 0;
+
+	virtual void PrepareMember() = 0;
 
 public:
 	Skill() : ISkill("Skill") {};
@@ -39,4 +42,11 @@ public:
 	virtual void Update(float fTimeElapsed);
 	virtual void DoNotUse() override = 0;
 	virtual void DoUse() override = 0;
+
+	void Prepare() 
+	{  
+		m_isPrepare = true; 
+		PrepareMember();
+	}
+	bool GetisPrepare() const { return m_isPrepare; }
 };

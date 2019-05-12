@@ -31,11 +31,9 @@ MyReflexTree::MyReflexTree(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *
 	m_LoadObject = ModelStorage::GetInstance()->GetRootObject("ReflexTree");
 
 	m_LoadObject->SetPosition(position);
-
-	XMFLOAT3 center{ -30.f, 100.f, 0.f };
+	 
 	XMFLOAT3 extents{ 100.f, 100.f, 100.f };
-	center = Vector3::Add(center, position);
-	m_pMyBOBox = new MyBOBox(pd3dDevice, pd3dCommandList, center, extents);
+	m_pMyBOBox = new MyBOBox(pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 0.F, 0.F }, extents);
   
 }
  
@@ -47,7 +45,7 @@ void MyReflexTree::UpdateShaderVariables(ID3D12GraphicsCommandList * pd3dCommand
 void MyReflexTree::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 {
 #ifdef _SHOW_BOUNDINGBOX
-	m_pMyBOBox->Render(pd3dCommandList, Matrix4x4::Identity());
+	m_pMyBOBox->Render(pd3dCommandList);
 #endif // _SHOW_BOUNDINGBOX
 
 	pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("InstancingStandardShader")->GetPSO());
@@ -67,7 +65,7 @@ SunFlower::SunFlower(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3d
 void SunFlower::Render(ID3D12GraphicsCommandList * pd3dCommandList)
 {
 #ifdef _SHOW_BOUNDINGBOX
-	m_pMyBOBox->Render(pd3dCommandList, Matrix4x4::Identity());
+	m_pMyBOBox->Render(pd3dCommandList);
 #endif // _SHOW_BOUNDINGBOX
 
 	pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("StandardShader")->GetPSO());
@@ -86,7 +84,7 @@ Rock::Rock(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandLis
 void Rock::Render(ID3D12GraphicsCommandList * pd3dCommandList)
 {
 #ifdef _SHOW_BOUNDINGBOX
-	m_pMyBOBox->Render(pd3dCommandList, Matrix4x4::Identity());
+	m_pMyBOBox->Render(pd3dCommandList);
 #endif // _SHOW_BOUNDINGBOX
 
 	pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("StandardShader")->GetPSO());
@@ -106,7 +104,7 @@ Pillar::Pillar(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dComman
 void Pillar::Render(ID3D12GraphicsCommandList * pd3dCommandList)
 {
 #ifdef _SHOW_BOUNDINGBOX
-	m_pMyBOBox->Render(pd3dCommandList, Matrix4x4::Identity());
+	m_pMyBOBox->Render(pd3dCommandList);
 #endif // _SHOW_BOUNDINGBOX
 
 	pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("StandardShader")->GetPSO());
@@ -125,7 +123,7 @@ Altar::Altar(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandL
 void Altar::Render(ID3D12GraphicsCommandList * pd3dCommandList)
 {
 #ifdef _SHOW_BOUNDINGBOX
-	m_pMyBOBox->Render(pd3dCommandList, Matrix4x4::Identity());
+	m_pMyBOBox->Render(pd3dCommandList);
 #endif // _SHOW_BOUNDINGBOX
 
 	pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("StandardShader")->GetPSO());

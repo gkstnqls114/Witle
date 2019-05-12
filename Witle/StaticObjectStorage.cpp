@@ -15,29 +15,66 @@
 using namespace FileRead;
 
 StaticObjectStorage* StaticObjectStorage::m_Instance{ nullptr };
- 
 
 void StaticObjectStorage::UpdateShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList, int count, XMFLOAT4X4 * transforms)
 { 
 }
 
-bool StaticObjectStorage::LoadTransform(char * name, char * comp_name, const int * terrainIDs, XMFLOAT3 pos)
+bool StaticObjectStorage::LoadTransform(char * name, const char * comp_name, const XMINT4& IDs, const XMFLOAT3& pos)
 {
 	bool result = false;
 	if (!strcmp(name, comp_name))
 	{
-		for (int x = 0; x < 4; ++x)
+		for (int Ti = 0; Ti < 4; ++Ti)
 		{
-			if (terrainIDs[x] == -1) continue;
+			int terrainIDs = -1; 
+			if (Ti == 0) terrainIDs = IDs.x;
+			else if (Ti == 1) terrainIDs = IDs.y;
+			else if (Ti == 2) terrainIDs = IDs.z;
+			else if (Ti == 3) terrainIDs = IDs.w;
 
-			m_StaticObjectStorage[comp_name][terrainIDs[x]].TerrainObjectCount += 1;
+			if (terrainIDs == -1) continue;
+
+			m_StaticObjectStorage[comp_name][terrainIDs].TerrainObjectCount += 1;
 
 			LoadObject* TestObject = ModelStorage::GetInstance()->GetRootObject(comp_name);
 			TestObject->SetPosition(pos);
 			TestObject->UpdateTransform(NULL);
 
-			m_StaticObjectStorage[comp_name][terrainIDs[x]].TransformList.emplace_back(TestObject->m_pChild->m_xmf4x4World);
+			m_StaticObjectStorage[comp_name][terrainIDs].TransformList.emplace_back(TestObject->m_pChild->m_xmf4x4World);
 			 
+			delete TestObject;
+			TestObject = nullptr;
+
+			result = true;
+		}
+	}
+	return result;
+}
+
+bool StaticObjectStorage::LoadTransform(char * name, const char * comp_name, const XMINT4 & IDs, const XMFLOAT4X4 & tr)
+{ 
+	bool result = false;
+	if (!strcmp(name, comp_name))
+	{
+		for (int Ti = 0; Ti < 4; ++Ti)
+		{
+			int terrainIDs = -1;
+			if (Ti == 0) terrainIDs = IDs.x;
+			else if (Ti == 1) terrainIDs = IDs.y;
+			else if (Ti == 2) terrainIDs = IDs.z;
+			else if (Ti == 3) terrainIDs = IDs.w;
+
+			if (terrainIDs == -1) continue;
+
+			m_StaticObjectStorage[comp_name][terrainIDs].TerrainObjectCount += 1;
+
+			LoadObject* TestObject = ModelStorage::GetInstance()->GetRootObject(comp_name);
+			TestObject->SetTransform(tr);
+			TestObject->UpdateTransform(NULL);
+
+			m_StaticObjectStorage[comp_name][terrainIDs].TransformList.emplace_back(TestObject->m_pChild->m_xmf4x4World);
+
 			delete TestObject;
 			TestObject = nullptr;
 
@@ -59,20 +96,10 @@ void StaticObjectStorage::LoadTerrainObjectFromFile(ID3D12Device * pd3dDevice, I
 	// 이름에 맞추어 구성해야하므로 하드코딩을 해야한다.
 	TerrainPieceCount = pTerrain->GetTerrainPieceCount();
 	 
-	m_StaticObjectStorage[TREE_1] = new TerrainObjectInfo[TerrainPieceCount];
-	m_StaticObjectStorage[TREE_2] = new TerrainObjectInfo[TerrainPieceCount];
-	m_StaticObjectStorage[TREE_3] = new TerrainObjectInfo[TerrainPieceCount];
-	m_StaticObjectStorage[BUSH] = new TerrainObjectInfo[TerrainPieceCount];
-	
-	m_StaticObjectStorage[BROKENPILLA] = new TerrainObjectInfo[TerrainPieceCount];
-	m_StaticObjectStorage[REED] = new TerrainObjectInfo[TerrainPieceCount];
-	m_StaticObjectStorage[RUIN_ARCH] = new TerrainObjectInfo[TerrainPieceCount];
-	m_StaticObjectStorage[RUIN_BROKENPILLA] = new TerrainObjectInfo[TerrainPieceCount];
-	m_StaticObjectStorage[RUIN_PILLAR] = new TerrainObjectInfo[TerrainPieceCount];
-	m_StaticObjectStorage[RUIN_SQUARE] = new TerrainObjectInfo[TerrainPieceCount];
-
-	m_StaticObjectStorage[SUNFLOWER] = new TerrainObjectInfo[TerrainPieceCount]; 
-	// m_StaticObjectStorage[ALTER] = new TerrainObjectInfo[TerrainPieceCount];
+	for (const auto& name : ModelStorage::GetInstance()->m_NameList)
+	{
+		m_StaticObjectStorage[name ] = new TerrainObjectInfo[TerrainPieceCount];
+	}
 
 	for (; ; )
 	{
@@ -80,14 +107,24 @@ void StaticObjectStorage::LoadTerrainObjectFromFile(ID3D12Device * pd3dDevice, I
 		{
 			if (!strcmp(pstrToken, "<Hierarchy>:"))
 			{
-				int nFrame = ::ReadIntegerFromFile(pInFile);
-				for (int i = 0; i < nFrame; ++i)
+				int nRootChild = ::ReadIntegerFromFile(pInFile); // 모든 오브젝트 개수
+
+				::ReadStringFromFile(pInFile, pstrToken); //<ObjectCount>: 
+				int nObjects = ::ReadIntegerFromFile(pInFile);
+				for (int i = 0; i < nObjects; ++i)
+				{  
+					::ReadStringFromFile(pInFile, pstrToken); // Object Name
+					::ReadIntegerFromFile(pInFile); // Object Count
+				}
+
+				for (int i = 0; i < nRootChild; ++i)
 				{
 					::ReadStringFromFile(pInFile, pstrToken);
 					if (!strcmp(pstrToken, "<Frame>:"))
 					{
 						LoadNameAndPositionFromFile(pd3dDevice, pd3dCommandList, pInFile, pTerrain);
 					}
+
 				}
 			}
 			else if (!strcmp(pstrToken, "</Hierarchy>"))
@@ -131,9 +168,15 @@ void StaticObjectStorage::LoadNameAndPositionFromFile(ID3D12Device * pd3dDevice,
 
 			XMFLOAT4X4 temp;
 			nReads = (UINT)::fread(&temp, sizeof(XMFLOAT4X4), 1, pInFile);
-			XMFLOAT4X4 transform = Matrix4x4::Identity();
+
+			::ReadStringFromFile(pInFile, pstrToken); // <GlobalRotation>:
+			XMFLOAT4 rotationXYZ;
+			nReads = (UINT)::fread(&rotationXYZ, sizeof(XMFLOAT4), 1, pInFile);
+			XMFLOAT4X4 transform = Matrix4x4::RotateMatrix(0.f, rotationXYZ.z, rotationXYZ.y);
+			
+			// XMFLOAT4X4 transform = Matrix4x4::Identity();
 			transform._41 =  -(temp._41) + 15000;
-			transform._42 = temp._42;
+			transform._42 = 0;
 			transform._43 =  -(temp._43) + 15000;
 
 			// 계산을 통해 몇번째 아이디인지 즉 어디의 리프노드에 존재하는 위치인지 알아낸다...
@@ -141,21 +184,14 @@ void StaticObjectStorage::LoadNameAndPositionFromFile(ID3D12Device * pd3dDevice,
 			// 그리고 위치 차이때문에 
 
 			XMFLOAT3 position{ transform._41, transform._42, transform._43 };
-			const int* terrainIDs = pTerrain->GetIDs(position);
+			XMINT4 terrainIDs = pTerrain->GetIDs(position);
+		 
+			for (const auto& modelname : ModelStorage::GetInstance()->m_NameList)
+			{ 
+				bool isLocated = LoadTransform(name, modelname.c_str(), terrainIDs, transform);
+				if (isLocated) break;
+			} 
 			 
-			LoadTransform(name, TREE_1, terrainIDs, XMFLOAT3{ transform._41, transform._42, transform._43 });
-			LoadTransform(name, TREE_2, terrainIDs, XMFLOAT3{ transform._41, transform._42, transform._43 });
-			LoadTransform(name, TREE_3, terrainIDs, XMFLOAT3{ transform._41, transform._42, transform._43 });
-			LoadTransform(name, BUSH, terrainIDs, XMFLOAT3{ transform._41, transform._42, transform._43 });
-			LoadTransform(name, BROKENPILLA, terrainIDs, XMFLOAT3{ transform._41, transform._42, transform._43 });
-			LoadTransform(name, REED, terrainIDs, XMFLOAT3{ transform._41, transform._42, transform._43 });
-			LoadTransform(name, RUIN_ARCH, terrainIDs, XMFLOAT3{ transform._41, transform._42, transform._43 });
-			LoadTransform(name, RUIN_BROKENPILLA, terrainIDs, XMFLOAT3{ transform._41, transform._42, transform._43 });
-			LoadTransform(name, RUIN_PILLAR, terrainIDs, XMFLOAT3{ transform._41, transform._42, transform._43 });
-			LoadTransform(name, RUIN_SQUARE, terrainIDs, XMFLOAT3{ transform._41, transform._42, transform._43 });
-			LoadTransform(name, SUNFLOWER, terrainIDs, XMFLOAT3{ transform._41, transform._42, transform._43 });
-			 
-			delete[]terrainIDs;
 		}
 		else if (!strcmp(pstrToken, "<Children>:"))
 		{
@@ -323,6 +359,14 @@ void StaticObjectStorage::CreateInfo(ID3D12Device * pd3dDevice, ID3D12GraphicsCo
 	m_isCreate = true;
 }
  
+void StaticObjectStorage::RenderAll(ID3D12GraphicsCommandList * pd3dCommandList)
+{
+	for (int i = 0; i < TerrainPieceCount; ++i)
+	{
+		Render(pd3dCommandList, i);
+	}
+}
+
 void StaticObjectStorage::Render(ID3D12GraphicsCommandList * pd3dCommandList, int index)
 {  
 	// info.first = 모델 이름
@@ -333,11 +377,9 @@ void StaticObjectStorage::Render(ID3D12GraphicsCommandList * pd3dCommandList, in
 		if (info.second[index].TerrainObjectCount == 0) continue;
 
 		pd3dCommandList->SetGraphicsRootShaderResourceView(ROOTPARAMETER_INSTANCING, info.second[index].m_pd3dcbGameObjects->GetGPUVirtualAddress()); // 인스턴싱 쉐이더 리소스 뷰
-		 
-		if (m_StaticObjectModelsStorage[info.first].pTexture)
-		{
-			m_StaticObjectModelsStorage[info.first].pTexture->UpdateShaderVariables(pd3dCommandList);
-		}
+		  
+		m_StaticObjectModelsStorage[info.first].pTexture->UpdateShaderVariables(pd3dCommandList);
+		
 		m_StaticObjectModelsStorage[info.first].pLoadObject->RenderInstancing(pd3dCommandList, info.second[index].TerrainObjectCount);
 	}  
 }

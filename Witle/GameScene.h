@@ -25,6 +25,8 @@ struct LIGHTS;
 struct MATERIAL;
 struct MATERIALS;
 
+class AimPoint;
+class CylinderMesh;
 
 class GameScene
 	: public Scene
@@ -63,6 +65,7 @@ protected:
 	virtual ID3D12RootSignature* CreateGraphicsRootSignature(ID3D12Device *pd3dDevice) override; 
 
 	void UpdateCollision(float fElapsedTime);
+	void ProcessPicking(float fElapsedTime);
 	void BuildLightsAndMaterials(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList);
 	void RenderShadowMap(ID3D12GraphicsCommandList *pd3dCommandList);
 	 
@@ -89,8 +92,9 @@ public:
 	void TESTSetRootDescriptor(ID3D12GraphicsCommandList *pd3dCommandList);
 	
 protected:
+	bool					m_isSkyMode{ false };
 
-	Widget*					m_AimPoint{ nullptr };
+	AimPoint*				m_AimPoint{ nullptr };
 
 	int*					m_PlayerTerrainIndex{ nullptr };
 	Sniping*				m_Sniping{ nullptr };
@@ -100,9 +104,14 @@ protected:
 	Player*                 m_pOtherPlayer{ nullptr };
 	  
 	Terrain*                m_Terrain{ nullptr }; 
-	CameraObject*           m_Camera{ nullptr };
+	CameraObject*           m_pMainCamera{ nullptr }; // 실제로 화면에 그려지는 카메라
 	
+	CameraObject*           m_pSkyCameraObj{ nullptr }; // 실제로 화면에 그려지는 카메라
+	Camera*					m_pSkyCamera{ nullptr };
+
 	SkyBox*					m_SkyBox{ nullptr };
+
+	CylinderMesh*			m_CylinderMesh{ nullptr };
 
 #ifdef CHECK_SUBVIEWS
 	CameraObject*			m_lookAboveCamera{ nullptr };

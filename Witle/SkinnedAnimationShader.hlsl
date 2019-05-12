@@ -33,10 +33,10 @@ VS_STANDARD_OUTPUT VSSkinnedAnimationStandard(VS_SKINNED_STANDARD_INPUT input)
 	{
 		mtxVertexToBoneWorld = mul(gpmtxBoneOffsets[input.indices[i]], gpmtxBoneTransforms[input.indices[i]]);
 		positionW += input.weights[i] * mul(float4(input.position, 1.0f), mtxVertexToBoneWorld).xyz;
-	}
+	} 
 
 	output.position = mul(mul(float4(positionW, 1.0f), gmtxView), gmtxProjection);
-	output.positionW = positionW;
+    output.positionW = positionW;
 	output.normalW = mul(input.normal, (float3x3)gmtxWorld);
 	output.tangentW = mul(input.tangent, (float3x3)gmtxWorld);
 	output.bitangentW = mul(input.bitangent, (float3x3)gmtxWorld);
@@ -84,8 +84,10 @@ VS_STANDARD_OUTPUT VSSkinnedAnimationStandard(VS_SKINNED_STANDARD_INPUT input)
 float4 PSStandard(VS_STANDARD_OUTPUT input) : SV_TARGET
 {  
 // 임시로 사용할 컬러 색깔
-	float4 TESTColor = float4(1.f, 1.f, 1.f, 1.f);
-
+    
+    float4 TESTColor = gtxtTexture.Sample(gWrapSamplerState, input.uv);
+    // float4 TESTColor = float4(1.f, 1.f, 1.f, 1.f);
+	
 	float3 normalW = float3(0.f, 0.f, 0.f);
 
 	normalW = normalize(input.normalW);

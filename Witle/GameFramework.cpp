@@ -32,6 +32,7 @@
 #include "ScreenShader.h"
 #include "CubeShader.h"
 #include "InstancingLineShader.h"
+#include "PickingPointShader.h"
 //// Shader ////////////////////////// 
 
 #ifdef _SHOW_BOUNDINGBOX
@@ -624,7 +625,9 @@ void CGameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPA
 
 	switch (nMessageID)
 	{
-	case WM_KEYUP:
+	case WM_KEYDOWN:   
+		break;
+	case WM_KEYUP: 
 		switch (wParam)
 		{
 		case VK_ESCAPE:
@@ -645,7 +648,7 @@ void CGameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPA
 			} 
 			OnResizeBackBuffers();
 			break;
-		}
+		} 
 		default:
 			break;
 		}
@@ -661,7 +664,7 @@ void CGameFramework::RenderOnSwapchain()
 
 	m_CommandList->ClearRenderTargetView(m_SwapChainCPUHandle[m_SwapChainBufferIndex], /*pfClearColor*/Colors::Gray, 0, NULL);
 	m_CommandList->ClearDepthStencilView(m_DepthStencilCPUHandle, D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, NULL);
-	m_CommandList->ClearDepthStencilView(m_ShadowMapCPUHandle, D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, NULL);
+	// m_CommandList->ClearDepthStencilView(m_ShadowMapCPUHandle, D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, NULL);
 
 	// 하단에 테스트용으로 보일 리소스들을 렌더한다.
 	// RenderShadowMap();
@@ -698,11 +701,16 @@ void CGameFramework::BuildShaders()
 	
 	Shader* pScreenShader = new ScreenShader();
 	pScreenShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
-	ShaderManager::GetInstance()->InsertShader("ScreenShader", pScreenShader);
+	ShaderManager::GetInstance()->InsertShader(SHADER_SCREEN, pScreenShader);
 
 	Shader* pSkyBoxShader = new SkyBoxShader();
 	pSkyBoxShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
 	ShaderManager::GetInstance()->InsertShader("SkyBoxShader", pSkyBoxShader);
+
+	Shader* pPickingPointShader = new PickingPointShader();
+	pPickingPointShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
+	ShaderManager::GetInstance()->InsertShader(SHADER_PICKINGPOINT, pPickingPointShader);
+
 #ifdef _SHOW_BOUNDINGBOX
 	Shader* pLineShader = new LineShader();
 	pLineShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());

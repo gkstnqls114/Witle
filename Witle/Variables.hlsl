@@ -13,6 +13,24 @@ cbuffer cbGameObjectInfo : register(b1)
     float3 gvCameraPosition : packoffset(c8);
 }
 
+// 루트 상수
+cbuffer cbPickingPoint : register(b4)
+{
+    float2 pickingPoint : packoffset(c0);
+}
+
+// 루트 상수
+cbuffer cbHPpercentage : register(b5)
+{
+    float HPpercentage : packoffset(c0);
+}
+
+// 루트 상수
+cbuffer cbTotalTime : register(b6)
+{
+    float totalTime : packoffset(c0);
+}
+
 SamplerState gWrapSamplerState : register(s0);
 SamplerState gssClamp          : register(s1);
 

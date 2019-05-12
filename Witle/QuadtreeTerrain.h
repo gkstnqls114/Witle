@@ -8,6 +8,7 @@ class TerrainMesh;
 class HeightMapImage;
 class MyFrustum;
 class Mesh;
+class Terrain;
 
 struct INFO
 {
@@ -39,8 +40,8 @@ private:
 	UINT m_widthTotal{ 0 };
 	UINT m_lengthTotal{ 0 };
 
-	const UINT m_lengthMin{ 128 + 1 }; // 나누어지는 픽셀 크기
-	const UINT m_widthMin{ 128 + 1 }; // 나누어지는 픽셀 크기
+	const UINT m_lengthMin{ 64 + 1 }; // 나누어지는 픽셀 크기
+	const UINT m_widthMin{ 64 + 1 }; // 나누어지는 픽셀 크기
 
 	XMFLOAT3 m_xmf3Scale{ 0.f, 0.f, 0.f };
 	XMFLOAT4 m_xmf4Color{ 1.f, 0.f, 0.f , 1.f};
@@ -50,14 +51,21 @@ private:
 	int m_ReafNodeCount = 0;
 	QUAD_TREE_NODE** m_pReafNodes{ nullptr };
  
-private:  
+private: 
+
+#ifdef _SHOW_BOUNDINGBOX
+	void RecursiveRenderTerrainObjects_BOBox(const QUAD_TREE_NODE* node, ID3D12GraphicsCommandList *pd3dCommandList);
+
+#endif 
+
 	void RenderTerrainObjects(ID3D12GraphicsCommandList *pd3dCommandList);
+	void RecursiveRenderTerrainObjects(const QUAD_TREE_NODE* node, ID3D12GraphicsCommandList *pd3dCommandList);
 	void RecursiveRender(const QUAD_TREE_NODE* node, ID3D12GraphicsCommandList *pd3dCommandList);
 	void RecursiveInitReafNodes(QUAD_TREE_NODE* node);
 	void RecursiveReleaseUploadBuffers(QUAD_TREE_NODE* node);
 	void RecursiveReleaseObjects(QUAD_TREE_NODE* node);
 	void RecursiveCalculateIDs(QUAD_TREE_NODE* node, const XMFLOAT3 position, int* pIDs) const;
-	void CalculateIDs(const XMFLOAT3 position, int* pIDs) const;
+	void CalculateIDs(const XMFLOAT3 position, XMINT4& pIDs) const;
 	void CalculateIndex(const XMFLOAT3 position, int* pIDs) const;
 
 	// 해당 함수를 재귀적으로 호출하며 터레인을 생성하는 함수입니다.
@@ -77,10 +85,11 @@ public:
 
 	QUAD_TREE_NODE* const GetRootNode() const { return m_pRootNode; }
 	// 해당 포지션에 속하는 리프노드의 아이디들을 리턴한다. 쿼드트리이므로 최대 4개가 존재한다.
-	int * const GetIDs(const XMFLOAT3& position) const;
+	XMINT4 const GetIDs(const XMFLOAT3& position) const;
 	int * const GetIndex(const XMFLOAT3& position) const;
 
 	void Render(ID3D12GraphicsCommandList *pd3dCommandList);
+	void Render(ID3D12GraphicsCommandList *pd3dCommandList, Terrain* pTerrain, ID3D12DescriptorHeap* pHeap);
 	void Render(int index, ID3D12GraphicsCommandList *pd3dCommandList);
 	static int GetTerrainPieceCount() { return gTreePieceCount; }
 	QUAD_TREE_NODE* GetReafNode(int index) { return m_pReafNodes[index]; }

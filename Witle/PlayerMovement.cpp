@@ -118,7 +118,7 @@ void PlayerMovement::BroomMode()
 void PlayerMovement::RunMode()
 {
 	m_isBroomMode = false;
-	m_fMaxVelocityXZ = 2000.0f; // 1초당 20m
+	m_fMaxVelocityXZ = 1500.0f; // 1초당 20m
 	m_fFriction = 100000.0f;
 	m_fDistance = 0.f;
 }

@@ -15,6 +15,7 @@ class WideareaMagic :
 protected:
 	virtual void ReleaseMembers() override;
 	virtual void ReleaseMemberUploadBuffers() override;
+	virtual void PrepareMember() override {};
 
 public:
 	WideareaMagic(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);

@@ -292,6 +292,11 @@ CAnimationSet::CAnimationSet(float fStartTime, float fEndTime, char *pstrName)
 
 CAnimationSet::~CAnimationSet()
 {
+
+}
+
+void CAnimationSet::ReleaseObject()
+{
 	if (m_pAnimationLayers) delete[] m_pAnimationLayers;
 
 	if (m_pCallbackKeys) delete[] m_pCallbackKeys;
@@ -307,9 +312,15 @@ void *CAnimationSet::GetCallbackData()
 	return(NULL);
 }
 
+static bool isEnd = false;
+static float prevTime = 0.f;
+static float Accumulate = 0.f;
 void CAnimationSet::SetPosition(float fTrackPosition)
 {
-	m_fPosition = fTrackPosition;
+	float ElapsedTime = fTrackPosition - prevTime;
+	Accumulate = Accumulate + ElapsedTime;
+	// std::cout << fTrackPosition << " - " << prevTime << " = >" << ElapsedTime << " : " << Accumulate << std::endl;
+
 	switch (m_nType)
 	{
 	case ANIMATION_TYPE_LOOP:
@@ -318,10 +329,26 @@ void CAnimationSet::SetPosition(float fTrackPosition)
 		break;
 	}
 	case ANIMATION_TYPE_ONCE:
-		break;
-	case ANIMATION_TYPE_PINGPONG:
+	{
+		if (Accumulate >= (m_fEndTime - m_fStartTime))
+		{
+			isEnd = false;
+			m_fPosition = m_fEndTime;
+		}
+		else
+		{ 
+			m_fPosition = m_fStartTime + Accumulate;
+		}
 		break;
 	}
+	case ANIMATION_TYPE_PINGPONG:
+	{
+
+		break;
+	}
+	}
+
+	prevTime = fTrackPosition;
 
 	if (m_pAnimationCallbackHandler)
 	{
@@ -382,10 +409,11 @@ CAnimationSets::~CAnimationSets()
 {
 	if (m_ppAnimationSets)
 	{
-		for (int i = 0; i < m_nAnimationSets; i++)
-		{
+		 for (int i = 0; i < m_nAnimationSets; i++)
+		 {
 			if (m_ppAnimationSets[i])
 			{
+				if (i == 0)m_ppAnimationSets[i]->ReleaseObject();
 				delete m_ppAnimationSets[i];
 				m_ppAnimationSets[i] = NULL;
 			}
@@ -457,9 +485,30 @@ void CAnimationController::SetAnimationCallbackHandler(int nAnimationSet, CAnima
 	if (m_pAnimationSets) m_pAnimationSets->SetAnimationCallbackHandler(nAnimationSet, pCallbackHandler);
 }
 
+bool CAnimationController::IsTrackAnimationSetFinish(int nAnimationTrack, int nAnimationSet)
+{
+	if (m_pAnimationTracks)
+	{
+		float fPos = m_pAnimationSets[0].m_ppAnimationSets[nAnimationSet]->m_fPosition;
+		float fEnd = m_pAnimationSets[0].m_ppAnimationSets[nAnimationSet]->m_fEndTime;
+		bool isEnd = fabsf(fPos - fEnd) < EPSILON;
+		if(isEnd) Accumulate = 0.f;
+
+		return isEnd;
+	}
+	else
+	{
+		return false;
+	}
+}
+
 void CAnimationController::SetTrackAnimationSet(int nAnimationTrack, int nAnimationSet)
 {
-	if (m_pAnimationTracks) m_pAnimationTracks[nAnimationTrack].SetAnimationSet(nAnimationSet);
+	if (m_pAnimationTracks)
+	{
+		m_pAnimationTracks[nAnimationTrack].SetAnimationSet(nAnimationSet);
+		Accumulate = 0.f;
+	}
 }
 
 void CAnimationController::SetTrackEnable(int nAnimationTrack, bool bEnable)
@@ -531,7 +580,10 @@ void CAnimationController::AdvanceTime(float fTimeElapsed, LoadObject *pRootGame
 	m_fTime += fTimeElapsed;
 	if (m_pAnimationTracks)
 	{
-		for (int i = 0; i < m_nAnimationTracks; i++) m_pAnimationTracks[i].m_fPosition += (fTimeElapsed * m_pAnimationTracks[i].m_fSpeed);
+		for (int i = 0; i < m_nAnimationTracks; i++)
+		{
+			m_pAnimationTracks[i].m_fPosition += (fTimeElapsed * m_pAnimationTracks[i].m_fSpeed);
+		}
 
 		for (int k = 0; k < m_nAnimationTracks; k++)
 		{
@@ -782,6 +834,12 @@ void LoadObject::SetTrackAnimationSet(int nAnimationTrack, int nAnimationSet)
 	if (m_pSkinnedAnimationController) m_pSkinnedAnimationController->SetTrackAnimationSet(nAnimationTrack, nAnimationSet);
 }
 
+bool LoadObject::IsTrackAnimationSetFinish(int nAnimationTrack, int nAnimationSet)
+{
+	if (m_pSkinnedAnimationController) return m_pSkinnedAnimationController->IsTrackAnimationSetFinish(nAnimationTrack, nAnimationSet);
+	else return false;
+}
+
 void LoadObject::SetTrackAnimationPosition(int nAnimationTrack, float fPosition)
 {
 	if (m_pSkinnedAnimationController) m_pSkinnedAnimationController->SetTrackPosition(nAnimationTrack, fPosition);
@@ -824,8 +882,14 @@ void LoadObject::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 		}
 	}
 
-	if (m_pSibling) m_pSibling->Render(pd3dCommandList);
-	if (m_pChild) m_pChild->Render(pd3dCommandList);
+	if (m_pSibling)
+	{
+		m_pSibling->Render(pd3dCommandList);
+	}
+	if (m_pChild)
+	{
+		m_pChild->Render(pd3dCommandList);
+	}
 }
 
 void LoadObject::RenderInstancing(ID3D12GraphicsCommandList * pd3dCommandList, int InstanceCount)
@@ -927,6 +991,12 @@ void LoadObject::SetPosition(XMFLOAT3 xmf3Position)
 	SetPosition(xmf3Position.x, xmf3Position.y, xmf3Position.z);
 }
 
+void LoadObject::SetTransform(const XMFLOAT4X4 & tr)
+{
+	m_xmf4x4ToParent = tr;
+	UpdateTransform(NULL);
+}
+
 void LoadObject::SetScale(float x, float y, float z)
 {
 	XMMATRIX mtxScale = XMMatrixScaling(x, y, z);
@@ -1015,6 +1085,8 @@ LoadObject *LoadObject::LoadFrameHierarchyFromFile(ID3D12Device *pd3dDevice, ID3
 
 	LoadObject *pGameObject = new LoadObject(1);
 	::ReadStringFromFile(pInFile, pGameObject->m_pstrFrameName);
+
+	printf("%s\n", pGameObject->m_pstrFrameName);
 
 	for (; ; )
 	{
@@ -1282,7 +1354,9 @@ void LoadObject::LoadAnimationFromFile_forPlayer(FILE * pInFile, CLoadedModelInf
 			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[ANIMATION_LEFT.ID] =         new CAnimationSet(ANIMATION_LEFT.StartTime,          ANIMATION_LEFT.EndTime, pstrToken);
 			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[ANIMATION_RIGHT.ID] =        new CAnimationSet(ANIMATION_RIGHT.StartTime,         ANIMATION_RIGHT.EndTime, pstrToken);
 			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[ANIMATION_ATTACK.ID] =       new CAnimationSet(ANIMATION_ATTACK.StartTime,        ANIMATION_ATTACK.EndTime, pstrToken);
+			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[ANIMATION_ATTACK.ID]->m_nType = ANIMATION_TYPE_ONCE;
 			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[ANIMATION_BROOMPREPARE.ID] = new CAnimationSet(ANIMATION_BROOMPREPARE.StartTime,  ANIMATION_BROOMPREPARE.EndTime, pstrToken);
+			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[ANIMATION_BROOMPREPARE.ID]->m_nType = ANIMATION_TYPE_ONCE;
 			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[ANIMATION_BROOMIDLE.ID] =    new CAnimationSet(ANIMATION_BROOMIDLE.StartTime,     ANIMATION_BROOMIDLE.EndTime, pstrToken);
 			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[ANIMATION_BROOMFORWARD.ID] = new CAnimationSet(ANIMATION_BROOMFORWARD.StartTime,  ANIMATION_BROOMFORWARD.EndTime, pstrToken);
 			
@@ -1466,3 +1540,4 @@ CHeightMapTerrain::~CHeightMapTerrain(void)
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  
+ 

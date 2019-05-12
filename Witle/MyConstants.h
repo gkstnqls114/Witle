@@ -17,7 +17,8 @@ enum MESH_TYPE_ID
 
 enum SHAPE_TYPE_ID
 {
-	RECTANGLE_SHAPE
+	RECTANGLE_SHAPE,
+	BROOMEFFECT_SHAPE
 };
 
 enum LIGHT_TYPE
@@ -36,7 +37,7 @@ enum LIGHT_TYPE
 #define MOUSE_WHEEL_DOWN	-120
 #define MOUSE_WHEEL_STOP	0
 
-#define CAMERA_FAR			10000.f //1 = 1cm 이므로 10000cm = 100m 
+#define CAMERA_FAR			7000.f //1 = 1cm 이므로 7000cm = 70m 
 
 /////////////////////////////////////////////// define 정의
 #define _WITH_DEBUG_TERRAIN_MAX_POS
@@ -52,7 +53,7 @@ enum LIGHT_TYPE
 
 
 //// Root Parameter Index /////////////////////////////////////////// 
-#define ROOTPATAMETER_COUNT 19
+#define ROOTPATAMETER_COUNT 21
 
 const UINT ROOTPARAMETER_WORLD = 0;
 const UINT ROOTPARAMETER_CAMERA = 1;
@@ -70,9 +71,11 @@ const UINT ROOTPARAMETER_SKINNEDBONETRANSFORM = 12;
 const UINT ROOTPARAMETER_EMISSION_3 = 13;
 const UINT ROOTPARAMETER_EMISSION_1 = 14;
 const UINT ROOTPARAMETER_EMISSION_2 = 15;
-const UINT ROOTPARAMETER_COLOR = 16;
+const UINT ROOTPARAMETER_PICKINGPOINT = 16;
 const UINT ROOTPARAMETER_INSTANCING = 17;
 const UINT ROOTPARAMETER_SKYBOX = 18;
+const UINT ROOTPARAMETER_HPPERCENTAGE = 19;
+const UINT ROOTPARAMETER_TIME = 20;
 
 //// Root Parameter Index /////////////////////////////////////////// 
 
@@ -138,13 +141,11 @@ const UINT ROOTPARAMETER_SKYBOX = 18;
 //// HeightMapImage.h 관련 define ////////////////////////
 
 
-//// 조작키 /////////////////////////////////////////// 
+//// 조작키 ///////////////////////////////////////////  
 #define DIR_FORWARD					0x01
 #define DIR_BACKWARD				0x02
 #define DIR_LEFT					0x04
-#define DIR_RIGHT					0x08
-#define DIR_UP						0x10
-#define DIR_DOWN					0x20
+#define DIR_RIGHT					0x08 
 //// 조작키 /////////////////////////////////////////// 
 
 
@@ -175,8 +176,8 @@ struct ANIMATION_INFO
 const ANIMATION_INFO ANIMATION_IDLE         { 0, 0.f * SECOND_PER_FRAME,   30.f * SECOND_PER_FRAME };
 const ANIMATION_INFO ANIMATION_FORWARD      { 1, 31.f * SECOND_PER_FRAME,  63.f * SECOND_PER_FRAME };
 const ANIMATION_INFO ANIMATION_BACKWARD     { 2, 64.f * SECOND_PER_FRAME,  104.f * SECOND_PER_FRAME };
-const ANIMATION_INFO ANIMATION_RIGHT         { 3, 105.f * SECOND_PER_FRAME, 137.f * SECOND_PER_FRAME };
-const ANIMATION_INFO ANIMATION_LEFT        { 4, 138.f * SECOND_PER_FRAME, 170.f * SECOND_PER_FRAME };
+const ANIMATION_INFO ANIMATION_RIGHT        { 3, 105.f * SECOND_PER_FRAME, 137.f * SECOND_PER_FRAME };
+const ANIMATION_INFO ANIMATION_LEFT         { 4, 138.f * SECOND_PER_FRAME, 170.f * SECOND_PER_FRAME };
 const ANIMATION_INFO ANIMATION_ATTACK       { 5, 171.f * SECOND_PER_FRAME, 191.f * SECOND_PER_FRAME };
 const ANIMATION_INFO ANIMATION_BROOMPREPARE { 6, 192.f * SECOND_PER_FRAME, 230.f * SECOND_PER_FRAME };
 const ANIMATION_INFO ANIMATION_BROOMIDLE    { 7, 231.f * SECOND_PER_FRAME, 261.f * SECOND_PER_FRAME };

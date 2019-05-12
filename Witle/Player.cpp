@@ -2,6 +2,12 @@
 #include "PlayerMovement.h"
 #include "MyBOBox.h" 
 #include "GameInput.h"
+#include "Texture.h"
+#include "MyDescriptorHeap.h"
+#include "Sniping.h"
+#include "EffectRect.h"
+#include "GameScreen.h"
+#include "MyRectangle.h"
 #include "Shader.h"
 #include "Object.h"
 #include "ShaderManager.h" 
@@ -12,10 +18,10 @@
 #include "Broom.h"
 #include "Terrain.h"
 #include "Player.h"
-
-
-
-
+ 
+static float playerOffestX = 0.f;
+static float playerOffestY = 75.f;
+static float playerOffestZ = 50.f;
 
 void Player::OnPlayerUpdateCallback(float fTimeElapsed)
 {
@@ -91,23 +97,44 @@ XMFLOAT3 Player::CalculateAlreadyPosition(float fTimeElapsed)
 Player::Player(const std::string & entityID, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void * pContext)
 	: GameObject(entityID)
 { 
-	m_PlayerModel = LoadObject::LoadGeometryAndAnimationFromFile_forPlayer(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/Chracter.bin", NULL);
-	m_pLoadObject = m_PlayerModel->m_pModelRootObject;
-	 
-	m_pLoadObject->m_pSkinnedAnimationController = new CAnimationController(pd3dDevice, pd3dCommandList, 1, m_PlayerModel);
-	m_pLoadObject->m_pSkinnedAnimationController->SetTrackAnimationSet(0, 0);
+	m_pHaep = new MyDescriptorHeap();
+	m_pHaep->CreateCbvSrvUavDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 2, 0);
 
-	XMFLOAT3 center{ 0.f, 75.f, 0.f };
-	XMFLOAT3 extents{ 25.f, 75.f, 25.f };
-	m_pMyBOBox = new MyBOBox(pd3dDevice, pd3dCommandList, center, extents);
+	m_pTexture_Cloth = new Texture(1, RESOURCE_TEXTURE2D);
+	m_pTexture_Cloth->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/Character_cloth_D.dds", 0);
+	m_pTexture_Body = new Texture(1, RESOURCE_TEXTURE2D);
+	m_pTexture_Body->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/Character_body_D.dds", 0);
+
+	m_pHaep->CreateShaderResourceViews(pd3dDevice, pd3dCommandList, m_pTexture_Cloth, ROOTPARAMETER_TEXTURE, false, 0);
+	m_pHaep->CreateShaderResourceViews(pd3dDevice, pd3dCommandList, m_pTexture_Body, ROOTPARAMETER_TEXTURE, false, 1);
+
+	m_PlayerModel_Cloth = LoadObject::LoadGeometryAndAnimationFromFile_forPlayer(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/Character_cloth.bin", NULL);
+	m_PlayerModel_Body = LoadObject::LoadGeometryAndAnimationFromFile_forPlayer(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/Character_body.bin", NULL);
+	m_pLoadObject_Cloth = m_PlayerModel_Cloth->m_pModelRootObject;
+	m_pLoadObject_Body = m_PlayerModel_Body->m_pModelRootObject;
 	 
+	m_pLoadObject_Cloth->m_pSkinnedAnimationController = new CAnimationController(pd3dDevice, pd3dCommandList, 1, m_PlayerModel_Cloth);
+	m_pLoadObject_Cloth->m_pSkinnedAnimationController->SetTrackAnimationSet(0, 0);
+	m_pLoadObject_Body->m_pSkinnedAnimationController = new CAnimationController(pd3dDevice, pd3dCommandList, 1, m_PlayerModel_Body);
+	m_pLoadObject_Body->m_pSkinnedAnimationController->SetTrackAnimationSet(0, 0);
+	 
+	XMFLOAT3 extents{ 25.f, 75.f, 25.f };
+	m_pMyBOBox = new MyBOBox(pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 75.F, 0.F }, extents);
+	
 	m_pPlayerStatus = new PlayerStatus(this, pd3dDevice, pd3dCommandList);
 	m_pPlayerMovement = new PlayerMovement(this);
 	 
-	m_pBroom = new Broom(m_pPlayerMovement);
+	m_Broom = new Broom(m_pPlayerMovement);
 
-	m_Transform.SetPosition(0.f, 75.f ,0.f);
-	
+	m_Transform.SetPosition(100.f, 57.f, 100.f);// 캐릭터가 중앙에 있지않아서 어쩔수없이 설정;
+
+	// 빗자루 스킬 이펙트 준비
+	m_BroomEffectRect = new BroomEffectRect(this, pd3dDevice, pd3dCommandList);
+	m_BroomLineEffectRect = new MyRectangle(
+		this, pd3dDevice, pd3dCommandList, 
+		POINT{ int(GameScreen::GetWidth())/2, int(GameScreen::GetHeight()) / 2 }, GameScreen::GetWidth(), GameScreen::GetHeight()
+		, L"Image/EffectLine.dds");
+
 	SetUpdatedContext(pContext); 
 }
 
@@ -117,27 +144,62 @@ Player::~Player()
 	m_pCameraUpdatedContext = nullptr;
 }
  
-
 void Player::ReleaseMembers()
 {
 	m_pPlayerUpdatedContext = nullptr;
 	m_pCameraUpdatedContext = nullptr;
-	if (m_pBroom)
+	if (m_BroomEffectRect)
+	{
+		m_BroomEffectRect->ReleaseObjects();
+		delete m_BroomEffectRect;
+		m_BroomEffectRect = nullptr;
+	}
+	if (m_BroomLineEffectRect)
+	{
+		m_BroomLineEffectRect->ReleaseObjects();
+		delete m_BroomLineEffectRect;
+		m_BroomLineEffectRect = nullptr;
+	}
+	if (m_pTexture_Cloth)
+	{
+		m_pTexture_Cloth->ReleaseObjects();
+		delete m_pTexture_Cloth;
+		m_pTexture_Cloth = nullptr;
+	}
+	if (m_pTexture_Body)
+	{
+		m_pTexture_Body->ReleaseObjects();
+		delete m_pTexture_Body;
+		m_pTexture_Body = nullptr;
+	}
+	if (m_Broom)
 	{ 
-		m_pBroom->ReleaseObjects();
-		delete m_pBroom;
-		m_pBroom = nullptr;
+		m_Broom->ReleaseObjects();
+		delete m_Broom;
+		m_Broom = nullptr;
 	}
-	if (m_pLoadObject)
+	if (m_pLoadObject_Cloth)
 	{
-		m_pLoadObject->ReleaseObjects(); 
-		m_pLoadObject = nullptr;
+		m_pLoadObject_Cloth->ReleaseObjects();
+		m_pLoadObject_Cloth = nullptr;
 	}
-	if (m_PlayerModel)
+
+	if (m_pLoadObject_Body)
 	{
-		//m_PlayerModel->ReleaseObjects();
-		//delete m_PlayerModel;
-		//m_PlayerModel = nullptr;
+		m_pLoadObject_Body->ReleaseObjects();
+		m_pLoadObject_Body = nullptr;
+	}
+	if (m_PlayerModel_Cloth)
+	{
+		m_PlayerModel_Cloth->ReleaseObjects();
+		delete m_PlayerModel_Cloth;
+		m_PlayerModel_Cloth = nullptr;
+	} 
+	if (m_PlayerModel_Body)
+	{
+		m_PlayerModel_Body->ReleaseObjects();
+		delete m_PlayerModel_Body;
+		m_PlayerModel_Body = nullptr;
 	}
 	if (m_pMyBOBox)
 	{
@@ -161,24 +223,37 @@ void Player::ReleaseMembers()
 
 void Player::ReleaseMemberUploadBuffers()
 {
-	if (m_pLoadObject) m_pLoadObject->ReleaseUploadBuffers();
-	if (m_PlayerModel)m_PlayerModel->ReleaseUploadBuffers();
+	if (m_BroomEffectRect) m_BroomEffectRect->ReleaseUploadBuffers();
+	if (m_BroomLineEffectRect) m_BroomLineEffectRect->ReleaseUploadBuffers();
+	if (m_pTexture_Cloth) m_pTexture_Cloth->ReleaseUploadBuffers(); 
+	if (m_pTexture_Body) m_pTexture_Body->ReleaseUploadBuffers(); 
+	if (m_pLoadObject_Cloth) m_pLoadObject_Cloth->ReleaseUploadBuffers();
+	if (m_pLoadObject_Body) m_pLoadObject_Body->ReleaseUploadBuffers();
+	if (m_PlayerModel_Cloth)m_PlayerModel_Cloth->ReleaseUploadBuffers();
+	if (m_PlayerModel_Body)m_PlayerModel_Body->ReleaseUploadBuffers();
 	if (m_pMyBOBox)m_pMyBOBox->ReleaseUploadBuffers();
 }
 
 void Player::Update(float fElapsedTime)
 { 
-	m_pBroom->Update(fElapsedTime);
+	m_Broom->Update(fElapsedTime);
 
 	// 이동량을 계산한다. 
 	m_pPlayerMovement->Update(fElapsedTime);
 	
 	// 이동량만큼 움직인다. 
-	 Move(Vector3::ScalarProduct(m_pPlayerMovement->m_xmf3Velocity, fElapsedTime, false));
-	 
-	 
+	Move(Vector3::ScalarProduct(m_pPlayerMovement->m_xmf3Velocity, fElapsedTime, false));
+
+	m_pMyBOBox->SetPosition(
+		XMFLOAT3(
+		m_Transform.GetPosition().x, 
+		75.f,
+		m_Transform.GetPosition().z)
+	);
+	
 	// 플레이어 콜백
 	// OnPlayerUpdateCallback(fElapsedTime);
+	 
 	 
 	// 이동량 줄어든다.
 	//fLength = Vector3::Length(m_xmf3Velocity);
@@ -192,10 +267,14 @@ void Player::Update(float fElapsedTime)
 void Player::SubstractHP(int sub)
 { 
 	m_pPlayerStatus->m_HP -= sub; 
+	std::cout << m_pPlayerStatus->m_HP << std::endl;
 }
 
 void Player::Animate(float fElapsedTime)
 {
+	// animate 이전에 현재 설정된 애니메이션 수행하도록 설정
+	SetTrackAnimationSet();
+
 	// 반드시 트랜스폼 업데이트..! 
 	m_Transform.Update(fElapsedTime);
 
@@ -204,54 +283,121 @@ void Player::Animate(float fElapsedTime)
 	float fYaw = 0.f;
 	float fRoll = 0.f;
 	XMMATRIX mtxRotate = XMMatrixRotationRollPitchYaw(XMConvertToRadians(fPitch), XMConvertToRadians(fYaw), XMConvertToRadians(fRoll));
-	m_pLoadObject->m_xmf4x4ToParent = Matrix4x4::Multiply(mtxRotate, m_Transform.GetpWorldMatrixs());
+	m_pLoadObject_Cloth->m_xmf4x4ToParent = Matrix4x4::Multiply(mtxRotate, m_Transform.GetpWorldMatrixs());
+	m_pLoadObject_Body->m_xmf4x4ToParent = Matrix4x4::Multiply(mtxRotate, m_Transform.GetpWorldMatrixs());
 	 
-	m_pLoadObject->Animate(fElapsedTime);
+	m_pLoadObject_Cloth->Animate(fElapsedTime);
+	m_pLoadObject_Body->Animate(fElapsedTime);
 }
 
 void Player::Render(ID3D12GraphicsCommandList * pd3dCommandList)
 {
-	if (!m_isRendering) return;
-
 #ifdef _SHOW_BOUNDINGBOX
-	m_pMyBOBox->Render(pd3dCommandList, m_Transform.GetpWorldMatrixs());
+	if (m_pSniping) m_pSniping->Render(pd3dCommandList);
+	m_pMyBOBox->Render(pd3dCommandList); 
 #endif // _SHOW_BOUNDINGBOX
 
-	m_pLoadObject->Render(pd3dCommandList);
-	// m_pPlayerStatus->Render(pd3dCommandList);
+	if (!m_isRendering) return; //만약 스나이핑 모드라면 플레이어를 렌더링하지 않는다.
+	m_pHaep->UpdateShaderVariable(pd3dCommandList);
+	m_pTexture_Cloth->UpdateShaderVariable(pd3dCommandList, 0);
+	m_pLoadObject_Cloth->Render(pd3dCommandList);
+	m_pTexture_Body->UpdateShaderVariable(pd3dCommandList, 0); 
+	m_pLoadObject_Body->Render(pd3dCommandList);
+
+	bool isMoving = GameInput::IsKeydownW() || GameInput::IsKeydownA() || GameInput::IsKeydownS() || GameInput::IsKeydownD();
+	if (m_Broom->GetisUsing() && isMoving)
+	{
+		m_BroomLineEffectRect->Render(pd3dCommandList, XMFLOAT2(0.F, 0.F), CGameTimer::GetInstance()->GetTotalTime());
+	}
+}
+
+void Player::RenderHpStatus(ID3D12GraphicsCommandList * pd3dCommandList)
+{
+	m_pPlayerStatus->Render(pd3dCommandList);
 }
  
-void Player::SetTrackAnimationSet(ULONG dwDirection)
+void Player::SetTrackAnimationSet()
 { 
-	m_pLoadObject->SetTrackAnimationSet(0, ANIMATION_IDLE.ID);
-
-	if (dwDirection & DIR_FORWARD)	m_pLoadObject->SetTrackAnimationSet(0, ANIMATION_FORWARD.ID);
-	if (dwDirection & DIR_BACKWARD) m_pLoadObject->SetTrackAnimationSet(0, ANIMATION_BACKWARD.ID);
-	if (dwDirection & DIR_RIGHT) m_pLoadObject->SetTrackAnimationSet(0, ANIMATION_RIGHT.ID);
-	if (dwDirection & DIR_LEFT) m_pLoadObject->SetTrackAnimationSet(0, ANIMATION_LEFT.ID); 
+	if (m_CurrAnimation != m_PrevAnimation)
+	{
+		m_pLoadObject_Cloth->SetTrackAnimationSet(0, m_CurrAnimation);
+		m_pLoadObject_Body->SetTrackAnimationSet(0, m_CurrAnimation);
+		m_PrevAnimation = m_CurrAnimation;
+	}
 }
 
 void Player::Move(const XMFLOAT3 & xmf3Shift)
 {
 	m_Transform.Move(xmf3Shift);
-	m_pMyBOBox->Move(xmf3Shift);
 }
  
-void Player::Rotate(float x, float y, float z)
-{
-	m_Transform.Rotate(x, y, z);
- 	m_pMyBOBox->Rotate(m_pPlayerMovement->m_fRoll, m_pPlayerMovement->m_fYaw, m_pPlayerMovement->m_fPitch);
+void Player::Rotate(float x, float y, float z) 
+{ 
+	m_Transform.Rotate(x, y, z); 
+	m_pMyBOBox->Rotate(m_pPlayerMovement->m_fRoll, m_pPlayerMovement->m_fYaw, m_pPlayerMovement->m_fPitch);
 }
 
 void Player::ProcessInput(float fTimeElapsed)
-{
+{ 
+	if (m_isAttacking)
+	{
+		if (m_pLoadObject_Cloth->IsTrackAnimationSetFinish(0, ANIMATION_ATTACK.ID))
+		{
+			m_isAttacking = false;
+		} 
+		return;
+	}
+
+	if (m_Broom->GetisPrepare())
+	{
+		m_CurrAnimation = ANIMATION_BROOMPREPARE.ID;
+
+		if (m_pLoadObject_Cloth->IsTrackAnimationSetFinish(0, ANIMATION_BROOMPREPARE.ID))
+		{
+			m_Broom->DoUse();
+		}
+		return;
+	}
+
 	DWORD dwDirection = 0;
+	m_CurrAnimation = ANIMATION_IDLE.ID;
+	// m_CurrAnimation = ANIMATION_FORWARD.ID;
 	 
-	if (GameInput::IsKeydownW()) dwDirection |= DIR_FORWARD;
-	if (GameInput::IsKeydownS()) dwDirection |= DIR_BACKWARD;
-	if (GameInput::IsKeydownA()) dwDirection |= DIR_LEFT;
-	if (GameInput::IsKeydownD()) dwDirection |= DIR_RIGHT;
-	 
+	bool isMove = false;
+	if (GameInput::IsKeydownW())
+	{
+		isMove = true;
+		m_CurrAnimation = ANIMATION_FORWARD.ID;
+		dwDirection |= DIR_FORWARD;
+	}
+	if (GameInput::IsKeydownS())
+	{
+		isMove = true;
+		m_CurrAnimation = ANIMATION_BACKWARD.ID;
+		dwDirection |= DIR_BACKWARD;
+	}
+	if (GameInput::IsKeydownA())
+	{
+		isMove = true;
+		m_CurrAnimation = ANIMATION_LEFT.ID;
+		dwDirection |= DIR_LEFT;
+	}
+	if (GameInput::IsKeydownD())
+	{
+		isMove = true;
+		m_CurrAnimation = ANIMATION_RIGHT.ID;
+		dwDirection |= DIR_RIGHT;
+	}
+
+	if (isMove && m_Broom->GetisUsing())
+	{
+		m_CurrAnimation = ANIMATION_BROOMFORWARD.ID;
+	}
+	else if (!isMove && m_Broom->GetisUsing())
+	{
+		m_CurrAnimation = ANIMATION_BROOMIDLE.ID;
+	}
+ 
 	// 만약 키보드 상하좌우 움직인다면...
 	if (dwDirection != 0)
 	{  
@@ -263,12 +409,29 @@ void Player::ProcessInput(float fTimeElapsed)
 		m_pPlayerMovement->ReduceVelocity(fTimeElapsed);
 	}
 
-	SetTrackAnimationSet(dwDirection);
+}
+
+bool Player::Attack()
+{
+	if (m_Broom->GetisUsing())
+	{
+		return false;
+	}
+	else
+	{
+		m_pPlayerMovement->m_xmf3Velocity = XMFLOAT3(0.F, 0.F, 0.F);
+		m_isAttacking = true;
+		m_CurrAnimation = ANIMATION_ATTACK.ID;
+		return true;
+	}
 }
 
 void Player::UseSkill_Broom()
 {
-	m_pBroom->DoUse();
+	if (!m_Broom->GetisUsing() && !m_Broom->GetisPrepare())
+	{
+		m_Broom->Prepare();
+	}
 }
 
 XMFLOAT3 Player::GetVelocity() const

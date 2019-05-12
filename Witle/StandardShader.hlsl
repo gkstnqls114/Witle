@@ -18,6 +18,7 @@ struct VS_STANDARD_OUTPUT
 	float3 tangentW : TANGENT;
 	float3 bitangentW : BITANGENT;
 	float2 uv : TEXCOORD;
+    float fogFactor : FOG;
 };
 
 VS_STANDARD_OUTPUT VSStandard(VS_STANDARD_INPUT input)
@@ -31,6 +32,11 @@ VS_STANDARD_OUTPUT VSStandard(VS_STANDARD_INPUT input)
 	output.position = mul(mul(float4(output.positionW, 1.0f), gmtxView), gmtxProjection);
 	output.uv = input.uv;
 
+    //포그 계수... 1: 투명하다 ~ 0: 탁하다
+    float fogEnd = 30000;
+    float fogStart = 100;
+    output.fogFactor = saturate((fogEnd - gvCameraPosition.z) / (fogEnd- fogStart));
+       
 	return(output);
 }
 
@@ -38,6 +44,11 @@ float4 PSStandard(VS_STANDARD_OUTPUT input) : SV_TARGET
 { 
 	// 임시로 사용할 컬러 색깔
     float4 TESTColor = gtxtTexture.Sample(gWrapSamplerState, input.uv);
+   
+    if (TESTColor.a < 0.1 && TESTColor.r < 0.1 && TESTColor.g < 0.1 && TESTColor.b < 0.1)
+        TESTColor = float4(1.f, 1.f, 1.f, 1.f);
+    else if (TESTColor.a < 0.5) discard;
+    
 	//float4 cAlbedoColor = float4(0.0f, 0.0f, 0.0f, 1.0f);
 	//if (gnTexturesMask & MATERIAL_ALBEDO_MAP) cAlbedoColor = gtxtAlbedoTexture.Sample(gssWrap, input.uv);
 	//float4 cSpecularColor = float4(0.0f, 0.0f, 0.0f, 1.0f);
@@ -61,9 +72,15 @@ float4 PSStandard(VS_STANDARD_OUTPUT input) : SV_TARGET
 	//{
 		normalW = normalize(input.normalW);
 	//}
-	//float4 cIllumination = Lighting(input.positionW, normalW);
-	//return(lerp(TESTColor, cIllumination, 0.5f));
-    return TESTColor;
+
+	float4 cIllumination = Lighting(input.positionW, normalW);
+    float4 ContrastColor = lerp(TESTColor, cIllumination, 0.5f); // 명암처리된 픽셀 색깔
+
+    float4 fogColor = float4(0.0 / 255.0, 34.0 / 255.0, 102.0 / 255.0, 1.0f);
+    
+    float4 finalColor = input.fogFactor * ContrastColor + (1.0 - input.fogFactor) * fogColor;
+
+    return finalColor;
 }
  
 
@@ -87,6 +104,21 @@ VS_STANDARD_OUTPUT VSStandardInstancing(VS_INSTANCING_OUTPUT input, uint nInstan
     output.bitangentW = mul(input.bitangent, (float3x3) gmtxInstancingWorld[nInstanceID].m_mtxWorld);
     output.position = mul(mul(float4(output.positionW, 1.0f), gmtxView), gmtxProjection);
     output.uv = input.uv;
-	 
+    
+    // Zfar = 포그 시작 범위
+    // Znear = 포그 끝 범위
+    // Z = 뷰 좌표계에서의 정점의 거리
+      
+    // f = (Zfar - Z) / (Zfar - Znear) = Zfar / (Zfar - Znear) + Z * (-1 / (Zfar - Znear))
+    //포그 계수... 1: 투명하다 ~ 0: 탁하다
+    float Z = length(gvCameraPosition - output.positionW);
+    
+    if (Z > 20000)
+        Z = 0;
+
+    float fogEnd = 10000;
+    float fogStart = 3000;
+    output.fogFactor = saturate((fogEnd - Z) / (fogEnd - fogStart));
+    
 	return(output);
 }

@@ -23,7 +23,7 @@ VS_SCREEN_OUTPUT VSScreen(VS_SCREEN_INPUT input, uint nVertexID : SV_VertexID)
     float ProjectionY = -2 * input.position.y / 720.f + 1;
      
     output.position = float4(ProjectionX, ProjectionY, input.position.z, 1.f);
-    output.uv = input.uv;
+    output.uv = input.uv * 100.f;
     output.color = float4(1.f, 1.f, 1.f, 1.f);
      
     return output;
@@ -31,9 +31,12 @@ VS_SCREEN_OUTPUT VSScreen(VS_SCREEN_INPUT input, uint nVertexID : SV_VertexID)
 
 
 float4 PSScreen(VS_SCREEN_OUTPUT input) : SV_TARGET
-{
-  //  float4 color = input.color; 
-    float4 color = gtxtTexture.Sample(gWrapSamplerState, input.uv);
+{ 
+    float4 color = float4(1.f, 0, 0, 1); 
     if (color.a < 0.5) discard;
+
+    if (input.uv.x > HPpercentage)
+        color = float4(0.f, 0.f, 0.f, 1.f);
+
     return color;
 }

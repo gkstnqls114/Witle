@@ -7,6 +7,7 @@ class MyRectangle;
 class PlayerStatus
 	: ComponentBase
 {
+	MyRectangle* m_HpBar{ nullptr };
 
 public:
 	int m_HP{ 1000 };

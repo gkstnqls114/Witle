@@ -64,8 +64,7 @@ private:
 	D3D12_CPU_DESCRIPTOR_HANDLE m_ShadowMapCPUHandle;
 	ID3D12Resource*			m_pShadowMap;
 	////////////////////////////// ½¦µµ¿ì¸Ê
-
-
+	 
 	//// GBuffer 
 	static const UINT m_GBuffersCount{ 2 };
 
@@ -133,8 +132,7 @@ private:
 
 	void BuildShaders();
 	void BuildTESTObjects();
-	 
-
+	  
 public:
 	CGameFramework();
 	~CGameFramework();

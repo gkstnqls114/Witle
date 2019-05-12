@@ -1,12 +1,18 @@
 #include "stdafx.h"
 #include "d3dUtil.h"
 #include "Transform.h"
+#include "MyFrustum.h"
 #include "GameScreen.h"
 #include "GameObject.h"
 #include "Camera.h"
 
 void Camera::ReleaseObjects()
-{
+{ 
+	if (m_pFrustum)
+	{
+		delete m_pFrustum;
+		m_pFrustum = nullptr;
+	}
 	ReleaseShaderVariables();
 }
 
@@ -15,12 +21,15 @@ void Camera::ReleaseUploadBuffers()
 
 }
 
-Camera::Camera(GameObject* pOwner)
+Camera::Camera(GameObject* pOwner, const XMFLOAT3& AtOffset)
 	: ComponentBase(pOwner)
 {
 	m_d3dViewport = D3D12_VIEWPORT{ 0.0f, 0.0f, static_cast<FLOAT>(GameScreen::GetWidth()) , static_cast<FLOAT>(GameScreen::GetHeight()), 0.0f, 1.0f };
+	m_AtOffset = AtOffset;
+	m_DebugAtOffset = AtOffset;
 	m_d3dScissorRect = D3D12_RECT{ 0, 0, static_cast<LONG>(GameScreen::GetWidth()) ,static_cast<LONG>(GameScreen::GetHeight()) };
 	m_FamilyID.InitCamera();
+	m_pFrustum = new MyFrustum(pOwner);
 }
 
 Camera::Camera(GameObject* pOwner, Camera *pCamera)
@@ -72,6 +81,36 @@ void Camera::ReleaseShaderVariables()
 	}
 }
 
+void Camera::MoveAtOffset(const XMFLOAT3 & Shift)
+{ 
+	Vector3::Add(m_DebugAtOffset, Shift);
+
+	XMFLOAT3 right = m_pOwner->GetTransform().GetRight();
+	XMFLOAT3 up = m_pOwner->GetTransform().GetUp();
+	XMFLOAT3 look = m_pOwner->GetTransform().GetLook();
+
+	XMFLOAT3 atoffsetRight = Vector3::ScalarProduct(right, Shift.x, false);
+	XMFLOAT3 atoffsetUp = Vector3::ScalarProduct(up, Shift.y, false);
+	XMFLOAT3 atoffsetLook = Vector3::ScalarProduct(look, Shift.z, false);
+
+	m_AtOffset = Vector3::Add(m_AtOffset, atoffsetRight); // (0, 0, 0)을 기준으로..  
+	m_AtOffset = Vector3::Add(m_AtOffset, atoffsetUp); // (0, 0, 0)을 기준으로..  
+	m_AtOffset = Vector3::Add(m_AtOffset, atoffsetLook); // (0, 0, 0)을 기준으로..  
+}
+
+void Camera::ZoomIn(float value)
+{
+	if (value >= 1) return;
+	m_Offset = Vector3::ScalarProduct(m_Offset, value, false);
+}
+
+void Camera::ZoomOut(float value)
+{
+	if (value <= 1) return;
+
+	m_Offset = Vector3::ScalarProduct(m_Offset, value, false);
+}
+ 
 void Camera::Teleport(const XMFLOAT3 & pos)
 {
 	m_pOwner->GetTransform().SetPosition(pos);
@@ -111,6 +150,8 @@ void Camera::RegenerateViewMatrix()
 	m_pOwner->GetTransform().SetRight(XMFLOAT3(m_xmf4x4View._11, m_xmf4x4View._21, m_xmf4x4View._31)); 
 	m_pOwner->GetTransform().SetUp(XMFLOAT3(m_xmf4x4View._12, m_xmf4x4View._22, m_xmf4x4View._32));
 	m_pOwner->GetTransform().SetLook(XMFLOAT3(m_xmf4x4View._13, m_xmf4x4View._23, m_xmf4x4View._33));
+
+	m_pFrustum->GenerateFrustum(m_xmf4x4Projection, m_xmf4x4View);
 }
 
 void Camera::GenerateProjectionMatrix(float fNearPlaneDistance, float fFarPlaneDistance, float fAspectRatio, float fFOVAngle)
@@ -139,10 +180,11 @@ void Camera::SetViewportsAndScissorRects(ID3D12GraphicsCommandList *pd3dCommandL
 	pd3dCommandList->RSSetViewports(1, &m_d3dViewport);
 	pd3dCommandList->RSSetScissorRects(1, &m_d3dScissorRect);
 }
- 
+
 Camera & Camera::operator=(const Camera & camera)
 {
 	// TODO: 여기에 반환 구문을 삽입합니다.
+	m_AtOffset = camera.m_AtOffset; 
 	m_At = camera.m_At;
 	m_Offset = camera.m_Offset;
 

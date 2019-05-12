@@ -4,6 +4,8 @@
 //// Skill header //////////////////////////
 #include "WideareaMagic.h"
 #include "Sniping.h" 
+#include "Broom.h"
+#include "CylinderMesh.h"
 //// Skill header //////////////////////////
 
 //// GameObject header //////////////////////////
@@ -20,6 +22,7 @@
 //// Manager header //////////////////////////
 
 #include "GameScreen.h"
+#include "GameTimer.h"
  
 #include "MyBOBox.h"
 #include "Collision.h"
@@ -37,8 +40,7 @@
 #include "Player.h"
 #include "CameraObject.h"
 #include "QuadTreeTerrain.h"
- 
-
+#include "BasicCam.h" 
 #include "GameScene.h"
 
 ID3D12DescriptorHeap*		GameScene::m_pd3dCbvSrvDescriptorHeap;
@@ -136,13 +138,26 @@ bool GameScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM w
 			// 플레이어 2으로 변경
 			break;
 		case VK_F3:
+			m_isSkyMode = !m_isSkyMode;
 			break;
 
 		}
 		break;
 	case WM_KEYDOWN:
-		switch (wParam) {
-		case '1': // 스킬 빗자루
+		switch (wParam) { 
+		case VK_F2:
+			MyBOBox::CHANGEMODE();
+			break;
+
+		case 'L':
+			m_pMainCamera->GetCamera()->MoveAtOffset(XMFLOAT3{ 0, -10, 0 });
+			break;
+
+		case 'Z': 
+			m_pPlayer->SubstractHP(100);
+			break;
+
+		case '1': // 스킬 빗자루  
 			m_pPlayer->UseSkill_Broom();
 			break;
 
@@ -158,8 +173,8 @@ bool GameScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM w
 			break;
 
 		case '3': // 스킬 광역 공격
-			m_WideareaMagic->DoUse(); 
-			m_WideareaMagic->SetPosition(m_pPlayer->GetTransform().GetPosition());
+			// m_WideareaMagic->DoUse(); 
+			// m_WideareaMagic->SetPosition(m_pPlayer->GetTransform().GetPosition());
 			break;
 		case 'W':
 		case 'w':  
@@ -185,12 +200,13 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	{
 		CreateRootSignature(pd3dDevice);
 	}
-	 
 	// 디스크립터 힙 설정
 	GameScene::CreateCbvSrvDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 3);
-	 
-	m_AimPoint = new Widget("AimPoint", pd3dDevice, pd3dCommandList, POINT{ int(GameScreen::GetWidth()) / 2, int(GameScreen::GetHeight()) / 2 }, 100.f, 100.f, L"Image/AimPoint.dds");
-	m_WideareaMagic = new WideareaMagic(pd3dDevice, pd3dCommandList);
+
+	// m_CylinderMesh = new CylinderMesh(m_pPlayer, pd3dDevice, pd3dCommandList, 100, 100, 100, 100, 100);
+
+	m_AimPoint = new AimPoint("AimPoint", pd3dDevice, pd3dCommandList, POINT{ int(GameScreen::GetWidth()) / 2, int(GameScreen::GetHeight()) / 2 }, 100.f, 100.f, L"Image/AimPoint.dds");
+	// m_WideareaMagic = new WideareaMagic(pd3dDevice, pd3dCommandList);
 
 	//// 스카이 박스 생성
 	m_SkyBox = new SkyBox(pd3dDevice, pd3dCommandList, 3000.F, 3000.F, 3000.F);
@@ -204,18 +220,28 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	// 테스트할 모델 오브젝트
 	 m_pPlayer = new Player("Player", pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 	m_pOtherPlayer = new Player("OtherPlayer", pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
-	m_pOtherPlayer->GetTransform().SetPosition(0, 75, 1000); 
 	m_SkyBox->SetpPlayerTransform(&m_pPlayer->GetTransform());
 
 	//// 테스트 쿼드트리 터레인 생성 
 	m_pQuadtreeTerrain = new QuadtreeTerrain(pd3dDevice, pd3dCommandList, 257, 257, xmf3Scale, xmf4Color, m_Terrain->GetHeightMapImage());
 
 	// 카메라
-	m_Camera = new CameraObject("Camera");  
-	m_Sniping = new Sniping(m_Camera, m_pPlayer, pd3dDevice, pd3dCommandList);
-	 m_pPlayer->SetSniping(m_Sniping);
-	 m_Camera->ChangeCamera(m_Sniping->GetBaseCamera());
+	m_pMainCamera = new CameraObject("Camera");  
+	m_Sniping = new Sniping(m_pMainCamera, m_pPlayer, pd3dDevice, pd3dCommandList);
+	m_pPlayer->SetSniping(m_Sniping);
+	m_pMainCamera->ChangeCamera(m_Sniping->GetBaseCamera());
 	 
+	m_pSkyCameraObj = new CameraObject("SkyCamera");
+	m_pSkyCamera = new BasicCam(m_pSkyCameraObj);
+	m_pSkyCamera->CreateShaderVariables(pd3dDevice, pd3dCommandList);
+	m_pSkyCamera->SetViewport(0, 0, GameScreen::GetWidth(), GameScreen::GetHeight(), 0.0f, 1.0f);
+	m_pSkyCamera->SetScissorRect(0, 0, GameScreen::GetWidth(), GameScreen::GetHeight());
+	m_pSkyCamera->GenerateProjectionMatrix(0.01f, 40000.F, float(GameScreen::GetWidth()) / float(GameScreen::GetHeight()), 60.0f);
+	m_pSkyCamera->SetAt(XMFLOAT3(15000.f, 0.f, 15000.f));
+	m_pSkyCamera->Rotate(90.F, 0.F, 0.F);
+	m_pSkyCamera->SetOffset(XMFLOAT3(0.f, -30000.f, 0.f));
+	m_pSkyCameraObj->ChangeCamera(m_pSkyCamera);
+
 #ifdef CHECK_SUBVIEWS
 	m_lookAboveCamera = new CameraObject("LookAboveCamera");
 
@@ -263,7 +289,18 @@ void GameScene::ReleaseObjects()
 		m_pd3dcbMaterials->Release();
 		m_pd3dcbMaterials = NULL;
 	}
-
+	if (m_pSkyCamera)
+	{
+		m_pSkyCamera->ReleaseObjects();
+		delete m_pSkyCamera;
+		m_pSkyCamera = nullptr;
+	}
+	if (m_pSkyCameraObj)
+	{
+		m_pSkyCameraObj->ReleaseObjects();
+		delete m_pSkyCameraObj;
+		m_pSkyCameraObj = nullptr;
+	}
 	if (m_SkyBox)
 	{
 		m_SkyBox->ReleaseObjects();
@@ -313,11 +350,11 @@ void GameScene::ReleaseObjects()
 		m_lookAboveCamera = nullptr;
 	}
 #endif
-	if (m_Camera)
+	if (m_pMainCamera)
 	{ 
-		m_Camera->ReleaseObjects();
-		delete m_Camera;
-		m_Camera = nullptr;
+		m_pMainCamera->ReleaseObjects();
+		delete m_pMainCamera;
+		m_pMainCamera = nullptr;
 	}
 	if (m_Terrain)
 	{ 
@@ -335,34 +372,25 @@ void GameScene::ReleaseObjects()
 
 bool GameScene::ProcessInput(HWND hWnd, float fElapsedTime)
 { 
+	// 플레이어 이동에 대한 처리 (정확히는 이동이 아니라 가속도)
 	m_pPlayer->ProcessInput(fElapsedTime);
+	// m_pOtherPlayer->ProcessInput(fElapsedTime);
+	// m_pOtherPlayer->Rotate(0.0f, 10.f, 0.f);
 
+	// 플레이어 회전에 대한 처리
 	if ((GameInput::GetDeltaX() != 0.0f) || (GameInput::GetDeltaY() != 0.0f))
 	{
 		if (GameInput::GetDeltaX() || GameInput::GetDeltaY())
 		{ 
 			// 플레이어와 카메라 똑같이 rotate...
 			// 순서 의존적이므로 변경 금지
-			m_Camera->GetCamera()->Rotate(GameInput::GetDeltaY(), GameInput::GetDeltaX(), 0.0f);
-			m_pPlayer->Rotate(0.0f, GameInput::GetDeltaX(), 0.0f);
+			m_pMainCamera->GetCamera()->Rotate(GameInput::GetDeltaY(), GameInput::GetDeltaX(), 0.0f);
+			m_pPlayer->Rotate(0.0f, GameInput::GetDeltaX(), 0.0f); 
 		} 
 	}
 	
-	Camera* pCamera = m_Camera->GetCamera();
-	RAY pickRay;
-	bool isPick = GameInput::GenerateRayforPicking(m_Camera->GetTransform().GetPosition(), pCamera->GetViewMatrix(), pCamera->GetProjectionMatrix(), pickRay);
-	if (isPick && m_pOtherPlayer)
-	{  
-		float dist;
-
-		auto world = m_pOtherPlayer->GetTransform().GetpWorldMatrixs();
-		BoundingOrientedBox box = m_pOtherPlayer->GetBOBox()->GetBOBox();
-		box.Transform(box, XMLoadFloat4x4(&world));
-		if (box.Intersects(XMLoadFloat3(&pickRay.origin), XMLoadFloat3(&pickRay.direction), dist))
-		{ 
-			m_pOtherPlayer->SubstractHP(100);
-		} 
-	}
+	// 피킹 처리
+	ProcessPicking(fElapsedTime);
 
 	return true;
 }
@@ -397,10 +425,14 @@ void GameScene::LastUpdate(float fElapsedTime)
 	 
 	// player update 이후에 camera update
 	// 순서변경X
-	if (m_Camera) m_Camera->LastUpdate(fElapsedTime);
+	if (m_pMainCamera) m_pMainCamera->LastUpdate(fElapsedTime);
+	if (m_pSkyCameraObj) m_pSkyCameraObj->LastUpdate(fElapsedTime);
 
 	// 카메라 프러스텀과 쿼드트리 지형 렌더링 체크
-	if (m_Camera && m_pQuadtreeTerrain) m_Camera->GetFrustum()->CheckRendering(m_pQuadtreeTerrain->GetRootNode());
+	if (m_pMainCamera && m_pQuadtreeTerrain)
+	{
+		m_pMainCamera->GetCamera()->GetFrustum()->CheckRendering(m_pQuadtreeTerrain->GetRootNode());
+	}
 	if (m_pQuadtreeTerrain) m_pQuadtreeTerrain->LastUpdate(fElapsedTime);
 	// 순서변경X 
 
@@ -408,8 +440,7 @@ void GameScene::LastUpdate(float fElapsedTime)
 	//if (Collision::isCollide(m_WideareaMagic->GetBSphere(), m_pPlayer->GetBOBox()))
 	//{
 
-	//}
-	
+	//} 
 }
 
 void GameScene::TESTSetRootDescriptor(ID3D12GraphicsCommandList * pd3dCommandList)
@@ -420,7 +451,7 @@ void GameScene::TESTSetRootDescriptor(ID3D12GraphicsCommandList * pd3dCommandLis
 
 void GameScene::AnimateObjects(float fTimeElapsed)
 { 
-	if(m_pOtherPlayer) m_pOtherPlayer->Animate(fTimeElapsed);
+	if (m_pOtherPlayer) m_pOtherPlayer->Animate(fTimeElapsed);
 	if (m_pPlayer) m_pPlayer->Animate(fTimeElapsed);
 }
 
@@ -434,10 +465,21 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	// 그래픽 루트 시그니처 설정
 	pd3dCommandList->SetGraphicsRootSignature(m_pd3dGraphicsRootSignature);
 
-	// 클라 화면 설정
-	m_Camera->SetViewportsAndScissorRects(pd3dCommandList); 
-	m_Camera->GetCamera()->UpdateShaderVariables(pd3dCommandList, ROOTPARAMETER_CAMERA);
+	// 클라 화면 설정	
+	if (m_isSkyMode)
+	{
+		m_pSkyCameraObj->SetViewportsAndScissorRects(pd3dCommandList);
+		m_pSkyCameraObj->GetCamera()->UpdateShaderVariables(pd3dCommandList, ROOTPARAMETER_CAMERA);
+	}
+	else
+	{
+		m_pMainCamera->SetViewportsAndScissorRects(pd3dCommandList);
+		m_pMainCamera->GetCamera()->UpdateShaderVariables(pd3dCommandList, ROOTPARAMETER_CAMERA);
+	}
 
+	// pd3dCommandList->SetComputeRoot32BitConstants(ROOTPARAMETER_WORLD, 16, Matrix4x4)
+	// m_CylinderMesh->Render(pd3dCommandList);
+	
 	// 스카이박스 렌더
 	if(m_SkyBox) m_SkyBox->Render(pd3dCommandList);
 	 
@@ -448,18 +490,18 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	D3D12_GPU_VIRTUAL_ADDRESS d3dcbMaterialsGpuVirtualAddress = m_pd3dcbMaterials->GetGPUVirtualAddress();
 	pd3dCommandList->SetGraphicsRootConstantBufferView(ROOTPARAMETER_MATERIALS, d3dcbMaterialsGpuVirtualAddress);
 
+	pd3dCommandList->SetDescriptorHeaps(1, &m_pd3dCbvSrvDescriptorHeap);
+
+	if (m_pPlayer) m_pPlayer->Render(pd3dCommandList);
+	if (m_pOtherPlayer) m_pOtherPlayer->Render(pd3dCommandList);
+
 	// 터레인
 	if (m_Terrain)
-	{ 
-		pd3dCommandList->SetDescriptorHeaps(1, &m_pd3dCbvSrvDescriptorHeap);
-		pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_WORLD, 16, &Matrix4x4::Identity(), 0);
-		m_Terrain->UpdateShaderVariables(pd3dCommandList);
-
-		// TerrainMesh Render
+	{  
 		Mesh* terrainMesh = m_Terrain->GetComponent<Mesh>("TerrainMesh");
-		m_pQuadtreeTerrain->Render(pd3dCommandList);
+		m_pQuadtreeTerrain->Render(pd3dCommandList, m_Terrain, m_pd3dCbvSrvDescriptorHeap); 
 	}
-	// if(m_WideareaMagic) m_WideareaMagic->Render(pd3dCommandList);
+	if(m_WideareaMagic) m_WideareaMagic->Render(pd3dCommandList);
 
 
 #ifdef CHECK_SUBVIEWS
@@ -472,12 +514,16 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	////////////////////////////// Model Render
 	// PSO 설정
 	 
-	pd3dCommandList->SetDescriptorHeaps(1, &m_pd3dCbvSrvDescriptorHeap); 
-	if(m_pPlayer) m_pPlayer->Render(pd3dCommandList);
-	if(m_pOtherPlayer) m_pOtherPlayer->Render(pd3dCommandList);
 
 	//// Aim point Render 
-	if(m_AimPoint) m_AimPoint->Render(pd3dCommandList);
+	if (!m_isSkyMode)
+	{
+		if (m_pPlayer) m_pPlayer->RenderHpStatus(pd3dCommandList);
+		if (!m_pPlayer->GetBroom()->GetisPrepare() && !m_pPlayer->GetBroom()->GetisUsing())
+		{
+			if(m_AimPoint) m_AimPoint->Render(pd3dCommandList);
+		}
+	}
 
 }
 
@@ -507,7 +553,9 @@ ID3D12RootSignature* GameScene::CreateGraphicsRootSignature(ID3D12Device *pd3dDe
 	pRootParameters[ROOTPARAMETER_CAMERA] = d3dUtil::CreateRootParameterCBV(1);          // b1: Camera
 	pRootParameters[ROOTPARAMETER_MATERIALS] = d3dUtil::CreateRootParameterCBV(2);       // b2: Materials
 	pRootParameters[ROOTPARAMETER_LIGHTS] = d3dUtil::CreateRootParameterCBV(3);          // b3: Lights
-	pRootParameters[ROOTPARAMETER_COLOR] = d3dUtil::CreateRootParameterConstants(3, 4);  // b4: Color
+	pRootParameters[ROOTPARAMETER_PICKINGPOINT] = d3dUtil::CreateRootParameterConstants(2, 4);  // b4: Color
+	pRootParameters[ROOTPARAMETER_HPPERCENTAGE] = d3dUtil::CreateRootParameterConstants(1, 5);  // b5: HP percentage
+	pRootParameters[ROOTPARAMETER_TIME] = d3dUtil::CreateRootParameterConstants(1, 6);  // b6: Elapsed Time
 	
 	D3D12_DESCRIPTOR_RANGE pTextureDescriptorRanges[3];
 	pTextureDescriptorRanges[0] = d3dUtil::CreateDescriptorRangeSRV(1, 0); //t0: gtxtTexture
@@ -610,52 +658,188 @@ void GameScene::UpdateCollision(float fElapsedTime)
 	// 충돌체크 ///////////////////////// 
 	BoundingOrientedBox AlreadyPlayerBBox = m_pPlayer->CalculateAlreadyBoundingBox(fElapsedTime);
 	XMFLOAT3 AlreadyPositon{ AlreadyPlayerBBox.Center.x, AlreadyPlayerBBox.Center.y, AlreadyPlayerBBox.Center.z };
-	 
-	for (const auto& name : ModelStorage::GetInstance()->m_NameList)
-	{
-		MyBOBox* box = ModelStorage::GetInstance()->GetBOBox(name);
-		if (!box) continue; // 충돌박스가 없다면 다른 오브젝트를 검사하자.
+	
+	// 외곽처리
+	MyBOBox outside_box[4]{ 
+		{XMFLOAT3(-100, 0, 15000), XMFLOAT3(100, 3000, 20000)},
+		{XMFLOAT3(15000, 0, 30100), XMFLOAT3(20000, 3000, 100)},
+		{XMFLOAT3(30100, 0, 15000), XMFLOAT3(100, 3000, 20000)},
+		{XMFLOAT3(15000, 0, -100), XMFLOAT3(30000, 3000, 100)},
+	};
 
-		XMFLOAT4X4* pWorldMatrix = StaticObjectStorage::GetInstance(m_pQuadtreeTerrain)->GetpWorldMatrixs(0, name);
-
-		// 트레인 조각 내부 오브젝트 개수만큼 충돌 체크
-		for (int i = 0; i < StaticObjectStorage::GetInstance(m_pQuadtreeTerrain)->GetObjectCount(0, name); ++i)
+	for (int i = 0; i < 4; ++i)
+	{  
+		// 이동한 박스를 통해 충돌한다.
+		bool isAlreadyCollide = Collision::isCollide(AlreadyPlayerBBox, outside_box[i].GetBOBox());
+		if (isAlreadyCollide)
 		{
-			//월드 행렬 갖고온다.
-
-			// 모델 충돌박스를 월드행렬 곱한다. 일단 현재는 포지션으로 이동
-			MyBOBox worldBox = *box;
-			worldBox.Move(XMFLOAT3(pWorldMatrix[i]._41, 0, pWorldMatrix[i]._43));
-			 
-			// 이동한 박스를 통해 충돌한다.
-			bool isAlreadyCollide = Collision::isCollide(AlreadyPlayerBBox, worldBox.GetBOBox());
-			if (isAlreadyCollide)
-			{  
-				for (int x = 0; x < 4; ++x) //  plane 4 면에 대해 체크한다..
+			for (int x = 0; x < 4; ++x) //  plane 4 면에 대해 체크한다..
+			{
+				XMFLOAT3 intersectionPoint;
+				// 여기서 d란... 원점과 평면과의 거리를 의미한다. (양수/음수)
+				float d = outside_box[i].GetPlane(x).w;
+				// 시간에 따른 이동을 기준으로 하므로 velocity 는 프레임 시간을 곱한다.
+				bool isFront = Plane::IsFront(outside_box[i].GetPlaneNormal(x), d, m_pPlayer->GetTransform().GetPosition()); // 업데이트 이전 위치
+				// 만약 무한한 평면에 교차했다면...
+				if (isFront)
 				{
-					XMFLOAT3 intersectionPoint;
-					// 여기서 d란... 원점과 평면과의 거리를 의미한다. (양수/음수)
-					float d = Plane::CaculateD(box->GetPlane(x), worldBox.GetPosOnPlane(x));
-					// 시간에 따른 이동을 기준으로 하므로 velocity 는 프레임 시간을 곱한다.
-					bool isIntersect = Plane::Intersect(box->GetPlaneNormal(x), d, m_pPlayer->GetTransform().GetPosition(), Vector3::ScalarProduct(m_pPlayer->GetVelocity(), fElapsedTime, false), intersectionPoint);
-					bool isFront = Plane::IsFront(box->GetPlaneNormal(x), d, m_pPlayer->GetTransform().GetPosition()); // 업데이트 이전 위치
-					// 만약 무한한 평면에 교차했다면...
-					if (isIntersect && isFront)
-					{ 
-						// 해당 교차점이 유한평면안에 존재하는지 확인한다. 
-						if (worldBox.IsIn(x, intersectionPoint))
-						{  
+					bool isIntersect = Plane::Intersect(outside_box[i].GetPlaneNormal(x), d, m_pPlayer->GetTransform().GetPosition(), Vector3::ScalarProduct(m_pPlayer->GetVelocity(), fElapsedTime, false), intersectionPoint);
+
+					if (isIntersect)
+					{
+						// 해당 교차점이 유한평면안에 존재하는지 확인한다.
+						// outside_box[i].IsIn(x, intersectionPoint)
+						// 
+						if (Collision::isIn(outside_box[i].GetBOBox(), intersectionPoint)) //isIn 함수 나중에 수정해야함
+						{
 							m_pPlayer->SetVelocity
 							(
-								Vector3::Sliding(box->GetPlaneNormal(x), m_pPlayer->GetVelocity())
+								Vector3::Sliding(outside_box[i].GetPlaneNormal(x), m_pPlayer->GetVelocity())
 							);
-						} 
+						}
 					}
 				}
-				 
 			}
 		}
-	}  
+	}
+
+	XMINT4 IDs = m_pQuadtreeTerrain->GetIDs(AlreadyPositon);
+	int TerrainCount = m_pQuadtreeTerrain->GetTerrainPieceCount();
+
+	// Ti: Terrain Index
+	for (int Ti = 0; Ti < TerrainCount; ++Ti)
+	{ 
+		int TerrainIndex = Ti;
+		//if (Ti == 0) TerrainIndex = IDs.x;
+		//else if (Ti == 1) TerrainIndex = IDs.y;
+		//else if (Ti == 2) TerrainIndex = IDs.z;
+		//else if (Ti == 3) TerrainIndex = IDs.w;
+
+		//if (TerrainIndex == -1) continue;
+
+		for (const auto& name : ModelStorage::GetInstance()->m_NameList)
+		{
+			MyBOBox* box = ModelStorage::GetInstance()->GetBOBox(name);
+			if (!box) continue; // 충돌박스가 없다면 다른 오브젝트를 검사하자.
+
+			XMFLOAT4X4* pWorldMatrix = StaticObjectStorage::GetInstance(m_pQuadtreeTerrain)->GetpWorldMatrixs(TerrainIndex, name);
+
+			// 트레인 조각 내부 오브젝트 개수만큼 충돌 체크
+			for (int i = 0; i < StaticObjectStorage::GetInstance(m_pQuadtreeTerrain)->GetObjectCount(TerrainIndex, name); ++i)
+			{
+				//월드 행렬 갖고온다.
+
+				// 모델 충돌박스를 월드행렬 곱한다. 일단 현재는 포지션으로 이동
+				MyBOBox worldBox = *box;
+				worldBox.Move(XMFLOAT3(pWorldMatrix[i]._41, 0, pWorldMatrix[i]._43));
+
+				// 이동한 박스를 통해 충돌한다.
+				bool isAlreadyCollide = Collision::isCollide(AlreadyPlayerBBox, worldBox.GetBOBox());
+				if (isAlreadyCollide)
+				{
+					for (int x = 0; x < 4; ++x) //  plane 4 면에 대해 체크한다..
+					{
+						XMFLOAT3 intersectionPoint;
+						// 여기서 d란... 원점과 평면과의 거리를 의미한다. (양수/음수)
+						float d = Plane::CaculateD(box->GetPlane(x), worldBox.GetPosOnPlane(x));
+						// 시간에 따른 이동을 기준으로 하므로 velocity 는 프레임 시간을 곱한다.
+						bool isFront = Plane::IsFront(box->GetPlaneNormal(x), d, m_pPlayer->GetTransform().GetPosition()); // 업데이트 이전 위치
+						// 만약 무한한 평면에 교차했다면...
+						if (isFront)
+						{
+							bool isIntersect = Plane::Intersect(box->GetPlaneNormal(x), d, m_pPlayer->GetTransform().GetPosition(), Vector3::ScalarProduct(m_pPlayer->GetVelocity(), fElapsedTime, false), intersectionPoint);
+
+							if (isIntersect)
+							{
+								// 해당 교차점이 유한평면안에 존재하는지 확인한다.
+								// worldBox.IsIn(x, intersectionPoint)
+								// 
+								if (Collision::isIn(worldBox.GetBOBox(), intersectionPoint)) //isIn 함수 나중에 수정해야함
+								{
+									m_pPlayer->SetVelocity
+									(
+										Vector3::Sliding(box->GetPlaneNormal(x), m_pPlayer->GetVelocity())
+									);
+								}
+							}
+						}
+					}
+
+				}
+			}
+		}
+	}
+}
+
+void GameScene::ProcessPicking(float fElapsedTime)
+{
+	if (GameInput::GetDragMode()) // 만약 드래그로 회전한다면...
+	{
+		if (!GameInput::IsKeydownE()) return; // e를 누르지 않았다면 아무것도 실행하지 않는다.
+		if (m_pPlayer->IsAttacking()) return;
+		
+		m_pPlayer->Attack();
+
+		// 피킹 ray를 만든다.
+		RAY pickRay = RAY::GeneratePickingRay(m_AimPoint->GetPickingPoint(), m_pMainCamera->GetCamera());
+
+		// 다른 유저와 닿는지 확인한다.
+		float Playerdist;
+		bool isCollide = Collision::isCollide(m_pOtherPlayer->GetBOBox()->GetBOBox(), pickRay.origin, pickRay.direction, Playerdist);
+		 
+		// 닿지 않는다면 리턴한다.
+		if (!isCollide) return;
+		if (Playerdist > 3000.f)
+		{
+			std::cout << Playerdist << " ... " << std::endl;
+			return;
+		}
+
+		m_pOtherPlayer->SubstractHP(10);
+		
+		//// 피킹 ray에 닿는 오브젝트가 있는 지 확인한다.
+		//float dist = FLT_MAX;
+		//float temp;
+		//bool isCollideObject;
+		//for (const auto& name : ModelStorage::GetInstance()->m_NameList)
+		//{
+		//	MyBOBox* box = ModelStorage::GetInstance()->GetBOBox(name);
+		//	if (!box) continue; // 충돌박스가 없다면 다른 오브젝트를 검사하자.
+
+		//	XMFLOAT4X4* pWorldMatrix = StaticObjectStorage::GetInstance(m_pQuadtreeTerrain)->GetpWorldMatrixs(0, name);
+
+		//	// 트레인 조각 내부 오브젝트 개수만큼 충돌 체크
+		//	for (int i = 0; i < StaticObjectStorage::GetInstance(m_pQuadtreeTerrain)->GetObjectCount(0, name); ++i)
+		//	{ 
+		//		// 모델 충돌박스를 월드행렬 곱한다. 일단 현재는 포지션으로 이동
+		//		MyBOBox worldBox = *box;
+		//		worldBox.Move(XMFLOAT3(pWorldMatrix[i]._41, 0, pWorldMatrix[i]._43));
+
+		//		if (Collision::isCollide(worldBox.GetBOBox(), pickRay.origin, pickRay.direction, temp))
+		//		{
+		//			std::cout << "오브젝트와 부딪힘" << std::endl;
+		//			dist = fminf(temp, dist);
+		//			isCollideObject = true;
+		//		}
+		//		
+		//	}
+		//}
+
+
+		//// 제일 짧은 거리는?
+		//// 만약 그게 다른 유저라면 해당 유저의 hp를 감소시킨다.
+		//if (Playerdist < dist)
+		//{
+		//	std::cout << "hp 감소" << std::endl;
+		//	m_pOtherPlayer->SubstractHP(10);
+		//} 
+	}
+	else // 드래그로 회전하지 않는다면...
+	{
+		if (!GameInput::isNowClick()) return; // 클릭하지 않았다면 아무것도 실행하지 않는다.
+		 
+
+	}
 }
 
 void GameScene::BuildLightsAndMaterials(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList)
@@ -695,8 +879,8 @@ void GameScene::BuildLightsAndMaterials(ID3D12Device *pd3dDevice, ID3D12Graphics
 
 	LightManager::m_pLights->m_pLights[2].bEnable = true;
 	LightManager::m_pLights->m_pLights[2].nType = LIGHT_TYPE::DIRECTIONAL_LIGHT;
-	LightManager::m_pLights->m_pLights[2].Ambient = XMFLOAT4(0.f, 1.f, 0.2f, 1.0f);
-	LightManager::m_pLights->m_pLights[2].Diffuse = XMFLOAT4(0.4f, 0.4f, 0.4f, 1.0f);
+	LightManager::m_pLights->m_pLights[2].Ambient = XMFLOAT4(1.f, 0.8f, 0.8f, 1.0f);
+	LightManager::m_pLights->m_pLights[2].Diffuse = XMFLOAT4(1.0f, 0.4f, 0.4f, 1.0f);
 	LightManager::m_pLights->m_pLights[2].Specular = XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f);
 	LightManager::m_pLights->m_pLights[2].Direction = XMFLOAT3(0.0f, 0.0f, 1.0f);
 	
