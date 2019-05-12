@@ -165,6 +165,7 @@
     <ClInclude Include="ComputeShader.h" />
     <ClInclude Include="CylinderMesh.h" />
     <ClInclude Include="DirectionalLight.h" />
+    <ClInclude Include="EffectRect.h" />
     <ClInclude Include="FamilyID.h" />
     <ClInclude Include="GameScreen.h" />
     <ClInclude Include="HorizonBlurShader.h" />
@@ -269,6 +270,7 @@
     <ClCompile Include="d3dUtil.cpp" />
     <ClCompile Include="DDSTextureLoader12.cpp" />
     <ClCompile Include="DirectionalLight.cpp" />
+    <ClCompile Include="EffectRect.cpp" />
     <ClCompile Include="Event.cpp" />
     <ClCompile Include="EventHandler.cpp" />
     <ClCompile Include="FamilyID.cpp" />
@@ -488,8 +490,7 @@
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Geometry</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-      </ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">VSStandard</EntryPointName>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>

@@ -11,6 +11,7 @@ class Broom;
 class Sniping;
 class Texture;
 class MyDescriptorHeap;
+class BroomEffect;
 
 // CHeightMapTerrain ¿‘¥œ¥Ÿ.
 class Player :

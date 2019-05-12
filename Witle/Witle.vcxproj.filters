@@ -262,6 +262,9 @@
     <Filter Include="05.Shader\PickingPointShader">
       <UniqueIdentifier>{e1b1da95-c95f-47f7-aeb8-f808f2605157}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.Component\Shape\EffectRect">
+      <UniqueIdentifier>{09688cfc-ab59-41c6-9ca9-d8ac58dbf341}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -558,6 +561,9 @@
     <ClInclude Include="PickingPointShader.h">
       <Filter>05.Shader\PickingPointShader</Filter>
     </ClInclude>
+    <ClInclude Include="EffectRect.h">
+      <Filter>02.Component\Shape\EffectRect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -835,6 +841,9 @@
     </ClCompile>
     <ClCompile Include="PickingPointShader.cpp">
       <Filter>05.Shader\PickingPointShader</Filter>
+    </ClCompile>
+    <ClCompile Include="EffectRect.cpp">
+      <Filter>02.Component\Shape\EffectRect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
