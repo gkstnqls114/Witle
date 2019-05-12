@@ -319,6 +319,17 @@ void Player::ProcessInput(float fTimeElapsed)
 		return;
 	}
 
+	if (m_pBroom->GetisPrepare())
+	{
+		m_CurrAnimation = ANIMATION_BROOMPREPARE.ID;
+
+		if (m_pLoadObject_Cloth->IsTrackAnimationSetFinish(0, ANIMATION_BROOMPREPARE.ID))
+		{
+			m_pBroom->DoUse();
+		}
+		return;
+	}
+
 	DWORD dwDirection = 0;
 	m_CurrAnimation = ANIMATION_IDLE.ID;
 	// m_CurrAnimation = ANIMATION_FORWARD.ID;
@@ -388,7 +399,10 @@ bool Player::Attack()
 
 void Player::UseSkill_Broom()
 {
-	m_pBroom->DoUse();
+	if (!m_pBroom->GetisUsing() && !m_pBroom->GetisPrepare())
+	{
+		m_pBroom->Prepare();
+	}
 }
 
 XMFLOAT3 Player::GetVelocity() const

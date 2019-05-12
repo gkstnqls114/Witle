@@ -16,10 +16,13 @@ class MyDescriptorHeap;
 class Player :
 	public GameObject
 {
+public:
+	// 임시
+	int m_CurrAnimation{ 0 }; // 현재 사용하는 애니메이션
+private:
 	bool m_isRendering{ true };
 	bool m_isAttacking{ false };
 	
-	int m_CurrAnimation{ 0 }; // 현재 사용하는 애니메이션
 	int m_PrevAnimation{ 0 }; // 현재 사용하는 애니메이션
 
 	PlayerMovement*    m_pPlayerMovement{ nullptr };

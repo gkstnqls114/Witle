@@ -1356,6 +1356,7 @@ void LoadObject::LoadAnimationFromFile_forPlayer(FILE * pInFile, CLoadedModelInf
 			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[ANIMATION_ATTACK.ID] =       new CAnimationSet(ANIMATION_ATTACK.StartTime,        ANIMATION_ATTACK.EndTime, pstrToken);
 			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[ANIMATION_ATTACK.ID]->m_nType = ANIMATION_TYPE_ONCE;
 			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[ANIMATION_BROOMPREPARE.ID] = new CAnimationSet(ANIMATION_BROOMPREPARE.StartTime,  ANIMATION_BROOMPREPARE.EndTime, pstrToken);
+			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[ANIMATION_BROOMPREPARE.ID]->m_nType = ANIMATION_TYPE_ONCE;
 			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[ANIMATION_BROOMIDLE.ID] =    new CAnimationSet(ANIMATION_BROOMIDLE.StartTime,     ANIMATION_BROOMIDLE.EndTime, pstrToken);
 			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[ANIMATION_BROOMFORWARD.ID] = new CAnimationSet(ANIMATION_BROOMFORWARD.StartTime,  ANIMATION_BROOMFORWARD.EndTime, pstrToken);
 			

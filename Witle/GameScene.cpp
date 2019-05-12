@@ -143,35 +143,7 @@ bool GameScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM w
 		}
 		break;
 	case WM_KEYDOWN:
-		switch (wParam) {
-		case 'Z':
-			// 카메라 거리가 걸어진다.
-			m_pMainCamera->GetCamera()->ZoomOut(1.2);
-			break;
-
-		case 'X':
-			// 카메라 거리가 가까워진다.
-			m_pMainCamera->GetCamera()->ZoomIn(0.9);
-			break;
-
-		case VK_RIGHT:
-			// at을 오른쪽으로 옮긴다.
-			m_pMainCamera->GetCamera()->MoveAtOffset(XMFLOAT3{10, 0, 0});
-			break;
-		
-		case VK_LEFT: 
-			m_pMainCamera->GetCamera()->MoveAtOffset(XMFLOAT3{ -10, 0, 0 });
-			break;
-
-		case VK_UP:
-			// at을 옮긴다.
-			m_pMainCamera->GetCamera()->MoveAtOffset(XMFLOAT3{ 0, 0, 10 });
-			break;
-
-		case VK_DOWN:
-			m_pMainCamera->GetCamera()->MoveAtOffset(XMFLOAT3{ 0, 0, -10 });
-			break;
-
+		switch (wParam) { 
 		case 'O':
 			m_pMainCamera->GetCamera()->MoveAtOffset(XMFLOAT3{ 0, 10, 0 });
 			break;
@@ -180,11 +152,11 @@ bool GameScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM w
 			m_pMainCamera->GetCamera()->MoveAtOffset(XMFLOAT3{ 0, -10, 0 });
 			break;
 
-		case 'E': 
+		case 'Z': 
 			m_pPlayer->SubstractHP(100);
 			break;
 
-		case '1': // 스킬 빗자루
+		case '1': // 스킬 빗자루  
 			m_pPlayer->UseSkill_Broom();
 			break;
 
@@ -231,7 +203,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	GameScene::CreateCbvSrvDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 3);
 	 
 	m_AimPoint = new AimPoint("AimPoint", pd3dDevice, pd3dCommandList, POINT{ int(GameScreen::GetWidth()) / 2, int(GameScreen::GetHeight()) / 2 }, 100.f, 100.f, L"Image/AimPoint.dds");
-	m_WideareaMagic = new WideareaMagic(pd3dDevice, pd3dCommandList);
+	// m_WideareaMagic = new WideareaMagic(pd3dDevice, pd3dCommandList);
 
 	//// 스카이 박스 생성
 	m_SkyBox = new SkyBox(pd3dDevice, pd3dCommandList, 3000.F, 3000.F, 3000.F);
