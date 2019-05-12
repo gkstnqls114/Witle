@@ -2,9 +2,12 @@
 #include "ComponentBase.h"
 
 class LineCube;
+
  
 class MyBOBox
 { 
+	static bool RENDER_BBOX;
+
 protected:
 #ifdef _SHOW_BOUNDINGBOX
 	XMFLOAT4X4 m_world;
@@ -15,6 +18,11 @@ protected:
 	XMFLOAT4 m_BoBoxPlane[4]; // 0: +X, 1: -X, 2: +Z, 3: -Z
 	 
 public:
+	static void CHANGEMODE()
+	{
+		RENDER_BBOX = !RENDER_BBOX;
+	}
+
 	MyBOBox(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, XMFLOAT3 extents, XMFLOAT3 Offset, XMFLOAT4 quaternion = XMFLOAT4(0.f, 0.f, 0.f, 1.f));
 	MyBOBox(const MyBOBox& other);
 	MyBOBox(XMFLOAT3 center, XMFLOAT3 extents);

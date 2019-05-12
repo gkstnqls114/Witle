@@ -33,10 +33,12 @@ VS_TERRAIN_OUTPUT VSTerrain(VS_TERRAIN_INPUT input)
     float4 positionW = mul(float4(input.position, 1.0f), gmtxWorld);
     float Z = length(gvCameraPosition - float3(positionW.xyz));
     
+    if (Z > 20000)
+        Z = 0;
     float fogEnd = 10000;
     float fogStart = 500;
     output.fogFactor = saturate((fogEnd - Z) / (fogEnd - fogStart)); 
-     
+
 	return(output);
 }
 
@@ -46,6 +48,7 @@ float4 PSTerrain(VS_TERRAIN_OUTPUT input) : SV_TARGET
 	float4 cDetailTexColor = gtxtTerrainDetailTexture.Sample(gWrapSamplerState, input.uv1);
 	float4 cColor = input.color * saturate((cBaseTexColor * 0.5f) + (cDetailTexColor * 0.5f));
     
+    cColor = 1.4 * cColor;
     float4 fogColor = float4(0.0 / 255.0, 34.0 / 255.0, 102.0 / 255.0, 1.0f);
     float4 finalColor = input.fogFactor * cColor + (1.0 - input.fogFactor) * fogColor;
 

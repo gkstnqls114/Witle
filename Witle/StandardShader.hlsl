@@ -113,6 +113,9 @@ VS_STANDARD_OUTPUT VSStandardInstancing(VS_INSTANCING_OUTPUT input, uint nInstan
     //포그 계수... 1: 투명하다 ~ 0: 탁하다
     float Z = length(gvCameraPosition - output.positionW);
     
+    if (Z > 20000)
+        Z = 0;
+
     float fogEnd = 10000;
     float fogStart = 3000;
     output.fogFactor = saturate((fogEnd - Z) / (fogEnd - fogStart));

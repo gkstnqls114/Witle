@@ -144,8 +144,8 @@ bool GameScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM w
 		break;
 	case WM_KEYDOWN:
 		switch (wParam) { 
-		case 'O':
-			m_pMainCamera->GetCamera()->MoveAtOffset(XMFLOAT3{ 0, 10, 0 });
+		case VK_F2:
+			MyBOBox::CHANGEMODE();
 			break;
 
 		case 'L':

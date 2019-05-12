@@ -3,7 +3,8 @@
 #include "ShaderManager.h"
 #include "LineCube.h"
 #include "MyBOBox.h"
- 
+bool MyBOBox::RENDER_BBOX = true;
+
 MyBOBox::MyBOBox(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, XMFLOAT3 center, XMFLOAT3 extents, XMFLOAT4 quaternion)
 {
 	m_BOBox = BoundingOrientedBox(XMFLOAT3(0.F, 0.F, 0.F), extents, quaternion);
@@ -63,7 +64,8 @@ void MyBOBox::ReleaseUploadBuffers()
 }
 
 void MyBOBox::Render(ID3D12GraphicsCommandList * pd3dCommandList)
-{
+{ 
+	if (!RENDER_BBOX) return;
 	if (m_pLineCube)
 	{
 		pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Line")->GetPSO());
@@ -72,6 +74,7 @@ void MyBOBox::Render(ID3D12GraphicsCommandList * pd3dCommandList)
 }
 void MyBOBox::RenderInstancing(ID3D12GraphicsCommandList * pd3dCommandList, int InstancingCount)
 {
+	if (!RENDER_BBOX) return;
 	if (m_pLineCube) m_pLineCube->RenderInstancing(pd3dCommandList, InstancingCount);
 }
 #endif
