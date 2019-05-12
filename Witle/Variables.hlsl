@@ -26,9 +26,9 @@ cbuffer cbHPpercentage : register(b5)
 }
 
 // 루트 상수
-cbuffer cbElapsedTime : register(b6)
+cbuffer cbTotalTime : register(b6)
 {
-    float ElapsedTime : packoffset(c0);
+    float totalTime : packoffset(c0);
 }
 
 SamplerState gWrapSamplerState : register(s0);
