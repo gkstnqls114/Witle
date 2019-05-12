@@ -23,6 +23,8 @@ public:
 	int m_CurrAnimation{ 0 }; // 현재 사용하는 애니메이션
 
 private:
+	bool isDead{ false };
+
 	bool m_isRendering{ true };
 	bool m_isAttacking{ false };
 	
@@ -88,6 +90,7 @@ public:
 	void Rotate(float x, float y, float z);
 
 	void ProcessInput(float fTimeElapsed);
+	void ProcessInputAI(float fTimeElapsed);
 
 	bool Attack();
 

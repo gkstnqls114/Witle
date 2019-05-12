@@ -176,7 +176,18 @@ bool GameScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM w
 			// m_WideareaMagic->DoUse(); 
 			// m_WideareaMagic->SetPosition(m_pPlayer->GetTransform().GetPosition());
 			break;
+
+		case '4':
+			break;
+
+		case '5':
+			break;
+
+		case '6':
+			break;
+
 		case 'W':
+			break;
 		case 'w':  
 			break;
 		case 'S':
@@ -374,7 +385,7 @@ bool GameScene::ProcessInput(HWND hWnd, float fElapsedTime)
 { 
 	// 플레이어 이동에 대한 처리 (정확히는 이동이 아니라 가속도)
 	m_pPlayer->ProcessInput(fElapsedTime);
-	// m_pOtherPlayer->ProcessInput(fElapsedTime);
+	m_pOtherPlayer->ProcessInputAI(fElapsedTime);
 	// m_pOtherPlayer->Rotate(0.0f, 10.f, 0.f);
 
 	// 플레이어 회전에 대한 처리
@@ -795,7 +806,7 @@ void GameScene::ProcessPicking(float fElapsedTime)
 			return;
 		}
 
-		m_pOtherPlayer->SubstractHP(10);
+		m_pOtherPlayer->SubstractHP(500);
 		
 		//// 피킹 ray에 닿는 오브젝트가 있는 지 확인한다.
 		//float dist = FLT_MAX;

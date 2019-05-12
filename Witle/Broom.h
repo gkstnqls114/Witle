@@ -13,12 +13,11 @@ protected:
 
 	virtual void PrepareMember() override;
 private:
-	virtual void DoNotUse() override;
 
 public:
 	Broom(PlayerMovement* playerStatus);
 	virtual ~Broom();
 
-
+	virtual void DoNotUse() override;
 	virtual void DoUse() override;
 };

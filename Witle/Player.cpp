@@ -20,7 +20,7 @@
 #include "Player.h"
  
 static float playerOffestX = 0.f;
-static float playerOffestY = 75.f;
+static float playerOffestY = 57.f;
 static float playerOffestZ = 50.f;
 
 void Player::OnPlayerUpdateCallback(float fTimeElapsed)
@@ -126,7 +126,7 @@ Player::Player(const std::string & entityID, ID3D12Device * pd3dDevice, ID3D12Gr
 	 
 	m_Broom = new Broom(m_pPlayerMovement);
 
-	m_Transform.SetPosition(100.f, 57.f, 100.f);// 캐릭터가 중앙에 있지않아서 어쩔수없이 설정;
+	m_Transform.SetPosition(100.f, playerOffestY, 100.f);// 캐릭터가 중앙에 있지않아서 어쩔수없이 설정;
 
 	// 빗자루 스킬 이펙트 준비
 	m_BroomEffectRect = new BroomEffectRect(this, pd3dDevice, pd3dCommandList);
@@ -235,7 +235,7 @@ void Player::ReleaseMemberUploadBuffers()
 }
 
 void Player::Update(float fElapsedTime)
-{ 
+{  
 	m_Broom->Update(fElapsedTime);
 
 	// 이동량을 계산한다. 
@@ -266,6 +266,10 @@ void Player::Update(float fElapsedTime)
 
 void Player::SubstractHP(int sub)
 { 
+	m_CurrAnimation = ANIMATION_BEATTACKED.ID;
+	m_pLoadObject_Body->SetTrackAnimationSet(0, m_CurrAnimation);
+	m_pLoadObject_Cloth->SetTrackAnimationSet(0, m_CurrAnimation);
+
 	m_pPlayerStatus->m_HP -= sub; 
 	std::cout << m_pPlayerStatus->m_HP << std::endl;
 }
@@ -336,9 +340,37 @@ void Player::Rotate(float x, float y, float z)
 	m_Transform.Rotate(x, y, z); 
 	m_pMyBOBox->Rotate(m_pPlayerMovement->m_fRoll, m_pPlayerMovement->m_fYaw, m_pPlayerMovement->m_fPitch);
 }
-
+ 
 void Player::ProcessInput(float fTimeElapsed)
-{ 
+{   
+	if (m_CurrAnimation == ANIMATION_BEATTACKED.ID)
+	{
+		if (!m_pLoadObject_Cloth->IsTrackAnimationSetFinish(0, ANIMATION_BEATTACKED.ID))
+		{
+			return;
+		}
+	}
+
+	//if (isDead)
+	//{
+	//	m_pPlayerStatus->m_HP += 10.f; 
+	//	if (m_pPlayerStatus->m_HP > 1000.F)
+	//	{ 
+	//		m_CurrAnimation = ANIMATION_IDLE.ID;
+	//		m_Broom->DoNotUse();
+	//		m_pPlayerStatus->m_HP = 1000.F;
+	//		isDead = false;
+	//	}
+	//	return;
+	//}
+
+	//if (m_pPlayerStatus->m_HP <= 0 && isDead == false)
+	//{
+	//	isDead = true;
+	//	m_CurrAnimation = ANIMATION_DEAD.ID;
+	//	return;
+	//}
+
 	if (m_isAttacking)
 	{
 		if (m_pLoadObject_Cloth->IsTrackAnimationSetFinish(0, ANIMATION_ATTACK.ID))
@@ -408,6 +440,20 @@ void Player::ProcessInput(float fTimeElapsed)
 	{
 		m_pPlayerMovement->ReduceVelocity(fTimeElapsed);
 	}
+
+}
+
+void Player::ProcessInputAI(float fTimeElapsed)
+{ 
+	if (m_CurrAnimation == ANIMATION_BEATTACKED.ID)
+	{
+		if (!m_pLoadObject_Cloth->IsTrackAnimationSetFinish(0, ANIMATION_BEATTACKED.ID))
+		{
+			return;
+		}
+	} 
+
+	m_CurrAnimation = ANIMATION_IDLE.ID;
 
 }
 
