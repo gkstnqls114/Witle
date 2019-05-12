@@ -1353,13 +1353,22 @@ void LoadObject::LoadAnimationFromFile_forPlayer(FILE * pInFile, CLoadedModelInf
 			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[ANIMATION_BACKWARD.ID] =     new CAnimationSet(ANIMATION_BACKWARD.StartTime,      ANIMATION_BACKWARD.EndTime, pstrToken);
 			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[ANIMATION_LEFT.ID] =         new CAnimationSet(ANIMATION_LEFT.StartTime,          ANIMATION_LEFT.EndTime, pstrToken);
 			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[ANIMATION_RIGHT.ID] =        new CAnimationSet(ANIMATION_RIGHT.StartTime,         ANIMATION_RIGHT.EndTime, pstrToken);
+			
 			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[ANIMATION_ATTACK.ID] =       new CAnimationSet(ANIMATION_ATTACK.StartTime,        ANIMATION_ATTACK.EndTime, pstrToken);
 			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[ANIMATION_ATTACK.ID]->m_nType = ANIMATION_TYPE_ONCE;
+			
 			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[ANIMATION_BROOMPREPARE.ID] = new CAnimationSet(ANIMATION_BROOMPREPARE.StartTime,  ANIMATION_BROOMPREPARE.EndTime, pstrToken);
 			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[ANIMATION_BROOMPREPARE.ID]->m_nType = ANIMATION_TYPE_ONCE;
-			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[ANIMATION_BROOMIDLE.ID] =    new CAnimationSet(ANIMATION_BROOMIDLE.StartTime,     ANIMATION_BROOMIDLE.EndTime, pstrToken);
-			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[ANIMATION_BROOMFORWARD.ID] = new CAnimationSet(ANIMATION_BROOMFORWARD.StartTime,  ANIMATION_BROOMFORWARD.EndTime, pstrToken);
 			
+			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[ANIMATION_BROOMIDLE.ID] =    new CAnimationSet(ANIMATION_BROOMIDLE.StartTime,     ANIMATION_BROOMIDLE.EndTime, pstrToken);
+			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[ANIMATION_BROOMFORWARD.ID] = new CAnimationSet(ANIMATION_BROOMFORWARD.StartTime, ANIMATION_BROOMFORWARD.EndTime, pstrToken);
+			
+			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[ANIMATION_DEAD.ID] = new CAnimationSet(ANIMATION_DEAD.StartTime, ANIMATION_DEAD.EndTime, pstrToken);
+			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[ANIMATION_DEAD.ID]->m_nType = ANIMATION_TYPE_ONCE;
+
+			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[ANIMATION_BEATTACKED.ID] = new CAnimationSet(ANIMATION_BEATTACKED.StartTime, ANIMATION_BEATTACKED.EndTime, pstrToken);
+			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[ANIMATION_BEATTACKED.ID]->m_nType = ANIMATION_TYPE_ONCE;
+
 			CAnimationSet *pAnimationSet = pLoadedModel->m_pAnimationSets->m_ppAnimationSets[nAnimationSet];
 
 			::ReadStringFromFile(pInFile, pstrToken);
