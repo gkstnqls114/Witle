@@ -231,6 +231,7 @@
     <ClInclude Include="Sniping.h" />
     <ClInclude Include="SoundManager.h" />
     <ClInclude Include="SpeedReduction.h" />
+    <ClInclude Include="SphereMesh.h" />
     <ClInclude Include="SpotLight.h" />
     <ClInclude Include="StandardShader.h" />
     <ClInclude Include="StaticObject.h" />
@@ -326,6 +327,7 @@
     <ClCompile Include="Sniping.cpp" />
     <ClCompile Include="SoundManager.cpp" />
     <ClCompile Include="SpeedReduction.cpp" />
+    <ClCompile Include="SphereMesh.cpp" />
     <ClCompile Include="SpotLight.cpp" />
     <ClCompile Include="StandardShader.cpp" />
     <ClCompile Include="StaticObject.cpp" />

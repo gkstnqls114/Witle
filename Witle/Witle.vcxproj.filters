@@ -265,6 +265,9 @@
     <Filter Include="02.Component\Shape\EffectRect">
       <UniqueIdentifier>{09688cfc-ab59-41c6-9ca9-d8ac58dbf341}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.Component\Mesh\SphereMesh">
+      <UniqueIdentifier>{14d1cc8f-b36d-4c8c-984a-d00fe9374022}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -564,6 +567,9 @@
     <ClInclude Include="EffectRect.h">
       <Filter>02.Component\Shape\EffectRect</Filter>
     </ClInclude>
+    <ClInclude Include="SphereMesh.h">
+      <Filter>02.Component\Mesh\SphereMesh</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -844,6 +850,9 @@
     </ClCompile>
     <ClCompile Include="EffectRect.cpp">
       <Filter>02.Component\Shape\EffectRect</Filter>
+    </ClCompile>
+    <ClCompile Include="SphereMesh.cpp">
+      <Filter>02.Component\Mesh\SphereMesh</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
