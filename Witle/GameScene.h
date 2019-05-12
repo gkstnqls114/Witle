@@ -107,7 +107,7 @@ protected:
 #ifdef CHECK_SUBVIEWS
 	CameraObject*			m_lookAboveCamera{ nullptr };
 #endif
-	 
+	 //
 	//////////////////////////////////////  Α¶Έν
 	ID3D12Resource				*m_pd3dcbLights{ nullptr };
 	LIGHTS						*m_pcbMappedLights{ nullptr };
