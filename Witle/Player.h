@@ -41,7 +41,7 @@ private:
 	LoadObject*		   m_pLoadObject_Cloth{ nullptr };
 	LoadObject*		   m_pLoadObject_Body{ nullptr };
 	 
-	Broom* m_pBroom{ nullptr };
+	Broom* m_Broom{ nullptr };
 	Sniping* m_pSniping{ nullptr };
 
 	BroomEffectRect*   m_BroomEffectRect{ nullptr };
@@ -99,6 +99,7 @@ public:
 	AXIS GetCoorAxis() { return m_Transform.GetCoorAxis(); }
 	XMFLOAT3 GetVelocity() const;
 	MyBOBox* GetBOBox() { return m_pMyBOBox; }
+	const Broom* GetBroom() const { return m_Broom; }
 	bool IsAttacking() const { return m_isAttacking; }
 	/////////////////////// Get
 

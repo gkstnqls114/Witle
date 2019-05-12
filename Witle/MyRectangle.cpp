@@ -3,6 +3,7 @@
 #include "Texture.h"
 #include "LoadingScene.h"
 #include "ShaderManager.h"
+#include "GameTimer.h"
 #include "MyDescriptorHeap.h"
 #include "MyRectangle.h"
 
@@ -160,12 +161,14 @@ void MyRectangle::Render(ID3D12GraphicsCommandList * pd3dCommandList)
 	pd3dCommandList->DrawInstanced(m_vertexCount, 1, m_nOffset, 0);
 }
 
-void MyRectangle::Render(ID3D12GraphicsCommandList * pd3dCommandList, const XMFLOAT2 & pos)
+void MyRectangle::Render(ID3D12GraphicsCommandList * pd3dCommandList, const XMFLOAT2 & pos, float Time)
 {
 	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_PICKINGPOINT);
 	if (m_pHeap) m_pHeap->UpdateShaderVariable(pd3dCommandList);
 	if (m_pTexture) m_pTexture->UpdateShaderVariables(pd3dCommandList);
 	pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_PICKINGPOINT, 2, &pos, 0);
+	 
+	pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_TIME, 1, &Time, 0);
 
 	pd3dCommandList->IASetPrimitiveTopology(m_d3dPrimitiveTopology);
 
@@ -174,3 +177,4 @@ void MyRectangle::Render(ID3D12GraphicsCommandList * pd3dCommandList, const XMFL
 
 	pd3dCommandList->DrawInstanced(m_vertexCount, 1, m_nOffset, 0);
 }
+ 

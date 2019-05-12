@@ -75,5 +75,5 @@ void AimPoint::MovePickingPoint(const XMFLOAT2 & shift)
 void AimPoint::Render(ID3D12GraphicsCommandList * pd3dCommandList)
 {
 	// 피킹 포인트 위해 설정
-	m_AimPoint->Render(pd3dCommandList, m_PickingPoint);
+	m_AimPoint->Render(pd3dCommandList, m_PickingPoint, 0.f);
 }

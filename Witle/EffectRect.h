@@ -31,7 +31,7 @@ public:
 
 	virtual void Render(ID3D12GraphicsCommandList * pd3dCommandList) override {};
 	// pos는 스크린 좌표계(왼쪽위가 0,0)를 기준으로 한 위치
-	virtual void Render(ID3D12GraphicsCommandList * pd3dCommandList, const XMFLOAT2& pos) {};
+	virtual void Render(ID3D12GraphicsCommandList * pd3dCommandList, const XMFLOAT2& pos, float Time) {};
 
 	void Render(ID3D12GraphicsCommandList * pd3dCommandList, float fElapsedTime);
 };

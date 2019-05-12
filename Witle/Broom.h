@@ -1,5 +1,6 @@
 #pragma once
 #include "Skill.h" 
+class PlayerMovement;
 
 class Broom
 	: public Skill

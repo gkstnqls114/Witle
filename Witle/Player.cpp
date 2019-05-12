@@ -124,7 +124,7 @@ Player::Player(const std::string & entityID, ID3D12Device * pd3dDevice, ID3D12Gr
 	m_pPlayerStatus = new PlayerStatus(this, pd3dDevice, pd3dCommandList);
 	m_pPlayerMovement = new PlayerMovement(this);
 	 
-	m_pBroom = new Broom(m_pPlayerMovement);
+	m_Broom = new Broom(m_pPlayerMovement);
 
 	m_Transform.SetPosition(100.f, 57.f, 100.f);// 캐릭터가 중앙에 있지않아서 어쩔수없이 설정;
 
@@ -172,11 +172,11 @@ void Player::ReleaseMembers()
 		delete m_pTexture_Body;
 		m_pTexture_Body = nullptr;
 	}
-	if (m_pBroom)
+	if (m_Broom)
 	{ 
-		m_pBroom->ReleaseObjects();
-		delete m_pBroom;
-		m_pBroom = nullptr;
+		m_Broom->ReleaseObjects();
+		delete m_Broom;
+		m_Broom = nullptr;
 	}
 	if (m_pLoadObject_Cloth)
 	{
@@ -236,7 +236,7 @@ void Player::ReleaseMemberUploadBuffers()
 
 void Player::Update(float fElapsedTime)
 { 
-	m_pBroom->Update(fElapsedTime);
+	m_Broom->Update(fElapsedTime);
 
 	// 이동량을 계산한다. 
 	m_pPlayerMovement->Update(fElapsedTime);
@@ -305,9 +305,9 @@ void Player::Render(ID3D12GraphicsCommandList * pd3dCommandList)
 	m_pLoadObject_Body->Render(pd3dCommandList);
 
 	bool isMoving = GameInput::IsKeydownW() || GameInput::IsKeydownA() || GameInput::IsKeydownS() || GameInput::IsKeydownD();
-	if (m_pBroom->GetisUsing() && isMoving)
+	if (m_Broom->GetisUsing() && isMoving)
 	{
-		m_BroomLineEffectRect->Render(pd3dCommandList, XMFLOAT2(0.F, 0.F));
+		m_BroomLineEffectRect->Render(pd3dCommandList, XMFLOAT2(0.F, 0.F), CGameTimer::GetInstance()->GetTimeElapsed());
 	}
 }
 
@@ -348,13 +348,13 @@ void Player::ProcessInput(float fTimeElapsed)
 		return;
 	}
 
-	if (m_pBroom->GetisPrepare())
+	if (m_Broom->GetisPrepare())
 	{
 		m_CurrAnimation = ANIMATION_BROOMPREPARE.ID;
 
 		if (m_pLoadObject_Cloth->IsTrackAnimationSetFinish(0, ANIMATION_BROOMPREPARE.ID))
 		{
-			m_pBroom->DoUse();
+			m_Broom->DoUse();
 		}
 		return;
 	}
@@ -389,11 +389,11 @@ void Player::ProcessInput(float fTimeElapsed)
 		dwDirection |= DIR_RIGHT;
 	}
 
-	if (isMove && m_pBroom->GetisUsing())
+	if (isMove && m_Broom->GetisUsing())
 	{
 		m_CurrAnimation = ANIMATION_BROOMFORWARD.ID;
 	}
-	else if (!isMove && m_pBroom->GetisUsing())
+	else if (!isMove && m_Broom->GetisUsing())
 	{
 		m_CurrAnimation = ANIMATION_BROOMIDLE.ID;
 	}
@@ -413,7 +413,7 @@ void Player::ProcessInput(float fTimeElapsed)
 
 bool Player::Attack()
 {
-	if (m_pBroom->GetisUsing())
+	if (m_Broom->GetisUsing())
 	{
 		return false;
 	}
@@ -428,9 +428,9 @@ bool Player::Attack()
 
 void Player::UseSkill_Broom()
 {
-	if (!m_pBroom->GetisUsing() && !m_pBroom->GetisPrepare())
+	if (!m_Broom->GetisUsing() && !m_Broom->GetisPrepare())
 	{
-		m_pBroom->Prepare();
+		m_Broom->Prepare();
 	}
 }
 

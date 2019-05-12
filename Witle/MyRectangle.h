@@ -33,5 +33,5 @@ public:
 	Texture* GetTexture() { return m_pTexture; }
 
 	virtual void Render(ID3D12GraphicsCommandList * pd3dCommandList) override;
-	virtual void Render(ID3D12GraphicsCommandList * pd3dCommandList, const XMFLOAT2& pos) override;
+	virtual void Render(ID3D12GraphicsCommandList * pd3dCommandList, const XMFLOAT2& pos, float ElapsedTime) override; 
 };

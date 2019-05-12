@@ -4,6 +4,7 @@
 //// Skill header //////////////////////////
 #include "WideareaMagic.h"
 #include "Sniping.h" 
+#include "Broom.h"
 //// Skill header //////////////////////////
 
 //// GameObject header //////////////////////////
@@ -20,6 +21,7 @@
 //// Manager header //////////////////////////
 
 #include "GameScreen.h"
+#include "GameTimer.h"
  
 #include "MyBOBox.h"
 #include "Collision.h"
@@ -511,7 +513,10 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	if (!m_isSkyMode)
 	{
 		if (m_pPlayer) m_pPlayer->RenderHpStatus(pd3dCommandList);
-		if(m_AimPoint) m_AimPoint->Render(pd3dCommandList);
+		if (!m_pPlayer->GetBroom()->GetisPrepare() && !m_pPlayer->GetBroom()->GetisUsing())
+		{
+			if(m_AimPoint) m_AimPoint->Render(pd3dCommandList);
+		}
 	}
 
 }
