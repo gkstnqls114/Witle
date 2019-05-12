@@ -108,7 +108,7 @@ protected:
 	
 	CameraObject*           m_pSkyCameraObj{ nullptr }; // 실제로 화면에 그려지는 카메라
 	Camera*					m_pSkyCamera{ nullptr };
-
+	//
 	SkyBox*					m_SkyBox{ nullptr };
 
 	CylinderMesh*			m_CylinderMesh{ nullptr };
