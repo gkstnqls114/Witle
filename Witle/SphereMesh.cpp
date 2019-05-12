@@ -121,7 +121,7 @@ void SphereMesh::ReleaseUploadBuffers()
 }
 
 SphereMesh::SphereMesh(GameObject* pOwner, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList,
-	float radius = 10, float height = 100, float topRadius = 10, float bottomRadius = 10, int sectorCount = 10, int stackCount =10)
+	float radius , float height , float topRadius , float bottomRadius , int sectorCount, int stackCount)
 	:Mesh(pOwner)
 {
 	m_ComponenetID = MESH_TYPE_ID::CYLINDER_MESH;
@@ -132,16 +132,7 @@ SphereMesh::SphereMesh(GameObject* pOwner, ID3D12Device * pd3dDevice, ID3D12Grap
 	m_d3dPrimitiveTopology = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 
 	m_nStride = sizeof(SphereVertex);
-
-	float stackHeight = height / stackCount;
-	float radiusStep = (topRadius - bottomRadius) / stackCount;
-	int ringCount = stackCount + 1;
-
-	// clear memory of prev arrays
-	//std::vector<float>().swap(vertices);
-	//std::vector<float>().swap(normals);
-	//std::vector<float>().swap(texCoords);
-
+	 
 	float x, y, z, xy;                              // vertex position
 	float nx, ny, nz, lengthInv = 1.0f / radius;    // vertex normal
 	float s, t;                                     // vertex texCoord
@@ -150,7 +141,9 @@ SphereMesh::SphereMesh(GameObject* pOwner, ID3D12Device * pd3dDevice, ID3D12Grap
 	float stackStep = PI / stackCount;
 	float sectorAngle, stackAngle;
 
-	SphereVertex* ControlPointVertices = new SphereVertex[stackCount];
+	m_vertexCount = stackCount * sectorCount;
+	SphereVertex* pControlPointVertices = new SphereVertex[m_vertexCount];
+	int count = 0;
 	for (int i = 0; i <= stackCount; ++i)
 	{
 		stackAngle = PI / 2 - i * stackStep;        // starting from pi/2 to -pi/2
@@ -167,31 +160,30 @@ SphereMesh::SphereMesh(GameObject* pOwner, ID3D12Device * pd3dDevice, ID3D12Grap
 			x = xy * cosf(sectorAngle);             // r * cos(u) * cos(v)
 			y = xy * sinf(sectorAngle);             // r * cos(u) * sin(v)
 
-			ControlPointVertices[i].position = XMFLOAT3(x, y, z);
+			pControlPointVertices[count].position = XMFLOAT3(x, y, z);
 			// normalized vertex normal (nx, ny, nz)
 			nx = x * lengthInv;
 			ny = y * lengthInv;
 			nz = z * lengthInv;
-			ControlPointVertices[i].normal = XMFLOAT3(nx, ny, nz);
+			pControlPointVertices[count].normal = XMFLOAT3(nx, ny, nz);
 			
 			// vertex tex coord (s, t) range between [0, 1]
 			s = (float)j / sectorCount;
 			t = (float)i / stackCount;
-			ControlPointVertices[i].uv = XMFLOAT2(s, t);
-
+			pControlPointVertices[count].uv = XMFLOAT2(s, t); 
+			pControlPointVertices[count].diffuse = XMFLOAT4(1.F, 1.F, 1.F, 1.F);
+			count += 1;
 		}
 	}
-	 
-
-	m_pPositionBuffer = d3dUtil::CreateBufferResource(pd3dDevice, pd3dCommandList, pVertices,
+	  
+	m_pPositionBuffer = d3dUtil::CreateBufferResource(pd3dDevice, pd3dCommandList, pControlPointVertices,
 		m_nStride * m_vertexCount, D3D12_HEAP_TYPE_DEFAULT,
 		D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, &m_pPositionUploadBuffer);
 
 	m_pVertexBufferViews[0].BufferLocation = m_pPositionBuffer->GetGPUVirtualAddress();
 	m_pVertexBufferViews[0].StrideInBytes = m_nStride;
 	m_pVertexBufferViews[0].SizeInBytes = m_nStride * m_vertexCount;
-
-	delete[] pVertices;
+	 
 	delete[] pControlPointVertices;
 }
 
