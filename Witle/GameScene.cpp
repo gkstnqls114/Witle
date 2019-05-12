@@ -37,9 +37,7 @@
 #include "Player.h"
 #include "CameraObject.h"
 #include "QuadTreeTerrain.h"
-#include "BasicCam.h"
- 
-
+#include "BasicCam.h" 
 #include "GameScene.h"
 
 ID3D12DescriptorHeap*		GameScene::m_pd3dCbvSrvDescriptorHeap;

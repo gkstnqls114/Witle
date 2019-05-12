@@ -5,6 +5,9 @@
 #include "Texture.h"
 #include "MyDescriptorHeap.h"
 #include "Sniping.h"
+#include "EffectRect.h"
+#include "GameScreen.h"
+#include "MyRectangle.h"
 #include "Shader.h"
 #include "Object.h"
 #include "ShaderManager.h" 
@@ -114,7 +117,6 @@ Player::Player(const std::string & entityID, ID3D12Device * pd3dDevice, ID3D12Gr
 	m_pLoadObject_Cloth->m_pSkinnedAnimationController->SetTrackAnimationSet(0, 0);
 	m_pLoadObject_Body->m_pSkinnedAnimationController = new CAnimationController(pd3dDevice, pd3dCommandList, 1, m_PlayerModel_Body);
 	m_pLoadObject_Body->m_pSkinnedAnimationController->SetTrackAnimationSet(0, 0);
-
 	 
 	XMFLOAT3 extents{ 25.f, 75.f, 25.f };
 	m_pMyBOBox = new MyBOBox(pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 75.F, 0.F }, extents);
@@ -125,6 +127,13 @@ Player::Player(const std::string & entityID, ID3D12Device * pd3dDevice, ID3D12Gr
 	m_pBroom = new Broom(m_pPlayerMovement);
 
 	m_Transform.SetPosition(100.f, 57.f, 100.f);// 캐릭터가 중앙에 있지않아서 어쩔수없이 설정;
+
+	// 빗자루 스킬 이펙트 준비
+	m_BroomEffectRect = new BroomEffectRect(this, pd3dDevice, pd3dCommandList);
+	m_BroomLineEffectRect = new MyRectangle(
+		this, pd3dDevice, pd3dCommandList, 
+		POINT{ int(GameScreen::GetWidth())/2, int(GameScreen::GetHeight()) / 2 }, GameScreen::GetWidth(), GameScreen::GetHeight()
+		, L"Image/EffectLine.dds");
 
 	SetUpdatedContext(pContext); 
 }
@@ -139,6 +148,18 @@ void Player::ReleaseMembers()
 {
 	m_pPlayerUpdatedContext = nullptr;
 	m_pCameraUpdatedContext = nullptr;
+	if (m_BroomEffectRect)
+	{
+		m_BroomEffectRect->ReleaseObjects();
+		delete m_BroomEffectRect;
+		m_BroomEffectRect = nullptr;
+	}
+	if (m_BroomLineEffectRect)
+	{
+		m_BroomLineEffectRect->ReleaseObjects();
+		delete m_BroomLineEffectRect;
+		m_BroomLineEffectRect = nullptr;
+	}
 	if (m_pTexture_Cloth)
 	{
 		m_pTexture_Cloth->ReleaseObjects();
@@ -202,6 +223,8 @@ void Player::ReleaseMembers()
 
 void Player::ReleaseMemberUploadBuffers()
 {
+	if (m_BroomEffectRect) m_BroomEffectRect->ReleaseUploadBuffers();
+	if (m_BroomLineEffectRect) m_BroomLineEffectRect->ReleaseUploadBuffers();
 	if (m_pTexture_Cloth) m_pTexture_Cloth->ReleaseUploadBuffers(); 
 	if (m_pTexture_Body) m_pTexture_Body->ReleaseUploadBuffers(); 
 	if (m_pLoadObject_Cloth) m_pLoadObject_Cloth->ReleaseUploadBuffers();
@@ -280,6 +303,12 @@ void Player::Render(ID3D12GraphicsCommandList * pd3dCommandList)
 	m_pLoadObject_Cloth->Render(pd3dCommandList);
 	m_pTexture_Body->UpdateShaderVariable(pd3dCommandList, 0); 
 	m_pLoadObject_Body->Render(pd3dCommandList);
+
+	bool isMoving = GameInput::IsKeydownW() || GameInput::IsKeydownA() || GameInput::IsKeydownS() || GameInput::IsKeydownD();
+	if (m_pBroom->GetisUsing() && isMoving)
+	{
+		m_BroomLineEffectRect->Render(pd3dCommandList, XMFLOAT2(0.F, 0.F));
+	}
 }
 
 void Player::RenderHpStatus(ID3D12GraphicsCommandList * pd3dCommandList)

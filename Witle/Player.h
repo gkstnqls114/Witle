@@ -10,8 +10,9 @@ class PlayerMovement;
 class Broom;
 class Sniping;
 class Texture;
-class MyDescriptorHeap;
-class BroomEffect;
+class MyDescriptorHeap; 
+class BroomEffectRect;
+class MyRectangle;
 
 // CHeightMapTerrain 입니다.
 class Player :
@@ -20,6 +21,7 @@ class Player :
 public:
 	// 임시
 	int m_CurrAnimation{ 0 }; // 현재 사용하는 애니메이션
+
 private:
 	bool m_isRendering{ true };
 	bool m_isAttacking{ false };
@@ -41,6 +43,9 @@ private:
 	 
 	Broom* m_pBroom{ nullptr };
 	Sniping* m_pSniping{ nullptr };
+
+	BroomEffectRect*   m_BroomEffectRect{ nullptr };
+	MyRectangle*       m_BroomLineEffectRect{ nullptr };
 	 
 	LPVOID m_pPlayerUpdatedContext { nullptr };
 	LPVOID m_pCameraUpdatedContext { nullptr };

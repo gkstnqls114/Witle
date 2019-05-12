@@ -35,3 +35,4 @@
 
 #define SHADER_SCREEN "ScreenShader"
 #define SHADER_PICKINGPOINT "PikcingPointShader"
+#define SHADER_BROOMEFFECT "BroomEffectShader"
