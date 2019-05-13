@@ -151,7 +151,8 @@ SphereMesh::SphereMesh(GameObject* pOwner, ID3D12Device * pd3dDevice, ID3D12Grap
 		z = radius * sinf(stackAngle);              // r * sin(u)
 
 		// add (sectorCount+1) vertices per stack
-		// the first and last vertices have same position and normal, but different tex coords
+		// the first and last vertices have same position and normal,
+		// but different tex coords
 		for (int j = 0; j <= sectorCount; ++j)
 		{
 			sectorAngle = j * sectorStep;           // starting from 0 to 2pi
@@ -159,8 +160,8 @@ SphereMesh::SphereMesh(GameObject* pOwner, ID3D12Device * pd3dDevice, ID3D12Grap
 			// vertex position (x, y, z)
 			x = xy * cosf(sectorAngle);             // r * cos(u) * cos(v)
 			y = xy * sinf(sectorAngle);             // r * cos(u) * sin(v)
-
 			pControlPointVertices[count].position = XMFLOAT3(x, y, z);
+
 			// normalized vertex normal (nx, ny, nz)
 			nx = x * lengthInv;
 			ny = y * lengthInv;
@@ -176,9 +177,11 @@ SphereMesh::SphereMesh(GameObject* pOwner, ID3D12Device * pd3dDevice, ID3D12Grap
 		}
 	}
 	  
-	m_pPositionBuffer = d3dUtil::CreateBufferResource(pd3dDevice, pd3dCommandList, pControlPointVertices,
+	m_pPositionBuffer = d3dUtil::CreateBufferResource(pd3dDevice, pd3dCommandList, 
+		pControlPointVertices,
 		m_nStride * m_vertexCount, D3D12_HEAP_TYPE_DEFAULT,
-		D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, &m_pPositionUploadBuffer);
+		D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, &m_pPositionUploadBuffer
+	);
 
 	m_pVertexBufferViews[0].BufferLocation = m_pPositionBuffer->GetGPUVirtualAddress();
 	m_pVertexBufferViews[0].StrideInBytes = m_nStride;

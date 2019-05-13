@@ -6,6 +6,7 @@
 #include "Sniping.h" 
 #include "Broom.h"
 #include "CylinderMesh.h"
+#include "SphereMesh.h"
 //// Skill header //////////////////////////
 
 //// GameObject header //////////////////////////
@@ -214,11 +215,9 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	// 디스크립터 힙 설정
 	GameScene::CreateCbvSrvDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 3);
 
-	// m_CylinderMesh = new CylinderMesh(m_pPlayer, pd3dDevice, pd3dCommandList, 100, 100, 100, 100, 100);
-
 	m_AimPoint = new AimPoint("AimPoint", pd3dDevice, pd3dCommandList, POINT{ int(GameScreen::GetWidth()) / 2, int(GameScreen::GetHeight()) / 2 }, 100.f, 100.f, L"Image/AimPoint.dds");
 	// m_WideareaMagic = new WideareaMagic(pd3dDevice, pd3dCommandList);
-
+	
 	//// 스카이 박스 생성
 	m_SkyBox = new SkyBox(pd3dDevice, pd3dCommandList, 3000.F, 3000.F, 3000.F);
 
@@ -487,10 +486,7 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 		m_pMainCamera->SetViewportsAndScissorRects(pd3dCommandList);
 		m_pMainCamera->GetCamera()->UpdateShaderVariables(pd3dCommandList, ROOTPARAMETER_CAMERA);
 	}
-
-	// pd3dCommandList->SetComputeRoot32BitConstants(ROOTPARAMETER_WORLD, 16, Matrix4x4)
-	// m_CylinderMesh->Render(pd3dCommandList);
-	
+	 
 	// 스카이박스 렌더
 	if(m_SkyBox) m_SkyBox->Render(pd3dCommandList);
 	 

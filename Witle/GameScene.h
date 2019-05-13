@@ -27,6 +27,7 @@ struct MATERIALS;
 
 class AimPoint;
 class CylinderMesh;
+class SphereMesh;
 
 class GameScene
 	: public Scene
@@ -110,8 +111,8 @@ protected:
 	Camera*					m_pSkyCamera{ nullptr };
 	//
 	SkyBox*					m_SkyBox{ nullptr };
-
-	CylinderMesh*			m_CylinderMesh{ nullptr };
+	 
+	// SphereMesh*			    m_SphereMesh{ nullptr };
 
 #ifdef CHECK_SUBVIEWS
 	CameraObject*			m_lookAboveCamera{ nullptr };
