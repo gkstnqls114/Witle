@@ -27,7 +27,7 @@ Broom::Broom(PlayerMovement* playerStatus)
 	: Skill()
 {
 	m_pPlayerMovement = playerStatus;
- 	m_UsingTime = 10.f; // 사용 시간
+ 	m_UsingTime = 5.f; // 사용 시간
 }
 
 Broom::~Broom()
