@@ -37,7 +37,7 @@ enum LIGHT_TYPE
 #define MOUSE_WHEEL_DOWN	-120
 #define MOUSE_WHEEL_STOP	0
 
-#define CAMERA_FAR			7000.f //1 = 1cm 이므로 7000cm = 70m 
+#define CAMERA_FAR			15000.f //1 = 1cm 이므로 7000cm = 70m 
 
 /////////////////////////////////////////////// define 정의
 #define _WITH_DEBUG_TERRAIN_MAX_POS

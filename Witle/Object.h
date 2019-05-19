@@ -344,7 +344,7 @@ public:
 public:
 	void ReleaseObjects();
 
-	void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList);
+	void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList, const XMFLOAT4X4& world);
 	
 	bool IsTrackAnimationSetFinish(int nAnimationTrack, int nAnimationSet);
 	void SetTrackAnimationSet(int nAnimationTrack, int nAnimationSet);

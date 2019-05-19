@@ -393,7 +393,7 @@ void Player::ProcessInput(float fTimeElapsed)
 
 	DWORD dwDirection = 0;
 	m_CurrAnimation = ANIMATION_IDLE.ID;
-	// m_CurrAnimation = ANIMATION_FORWARD.ID;
+	// m_CurrAnimation = ANIMATION_DEAD.ID;
 	 
 	bool isMove = false;
 	if (GameInput::IsKeydownW())

@@ -566,7 +566,7 @@ void CAnimationController::ReleaseObjects()
 	} 
 }
 
-void CAnimationController::UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList)
+void CAnimationController::UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList, const XMFLOAT4X4& world)
 {
 	for (int i = 0; i < m_nSkinnedMeshes; i++)
 	{
@@ -857,7 +857,7 @@ void LoadObject::Animate(float fTimeElapsed)
 
 void LoadObject::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 {
-	if (m_pSkinnedAnimationController) m_pSkinnedAnimationController->UpdateShaderVariables(pd3dCommandList);
+	if (m_pSkinnedAnimationController) m_pSkinnedAnimationController->UpdateShaderVariables(pd3dCommandList, m_xmf4x4World);
 
 	if (m_pMesh)
 	{
@@ -894,7 +894,7 @@ void LoadObject::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 
 void LoadObject::RenderInstancing(ID3D12GraphicsCommandList * pd3dCommandList, int InstanceCount)
 {
-	if (m_pSkinnedAnimationController) m_pSkinnedAnimationController->UpdateShaderVariables(pd3dCommandList);
+	if (m_pSkinnedAnimationController) m_pSkinnedAnimationController->UpdateShaderVariables(pd3dCommandList, m_xmf4x4World);
 
 	if (m_pMesh)
 	{ 
