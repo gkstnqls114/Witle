@@ -83,7 +83,7 @@ Monster::Monster(const std::string & entityID, ID3D12Device * pd3dDevice, ID3D12
 	m_pMonsterStatus = new MonsterStatus(this, pd3dDevice, pd3dCommandList);
 	m_pMonsterMovement = new MonsterMovement(this);
 	 
-	m_Transform.SetPosition(100.f, MonsterOffestY, 100.f);// 캐릭터가 중앙에 있지않아서 어쩔수없이 설정;
+	// m_Transform.SetPosition(100.f, MonsterOffestY, 100.f);// 캐릭터가 중앙에 있지않아서 어쩔수없이 설정;
 	 
 }
 

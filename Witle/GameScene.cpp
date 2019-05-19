@@ -42,6 +42,7 @@
 #include "CameraObject.h"
 #include "QuadTreeTerrain.h"
 #include "BasicCam.h" 
+#include "Slime.h"
 #include "GameScene.h"
 
 ID3D12DescriptorHeap*		GameScene::m_pd3dCbvSrvDescriptorHeap;
@@ -227,10 +228,13 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	XMFLOAT4 xmf4Color(0.0f, 0.5f, 0.0f, 0.0f);
 	m_Terrain = new Terrain("Terrain", pd3dDevice, pd3dCommandList, L"Image/HeightMap.raw", 257, 257, 257, 257, xmf3Scale, xmf4Color);
 	
-	// 테스트할 모델 오브젝트
-	 m_pPlayer = new Player("Player", pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	// 플레이어
+	m_pPlayer = new Player("Player", pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 	m_pOtherPlayer = new Player("OtherPlayer", pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 	m_SkyBox->SetpPlayerTransform(&m_pPlayer->GetTransform());
+
+	// 몬스터
+	m_TestMonster = new Slime("Slime", pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 
 	//// 테스트 쿼드트리 터레인 생성 
 	m_pQuadtreeTerrain = new QuadtreeTerrain(pd3dDevice, pd3dCommandList, 257, 257, xmf3Scale, xmf4Color, m_Terrain->GetHeightMapImage());
@@ -463,6 +467,7 @@ void GameScene::AnimateObjects(float fTimeElapsed)
 { 
 	if (m_pOtherPlayer) m_pOtherPlayer->Animate(fTimeElapsed);
 	if (m_pPlayer) m_pPlayer->Animate(fTimeElapsed);
+	if (m_TestMonster) m_TestMonster->Animate(fTimeElapsed);
 }
 
 void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
@@ -530,6 +535,11 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 		{
 			if(m_AimPoint) m_AimPoint->Render(pd3dCommandList);
 		}
+	}
+
+	if (m_TestMonster)
+	{
+		m_TestMonster->Render(pd3dCommandList);
 	}
 
 }

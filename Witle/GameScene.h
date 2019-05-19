@@ -6,11 +6,15 @@ class Sniping;
 class WideareaMagic;
 //// Skill ////////////////
 
-class Widget;
-class SkyBox;
+//// Objects ///////////////
 class Player; 
-class Shader;
-class ReflexTree;
+class Widget;
+
+//// Objects ///////////////
+
+class Monster;
+class SkyBox;
+class Shader; 
 class CLoadedModelInfo;
 
 class CameraObject;
@@ -113,6 +117,7 @@ protected:
 	SkyBox*					m_SkyBox{ nullptr };
 	 
 	// SphereMesh*			    m_SphereMesh{ nullptr };
+	Monster*				m_TestMonster{ nullptr };
 
 #ifdef CHECK_SUBVIEWS
 	CameraObject*			m_lookAboveCamera{ nullptr };
