@@ -179,6 +179,9 @@
     <ClInclude Include="LoadingScene.h" />
     <ClInclude Include="LobbyScene.h" />
     <ClInclude Include="Material.h" />
+    <ClInclude Include="Monster.h" />
+    <ClInclude Include="MonsterMovement.h" />
+    <ClInclude Include="MonsterStatus.h" />
     <ClInclude Include="MyBOBox.h" />
     <ClInclude Include="MyBSphere.h" />
     <ClInclude Include="MyConstants.h" />
@@ -228,6 +231,7 @@
     <ClInclude Include="SkyBox.h" />
     <ClInclude Include="SkyBoxShader.h" />
     <ClInclude Include="SkyPlane.h" />
+    <ClInclude Include="Slime.h" />
     <ClInclude Include="Sniping.h" />
     <ClInclude Include="SoundManager.h" />
     <ClInclude Include="SpeedReduction.h" />
@@ -296,6 +300,9 @@
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="MeshRenderer.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Monster.cpp" />
+    <ClCompile Include="MonsterMovement.cpp" />
+    <ClCompile Include="MonsterStatus.cpp" />
     <ClCompile Include="MyBOBox.cpp" />
     <ClCompile Include="MyBSphere.cpp" />
     <ClCompile Include="MyDescriptorHeap.cpp" />
@@ -324,6 +331,7 @@
     <ClCompile Include="SkinnedShader.cpp" />
     <ClCompile Include="SkyBox.cpp" />
     <ClCompile Include="SkyBoxShader.cpp" />
+    <ClCompile Include="Slime.cpp" />
     <ClCompile Include="Sniping.cpp" />
     <ClCompile Include="SoundManager.cpp" />
     <ClCompile Include="SpeedReduction.cpp" />

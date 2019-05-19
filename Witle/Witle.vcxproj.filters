@@ -268,6 +268,21 @@
     <Filter Include="02.Component\Mesh\SphereMesh">
       <UniqueIdentifier>{14d1cc8f-b36d-4c8c-984a-d00fe9374022}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.GameObject\Monster">
+      <UniqueIdentifier>{8062d154-08a1-41ca-a30a-ff569f779ccb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\ForMonster">
+      <UniqueIdentifier>{6f6f0da4-460e-4a1c-ad74-3a573093c8c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\ForMonster\MonsterMovement">
+      <UniqueIdentifier>{692a14ef-ebae-4df5-a360-50a94d6057b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\ForMonster\MonsterStatus">
+      <UniqueIdentifier>{ab995979-ee05-40e1-beb5-de7c89b328f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameObject\Monster\Slime">
+      <UniqueIdentifier>{e58f492a-8b9e-4d14-8f6d-d915c5c785c3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -570,6 +585,18 @@
     <ClInclude Include="SphereMesh.h">
       <Filter>02.Component\Mesh\SphereMesh</Filter>
     </ClInclude>
+    <ClInclude Include="Monster.h">
+      <Filter>03.GameObject\Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="MonsterStatus.h">
+      <Filter>02.Component\ForMonster\MonsterStatus</Filter>
+    </ClInclude>
+    <ClInclude Include="MonsterMovement.h">
+      <Filter>02.Component\ForMonster\MonsterMovement</Filter>
+    </ClInclude>
+    <ClInclude Include="Slime.h">
+      <Filter>03.GameObject\Monster\Slime</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -853,6 +880,18 @@
     </ClCompile>
     <ClCompile Include="SphereMesh.cpp">
       <Filter>02.Component\Mesh\SphereMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Monster.cpp">
+      <Filter>03.GameObject\Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="MonsterStatus.cpp">
+      <Filter>02.Component\ForMonster\MonsterStatus</Filter>
+    </ClCompile>
+    <ClCompile Include="MonsterMovement.cpp">
+      <Filter>02.Component\ForMonster\MonsterMovement</Filter>
+    </ClCompile>
+    <ClCompile Include="Slime.cpp">
+      <Filter>03.GameObject\Monster\Slime</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
