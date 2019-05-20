@@ -126,7 +126,7 @@ Player::Player(const std::string & entityID, ID3D12Device * pd3dDevice, ID3D12Gr
 	 
 	m_Broom = new Broom(m_pPlayerMovement);
 
-	m_Transform.SetPosition(100.f, playerOffestY, 100.f);// 캐릭터가 중앙에 있지않아서 어쩔수없이 설정;
+	m_Transform.SetPosition(100.f, 0.f, 100.f);// 캐릭터가 중앙에 있지않아서 어쩔수없이 설정;
 
 	// 빗자루 스킬 이펙트 준비
 	m_BroomEffectRect = new BroomEffectRect(this, pd3dDevice, pd3dCommandList);
@@ -284,6 +284,7 @@ void Player::Animate(float fElapsedTime)
 
 	//// 위치가 안맞아서 재조정  
 	float fPitch = -90.f;
+	// float fPitch = 0.f;
 	float fYaw = 0.f;
 	float fRoll = 0.f;
 	XMMATRIX mtxRotate = XMMatrixRotationRollPitchYaw(XMConvertToRadians(fPitch), XMConvertToRadians(fYaw), XMConvertToRadians(fRoll));

@@ -235,6 +235,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 
 	// 몬스터
 	m_TestMonster = new Slime("Slime", pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	Monster::SetTarget(m_pPlayer);
 
 	//// 테스트 쿼드트리 터레인 생성 
 	m_pQuadtreeTerrain = new QuadtreeTerrain(pd3dDevice, pd3dCommandList, 257, 257, xmf3Scale, xmf4Color, m_Terrain->GetHeightMapImage());
@@ -417,6 +418,7 @@ void GameScene::Update(float fElapsedTime)
 
 	if(m_pPlayer) m_pPlayer->Update(fElapsedTime); //Velocity를 통해 pos 이동
 	if(m_pOtherPlayer) m_pOtherPlayer->Update(fElapsedTime);
+	if(m_TestMonster) m_TestMonster->Update(fElapsedTime);
 
 	if(m_SkyBox) m_SkyBox->Update(fElapsedTime); 
 	if(m_WideareaMagic) m_WideareaMagic->Update(fElapsedTime);
@@ -450,11 +452,6 @@ void GameScene::LastUpdate(float fElapsedTime)
 	if (m_pQuadtreeTerrain) m_pQuadtreeTerrain->LastUpdate(fElapsedTime);
 	// 순서변경X 
 
-	// 이동한 플레이어 데미지 체크
-	//if (Collision::isCollide(m_WideareaMagic->GetBSphere(), m_pPlayer->GetBOBox()))
-	//{
-
-	//} 
 }
 
 void GameScene::TESTSetRootDescriptor(ID3D12GraphicsCommandList * pd3dCommandList)

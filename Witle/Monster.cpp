@@ -23,19 +23,21 @@ static float MonsterOffestX = 0.f;
 static float MonsterOffestY = 57.f;
 static float MonsterOffestZ = 50.f;
  
+GameObject*  Monster::m_pTarget{ nullptr };
+
 XMFLOAT3 Monster::CalculateAlreadyVelocity(float fTimeElapsed)
 {
-	XMFLOAT3 AlreadyVelocity = Vector3::Add(m_pMonsterMovement->m_xmf3Velocity, m_pMonsterMovement->m_xmf3Gravity);
+	XMFLOAT3 AlreadyVelocity = Vector3::Add(m_MonsterMovement->m_xmf3Velocity, m_MonsterMovement->m_xmf3Gravity);
 	float fLength = sqrtf(AlreadyVelocity.x * AlreadyVelocity.x + AlreadyVelocity.z * AlreadyVelocity.z);
-	float fMaxVelocityXZ = m_pMonsterMovement->m_fMaxVelocityXZ;
-	if (fLength > m_pMonsterMovement->m_fMaxVelocityXZ)
+	float fMaxVelocityXZ = m_MonsterMovement->m_fMaxVelocityXZ;
+	if (fLength > m_MonsterMovement->m_fMaxVelocityXZ)
 	{
 		AlreadyVelocity.x *= (fMaxVelocityXZ / fLength);
 		AlreadyVelocity.z *= (fMaxVelocityXZ / fLength);
 	}
-	float fMaxVelocityY = m_pMonsterMovement->m_fMaxVelocityY;
+	float fMaxVelocityY = m_MonsterMovement->m_fMaxVelocityY;
 	fLength = sqrtf(AlreadyVelocity.y * AlreadyVelocity.y);
-	if (fLength > m_pMonsterMovement->m_fMaxVelocityY) AlreadyVelocity.y *= (fMaxVelocityY / fLength);
+	if (fLength > m_MonsterMovement->m_fMaxVelocityY) AlreadyVelocity.y *= (fMaxVelocityY / fLength);
 
 	XMFLOAT3 xmf3Velocity = Vector3::ScalarProduct(AlreadyVelocity, fTimeElapsed, false);
 
@@ -43,14 +45,14 @@ XMFLOAT3 Monster::CalculateAlreadyVelocity(float fTimeElapsed)
 }
 BoundingOrientedBox Monster::CalculateAlreadyBoundingBox(float fTimeElapsed)
 {
-	XMFLOAT3 AlreadyPosition = Vector3::Add(m_Transform.GetPosition(), m_pMonsterMovement->AlreadyUpdate(fTimeElapsed));
+	XMFLOAT3 AlreadyPosition = Vector3::Add(m_Transform.GetPosition(), m_MonsterMovement->AlreadyUpdate(fTimeElapsed));
 	BoundingOrientedBox AlreadyBBox = m_pMyBOBox->GetBOBox();
 	AlreadyBBox.Center = AlreadyPosition;
 	return AlreadyBBox;
 }
 XMFLOAT3 Monster::CalculateAlreadyPosition(float fTimeElapsed)
 {
-	XMFLOAT3 AlreadyPosition = Vector3::Add(m_Transform.GetPosition(), m_pMonsterMovement->AlreadyUpdate(fTimeElapsed));
+	XMFLOAT3 AlreadyPosition = Vector3::Add(m_Transform.GetPosition(), m_MonsterMovement->AlreadyUpdate(fTimeElapsed));
 	return AlreadyPosition;
 }
 
@@ -80,8 +82,8 @@ Monster::Monster(const std::string & entityID, ID3D12Device * pd3dDevice, ID3D12
 	XMFLOAT3 extents{ 25.f, 75.f, 25.f };
 	m_pMyBOBox = new MyBOBox(pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 75.F, 0.F }, extents);
 
-	m_pMonsterStatus = new MonsterStatus(this, pd3dDevice, pd3dCommandList);
-	m_pMonsterMovement = new MonsterMovement(this);
+	m_MonsterStatus = new MonsterStatus(this, pd3dDevice, pd3dCommandList);
+	m_MonsterMovement = new MonsterMovement(this);
 	 
 	// m_Transform.SetPosition(100.f, MonsterOffestY, 100.f);// 캐릭터가 중앙에 있지않아서 어쩔수없이 설정;
 	 
@@ -118,17 +120,17 @@ void Monster::ReleaseMembers()
 		delete m_pMyBOBox;
 		m_pMyBOBox = nullptr;
 	}
-	if (m_pMonsterStatus)
+	if (m_MonsterStatus)
 	{
-		m_pMonsterStatus->ReleaseObjects();
-		delete m_pMonsterStatus;
-		m_pMonsterStatus = nullptr;
+		m_MonsterStatus->ReleaseObjects();
+		delete m_MonsterStatus;
+		m_MonsterStatus = nullptr;
 	}
-	if (m_pMonsterMovement)
+	if (m_MonsterMovement)
 	{
-		m_pMonsterMovement->ReleaseObjects();
-		delete m_pMonsterMovement;
-		m_pMonsterMovement = nullptr;
+		m_MonsterMovement->ReleaseObjects();
+		delete m_MonsterMovement;
+		m_MonsterMovement = nullptr;
 	}
 }
 
@@ -139,42 +141,15 @@ void Monster::ReleaseMemberUploadBuffers()
 	if (m_MonsterModel)m_MonsterModel->ReleaseUploadBuffers();
 	if (m_pMyBOBox)m_pMyBOBox->ReleaseUploadBuffers();
 }
-
-void Monster::Update(float fElapsedTime)
-{ 
-	// 이동량을 계산한다. 
-	m_pMonsterMovement->Update(fElapsedTime);
-
-	// 이동량만큼 움직인다. 
-	Move(Vector3::ScalarProduct(m_pMonsterMovement->m_xmf3Velocity, fElapsedTime, false));
-
-	m_pMyBOBox->SetPosition(
-		XMFLOAT3(
-			m_Transform.GetPosition().x,
-			75.f,
-			m_Transform.GetPosition().z)
-	);
-
-	// 플레이어 콜백
-	// OnMonsterUpdateCallback(fElapsedTime);
-
-
-	// 이동량 줄어든다.
-	//fLength = Vector3::Length(m_xmf3Velocity);
-	//float fDeceleration = (m_fFriction * fElapsedTime); // 감소량
-	//if (fDeceleration > fLength) fDeceleration = fLength;
-	//m_xmf3Velocity = Vector3::Add(m_xmf3Velocity, Vector3::ScalarProduct(m_xmf3Velocity, -fDeceleration, true));
-
-	//m_pLoadObject->SetTrackAnimationSet(0, ::IsZero(fLength) ? 0 : 1); // 만약에 fLength가 0이 아니라면... 즉 움직인다면...
-}
+ 
 
 void Monster::SubstractHP(int sub)
 {
 	m_CurrAnimation = ANIMATION_BEATTACKED.ID;
 	m_pLoadObject->SetTrackAnimationSet(0, m_CurrAnimation);
 	
-	m_pMonsterStatus->m_HP -= sub;
-	std::cout << m_pMonsterStatus->m_HP << std::endl;
+	m_MonsterStatus->m_HP -= sub;
+	std::cout << m_MonsterStatus->m_HP << std::endl;
 }
 
 void Monster::Animate(float fElapsedTime)
@@ -209,7 +184,7 @@ void Monster::Render(ID3D12GraphicsCommandList * pd3dCommandList)
 
 void Monster::RenderHpStatus(ID3D12GraphicsCommandList * pd3dCommandList)
 {
-	m_pMonsterStatus->Render(pd3dCommandList);
+	m_MonsterStatus->Render(pd3dCommandList);
 }
 
 void Monster::SetTrackAnimationSet()
@@ -229,7 +204,7 @@ void Monster::Move(const XMFLOAT3 & xmf3Shift)
 void Monster::Rotate(float x, float y, float z)
 {
 	m_Transform.Rotate(x, y, z);
-	m_pMyBOBox->Rotate(m_pMonsterMovement->m_fRoll, m_pMonsterMovement->m_fYaw, m_pMonsterMovement->m_fPitch);
+	m_pMyBOBox->Rotate(m_MonsterMovement->m_fRoll, m_MonsterMovement->m_fYaw, m_MonsterMovement->m_fPitch);
 }
 
 void Monster::ProcessInput(float fTimeElapsed)
@@ -244,18 +219,18 @@ void Monster::ProcessInput(float fTimeElapsed)
 
 	//if (isDead)
 	//{
-	//	m_pMonsterStatus->m_HP += 10.f; 
-	//	if (m_pMonsterStatus->m_HP > 1000.F)
+	//	m_MonsterStatus->m_HP += 10.f; 
+	//	if (m_MonsterStatus->m_HP > 1000.F)
 	//	{ 
 	//		m_CurrAnimation = ANIMATION_IDLE.ID;
 	//		m_Broom->DoNotUse();
-	//		m_pMonsterStatus->m_HP = 1000.F;
+	//		m_MonsterStatus->m_HP = 1000.F;
 	//		isDead = false;
 	//	}
 	//	return;
 	//}
 
-	//if (m_pMonsterStatus->m_HP <= 0 && isDead == false)
+	//if (m_MonsterStatus->m_HP <= 0 && isDead == false)
 	//{
 	//	isDead = true;
 	//	m_CurrAnimation = ANIMATION_DEAD.ID;
@@ -305,11 +280,11 @@ void Monster::ProcessInput(float fTimeElapsed)
 	if (dwDirection != 0)
 	{
 		//플레이어의 이동량 벡터를 xmf3Shift 벡터만큼 더한다. 
-		m_pMonsterMovement->MoveVelocity(dwDirection, fTimeElapsed);
+		m_MonsterMovement->MoveVelocity(dwDirection, fTimeElapsed);
 	}
 	else
 	{
-		m_pMonsterMovement->ReduceVelocity(fTimeElapsed);
+		m_MonsterMovement->ReduceVelocity(fTimeElapsed);
 	}
 
 }
@@ -323,10 +298,10 @@ void Monster::ProcessInputAI(float fTimeElapsed)
 
 XMFLOAT3 Monster::GetVelocity() const
 {
-	return m_pMonsterMovement->m_xmf3Velocity;
+	return m_MonsterMovement->m_xmf3Velocity;
 }
 
 void Monster::SetVelocity(const XMFLOAT3 & velocity)
 {
-	m_pMonsterMovement->m_xmf3Velocity = velocity;
+	m_MonsterMovement->m_xmf3Velocity = velocity;
 }

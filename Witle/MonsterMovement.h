@@ -20,7 +20,10 @@ public:
 	float m_fRoll = 0.0f;
 	float m_fYaw = 0.0f;
 
+	const float m_fNearDistance = 500.f;
+
 private:
+	bool IsNearPlayer(const GameObject* Target);
 	void MoveVelocity(const XMFLOAT3& shift);
 
 public:
@@ -31,7 +34,12 @@ public:
 	MonsterMovement(GameObject* pOwner);
 	virtual ~MonsterMovement();
 
+	// 이동에 관련된 호출
 	virtual void Update(float) override;
+
+	// Update 수행 이전 반드시 호출
+	virtual void UpdateAI(float fElpasedTime, const GameObject* pTarget);
+
 	XMFLOAT3 AlreadyUpdate(float);
 
 	void MoveVelocity(DWORD dwDirection, float);

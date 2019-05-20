@@ -2,6 +2,11 @@
 #include "GameObject.h"
 #include "MonsterMovement.h"
 
+bool MonsterMovement::IsNearPlayer(const GameObject * target)
+{
+	return Vector3::Length(Vector3::Subtract(m_pOwner->GetTransform().GetPosition(), target->GetTransform().GetPosition())) < m_fNearDistance;
+}
+
 void MonsterMovement::MoveVelocity(const XMFLOAT3 & xmf3Shift)
 {
 	m_xmf3Velocity = Vector3::Add(m_xmf3Velocity, xmf3Shift);
@@ -31,6 +36,16 @@ void MonsterMovement::Update(float fTimeElapsed)
 	float fMaxVelocityY = m_fMaxVelocityY;
 	fLength = sqrtf(m_xmf3Velocity.y * m_xmf3Velocity.y);
 	if (fLength > m_fMaxVelocityY) m_xmf3Velocity.y *= (fMaxVelocityY / fLength);
+}
+
+void MonsterMovement::UpdateAI(float fElpasedTime, const GameObject* pTarget)
+{
+	// 주변에 플레이어가 있는지 확인한다.
+	if (IsNearPlayer(pTarget))
+	{
+		// 만약에 있다면 따라가도록 VELOCITY 를 설정한다.
+		m_xmf3Velocity = Vector3::Subtract(pTarget->GetTransform().GetPosition(), m_pOwner->GetTransform().GetPosition());
+	}
 }
 
 XMFLOAT3 MonsterMovement::AlreadyUpdate(float fTimeElapsed)

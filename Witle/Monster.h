@@ -19,8 +19,11 @@ class Monster :
 	public GameObject
 {
 protected:
-	MonsterMovement*    m_pMonsterMovement{ nullptr };
-	MonsterStatus*	   m_pMonsterStatus{ nullptr };
+	static GameObject*  m_pTarget;
+
+protected:
+	MonsterMovement*    m_MonsterMovement{ nullptr };
+	MonsterStatus*	   m_MonsterStatus{ nullptr };
 	MyBOBox*		   m_pMyBOBox{ nullptr };
 
 	Texture*			m_pTexture{ nullptr };
@@ -45,7 +48,8 @@ protected:
 	virtual void ReleaseMemberUploadBuffers() override;
 
 public:
-	virtual void Update(float fElapsedTime) override;
+	static void SetTarget(GameObject* player) { m_pTarget = player; }
+	virtual void Update(float fElapsedTime) = 0;
 
 private:
 	void OnMonsterUpdateCallback(float fTimeElapsed);
@@ -55,8 +59,6 @@ private:
 public:
 	Monster(const std::string& entityID, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext = NULL);
 	virtual ~Monster();
-
-	void LastUpdate(float);
 	 
 	void DoNotRendering() { m_isRendering = false; }
 	void DoRendering() { m_isRendering = true; }
