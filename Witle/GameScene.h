@@ -69,8 +69,7 @@ protected:
 	//그래픽 루트 시그너쳐를 생성한다.
 	virtual ID3D12RootSignature* CreateGraphicsRootSignature(ID3D12Device *pd3dDevice) override; 
 
-	void UpdateCollision(float fElapsedTime);
-	void ProcessPicking(float fElapsedTime);
+	void UpdateCollision(float fElapsedTime); 
 	void BuildLightsAndMaterials(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList);
 	void RenderShadowMap(ID3D12GraphicsCommandList *pd3dCommandList);
 	 
@@ -116,7 +115,7 @@ protected:
 	//
 	SkyBox*					m_SkyBox{ nullptr };
 	 
-	// SphereMesh*			    m_SphereMesh{ nullptr };
+	SphereMesh*			    m_SphereMesh{ nullptr };
 	Monster*				m_TestMonster{ nullptr };
 
 #ifdef CHECK_SUBVIEWS

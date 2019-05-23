@@ -29,8 +29,7 @@ VertexOut VS(VertexIn input)
 
 	output.positionW = (float3)mul(float4(input.position, 1.0f), gmtxWorld);
 	output.position = mul(mul(float4(output.positionW, 1.0f), gmtxView), gmtxProjection);
-
-	// output.uv = input.uv;
+     
 	output.normalW = mul(input.normal, (float3x3)gmtxWorld);
 #ifdef _WITH_VERTEX_LIGHTING
 	output.normalW = normalize(output.normalW);
@@ -56,10 +55,10 @@ float4 PS(VertexOut input) : SV_TARGET
 //#ifdef _WITH_VERTEX_LIGHTING
 //	float4 cIllumination = input.color;
 //#else
-//	input.normalW = normalize(input.normalW);
-//	float4 cIllumination = Lighting(input.positionW, input.normalW);
+    input.normalW = normalize(input.normalW);
+    float4 cIllumination = Lighting(input.positionW, input.normalW);
 //#endif
-	return(cColor ); 
+	return(cColor); 
 
 }
 

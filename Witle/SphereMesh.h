@@ -37,7 +37,7 @@ public:
 
 public:
 	SphereMesh(GameObject* pOwner, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, 
-		float radius = 10, float height = 100, float topRadius = 10, float bottomRadius = 10, int sectorCount = 10, int stackCount = 10
+		float radius = 500, float height = 500, float topRadius = 10, float bottomRadius = 10, int sectorCount = 10, int stackCount = 10
 	);
 	virtual ~SphereMesh();
 	void CreateTexture(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandListconst, const wchar_t *pszFileName);

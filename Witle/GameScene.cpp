@@ -216,6 +216,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	// 디스크립터 힙 설정
 	GameScene::CreateCbvSrvDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 3);
 
+
 	m_AimPoint = new AimPoint("AimPoint", pd3dDevice, pd3dCommandList, POINT{ int(GameScreen::GetWidth()) / 2, int(GameScreen::GetHeight()) / 2 }, 100.f, 100.f, L"Image/AimPoint.dds");
 	// m_WideareaMagic = new WideareaMagic(pd3dDevice, pd3dCommandList);
 	
@@ -232,6 +233,8 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	m_pPlayer = new Player("Player", pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 	m_pOtherPlayer = new Player("OtherPlayer", pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 	m_SkyBox->SetpPlayerTransform(&m_pPlayer->GetTransform());
+	// 테스트용
+	m_SphereMesh = new SphereMesh(m_pPlayer, pd3dDevice, pd3dCommandList);
 
 	// 몬스터
 	m_TestMonster = new Slime("Slime", pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
@@ -390,8 +393,7 @@ bool GameScene::ProcessInput(HWND hWnd, float fElapsedTime)
 	// 플레이어 이동에 대한 처리 (정확히는 이동이 아니라 가속도)
 	m_pPlayer->ProcessInput(fElapsedTime);
 	m_pOtherPlayer->ProcessInputAI(fElapsedTime);
-	// m_pOtherPlayer->Rotate(0.0f, 10.f, 0.f);
-
+	
 	// 플레이어 회전에 대한 처리
 	if ((GameInput::GetDeltaX() != 0.0f) || (GameInput::GetDeltaY() != 0.0f))
 	{
@@ -403,16 +405,23 @@ bool GameScene::ProcessInput(HWND hWnd, float fElapsedTime)
 			m_pPlayer->Rotate(0.0f, GameInput::GetDeltaX(), 0.0f); 
 		} 
 	}
-	
-	// 피킹 처리
-	ProcessPicking(fElapsedTime);
-
+	 
 	return true;
 }
 
 // ProcessInput에 의한 right, up, look, pos 를 월드변환 행렬에 갱신한다.
 void GameScene::Update(float fElapsedTime)
 { 
+	// 플레이어 공격
+	if (GameInput::GetDragMode()) // 만약 드래그로 회전한다면...
+	{
+		m_pPlayer->Attack(m_pOtherPlayer, m_pOtherPlayer->GetBOBox(), m_AimPoint->GetPickingPoint(), m_pMainCamera->GetCamera());
+	}
+	else // 드래그로 회전하지 않는다면...
+	{
+		if (!GameInput::isNowClick()) return; // 클릭하지 않았다면 아무것도 실행하지 않는다.
+	}
+
 	//// 순서 변경 X ////
 	UpdateCollision(fElapsedTime);
 
@@ -501,6 +510,8 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 
 	pd3dCommandList->SetDescriptorHeaps(1, &m_pd3dCbvSrvDescriptorHeap);
 
+	pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_WORLD, 16, &Matrix4x4::Identity(), 0);
+	m_SphereMesh->Render(pd3dCommandList);
 	if (m_pPlayer) m_pPlayer->Render(pd3dCommandList);
 	if (m_pOtherPlayer) m_pOtherPlayer->Render(pd3dCommandList);
 
@@ -782,21 +793,6 @@ void GameScene::UpdateCollision(float fElapsedTime)
 				}
 			}
 		}
-	}
-}
-
-void GameScene::ProcessPicking(float fElapsedTime)
-{
-	if (GameInput::GetDragMode()) // 만약 드래그로 회전한다면...
-	{
-		m_pPlayer->Attack(m_pOtherPlayer, m_pOtherPlayer->GetBOBox(), m_AimPoint->GetPickingPoint(), m_pMainCamera->GetCamera());
-		 
-	}
-	else // 드래그로 회전하지 않는다면...
-	{
-		if (!GameInput::isNowClick()) return; // 클릭하지 않았다면 아무것도 실행하지 않는다.
-		 
-
 	}
 }
 

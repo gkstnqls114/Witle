@@ -133,6 +133,9 @@ SphereMesh::SphereMesh(GameObject* pOwner, ID3D12Device * pd3dDevice, ID3D12Grap
 
 	m_nStride = sizeof(SphereVertex);
 	 
+	// 출처: http://www.songho.ca/opengl/gl_sphere.html
+
+	// clear memory of prev arrays
 	float x, y, z, xy;                              // vertex position
 	float nx, ny, nz, lengthInv = 1.0f / radius;    // vertex normal
 	float s, t;                                     // vertex texCoord
@@ -141,44 +144,74 @@ SphereMesh::SphereMesh(GameObject* pOwner, ID3D12Device * pd3dDevice, ID3D12Grap
 	float stackStep = PI / stackCount;
 	float sectorAngle, stackAngle;
 
-	m_vertexCount = stackCount * sectorCount;
-	SphereVertex* pControlPointVertices = new SphereVertex[m_vertexCount];
-	int count = 0;
-	for (int i = 0; i <= stackCount; ++i)
+	SphereVertex* pControlPointVertices = new SphereVertex[(stackCount + 1) * (sectorCount+ 1)];
+	int Cindex = 0;
+	for (int i = 0; i < stackCount + 1; ++i)
 	{
 		stackAngle = PI / 2 - i * stackStep;        // starting from pi/2 to -pi/2
 		xy = radius * cosf(stackAngle);             // r * cos(u)
 		z = radius * sinf(stackAngle);              // r * sin(u)
 
 		// add (sectorCount+1) vertices per stack
-		// the first and last vertices have same position and normal,
-		// but different tex coords
-		for (int j = 0; j <= sectorCount; ++j)
+		// the first and last vertices have same position and normal, but different tex coords
+		for (int j = 0; j < sectorCount + 1; ++j)
 		{
 			sectorAngle = j * sectorStep;           // starting from 0 to 2pi
 
 			// vertex position (x, y, z)
 			x = xy * cosf(sectorAngle);             // r * cos(u) * cos(v)
 			y = xy * sinf(sectorAngle);             // r * cos(u) * sin(v)
-			pControlPointVertices[count].position = XMFLOAT3(x, y, z);
+			pControlPointVertices[Cindex].position = XMFLOAT3(x, y, z);
 
 			// normalized vertex normal (nx, ny, nz)
 			nx = x * lengthInv;
 			ny = y * lengthInv;
 			nz = z * lengthInv;
-			pControlPointVertices[count].normal = XMFLOAT3(nx, ny, nz);
-			
+			pControlPointVertices[Cindex].normal = XMFLOAT3(nx, ny, nz);
+			 
 			// vertex tex coord (s, t) range between [0, 1]
 			s = (float)j / sectorCount;
 			t = (float)i / stackCount;
-			pControlPointVertices[count].uv = XMFLOAT2(s, t); 
-			pControlPointVertices[count].diffuse = XMFLOAT4(1.F, 1.F, 1.F, 1.F);
-			count += 1;
+			pControlPointVertices[Cindex].uv = XMFLOAT2(s, t); 
+
+			Cindex += 1;
 		}
 	}
-	  
+
+	// generate CCW index list of sphere triangles 
+	int maybe_vertexCount = stackCount * sectorCount * 6; // 최대 크기로 더 많이 할당한다.
+	SphereVertex* pVertices = new SphereVertex[maybe_vertexCount];
+	int k1, k2;
+	int index = 0;
+	for (int i = 0; i < stackCount; ++i)
+	{
+		k1 = i * (sectorCount + 1);     // beginning of current stack
+		k2 = k1 + sectorCount + 1;      // beginning of next stack
+		 
+		for (int j = 0; j < sectorCount; ++j, ++k1, ++k2)
+		{
+			// 2 triangles per sector excluding first and last stacks
+			// k1 => k2 => k1+1
+			if (i != 0)
+			{
+				pVertices[index++] = pControlPointVertices[k1];
+				pVertices[index++] = pControlPointVertices[k2];
+				pVertices[index++] = pControlPointVertices[k1 + 1]; 
+			}
+
+			// k1+1 => k2 => k2+1
+			if (i != (stackCount - 1))
+			{ 
+				pVertices[index++] = pControlPointVertices[k1 + 1];
+				pVertices[index++] = pControlPointVertices[k2];
+				pVertices[index++] = pControlPointVertices[k2 + 1]; 
+			}  
+		}
+	} 
+	m_vertexCount = index; 
+
 	m_pPositionBuffer = d3dUtil::CreateBufferResource(pd3dDevice, pd3dCommandList, 
-		pControlPointVertices,
+		pVertices,
 		m_nStride * m_vertexCount, D3D12_HEAP_TYPE_DEFAULT,
 		D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, &m_pPositionUploadBuffer
 	);
@@ -188,6 +221,7 @@ SphereMesh::SphereMesh(GameObject* pOwner, ID3D12Device * pd3dDevice, ID3D12Grap
 	m_pVertexBufferViews[0].SizeInBytes = m_nStride * m_vertexCount;
 	 
 	delete[] pControlPointVertices;
+	delete[] pVertices;
 }
 
 SphereMesh::~SphereMesh()
