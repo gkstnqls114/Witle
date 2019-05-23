@@ -24,7 +24,7 @@ public:
 	virtual void Update(float) override;
 	
 	// Update 수행 이전 반드시 호출
-	virtual void UpdateAI(float);
+	virtual void ProcessAI(float);
 	void Render(ID3D12GraphicsCommandList *pd3dCommandList);
 
 };

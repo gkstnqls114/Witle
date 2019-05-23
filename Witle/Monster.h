@@ -14,6 +14,13 @@ class MyDescriptorHeap;
 class BroomEffectRect;
 class MyRectangle;
 
+enum MONSTER_STATE
+{
+	IDEL,
+	MOVE,
+	ATTACK
+};
+
 // CHeightMapTerrain 입니다.
 class Monster :
 	public GameObject
@@ -41,8 +48,6 @@ private:
 
 	int m_PrevAnimation{ 0 }; // 현재 사용하는 애니메이션
 
-	 
-
 protected:
 	virtual void ReleaseMembers() override;
 	virtual void ReleaseMemberUploadBuffers() override;
@@ -50,10 +55,9 @@ protected:
 public:
 	static void SetTarget(GameObject* player) { m_pTarget = player; }
 	virtual void Update(float fElapsedTime) = 0;
+	virtual void ProcessAI(float fElapsedTime) = 0;
 
-private:
-	void OnMonsterUpdateCallback(float fTimeElapsed);
-	void OnCameraUpdateCallback(float fTimeElapsed, Camera* camera);
+private: 
 	void SetTrackAnimationSet();
 
 public:
@@ -80,21 +84,16 @@ public:
 
 	void ProcessInput(float fTimeElapsed);
 	void ProcessInputAI(float fTimeElapsed);
-
-	bool Attack();
-
-	/////////////////////// Skill
-	void UseSkill_Broom();
-	/////////////////////// Skill
-
-	/////////////////////// Get
+	 
+	//// Get /////////////////// 
 	AXIS GetCoorAxis() { return m_Transform.GetCoorAxis(); }
 	XMFLOAT3 GetVelocity() const;
 	MyBOBox* GetBOBox() { return m_pMyBOBox; } 
 	bool IsAttacking() const { return m_isAttacking; }
-	/////////////////////// Get
+	//// Get /////////////////// 
 
-	/////////////////////// Set	
+	//// Set /////////////////// 
 	void SetVelocity(const XMFLOAT3& velocity); 
-	/////////////////////// Set
+	//// Set /////////////////// 
+
 };

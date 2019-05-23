@@ -400,8 +400,7 @@ void Player::ProcessInput(float fTimeElapsed)
 	}
 
 	DWORD dwDirection = 0;
-	m_CurrAnimation = ANIMATION_IDLE.ID;
-	// m_CurrAnimation = ANIMATION_DEAD.ID;
+	m_CurrAnimation = ANIMATION_IDLE.ID; 
 	 
 	bool isMove = false;
 	if (GameInput::IsKeydownW())
@@ -482,8 +481,7 @@ bool Player::Attack(Player* player, MyCollider* collider, XMFLOAT2 aimPoint, Cam
 		player->SubstractHP(500);
 	}
 	else
-	{ 
-
+	{  
 		// 피킹 ray를 만든다.
 		RAY pickRay = RAY::GeneratePickingRay(aimPoint, pMainCaemra);
 

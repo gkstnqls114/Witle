@@ -38,13 +38,17 @@ void MonsterMovement::Update(float fTimeElapsed)
 	if (fLength > m_fMaxVelocityY) m_xmf3Velocity.y *= (fMaxVelocityY / fLength);
 }
 
-void MonsterMovement::UpdateAI(float fElpasedTime, const GameObject* pTarget)
+void MonsterMovement::ProcessAI(float fElpasedTime, const XMFLOAT3& randomDirection, const GameObject* pTarget)
 {
 	// 주변에 플레이어가 있는지 확인한다.
 	if (IsNearPlayer(pTarget))
 	{
 		// 만약에 있다면 따라가도록 VELOCITY 를 설정한다.
 		m_xmf3Velocity = Vector3::Subtract(pTarget->GetTransform().GetPosition(), m_pOwner->GetTransform().GetPosition());
+	}
+	else
+	{
+		m_xmf3Velocity = randomDirection;
 	}
 }
 

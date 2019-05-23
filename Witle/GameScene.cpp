@@ -391,8 +391,7 @@ void GameScene::ReleaseObjects()
 bool GameScene::ProcessInput(HWND hWnd, float fElapsedTime)
 { 
 	// 플레이어 이동에 대한 처리 (정확히는 이동이 아니라 가속도)
-	m_pPlayer->ProcessInput(fElapsedTime);
-	m_pOtherPlayer->ProcessInputAI(fElapsedTime);
+	m_pPlayer->ProcessInput(fElapsedTime); 
 	
 	// 플레이어 회전에 대한 처리
 	if ((GameInput::GetDeltaX() != 0.0f) || (GameInput::GetDeltaY() != 0.0f))
@@ -405,7 +404,8 @@ bool GameScene::ProcessInput(HWND hWnd, float fElapsedTime)
 			m_pPlayer->Rotate(0.0f, GameInput::GetDeltaX(), 0.0f); 
 		} 
 	}
-	 
+	
+	m_TestMonster->ProcessAI(fElapsedTime);
 	return true;
 }
 
@@ -419,7 +419,7 @@ void GameScene::Update(float fElapsedTime)
 	}
 	else // 드래그로 회전하지 않는다면...
 	{
-		if (!GameInput::isNowClick()) return; // 클릭하지 않았다면 아무것도 실행하지 않는다.
+
 	}
 
 	//// 순서 변경 X ////
@@ -459,8 +459,7 @@ void GameScene::LastUpdate(float fElapsedTime)
 		m_pMainCamera->GetCamera()->GetFrustum()->CheckRendering(m_pQuadtreeTerrain->GetRootNode());
 	}
 	if (m_pQuadtreeTerrain) m_pQuadtreeTerrain->LastUpdate(fElapsedTime);
-	// 순서변경X 
-
+	// 순서변경X  
 }
 
 void GameScene::TESTSetRootDescriptor(ID3D12GraphicsCommandList * pd3dCommandList)

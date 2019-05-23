@@ -34,7 +34,7 @@ void MonsterStatus::Update(float fTimeElapsed)
 
 }
 
-void MonsterStatus::UpdateAI(float fTimeElapsed)
+void MonsterStatus::ProcessAI(float fTimeElapsed)
 {
 
 }

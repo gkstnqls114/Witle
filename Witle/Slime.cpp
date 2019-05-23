@@ -26,6 +26,8 @@ Slime::Slime(const std::string & entityID, ID3D12Device * pd3dDevice, ID3D12Grap
 
 	// m_Transform.SetPosition(100 + rand() % 2000, 0, 100 + rand() % 2000);
 	m_Transform.SetPosition(1000, 0, 1000);
+
+	m_Direction = XMFLOAT3(rand() % 10, 0, rand() % 10);
 }
 
 Slime::~Slime()
@@ -34,9 +36,6 @@ Slime::~Slime()
 
 void Slime::Update(float fElapsedTime)
 {
-	m_MonsterMovement->UpdateAI(fElapsedTime, m_pTarget);
-	m_MonsterStatus->UpdateAI(fElapsedTime);
-
 	// 이동량을 계산한다. 
 	m_MonsterMovement->Update(fElapsedTime);
 
@@ -48,6 +47,11 @@ void Slime::Update(float fElapsedTime)
 			m_Transform.GetPosition().x,
 			75.f,
 			m_Transform.GetPosition().z)
-	);
+	); 
+}
 
+void Slime::ProcessAI(float fElapsedTime)
+{
+	m_MonsterMovement->ProcessAI(fElapsedTime, m_Direction, m_pTarget);
+	m_MonsterStatus->ProcessAI(fElapsedTime); 
 }

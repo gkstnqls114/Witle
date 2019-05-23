@@ -288,14 +288,7 @@ void Monster::ProcessInput(float fTimeElapsed)
 	}
 
 }
-
-void Monster::ProcessInputAI(float fTimeElapsed)
-{
-	m_CurrAnimation = ANIMATION_IDLE.ID;
-
-}
- 
-
+  
 XMFLOAT3 Monster::GetVelocity() const
 {
 	return m_MonsterMovement->m_xmf3Velocity;
