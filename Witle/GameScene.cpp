@@ -792,24 +792,7 @@ void GameScene::ProcessPicking(float fElapsedTime)
 		if (!GameInput::IsKeydownE()) return; // e를 누르지 않았다면 아무것도 실행하지 않는다.
 		if (m_pPlayer->IsAttacking()) return;
 		
-		m_pPlayer->Attack();
-
-		// 피킹 ray를 만든다.
-		RAY pickRay = RAY::GeneratePickingRay(m_AimPoint->GetPickingPoint(), m_pMainCamera->GetCamera());
-
-		// 다른 유저와 닿는지 확인한다.
-		float Playerdist;
-		bool isCollide = Collision::isCollide(m_pOtherPlayer->GetBOBox()->GetBOBox(), pickRay.origin, pickRay.direction, Playerdist);
-		 
-		// 닿지 않는다면 리턴한다.
-		if (!isCollide) return;
-		if (Playerdist > 3000.f)
-		{
-			std::cout << Playerdist << " ... " << std::endl;
-			return;
-		}
-
-		m_pOtherPlayer->SubstractHP(500);
+		m_pPlayer->Attack(m_pOtherPlayer, m_pOtherPlayer->GetBOBox(), m_AimPoint->GetPickingPoint(), m_pMainCamera->GetCamera());
 		
 		//// 피킹 ray에 닿는 오브젝트가 있는 지 확인한다.
 		//float dist = FLT_MAX;

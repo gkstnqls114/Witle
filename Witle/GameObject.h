@@ -59,4 +59,15 @@ public:
 	Transform& GetTransform() { return m_Transform; }
 	const std::string& GetName() const { return m_EntityID; }
 };
- 
+
+class EmptyGameObject
+	: public GameObject
+{ 
+protected:
+	virtual void ReleaseMembers() {};
+	virtual void ReleaseMemberUploadBuffers() {};
+
+public:
+	EmptyGameObject(const std::string& entityID) : GameObject(entityID) {};
+	virtual ~EmptyGameObject() {};
+};

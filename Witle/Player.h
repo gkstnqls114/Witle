@@ -3,6 +3,7 @@
 
 class Camera;
 class CLoadedModelInfo;
+class MyCollider;
 class LoadObject;
 class MyBOBox;
 class PlayerStatus;
@@ -92,7 +93,7 @@ public:
 	void ProcessInput(float fTimeElapsed);
 	void ProcessInputAI(float fTimeElapsed);
 
-	bool Attack();
+	bool Attack(Player* player, MyCollider* collider, XMFLOAT2 aimPoint ,Camera* pMainCaemra);
 
 	/////////////////////// Skill
 	void UseSkill_Broom();

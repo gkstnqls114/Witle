@@ -80,7 +80,7 @@ Monster::Monster(const std::string & entityID, ID3D12Device * pd3dDevice, ID3D12
 	: GameObject(entityID)
 {
 	XMFLOAT3 extents{ 25.f, 75.f, 25.f };
-	m_pMyBOBox = new MyBOBox(pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 75.F, 0.F }, extents);
+	m_pMyBOBox = new MyBOBox(this, pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 75.F, 0.F }, extents);
 
 	m_MonsterStatus = new MonsterStatus(this, pd3dDevice, pd3dCommandList);
 	m_MonsterMovement = new MonsterMovement(this);

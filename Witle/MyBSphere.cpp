@@ -4,11 +4,11 @@
 #include "LineCube.h"
 #include "MyBSphere.h"
 
-MyBSphere::MyBSphere(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, XMFLOAT3 center, float radius)
+MyBSphere::MyBSphere(GameObject* pOwner, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, XMFLOAT3 center, float radius)
 {
 	m_BSphere = BoundingSphere(center, radius); 
 #ifdef _SHOW_BOUNDINGBOX
-	m_pLineCube = new LineCube(pd3dDevice, pd3dCommandList, m_BSphere.Center, XMFLOAT3(radius, radius, radius));
+	m_pLineCube = new LineCube(pOwner, pd3dDevice, pd3dCommandList, m_BSphere.Center, XMFLOAT3(radius, radius, radius));
 #endif // DEBUG 
 }
 

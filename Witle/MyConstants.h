@@ -7,6 +7,11 @@
 
 
 //// Enum Type ////////////////////////////////////
+enum COLLIDER_TYPE
+{
+	BOUNDING_BOX
+};
+
 enum MESH_TYPE_ID
 {
 	CUBE_MESH,

@@ -1,22 +1,29 @@
 #include "stdafx.h"
+
+// GameBase //////////////
+#include "GameInput.h"
+#include "GameTimer.h" 
+#include "GameScreen.h"
+// GameBase //////////////
+ 
+#include "Camera.h"
+#include "Collision.h"
 #include "PlayerMovement.h"
 #include "MyBOBox.h" 
-#include "GameInput.h"
 #include "Texture.h"
 #include "MyDescriptorHeap.h"
 #include "Sniping.h"
 #include "EffectRect.h"
-#include "GameScreen.h"
 #include "MyRectangle.h"
 #include "Shader.h"
 #include "Object.h"
 #include "ShaderManager.h" 
 #include "Transform.h"
 #include "PlayerStatus.h"
-#include "GameTimer.h"
 #include "FollowCam.h"
 #include "Broom.h"
 #include "Terrain.h"
+
 #include "Player.h"
  
 static float playerOffestX = 0.f;
@@ -119,7 +126,7 @@ Player::Player(const std::string & entityID, ID3D12Device * pd3dDevice, ID3D12Gr
 	m_pLoadObject_Body->m_pSkinnedAnimationController->SetTrackAnimationSet(0, 0);
 	 
 	XMFLOAT3 extents{ 25.f, 75.f, 25.f };
-	m_pMyBOBox = new MyBOBox(pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 75.F, 0.F }, extents);
+	m_pMyBOBox = new MyBOBox(this, pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 75.F, 0.F }, extents);
 	
 	m_pPlayerStatus = new PlayerStatus(this, pd3dDevice, pd3dCommandList);
 	m_pPlayerMovement = new PlayerMovement(this);
@@ -458,19 +465,41 @@ void Player::ProcessInputAI(float fTimeElapsed)
 
 }
 
-bool Player::Attack()
-{
-	if (m_Broom->GetisUsing())
+//  
+bool Player::Attack(Player* player, MyCollider* collider, XMFLOAT2 aimPoint, Camera* pMainCaemra)
+{  
+	// AttaCK이 시행되지 않는 ㅕㅇ우
+	if (m_Broom->GetisUsing()) return false;
+	 
+	// 시행된다면..
+	bool isNearMonster = false;
+	if (isNearMonster) // 주위에 몬스터 가있는 경우 ㅡㄴ접곡ㅇ격
 	{
-		return false;
+
 	}
-	else
-	{
-		m_pPlayerMovement->m_xmf3Velocity = XMFLOAT3(0.F, 0.F, 0.F);
-		m_isAttacking = true;
-		m_CurrAnimation = ANIMATION_ATTACK.ID;
-		return true;
+	else // 원거ㅣㄹ 공격
+	{ 
+		// 피킹 ray를 만든다.
+		RAY pickRay = RAY::GeneratePickingRay(aimPoint, pMainCaemra);
+
+		// 다른 유저와 닿는지 확인한다.
+		float Playerdist;
+		bool isCollide = Collision::isCollide(collider, pickRay.origin, pickRay.direction, Playerdist);
+
+		// 닿지 않는다면 리턴한다.
+		if (!isCollide) return false;
+		if (Playerdist > 3000.f)
+		{
+			std::cout << Playerdist << " ... " << std::endl;
+		}
+
+		player->SubstractHP(500);
 	}
+
+	m_pPlayerMovement->m_xmf3Velocity = XMFLOAT3(0.F, 0.F, 0.F);
+	m_isAttacking = true;
+	m_CurrAnimation = ANIMATION_ATTACK.ID;
+	return true;
 }
 
 void Player::UseSkill_Broom()

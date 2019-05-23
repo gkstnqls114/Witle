@@ -12,7 +12,7 @@ protected:
 	BoundingSphere m_BSphere; 
 
 public:
-	MyBSphere(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, XMFLOAT3 center, float radius);
+	MyBSphere(GameObject* pOwner, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, XMFLOAT3 center, float radius);
 	virtual ~MyBSphere();
 
 	void ReleaseObjects();

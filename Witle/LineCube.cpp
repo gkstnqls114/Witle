@@ -90,10 +90,9 @@ void LineCube::CalculateVertexNormals(XMFLOAT3 * pxmf3Normals, XMFLOAT3 * pxmf3P
 	}
 }
 
-LineCube::LineCube(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, XMFLOAT3 center, XMFLOAT3 extents)
-{  
-	m_FamilyID.InitMesh();
-
+LineCube::LineCube(GameObject* pOwner, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, XMFLOAT3 center, XMFLOAT3 extents)
+	:Mesh( pOwner )
+{   
 	m_ComponenetID = MESH_TYPE_ID::CUBE_MESH;
 
 	m_nVertexBufferViews = 1;
@@ -207,7 +206,8 @@ LineCube::LineCube(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCo
 	m_pVertexBufferViews[0].SizeInBytes = m_nStride * m_vertexCount;
 }
 
-LineCube::LineCube(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, float width, float height, float depth)
+LineCube::LineCube(GameObject* pOwner, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, float width, float height, float depth)
+	:Mesh(pOwner)
 { 
 	m_ComponenetID = MESH_TYPE_ID::CUBE_MESH;
 
@@ -347,154 +347,10 @@ LineCube::LineCube(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCo
 
 }
 
-LineCube::LineCube(GameObject* pOwner, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, float width, float height, float depth)
-	:Mesh(pOwner)
-{
-	m_ComponenetID = MESH_TYPE_ID::CUBE_MESH;
-
-	m_nVertexBufferViews = 1;
-	m_pVertexBufferViews = new D3D12_VERTEX_BUFFER_VIEW[m_nVertexBufferViews];
-
-	m_vertexCount = CUBE_VERTEX_COUNT;
-	m_nStride = sizeof(CubeVertex);
-	m_d3dPrimitiveTopology = D3D_PRIMITIVE_TOPOLOGY_LINELIST;
-
-	float fx = width * 0.5f;
-	float fy = height * 0.5f;
-	float fz = depth * 0.5f;
-
-	XMFLOAT3 pxmf3Positions[CUBE_VERTEX_COUNT];
-	int i = 0;
-	// 첫번째면 (-fz 고정)
-	pxmf3Positions[i++] = XMFLOAT3(-fx, +fy, -fz);
-	pxmf3Positions[i++] = XMFLOAT3(+fx, +fy, -fz);
-
-	pxmf3Positions[i++] = XMFLOAT3(+fx, +fy, -fz);
-	pxmf3Positions[i++] = XMFLOAT3(+fx, -fy, -fz);
-
-	pxmf3Positions[i++] = XMFLOAT3(+fx, -fy, -fz);
-	pxmf3Positions[i++] = XMFLOAT3(-fx, +fy, -fz);
-
-	pxmf3Positions[i++] = XMFLOAT3(-fx, +fy, -fz);
-	pxmf3Positions[i++] = XMFLOAT3(+fx, -fy, -fz);
-
-	pxmf3Positions[i++] = XMFLOAT3(+fx, -fy, -fz);
-	pxmf3Positions[i++] = XMFLOAT3(-fx, -fy, -fz);
-
-	// 두 번째면 (+fy 고정)
-	pxmf3Positions[i++] = XMFLOAT3(-fx, +fy, +fz);
-	pxmf3Positions[i++] = XMFLOAT3(+fx, +fy, +fz);
-
-	pxmf3Positions[i++] = XMFLOAT3(+fx, +fy, +fz);
-	pxmf3Positions[i++] = XMFLOAT3(+fx, +fy, -fz);
-
-	pxmf3Positions[i++] = XMFLOAT3(+fx, +fy, -fz);
-	pxmf3Positions[i++] = XMFLOAT3(-fx, +fy, -fz);
-
-	pxmf3Positions[i++] = XMFLOAT3(-fx, +fy, -fz);
-	pxmf3Positions[i++] = XMFLOAT3(-fx, +fy, +fz);
-
-	pxmf3Positions[i++] = XMFLOAT3(+fx, +fy, -fz);
-	pxmf3Positions[i++] = XMFLOAT3(-fx, +fy, -fz);
-
-
-	// 세 번째 면 (+fz 고정)
-	pxmf3Positions[i++] = XMFLOAT3(-fx, -fy, +fz);
-	pxmf3Positions[i++] = XMFLOAT3(+fx, -fy, +fz);
-
-	pxmf3Positions[i++] = XMFLOAT3(+fx, -fy, +fz);
-	pxmf3Positions[i++] = XMFLOAT3(+fx, +fy, +fz);
-
-	pxmf3Positions[i++] = XMFLOAT3(+fx, +fy, +fz);
-	pxmf3Positions[i++] = XMFLOAT3(-fx, -fy, +fz);
-
-	pxmf3Positions[i++] = XMFLOAT3(-fx, -fy, +fz);
-	pxmf3Positions[i++] = XMFLOAT3(+fx, +fy, +fz);
-
-	pxmf3Positions[i++] = XMFLOAT3(+fx, +fy, +fz);
-	pxmf3Positions[i++] = XMFLOAT3(-fx, +fy, +fz);
-
-	// 네 번째면 (-fy 고정)
-	pxmf3Positions[i++] = XMFLOAT3(-fx, -fy, -fz);
-	pxmf3Positions[i++] = XMFLOAT3(+fx, -fy, -fz);
-
-	pxmf3Positions[i++] = XMFLOAT3(+fx, -fy, -fz);
-	pxmf3Positions[i++] = XMFLOAT3(+fx, -fy, +fz);
-
-	pxmf3Positions[i++] = XMFLOAT3(+fx, -fy, +fz);
-	pxmf3Positions[i++] = XMFLOAT3(-fx, -fy, -fz);
-
-	pxmf3Positions[i++] = XMFLOAT3(+fx, -fy, +fz);
-	pxmf3Positions[i++] = XMFLOAT3(-fx, -fy, +fz);
-
-	pxmf3Positions[i++] = XMFLOAT3(+fx, -fy, +fz);
-	pxmf3Positions[i++] = XMFLOAT3(-fx, -fy, +fz);
-
-	// 다섯번째면 (-fx 고정)
-	pxmf3Positions[i++] = XMFLOAT3(-fx, +fy, +fz);
-	pxmf3Positions[i++] = XMFLOAT3(-fx, +fy, -fz);
-
-	pxmf3Positions[i++] = XMFLOAT3(-fx, +fy, -fz);
-	pxmf3Positions[i++] = XMFLOAT3(-fx, -fy, -fz);
-
-	pxmf3Positions[i++] = XMFLOAT3(-fx, -fy, -fz);
-	pxmf3Positions[i++] = XMFLOAT3(-fx, +fy, +fz);
-
-	pxmf3Positions[i++] = XMFLOAT3(-fx, -fy, -fz);
-	pxmf3Positions[i++] = XMFLOAT3(-fx, -fy, +fz);
-
-	pxmf3Positions[i++] = XMFLOAT3(-fx, -fy, +fz);
-	pxmf3Positions[i++] = XMFLOAT3(-fx, -fy, +fz);
-
-	// 여섯 번째면 (+fx 고정)
-	pxmf3Positions[i++] = XMFLOAT3(+fx, +fy, -fz);
-	pxmf3Positions[i++] = XMFLOAT3(+fx, +fy, +fz);
-
-	pxmf3Positions[i++] = XMFLOAT3(+fx, +fy, +fz);
-	pxmf3Positions[i++] = XMFLOAT3(+fx, -fy, +fz);
-
-	pxmf3Positions[i++] = XMFLOAT3(+fx, -fy, +fz);
-	pxmf3Positions[i++] = XMFLOAT3(+fx, +fy, -fz);
-
-	pxmf3Positions[i++] = XMFLOAT3(+fx, +fy, -fz);
-	pxmf3Positions[i++] = XMFLOAT3(+fx, -fy, +fz);
-
-	pxmf3Positions[i++] = XMFLOAT3(+fx, -fy, +fz);
-	pxmf3Positions[i++] = XMFLOAT3(+fx, -fy, -fz);
-
-	XMFLOAT4 pxmf3Color[CUBE_VERTEX_COUNT];
-	for (int Ci = 0; Ci < CUBE_VERTEX_COUNT; ++Ci)
-	{
-		pxmf3Color[Ci] = Vector4::XMVectorToFloat4(Colors::Red);
-	}
-	
-	XMFLOAT3 pxmf3Normals[CUBE_VERTEX_COUNT];
-	CalculateVertexNormals(pxmf3Normals, pxmf3Positions, m_vertexCount, NULL, 0);
-
-	CubeVertex pVertices[CUBE_VERTEX_COUNT];
-	for (int x = 0; x < CUBE_VERTEX_COUNT; ++x)
-	{
-		pVertices[x] = CubeVertex(pxmf3Positions[x], pxmf3Normals[x], pxmf3Color[x]);
-	}
-
-	m_pPositionBuffer = d3dUtil::CreateBufferResource(pd3dDevice, pd3dCommandList, pVertices,
-		m_nStride * m_vertexCount, D3D12_HEAP_TYPE_DEFAULT,
-		D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, &m_pPositionUploadBuffer);
-
-	m_pVertexBufferViews[0].BufferLocation = m_pPositionBuffer->GetGPUVirtualAddress();
-	m_pVertexBufferViews[0].StrideInBytes = m_nStride;
-	m_pVertexBufferViews[0].SizeInBytes = m_nStride * m_vertexCount;
-
-}
-
 LineCube::~LineCube()
 {
-	if (m_pVertexBufferViews) {
-		delete[] m_pVertexBufferViews;
-		m_pVertexBufferViews = nullptr;
-	}
-
 }
+ 
 
 void LineCube::Render(ID3D12GraphicsCommandList * pd3dCommandList, const XMFLOAT4X4& world, bool isMoved)
 { 

@@ -36,10 +36,7 @@ protected:
 public:
 	virtual void ReleaseObjects() override;
 	virtual void ReleaseUploadBuffers() override;
-
-protected:
-	Mesh() {};
-
+	 
 public:
 	Mesh(GameObject* pOwner);
 	virtual ~Mesh();

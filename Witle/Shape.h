@@ -35,11 +35,7 @@ protected:
 
 	UINT							m_nStartIndex = 0;
 	int								m_nBaseVertex = 0;
-
-
-protected:
-	Shape() {};
-
+	 
 public:
 	Shape(GameObject* pOwner);
 	virtual ~Shape();

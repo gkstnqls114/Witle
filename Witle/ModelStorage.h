@@ -5,6 +5,7 @@ class CMesh;
 class MyBOBox;
 class LoadObject;
 class Texture;
+class EmptyGameObject;
 
 class ModelStorage
 {
@@ -18,6 +19,7 @@ class ModelStorage
 
 	std::map<std::string, ModelInfo> m_ModelStorage; // 모델 이름은 반드시 클래스에 맞춘다.
 
+	static EmptyGameObject* test; 
 	static ModelStorage* m_Instance;
 
 public:

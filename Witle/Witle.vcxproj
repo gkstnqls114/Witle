@@ -184,6 +184,7 @@
     <ClInclude Include="MonsterStatus.h" />
     <ClInclude Include="MyBOBox.h" />
     <ClInclude Include="MyBSphere.h" />
+    <ClInclude Include="MyCollider.h" />
     <ClInclude Include="MyConstants.h" />
     <ClInclude Include="CubeMesh.h" />
     <ClInclude Include="CubeShader.h" />
@@ -305,6 +306,7 @@
     <ClCompile Include="MonsterStatus.cpp" />
     <ClCompile Include="MyBOBox.cpp" />
     <ClCompile Include="MyBSphere.cpp" />
+    <ClCompile Include="MyCollider.cpp" />
     <ClCompile Include="MyDescriptorHeap.cpp" />
     <ClCompile Include="MyFrustum.cpp" />
     <ClCompile Include="MyRigidbody.cpp" />

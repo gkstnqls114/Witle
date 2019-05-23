@@ -33,7 +33,7 @@ MyReflexTree::MyReflexTree(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *
 	m_LoadObject->SetPosition(position);
 	 
 	XMFLOAT3 extents{ 100.f, 100.f, 100.f };
-	m_pMyBOBox = new MyBOBox(pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 0.F, 0.F }, extents);
+	m_pMyBOBox = new MyBOBox(this , pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 0.F, 0.F }, extents);
   
 }
  

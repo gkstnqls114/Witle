@@ -5,7 +5,8 @@
 #include "MyBOBox.h"
 bool MyBOBox::RENDER_BBOX = true;
 
-MyBOBox::MyBOBox(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, XMFLOAT3 center, XMFLOAT3 extents, XMFLOAT4 quaternion)
+MyBOBox::MyBOBox(GameObject* pOwner, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, XMFLOAT3 center, XMFLOAT3 extents, XMFLOAT4 quaternion)
+	: MyCollider(pOwner, COLLIDER_TYPE::BOUNDING_BOX)
 {
 	m_BOBox = BoundingOrientedBox(XMFLOAT3(0.F, 0.F, 0.F), extents, quaternion);
 #ifdef _SHOW_BOUNDINGBOX
@@ -14,7 +15,7 @@ MyBOBox::MyBOBox(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dComm
 	m_world._41 = m_Pivot.x;
 	m_world._42 = m_Pivot.y;
 	m_world._43 = m_Pivot.z;
-	m_pLineCube = new LineCube(pd3dDevice, pd3dCommandList, m_BOBox.Center, m_BOBox.Extents);
+	m_pLineCube = new LineCube(pOwner, pd3dDevice, pd3dCommandList, m_BOBox.Center, m_BOBox.Extents);
 #endif // DEBUG 
 	 
 	m_BoBoxPlane[0] = Plane::Plane(Vector3::Add(center, XMFLOAT3(extents.x, 0.f, 0.f)), XMFLOAT3(1.f, 0.f, 0.f)); // +x¸é normal (1, 0, 0) 
@@ -23,7 +24,8 @@ MyBOBox::MyBOBox(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dComm
 	m_BoBoxPlane[3] = Plane::Plane(Vector3::Add(center, XMFLOAT3(0.f, 0.f, -extents.z)), XMFLOAT3(0.f, 0.f, -1.f)); // -z¸é normal (0, 0, -1)
 }
 
-MyBOBox::MyBOBox(const MyBOBox & other)
+MyBOBox::MyBOBox(const MyBOBox & other) 
+	:MyCollider(m_pOwner, COLLIDER_TYPE::BOUNDING_BOX)
 {
 	m_pLineCube = nullptr;
 	m_BOBox = other.m_BOBox;
@@ -34,6 +36,7 @@ MyBOBox::MyBOBox(const MyBOBox & other)
 }
 
 MyBOBox::MyBOBox(XMFLOAT3 center, XMFLOAT3 extents)
+	:MyCollider(m_pOwner, COLLIDER_TYPE::BOUNDING_BOX)
 {
 	m_BOBox = BoundingOrientedBox(center, extents, XMFLOAT4(0, 0, 0, 1));
 

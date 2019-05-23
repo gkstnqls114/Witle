@@ -1,9 +1,11 @@
 #include "stdafx.h"
 #include "Object.h"  
 #include "MyBOBox.h"
+#include "GameObject.h"
 #include "TextureStorage.h"
 #include "ModelStorage.h"
 
+EmptyGameObject* ModelStorage::test{ nullptr };
 ModelStorage* ModelStorage::m_Instance{ nullptr };
 
 ModelStorage * ModelStorage::GetInstance()
@@ -57,20 +59,22 @@ void ModelStorage::CreateModels(ID3D12Device * pd3dDevice, ID3D12GraphicsCommand
 	}
 
 	// 충돌박스 목록
-	m_ModelStorage[TREE_1].modelBOBox = new MyBOBox(pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 0.F, 0.F }, XMFLOAT3{ 200.F, 200.F, 200.F });
-	m_ModelStorage[TREE_BG_1].modelBOBox = new MyBOBox(pd3dDevice, pd3dCommandList, XMFLOAT3{0.F, 0.F, 0.F}, XMFLOAT3{ 200.F, 200.F, 200.F });
-	m_ModelStorage[TREE_2].modelBOBox = new MyBOBox(pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 0.F, 0.F }, XMFLOAT3{ 100.F, 100.F, 100.F });
-	m_ModelStorage[TREE_BG_2].modelBOBox = new MyBOBox(pd3dDevice, pd3dCommandList, XMFLOAT3{0.F, 0.F, 0.F},XMFLOAT3{ 200.F, 200.F, 200.F });
-	m_ModelStorage[TREE_3].modelBOBox = new MyBOBox(pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 0.F, 0.F }, XMFLOAT3{ 100.F, 100.F, 100.F });
-	m_ModelStorage[TREE_BG_3].modelBOBox = new MyBOBox(pd3dDevice, pd3dCommandList, XMFLOAT3{0.F, 0.F, 0.F},XMFLOAT3{ 200.F, 200.F, 200.F });
-	m_ModelStorage[RUIN_ARCH].modelBOBox = new MyBOBox(pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 0.F, 0.F }, XMFLOAT3{ 300.F, 300.F, 300.F });
-	m_ModelStorage[RUIN_BROKENPILLA].modelBOBox = new MyBOBox(pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 0.F, 0.F }, XMFLOAT3{ 300.F, 300.F, 300.F });
-	m_ModelStorage[RUIN_PILLAR].modelBOBox = new MyBOBox(pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 0.F, 0.F }, XMFLOAT3{ 400.F, 400.F, 400.F });
-	m_ModelStorage[RUIN_SQUARE].modelBOBox = new MyBOBox(pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 0.F, 0.F }, XMFLOAT3{ 400.F, 400.F, 400.F });
-	m_ModelStorage[ALTAR_IN].modelBOBox = new MyBOBox(pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 0.F, 0.F }, XMFLOAT3{ 200.F, 200.F, 200.F });
+	test = new EmptyGameObject("Empty");
+
+	m_ModelStorage[TREE_1].modelBOBox = new MyBOBox(test, pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 0.F, 0.F }, XMFLOAT3{ 200.F, 200.F, 200.F });
+	m_ModelStorage[TREE_BG_1].modelBOBox = new MyBOBox(test, pd3dDevice, pd3dCommandList, XMFLOAT3{0.F, 0.F, 0.F}, XMFLOAT3{ 200.F, 200.F, 200.F });
+	m_ModelStorage[TREE_2].modelBOBox = new MyBOBox(test, pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 0.F, 0.F }, XMFLOAT3{ 100.F, 100.F, 100.F });
+	m_ModelStorage[TREE_BG_2].modelBOBox = new MyBOBox(test, pd3dDevice, pd3dCommandList, XMFLOAT3{0.F, 0.F, 0.F},XMFLOAT3{ 200.F, 200.F, 200.F });
+	m_ModelStorage[TREE_3].modelBOBox = new MyBOBox(test, pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 0.F, 0.F }, XMFLOAT3{ 100.F, 100.F, 100.F });
+	m_ModelStorage[TREE_BG_3].modelBOBox = new MyBOBox(test, pd3dDevice, pd3dCommandList, XMFLOAT3{0.F, 0.F, 0.F},XMFLOAT3{ 200.F, 200.F, 200.F });
+	m_ModelStorage[RUIN_ARCH].modelBOBox = new MyBOBox(test, pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 0.F, 0.F }, XMFLOAT3{ 300.F, 300.F, 300.F });
+	m_ModelStorage[RUIN_BROKENPILLA].modelBOBox = new MyBOBox(test, pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 0.F, 0.F }, XMFLOAT3{ 300.F, 300.F, 300.F });
+	m_ModelStorage[RUIN_PILLAR].modelBOBox = new MyBOBox(test, pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 0.F, 0.F }, XMFLOAT3{ 400.F, 400.F, 400.F });
+	m_ModelStorage[RUIN_SQUARE].modelBOBox = new MyBOBox(test, pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 0.F, 0.F }, XMFLOAT3{ 400.F, 400.F, 400.F });
+	m_ModelStorage[ALTAR_IN].modelBOBox = new MyBOBox(test, pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 0.F, 0.F }, XMFLOAT3{ 200.F, 200.F, 200.F });
 	// m_ModelStorage[ALTAR_IN].modelBOBox = new MyBOBox(pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 0.F, 0.F }, XMFLOAT3{ 200.F, 200.F, 200.F });
 	// m_ModelStorage[SUNFLOWER].modelBOBox = new MyBOBox(pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 0.F, 0.F }, XMFLOAT3{ 400.F, 400.F, 400.F });
-	 
+	
 	m_isCreate = true;
 }
 
@@ -98,7 +102,7 @@ void ModelStorage::ReleaseObjects()
 			model.second.modelBOBox = nullptr;
 		}
 	}
-
+	 
 	m_ModelStorage.clear(); 
 	m_NameList.clear();
 }
