@@ -73,7 +73,7 @@ void CubeMesh::CalculateTriangleStripVertexNormals(XMFLOAT3 * pxmf3Normals, XMFL
 
 void CubeMesh::CalculateVertexNormals(XMFLOAT3 * pxmf3Normals, XMFLOAT3 * pxmf3Positions, int nVertices, UINT * pnIndices, int nIndices)
 {
-	switch (m_d3dPrimitiveTopology)
+	switch (GetPrimitiveTopology())
 	{
 	case D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST:
 		if (pnIndices)
@@ -98,8 +98,7 @@ CubeMesh::CubeMesh(GameObject* pOwner, ID3D12Device * pd3dDevice, ID3D12Graphics
 	m_pVertexBufferViews = new D3D12_VERTEX_BUFFER_VIEW[m_nVertexBufferViews];
 
 	m_vertexCount = CUBE_VERTEX_COUNT;
-	m_nStride = sizeof(CubeVertex);
-	m_d3dPrimitiveTopology = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
+	m_nStride = sizeof(CubeVertex); 
 
 	float fx = width * 0.5f;
 	float fy = height * 0.5f;

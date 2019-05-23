@@ -4,7 +4,7 @@
 #include "TerrainMesh.h"
 
 TerrainMesh::TerrainMesh(GameObject* pOwner, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, int xStart, int zStart, int nWidth, int nLength, XMFLOAT3 xmf3Scale, XMFLOAT4 xmf4Color, void * pContext)
-	:Mesh(pOwner)
+	:Mesh(pOwner, D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP)
 {
 	m_ComponenetID = TERRAIN_MESH;
 
@@ -13,8 +13,7 @@ TerrainMesh::TerrainMesh(GameObject* pOwner, ID3D12Device * pd3dDevice, ID3D12Gr
 	m_nStride = sizeof(CDiffused2TexturedVertex);
 	m_nOffset = 0;
 	m_nSlot = 0;
-	m_d3dPrimitiveTopology = D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP;
-
+	
 	m_nWidth = nWidth;
 	m_nLength = nLength;
 	m_xmf3Scale = xmf3Scale;

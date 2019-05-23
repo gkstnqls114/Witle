@@ -9,6 +9,9 @@ class Mesh :
 public:
 	virtual void Render(ID3D12GraphicsCommandList * commandList) = 0;
 
+private:
+	D3D12_PRIMITIVE_TOPOLOGY		m_d3dPrimitiveTopology;
+
 protected:
 	// 위치 버퍼
 	UINT							m_vertexCount{ 0 }; // 인덱스 버퍼가 없을 경우 사용함
@@ -28,7 +31,6 @@ protected:
 
 	D3D12_INDEX_BUFFER_VIEW			m_IndexBufferView;
 
-	D3D12_PRIMITIVE_TOPOLOGY		m_d3dPrimitiveTopology;
 	UINT							m_nSlot = 0;
 	UINT							m_nStride = 0;
 	UINT							m_nOffset = 0;
@@ -42,7 +44,7 @@ public:
 	virtual void ReleaseUploadBuffers() override;
 	
 public:
-	Mesh(GameObject* pOwner);
+	Mesh(GameObject* pOwner, D3D12_PRIMITIVE_TOPOLOGY topology = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	virtual ~Mesh();
 	
 	/////////////////////////////////////////////////////////////////////////// Get
@@ -62,3 +64,12 @@ public:
 	
 };
 
+// Topology만 LINE_STRIP으로 설정해주도록 하는 클래스.
+class LineMesh
+	: public Mesh
+{
+
+public:
+	LineMesh(GameObject* pOwner) : Mesh(pOwner, D3D_PRIMITIVE_TOPOLOGY_LINELIST) {};
+	virtual ~LineMesh();
+};

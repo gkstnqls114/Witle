@@ -76,7 +76,7 @@ void CylinderMesh::CalculateTriangleStripVertexNormals(XMFLOAT3 * pxmf3Normals, 
 
 void CylinderMesh::CalculateVertexNormals(XMFLOAT3 * pxmf3Normals, XMFLOAT3 * pxmf3Positions, int nVertices, UINT * pnIndices, int nIndices)
 {
-	switch (m_d3dPrimitiveTopology)
+	switch (GetPrimitiveTopology())
 	{
 	case D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST:
 		if (pnIndices)
@@ -127,9 +127,7 @@ CylinderMesh::CylinderMesh(GameObject* pOwner, ID3D12Device * pd3dDevice, ID3D12
 
 	m_nVertexBufferViews = 1;
 	m_pVertexBufferViews = new D3D12_VERTEX_BUFFER_VIEW[m_nVertexBufferViews];
-
-	m_d3dPrimitiveTopology = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
-
+	 
 	m_nStride = sizeof(CylinderVertex);
 
 	float stackHeight = height / stackCount;

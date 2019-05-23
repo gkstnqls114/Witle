@@ -76,7 +76,7 @@ void SphereMesh::CalculateTriangleStripVertexNormals(XMFLOAT3 * pxmf3Normals, XM
 
 void SphereMesh::CalculateVertexNormals(XMFLOAT3 * pxmf3Normals, XMFLOAT3 * pxmf3Positions, int nVertices, UINT * pnIndices, int nIndices)
 {
-	switch (m_d3dPrimitiveTopology)
+	switch (GetPrimitiveTopology())
 	{
 	case D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST:
 		if (pnIndices)
@@ -128,9 +128,6 @@ SphereMesh::SphereMesh(GameObject* pOwner, ID3D12Device * pd3dDevice, ID3D12Grap
 
 	m_nVertexBufferViews = 1;
 	m_pVertexBufferViews = new D3D12_VERTEX_BUFFER_VIEW[m_nVertexBufferViews];
-
-
-	m_d3dPrimitiveTopology = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 
 	m_nStride = sizeof(SphereVertex);
 	 

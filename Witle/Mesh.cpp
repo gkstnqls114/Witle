@@ -2,8 +2,8 @@
 #include "Mesh.h"
 
 
-Mesh::Mesh(GameObject* pOwner)
-	:ComponentBase(pOwner)
+Mesh::Mesh(GameObject* pOwner, D3D12_PRIMITIVE_TOPOLOGY topology)
+	:m_d3dPrimitiveTopology(topology), ComponentBase(pOwner)
 {
 	m_FamilyID.InitMesh();
 }
@@ -56,4 +56,8 @@ void Mesh::ReleaseUploadBuffers()
 		m_pIndexUploadBuffer->Release();
 		m_pIndexUploadBuffer = nullptr;
 	}
+}
+
+LineMesh::~LineMesh()
+{
 }

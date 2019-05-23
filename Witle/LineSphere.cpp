@@ -74,7 +74,7 @@ void LineSphere::CalculateTriangleStripVertexNormals(XMFLOAT3 * pxmf3Normals, XM
 
 void LineSphere::CalculateVertexNormals(XMFLOAT3 * pxmf3Normals, XMFLOAT3 * pxmf3Positions, int nVertices, UINT * pnIndices, int nIndices)
 {
-	switch (m_d3dPrimitiveTopology)
+	switch (GetPrimitiveTopology())
 	{
 	case D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST:
 		if (pnIndices)
@@ -107,15 +107,13 @@ void LineSphere::ReleaseUploadBuffers()
 }
   
 LineSphere::LineSphere(GameObject * pOwner, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, float radius, float height, float topRadius, float bottomRadius, int sectorCount, int stackCount)
-	:Mesh(pOwner)
+	:LineMesh(pOwner)
 {
 	m_ComponenetID = MESH_TYPE_ID::CYLINDER_MESH;
 
 	m_nVertexBufferViews = 1;
 	m_pVertexBufferViews = new D3D12_VERTEX_BUFFER_VIEW[m_nVertexBufferViews];
-	 
-	m_d3dPrimitiveTopology = D3D_PRIMITIVE_TOPOLOGY_LINELIST;
-
+	
 	m_nStride = sizeof(SphereVertex);
 
 	// ÃâÃ³: http://www.songho.ca/opengl/gl_sphere.html
@@ -217,7 +215,7 @@ void LineSphere::Render(ID3D12GraphicsCommandList * pd3dCommandList, const XMFLO
 	}
 	pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_WORLD, 16, &xmf4x4World, 0);
 
-	pd3dCommandList->IASetPrimitiveTopology(m_d3dPrimitiveTopology);
+	pd3dCommandList->IASetPrimitiveTopology(GetPrimitiveTopology());
 
 	D3D12_VERTEX_BUFFER_VIEW pVertexBufferViews[1] = { m_pVertexBufferViews[0] };
 	pd3dCommandList->IASetVertexBuffers(m_nSlot, 1, pVertexBufferViews);
@@ -227,7 +225,7 @@ void LineSphere::Render(ID3D12GraphicsCommandList * pd3dCommandList, const XMFLO
 
 void LineSphere::RenderInstancing(ID3D12GraphicsCommandList * pd3dCommandList, int Instancingcount)
 {
-	pd3dCommandList->IASetPrimitiveTopology(m_d3dPrimitiveTopology);
+	pd3dCommandList->IASetPrimitiveTopology(GetPrimitiveTopology());
 
 	D3D12_VERTEX_BUFFER_VIEW pVertexBufferViews[1] = { m_pVertexBufferViews[0] };
 	pd3dCommandList->IASetVertexBuffers(m_nSlot, 1, pVertexBufferViews);

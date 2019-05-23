@@ -74,7 +74,7 @@ void LineCube::CalculateTriangleStripVertexNormals(XMFLOAT3 * pxmf3Normals, XMFL
 
 void LineCube::CalculateVertexNormals(XMFLOAT3 * pxmf3Normals, XMFLOAT3 * pxmf3Positions, int nVertices, UINT * pnIndices, int nIndices)
 {
-	switch (m_d3dPrimitiveTopology)
+	switch (GetPrimitiveTopology())
 	{
 	case D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST:
 		if (pnIndices)
@@ -91,7 +91,7 @@ void LineCube::CalculateVertexNormals(XMFLOAT3 * pxmf3Normals, XMFLOAT3 * pxmf3P
 }
 
 LineCube::LineCube(GameObject* pOwner, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, XMFLOAT3 center, XMFLOAT3 extents)
-	:Mesh( pOwner )
+	: LineMesh( pOwner )
 {   
 	m_ComponenetID = MESH_TYPE_ID::CUBE_MESH;
 
@@ -100,8 +100,7 @@ LineCube::LineCube(GameObject* pOwner, ID3D12Device * pd3dDevice, ID3D12Graphics
 
 	m_vertexCount = CUBE_VERTEX_COUNT;
 	m_nStride = sizeof(CubeVertex);
-	m_d3dPrimitiveTopology = D3D_PRIMITIVE_TOPOLOGY_LINELIST;
-
+	
 	float fx = extents.x;
 	float fy = extents.y;
 	float fz = extents.z;
@@ -207,7 +206,7 @@ LineCube::LineCube(GameObject* pOwner, ID3D12Device * pd3dDevice, ID3D12Graphics
 }
 
 LineCube::LineCube(GameObject* pOwner, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, float width, float height, float depth)
-	:Mesh(pOwner)
+	:LineMesh(pOwner)
 { 
 	m_ComponenetID = MESH_TYPE_ID::CUBE_MESH;
 
@@ -216,8 +215,7 @@ LineCube::LineCube(GameObject* pOwner, ID3D12Device * pd3dDevice, ID3D12Graphics
 
 	m_vertexCount = CUBE_VERTEX_COUNT;
 	m_nStride = sizeof(CubeVertex);
-	m_d3dPrimitiveTopology = D3D_PRIMITIVE_TOPOLOGY_LINELIST;
-
+	 
 	float fx = width * 0.5f;
 	float fy = height * 0.5f;
 	float fz = depth * 0.5f;
@@ -365,7 +363,7 @@ void LineCube::Render(ID3D12GraphicsCommandList * pd3dCommandList, const XMFLOAT
 	}
 	pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_WORLD, 16, &xmf4x4World, 0);
 	
-	pd3dCommandList->IASetPrimitiveTopology(m_d3dPrimitiveTopology);
+	pd3dCommandList->IASetPrimitiveTopology(GetPrimitiveTopology());
 
 	D3D12_VERTEX_BUFFER_VIEW pVertexBufferViews[1] = { m_pVertexBufferViews[0] };
 	pd3dCommandList->IASetVertexBuffers(m_nSlot, 1, pVertexBufferViews);
@@ -375,7 +373,7 @@ void LineCube::Render(ID3D12GraphicsCommandList * pd3dCommandList, const XMFLOAT
 
 void LineCube::RenderInstancing(ID3D12GraphicsCommandList * pd3dCommandList, int Instancingcount)
 {
-	pd3dCommandList->IASetPrimitiveTopology(m_d3dPrimitiveTopology);
+	pd3dCommandList->IASetPrimitiveTopology(GetPrimitiveTopology());
 
 	D3D12_VERTEX_BUFFER_VIEW pVertexBufferViews[1] = { m_pVertexBufferViews[0] };
 	pd3dCommandList->IASetVertexBuffers(m_nSlot, 1, pVertexBufferViews);

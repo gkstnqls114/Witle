@@ -11,9 +11,6 @@
     <Filter Include="02.Component">
       <UniqueIdentifier>{e0d43984-5afe-4a2c-bd8b-a0ca9b54aaca}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.Component\Mesh">
-      <UniqueIdentifier>{9332b465-1b8d-48b4-95b7-61997aa91ecc}</UniqueIdentifier>
-    </Filter>
     <Filter Include="03.GameObject">
       <UniqueIdentifier>{721a251d-9193-4eb9-ae89-55c959b5611e}</UniqueIdentifier>
     </Filter>
@@ -26,23 +23,11 @@
     <Filter Include="05.Shader">
       <UniqueIdentifier>{c71c2a0d-b962-4d5c-ac07-4c3b249dbebf}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.Component\Camera">
-      <UniqueIdentifier>{97a51fee-d2d6-4527-a559-c0e182ff3bb1}</UniqueIdentifier>
-    </Filter>
     <Filter Include="04.Scene\GameScene">
       <UniqueIdentifier>{c180d064-7e4e-4469-87b4-f89798c06e9c}</UniqueIdentifier>
     </Filter>
     <Filter Include="05.Shader\CubeShader">
       <UniqueIdentifier>{2fc3b0e0-6d16-44ac-8746-31fe58dbaf81}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.Component\Mesh\CubeMesh">
-      <UniqueIdentifier>{a77760b1-476a-4e4b-87fc-9d7489d0af01}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.Component\Transform">
-      <UniqueIdentifier>{c5998ac7-92a4-4244-af25-cb6bdae4a910}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.Component\Camera\FollowCam">
-      <UniqueIdentifier>{30946cd8-6188-4005-beca-1055cfb62f9b}</UniqueIdentifier>
     </Filter>
     <Filter Include="리소스 파일">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
@@ -60,9 +45,6 @@
     </Filter>
     <Filter Include="09.ActionTable">
       <UniqueIdentifier>{1250eaaf-0c68-40e7-9229-4c084354b819}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.Component\Mesh\TerrainMesh">
-      <UniqueIdentifier>{6fbb8228-6540-452a-8c4b-9c6a04f96c25}</UniqueIdentifier>
     </Filter>
     <Filter Include="03.GameObject\Terrain">
       <UniqueIdentifier>{a74113fd-ff21-4d9a-8b1d-0bb57750bd0d}</UniqueIdentifier>
@@ -90,9 +72,6 @@
     </Filter>
     <Filter Include="10.Renderer\SkinnedMeshRenderer">
       <UniqueIdentifier>{46b1a7bc-5c15-44dd-883d-2897ca51d750}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.Component\Camera\BasicCam">
-      <UniqueIdentifier>{3e7f290a-f5ed-422b-a7a6-8c66ce8dc478}</UniqueIdentifier>
     </Filter>
     <Filter Include="11.Event">
       <UniqueIdentifier>{3f9358d8-bf33-46cb-8896-0fad7507622f}</UniqueIdentifier>
@@ -163,9 +142,6 @@
     <Filter Include="05.Shader\LineShader">
       <UniqueIdentifier>{fda23db5-9c9d-46fa-abe2-a357f294f44c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.Component\Mesh\LineCube">
-      <UniqueIdentifier>{6d1d2593-cc91-440b-987d-23328fb5f18c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="99.etc\Collider">
       <UniqueIdentifier>{e42b872b-d74d-4d65-862f-295508e73de7}</UniqueIdentifier>
     </Filter>
@@ -190,14 +166,8 @@
     <Filter Include="04.Scene\RoomScene">
       <UniqueIdentifier>{0cb84e77-e644-46e4-adeb-bac56c763ceb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.Component\Shape">
-      <UniqueIdentifier>{e049cf3c-d529-4adb-a560-648f593ee5bf}</UniqueIdentifier>
-    </Filter>
     <Filter Include="03.GameObject\Button">
       <UniqueIdentifier>{03be92de-946d-46c5-9be8-52173edf3c04}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.Component\Shape\MyRectangle">
-      <UniqueIdentifier>{d4a57115-6c92-4d13-abe2-811676fc65d5}</UniqueIdentifier>
     </Filter>
     <Filter Include="05.Shader\ScreenShader">
       <UniqueIdentifier>{e11c642f-3db6-462a-afa9-ea97701a5168}</UniqueIdentifier>
@@ -219,9 +189,6 @@
     </Filter>
     <Filter Include="05.Shader\SkyBoxShader">
       <UniqueIdentifier>{e0d12ac8-8b08-42e1-acbe-f56e4be352c5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.Component\Mesh\CylinderMesh">
-      <UniqueIdentifier>{f7fc59e2-8d4d-4f17-8d4e-c1eb04a2d1e9}</UniqueIdentifier>
     </Filter>
     <Filter Include="03.GameObject\Widget">
       <UniqueIdentifier>{e0e3c899-458d-4083-b5d8-67bfebe3527e}</UniqueIdentifier>
@@ -253,12 +220,6 @@
     <Filter Include="05.Shader\PickingPointShader">
       <UniqueIdentifier>{e1b1da95-c95f-47f7-aeb8-f808f2605157}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.Component\Shape\EffectRect">
-      <UniqueIdentifier>{09688cfc-ab59-41c6-9ca9-d8ac58dbf341}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.Component\Mesh\SphereMesh">
-      <UniqueIdentifier>{14d1cc8f-b36d-4c8c-984a-d00fe9374022}</UniqueIdentifier>
-    </Filter>
     <Filter Include="03.GameObject\Monster">
       <UniqueIdentifier>{8062d154-08a1-41ca-a30a-ff569f779ccb}</UniqueIdentifier>
     </Filter>
@@ -274,20 +235,62 @@
     <Filter Include="03.GameObject\Monster\Slime">
       <UniqueIdentifier>{e58f492a-8b9e-4d14-8f6d-d915c5c785c3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.Component\MyCollider">
+    <Filter Include="02.Component\02.Camera">
+      <UniqueIdentifier>{97a51fee-d2d6-4527-a559-c0e182ff3bb1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\02.Camera\FollowCam">
+      <UniqueIdentifier>{30946cd8-6188-4005-beca-1055cfb62f9b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\02.Camera\BasicCam">
+      <UniqueIdentifier>{3e7f290a-f5ed-422b-a7a6-8c66ce8dc478}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\03.Mesh">
+      <UniqueIdentifier>{9332b465-1b8d-48b4-95b7-61997aa91ecc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\03.Mesh\CubeMesh">
+      <UniqueIdentifier>{a77760b1-476a-4e4b-87fc-9d7489d0af01}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\03.Mesh\TerrainMesh">
+      <UniqueIdentifier>{6fbb8228-6540-452a-8c4b-9c6a04f96c25}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\03.Mesh\CylinderMesh">
+      <UniqueIdentifier>{f7fc59e2-8d4d-4f17-8d4e-c1eb04a2d1e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\03.Mesh\SphereMesh">
+      <UniqueIdentifier>{14d1cc8f-b36d-4c8c-984a-d00fe9374022}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\04.Shape">
+      <UniqueIdentifier>{e049cf3c-d529-4adb-a560-648f593ee5bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\04.Shape\MyRectangle">
+      <UniqueIdentifier>{d4a57115-6c92-4d13-abe2-811676fc65d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\04.Shape\EffectRect">
+      <UniqueIdentifier>{09688cfc-ab59-41c6-9ca9-d8ac58dbf341}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\01.Transform">
+      <UniqueIdentifier>{c5998ac7-92a4-4244-af25-cb6bdae4a910}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\05.MyCollider">
       <UniqueIdentifier>{2a3db1b5-2dc7-475d-9f65-a87936136476}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.Component\MyCollider\MyBSphere">
+    <Filter Include="02.Component\05.MyCollider\MyBSphere">
       <UniqueIdentifier>{d3c2de43-9e69-4539-914d-08d0eeb57b16}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.Component\MyCollider\MyBOBox">
+    <Filter Include="02.Component\05.MyCollider\MyBOBox">
       <UniqueIdentifier>{e8a14a7d-6bcb-4984-b8cf-189fb6ec9d20}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.Component\MyCollider\MyFrustum">
+    <Filter Include="02.Component\05.MyCollider\MyFrustum">
       <UniqueIdentifier>{4b849b20-e341-441f-a863-7a7ded49cad8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.Component\Mesh\LineSphere">
+    <Filter Include="02.Component\03.Mesh\01.LineMesh">
+      <UniqueIdentifier>{4137323d-cb1c-4d98-9714-b28e9e624bc7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\03.Mesh\01.LineMesh\LineSphere">
       <UniqueIdentifier>{847971ea-4bc3-4874-ba8a-894a46d9a433}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\03.Mesh\01.LineMesh\LineCube">
+      <UniqueIdentifier>{6d1d2593-cc91-440b-987d-23328fb5f18c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -307,7 +310,7 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Mesh.h">
-      <Filter>02.Component\Mesh</Filter>
+      <Filter>02.Component\03.Mesh</Filter>
     </ClInclude>
     <ClInclude Include="Renderer.h">
       <Filter>10.Renderer</Filter>
@@ -349,16 +352,16 @@
       <Filter>05.Shader\CubeShader</Filter>
     </ClInclude>
     <ClInclude Include="CubeMesh.h">
-      <Filter>02.Component\Mesh\CubeMesh</Filter>
+      <Filter>02.Component\03.Mesh\CubeMesh</Filter>
     </ClInclude>
     <ClInclude Include="Camera.h">
-      <Filter>02.Component\Camera</Filter>
+      <Filter>02.Component\02.Camera</Filter>
     </ClInclude>
     <ClInclude Include="Transform.h">
-      <Filter>02.Component\Transform</Filter>
+      <Filter>02.Component\01.Transform</Filter>
     </ClInclude>
     <ClInclude Include="FollowCam.h">
-      <Filter>02.Component\Camera\FollowCam</Filter>
+      <Filter>02.Component\02.Camera\FollowCam</Filter>
     </ClInclude>
     <ClInclude Include="HeightMapImage.h">
       <Filter>02.Component</Filter>
@@ -367,7 +370,7 @@
       <Filter>03.GameObject\Terrain</Filter>
     </ClInclude>
     <ClInclude Include="TerrainMesh.h">
-      <Filter>02.Component\Mesh\TerrainMesh</Filter>
+      <Filter>02.Component\03.Mesh\TerrainMesh</Filter>
     </ClInclude>
     <ClInclude Include="MeshRenderer.h">
       <Filter>10.Renderer\MeshRenderer</Filter>
@@ -394,7 +397,7 @@
       <Filter>03.GameObject\Camera</Filter>
     </ClInclude>
     <ClInclude Include="BasicCam.h">
-      <Filter>02.Component\Camera\BasicCam</Filter>
+      <Filter>02.Component\02.Camera\BasicCam</Filter>
     </ClInclude>
     <ClInclude Include="EventHandler.h">
       <Filter>11.Event</Filter>
@@ -409,7 +412,7 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="MyFrustum.h">
-      <Filter>02.Component\MyCollider\MyFrustum</Filter>
+      <Filter>02.Component\05.MyCollider\MyFrustum</Filter>
     </ClInclude>
     <ClInclude Include="GameScreen.h">
       <Filter>01.GameBase</Filter>
@@ -493,13 +496,13 @@
       <Filter>05.Shader\LineShader</Filter>
     </ClInclude>
     <ClInclude Include="LineCube.h">
-      <Filter>02.Component\Mesh\LineCube</Filter>
+      <Filter>02.Component\03.Mesh\01.LineMesh\LineCube</Filter>
     </ClInclude>
     <ClInclude Include="Collision.h">
       <Filter>99.etc\Collision</Filter>
     </ClInclude>
     <ClInclude Include="MyBOBox.h">
-      <Filter>02.Component\MyCollider\MyBOBox</Filter>
+      <Filter>02.Component\05.MyCollider\MyBOBox</Filter>
     </ClInclude>
     <ClInclude Include="ModelStorage.h">
       <Filter>13.Storage/Manager\ModelStorage</Filter>
@@ -535,13 +538,13 @@
       <Filter>03.GameObject\Terrain</Filter>
     </ClInclude>
     <ClInclude Include="Shape.h">
-      <Filter>02.Component\Shape</Filter>
+      <Filter>02.Component\04.Shape</Filter>
     </ClInclude>
     <ClInclude Include="Button.h">
       <Filter>03.GameObject\Button</Filter>
     </ClInclude>
     <ClInclude Include="MyRectangle.h">
-      <Filter>02.Component\Shape\MyRectangle</Filter>
+      <Filter>02.Component\04.Shape\MyRectangle</Filter>
     </ClInclude>
     <ClInclude Include="ScreenShader.h">
       <Filter>05.Shader\ScreenShader</Filter>
@@ -565,13 +568,13 @@
       <Filter>13.Storage/Manager\SoundManager</Filter>
     </ClInclude>
     <ClInclude Include="CylinderMesh.h">
-      <Filter>02.Component\Mesh\CylinderMesh</Filter>
+      <Filter>02.Component\03.Mesh\CylinderMesh</Filter>
     </ClInclude>
     <ClInclude Include="Widget.h">
       <Filter>03.GameObject\Widget</Filter>
     </ClInclude>
     <ClInclude Include="MyBSphere.h">
-      <Filter>02.Component\MyCollider\MyBSphere</Filter>
+      <Filter>02.Component\05.MyCollider\MyBSphere</Filter>
     </ClInclude>
     <ClInclude Include="MyNames.h">
       <Filter>헤더 파일</Filter>
@@ -586,10 +589,10 @@
       <Filter>05.Shader\PickingPointShader</Filter>
     </ClInclude>
     <ClInclude Include="EffectRect.h">
-      <Filter>02.Component\Shape\EffectRect</Filter>
+      <Filter>02.Component\04.Shape\EffectRect</Filter>
     </ClInclude>
     <ClInclude Include="SphereMesh.h">
-      <Filter>02.Component\Mesh\SphereMesh</Filter>
+      <Filter>02.Component\03.Mesh\SphereMesh</Filter>
     </ClInclude>
     <ClInclude Include="Monster.h">
       <Filter>03.GameObject\Monster</Filter>
@@ -604,10 +607,10 @@
       <Filter>03.GameObject\Monster\Slime</Filter>
     </ClInclude>
     <ClInclude Include="MyCollider.h">
-      <Filter>02.Component\MyCollider</Filter>
+      <Filter>02.Component\05.MyCollider</Filter>
     </ClInclude>
     <ClInclude Include="LineSphere.h">
-      <Filter>02.Component\Mesh\LineSphere</Filter>
+      <Filter>02.Component\03.Mesh\01.LineMesh\LineSphere</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -645,7 +648,7 @@
       <Filter>05.Shader</Filter>
     </ClCompile>
     <ClCompile Include="Mesh.cpp">
-      <Filter>02.Component\Mesh</Filter>
+      <Filter>02.Component\03.Mesh</Filter>
     </ClCompile>
     <ClCompile Include="GameScene.cpp">
       <Filter>04.Scene\GameScene</Filter>
@@ -657,19 +660,19 @@
       <Filter>01.GameBase</Filter>
     </ClCompile>
     <ClCompile Include="Camera.cpp">
-      <Filter>02.Component\Camera</Filter>
+      <Filter>02.Component\02.Camera</Filter>
     </ClCompile>
     <ClCompile Include="CubeShader.cpp">
       <Filter>05.Shader\CubeShader</Filter>
     </ClCompile>
     <ClCompile Include="CubeMesh.cpp">
-      <Filter>02.Component\Mesh\CubeMesh</Filter>
+      <Filter>02.Component\03.Mesh\CubeMesh</Filter>
     </ClCompile>
     <ClCompile Include="Transform.cpp">
-      <Filter>02.Component\Transform</Filter>
+      <Filter>02.Component\01.Transform</Filter>
     </ClCompile>
     <ClCompile Include="FollowCam.cpp">
-      <Filter>02.Component\Camera\FollowCam</Filter>
+      <Filter>02.Component\02.Camera\FollowCam</Filter>
     </ClCompile>
     <ClCompile Include="HeightMapImage.cpp">
       <Filter>02.Component</Filter>
@@ -678,7 +681,7 @@
       <Filter>03.GameObject\Terrain</Filter>
     </ClCompile>
     <ClCompile Include="TerrainMesh.cpp">
-      <Filter>02.Component\Mesh\TerrainMesh</Filter>
+      <Filter>02.Component\03.Mesh\TerrainMesh</Filter>
     </ClCompile>
     <ClCompile Include="MeshRenderer.cpp">
       <Filter>10.Renderer\MeshRenderer</Filter>
@@ -705,7 +708,7 @@
       <Filter>03.GameObject\Camera</Filter>
     </ClCompile>
     <ClCompile Include="BasicCam.cpp">
-      <Filter>02.Component\Camera\BasicCam</Filter>
+      <Filter>02.Component\02.Camera\BasicCam</Filter>
     </ClCompile>
     <ClCompile Include="EventHandler.cpp">
       <Filter>11.Event</Filter>
@@ -714,7 +717,7 @@
       <Filter>11.Event</Filter>
     </ClCompile>
     <ClCompile Include="MyFrustum.cpp">
-      <Filter>02.Component\MyCollider\MyFrustum</Filter>
+      <Filter>02.Component\05.MyCollider\MyFrustum</Filter>
     </ClCompile>
     <ClCompile Include="GameScreen.cpp">
       <Filter>01.GameBase</Filter>
@@ -798,13 +801,13 @@
       <Filter>05.Shader\LineShader</Filter>
     </ClCompile>
     <ClCompile Include="LineCube.cpp">
-      <Filter>02.Component\Mesh\LineCube</Filter>
+      <Filter>02.Component\03.Mesh\01.LineMesh\LineCube</Filter>
     </ClCompile>
     <ClCompile Include="Collision.cpp">
       <Filter>99.etc\Collision</Filter>
     </ClCompile>
     <ClCompile Include="MyBOBox.cpp">
-      <Filter>02.Component\MyCollider\MyBOBox</Filter>
+      <Filter>02.Component\05.MyCollider\MyBOBox</Filter>
     </ClCompile>
     <ClCompile Include="ModelStorage.cpp">
       <Filter>13.Storage/Manager\ModelStorage</Filter>
@@ -840,13 +843,13 @@
       <Filter>03.GameObject\Terrain</Filter>
     </ClCompile>
     <ClCompile Include="Shape.cpp">
-      <Filter>02.Component\Shape</Filter>
+      <Filter>02.Component\04.Shape</Filter>
     </ClCompile>
     <ClCompile Include="Button.cpp">
       <Filter>03.GameObject\Button</Filter>
     </ClCompile>
     <ClCompile Include="MyRectangle.cpp">
-      <Filter>02.Component\Shape\MyRectangle</Filter>
+      <Filter>02.Component\04.Shape\MyRectangle</Filter>
     </ClCompile>
     <ClCompile Include="ScreenShader.cpp">
       <Filter>05.Shader\ScreenShader</Filter>
@@ -870,13 +873,13 @@
       <Filter>13.Storage/Manager\SoundManager</Filter>
     </ClCompile>
     <ClCompile Include="CylinderMesh.cpp">
-      <Filter>02.Component\Mesh\CylinderMesh</Filter>
+      <Filter>02.Component\03.Mesh\CylinderMesh</Filter>
     </ClCompile>
     <ClCompile Include="Widget.cpp">
       <Filter>03.GameObject\Widget</Filter>
     </ClCompile>
     <ClCompile Include="MyBSphere.cpp">
-      <Filter>02.Component\MyCollider\MyBSphere</Filter>
+      <Filter>02.Component\05.MyCollider\MyBSphere</Filter>
     </ClCompile>
     <ClCompile Include="TextureStorage.cpp">
       <Filter>13.Storage/Manager\TextureStorage</Filter>
@@ -888,10 +891,10 @@
       <Filter>05.Shader\PickingPointShader</Filter>
     </ClCompile>
     <ClCompile Include="EffectRect.cpp">
-      <Filter>02.Component\Shape\EffectRect</Filter>
+      <Filter>02.Component\04.Shape\EffectRect</Filter>
     </ClCompile>
     <ClCompile Include="SphereMesh.cpp">
-      <Filter>02.Component\Mesh\SphereMesh</Filter>
+      <Filter>02.Component\03.Mesh\SphereMesh</Filter>
     </ClCompile>
     <ClCompile Include="Monster.cpp">
       <Filter>03.GameObject\Monster</Filter>
@@ -906,10 +909,10 @@
       <Filter>03.GameObject\Monster\Slime</Filter>
     </ClCompile>
     <ClCompile Include="MyCollider.cpp">
-      <Filter>02.Component\MyCollider</Filter>
+      <Filter>02.Component\05.MyCollider</Filter>
     </ClCompile>
     <ClCompile Include="LineSphere.cpp">
-      <Filter>02.Component\Mesh\LineSphere</Filter>
+      <Filter>02.Component\03.Mesh\01.LineMesh\LineSphere</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

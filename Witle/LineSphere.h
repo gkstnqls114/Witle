@@ -5,7 +5,7 @@ class Texture;
 class MyDescriptorHeap;
 
 class LineSphere :
-	public Mesh
+	public LineMesh
 {
 public:
 	virtual void Render(ID3D12GraphicsCommandList * commandList) override {};
