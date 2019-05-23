@@ -475,13 +475,15 @@ bool Player::Attack(Player* player, MyCollider* collider, XMFLOAT2 aimPoint, Cam
 	if (m_Broom->GetisUsing()) return false;
 	 
 	// 시행된다면..
-	bool isNearMonster = false;
-	if (isNearMonster) // 주위에 몬스터 가있는 경우 ㅡㄴ접곡ㅇ격
-	{
-
+	bool isNearMonster = Vector3::Length(player->GetTransform().GetPosition(), m_Transform.GetPosition()) < 100;
+	if (isNearMonster) // 몬스터와 가까운 경우 근접 공격
+	{  
+		std::cout << "근접공격" << std::endl;
+		player->SubstractHP(500);
 	}
-	else // 원거ㅣㄹ 공격
+	else
 	{ 
+
 		// 피킹 ray를 만든다.
 		RAY pickRay = RAY::GeneratePickingRay(aimPoint, pMainCaemra);
 
@@ -491,12 +493,12 @@ bool Player::Attack(Player* player, MyCollider* collider, XMFLOAT2 aimPoint, Cam
 
 		// 닿지 않는다면 리턴한다.
 		if (!isCollide) return false;
-		if (Playerdist > 3000.f)
+		if (Playerdist < 3000.f)
 		{
-			std::cout << Playerdist << " ... " << std::endl;
+			std::cout << "원거리공격" << std::endl;
+			player->SubstractHP(500);
 		}
 
-		player->SubstractHP(500);
 	}
 
 	m_pPlayerMovement->m_xmf3Velocity = XMFLOAT3(0.F, 0.F, 0.F);

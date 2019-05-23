@@ -510,8 +510,8 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 
 	pd3dCommandList->SetDescriptorHeaps(1, &m_pd3dCbvSrvDescriptorHeap);
 
-	pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_WORLD, 16, &Matrix4x4::Identity(), 0);
-	m_SphereMesh->Render(pd3dCommandList);
+	// pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_WORLD, 16, &Matrix4x4::Identity(), 0);
+	// m_SphereMesh->Render(pd3dCommandList);
 	if (m_pPlayer) m_pPlayer->Render(pd3dCommandList);
 	if (m_pOtherPlayer) m_pOtherPlayer->Render(pd3dCommandList);
 
