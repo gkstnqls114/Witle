@@ -4,25 +4,24 @@
 class Texture;
 class MyDescriptorHeap;
 
-class SphereMesh :
+class LineSphere :
 	public Mesh
 {
 public:
-	virtual void Render(ID3D12GraphicsCommandList * commandList) override;
+	virtual void Render(ID3D12GraphicsCommandList * commandList) override {};
 
 private:
+
 	class SphereVertex
 	{
 	public:
 		XMFLOAT3						position;
 		XMFLOAT4						diffuse;
-		XMFLOAT3						normal;
-		XMFLOAT2						uv;
 
 	public:
 		SphereVertex() { position = XMFLOAT3(0.0f, 0.0f, 0.0f); diffuse = XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f); }
-		SphereVertex(float x, float y, float z, XMFLOAT4 xmf4Diffuse, XMFLOAT3 xmf3normal) { position = XMFLOAT3(x, y, z); diffuse = xmf4Diffuse; normal = xmf3normal; }
-		SphereVertex(XMFLOAT3 xmf3Position, XMFLOAT3 xmf3normal, XMFLOAT4 xmf4Diffuse = XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f)) { position = xmf3Position; diffuse = xmf4Diffuse;  normal = xmf3normal; }
+		SphereVertex(float x, float y, float z, XMFLOAT4 xmf4Diffuse) { position = XMFLOAT3(x, y, z); diffuse = xmf4Diffuse; }
+		SphereVertex(XMFLOAT3 xmf3Position, XMFLOAT4 xmf4Diffuse = XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f)) { position = xmf3Position; diffuse = xmf4Diffuse; }
 		~SphereVertex() { }
 	};
 
@@ -39,13 +38,15 @@ public:
 	virtual void ReleaseUploadBuffers() override;
 
 public:
-	SphereMesh(GameObject* pOwner, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, 
+	LineSphere(GameObject* pOwner, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList,
 		float radius = 500, float height = 500, float topRadius = 10, float bottomRadius = 10, int sectorCount = 10, int stackCount = 10
 	);
-	virtual ~SphereMesh();
-	void CreateTexture(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandListconst, const wchar_t *pszFileName);
+	virtual ~LineSphere();
+	
+	virtual void Update(float ElapsedTime) override {};
 
-	virtual void Update(float ElapsedTime) override {}; 
-private:
+	void Render(ID3D12GraphicsCommandList *pd3dCommandLis, const XMFLOAT4X4&, bool);
+	void RenderInstancing(ID3D12GraphicsCommandList *pd3dCommandList, int count);
+
 };
 

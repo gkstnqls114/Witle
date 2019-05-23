@@ -31,7 +31,7 @@ struct MATERIALS;
 
 class AimPoint;
 class CylinderMesh;
-class SphereMesh;
+class LineSphere;
 
 class GameScene
 	: public Scene
@@ -115,7 +115,7 @@ protected:
 	//
 	SkyBox*					m_SkyBox{ nullptr };
 	 
-	SphereMesh*			    m_SphereMesh{ nullptr };
+	LineSphere*			    m_SphereMesh{ nullptr };
 	Monster*				m_TestMonster{ nullptr };
 
 #ifdef CHECK_SUBVIEWS

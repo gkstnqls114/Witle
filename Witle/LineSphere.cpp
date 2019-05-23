@@ -1,13 +1,11 @@
 #include "stdafx.h"
 #include "d3dUtil.h"
-#include "MyDescriptorHeap.h"
-#include "Texture.h"
 #include "ShaderManager.h"
-#include "SphereMesh.h"
+#include "LineSphere.h"
 
-#define CYILNDER_VERTEX_COUNT 36
+#define CUBE_VERTEX_COUNT 60 
 
-void SphereMesh::CalculateTriangleListVertexNormals(XMFLOAT3 * pxmf3Normals, XMFLOAT3 * pxmf3Positions, int nVertices)
+void LineSphere::CalculateTriangleListVertexNormals(XMFLOAT3 * pxmf3Normals, XMFLOAT3 * pxmf3Positions, int nVertices)
 {
 	int nPrimitives = nVertices / 3;
 	UINT nIndex0, nIndex1, nIndex2;
@@ -22,7 +20,7 @@ void SphereMesh::CalculateTriangleListVertexNormals(XMFLOAT3 * pxmf3Normals, XMF
 	}
 }
 
-void SphereMesh::CalculateTriangleListVertexNormals(XMFLOAT3 * pxmf3Normals, XMFLOAT3 * pxmf3Positions, UINT nVertices, UINT * pnIndices, UINT nIndices)
+void LineSphere::CalculateTriangleListVertexNormals(XMFLOAT3 * pxmf3Normals, XMFLOAT3 * pxmf3Positions, UINT nVertices, UINT * pnIndices, UINT nIndices)
 {
 	UINT nPrimitives = (pnIndices) ? (nIndices / 3) : (nVertices / 3);
 	XMFLOAT3 xmf3SumOfNormal, xmf3Edge01, xmf3Edge02, xmf3Normal;
@@ -47,7 +45,7 @@ void SphereMesh::CalculateTriangleListVertexNormals(XMFLOAT3 * pxmf3Normals, XMF
 	}
 }
 
-void SphereMesh::CalculateTriangleStripVertexNormals(XMFLOAT3 * pxmf3Normals, XMFLOAT3 * pxmf3Positions, UINT nVertices, UINT * pnIndices, UINT nIndices)
+void LineSphere::CalculateTriangleStripVertexNormals(XMFLOAT3 * pxmf3Normals, XMFLOAT3 * pxmf3Positions, UINT nVertices, UINT * pnIndices, UINT nIndices)
 {
 	UINT nPrimitives = (pnIndices) ? (nIndices - 2) : (nVertices - 2);
 	XMFLOAT3 xmf3SumOfNormal(0.0f, 0.0f, 0.0f);
@@ -74,7 +72,7 @@ void SphereMesh::CalculateTriangleStripVertexNormals(XMFLOAT3 * pxmf3Normals, XM
 	}
 }
 
-void SphereMesh::CalculateVertexNormals(XMFLOAT3 * pxmf3Normals, XMFLOAT3 * pxmf3Positions, int nVertices, UINT * pnIndices, int nIndices)
+void LineSphere::CalculateVertexNormals(XMFLOAT3 * pxmf3Normals, XMFLOAT3 * pxmf3Positions, int nVertices, UINT * pnIndices, int nIndices)
 {
 	switch (m_d3dPrimitiveTopology)
 	{
@@ -92,21 +90,10 @@ void SphereMesh::CalculateVertexNormals(XMFLOAT3 * pxmf3Normals, XMFLOAT3 * pxmf
 	}
 }
 
-void SphereMesh::ReleaseObjects()
-{
+void LineSphere::ReleaseObjects()
+{ 
 	Mesh::ReleaseObjects();
-
-	if (m_Heap)
-	{
-		m_Heap->ReleaseObjects();
-		delete m_Heap;
-		m_Heap = nullptr;
-	}
-	if (m_Texture)
-	{
-		delete m_Texture;
-		m_Texture = nullptr;
-	}
+	 
 	if (m_pVertexBufferViews)
 	{
 		delete[] m_pVertexBufferViews;
@@ -114,26 +101,23 @@ void SphereMesh::ReleaseObjects()
 	}
 }
 
-void SphereMesh::ReleaseUploadBuffers()
+void LineSphere::ReleaseUploadBuffers()
 {
 	Mesh::ReleaseUploadBuffers();
-	if (m_Texture) m_Texture->ReleaseUploadBuffers();
 }
-
-SphereMesh::SphereMesh(GameObject* pOwner, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList,
-	float radius , float height , float topRadius , float bottomRadius , int sectorCount, int stackCount)
+  
+LineSphere::LineSphere(GameObject * pOwner, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, float radius, float height, float topRadius, float bottomRadius, int sectorCount, int stackCount)
 	:Mesh(pOwner)
 {
 	m_ComponenetID = MESH_TYPE_ID::CYLINDER_MESH;
 
 	m_nVertexBufferViews = 1;
 	m_pVertexBufferViews = new D3D12_VERTEX_BUFFER_VIEW[m_nVertexBufferViews];
-
-
-	m_d3dPrimitiveTopology = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
+	 
+	m_d3dPrimitiveTopology = D3D_PRIMITIVE_TOPOLOGY_LINELIST;
 
 	m_nStride = sizeof(SphereVertex);
-	 
+
 	// √‚√≥: http://www.songho.ca/opengl/gl_sphere.html
 
 	// clear memory of prev arrays
@@ -145,7 +129,7 @@ SphereMesh::SphereMesh(GameObject* pOwner, ID3D12Device * pd3dDevice, ID3D12Grap
 	float stackStep = PI / stackCount;
 	float sectorAngle, stackAngle;
 
-	SphereVertex* pControlPointVertices = new SphereVertex[(stackCount + 1) * (sectorCount+ 1)];
+	SphereVertex* pControlPointVertices = new SphereVertex[(stackCount + 1) * (sectorCount + 1)];
 	int Cindex = 0;
 	for (int i = 0; i < stackCount + 1; ++i)
 	{
@@ -163,18 +147,7 @@ SphereMesh::SphereMesh(GameObject* pOwner, ID3D12Device * pd3dDevice, ID3D12Grap
 			x = xy * cosf(sectorAngle);             // r * cos(u) * cos(v)
 			y = xy * sinf(sectorAngle);             // r * cos(u) * sin(v)
 			pControlPointVertices[Cindex].position = XMFLOAT3(x, y, z);
-
-			// normalized vertex normal (nx, ny, nz)
-			nx = x * lengthInv;
-			ny = y * lengthInv;
-			nz = z * lengthInv;
-			pControlPointVertices[Cindex].normal = XMFLOAT3(nx, ny, nz);
 			 
-			// vertex tex coord (s, t) range between [0, 1]
-			s = (float)j / sectorCount;
-			t = (float)i / stackCount;
-			pControlPointVertices[Cindex].uv = XMFLOAT2(s, t); 
-
 			Cindex += 1;
 		}
 	}
@@ -188,7 +161,7 @@ SphereMesh::SphereMesh(GameObject* pOwner, ID3D12Device * pd3dDevice, ID3D12Grap
 	{
 		k1 = i * (sectorCount + 1);     // beginning of current stack
 		k2 = k1 + sectorCount + 1;      // beginning of next stack
-		 
+
 		for (int j = 0; j < sectorCount; ++j, ++k1, ++k2)
 		{
 			// 2 triangles per sector excluding first and last stacks
@@ -197,21 +170,21 @@ SphereMesh::SphereMesh(GameObject* pOwner, ID3D12Device * pd3dDevice, ID3D12Grap
 			{
 				pVertices[index++] = pControlPointVertices[k1];
 				pVertices[index++] = pControlPointVertices[k2];
-				pVertices[index++] = pControlPointVertices[k1 + 1]; 
+				pVertices[index++] = pControlPointVertices[k1 + 1];
 			}
 
 			// k1+1 => k2 => k2+1
 			if (i != (stackCount - 1))
-			{ 
+			{
 				pVertices[index++] = pControlPointVertices[k1 + 1];
 				pVertices[index++] = pControlPointVertices[k2];
-				pVertices[index++] = pControlPointVertices[k2 + 1]; 
-			}  
+				pVertices[index++] = pControlPointVertices[k2 + 1];
+			}
 		}
-	} 
-	m_vertexCount = index; 
+	}
+	m_vertexCount = index;
 
-	m_pPositionBuffer = d3dUtil::CreateBufferResource(pd3dDevice, pd3dCommandList, 
+	m_pPositionBuffer = d3dUtil::CreateBufferResource(pd3dDevice, pd3dCommandList,
 		pVertices,
 		m_nStride * m_vertexCount, D3D12_HEAP_TYPE_DEFAULT,
 		D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, &m_pPositionUploadBuffer
@@ -220,34 +193,44 @@ SphereMesh::SphereMesh(GameObject* pOwner, ID3D12Device * pd3dDevice, ID3D12Grap
 	m_pVertexBufferViews[0].BufferLocation = m_pPositionBuffer->GetGPUVirtualAddress();
 	m_pVertexBufferViews[0].StrideInBytes = m_nStride;
 	m_pVertexBufferViews[0].SizeInBytes = m_nStride * m_vertexCount;
-	 
+
 	delete[] pControlPointVertices;
 	delete[] pVertices;
 }
 
-SphereMesh::~SphereMesh()
+LineSphere::~LineSphere()
 {
 }
 
-void SphereMesh::CreateTexture(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, const wchar_t *pszFileName)
+void LineSphere::Render(ID3D12GraphicsCommandList * pd3dCommandList, const XMFLOAT4X4& world, bool isMoved)
 {
-	m_Heap = new MyDescriptorHeap();
-	m_Heap->CreateCbvSrvUavDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 1, 0);
-	m_Texture = new Texture(1);
-	m_Texture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, pszFileName, 0);
-	m_Heap->CreateShaderResourceViews(pd3dDevice, pd3dCommandList, m_Texture, ROOTPARAMETER_TEXTURE, false);
+	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, "Line");
+
+	XMFLOAT4X4 xmf4x4World;
+	if (isMoved)
+	{
+		XMStoreFloat4x4(&xmf4x4World, XMMatrixTranspose(XMLoadFloat4x4(&world)));
+	}
+	else
+	{
+		XMStoreFloat4x4(&xmf4x4World, XMMatrixTranspose(XMLoadFloat4x4(&Matrix4x4::Identity())));
+	}
+	pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_WORLD, 16, &xmf4x4World, 0);
+
+	pd3dCommandList->IASetPrimitiveTopology(m_d3dPrimitiveTopology);
+
+	D3D12_VERTEX_BUFFER_VIEW pVertexBufferViews[1] = { m_pVertexBufferViews[0] };
+	pd3dCommandList->IASetVertexBuffers(m_nSlot, 1, pVertexBufferViews);
+
+	pd3dCommandList->DrawInstanced(m_vertexCount, 1, m_nOffset, 0);
 }
 
-void SphereMesh::Render(ID3D12GraphicsCommandList * commandList)
+void LineSphere::RenderInstancing(ID3D12GraphicsCommandList * pd3dCommandList, int Instancingcount)
 {
-	ShaderManager::GetInstance()->SetPSO(commandList, "Cube");
-	commandList->IASetPrimitiveTopology(GetPrimitiveTopology());
+	pd3dCommandList->IASetPrimitiveTopology(m_d3dPrimitiveTopology);
 
-	if (m_Heap) m_Heap->UpdateShaderVariable(commandList);
-	if (m_Texture) m_Texture->UpdateShaderVariables(commandList);
+	D3D12_VERTEX_BUFFER_VIEW pVertexBufferViews[1] = { m_pVertexBufferViews[0] };
+	pd3dCommandList->IASetVertexBuffers(m_nSlot, 1, pVertexBufferViews);
 
-	D3D12_VERTEX_BUFFER_VIEW pVertexBufferViews[] = { GetVertexBufferView(0) };
-	commandList->IASetVertexBuffers(0, _countof(pVertexBufferViews), pVertexBufferViews);
-
-	commandList->DrawInstanced(GetVertexCount(), 1, 0, 0);
+	pd3dCommandList->DrawInstanced(m_vertexCount, Instancingcount, m_nOffset, 0);
 }

@@ -5,6 +5,7 @@
 #include "MyBSphere.h"
 
 MyBSphere::MyBSphere(GameObject* pOwner, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, XMFLOAT3 center, float radius)
+	:MyCollider(pOwner, COLLIDER_TYPE::BOUNDING_SPHERE)
 {
 	m_BSphere = BoundingSphere(center, radius); 
 #ifdef _SHOW_BOUNDINGBOX

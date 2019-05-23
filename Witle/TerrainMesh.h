@@ -5,6 +5,10 @@
 class TerrainMesh
 	:public Mesh
 { 
+public: 
+	virtual void Render(ID3D12GraphicsCommandList * commandList) override {};
+
+private:
 	class CDiffused2TexturedVertex 
 	{
 	public:

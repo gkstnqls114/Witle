@@ -2,9 +2,13 @@
 #include "Mesh.h"
 
 class LineShader;
+
 class LineCube :
 	public Mesh
-{ 
+{    
+public:
+	virtual void Render(ID3D12GraphicsCommandList * commandList) override {};
+
 private:  
 	class CubeVertex
 	{

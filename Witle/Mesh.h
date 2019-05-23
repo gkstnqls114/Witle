@@ -6,6 +6,9 @@
 class Mesh :
 	public ComponentBase
 {
+public:
+	virtual void Render(ID3D12GraphicsCommandList * commandList) = 0;
+
 protected:
 	// 위치 버퍼
 	UINT							m_vertexCount{ 0 }; // 인덱스 버퍼가 없을 경우 사용함
@@ -32,16 +35,16 @@ protected:
 
 	UINT							m_nStartIndex = 0;
 	int								m_nBaseVertex = 0;
-	 
+	
+
 public:
 	virtual void ReleaseObjects() override;
 	virtual void ReleaseUploadBuffers() override;
-	 
+	
 public:
 	Mesh(GameObject* pOwner);
 	virtual ~Mesh();
-	 
-
+	
 	/////////////////////////////////////////////////////////////////////////// Get
 	UINT GetVertexCount() const { return m_vertexCount; }
 	const ID3D12Resource* GetPositonBuffer() const { m_pPositionBuffer; }

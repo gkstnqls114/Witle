@@ -176,6 +176,7 @@
     <ClInclude Include="LightObject.h" />
     <ClInclude Include="LineCube.h" />
     <ClInclude Include="LineShader.h" />
+    <ClInclude Include="LineSphere.h" />
     <ClInclude Include="LoadingScene.h" />
     <ClInclude Include="LobbyScene.h" />
     <ClInclude Include="Material.h" />
@@ -295,6 +296,7 @@
     <ClCompile Include="LightObject.cpp" />
     <ClCompile Include="LineCube.cpp" />
     <ClCompile Include="LineShader.cpp" />
+    <ClCompile Include="LineSphere.cpp" />
     <ClCompile Include="LoadingScene.cpp" />
     <ClCompile Include="LobbyScene.cpp" />
     <ClCompile Include="Material.cpp" />

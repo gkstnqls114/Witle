@@ -1,9 +1,10 @@
 #pragma once
-#include "ComponentBase.h"
+#include "MyCollider.h"
 
 class LineCube;
 
 class MyBSphere
+	: public MyCollider
 {
 protected:
 #ifdef _SHOW_BOUNDINGBOX

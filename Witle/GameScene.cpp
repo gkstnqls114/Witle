@@ -6,7 +6,7 @@
 #include "Sniping.h" 
 #include "Broom.h"
 #include "CylinderMesh.h"
-#include "SphereMesh.h"
+#include "LineSphere.h"
 //// Skill header //////////////////////////
 
 //// GameObject header //////////////////////////
@@ -234,7 +234,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	m_pOtherPlayer = new Player("OtherPlayer", pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 	m_SkyBox->SetpPlayerTransform(&m_pPlayer->GetTransform());
 	// 테스트용
-	m_SphereMesh = new SphereMesh(m_pPlayer, pd3dDevice, pd3dCommandList);
+	m_SphereMesh = new LineSphere(m_pPlayer, pd3dDevice, pd3dCommandList);
 
 	// 몬스터
 	m_TestMonster = new Slime("Slime", pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
@@ -510,7 +510,7 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	pd3dCommandList->SetDescriptorHeaps(1, &m_pd3dCbvSrvDescriptorHeap);
 
 	// pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_WORLD, 16, &Matrix4x4::Identity(), 0);
-	// m_SphereMesh->Render(pd3dCommandList);
+	m_SphereMesh->Render(pd3dCommandList, Matrix4x4::Identity(), false);
 	if (m_pPlayer) m_pPlayer->Render(pd3dCommandList);
 	if (m_pOtherPlayer) m_pOtherPlayer->Render(pd3dCommandList);
 

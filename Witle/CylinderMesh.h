@@ -6,6 +6,9 @@ class MyDescriptorHeap;
 class CylinderMesh :
 	public Mesh
 {
+public:
+	virtual void Render(ID3D12GraphicsCommandList * commandList) override;
+
 private:
 	class CylinderVertex
 	{
@@ -39,8 +42,7 @@ public:
 	virtual ~CylinderMesh();
 	void CreateTexture(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandListconst, const wchar_t *pszFileName);
 
-	virtual void Update(float ElapsedTime) override {};
-	void Render(ID3D12GraphicsCommandList *commandList);
+	virtual void Update(float ElapsedTime) override {}; 
 private:
 };
 

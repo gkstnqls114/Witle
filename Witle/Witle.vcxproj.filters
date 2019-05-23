@@ -286,6 +286,9 @@
     <Filter Include="02.Component\MyCollider\MyFrustum">
       <UniqueIdentifier>{4b849b20-e341-441f-a863-7a7ded49cad8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.Component\Mesh\LineSphere">
+      <UniqueIdentifier>{847971ea-4bc3-4874-ba8a-894a46d9a433}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -603,6 +606,9 @@
     <ClInclude Include="MyCollider.h">
       <Filter>02.Component\MyCollider</Filter>
     </ClInclude>
+    <ClInclude Include="LineSphere.h">
+      <Filter>02.Component\Mesh\LineSphere</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -901,6 +907,9 @@
     </ClCompile>
     <ClCompile Include="MyCollider.cpp">
       <Filter>02.Component\MyCollider</Filter>
+    </ClCompile>
+    <ClCompile Include="LineSphere.cpp">
+      <Filter>02.Component\Mesh\LineSphere</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
