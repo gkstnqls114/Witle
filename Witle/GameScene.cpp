@@ -789,47 +789,8 @@ void GameScene::ProcessPicking(float fElapsedTime)
 {
 	if (GameInput::GetDragMode()) // 만약 드래그로 회전한다면...
 	{
-		if (!GameInput::IsKeydownE()) return; // e를 누르지 않았다면 아무것도 실행하지 않는다.
-		if (m_pPlayer->IsAttacking()) return;
-		
 		m_pPlayer->Attack(m_pOtherPlayer, m_pOtherPlayer->GetBOBox(), m_AimPoint->GetPickingPoint(), m_pMainCamera->GetCamera());
-		
-		//// 피킹 ray에 닿는 오브젝트가 있는 지 확인한다.
-		//float dist = FLT_MAX;
-		//float temp;
-		//bool isCollideObject;
-		//for (const auto& name : ModelStorage::GetInstance()->m_NameList)
-		//{
-		//	MyBOBox* box = ModelStorage::GetInstance()->GetBOBox(name);
-		//	if (!box) continue; // 충돌박스가 없다면 다른 오브젝트를 검사하자.
-
-		//	XMFLOAT4X4* pWorldMatrix = StaticObjectStorage::GetInstance(m_pQuadtreeTerrain)->GetpWorldMatrixs(0, name);
-
-		//	// 트레인 조각 내부 오브젝트 개수만큼 충돌 체크
-		//	for (int i = 0; i < StaticObjectStorage::GetInstance(m_pQuadtreeTerrain)->GetObjectCount(0, name); ++i)
-		//	{ 
-		//		// 모델 충돌박스를 월드행렬 곱한다. 일단 현재는 포지션으로 이동
-		//		MyBOBox worldBox = *box;
-		//		worldBox.Move(XMFLOAT3(pWorldMatrix[i]._41, 0, pWorldMatrix[i]._43));
-
-		//		if (Collision::isCollide(worldBox.GetBOBox(), pickRay.origin, pickRay.direction, temp))
-		//		{
-		//			std::cout << "오브젝트와 부딪힘" << std::endl;
-		//			dist = fminf(temp, dist);
-		//			isCollideObject = true;
-		//		}
-		//		
-		//	}
-		//}
-
-
-		//// 제일 짧은 거리는?
-		//// 만약 그게 다른 유저라면 해당 유저의 hp를 감소시킨다.
-		//if (Playerdist < dist)
-		//{
-		//	std::cout << "hp 감소" << std::endl;
-		//	m_pOtherPlayer->SubstractHP(10);
-		//} 
+		 
 	}
 	else // 드래그로 회전하지 않는다면...
 	{
