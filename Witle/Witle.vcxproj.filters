@@ -313,6 +313,9 @@
     <Filter Include="02.Component\ForMonster\MonsterAction\05.DeadAction">
       <UniqueIdentifier>{f34ded6a-1a2a-4110-a759-a0c457ba548d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="13.Storage/Manager\PlayerManager">
+      <UniqueIdentifier>{afdbfed4-c562-40bf-bd28-1e20f4b191ca}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -654,6 +657,9 @@
     <ClInclude Include="DeadAction.h">
       <Filter>02.Component\ForMonster\MonsterAction\05.DeadAction</Filter>
     </ClInclude>
+    <ClInclude Include="PlayerManager.h">
+      <Filter>13.Storage/Manager\PlayerManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -976,6 +982,9 @@
     </ClCompile>
     <ClCompile Include="MonsterAction.cpp">
       <Filter>02.Component\ForMonster\MonsterAction</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerManager.cpp">
+      <Filter>13.Storage/Manager\PlayerManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

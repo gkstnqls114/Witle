@@ -29,9 +29,7 @@
 static float MonsterOffestX = 0.f;
 static float MonsterOffestY = 57.f;
 static float MonsterOffestZ = 50.f;
- 
-GameObject*  Monster::m_pTarget{ nullptr };
-
+  
 XMFLOAT3 Monster::CalculateAlreadyVelocity(float fTimeElapsed)
 {
 	XMFLOAT3 AlreadyVelocity = Vector3::Add(m_MonsterMovement->m_xmf3Velocity, m_MonsterMovement->m_xmf3Gravity);

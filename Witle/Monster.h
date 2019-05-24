@@ -32,9 +32,6 @@ public:
 	virtual void UpdateState(float fElapsedTime) = 0;
 
 protected:
-	static GameObject*  m_pTarget;
-
-protected:
 	RecognitionRange*   m_RecognitionRange{ nullptr };
 	MonsterMovement*    m_MonsterMovement{ nullptr };
 	MonsterStatus*	   m_MonsterStatus{ nullptr };
@@ -53,10 +50,7 @@ private:
 protected:
 	virtual void ReleaseMembers() override;
 	virtual void ReleaseMemberUploadBuffers() override;
-
-public:
-	static void SetTarget(GameObject* player) { m_pTarget = player; }
-
+	 
 private: 
 	void SetTrackAnimationSet();
 

@@ -216,6 +216,7 @@
     <ClInclude Include="Object.h" />
     <ClInclude Include="PickingPointShader.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="PlayerManager.h" />
     <ClInclude Include="PlayerMovement.h" />
     <ClInclude Include="PlayerStatus.h" />
     <ClInclude Include="PointLight.h" />
@@ -327,6 +328,7 @@
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="PickingPointShader.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PlayerManager.cpp" />
     <ClCompile Include="PlayerMovement.cpp" />
     <ClCompile Include="PlayerStatus.cpp" />
     <ClCompile Include="PointLight.cpp" />

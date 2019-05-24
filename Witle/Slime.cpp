@@ -4,6 +4,7 @@
 #include "MonsterMovement.h"
 #include "MonsterStatus.h"
 #include "RecognitionRange.h"
+#include "PlayerManager.h"
 // For Monster ///////////////
 
 #include "MyDescriptorHeap.h"
@@ -57,5 +58,5 @@ void Slime::Update(float fElapsedTime)
  
 void Slime::UpdateState(float fElapsedTime)
 {
-	m_MonsterMovement->UpdateState(fElapsedTime, m_Direction, m_pTarget, m_RecognitionRange->m_RecognitionRange);
+	m_MonsterMovement->UpdateState(fElapsedTime, m_Direction, m_RecognitionRange->m_RecognitionRange);
 }

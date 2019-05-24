@@ -1,6 +1,8 @@
 #pragma once
 #include "ComponentBase.h"
 
+class Player;
+
 class MonsterAction;
 
 class IdleAction;
@@ -36,7 +38,7 @@ public:
 	const float m_fNearDistance{ 0.f };
 
 private:
-	bool IsNearPlayer(const GameObject* Target, float distance);
+	bool IsNearPlayer(const Player* Target, float distance);
 	void UpdateVelocity(float);
 
 public:
@@ -51,15 +53,12 @@ public:
 	virtual void Update(float) override;
 
 	// Update 수행 이전 반드시 호출
-	virtual void UpdateState(float fElpasedTime, const XMFLOAT3& randomDirection, const GameObject* pTarget, float distance);
+	virtual void UpdateState(float fElpasedTime, const XMFLOAT3& randomDirection, float distance);
 
 	XMFLOAT3 AlreadyUpdate(float);
-
-	void MoveVelocity(DWORD dwDirection, float);
+	 
 	void MoveVelocity(const XMFLOAT3& shift);
 
 	void ReduceVelocity(float);
-
-	void BroomMode();
-	void RunMode();
+	 
 };

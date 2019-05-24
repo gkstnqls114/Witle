@@ -5,13 +5,14 @@
 #include "MoveAction.h"
 #include "ChaseAction.h"
 #include "SearchAction.h"
+#include "PlayerManager.h"
 #include "DeadAction.h"
 // Action ////////////////////////
 
-#include "GameObject.h"
+#include "Player.h"
 #include "MonsterMovement.h"
 
-bool MonsterMovement::IsNearPlayer(const GameObject * target, float distance)
+bool MonsterMovement::IsNearPlayer(const Player * target, float distance)
 {
 	return Vector3::Length(Vector3::Subtract(m_pOwner->GetTransform().GetPosition(), target->GetTransform().GetPosition())) < distance;
 }
@@ -69,9 +70,9 @@ void MonsterMovement::Update(float fTimeElapsed)
 	if (fLength > m_fMaxVelocityY) m_xmf3Velocity.y *= (fMaxVelocityY / fLength);
 }
 
-void MonsterMovement::UpdateState(float fElpasedTime, const XMFLOAT3& randomDirection, const GameObject* pTarget, float distance)
+void MonsterMovement::UpdateState(float fElpasedTime, const XMFLOAT3& randomDirection, float distance)
 {
-	if (IsNearPlayer(pTarget, distance))
+	if (IsNearPlayer(PlayerManager::GetMainPlayer(), distance))
 	{
 		m_CurrMonsterAction = m_ChaseAction;
 	}
