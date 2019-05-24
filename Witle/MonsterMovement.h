@@ -57,7 +57,7 @@ public:
 	virtual void Update(float) override;
 
 	// Update 수행 이전 반드시 호출
-	virtual void UpdateState(float fElpasedTime, const XMFLOAT3& randomDirection, float distance);
+	virtual void UpdateState(float fElpasedTime);
 
 	XMFLOAT3 AlreadyUpdate(float);
 	 

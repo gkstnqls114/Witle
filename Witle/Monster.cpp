@@ -12,7 +12,11 @@
 #include "MonsterStatus.h"
 // GameBase /////////////////////
 
+// DebugMesh /////////////////////
 #include "MyBOBox.h" 
+#include "LineSphere.h"
+// DebugMesh /////////////////////
+
 #include "Texture.h"
 #include "MyDescriptorHeap.h"
 #include "Sniping.h"
@@ -93,8 +97,11 @@ Monster::Monster(const std::string & entityID, const XMFLOAT3& SpawnPoint, ID3D1
 	m_MonsterStatus = new MonsterStatus(this, pd3dDevice, pd3dCommandList);
 	m_MonsterMovement = new MonsterMovement(this);
 	 
-	// m_Transform.SetPosition(100.f, MonsterOffestY, 100.f);// 캐릭터가 중앙에 있지않아서 어쩔수없이 설정;
-	 
+	// 디버그용
+	m_pDebugObject = new EmptyGameObject("SpawnPosition");
+	m_pDebugObject->GetTransform().SetPosition(SpawnPoint);
+	m_pDebugObject->GetTransform().Update(0.f); // position update위해...
+	m_pDebugSpawnMesh = new LineSphere(m_pDebugObject, pd3dDevice, pd3dCommandList, m_SpawnRange, m_SpawnRange);
 }
 
 Monster::~Monster()
@@ -104,6 +111,12 @@ Monster::~Monster()
 
 void Monster::ReleaseMembers()
 { 
+	if(m_pDebugObject)
+	{
+		m_pDebugObject->ReleaseObjects();
+		delete m_pDebugObject;
+		m_pDebugObject = nullptr;
+	}
 	if (m_pTexture)
 	{
 		m_pTexture->ReleaseObjects();
@@ -144,6 +157,7 @@ void Monster::ReleaseMembers()
 
 void Monster::ReleaseMemberUploadBuffers()
 {
+	if (m_pDebugSpawnMesh) m_pDebugSpawnMesh->ReleaseUploadBuffers();
 	if (m_pTexture) m_pTexture->ReleaseUploadBuffers();
 	if (m_pLoadObject) m_pLoadObject->ReleaseUploadBuffers();
 	if (m_MonsterModel)m_MonsterModel->ReleaseUploadBuffers();
@@ -181,6 +195,7 @@ void Monster::Animate(float fElapsedTime)
 void Monster::Render(ID3D12GraphicsCommandList * pd3dCommandList)
 {  
 	m_pMyBOBox->Render(pd3dCommandList); 
+	m_pDebugSpawnMesh->Render(pd3dCommandList);
 	m_RecognitionRange->RenderDebug(pd3dCommandList);
 
 	m_pHaep->UpdateShaderVariable(pd3dCommandList);
@@ -213,12 +228,8 @@ void Monster::Rotate(float x, float y, float z)
 	m_pMyBOBox->Rotate(m_MonsterMovement->m_fRoll, m_MonsterMovement->m_fYaw, m_MonsterMovement->m_fPitch);
 }
 
-XMFLOAT3 Monster::GetVelocity() const
+float Monster::GetRecognitionRange() const
 {
-	return m_MonsterMovement->m_xmf3Velocity;
+	return m_RecognitionRange->m_RecognitionRange;
 }
-
-void Monster::SetVelocity(const XMFLOAT3 & velocity)
-{
-	m_MonsterMovement->m_xmf3Velocity = velocity;
-}
+ 

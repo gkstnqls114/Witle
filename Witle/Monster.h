@@ -10,6 +10,8 @@ class MonsterMovement;
 class Texture;
 class MyDescriptorHeap;
 
+class LineMesh;
+
 class RecognitionRange;
 class MyRectangle;
 
@@ -23,7 +25,6 @@ enum MONSTER_STATE
 	CHASE
 };
 
-// CHeightMapTerrain 입니다.
 class Monster :
 	public GameObject
 {
@@ -43,7 +44,12 @@ protected:
 	CLoadedModelInfo*  m_MonsterModel{ nullptr };
 	LoadObject*		   m_pLoadObject{ nullptr };
 
+
 	XMFLOAT3 m_SpawnPoint;
+	const float    m_SpawnRange{ 1500.f };
+	// Spawn Point 주위로 Range를 확인하기 위해 임시로 설정
+	GameObject * m_pDebugObject{ nullptr };
+	LineMesh* m_pDebugSpawnMesh{ nullptr };
 
 private: 
 	int m_CurrAnimation{ 0 }; // 현재 사용하는 애니메이션
@@ -77,13 +83,11 @@ public:
 	void Rotate(float x, float y, float z);
 	  
 	//// Get /////////////////// 
-	AXIS GetCoorAxis() { return m_Transform.GetCoorAxis(); }
-	XMFLOAT3 GetVelocity() const;
-	MyBOBox* GetBOBox() { return m_pMyBOBox; }  
+	float GetRecognitionRange() const;
+	AXIS GetCoorAxis() const { return m_Transform.GetCoorAxis(); } 
+	MyBOBox* GetBOBox() const { return m_pMyBOBox; }
+	XMFLOAT3 GetSpawnPoint() const { return m_SpawnPoint; }
+	float GetSpawnRange() const { return m_SpawnRange; }
 	//// Get /////////////////// 
-
-	//// Set /////////////////// 
-	void SetVelocity(const XMFLOAT3& velocity); 
-	//// Set /////////////////// 
-
+	 
 };

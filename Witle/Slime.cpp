@@ -31,9 +31,7 @@ Slime::Slime(const std::string & entityID, const XMFLOAT3& SpawnPoint,
 	m_pLoadObject->m_pSkinnedAnimationController = new CAnimationController(pd3dDevice, pd3dCommandList, 1, m_MonsterModel);
 	m_pLoadObject->m_pSkinnedAnimationController->SetTrackAnimationSet(0, 0);
 
-	m_Transform.SetPosition(SpawnPoint);
-
-	m_Direction = XMFLOAT3(rand() % 10, 0, rand() % 10);
+	m_Transform.SetPosition(SpawnPoint); 
 }
 
 Slime::~Slime()
@@ -58,5 +56,5 @@ void Slime::Update(float fElapsedTime)
  
 void Slime::UpdateState(float fElapsedTime)
 {
-	m_MonsterMovement->UpdateState(fElapsedTime, m_Direction, m_RecognitionRange->m_RecognitionRange);
+	m_MonsterMovement->UpdateState(fElapsedTime);
 }

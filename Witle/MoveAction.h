@@ -8,6 +8,8 @@ class MonsterMovement;
 class MoveAction
 	: public MonsterAction
 {
+	XMFLOAT3 m_Direction{ 0.f, 0.f, 0.f }; // 움직이는 방향
+
 public:
 	virtual void ReleaseObjects() override {};
 	virtual void ReleaseUploadBuffers() override {};
@@ -19,5 +21,6 @@ public:
 	// Update 수행 이전 반드시 호출
 	virtual void UpdateVelocity(float fElpasedTime, MonsterMovement* movement) override;
 	virtual void Init() override {};
-
+	void SetDirection(const XMFLOAT3& direction) { m_Direction = direction; }
+	XMFLOAT3 GetDirection() const { return m_Direction; }
 };
