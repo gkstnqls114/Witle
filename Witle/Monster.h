@@ -43,6 +43,8 @@ protected:
 	CLoadedModelInfo*  m_MonsterModel{ nullptr };
 	LoadObject*		   m_pLoadObject{ nullptr };
 
+	XMFLOAT3 m_SpawnPoint;
+
 private: 
 	int m_CurrAnimation{ 0 }; // 현재 사용하는 애니메이션
 	int m_PrevAnimation{ 0 }; // 현재 사용하는 애니메이션
@@ -55,7 +57,7 @@ private:
 	void SetTrackAnimationSet();
 
 public:
-	Monster(const std::string& entityID, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext = NULL);
+	Monster(const std::string& entityID, const XMFLOAT3& SpwanPoint, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature);
 	virtual ~Monster();
 	 
 	void Render(ID3D12GraphicsCommandList *pd3dCommandList);

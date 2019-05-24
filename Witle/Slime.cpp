@@ -13,8 +13,9 @@
 #include "Texture.h"
 #include "Slime.h"
 
-Slime::Slime(const std::string & entityID, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature)
-	: Monster(entityID, pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature)
+Slime::Slime(const std::string & entityID, const XMFLOAT3& SpawnPoint, 
+	ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature)
+	: Monster(entityID, SpawnPoint, pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature)
 { 
 	m_pHaep = new MyDescriptorHeap();
 	m_pHaep->CreateCbvSrvUavDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 1, 0);
@@ -30,8 +31,7 @@ Slime::Slime(const std::string & entityID, ID3D12Device * pd3dDevice, ID3D12Grap
 	m_pLoadObject->m_pSkinnedAnimationController = new CAnimationController(pd3dDevice, pd3dCommandList, 1, m_MonsterModel);
 	m_pLoadObject->m_pSkinnedAnimationController->SetTrackAnimationSet(0, 0);
 
-	// m_Transform.SetPosition(100 + rand() % 2000, 0, 100 + rand() % 2000);
-	m_Transform.SetPosition(1000, 0, 1000);
+	m_Transform.SetPosition(SpawnPoint);
 
 	m_Direction = XMFLOAT3(rand() % 10, 0, rand() % 10);
 }

@@ -40,7 +40,7 @@ public:
 	float m_fYaw = 0.0f;
 
 	const float m_fNearDistance{ 0.f };
-
+ 
 private:
 	bool IsNearPlayer(const Player* Target, float distance);
 	void UpdateVelocity(float);

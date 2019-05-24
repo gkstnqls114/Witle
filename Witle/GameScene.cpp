@@ -237,7 +237,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	// 테스트용 
 
 	// 몬스터
-	m_TestMonster = new Slime("Slime", pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	m_TestMonster = new Slime("Slime", XMFLOAT3(1000, 0, 1000), pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 
 	//// 테스트 쿼드트리 터레인 생성 
 	m_pQuadtreeTerrain = new QuadtreeTerrain(pd3dDevice, pd3dCommandList, 257, 257, xmf3Scale, xmf4Color, m_Terrain->GetHeightMapImage());

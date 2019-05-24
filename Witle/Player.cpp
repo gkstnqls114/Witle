@@ -294,21 +294,23 @@ void Player::Animate(float fElapsedTime)
 	// float fPitch = 0.f;
 	float fYaw = 0.f;
 	float fRoll = 0.f;
-	XMMATRIX mtxRotate = XMMatrixRotationRollPitchYaw(XMConvertToRadians(fPitch), XMConvertToRadians(fYaw), XMConvertToRadians(fRoll));
+	XMMATRIX mtxRotate = XMMatrixRotationRollPitchYaw(
+		XMConvertToRadians(fPitch), 
+		XMConvertToRadians(fYaw),
+		XMConvertToRadians(fRoll)
+	);
 	m_pLoadObject_Cloth->m_xmf4x4ToParent = Matrix4x4::Multiply(mtxRotate, m_Transform.GetWorldMatrix());
 	m_pLoadObject_Body->m_xmf4x4ToParent = Matrix4x4::Multiply(mtxRotate, m_Transform.GetWorldMatrix());
-	 
+	
 	m_pLoadObject_Cloth->Animate(fElapsedTime);
 	m_pLoadObject_Body->Animate(fElapsedTime);
 }
 
 void Player::Render(ID3D12GraphicsCommandList * pd3dCommandList)
-{
-
+{ 
 	if (m_pSniping) m_pSniping->Render(pd3dCommandList);
 	m_pMyBOBox->Render(pd3dCommandList); 
-
-
+	 
 	if (!m_isRendering) return; //만약 스나이핑 모드라면 플레이어를 렌더링하지 않는다.
 	m_pHaep->UpdateShaderVariable(pd3dCommandList);
 	m_pTexture_Cloth->UpdateShaderVariable(pd3dCommandList, 0);
