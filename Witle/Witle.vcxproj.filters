@@ -295,6 +295,24 @@
     <Filter Include="02.Component\ForMonster\RecognitionRange">
       <UniqueIdentifier>{6a6ef169-afe8-4c4d-b4d3-243ccbd3687b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.Component\ForMonster\MonsterAction">
+      <UniqueIdentifier>{7af56684-3251-42e9-8b80-d6e616723689}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\ForMonster\MonsterAction\01.IdleAction">
+      <UniqueIdentifier>{602963d6-a3df-499b-acb2-efa1792d6833}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\ForMonster\MonsterAction\02.MoveAction">
+      <UniqueIdentifier>{064dbc3b-3bac-4ac7-b13a-fa2f75bf7617}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\ForMonster\MonsterAction\03.ChaseAction">
+      <UniqueIdentifier>{9b4fd1be-3609-4380-8add-bd721aa9baa8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\ForMonster\MonsterAction\04.SearchAction">
+      <UniqueIdentifier>{1c69dd90-bcd3-4fcb-9239-46163349daca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\ForMonster\MonsterAction\05.DeadAction">
+      <UniqueIdentifier>{f34ded6a-1a2a-4110-a759-a0c457ba548d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -618,6 +636,24 @@
     <ClInclude Include="RecognitionRange.h">
       <Filter>02.Component\ForMonster\RecognitionRange</Filter>
     </ClInclude>
+    <ClInclude Include="MonsterAction.h">
+      <Filter>02.Component\ForMonster\MonsterAction</Filter>
+    </ClInclude>
+    <ClInclude Include="IdleAction.h">
+      <Filter>02.Component\ForMonster\MonsterAction\01.IdleAction</Filter>
+    </ClInclude>
+    <ClInclude Include="MoveAction.h">
+      <Filter>02.Component\ForMonster\MonsterAction\02.MoveAction</Filter>
+    </ClInclude>
+    <ClInclude Include="ChaseAction.h">
+      <Filter>02.Component\ForMonster\MonsterAction\03.ChaseAction</Filter>
+    </ClInclude>
+    <ClInclude Include="SearchAction.h">
+      <Filter>02.Component\ForMonster\MonsterAction\04.SearchAction</Filter>
+    </ClInclude>
+    <ClInclude Include="DeadAction.h">
+      <Filter>02.Component\ForMonster\MonsterAction\05.DeadAction</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -922,6 +958,24 @@
     </ClCompile>
     <ClCompile Include="RecognitionRange.cpp">
       <Filter>02.Component\ForMonster\RecognitionRange</Filter>
+    </ClCompile>
+    <ClCompile Include="IdleAction.cpp">
+      <Filter>02.Component\ForMonster\MonsterAction\01.IdleAction</Filter>
+    </ClCompile>
+    <ClCompile Include="MoveAction.cpp">
+      <Filter>02.Component\ForMonster\MonsterAction\02.MoveAction</Filter>
+    </ClCompile>
+    <ClCompile Include="ChaseAction.cpp">
+      <Filter>02.Component\ForMonster\MonsterAction\03.ChaseAction</Filter>
+    </ClCompile>
+    <ClCompile Include="SearchAction.cpp">
+      <Filter>02.Component\ForMonster\MonsterAction\04.SearchAction</Filter>
+    </ClCompile>
+    <ClCompile Include="DeadAction.cpp">
+      <Filter>02.Component\ForMonster\MonsterAction\05.DeadAction</Filter>
+    </ClCompile>
+    <ClCompile Include="MonsterAction.cpp">
+      <Filter>02.Component\ForMonster\MonsterAction</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

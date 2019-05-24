@@ -33,12 +33,7 @@ void MonsterStatus::Update(float fTimeElapsed)
 {
 
 }
-
-void MonsterStatus::ProcessAI(float fTimeElapsed)
-{
-
-}
-
+ 
 void MonsterStatus::Render(ID3D12GraphicsCommandList * pd3dCommandList)
 {
 	float percentage = float(m_HP) / 1000.f * 100.f;

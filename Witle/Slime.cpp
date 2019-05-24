@@ -54,9 +54,8 @@ void Slime::Update(float fElapsedTime)
 			m_Transform.GetPosition().z)
 	); 
 }
-
-void Slime::ProcessAI(float fElapsedTime)
+ 
+void Slime::UpdateState(float fElapsedTime)
 {
-	m_MonsterMovement->ProcessAI(fElapsedTime, m_Direction, m_pTarget, m_RecognitionRange->m_RecognitionRange);
-	m_MonsterStatus->ProcessAI(fElapsedTime); 
+	m_MonsterMovement->UpdateState(fElapsedTime, m_Direction, m_pTarget, m_RecognitionRange->m_RecognitionRange);
 }

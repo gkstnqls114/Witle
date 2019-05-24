@@ -27,6 +27,10 @@ enum MONSTER_STATE
 class Monster :
 	public GameObject
 {
+public:
+	virtual void Update(float fElapsedTime) = 0;
+	virtual void UpdateState(float fElapsedTime) = 0;
+
 protected:
 	static GameObject*  m_pTarget;
 
@@ -52,8 +56,6 @@ protected:
 
 public:
 	static void SetTarget(GameObject* player) { m_pTarget = player; }
-	virtual void Update(float fElapsedTime) = 0;
-	virtual void ProcessAI(float fElapsedTime) = 0;
 
 private: 
 	void SetTrackAnimationSet();

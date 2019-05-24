@@ -13,7 +13,7 @@ public:
 
 	virtual void Update(float) override;
 
-	// 현재 슬라임의 AI는 어떤 한 방향에 대해서 직진만 수행합니다.
-	virtual void ProcessAI(float fElapsedTime) override;
+	// 현재 수행할 액션(가속도관리하는클래스)를 관리합니다.
+	virtual void UpdateState(float fElapsedTime) override;
 
 };

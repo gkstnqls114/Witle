@@ -403,7 +403,7 @@ bool GameScene::ProcessInput(HWND hWnd, float fElapsedTime)
 		} 
 	}
 	
-	m_TestMonster->ProcessAI(fElapsedTime);
+	m_TestMonster->UpdateState(fElapsedTime);
 	return true;
 }
 

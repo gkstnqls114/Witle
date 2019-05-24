@@ -159,16 +159,19 @@
     <ClInclude Include="Broom.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="CameraObject.h" />
+    <ClInclude Include="ChaseAction.h" />
     <ClInclude Include="CMesh.h" />
     <ClInclude Include="Collision.h" />
     <ClInclude Include="ComponentBase.h" />
     <ClInclude Include="ComputeShader.h" />
     <ClInclude Include="CylinderMesh.h" />
+    <ClInclude Include="DeadAction.h" />
     <ClInclude Include="DirectionalLight.h" />
     <ClInclude Include="EffectRect.h" />
     <ClInclude Include="FamilyID.h" />
     <ClInclude Include="GameScreen.h" />
     <ClInclude Include="HorizonBlurShader.h" />
+    <ClInclude Include="IdleAction.h" />
     <ClInclude Include="InstancingLineShader.h" />
     <ClInclude Include="InstancingStandardShader.h" />
     <ClInclude Include="Light.h" />
@@ -181,8 +184,10 @@
     <ClInclude Include="LobbyScene.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Monster.h" />
+    <ClInclude Include="MonsterAction.h" />
     <ClInclude Include="MonsterMovement.h" />
     <ClInclude Include="MonsterStatus.h" />
+    <ClInclude Include="MoveAction.h" />
     <ClInclude Include="MyBOBox.h" />
     <ClInclude Include="MyBSphere.h" />
     <ClInclude Include="MyCollider.h" />
@@ -219,6 +224,7 @@
     <ClInclude Include="RecognitionRange.h" />
     <ClInclude Include="RoomScene.h" />
     <ClInclude Include="ScreenShader.h" />
+    <ClInclude Include="SearchAction.h" />
     <ClInclude Include="ShaderManager.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Resource.h" />
@@ -268,6 +274,7 @@
     <ClCompile Include="Broom.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="CameraObject.cpp" />
+    <ClCompile Include="ChaseAction.cpp" />
     <ClCompile Include="CMesh.cpp" />
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="ComponentBase.cpp" />
@@ -277,6 +284,7 @@
     <ClCompile Include="CylinderMesh.cpp" />
     <ClCompile Include="d3dUtil.cpp" />
     <ClCompile Include="DDSTextureLoader12.cpp" />
+    <ClCompile Include="DeadAction.cpp" />
     <ClCompile Include="DirectionalLight.cpp" />
     <ClCompile Include="EffectRect.cpp" />
     <ClCompile Include="Event.cpp" />
@@ -290,6 +298,7 @@
     <ClCompile Include="GameTimer.cpp" />
     <ClCompile Include="HeightMapImage.cpp" />
     <ClCompile Include="HorizonBlurShader.cpp" />
+    <ClCompile Include="IdleAction.cpp" />
     <ClCompile Include="InstancingLineShader.cpp" />
     <ClCompile Include="InstancingStandardShader.cpp" />
     <ClCompile Include="Light.cpp" />
@@ -305,8 +314,10 @@
     <ClCompile Include="MeshRenderer.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Monster.cpp" />
+    <ClCompile Include="MonsterAction.cpp" />
     <ClCompile Include="MonsterMovement.cpp" />
     <ClCompile Include="MonsterStatus.cpp" />
+    <ClCompile Include="MoveAction.cpp" />
     <ClCompile Include="MyBOBox.cpp" />
     <ClCompile Include="MyBSphere.cpp" />
     <ClCompile Include="MyCollider.cpp" />
@@ -324,6 +335,7 @@
     <ClCompile Include="RecognitionRange.cpp" />
     <ClCompile Include="RoomScene.cpp" />
     <ClCompile Include="ScreenShader.cpp" />
+    <ClCompile Include="SearchAction.cpp" />
     <ClCompile Include="ShaderManager.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Scene.cpp" />
