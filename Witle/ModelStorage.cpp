@@ -123,11 +123,11 @@ MyBOBox * ModelStorage::GetBOBox(std::string name)
 
 	return m_ModelStorage[name].modelBOBox;
 }
-#ifdef _SHOW_BOUNDINGBOX
+
 void ModelStorage::RenderBOBoxInstancing(ID3D12GraphicsCommandList * pd3dCommandList, const std::string& name, int InstancingCount)
 { 
 	if (!m_ModelStorage[name].modelBOBox) return;
 
 	m_ModelStorage[name].modelBOBox->RenderInstancing(pd3dCommandList, InstancingCount);
 }
-#endif // _SHOW_BOUNDINGBOX
+

@@ -53,10 +53,10 @@ private:
  
 private: 
 
-#ifdef _SHOW_BOUNDINGBOX
+
 	void RecursiveRenderTerrainObjects_BOBox(const QUAD_TREE_NODE* node, ID3D12GraphicsCommandList *pd3dCommandList);
 
-#endif 
+
 
 	void RenderTerrainObjects(ID3D12GraphicsCommandList *pd3dCommandList);
 	void RecursiveRenderTerrainObjects(const QUAD_TREE_NODE* node, ID3D12GraphicsCommandList *pd3dCommandList);

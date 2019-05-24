@@ -1,22 +1,29 @@
 #include "stdafx.h"
-#include "MonsterMovement.h"
-#include "MyBOBox.h" 
+
+// Game Base /////////////////////
 #include "GameInput.h"
+#include "GameTimer.h"
+#include "GameScreen.h"
+// Game Base /////////////////////
+
+// For Monster /////////////////////
+#include "MonsterMovement.h"
+#include "RecognitionRange.h"
+#include "MonsterStatus.h"
+// GameBase /////////////////////
+
+#include "MyBOBox.h" 
 #include "Texture.h"
 #include "MyDescriptorHeap.h"
 #include "Sniping.h"
 #include "EffectRect.h"
-#include "GameScreen.h"
 #include "MyRectangle.h"
-#include "Shader.h"
 #include "Object.h"
 #include "ShaderManager.h" 
 #include "Transform.h"
-#include "MonsterStatus.h"
-#include "GameTimer.h"
 #include "FollowCam.h"
-#include "Broom.h"
 #include "Terrain.h"
+
 #include "Monster.h"
 
 static float MonsterOffestX = 0.f;
@@ -79,6 +86,9 @@ XMFLOAT3 Monster::CalculateAlreadyPosition(float fTimeElapsed)
 Monster::Monster(const std::string & entityID, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void * pContext)
 	: GameObject(entityID)
 {
+	m_RecognitionRange = new RecognitionRange(this);
+	m_RecognitionRange->CreateDebugMesh(pd3dDevice, pd3dCommandList);
+
 	XMFLOAT3 extents{ 25.f, 75.f, 25.f };
 	m_pMyBOBox = new MyBOBox(this, pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 75.F, 0.F }, extents);
 
@@ -171,10 +181,8 @@ void Monster::Animate(float fElapsedTime)
 }
 
 void Monster::Render(ID3D12GraphicsCommandList * pd3dCommandList)
-{
-#ifdef _SHOW_BOUNDINGBOX 
-	m_pMyBOBox->Render(pd3dCommandList);
-#endif // _SHOW_BOUNDINGBOX
+{ 
+	m_pMyBOBox->Render(pd3dCommandList); 
 
 	if (!m_isRendering) return; //만약 스나이핑 모드라면 플레이어를 렌더링하지 않는다.
 	m_pHaep->UpdateShaderVariable(pd3dCommandList);

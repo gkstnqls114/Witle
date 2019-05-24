@@ -292,6 +292,9 @@
     <Filter Include="02.Component\03.Mesh\01.LineMesh\LineCube">
       <UniqueIdentifier>{6d1d2593-cc91-440b-987d-23328fb5f18c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.Component\ForMonster\RecognitionRange">
+      <UniqueIdentifier>{6a6ef169-afe8-4c4d-b4d3-243ccbd3687b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -612,6 +615,9 @@
     <ClInclude Include="LineSphere.h">
       <Filter>02.Component\03.Mesh\01.LineMesh\LineSphere</Filter>
     </ClInclude>
+    <ClInclude Include="RecognitionRange.h">
+      <Filter>02.Component\ForMonster\RecognitionRange</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -913,6 +919,9 @@
     </ClCompile>
     <ClCompile Include="LineSphere.cpp">
       <Filter>02.Component\03.Mesh\01.LineMesh\LineSphere</Filter>
+    </ClCompile>
+    <ClCompile Include="RecognitionRange.cpp">
+      <Filter>02.Component\ForMonster\RecognitionRange</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

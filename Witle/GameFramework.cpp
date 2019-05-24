@@ -33,11 +33,8 @@
 #include "CubeShader.h"
 #include "InstancingLineShader.h"
 #include "PickingPointShader.h"
+#include "LineShader.h" 
 //// Shader ////////////////////////// 
-
-#ifdef _SHOW_BOUNDINGBOX
-#include "LineShader.h"
-#endif // _SHOW_BOUNDINGBOX
  
 #include "Object.h"
 #include "Texture.h"
@@ -710,8 +707,7 @@ void CGameFramework::BuildShaders()
 	Shader* pPickingPointShader = new PickingPointShader();
 	pPickingPointShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
 	ShaderManager::GetInstance()->InsertShader(SHADER_PICKINGPOINT, pPickingPointShader);
-
-#ifdef _SHOW_BOUNDINGBOX
+	 
 	Shader* pLineShader = new LineShader();
 	pLineShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
 	ShaderManager::GetInstance()->InsertShader("Line", pLineShader);
@@ -719,7 +715,7 @@ void CGameFramework::BuildShaders()
 	Shader* pInstancingLineShader = new InstancingLineShader();
 	pInstancingLineShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
 	ShaderManager::GetInstance()->InsertShader("InstancingLine", pInstancingLineShader);
-#endif
+
 }
 
 void CGameFramework::BuildTESTObjects()

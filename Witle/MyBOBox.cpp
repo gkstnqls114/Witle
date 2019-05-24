@@ -9,14 +9,13 @@ MyBOBox::MyBOBox(GameObject* pOwner, ID3D12Device * pd3dDevice, ID3D12GraphicsCo
 	: MyCollider(pOwner, COLLIDER_TYPE::BOUNDING_BOX)
 {
 	m_BOBox = BoundingOrientedBox(XMFLOAT3(0.F, 0.F, 0.F), extents, quaternion);
-#ifdef _SHOW_BOUNDINGBOX
+
 	m_world = Matrix4x4::Identity();
 	m_Pivot = center;
 	m_world._41 = m_Pivot.x;
 	m_world._42 = m_Pivot.y;
 	m_world._43 = m_Pivot.z;
 	m_pLineCube = new LineCube(pOwner, pd3dDevice, pd3dCommandList, m_BOBox.Center, m_BOBox.Extents);
-#endif // DEBUG 
 	 
 	m_BoBoxPlane[0] = Plane::Plane(Vector3::Add(center, XMFLOAT3(extents.x, 0.f, 0.f)), XMFLOAT3(1.f, 0.f, 0.f)); // +x면 normal (1, 0, 0) 
 	m_BoBoxPlane[1] = Plane::Plane(Vector3::Add(center, XMFLOAT3(-extents.x, 0.f, 0.f)), XMFLOAT3(-1.f, 0.f, 0.f)); // -x면 normal (-1, 0, 0)
@@ -47,23 +46,20 @@ MyBOBox::MyBOBox(XMFLOAT3 center, XMFLOAT3 extents)
 }
 
 MyBOBox::~MyBOBox()
-{ 
-#ifdef _SHOW_BOUNDINGBOX
+{  
 	if (m_pLineCube)
 	{
 		delete m_pLineCube;
-	}
-#endif
+	} 
 }
- 
-#ifdef _SHOW_BOUNDINGBOX
+  
 void MyBOBox::ReleaseObjects()
 {
-	m_pLineCube->ReleaseObjects();
+	if(m_pLineCube) m_pLineCube->ReleaseObjects();
 }
 void MyBOBox::ReleaseUploadBuffers()
 {
-	m_pLineCube->ReleaseUploadBuffers();
+	if(m_pLineCube) m_pLineCube->ReleaseUploadBuffers();
 }
 
 void MyBOBox::Render(ID3D12GraphicsCommandList * pd3dCommandList)
@@ -79,16 +75,14 @@ void MyBOBox::RenderInstancing(ID3D12GraphicsCommandList * pd3dCommandList, int 
 {
 	if (!RENDER_BBOX) return;
 	if (m_pLineCube) m_pLineCube->RenderInstancing(pd3dCommandList, InstancingCount);
-}
-#endif
+} 
 
 // 말이 Rotate지만, 실제로 roll, yaw, pitch에 맞춰서 축을 다시 설정하고 있다.
 // 기준이 되는 position 에 따라 공전 수행
 void MyBOBox::Rotate(float roll, float yaw, float pitch)
 {
 	m_BOBox.Orientation = Quaternion::ToQuaternion(roll, yaw, pitch);
-
-#ifdef _SHOW_BOUNDINGBOX
+	 
 	XMFLOAT4X4 rotate = Matrix4x4::RotateMatrix(roll, yaw, pitch);
 	XMFLOAT4X4 world = m_world;
 	world._41 = m_Pivot.x; 
@@ -98,31 +92,25 @@ void MyBOBox::Rotate(float roll, float yaw, float pitch)
 
 	m_world._41 = m_BOBox.Center.x;
 	m_world._42 = m_BOBox.Center.y;
-	m_world._43 = m_BOBox.Center.z;
-#endif
+	m_world._43 = m_BOBox.Center.z; 
 }
 
 void MyBOBox::Move(const XMFLOAT3 & xmf3Shift)
 {
 	m_BOBox.Center = Vector3::Add(m_BOBox.Center, xmf3Shift);
-
-#ifdef _SHOW_BOUNDINGBOX
+	 
 	m_world._41 = m_BOBox.Center.x;
 	m_world._42 = m_BOBox.Center.y;
-	m_world._43 = m_BOBox.Center.z;
-#endif
+	m_world._43 = m_BOBox.Center.z; 
 }
 
 void MyBOBox::SetPosition(const XMFLOAT3 & pos)
 {
 	m_BOBox.Center = pos;
-
-#ifdef _SHOW_BOUNDINGBOX
+	 
 	m_world._41 = m_BOBox.Center.x;
 	m_world._42 = m_BOBox.Center.y;
-	m_world._43 = m_BOBox.Center.z;
-#endif
-
+	m_world._43 = m_BOBox.Center.z; 
 }
 
 bool MyBOBox::IsIn(int index, const XMFLOAT3 & intersectionPoint)

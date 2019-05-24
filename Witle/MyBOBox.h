@@ -8,12 +8,17 @@ class MyBOBox
 { 
 	static bool RENDER_BBOX;
 
+public: 
+	virtual void ReleaseObjects() override;
+	virtual void ReleaseUploadBuffers() override;
+
 protected:
-#ifdef _SHOW_BOUNDINGBOX
+#ifdef USING_DEBUGMESH
 	XMFLOAT4X4 m_world;
 	XMFLOAT3 m_Pivot; // 회전중심
 	LineCube* m_pLineCube{ nullptr };
 #endif
+
 	BoundingOrientedBox m_BOBox;
 	XMFLOAT4 m_BoBoxPlane[4]; // 0: +X, 1: -X, 2: +Z, 3: -Z
 	 
@@ -28,12 +33,8 @@ public:
 	MyBOBox(XMFLOAT3 center, XMFLOAT3 extents);
 	virtual ~MyBOBox();
 
-#ifdef _SHOW_BOUNDINGBOX 
-	void ReleaseObjects();
-	void ReleaseUploadBuffers();
 	void Render(ID3D12GraphicsCommandList * pd3dCommandList);
 	void RenderInstancing(ID3D12GraphicsCommandList * pd3dCommandList, int InstancingCount);
-#endif // _SHOW_BOUNDINGBOX
 
 	// 공전이 아닌 자전을 수행한다.
 	void Rotate(float roll, float yaw, float pitch);
@@ -86,7 +87,10 @@ public:
 	// LineCube는 그리지 않는다.
 	MyBOBox operator=(const MyBOBox& other)
 	{  
+#ifdef USING_DEBUGMESH
 		m_pLineCube = nullptr;
+#endif // USING_DEBUGMESH
+
 		m_BOBox = other.m_BOBox;
 		for (int i = 0; i < 4; ++i)
 		{

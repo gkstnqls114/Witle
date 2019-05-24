@@ -7,18 +7,20 @@ class LoadObject;
 class MyBOBox;
 class MonsterStatus;
 class MonsterMovement;
-class Broom;
-class Sniping;
 class Texture;
 class MyDescriptorHeap;
-class BroomEffectRect;
+
+class RecognitionRange;
 class MyRectangle;
 
 enum MONSTER_STATE
 {
 	IDEL,
 	MOVE,
-	ATTACK
+	ATTACK,
+	DIE,
+	SEARCH,
+	CHASE
 };
 
 // CHeightMapTerrain 입니다.
@@ -29,6 +31,7 @@ protected:
 	static GameObject*  m_pTarget;
 
 protected:
+	RecognitionRange*   m_RecognitionRange{ nullptr };
 	MonsterMovement*    m_MonsterMovement{ nullptr };
 	MonsterStatus*	   m_MonsterStatus{ nullptr };
 	MyBOBox*		   m_pMyBOBox{ nullptr };
@@ -40,12 +43,12 @@ protected:
 	LoadObject*		   m_pLoadObject{ nullptr };
 
 private:
-	int m_CurrAnimation{ 0 }; // 현재 사용하는 애니메이션
 	bool isDead{ false };
 
 	bool m_isRendering{ true };
 	bool m_isAttacking{ false };
 
+	int m_CurrAnimation{ 0 }; // 현재 사용하는 애니메이션
 	int m_PrevAnimation{ 0 }; // 현재 사용하는 애니메이션
 
 protected:

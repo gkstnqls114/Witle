@@ -35,7 +35,7 @@ void QuadtreeTerrain::ReleaseMemberUploadBuffers()
 	RecursiveReleaseUploadBuffers(m_pRootNode);
 }
 
-#ifdef _SHOW_BOUNDINGBOX
+
 void QuadtreeTerrain::RecursiveRenderTerrainObjects_BOBox(const QUAD_TREE_NODE * node, ID3D12GraphicsCommandList * pd3dCommandList)
 {
 	if (node->isRendering)
@@ -55,7 +55,7 @@ void QuadtreeTerrain::RecursiveRenderTerrainObjects_BOBox(const QUAD_TREE_NODE *
 		}
 	}
 }
-#endif 
+
 
 void QuadtreeTerrain::RenderTerrainObjects(ID3D12GraphicsCommandList * pd3dCommandList)
 {
@@ -65,10 +65,10 @@ void QuadtreeTerrain::RenderTerrainObjects(ID3D12GraphicsCommandList * pd3dComma
 	TextureStorage::GetInstance()->SetHeap(pd3dCommandList);
 	RecursiveRenderTerrainObjects(m_pRootNode, pd3dCommandList);
 	 
-#ifdef _SHOW_BOUNDINGBOX
+
 	 pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("InstancingLine")->GetPSO());
 	RecursiveRenderTerrainObjects_BOBox(m_pRootNode, pd3dCommandList);
-#endif // 	  
+
 
 }
 

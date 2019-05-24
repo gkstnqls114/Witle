@@ -35,8 +35,6 @@ public:
 	LoadObject * GetRootObject(std::string name);
 	MyBOBox * GetBOBox(std::string name);
 
-#ifdef _SHOW_BOUNDINGBOX
 	void RenderBOBoxInstancing(ID3D12GraphicsCommandList * pd3dCommandList, const std::string& name, int InstancingCount);
-#endif // _SHOW_BOUNDINGBOX
 
 };

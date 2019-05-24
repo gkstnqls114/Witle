@@ -46,15 +46,15 @@ enum LIGHT_TYPE
 #define CAMERA_FAR			15000.f //1 = 1cm 이므로 7000cm = 70m 
 
 /////////////////////////////////////////////// define 정의
+#define USING_DEBUGMESH
+
 #define _WITH_DEBUG_TERRAIN_MAX_POS
 // #define CHECK_SUBVIEWS
 #define CHECK_FRAMERATE // 정의한경우, 프레임 레이트가 상단 타이틀에 보인다.
 
 // #define _WITH_DEBUG_FRAME_HIERARCHY
 #define _WITH_DEBUG_SKINNING_BONE
-#define _WITH_DISPLAY_TEXTURE_NAME
-
-#define _SHOW_BOUNDINGBOX
+#define _WITH_DISPLAY_TEXTURE_NAME 
 /////////////////////////////////////////////// define 정의
 
 

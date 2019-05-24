@@ -8,37 +8,38 @@ MyBSphere::MyBSphere(GameObject* pOwner, ID3D12Device * pd3dDevice, ID3D12Graphi
 	:MyCollider(pOwner, COLLIDER_TYPE::BOUNDING_SPHERE)
 {
 	m_BSphere = BoundingSphere(center, radius); 
-#ifdef _SHOW_BOUNDINGBOX
+
 	m_pLineCube = new LineCube(pOwner, pd3dDevice, pd3dCommandList, m_BSphere.Center, XMFLOAT3(radius, radius, radius));
-#endif // DEBUG 
+
+
 }
 
 MyBSphere::~MyBSphere()
 {
-#ifdef _SHOW_BOUNDINGBOX
+
 	if (m_pLineCube)
 	{
 		delete m_pLineCube;
 	}
-#endif
+
 }
 
 void MyBSphere::ReleaseObjects()
 {
-#ifdef _SHOW_BOUNDINGBOX
+
 	if(m_pLineCube) m_pLineCube->ReleaseObjects();
-#endif // _SHOW_BOUNDINGBOX 
+
 }
 
 void MyBSphere::ReleaseUploadBuffers()
 {
-#ifdef _SHOW_BOUNDINGBOX
+
 	if (m_pLineCube) m_pLineCube->ReleaseUploadBuffers();
-#endif // _SHOW_BOUNDINGBOX 
+
 }
 
 
-#ifdef _SHOW_BOUNDINGBOX
+
 void MyBSphere::Render(ID3D12GraphicsCommandList * pd3dCommandList, const XMFLOAT4X4& xmf4x4World)
 {
 	if (m_pLineCube)
@@ -47,7 +48,7 @@ void MyBSphere::Render(ID3D12GraphicsCommandList * pd3dCommandList, const XMFLOA
 		m_pLineCube->Render(pd3dCommandList, xmf4x4World, true);
 	}
 }
-#endif
+
  
 
 void MyBSphere::Move(const XMFLOAT3 & xmf3Shift)

@@ -44,9 +44,9 @@ void MyReflexTree::UpdateShaderVariables(ID3D12GraphicsCommandList * pd3dCommand
 
 void MyReflexTree::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 {
-#ifdef _SHOW_BOUNDINGBOX
+
 	m_pMyBOBox->Render(pd3dCommandList);
-#endif // _SHOW_BOUNDINGBOX
+
 
 	pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("InstancingStandardShader")->GetPSO());
 	m_LoadObject->Render(pd3dCommandList);
@@ -64,9 +64,9 @@ SunFlower::SunFlower(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3d
  
 void SunFlower::Render(ID3D12GraphicsCommandList * pd3dCommandList)
 {
-#ifdef _SHOW_BOUNDINGBOX
+
 	m_pMyBOBox->Render(pd3dCommandList);
-#endif // _SHOW_BOUNDINGBOX
+
 
 	pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("StandardShader")->GetPSO());
 	m_LoadObject->Render(pd3dCommandList);
@@ -83,9 +83,9 @@ Rock::Rock(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandLis
  
 void Rock::Render(ID3D12GraphicsCommandList * pd3dCommandList)
 {
-#ifdef _SHOW_BOUNDINGBOX
+
 	m_pMyBOBox->Render(pd3dCommandList);
-#endif // _SHOW_BOUNDINGBOX
+
 
 	pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("StandardShader")->GetPSO());
 	m_LoadObject->Render(pd3dCommandList);
@@ -103,9 +103,9 @@ Pillar::Pillar(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dComman
 
 void Pillar::Render(ID3D12GraphicsCommandList * pd3dCommandList)
 {
-#ifdef _SHOW_BOUNDINGBOX
+
 	m_pMyBOBox->Render(pd3dCommandList);
-#endif // _SHOW_BOUNDINGBOX
+
 
 	pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("StandardShader")->GetPSO());
 	m_LoadObject->Render(pd3dCommandList);
@@ -122,9 +122,9 @@ Altar::Altar(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandL
 
 void Altar::Render(ID3D12GraphicsCommandList * pd3dCommandList)
 {
-#ifdef _SHOW_BOUNDINGBOX
+
 	m_pMyBOBox->Render(pd3dCommandList);
-#endif // _SHOW_BOUNDINGBOX
+
 
 	pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("StandardShader")->GetPSO());
 	m_LoadObject->Render(pd3dCommandList);
