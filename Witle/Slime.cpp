@@ -1,8 +1,13 @@
 #include "stdafx.h"
-#include "MyDescriptorHeap.h"
-#include "Object.h"
+
+// For Monster ///////////////
 #include "MonsterMovement.h"
 #include "MonsterStatus.h"
+#include "RecognitionRange.h"
+// For Monster ///////////////
+
+#include "MyDescriptorHeap.h"
+#include "Object.h"
 #include "MyBOBox.h"
 #include "Texture.h"
 #include "Slime.h"
@@ -52,6 +57,6 @@ void Slime::Update(float fElapsedTime)
 
 void Slime::ProcessAI(float fElapsedTime)
 {
-	m_MonsterMovement->ProcessAI(fElapsedTime, m_Direction, m_pTarget);
+	m_MonsterMovement->ProcessAI(fElapsedTime, m_Direction, m_pTarget, m_RecognitionRange->m_RecognitionRange);
 	m_MonsterStatus->ProcessAI(fElapsedTime); 
 }

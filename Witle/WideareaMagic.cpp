@@ -78,7 +78,7 @@ void WideareaMagic::Render(ID3D12GraphicsCommandList* commandList)
 {
 	if (!m_isUsing) return; 
 	 
-	m_MyBSphere->Render(commandList, m_Transform.GetpWorldMatrixs()); 
+	m_MyBSphere->Render(commandList, m_Transform.GetWorldMatrix()); 
 	UpdateShaderVariable(commandList, m_Transform.GetpWorldMatrix());
 	m_CylinderMesh->Render(commandList);
 }

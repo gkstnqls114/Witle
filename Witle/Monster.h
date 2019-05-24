@@ -42,12 +42,7 @@ protected:
 	CLoadedModelInfo*  m_MonsterModel{ nullptr };
 	LoadObject*		   m_pLoadObject{ nullptr };
 
-private:
-	bool isDead{ false };
-
-	bool m_isRendering{ true };
-	bool m_isAttacking{ false };
-
+private: 
 	int m_CurrAnimation{ 0 }; // 현재 사용하는 애니메이션
 	int m_PrevAnimation{ 0 }; // 현재 사용하는 애니메이션
 
@@ -67,32 +62,26 @@ public:
 	Monster(const std::string& entityID, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext = NULL);
 	virtual ~Monster();
 	 
-	void DoNotRendering() { m_isRendering = false; }
-	void DoRendering() { m_isRendering = true; }
-
+	void Render(ID3D12GraphicsCommandList *pd3dCommandList);
+	void RenderHpStatus(ID3D12GraphicsCommandList *pd3dCommandList);
+	  
 	XMFLOAT3 CalculateAlreadyVelocity(float fTimeElapsed);
 	BoundingOrientedBox CalculateAlreadyBoundingBox(float fTimeElapsed);
 	XMFLOAT3 CalculateAlreadyPosition(float fTimeElapsed);
 
 	void SubstractHP(int sub);
 	void Animate(float fElapsedTime);
-	void Render(ID3D12GraphicsCommandList *pd3dCommandList);
-	void RenderHpStatus(ID3D12GraphicsCommandList *pd3dCommandList);
 
 	void Move(ULONG nDirection, float fDistance, bool bVelocity = false);
 	void Move(const XMFLOAT3& xmf3Shift);
 	void MoveVelocity(const XMFLOAT3& xmf3Shift);
 	void Move(float fxOffset = 0.0f, float fyOffset = 0.0f, float fzOffset = 0.0f);
 	void Rotate(float x, float y, float z);
-
-	void ProcessInput(float fTimeElapsed);
-	void ProcessInputAI(float fTimeElapsed);
-	 
+	  
 	//// Get /////////////////// 
 	AXIS GetCoorAxis() { return m_Transform.GetCoorAxis(); }
 	XMFLOAT3 GetVelocity() const;
-	MyBOBox* GetBOBox() { return m_pMyBOBox; } 
-	bool IsAttacking() const { return m_isAttacking; }
+	MyBOBox* GetBOBox() { return m_pMyBOBox; }  
 	//// Get /////////////////// 
 
 	//// Set /////////////////// 

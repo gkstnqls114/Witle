@@ -295,8 +295,8 @@ void Player::Animate(float fElapsedTime)
 	float fYaw = 0.f;
 	float fRoll = 0.f;
 	XMMATRIX mtxRotate = XMMatrixRotationRollPitchYaw(XMConvertToRadians(fPitch), XMConvertToRadians(fYaw), XMConvertToRadians(fRoll));
-	m_pLoadObject_Cloth->m_xmf4x4ToParent = Matrix4x4::Multiply(mtxRotate, m_Transform.GetpWorldMatrixs());
-	m_pLoadObject_Body->m_xmf4x4ToParent = Matrix4x4::Multiply(mtxRotate, m_Transform.GetpWorldMatrixs());
+	m_pLoadObject_Cloth->m_xmf4x4ToParent = Matrix4x4::Multiply(mtxRotate, m_Transform.GetWorldMatrix());
+	m_pLoadObject_Body->m_xmf4x4ToParent = Matrix4x4::Multiply(mtxRotate, m_Transform.GetWorldMatrix());
 	 
 	m_pLoadObject_Cloth->Animate(fElapsedTime);
 	m_pLoadObject_Body->Animate(fElapsedTime);

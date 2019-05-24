@@ -232,8 +232,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	m_pPlayer = new Player("Player", pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 	m_pOtherPlayer = new Player("OtherPlayer", pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 	m_SkyBox->SetpPlayerTransform(&m_pPlayer->GetTransform());
-	// 테스트용
-	m_SphereMesh = new LineSphere(m_pPlayer, pd3dDevice, pd3dCommandList);
+	// 테스트용 
 
 	// 몬스터
 	m_TestMonster = new Slime("Slime", pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
@@ -507,9 +506,7 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	pd3dCommandList->SetGraphicsRootConstantBufferView(ROOTPARAMETER_MATERIALS, d3dcbMaterialsGpuVirtualAddress);
 
 	pd3dCommandList->SetDescriptorHeaps(1, &m_pd3dCbvSrvDescriptorHeap);
-
-	// pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_WORLD, 16, &Matrix4x4::Identity(), 0);
-	m_SphereMesh->Render(pd3dCommandList, Matrix4x4::Identity(), false);
+	 
 	if (m_pPlayer) m_pPlayer->Render(pd3dCommandList);
 	if (m_pOtherPlayer) m_pOtherPlayer->Render(pd3dCommandList);
 
@@ -745,7 +742,7 @@ void GameScene::UpdateCollision(float fElapsedTime)
 			MyBOBox* box = ModelStorage::GetInstance()->GetBOBox(name);
 			if (!box) continue; // 충돌박스가 없다면 다른 오브젝트를 검사하자.
 
-			XMFLOAT4X4* pWorldMatrix = StaticObjectStorage::GetInstance(m_pQuadtreeTerrain)->GetpWorldMatrixs(TerrainIndex, name);
+			XMFLOAT4X4* pWorldMatrix = StaticObjectStorage::GetInstance(m_pQuadtreeTerrain)->GetWorldMatrix(TerrainIndex, name);
 
 			// 트레인 조각 내부 오브젝트 개수만큼 충돌 체크
 			for (int i = 0; i < StaticObjectStorage::GetInstance(m_pQuadtreeTerrain)->GetObjectCount(TerrainIndex, name); ++i)

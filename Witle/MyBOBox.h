@@ -12,12 +12,10 @@ public:
 	virtual void ReleaseObjects() override;
 	virtual void ReleaseUploadBuffers() override;
 
-protected:
-#ifdef USING_DEBUGMESH
+protected: 
 	XMFLOAT4X4 m_world;
 	XMFLOAT3 m_Pivot; // 회전중심
-	LineCube* m_pLineCube{ nullptr };
-#endif
+	LineCube* m_pLineCube{ nullptr }; 
 
 	BoundingOrientedBox m_BOBox;
 	XMFLOAT4 m_BoBoxPlane[4]; // 0: +X, 1: -X, 2: +Z, 3: -Z

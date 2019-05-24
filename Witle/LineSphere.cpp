@@ -1,9 +1,26 @@
 #include "stdafx.h"
 #include "d3dUtil.h"
 #include "ShaderManager.h"
+#include "GameObject.h"
 #include "LineSphere.h"
 
 #define CUBE_VERTEX_COUNT 60 
+
+void LineSphere::Render(ID3D12GraphicsCommandList * pd3dCommandList)
+{ 
+	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, "Line");
+	 
+	XMFLOAT4X4 xmf4x4World;
+	XMStoreFloat4x4(&xmf4x4World, XMMatrixTranspose(XMLoadFloat4x4(&m_pOwner->GetTransform().GetWorldMatrix())));
+	pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_WORLD, 16, &xmf4x4World, 0);
+
+	pd3dCommandList->IASetPrimitiveTopology(GetPrimitiveTopology());
+
+	D3D12_VERTEX_BUFFER_VIEW pVertexBufferViews[1] = { m_pVertexBufferViews[0] };
+	pd3dCommandList->IASetVertexBuffers(m_nSlot, 1, pVertexBufferViews);
+
+	pd3dCommandList->DrawInstanced(m_vertexCount, 1, m_nOffset, 0);
+}
 
 void LineSphere::CalculateTriangleListVertexNormals(XMFLOAT3 * pxmf3Normals, XMFLOAT3 * pxmf3Positions, int nVertices)
 {

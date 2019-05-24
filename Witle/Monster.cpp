@@ -86,7 +86,7 @@ XMFLOAT3 Monster::CalculateAlreadyPosition(float fTimeElapsed)
 Monster::Monster(const std::string & entityID, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void * pContext)
 	: GameObject(entityID)
 {
-	m_RecognitionRange = new RecognitionRange(this);
+	m_RecognitionRange = new RecognitionRange(this, 500.f);
 	m_RecognitionRange->CreateDebugMesh(pd3dDevice, pd3dCommandList);
 
 	XMFLOAT3 extents{ 25.f, 75.f, 25.f };
@@ -175,19 +175,20 @@ void Monster::Animate(float fElapsedTime)
 	float fYaw = 0.f;
 	float fRoll = 0.f;
 	XMMATRIX mtxRotate = XMMatrixRotationRollPitchYaw(XMConvertToRadians(fPitch), XMConvertToRadians(fYaw), XMConvertToRadians(fRoll));
-	m_pLoadObject->m_xmf4x4ToParent = Matrix4x4::Multiply(mtxRotate, m_Transform.GetpWorldMatrixs());
+	m_pLoadObject->m_xmf4x4ToParent = Matrix4x4::Multiply(mtxRotate, m_Transform.GetWorldMatrix());
 	
 	m_pLoadObject->Animate(fElapsedTime); 
 }
 
 void Monster::Render(ID3D12GraphicsCommandList * pd3dCommandList)
-{ 
+{  
 	m_pMyBOBox->Render(pd3dCommandList); 
 
-	if (!m_isRendering) return; //만약 스나이핑 모드라면 플레이어를 렌더링하지 않는다.
 	m_pHaep->UpdateShaderVariable(pd3dCommandList);
 	m_pTexture->UpdateShaderVariable(pd3dCommandList, 0);
 	m_pLoadObject->Render(pd3dCommandList);
+
+	m_RecognitionRange->RenderDebug(pd3dCommandList);
 }
 
 void Monster::RenderHpStatus(ID3D12GraphicsCommandList * pd3dCommandList)
@@ -215,88 +216,6 @@ void Monster::Rotate(float x, float y, float z)
 	m_pMyBOBox->Rotate(m_MonsterMovement->m_fRoll, m_MonsterMovement->m_fYaw, m_MonsterMovement->m_fPitch);
 }
 
-void Monster::ProcessInput(float fTimeElapsed)
-{
-	if (m_CurrAnimation == ANIMATION_BEATTACKED.ID)
-	{
-		if (!m_pLoadObject->IsTrackAnimationSetFinish(0, ANIMATION_BEATTACKED.ID))
-		{
-			return;
-		}
-	}
-
-	//if (isDead)
-	//{
-	//	m_MonsterStatus->m_HP += 10.f; 
-	//	if (m_MonsterStatus->m_HP > 1000.F)
-	//	{ 
-	//		m_CurrAnimation = ANIMATION_IDLE.ID;
-	//		m_Broom->DoNotUse();
-	//		m_MonsterStatus->m_HP = 1000.F;
-	//		isDead = false;
-	//	}
-	//	return;
-	//}
-
-	//if (m_MonsterStatus->m_HP <= 0 && isDead == false)
-	//{
-	//	isDead = true;
-	//	m_CurrAnimation = ANIMATION_DEAD.ID;
-	//	return;
-	//}
-
-	if (m_isAttacking)
-	{
-		if (m_pLoadObject->IsTrackAnimationSetFinish(0, ANIMATION_ATTACK.ID))
-		{
-			m_isAttacking = false;
-		}
-		return;
-	} 
-
-	DWORD dwDirection = 0;
-	m_CurrAnimation = ANIMATION_IDLE.ID;
-	// m_CurrAnimation = ANIMATION_DEAD.ID;
-
-	bool isMove = false;
-	if (GameInput::IsKeydownW())
-	{
-		isMove = true;
-		m_CurrAnimation = ANIMATION_FORWARD.ID;
-		dwDirection |= DIR_FORWARD;
-	}
-	if (GameInput::IsKeydownS())
-	{
-		isMove = true;
-		m_CurrAnimation = ANIMATION_BACKWARD.ID;
-		dwDirection |= DIR_BACKWARD;
-	}
-	if (GameInput::IsKeydownA())
-	{
-		isMove = true;
-		m_CurrAnimation = ANIMATION_LEFT.ID;
-		dwDirection |= DIR_LEFT;
-	}
-	if (GameInput::IsKeydownD())
-	{
-		isMove = true;
-		m_CurrAnimation = ANIMATION_RIGHT.ID;
-		dwDirection |= DIR_RIGHT;
-	}
-	 
-	// 만약 키보드 상하좌우 움직인다면...
-	if (dwDirection != 0)
-	{
-		//플레이어의 이동량 벡터를 xmf3Shift 벡터만큼 더한다. 
-		m_MonsterMovement->MoveVelocity(dwDirection, fTimeElapsed);
-	}
-	else
-	{
-		m_MonsterMovement->ReduceVelocity(fTimeElapsed);
-	}
-
-}
-  
 XMFLOAT3 Monster::GetVelocity() const
 {
 	return m_MonsterMovement->m_xmf3Velocity;

@@ -23,7 +23,7 @@ public:
 	const float m_fNearDistance = 500.f;
 
 private:
-	bool IsNearPlayer(const GameObject* Target);
+	bool IsNearPlayer(const GameObject* Target, float distance);
 
 public:
 	virtual void ReleaseObjects() override {};
@@ -37,7 +37,7 @@ public:
 	virtual void Update(float) override;
 
 	// Update 수행 이전 반드시 호출
-	virtual void ProcessAI(float fElpasedTime, const XMFLOAT3& randomDirection, const GameObject* pTarget);
+	virtual void ProcessAI(float fElpasedTime, const XMFLOAT3& randomDirection, const GameObject* pTarget, float distance);
 
 	XMFLOAT3 AlreadyUpdate(float);
 

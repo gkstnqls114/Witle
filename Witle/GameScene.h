@@ -115,7 +115,6 @@ protected:
 	//
 	SkyBox*					m_SkyBox{ nullptr };
 	 
-	LineSphere*			    m_SphereMesh{ nullptr };
 	Monster*				m_TestMonster{ nullptr };
 
 #ifdef CHECK_SUBVIEWS

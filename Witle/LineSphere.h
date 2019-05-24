@@ -8,7 +8,7 @@ class LineSphere :
 	public LineMesh
 {
 public:
-	virtual void Render(ID3D12GraphicsCommandList * commandList) override {};
+	virtual void Render(ID3D12GraphicsCommandList * commandList) override;
 
 private:
 
