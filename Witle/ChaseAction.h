@@ -9,8 +9,12 @@ class ChaseAction
 	: public MonsterAction
 {
 public:
-	ChaseAction() {};
-	~ChaseAction() {};
+	virtual void ReleaseObjects() override {};
+	virtual void ReleaseUploadBuffers() override {};
+
+public:
+	ChaseAction(GameObject* pOwner) : MonsterAction(pOwner) {};
+	virtual ~ChaseAction() {};
 
 	// Update 수행 이전 반드시 호출
 	virtual void UpdateVelocity(float fElpasedTime, MonsterMovement* movement) override;

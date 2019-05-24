@@ -15,6 +15,10 @@ public:
 class ComponentBase
 	: public IComponentBase
 { 
+public: 
+	virtual void ReleaseObjects() = 0;
+	virtual void ReleaseUploadBuffers() = 0;
+
 public:
 	ComponentBase(GameObject* pOwner) : m_pOwner(pOwner) {}
 	virtual ~ComponentBase();
@@ -23,8 +27,6 @@ public:
 	const FamilyID& GetFamilyID() const { return m_FamilyID; };
 
 	virtual void Update(float fTimeElapsed) override {};
-	virtual void ReleaseObjects() = 0;
-	virtual void ReleaseUploadBuffers() = 0;
 	
 	const GameObject* GetpOwner() const { return m_pOwner; }
 

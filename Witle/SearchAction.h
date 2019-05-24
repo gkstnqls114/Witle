@@ -9,8 +9,12 @@ class SearchAction
 	: public MonsterAction
 {
 public:
-	SearchAction() {};
-	~SearchAction() {};
+	virtual void ReleaseObjects() override {};
+	virtual void ReleaseUploadBuffers() override {};
+
+public:
+	SearchAction(GameObject* pOwner) : MonsterAction(pOwner) {};
+	virtual ~SearchAction() {};
 
 	// Update 수행 이전 반드시 호출
 	virtual void UpdateVelocity(float fElpasedTime, MonsterMovement* movement) override;

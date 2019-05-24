@@ -9,8 +9,12 @@ class MoveAction
 	: public MonsterAction
 {
 public:
-	MoveAction() {};
-	~MoveAction() {};
+	virtual void ReleaseObjects() override {};
+	virtual void ReleaseUploadBuffers() override {};
+
+public:
+	MoveAction(GameObject* pOwner) : MonsterAction(pOwner) {};
+	virtual ~MoveAction() {};
 
 	// Update 수행 이전 반드시 호출
 	virtual void UpdateVelocity(float fElpasedTime, MonsterMovement* movement) override;

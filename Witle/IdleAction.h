@@ -9,8 +9,8 @@ class IdleAction
 	: public MonsterAction
 {
 public:
-	IdleAction() {};
-	~IdleAction() {};
+	IdleAction(GameObject* pOwner) : MonsterAction(pOwner) {};
+	virtual ~IdleAction() {};
 
 	// Update 수행 이전 반드시 호출
 	virtual void UpdateVelocity(float fElpasedTime, MonsterMovement* movement) override;

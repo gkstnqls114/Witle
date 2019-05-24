@@ -39,11 +39,11 @@ void MonsterMovement::MoveVelocity(const XMFLOAT3 & xmf3Shift)
 MonsterMovement::MonsterMovement(GameObject * pOwner)
 	:ComponentBase(pOwner)
 {
-	m_IdleAction = new IdleAction();
-	m_MoveAction = new MoveAction();
-	m_ChaseAction = new ChaseAction();
-	m_SearchAction = new SearchAction();
-	m_DeadAction = new DeadAction();
+	m_IdleAction = new IdleAction(pOwner);
+	m_MoveAction = new MoveAction(pOwner);
+	m_ChaseAction = new ChaseAction(pOwner);
+	m_SearchAction = new SearchAction(pOwner);
+	m_DeadAction = new DeadAction(pOwner);
 
 	m_CurrMonsterAction = m_IdleAction;
 }
@@ -75,6 +75,10 @@ void MonsterMovement::UpdateState(float fElpasedTime, const XMFLOAT3& randomDire
 	if (IsNearPlayer(PlayerManager::GetMainPlayer(), distance))
 	{
 		m_CurrMonsterAction = m_ChaseAction;
+	}
+	else
+	{
+		m_CurrMonsterAction = m_IdleAction;
 	}
 }
 
