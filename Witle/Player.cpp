@@ -468,9 +468,7 @@ void Player::ProcessInputAI(float fTimeElapsed)
 bool Player::Attack(Player* player, MyCollider* collider, XMFLOAT2 aimPoint, Camera* pMainCaemra)
 {   
 	if (!GameInput::IsKeydownE()) return false; // e를 누르지 않았다면 아무것도 실행하지 않는다.
-	if (IsAttacking()) return false;
-
-	// AttaCK이 시행되지 않는 ㅕㅇ우
+	if (IsAttacking()) return false; 
 	if (m_Broom->GetisUsing()) return false;
 	 
 	// 시행된다면..
@@ -489,9 +487,7 @@ bool Player::Attack(Player* player, MyCollider* collider, XMFLOAT2 aimPoint, Cam
 		float Playerdist;
 		bool isCollide = Collision::isCollide(collider, pickRay.origin, pickRay.direction, Playerdist);
 
-		// 닿지 않는다면 리턴한다.
-		if (!isCollide) return false;
-		if (Playerdist < 3000.f)
+		if (isCollide && Playerdist < 3000.f)
 		{
 			std::cout << "원거리공격" << std::endl;
 			player->SubstractHP(500);
