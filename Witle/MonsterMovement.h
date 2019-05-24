@@ -22,6 +22,10 @@ class MonsterMovement
 	MonsterAction*  m_SearchAction       { nullptr };
 	MonsterAction*  m_DeadAction         { nullptr };
 
+	float m_TotalTime{ 0.f };
+	const float m_IdleTime{ 1.f }; //Idle 상태로 있는 시간
+	const float m_MoveTime{ 6.f }; //Move 상태로 있는 시간
+
 public:  
 	XMFLOAT3 m_xmf3Velocity = XMFLOAT3(0.0f, 0.0f, 0.0f);
 	XMFLOAT3 m_xmf3Gravity = XMFLOAT3(0.0f, 0.0f, 0.0f);

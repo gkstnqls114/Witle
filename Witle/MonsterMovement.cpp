@@ -71,15 +71,47 @@ void MonsterMovement::Update(float fTimeElapsed)
 }
 
 void MonsterMovement::UpdateState(float fElpasedTime, const XMFLOAT3& randomDirection, float distance)
-{
-	if (IsNearPlayer(PlayerManager::GetMainPlayer(), distance))
+{   
+	// 어떤 상황이던간에 근처에 플레이어가 있는 경우 따라간다.
+	if (m_CurrMonsterAction != m_ChaseAction &&
+		IsNearPlayer(PlayerManager::GetMainPlayer(), distance))
 	{
+		m_TotalTime = 0.f;
 		m_CurrMonsterAction = m_ChaseAction;
+		return;
 	}
-	else
+	
+	if (m_CurrMonsterAction == m_ChaseAction
+		&& !IsNearPlayer(PlayerManager::GetMainPlayer(), distance))
 	{
+		m_TotalTime = 0.f;
 		m_CurrMonsterAction = m_IdleAction;
+		return;
 	}
+
+	if (m_CurrMonsterAction == m_ChaseAction) return;
+
+	m_TotalTime += fElpasedTime;
+	if (m_CurrMonsterAction == m_IdleAction)
+	{
+		if (m_TotalTime > m_IdleTime)
+		{
+			m_TotalTime = 0.f;
+			m_CurrMonsterAction = m_MoveAction;
+			return;
+		}
+	}
+
+	if (m_CurrMonsterAction == m_MoveAction)
+	{ 
+		if (m_TotalTime > m_MoveTime)
+		{
+			m_TotalTime = 0.f;
+			m_CurrMonsterAction = m_IdleAction;
+			return;
+		}
+	}
+
 }
 
 XMFLOAT3 MonsterMovement::AlreadyUpdate(float fTimeElapsed)
