@@ -88,7 +88,7 @@ XMFLOAT3 Monster::CalculateAlreadyPosition(float fTimeElapsed)
 Monster::Monster(const std::string & entityID, const XMFLOAT3& SpawnPoint, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature)
 	: m_SpawnPoint(SpawnPoint), GameObject(entityID)
 {
-	m_RecognitionRange = new RecognitionRange(this, 500.f);
+	m_RecognitionRange = new RecognitionRange(this, 500.f, 3.f);
 	m_RecognitionRange->CreateDebugMesh(pd3dDevice, pd3dCommandList);
 
 	XMFLOAT3 extents{ 25.f, 75.f, 25.f };
@@ -111,6 +111,12 @@ Monster::~Monster()
 
 void Monster::ReleaseMembers()
 { 
+	if (m_RecognitionRange)
+	{
+		m_RecognitionRange->ReleaseObjects();
+		delete m_RecognitionRange;
+		m_RecognitionRange = nullptr;
+	}
 	if(m_pDebugObject)
 	{
 		m_pDebugObject->ReleaseObjects();
@@ -226,10 +232,5 @@ void Monster::Rotate(float x, float y, float z)
 {
 	m_Transform.Rotate(x, y, z);
 	m_pMyBOBox->Rotate(m_MonsterMovement->m_fRoll, m_MonsterMovement->m_fYaw, m_MonsterMovement->m_fPitch);
-}
-
-float Monster::GetRecognitionRange() const
-{
-	return m_RecognitionRange->m_RecognitionRange;
 }
  

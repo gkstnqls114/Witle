@@ -319,11 +319,14 @@
     <Filter Include="02.Component\SkinnedMesh">
       <UniqueIdentifier>{9d47c2f1-aa91-4941-8058-09e473ae1b0f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.Component\06.UI">
+    <Filter Include="02.Component\06.UI2D">
       <UniqueIdentifier>{87ba4ce9-5626-4596-8b6f-91ee0cce8950}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.Component\06.UI\UIImage">
+    <Filter Include="02.Component\06.UI2D\UI2DImage">
       <UniqueIdentifier>{a2ceee24-a464-4df1-8cee-0d2929239bbf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\07.UI3D">
+      <UniqueIdentifier>{19ced049-b3fe-44f3-936a-86982972daef}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -673,10 +676,10 @@
       <Filter>05.Shader\UIScreenShader</Filter>
     </ClInclude>
     <ClInclude Include="UI2D.h">
-      <Filter>02.Component\06.UI</Filter>
+      <Filter>02.Component\06.UI2D</Filter>
     </ClInclude>
     <ClInclude Include="UI2DImage.h">
-      <Filter>02.Component\06.UI\UIImage</Filter>
+      <Filter>02.Component\06.UI2D\UI2DImage</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1008,10 +1011,10 @@
       <Filter>05.Shader\UIScreenShader</Filter>
     </ClCompile>
     <ClCompile Include="UI2D.cpp">
-      <Filter>02.Component\06.UI</Filter>
+      <Filter>02.Component\06.UI2D</Filter>
     </ClCompile>
     <ClCompile Include="UI2DImage.cpp">
-      <Filter>02.Component\06.UI\UIImage</Filter>
+      <Filter>02.Component\06.UI2D\UI2DImage</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

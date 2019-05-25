@@ -11,6 +11,8 @@ class RecognitionRange
 	LineSphere* m_DebugMesh;
 
 public:
+	const float m_RecognitionTime{ 0.f }; // 플레이어를 인식할 때까지 걸리는 시간
+	float m_TotalTime { 0.f }; 
 	const float m_RecognitionRange{ 0.f }; // 플레이어를 인식하는 범위
 	 
 public:
@@ -18,7 +20,8 @@ public:
 	virtual void ReleaseUploadBuffers() override;
 
 public:
-	RecognitionRange(GameObject* pOwner, float range) : m_RecognitionRange(range), ComponentBase(pOwner) {};
+	RecognitionRange(GameObject* pOwner, float range, float time) 
+		: m_RecognitionRange(range), m_RecognitionTime(time), ComponentBase(pOwner) {};
 	virtual ~RecognitionRange();
 
 	void CreateDebugMesh(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);

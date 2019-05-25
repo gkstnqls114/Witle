@@ -83,7 +83,7 @@ public:
 	void Rotate(float x, float y, float z);
 	  
 	//// Get /////////////////// 
-	float GetRecognitionRange() const;
+	RecognitionRange* GetRecognitionRange() const { return m_RecognitionRange;};
 	AXIS GetCoorAxis() const { return m_Transform.GetCoorAxis(); } 
 	MyBOBox* GetBOBox() const { return m_pMyBOBox; }
 	XMFLOAT3 GetSpawnPoint() const { return m_SpawnPoint; }

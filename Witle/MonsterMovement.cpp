@@ -10,6 +10,7 @@
 // Action ////////////////////////
 
 #include "Monster.h"
+#include "RecognitionRange.h"
 #include "Player.h"
 #include "MonsterMovement.h"
 
@@ -77,15 +78,26 @@ void MonsterMovement::UpdateState(float fElpasedTime)
 
 	// 어떤 상황이던간에(chase가 아닌경우) 인식 근처에 플레이어가 있는 경우 따라간다.
 	if (m_CurrMonsterAction != m_ChaseAction &&
-		IsNearPlayer(PlayerManager::GetMainPlayer(), pMonsterOwner->GetRecognitionRange()))
+		IsNearPlayer(PlayerManager::GetMainPlayer(), pMonsterOwner->GetRecognitionRange()->m_RecognitionRange))
 	{
 		m_TotalTime = 0.f;
-		m_CurrMonsterAction = m_ChaseAction;
+		 
+		// 만약 인식시간이 되었을 경우...
+		if (pMonsterOwner->GetRecognitionRange()->m_TotalTime >= pMonsterOwner->GetRecognitionRange()->m_RecognitionTime) 
+		{
+			pMonsterOwner->GetRecognitionRange()->m_TotalTime = 0;
+			m_CurrMonsterAction = m_ChaseAction;
+		}
 		return;
+	}
+	else if ((m_CurrMonsterAction != m_ChaseAction &&
+		!IsNearPlayer(PlayerManager::GetMainPlayer(), pMonsterOwner->GetRecognitionRange()->m_RecognitionRange)))
+	{ 
+		pMonsterOwner->GetRecognitionRange()->m_TotalTime = 0;
 	}
 	
 	if (m_CurrMonsterAction == m_ChaseAction
-		&& !IsNearPlayer(PlayerManager::GetMainPlayer(), pMonsterOwner->GetRecognitionRange()))
+		&& !IsNearPlayer(PlayerManager::GetMainPlayer(), pMonsterOwner->GetRecognitionRange()->m_RecognitionRange))
 	{
 		m_TotalTime = 0.f;
 		m_CurrMonsterAction = m_IdleAction;
