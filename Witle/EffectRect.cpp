@@ -2,6 +2,7 @@
 #include "d3dUtil.h"
 #include "Texture.h"
 #include "GameTimer.h"
+#include "Shader.h"
 #include "ShaderManager.h"
 #include "MyDescriptorHeap.h"
 #include "EffectRect.h"
@@ -83,6 +84,20 @@ BroomEffectRect::BroomEffectRect(GameObject * pOwner, ID3D12Device * pd3dDevice,
 
 BroomEffectRect::~BroomEffectRect()
 {
+}
+
+void BroomEffectRect::Render(ID3D12GraphicsCommandList * pd3dCommandList, const Shader * shader)
+{ 
+	pd3dCommandList->SetPipelineState(shader->GetPSO()); 
+	m_pHeap->UpdateShaderVariable(pd3dCommandList);
+	m_pTexture->UpdateShaderVariables(pd3dCommandList);
+
+	pd3dCommandList->IASetPrimitiveTopology(m_d3dPrimitiveTopology);
+
+	D3D12_VERTEX_BUFFER_VIEW pVertexBufferViews[] = { m_pVertexBufferViews[0] };
+	pd3dCommandList->IASetVertexBuffers(m_nSlot, _countof(pVertexBufferViews), pVertexBufferViews);
+
+	pd3dCommandList->DrawInstanced(m_vertexCount, 1, m_nOffset, 0);
 }
 
 void BroomEffectRect::Render(ID3D12GraphicsCommandList * pd3dCommandList, float fElapsedTime)

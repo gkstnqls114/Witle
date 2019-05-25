@@ -3,12 +3,16 @@
 #include "ComponentBase.h"
 
 class MyDescriptorHeap;
+class Shader;
 
 // Shape Class
 // 모델 안에 애니메이션 정보(정점 안에 들어가는 뼈대에 대한 정보)가 들어가지 않습니다.
 class Shape :
 	public ComponentBase
 {
+public:
+	virtual void Render(ID3D12GraphicsCommandList * pd3dCommandList, const Shader* shader) = 0;
+
 protected:
 	// 위치 버퍼
 	UINT							m_vertexCount{ 0 }; // 인덱스 버퍼가 없을 경우 사용함
@@ -58,8 +62,5 @@ public:
 	D3D12_PRIMITIVE_TOPOLOGY GetPrimitiveTopology() const { return m_d3dPrimitiveTopology; }
 	/////////////////////////////////////////////////////////////////////////// Get
 
-	virtual void Render(ID3D12GraphicsCommandList * pd3dCommandList) = 0;
-	// pos는 스크린 좌표계(왼쪽위가 0,0)를 기준으로 한 위치
-	virtual void Render(ID3D12GraphicsCommandList * pd3dCommandList, const XMFLOAT2& pos, float ElapsedTime) = 0;
 };
 

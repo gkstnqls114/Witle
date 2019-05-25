@@ -56,7 +56,7 @@ MonsterMovement::~MonsterMovement()
 
 void MonsterMovement::Update(float fTimeElapsed)
 {
-	UpdateVelocity(fTimeElapsed);
+	UpdateVelocity(fTimeElapsed); // State 상태에 따라 Velocity를 갱신(Set)한다.
 
 	m_xmf3Velocity = Vector3::Add(m_xmf3Velocity, m_xmf3Gravity);
 	float fLength = sqrtf(m_xmf3Velocity.x * m_xmf3Velocity.x + m_xmf3Velocity.z * m_xmf3Velocity.z);

@@ -157,6 +157,8 @@
     <ClInclude Include="Avoidance.h" />
     <ClInclude Include="BasicCam.h" />
     <ClInclude Include="Broom.h" />
+    <ClInclude Include="UIImage.h" />
+    <ClInclude Include="UI.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="CameraObject.h" />
     <ClInclude Include="ChaseAction.h" />
@@ -260,6 +262,7 @@
     <ClInclude Include="TESTShader.h" />
     <ClInclude Include="TextureStorage.h" />
     <ClInclude Include="Transform.h" />
+    <ClInclude Include="UIScreenShader.h" />
     <ClInclude Include="VerticalBlurShader.h" />
     <ClInclude Include="WICTextureLoader12.h" />
     <ClInclude Include="WideareaMagic.h" />
@@ -374,6 +377,9 @@
     <ClCompile Include="TESTShader.cpp" />
     <ClCompile Include="TextureStorage.cpp" />
     <ClCompile Include="Transform.cpp" />
+    <ClCompile Include="UIImage.cpp" />
+    <ClCompile Include="UI.cpp" />
+    <ClCompile Include="UIScreenShader.cpp" />
     <ClCompile Include="VerticalBlurShader.cpp" />
     <ClCompile Include="WICTextureLoader12.cpp" />
     <ClCompile Include="WideareaMagic.cpp" />
@@ -537,6 +543,17 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="UIScreenShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="Variables.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compute</ShaderType>

@@ -1,12 +1,14 @@
 #pragma once
 #include "ComponentBase.h"
 
+class Shader;
 class MyRectangle;
 
 // HP 관련 정보
 class PlayerStatus
 	: ComponentBase
 {
+	Shader* m_pHPBarShader{ nullptr };
 	MyRectangle* m_HpBar{ nullptr };
 
 public:

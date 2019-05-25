@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Texture.h"
 #include "GameScreen.h"
+#include "ShaderManager.h"
 #include "MyRectangle.h"
 #include "Widget.h"
 
@@ -48,7 +49,7 @@ void Widget::Update(float fElapsedTime)
 
 void Widget::Render(ID3D12GraphicsCommandList * pd3dCommandList)
 {
-	m_AimPoint->Render(pd3dCommandList);
+	m_AimPoint->Render(pd3dCommandList, ShaderManager::GetInstance()->GetShader(SHADER_SCREEN));
 }
 
 Texture * Widget::GetTexture()

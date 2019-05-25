@@ -3,6 +3,7 @@
 
 class MyRectangle; 
 class Texture;
+class Shader;
 
 class Button
 	: public GameObject
@@ -10,6 +11,8 @@ class Button
 	RECT m_rect;
 	MyRectangle* m_pButtonON{ nullptr };
 	MyRectangle* m_pButtonOFF{ nullptr };
+
+	Shader* m_pButtonShader{ nullptr };
 
 	bool m_isClick{ false };
 

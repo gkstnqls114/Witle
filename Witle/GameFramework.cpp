@@ -485,9 +485,9 @@ void CGameFramework::BuildObjects()
 	
 	///////////////////////////////////////////////////////////////////////////// 리소스 생성
 	// 루트 시그니처 위해 장면 먼저 생성
-	m_pScene = new GameScene;
+	 m_pScene = new GameScene;
 	// m_pScene = new LoadingScene;
-	// m_pScene = new RoomScene;
+	//m_pScene = new RoomScene;
 	m_pScene->CreateRootSignature(m_d3dDevice.Get()); 
 
 	// 루트 시그니처를 통해 모든 오브젝트 갖고온다.

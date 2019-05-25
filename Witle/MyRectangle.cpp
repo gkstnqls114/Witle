@@ -1,10 +1,20 @@
 #include "stdafx.h"
 #include "d3dUtil.h"
+
+// GameBase////////////////////////
+#include "GameScreen.h"
+#include "GameTimer.h"
+// GameBase////////////////////////
+
+// Manager / Stroage ////////////////////////
+#include "ShaderManager.h"
+// Manager / Stroage ////////////////////////
+
 #include "Texture.h"
 #include "LoadingScene.h"
-#include "ShaderManager.h"
-#include "GameTimer.h"
 #include "MyDescriptorHeap.h"
+#include "Shader.h"
+
 #include "MyRectangle.h"
 
 #define RECTANGLE_VERTEX_COUNT 6
@@ -146,10 +156,11 @@ MyRectangle::MyRectangle(GameObject * pOwner, ID3D12Device * pd3dDevice, ID3D12G
 MyRectangle::~MyRectangle()
 {
 }
-
-void MyRectangle::Render(ID3D12GraphicsCommandList * pd3dCommandList)
+ 
+void MyRectangle::Render(ID3D12GraphicsCommandList * pd3dCommandList, const Shader * shader)
 {
-	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_SCREEN);
+	pd3dCommandList->SetPipelineState(shader->GetPSO());
+	 
 	if(m_pHeap) m_pHeap->UpdateShaderVariable(pd3dCommandList);
 	if(m_pTexture) m_pTexture->UpdateShaderVariables(pd3dCommandList);
 
@@ -161,14 +172,15 @@ void MyRectangle::Render(ID3D12GraphicsCommandList * pd3dCommandList)
 	pd3dCommandList->DrawInstanced(m_vertexCount, 1, m_nOffset, 0);
 }
 
-void MyRectangle::Render(ID3D12GraphicsCommandList * pd3dCommandList, const XMFLOAT2 & pos, float Time)
+void MyRectangle::Render(ID3D12GraphicsCommandList * pd3dCommandList, XMFLOAT2 pos, float time)
 {
 	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_PICKINGPOINT);
+
+	pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_PICKINGPOINT, 2, &pos, 0);	 
+	pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_TIME, 1, &time, 0);
+
 	if (m_pHeap) m_pHeap->UpdateShaderVariable(pd3dCommandList);
 	if (m_pTexture) m_pTexture->UpdateShaderVariables(pd3dCommandList);
-	pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_PICKINGPOINT, 2, &pos, 0);
-	 
-	pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_TIME, 1, &Time, 0);
 
 	pd3dCommandList->IASetPrimitiveTopology(m_d3dPrimitiveTopology);
 
@@ -177,4 +189,22 @@ void MyRectangle::Render(ID3D12GraphicsCommandList * pd3dCommandList, const XMFL
 
 	pd3dCommandList->DrawInstanced(m_vertexCount, 1, m_nOffset, 0);
 }
+
+//
+//void MyRectangle::Render(ID3D12GraphicsCommandList * pd3dCommandList, const XMFLOAT2 & pos, float Time)
+//{
+//	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_PICKINGPOINT);
+//	if (m_pHeap) m_pHeap->UpdateShaderVariable(pd3dCommandList);
+//	if (m_pTexture) m_pTexture->UpdateShaderVariables(pd3dCommandList);
+//	pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_PICKINGPOINT, 2, &pos, 0);
+//	 
+//	pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_TIME, 1, &Time, 0);
+//
+//	pd3dCommandList->IASetPrimitiveTopology(m_d3dPrimitiveTopology);
+//
+//	D3D12_VERTEX_BUFFER_VIEW pVertexBufferViews[] = { m_pVertexBufferViews[0] };
+//	pd3dCommandList->IASetVertexBuffers(m_nSlot, _countof(pVertexBufferViews), pVertexBufferViews);
+//
+//	pd3dCommandList->DrawInstanced(m_vertexCount, 1, m_nOffset, 0);
+//}
  
