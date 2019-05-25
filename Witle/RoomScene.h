@@ -1,7 +1,7 @@
 #pragma once
 #include "Scene.h"
 
-class Button;
+class UIImage;
 
 class RoomScene
 	: public Scene
@@ -69,7 +69,9 @@ private:
 	D3D12_VIEWPORT	m_d3dViewport;
 	D3D12_RECT		m_d3dScissorRect;
 
-	Button* m_pStartButton{ nullptr };
-	Button* m_pCharacterAppearanceButton_1{ nullptr };
-	Button* m_pCharacterAppearanceButton_2{ nullptr };
+	//Button* m_pStartButton{ nullptr };
+	//Button* m_pCharacterAppearanceButton_1{ nullptr };
+	//Button* m_pCharacterAppearanceButton_2{ nullptr };
+
+	UIImage* m_SampleUIImage{ nullptr };
 };

@@ -190,6 +190,19 @@ void MyRectangle::Render(ID3D12GraphicsCommandList * pd3dCommandList, XMFLOAT2 p
 	pd3dCommandList->DrawInstanced(m_vertexCount, 1, m_nOffset, 0);
 }
 
+void MyRectangle::Render(ID3D12GraphicsCommandList * pd3dCommandList)
+{ 
+	if (m_pHeap) m_pHeap->UpdateShaderVariable(pd3dCommandList);
+	if (m_pTexture) m_pTexture->UpdateShaderVariables(pd3dCommandList);
+
+	pd3dCommandList->IASetPrimitiveTopology(m_d3dPrimitiveTopology);
+
+	D3D12_VERTEX_BUFFER_VIEW pVertexBufferViews[] = { m_pVertexBufferViews[0] };
+	pd3dCommandList->IASetVertexBuffers(m_nSlot, _countof(pVertexBufferViews), pVertexBufferViews);
+
+	pd3dCommandList->DrawInstanced(m_vertexCount, 1, m_nOffset, 0);
+}
+
 //
 //void MyRectangle::Render(ID3D12GraphicsCommandList * pd3dCommandList, const XMFLOAT2 & pos, float Time)
 //{

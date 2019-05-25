@@ -19,6 +19,7 @@ public:
 	static void ReleaseInstance();
 
 	void ReleaseObjects();
+	void BuildShaders(ID3D12Device * pd3dDevice, ID3D12RootSignature * const pd3dGraphicsRootSignature);
 	bool InsertShader(const std::string& s, Shader* pso);
 	Shader * GetShader(const std::string & s) const;
 

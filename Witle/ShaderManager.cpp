@@ -1,5 +1,22 @@
-#include "stdafx.h"
-#include "Shader.h"
+#include "stdafx.h" 
+
+//// Shader ////////////////////////// 
+#include "SkyBoxShader.h"
+#include "StandardShader.h"
+#include "TerrainShader.h"
+#include "SkinnedShader.h"
+#include "HorizonBlurShader.h"
+#include "VerticalBlurShader.h"
+#include "InstancingStandardShader.h"
+#include "TESTShader.h"
+#include "ScreenShader.h"
+#include "CubeShader.h"
+#include "InstancingLineShader.h"
+#include "PickingPointShader.h"
+#include "LineShader.h" 
+#include "UIScreenShader.h"
+//// Shader ////////////////////////// 
+
 #include "ShaderManager.h"
 
 ShaderManager* ShaderManager::m_ShaderManagerInstance{ nullptr };
@@ -46,6 +63,53 @@ void ShaderManager::ReleaseObjects()
 		shader.second = nullptr;
 	}
 	m_Shaders.clear();
+}
+
+void ShaderManager::BuildShaders(ID3D12Device * pd3dDevice, ID3D12RootSignature * const pd3dGraphicsRootSignature)
+{ 
+	Shader* pCubeShader = new CubeShader();
+	pCubeShader->CreateShader(pd3dDevice, pd3dGraphicsRootSignature);
+	InsertShader("Cube", pCubeShader);
+
+	Shader* pTerrainShader = new TerrainShader();
+	pTerrainShader->CreateShader(pd3dDevice, pd3dGraphicsRootSignature);
+	InsertShader("Terrain", pTerrainShader);
+
+	Shader* pStandardShader = new StandardShader();
+	pStandardShader->CreateShader(pd3dDevice, pd3dGraphicsRootSignature);
+	InsertShader("StandardShader", pStandardShader);
+
+	Shader* pInstancingStandardShader = new InstancingStandardShader();
+	pInstancingStandardShader->CreateShader(pd3dDevice, pd3dGraphicsRootSignature);
+	InsertShader("InstancingStandardShader", pInstancingStandardShader);
+
+	Shader* pSkinnedShader = new SkinnedShader();
+	pSkinnedShader->CreateShader(pd3dDevice, pd3dGraphicsRootSignature);
+	InsertShader("SkinnedShader", pSkinnedShader);
+
+	Shader* pScreenShader = new ScreenShader();
+	pScreenShader->CreateShader(pd3dDevice, pd3dGraphicsRootSignature);
+	InsertShader(SHADER_SCREEN, pScreenShader);
+
+	Shader* pSkyBoxShader = new SkyBoxShader();
+	pSkyBoxShader->CreateShader(pd3dDevice, pd3dGraphicsRootSignature);
+	InsertShader("SkyBoxShader", pSkyBoxShader);
+
+	Shader* pPickingPointShader = new PickingPointShader();
+	pPickingPointShader->CreateShader(pd3dDevice, pd3dGraphicsRootSignature);
+	InsertShader(SHADER_PICKINGPOINT, pPickingPointShader);
+
+	Shader* pLineShader = new LineShader();
+	pLineShader->CreateShader(pd3dDevice, pd3dGraphicsRootSignature);
+	InsertShader("Line", pLineShader);
+
+	Shader* pInstancingLineShader = new InstancingLineShader();
+	pInstancingLineShader->CreateShader(pd3dDevice, pd3dGraphicsRootSignature);
+	InsertShader("InstancingLine", pInstancingLineShader);
+
+	Shader* pUIScreenShader = new UIScreenShader();
+	pUIScreenShader->CreateShader(pd3dDevice, pd3dGraphicsRootSignature);
+	InsertShader(SHADER_UISCREEN, pUIScreenShader);
 }
 
 bool ShaderManager::InsertShader(const std::string& s, Shader * pso)

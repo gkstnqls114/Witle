@@ -25,11 +25,11 @@ void UIScreenShader::Update(float ElapsedTime)
 
 D3D12_INPUT_LAYOUT_DESC UIScreenShader::CreateInputLayout()
 {
-	UINT nInputElementDescs = 3;
+	UINT nInputElementDescs = 2;
 	D3D12_INPUT_ELEMENT_DESC *pd3dInputElementDescs = new D3D12_INPUT_ELEMENT_DESC[nInputElementDescs];
 
 	pd3dInputElementDescs[0] = { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 };
-	pd3dInputElementDescs[2] = { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 };
+	pd3dInputElementDescs[1] = { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 };
 	
 	D3D12_INPUT_LAYOUT_DESC d3dInputLayoutDesc;
 	d3dInputLayoutDesc.pInputElementDescs = pd3dInputElementDescs;
@@ -107,10 +107,10 @@ D3D12_PRIMITIVE_TOPOLOGY_TYPE UIScreenShader::CreatePrimitiveTopologyType()
 
 D3D12_SHADER_BYTECODE UIScreenShader::CreateVertexShader(ID3DBlob ** ppd3dShaderBlob)
 {
-	return(Shader::CompileShaderFromFile(L"UIScreenShader.hlsl", "VSScreen", "vs_5_1", ppd3dShaderBlob));
+	return(Shader::CompileShaderFromFile(L"UIScreenShader.hlsl", "VSUIScreen", "vs_5_1", ppd3dShaderBlob));
 }
 
 D3D12_SHADER_BYTECODE UIScreenShader::CreatePixelShader(ID3DBlob ** ppd3dShaderBlob)
 {
-	return(Shader::CompileShaderFromFile(L"UIScreenShader.hlsl", "PSScreen", "ps_5_1", ppd3dShaderBlob));
+	return(Shader::CompileShaderFromFile(L"UIScreenShader.hlsl", "PSUIScreen", "ps_5_1", ppd3dShaderBlob));
 }

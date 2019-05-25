@@ -34,4 +34,7 @@ public:
 
 	virtual void Render(ID3D12GraphicsCommandList * pd3dCommandList, const Shader* shader) override;
 	void Render(ID3D12GraphicsCommandList * pd3dCommandList, XMFLOAT2 pos, float time); //picking Point
+
+	// 쉐이더 설정과 쉐이더 변수는 이 함수 이전에서 설정한다.
+	void Render(ID3D12GraphicsCommandList * pd3dCommandList);
 };

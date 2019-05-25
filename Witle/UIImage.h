@@ -1,7 +1,7 @@
 #pragma once
 #include "UI.h"
 
-class MyRectangle; 
+class MyDescriptorHeap;
 class Texture;
 
 class UIImage

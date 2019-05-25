@@ -3,6 +3,7 @@
 #include "GameScreen.h"
 #include "d3dUtil.h" 
 #include "Button.h"
+#include "UIImage.h"
 #include "ShaderManager.h"
 #include "Texture.h"
 #include "RoomScene.h"
@@ -137,22 +138,7 @@ void RoomScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 
 	// 디스크립터 힙 설정
 	RoomScene::CreateCbvSrvDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 3);
-
-	m_pStartButton = new Button("StartButton", pd3dDevice, pd3dCommandList, 
-		RECT{ static_cast<LONG>(GameScreen::GetWidth()) - 250, static_cast<LONG>(GameScreen::GetHeight()) - 100,
-		      static_cast<LONG>(GameScreen::GetWidth()) - 25, static_cast<LONG>(GameScreen::GetHeight()) - 25} , nullptr, nullptr);
-
-	m_pCharacterAppearanceButton_1 = new Button("CharacterAppearanceButton_1", pd3dDevice, pd3dCommandList,
-		POINT{ static_cast<LONG>(GameScreen::GetWidth()) - 500,  static_cast<LONG>(GameScreen::GetHeight()) - 250 }, 200, 200,
-		L"Image/CharacterAppearance1_ON.dds",
-		L"Image/CharacterAppearance1_OFF.dds"
-	);
-
-	m_pCharacterAppearanceButton_2 = new Button("CharacterAppearanceButton_2", pd3dDevice, pd3dCommandList,
-		POINT{ static_cast<LONG>(GameScreen::GetWidth()) - 200,  static_cast<LONG>(GameScreen::GetHeight()) - 250 }, 200, 200,
-		L"Image/CharacterAppearance2_ON.dds",
-		L"Image/CharacterAppearance2_OFF.dds"
-	);
+	 
 }
 
 void RoomScene::ReleaseObjects()
@@ -162,16 +148,7 @@ void RoomScene::ReleaseObjects()
 
 bool RoomScene::ProcessInput(HWND hWnd, float ElapsedTime)
 { 
-	if (m_pCharacterAppearanceButton_1->CheckClickTRUE(GameInput::GetdownClickcursor()))
-	{
-		m_pCharacterAppearanceButton_2->IsNotClick();
-	}
 
-	if(m_pCharacterAppearanceButton_2->CheckClickTRUE(GameInput::GetdownClickcursor()))
-	{
-		m_pCharacterAppearanceButton_1->IsNotClick(); 
-	}
-	 
 	return true;
 }
 
@@ -197,14 +174,14 @@ void RoomScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	pd3dCommandList->RSSetViewports(1, &m_d3dViewport);
 	pd3dCommandList->RSSetScissorRects(1, &m_d3dScissorRect);
 	 
-	m_pCharacterAppearanceButton_1->Render(pd3dCommandList);
-	m_pCharacterAppearanceButton_2->Render(pd3dCommandList);
-	m_pStartButton->Render(pd3dCommandList);
+	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_UISCREEN);
+
+	// m_SampleUIImage->Render()
 }
 
 void RoomScene::ReleaseUploadBuffers()
 {
-	if (m_pStartButton) m_pStartButton->ReleaseUploadBuffers();
+	// if (m_SampleUIImage) m_SampleUIImage->ReleaseUploadBuffers();
 }
 
 

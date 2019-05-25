@@ -33,6 +33,7 @@
 
 // 쉐이더 이름들
 
-#define SHADER_SCREEN "ScreenShader"
-#define SHADER_PICKINGPOINT "PikcingPointShader"
-#define SHADER_BROOMEFFECT "BroomEffectShader"
+#define SHADER_SCREEN "Screen"
+#define SHADER_PICKINGPOINT "PikcingPoint"
+#define SHADER_BROOMEFFECT "BroomEffect"
+#define SHADER_UISCREEN "UIScreen"

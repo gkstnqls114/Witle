@@ -19,23 +19,8 @@
 #include "RoomScene.h"
 #include "LoadingScene.h"
 //// Scene ////////////////////////// 
-
-//// Shader ////////////////////////// 
-#include "SkyBoxShader.h"
-#include "StandardShader.h"
-#include "TerrainShader.h"
-#include "SkinnedShader.h"
-#include "HorizonBlurShader.h"
-#include "VerticalBlurShader.h"
-#include "InstancingStandardShader.h"
-#include "TESTShader.h"
-#include "ScreenShader.h"
-#include "CubeShader.h"
-#include "InstancingLineShader.h"
-#include "PickingPointShader.h"
-#include "LineShader.h" 
-//// Shader ////////////////////////// 
  
+#include "Shader.h"
 #include "Object.h"
 #include "Texture.h"
 #include "MyDescriptorHeap.h"
@@ -485,9 +470,9 @@ void CGameFramework::BuildObjects()
 	
 	///////////////////////////////////////////////////////////////////////////// 리소스 생성
 	// 루트 시그니처 위해 장면 먼저 생성
-	 m_pScene = new GameScene;
+	// m_pScene = new GameScene;
 	// m_pScene = new LoadingScene;
-	//m_pScene = new RoomScene;
+	m_pScene = new RoomScene;
 	m_pScene->CreateRootSignature(m_d3dDevice.Get()); 
 
 	// 루트 시그니처를 통해 모든 오브젝트 갖고온다.
@@ -675,47 +660,7 @@ void CGameFramework::RenderOnSwapchain()
 void CGameFramework::BuildShaders()
 {
 	CMaterial::PrepareShaders(m_d3dDevice.Get(), m_CommandList.Get(), m_pScene->GetGraphicsRootSignature());
-
-	Shader* pCubeShader = new CubeShader();
-	pCubeShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
-	ShaderManager::GetInstance()->InsertShader("Cube", pCubeShader);
-
-	Shader* pTerrainShader = new TerrainShader();
-	pTerrainShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
-	ShaderManager::GetInstance()->InsertShader("Terrain", pTerrainShader);
-	 
-	Shader* pStandardShader = new StandardShader();
-	pStandardShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
-	ShaderManager::GetInstance()->InsertShader("StandardShader", pStandardShader);
-
-	Shader* pInstancingStandardShader = new InstancingStandardShader();
-	pInstancingStandardShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
-	ShaderManager::GetInstance()->InsertShader("InstancingStandardShader", pInstancingStandardShader);
-
-	Shader* pSkinnedShader = new SkinnedShader();
-	pSkinnedShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
-	ShaderManager::GetInstance()->InsertShader("SkinnedShader", pSkinnedShader);
-	
-	Shader* pScreenShader = new ScreenShader();
-	pScreenShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
-	ShaderManager::GetInstance()->InsertShader(SHADER_SCREEN, pScreenShader);
-
-	Shader* pSkyBoxShader = new SkyBoxShader();
-	pSkyBoxShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
-	ShaderManager::GetInstance()->InsertShader("SkyBoxShader", pSkyBoxShader);
-
-	Shader* pPickingPointShader = new PickingPointShader();
-	pPickingPointShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
-	ShaderManager::GetInstance()->InsertShader(SHADER_PICKINGPOINT, pPickingPointShader);
-	 
-	Shader* pLineShader = new LineShader();
-	pLineShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
-	ShaderManager::GetInstance()->InsertShader("Line", pLineShader);
-	 
-	Shader* pInstancingLineShader = new InstancingLineShader();
-	pInstancingLineShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
-	ShaderManager::GetInstance()->InsertShader("InstancingLine", pInstancingLineShader);
-
+	ShaderManager::GetInstance()->BuildShaders(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
 }
 
 void CGameFramework::BuildTESTObjects()
