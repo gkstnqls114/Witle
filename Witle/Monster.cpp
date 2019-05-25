@@ -10,6 +10,7 @@
 #include "MonsterMovement.h"
 #include "RecognitionRange.h"
 #include "MonsterStatus.h"
+#include "UI3DImage.h"
 // GameBase /////////////////////
 
 // DebugMesh /////////////////////
@@ -17,6 +18,8 @@
 #include "LineSphere.h"
 // DebugMesh /////////////////////
 
+#include "CameraObject.h"
+#include "MainCameraMgr.h"
 #include "Texture.h"
 #include "MyDescriptorHeap.h"
 #include "Sniping.h"
@@ -64,26 +67,7 @@ XMFLOAT3 Monster::CalculateAlreadyPosition(float fTimeElapsed)
 	XMFLOAT3 AlreadyPosition = Vector3::Add(m_Transform.GetPosition(), m_MonsterMovement->AlreadyUpdate(fTimeElapsed));
 	return AlreadyPosition;
 }
-
-//void Monster::OnCameraUpdateCallback(float fTimeElapsed, Camera* pCamera)
-//{
-//	if (!m_pCameraUpdatedContext) return;
-//	
-//	Terrain *pTerrain = (Terrain *)m_pCameraUpdatedContext;
-//	XMFLOAT3 xmf3Scale = pTerrain->GetScale();
-//	XMFLOAT3 xmf3CameraPosition = pCamera->GetOwner()->GetTransform().GetPosition();
-//	int z = (int)(xmf3CameraPosition.z / xmf3Scale.z);
-//	bool bReverseQuad = ((z % 2) != 0);
-//	float fHeight = pTerrain->GetHeight(xmf3CameraPosition.x, xmf3CameraPosition.z, bReverseQuad);
-//	fHeight = fHeight + 5.f;
-//	if (xmf3CameraPosition.y <= fHeight)
-//	{
-//		xmf3CameraPosition.y = fHeight;
-//		pCamera->GetOwner()->GetTransform().SetPosition(xmf3CameraPosition);
-//		static_cast<FollowCam *>(pCamera)->SetLookAt(m_Transform.GetPosition());
-//	}
-//}
-
+ 
 
 Monster::Monster(const std::string & entityID, const XMFLOAT3& SpawnPoint, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature)
 	: m_SpawnPoint(SpawnPoint), GameObject(entityID)
@@ -96,7 +80,13 @@ Monster::Monster(const std::string & entityID, const XMFLOAT3& SpawnPoint, ID3D1
 
 	m_MonsterStatus = new MonsterStatus(this, pd3dDevice, pd3dCommandList);
 	m_MonsterMovement = new MonsterMovement(this);
-	 
+
+	m_MonsterHP = new UI3DImage(this, pd3dDevice, pd3dCommandList, POINT{0, 0},
+		100.F,
+		30.f,
+		L"Image/Red.dds"
+	);
+
 	// 디버그용
 	m_pDebugObject = new EmptyGameObject("SpawnPosition");
 	m_pDebugObject->GetTransform().SetPosition(SpawnPoint);
@@ -111,6 +101,12 @@ Monster::~Monster()
 
 void Monster::ReleaseMembers()
 { 
+	if (m_MonsterHP)
+	{
+		m_MonsterHP->ReleaseObjects();
+		delete m_MonsterHP;
+		m_MonsterHP = nullptr;
+	}
 	if (m_RecognitionRange)
 	{
 		m_RecognitionRange->ReleaseObjects();
@@ -163,6 +159,7 @@ void Monster::ReleaseMembers()
 
 void Monster::ReleaseMemberUploadBuffers()
 {
+	if (m_MonsterHP) m_MonsterHP->ReleaseUploadBuffers();
 	if (m_pDebugSpawnMesh) m_pDebugSpawnMesh->ReleaseUploadBuffers();
 	if (m_pTexture) m_pTexture->ReleaseUploadBuffers();
 	if (m_pLoadObject) m_pLoadObject->ReleaseUploadBuffers();
@@ -207,6 +204,22 @@ void Monster::Render(ID3D12GraphicsCommandList * pd3dCommandList)
 	m_pHaep->UpdateShaderVariable(pd3dCommandList);
 	m_pTexture->UpdateShaderVariable(pd3dCommandList, 0);
 	m_pLoadObject->Render(pd3dCommandList);
+
+	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_UIWORLD);
+
+	// set look at.... 빌보드 처리...
+	XMFLOAT4X4 uiWorld = m_Transform.GetWorldMatrix(); 
+	uiWorld._42 += 200;
+
+	XMFLOAT3 xmf3Position(uiWorld._41, uiWorld._42, uiWorld._43);
+
+	XMFLOAT4X4 mtxLookAt = Matrix4x4::LookAtLH(xmf3Position, MainCameraMgr::GetMainCamera()->GetTransform().GetPosition(), XMFLOAT3(0, 1, 0));
+	uiWorld._11 = mtxLookAt._11; uiWorld._12 = mtxLookAt._21; uiWorld._13 = mtxLookAt._31;
+	uiWorld._21 = mtxLookAt._12; uiWorld._22 = mtxLookAt._22; uiWorld._23 = mtxLookAt._32;
+	uiWorld._31 = mtxLookAt._13; uiWorld._32 = mtxLookAt._23; uiWorld._33 = mtxLookAt._33;
+	// set look at....
+
+	m_MonsterHP->Render(pd3dCommandList, uiWorld);
 }
 
 void Monster::RenderHpStatus(ID3D12GraphicsCommandList * pd3dCommandList)

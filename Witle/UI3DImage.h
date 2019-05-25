@@ -1,15 +1,17 @@
 #pragma once
-#include "UI2D.h"
+#include "UI3D.h"
 
 class MyDescriptorHeap;
 class Texture;
 
 // MyRectangle과 유사한 동작을 수행
-class UI2DImage
-	: public UI2D
+class UI3DImage
+	: public UI3D
 {
 public:
 	virtual void Render(ID3D12GraphicsCommandList * pd3dCommandList, const Shader* shader) override {};
+	virtual void ReleaseObjects() override;
+	virtual void ReleaseUploadBuffers() override;
 
 private:
 	struct UIVertex
@@ -25,17 +27,14 @@ private:
 	MyDescriptorHeap* m_pHeap{ nullptr };
 	Texture* m_pTexture{ nullptr };
 
-private:
-	virtual void ReleaseObjects() override;
-	virtual void ReleaseUploadBuffers() override;
 
 public:
-	UI2DImage(GameObject* pOwner, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, RECT rect, const wchar_t * filepath);
-	UI2DImage(GameObject* pOwner, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, POINT center, float width, float height, const wchar_t * filepath);
-	virtual ~UI2DImage();
+	UI3DImage(GameObject* pOwner, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, RECT rect, const wchar_t * filepath);
+	UI3DImage(GameObject* pOwner, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, POINT center, float width, float height, const wchar_t * filepath);
+	virtual ~UI3DImage();
 
 	virtual void Update(float fElapsedTime) override;
 	 
 	// Render이전에 쉐이더와 쉐이더변수 설정을 해야함
-	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList) override;
+	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, const XMFLOAT4X4& world) override;
 };

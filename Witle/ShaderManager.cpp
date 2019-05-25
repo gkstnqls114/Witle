@@ -15,6 +15,7 @@
 #include "PickingPointShader.h"
 #include "LineShader.h" 
 #include "UIScreenShader.h"
+#include "UIWorldShader.h"
 //// Shader ////////////////////////// 
 
 #include "ShaderManager.h"
@@ -110,6 +111,10 @@ void ShaderManager::BuildShaders(ID3D12Device * pd3dDevice, ID3D12RootSignature 
 	Shader* pUIScreenShader = new UIScreenShader();
 	pUIScreenShader->CreateShader(pd3dDevice, pd3dGraphicsRootSignature);
 	InsertShader(SHADER_UISCREEN, pUIScreenShader);
+
+	Shader* pUIWorldShader = new UIWorldShader();
+	pUIWorldShader->CreateShader(pd3dDevice, pd3dGraphicsRootSignature);
+	InsertShader(SHADER_UIWORLD, pUIWorldShader); 
 }
 
 bool ShaderManager::InsertShader(const std::string& s, Shader * pso)

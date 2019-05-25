@@ -22,6 +22,7 @@
 #include "ShaderManager.h"
 #include "StaticObjectStorage.h" 
 #include "PlayerManager.h"
+#include "MainCameraMgr.h"
 //// Manager header //////////////////////////
 
 #include "GameScreen.h"
@@ -153,8 +154,7 @@ bool GameScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM w
 			MyBOBox::CHANGEMODE();
 			break;
 
-		case 'L':
-			m_pMainCamera->GetCamera()->MoveAtOffset(XMFLOAT3{ 0, -10, 0 });
+		case 'L': 
 			break;
 
 		case 'Z': 
@@ -243,6 +243,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	m_Sniping = new Sniping(m_pMainCamera, m_pPlayer, pd3dDevice, pd3dCommandList);
 	m_pPlayer->SetSniping(m_Sniping);
 	m_pMainCamera->ChangeCamera(m_Sniping->GetBaseCamera());
+	MainCameraMgr::SetMainPlayer(m_pMainCamera);
 	 
 	m_pSkyCameraObj = new CameraObject("SkyCamera");
 	m_pSkyCamera = new BasicCam(m_pSkyCameraObj);

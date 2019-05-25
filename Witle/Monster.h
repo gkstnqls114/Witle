@@ -11,6 +11,7 @@ class Texture;
 class MyDescriptorHeap;
 
 class LineMesh;
+class UI3DImage;
 
 class RecognitionRange;
 class MyRectangle;
@@ -33,10 +34,12 @@ public:
 	virtual void UpdateState(float fElapsedTime) = 0;
 
 protected:
+	UI3DImage*			m_MonsterHP{ nullptr };
 	RecognitionRange*   m_RecognitionRange{ nullptr };
 	MonsterMovement*    m_MonsterMovement{ nullptr };
 	MonsterStatus*	   m_MonsterStatus{ nullptr };
 	MyBOBox*		   m_pMyBOBox{ nullptr };
+
 
 	Texture*			m_pTexture{ nullptr };
 	MyDescriptorHeap*	m_pHaep{ nullptr };

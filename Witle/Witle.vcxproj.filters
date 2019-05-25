@@ -193,21 +193,6 @@
     <Filter Include="13.Storage/Manager">
       <UniqueIdentifier>{ef16f092-5f62-4c3c-9ce6-0b84f633136a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="13.Storage/Manager\ModelStorage">
-      <UniqueIdentifier>{6f721a66-4caa-4e6f-b8e2-a51b09ac77f4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="13.Storage/Manager\StaticObjectStorage">
-      <UniqueIdentifier>{d8ca9f62-bada-44fd-a0d4-807e00dae610}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="13.Storage/Manager\SoundManager">
-      <UniqueIdentifier>{6e5565ad-e180-4212-b1e8-f920bfb6effd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="13.Storage/Manager\LightManager">
-      <UniqueIdentifier>{8d004bf1-b8cc-4fd5-b0d1-58af214d6d24}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="13.Storage/Manager\TextureStorage">
-      <UniqueIdentifier>{336fca6f-fc21-4c05-a804-c9e60309ed49}</UniqueIdentifier>
-    </Filter>
     <Filter Include="05.Shader\SkinnedShader.cpp">
       <UniqueIdentifier>{5994879b-c065-48e2-a58e-486b84ad26e6}</UniqueIdentifier>
     </Filter>
@@ -310,9 +295,6 @@
     <Filter Include="02.Component\ForMonster\MonsterAction\05.DeadAction">
       <UniqueIdentifier>{f34ded6a-1a2a-4110-a759-a0c457ba548d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="13.Storage/Manager\PlayerManager">
-      <UniqueIdentifier>{afdbfed4-c562-40bf-bd28-1e20f4b191ca}</UniqueIdentifier>
-    </Filter>
     <Filter Include="05.Shader\UIScreenShader">
       <UniqueIdentifier>{1b5f46a2-13a1-4158-a293-88a85f35d540}</UniqueIdentifier>
     </Filter>
@@ -328,8 +310,38 @@
     <Filter Include="02.Component\07.UI3D">
       <UniqueIdentifier>{19ced049-b3fe-44f3-936a-86982972daef}</UniqueIdentifier>
     </Filter>
-    <Filter Include="13.Storage/Manager\GraphicsRootSignatureMgr">
+    <Filter Include="02.Component\07.UI3D\UI3DImage">
+      <UniqueIdentifier>{db1a5698-23db-45ae-a771-3105e0c9c23a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Shader\UIWorldShader">
+      <UniqueIdentifier>{e09192d1-232e-4c75-ad22-9cbdcb320559}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="13.Storage/Manager\01.ShaderMgr">
+      <UniqueIdentifier>{1a579b7b-bbbc-405f-8f6a-a97ca1858aa4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="13.Storage/Manager\02.LightManager">
+      <UniqueIdentifier>{8d004bf1-b8cc-4fd5-b0d1-58af214d6d24}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="13.Storage/Manager\03.ModelStorage">
+      <UniqueIdentifier>{6f721a66-4caa-4e6f-b8e2-a51b09ac77f4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="13.Storage/Manager\04.GraphicsRootSignatureMgr">
       <UniqueIdentifier>{8d8ff32c-2a6b-4116-b88d-0f144624d9ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="13.Storage/Manager\05.PlayerManager">
+      <UniqueIdentifier>{afdbfed4-c562-40bf-bd28-1e20f4b191ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="13.Storage/Manager\06.SoundManager">
+      <UniqueIdentifier>{6e5565ad-e180-4212-b1e8-f920bfb6effd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="13.Storage/Manager\07.StaticObjectStorage">
+      <UniqueIdentifier>{d8ca9f62-bada-44fd-a0d4-807e00dae610}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="13.Storage/Manager\08.TextureStorage">
+      <UniqueIdentifier>{336fca6f-fc21-4c05-a804-c9e60309ed49}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="13.Storage/Manager\09.MainCameraMgr">
+      <UniqueIdentifier>{77e59bf6-ba18-4c91-9800-d502e21c3fd4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -373,9 +385,6 @@
       <Filter>04.Scene\Manager</Filter>
     </ClInclude>
     <ClInclude Include="Shader.h">
-      <Filter>05.Shader</Filter>
-    </ClInclude>
-    <ClInclude Include="ShaderManager.h">
       <Filter>05.Shader</Filter>
     </ClInclude>
     <ClInclude Include="d3dUtil.h">
@@ -478,7 +487,7 @@
       <Filter>05.Shader\TESTShader</Filter>
     </ClInclude>
     <ClInclude Include="LightManager.h">
-      <Filter>13.Storage/Manager\LightManager</Filter>
+      <Filter>13.Storage/Manager\02.LightManager</Filter>
     </ClInclude>
     <ClInclude Include="Skill.h">
       <Filter>12.Skill</Filter>
@@ -544,7 +553,7 @@
       <Filter>02.Component\05.MyCollider\MyBOBox</Filter>
     </ClInclude>
     <ClInclude Include="ModelStorage.h">
-      <Filter>13.Storage/Manager\ModelStorage</Filter>
+      <Filter>13.Storage/Manager\03.ModelStorage</Filter>
     </ClInclude>
     <ClInclude Include="StaticObject.h">
       <Filter>03.GameObject</Filter>
@@ -556,7 +565,7 @@
       <Filter>05.Shader\InstancingStandardShader</Filter>
     </ClInclude>
     <ClInclude Include="StaticObjectStorage.h">
-      <Filter>13.Storage/Manager\StaticObjectStorage</Filter>
+      <Filter>13.Storage/Manager\07.StaticObjectStorage</Filter>
     </ClInclude>
     <ClInclude Include="FamilyID.h">
       <Filter>99.etc\ID\FamilyID</Filter>
@@ -604,7 +613,7 @@
       <Filter>05.Shader\SkyBoxShader</Filter>
     </ClInclude>
     <ClInclude Include="SoundManager.h">
-      <Filter>13.Storage/Manager\SoundManager</Filter>
+      <Filter>13.Storage/Manager\06.SoundManager</Filter>
     </ClInclude>
     <ClInclude Include="CylinderMesh.h">
       <Filter>02.Component\03.Mesh\CylinderMesh</Filter>
@@ -619,7 +628,7 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="TextureStorage.h">
-      <Filter>13.Storage/Manager\TextureStorage</Filter>
+      <Filter>13.Storage/Manager\08.TextureStorage</Filter>
     </ClInclude>
     <ClInclude Include="InstancingLineShader.h">
       <Filter>05.Shader\InstancingLineShader</Filter>
@@ -673,7 +682,7 @@
       <Filter>02.Component\ForMonster\MonsterAction\05.DeadAction</Filter>
     </ClInclude>
     <ClInclude Include="PlayerManager.h">
-      <Filter>13.Storage/Manager\PlayerManager</Filter>
+      <Filter>13.Storage/Manager\05.PlayerManager</Filter>
     </ClInclude>
     <ClInclude Include="UIScreenShader.h">
       <Filter>05.Shader\UIScreenShader</Filter>
@@ -685,7 +694,22 @@
       <Filter>02.Component\06.UI2D\UI2DImage</Filter>
     </ClInclude>
     <ClInclude Include="GraphicsRootSignatureMgr.h">
-      <Filter>13.Storage/Manager\GraphicsRootSignatureMgr</Filter>
+      <Filter>13.Storage/Manager\04.GraphicsRootSignatureMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="UI3D.h">
+      <Filter>02.Component\07.UI3D</Filter>
+    </ClInclude>
+    <ClInclude Include="UI3DImage.h">
+      <Filter>02.Component\07.UI3D\UI3DImage</Filter>
+    </ClInclude>
+    <ClInclude Include="UIWorldShader.h">
+      <Filter>05.Shader\UIWorldShader</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderManager.h">
+      <Filter>13.Storage/Manager\01.ShaderMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="MainCameraMgr.h">
+      <Filter>13.Storage/Manager\09.MainCameraMgr</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -717,9 +741,6 @@
       <Filter>10.Renderer</Filter>
     </ClCompile>
     <ClCompile Include="Shader.cpp">
-      <Filter>05.Shader</Filter>
-    </ClCompile>
-    <ClCompile Include="ShaderManager.cpp">
       <Filter>05.Shader</Filter>
     </ClCompile>
     <ClCompile Include="Mesh.cpp">
@@ -819,7 +840,7 @@
       <Filter>05.Shader\TESTShader</Filter>
     </ClCompile>
     <ClCompile Include="LightManager.cpp">
-      <Filter>13.Storage/Manager\LightManager</Filter>
+      <Filter>13.Storage/Manager\02.LightManager</Filter>
     </ClCompile>
     <ClCompile Include="Skill.cpp">
       <Filter>12.Skill</Filter>
@@ -885,7 +906,7 @@
       <Filter>02.Component\05.MyCollider\MyBOBox</Filter>
     </ClCompile>
     <ClCompile Include="ModelStorage.cpp">
-      <Filter>13.Storage/Manager\ModelStorage</Filter>
+      <Filter>13.Storage/Manager\03.ModelStorage</Filter>
     </ClCompile>
     <ClCompile Include="StaticObject.cpp">
       <Filter>03.GameObject</Filter>
@@ -897,7 +918,7 @@
       <Filter>05.Shader\InstancingStandardShader</Filter>
     </ClCompile>
     <ClCompile Include="StaticObjectStorage.cpp">
-      <Filter>13.Storage/Manager\StaticObjectStorage</Filter>
+      <Filter>13.Storage/Manager\07.StaticObjectStorage</Filter>
     </ClCompile>
     <ClCompile Include="FamilyID.cpp">
       <Filter>99.etc\ID\FamilyID</Filter>
@@ -945,7 +966,7 @@
       <Filter>05.Shader\SkyBoxShader</Filter>
     </ClCompile>
     <ClCompile Include="SoundManager.cpp">
-      <Filter>13.Storage/Manager\SoundManager</Filter>
+      <Filter>13.Storage/Manager\06.SoundManager</Filter>
     </ClCompile>
     <ClCompile Include="CylinderMesh.cpp">
       <Filter>02.Component\03.Mesh\CylinderMesh</Filter>
@@ -957,7 +978,7 @@
       <Filter>02.Component\05.MyCollider\MyBSphere</Filter>
     </ClCompile>
     <ClCompile Include="TextureStorage.cpp">
-      <Filter>13.Storage/Manager\TextureStorage</Filter>
+      <Filter>13.Storage/Manager\08.TextureStorage</Filter>
     </ClCompile>
     <ClCompile Include="InstancingLineShader.cpp">
       <Filter>05.Shader\InstancingLineShader</Filter>
@@ -1011,7 +1032,7 @@
       <Filter>02.Component\ForMonster\MonsterAction</Filter>
     </ClCompile>
     <ClCompile Include="PlayerManager.cpp">
-      <Filter>13.Storage/Manager\PlayerManager</Filter>
+      <Filter>13.Storage/Manager\05.PlayerManager</Filter>
     </ClCompile>
     <ClCompile Include="UIScreenShader.cpp">
       <Filter>05.Shader\UIScreenShader</Filter>
@@ -1023,7 +1044,22 @@
       <Filter>02.Component\06.UI2D\UI2DImage</Filter>
     </ClCompile>
     <ClCompile Include="GraphicsRootSignatureMgr.cpp">
-      <Filter>13.Storage/Manager\GraphicsRootSignatureMgr</Filter>
+      <Filter>13.Storage/Manager\04.GraphicsRootSignatureMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="UI3D.cpp">
+      <Filter>02.Component\07.UI3D</Filter>
+    </ClCompile>
+    <ClCompile Include="UI3DImage.cpp">
+      <Filter>02.Component\07.UI3D\UI3DImage</Filter>
+    </ClCompile>
+    <ClCompile Include="UIWorldShader.cpp">
+      <Filter>05.Shader\UIWorldShader</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderManager.cpp">
+      <Filter>13.Storage/Manager\01.ShaderMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="MainCameraMgr.cpp">
+      <Filter>13.Storage/Manager\09.MainCameraMgr</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1080,6 +1116,9 @@
       <Filter>HLSL</Filter>
     </FxCompile>
     <FxCompile Include="UIScreenShader.hlsl">
+      <Filter>HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="UIWorldShader.hlsl">
       <Filter>HLSL</Filter>
     </FxCompile>
   </ItemGroup>

@@ -158,6 +158,9 @@
     <ClInclude Include="BasicCam.h" />
     <ClInclude Include="Broom.h" />
     <ClInclude Include="GraphicsRootSignatureMgr.h" />
+    <ClInclude Include="MainCameraMgr.h" />
+    <ClInclude Include="UI3DImage.h" />
+    <ClInclude Include="UI3D.h" />
     <ClInclude Include="UI2DImage.h" />
     <ClInclude Include="UI2D.h" />
     <ClInclude Include="Button.h" />
@@ -263,6 +266,7 @@
     <ClInclude Include="TESTShader.h" />
     <ClInclude Include="TextureStorage.h" />
     <ClInclude Include="Transform.h" />
+    <ClInclude Include="UIWorldShader.h" />
     <ClInclude Include="UIScreenShader.h" />
     <ClInclude Include="VerticalBlurShader.h" />
     <ClInclude Include="WICTextureLoader12.h" />
@@ -314,6 +318,7 @@
     <ClCompile Include="LineSphere.cpp" />
     <ClCompile Include="LoadingScene.cpp" />
     <ClCompile Include="LobbyScene.cpp" />
+    <ClCompile Include="MainCameraMgr.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="MeshRenderer.cpp" />
@@ -379,8 +384,11 @@
     <ClCompile Include="TESTShader.cpp" />
     <ClCompile Include="TextureStorage.cpp" />
     <ClCompile Include="Transform.cpp" />
+    <ClCompile Include="UI3DImage.cpp" />
+    <ClCompile Include="UI3D.cpp" />
     <ClCompile Include="UI2DImage.cpp" />
     <ClCompile Include="UI2D.cpp" />
+    <ClCompile Include="UIWorldShader.cpp" />
     <ClCompile Include="UIScreenShader.cpp" />
     <ClCompile Include="VerticalBlurShader.cpp" />
     <ClCompile Include="WICTextureLoader12.cpp" />
@@ -558,6 +566,9 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
       </ExcludedFromBuild>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">VSUIScreen</EntryPointName>
+    </FxCompile>
+    <FxCompile Include="UIWorldShader.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="Variables.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compute</ShaderType>

@@ -37,3 +37,4 @@
 #define SHADER_PICKINGPOINT "PikcingPoint"
 #define SHADER_BROOMEFFECT "BroomEffect"
 #define SHADER_UISCREEN "UIScreen"
+#define SHADER_UIWORLD "UIWorld" 
