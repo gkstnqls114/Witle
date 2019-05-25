@@ -82,6 +82,8 @@ void MonsterMovement::UpdateState(float fElpasedTime)
 	{
 		m_TotalTime = 0.f;
 		 
+		pMonsterOwner->GetRecognitionRange()->m_TotalTime += fElpasedTime;
+
 		// 만약 인식시간이 되었을 경우...
 		if (pMonsterOwner->GetRecognitionRange()->m_TotalTime >= pMonsterOwner->GetRecognitionRange()->m_RecognitionTime) 
 		{
