@@ -1,7 +1,8 @@
 #pragma once
 #include "Scene.h"
 
-class UIImage;
+class UI2DImage;
+class GameObject;
 
 class RoomScene
 	: public Scene
@@ -73,5 +74,6 @@ private:
 	//Button* m_pCharacterAppearanceButton_1{ nullptr };
 	//Button* m_pCharacterAppearanceButton_2{ nullptr };
 
-	UIImage* m_SampleUIImage{ nullptr };
+	GameObject* m_TESTGameObject{ nullptr };
+	UI2DImage* m_SampleUIImage{ nullptr };
 };

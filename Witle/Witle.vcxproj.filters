@@ -672,10 +672,10 @@
     <ClInclude Include="UIScreenShader.h">
       <Filter>05.Shader\UIScreenShader</Filter>
     </ClInclude>
-    <ClInclude Include="UI.h">
+    <ClInclude Include="UI2D.h">
       <Filter>02.Component\06.UI</Filter>
     </ClInclude>
-    <ClInclude Include="UIImage.h">
+    <ClInclude Include="UI2DImage.h">
       <Filter>02.Component\06.UI\UIImage</Filter>
     </ClInclude>
   </ItemGroup>
@@ -1007,10 +1007,10 @@
     <ClCompile Include="UIScreenShader.cpp">
       <Filter>05.Shader\UIScreenShader</Filter>
     </ClCompile>
-    <ClCompile Include="UI.cpp">
+    <ClCompile Include="UI2D.cpp">
       <Filter>02.Component\06.UI</Filter>
     </ClCompile>
-    <ClCompile Include="UIImage.cpp">
+    <ClCompile Include="UI2DImage.cpp">
       <Filter>02.Component\06.UI\UIImage</Filter>
     </ClCompile>
   </ItemGroup>

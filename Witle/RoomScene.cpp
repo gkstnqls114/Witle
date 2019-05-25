@@ -1,11 +1,12 @@
 #include "stdafx.h"
+#include "d3dUtil.h"  
 #include "GameInput.h"
 #include "GameScreen.h"
-#include "d3dUtil.h" 
-#include "Button.h"
-#include "UIImage.h"
-#include "ShaderManager.h"
+#include "UI2DImage.h"
+#include "ShaderManager.h" 
+#include "GameObject.h"
 #include "Texture.h"
+
 #include "RoomScene.h"
 
 ID3D12DescriptorHeap*		RoomScene::m_pd3dCbvSrvDescriptorHeap;
@@ -136,9 +137,12 @@ void RoomScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	m_d3dViewport = D3D12_VIEWPORT{ 0.0f, 0.0f, static_cast<FLOAT>(GameScreen::GetWidth()) , static_cast<FLOAT>(GameScreen::GetHeight()), 0.0f, 1.0f };
 	m_d3dScissorRect = D3D12_RECT{ 0, 0, static_cast<LONG>(GameScreen::GetWidth()) ,static_cast<LONG>(GameScreen::GetHeight()) };
 
-	// 디스크립터 힙 설정
-	RoomScene::CreateCbvSrvDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 3);
-	 
+	m_TESTGameObject = new EmptyGameObject("Test");
+	m_SampleUIImage = new UI2DImage(
+		m_TESTGameObject, pd3dDevice, pd3dCommandList,
+		POINT{ 60 , 120 }, 100, 200, L"Image/CharacterAppearance1_OFF.dds"
+	);
+
 }
 
 void RoomScene::ReleaseObjects()
@@ -147,8 +151,7 @@ void RoomScene::ReleaseObjects()
 }
 
 bool RoomScene::ProcessInput(HWND hWnd, float ElapsedTime)
-{ 
-
+{  
 	return true;
 }
 
@@ -176,7 +179,7 @@ void RoomScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	 
 	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_UISCREEN);
 
-	// m_SampleUIImage->Render()
+	m_SampleUIImage->Render(pd3dCommandList);
 }
 
 void RoomScene::ReleaseUploadBuffers()

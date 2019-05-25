@@ -157,8 +157,8 @@
     <ClInclude Include="Avoidance.h" />
     <ClInclude Include="BasicCam.h" />
     <ClInclude Include="Broom.h" />
-    <ClInclude Include="UIImage.h" />
-    <ClInclude Include="UI.h" />
+    <ClInclude Include="UI2DImage.h" />
+    <ClInclude Include="UI2D.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="CameraObject.h" />
     <ClInclude Include="ChaseAction.h" />
@@ -377,8 +377,8 @@
     <ClCompile Include="TESTShader.cpp" />
     <ClCompile Include="TextureStorage.cpp" />
     <ClCompile Include="Transform.cpp" />
-    <ClCompile Include="UIImage.cpp" />
-    <ClCompile Include="UI.cpp" />
+    <ClCompile Include="UI2DImage.cpp" />
+    <ClCompile Include="UI2D.cpp" />
     <ClCompile Include="UIScreenShader.cpp" />
     <ClCompile Include="VerticalBlurShader.cpp" />
     <ClCompile Include="WICTextureLoader12.cpp" />

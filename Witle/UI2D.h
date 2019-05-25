@@ -1,11 +1,11 @@
 #pragma once
-#include "ComponentBase.h"
+#include "Shape.h"
 
 class MyRectangle; 
 class Texture;
 
-class UI
-	: public ComponentBase
+class UI2D
+	: public Shape
 {
 
 
@@ -14,8 +14,8 @@ private:
 	virtual void ReleaseUploadBuffers() = 0;
 
 public:
-	UI(GameObject* pOwner);
-	virtual ~UI();
+	UI2D(GameObject* pOwner);
+	virtual ~UI2D();
 
 	virtual void Update(float fElapsedTime) override {};
 
