@@ -138,9 +138,14 @@ void RoomScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	m_d3dScissorRect = D3D12_RECT{ 0, 0, static_cast<LONG>(GameScreen::GetWidth()) ,static_cast<LONG>(GameScreen::GetHeight()) };
 
 	m_TESTGameObject = new EmptyGameObject("Test");
+	
+
+	///////////////////////// 
+	// 여기서 UI 설정 작업을 해주세요~!
+	//////////////////////////
 	m_SampleUIImage = new UI2DImage(
-		m_TESTGameObject, pd3dDevice, pd3dCommandList,
-		POINT{ 60 , 120 }, 100, 200, L"Image/CharacterAppearance1_OFF.dds"
+		m_TESTGameObject, pd3dDevice, pd3dCommandList, // 유지해야하는 정보
+		POINT{ 60 , 120 }, 100, 200, L"Image/CharacterAppearance1_OFF.dds" // 바꾸는 정보
 	);
 
 }
@@ -179,6 +184,9 @@ void RoomScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	 
 	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_UISCREEN);
 
+	///////////////////////// 
+	// UI Render
+	//////////////////////////
 	m_SampleUIImage->Render(pd3dCommandList);
 }
 
