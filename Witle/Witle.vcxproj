@@ -157,6 +157,7 @@
     <ClInclude Include="Avoidance.h" />
     <ClInclude Include="BasicCam.h" />
     <ClInclude Include="Broom.h" />
+    <ClInclude Include="GraphicsRootSignatureMgr.h" />
     <ClInclude Include="UI2DImage.h" />
     <ClInclude Include="UI2D.h" />
     <ClInclude Include="Button.h" />
@@ -331,6 +332,7 @@
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="PickingPointShader.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="GraphicsRootSignatureMgr.cpp" />
     <ClCompile Include="PlayerManager.cpp" />
     <ClCompile Include="PlayerMovement.cpp" />
     <ClCompile Include="PlayerStatus.cpp" />

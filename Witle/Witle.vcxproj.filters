@@ -328,6 +328,9 @@
     <Filter Include="02.Component\07.UI3D">
       <UniqueIdentifier>{19ced049-b3fe-44f3-936a-86982972daef}</UniqueIdentifier>
     </Filter>
+    <Filter Include="13.Storage/Manager\GraphicsRootSignatureMgr">
+      <UniqueIdentifier>{8d8ff32c-2a6b-4116-b88d-0f144624d9ae}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -681,6 +684,9 @@
     <ClInclude Include="UI2DImage.h">
       <Filter>02.Component\06.UI2D\UI2DImage</Filter>
     </ClInclude>
+    <ClInclude Include="GraphicsRootSignatureMgr.h">
+      <Filter>13.Storage/Manager\GraphicsRootSignatureMgr</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1015,6 +1021,9 @@
     </ClCompile>
     <ClCompile Include="UI2DImage.cpp">
       <Filter>02.Component\06.UI2D\UI2DImage</Filter>
+    </ClCompile>
+    <ClCompile Include="GraphicsRootSignatureMgr.cpp">
+      <Filter>13.Storage/Manager\GraphicsRootSignatureMgr</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

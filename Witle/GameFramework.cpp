@@ -8,6 +8,7 @@
 //// GameBase ////////////////////////// 
 
 //// Manager ////////////////////////// 
+#include "GraphicsRootSignatureMgr.h"
 #include "ShaderManager.h"
 #include "ModelStorage.h"
 #include "TextureStorage.h"
@@ -128,7 +129,7 @@ void CGameFramework::RenderShadowMap()
 	m_CommandList->OMSetRenderTargets(1, &m_SwapChainCPUHandle[m_SwapChainBufferIndex], TRUE, &m_DepthStencilCPUHandle);
 
 	////그래픽 루트 시그너쳐를 설정한다.
-	m_CommandList->SetGraphicsRootSignature(m_pScene->GetGraphicsRootSignature());
+	m_CommandList->SetGraphicsRootSignature(GraphicsRootSignatureMgr::GetGraphicsRootSignature());
 
 	////파이프라인 상태를 설정한다.
 	m_CommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("TEST")->GetPSO());
@@ -469,15 +470,16 @@ void CGameFramework::BuildObjects()
 	m_CommandList->Reset(m_CommandAllocator.Get(), NULL);
 	
 	///////////////////////////////////////////////////////////////////////////// 리소스 생성
-	// 루트 시그니처 위해 장면 먼저 생성
+	// 루트 시그니처 먼저 생성
+	GraphicsRootSignatureMgr::BuildObject(m_d3dDevice.Get());
+
 	m_pScene = new GameScene;
 	// m_pScene = new LoadingScene;
 	// m_pScene = new RoomScene;
-	m_pScene->CreateRootSignature(m_d3dDevice.Get()); 
-
+	
 	// 루트 시그니처를 통해 모든 오브젝트 갖고온다.
 	TextureStorage::GetInstance()->CreateTextures(m_d3dDevice.Get(), m_CommandList.Get());
-	ModelStorage::GetInstance()->CreateModels(m_d3dDevice.Get(), m_CommandList.Get(), m_pScene->GetGraphicsRootSignature());
+	ModelStorage::GetInstance()->CreateModels(m_d3dDevice.Get(), m_CommandList.Get(), GraphicsRootSignatureMgr::GetGraphicsRootSignature());
 	  
 	BuildTESTObjects();
 	BuildShaders();
@@ -659,17 +661,17 @@ void CGameFramework::RenderOnSwapchain()
 
 void CGameFramework::BuildShaders()
 {
-	CMaterial::PrepareShaders(m_d3dDevice.Get(), m_CommandList.Get(), m_pScene->GetGraphicsRootSignature());
-	ShaderManager::GetInstance()->BuildShaders(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
+	CMaterial::PrepareShaders(m_d3dDevice.Get(), m_CommandList.Get(), GraphicsRootSignatureMgr::GetGraphicsRootSignature());
+	ShaderManager::GetInstance()->BuildShaders(m_d3dDevice.Get(), GraphicsRootSignatureMgr::GetGraphicsRootSignature());
 }
 
 void CGameFramework::BuildTESTObjects()
 {
 	//m_horizenShader = new HorizonBlurShader();
-	//m_horizenShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
+	//m_horizenShader->CreateShader(m_d3dDevice.Get(), GraphicsRootSignatureMgr::GetGraphicsRootSignature());
 
 	//m_verticalShader = new VerticalBlurShader();
-	//m_verticalShader->CreateShader(m_d3dDevice.Get(), m_pScene->GetGraphicsRootSignature());
+	//m_verticalShader->CreateShader(m_d3dDevice.Get(), GraphicsRootSignatureMgr::GetGraphicsRootSignature());
 }
  
 void CGameFramework::RenderOnGbuffer()
