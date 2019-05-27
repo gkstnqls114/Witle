@@ -48,11 +48,12 @@ public:
 	static bool isCollide(MyCollider* collider, const XMFLOAT3& origin, const XMFLOAT3& direction, float& dist);
 
 	// 만약 MyBOBox에 부딪히면 슬라이딩 벡터로 처리한다.
-	static bool ProcessCollision(const BoundingOrientedBox& staticObject,
-		const MyBOBox& moveObject,
+	static bool ProcessCollision(const BoundingOrientedBox& moveObject,
+		const MyBOBox& staticObject,  
 		const XMFLOAT3 & beforUpdatePosition,
 		const XMFLOAT3 & nowVelocity,
 		float fElapsedTime,
+		bool StaticObjIsMove,
 		/*out*/XMFLOAT3& SlideVector);
-
+	 
 };

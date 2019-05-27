@@ -589,6 +589,7 @@ void GameScene::UpdateCollision(float fElapsedTime)
 			m_pPlayer->GetTransform().GetPosition(),
 			m_pPlayer->GetVelocity(), 
 			fElapsedTime,
+			false,
 			slideVector);
 
 		if (isSlide)
@@ -627,39 +628,22 @@ void GameScene::UpdateCollision(float fElapsedTime)
 				MyBOBox worldBox = *box;
 				worldBox.Move(XMFLOAT3(pWorldMatrix[i]._41, 0, pWorldMatrix[i]._43));
 
-				// 이동한 박스를 통해 충돌한다.
-				bool isAlreadyCollide = Collision::isCollide(AlreadyPlayerBBox, worldBox.GetBOBox());
-				if (isAlreadyCollide)
+				XMFLOAT3 slideVector{ 0.f, 0.f, 0.f };
+
+				bool isSlide = Collision::ProcessCollision(
+					AlreadyPlayerBBox,
+					worldBox,
+					m_pPlayer->GetTransform().GetPosition(),
+					m_pPlayer->GetVelocity(),
+					fElapsedTime,
+					true,
+					slideVector);
+
+				if (isSlide)
 				{
-					for (int x = 0; x < 4; ++x) //  plane 4 면에 대해 체크한다..
-					{
-						XMFLOAT3 intersectionPoint;
-						// 여기서 d란... 원점과 평면과의 거리를 의미한다. (양수/음수)
-						float d = Plane::CaculateD(box->GetPlane(x), worldBox.GetPosOnPlane(x));
-						// 시간에 따른 이동을 기준으로 하므로 velocity 는 프레임 시간을 곱한다.
-						bool isFront = Plane::IsFront(box->GetPlaneNormal(x), d, m_pPlayer->GetTransform().GetPosition()); // 업데이트 이전 위치
-						// 만약 무한한 평면에 교차했다면...
-						if (isFront)
-						{
-							bool isIntersect = Plane::Intersect(box->GetPlaneNormal(x), d, m_pPlayer->GetTransform().GetPosition(), Vector3::ScalarProduct(m_pPlayer->GetVelocity(), fElapsedTime, false), intersectionPoint);
-
-							if (isIntersect)
-							{
-								// 해당 교차점이 유한평면안에 존재하는지 확인한다.
-								// worldBox.IsIn(x, intersectionPoint)
-								// 
-								if (Collision::isIn(worldBox.GetBOBox(), intersectionPoint)) //isIn 함수 나중에 수정해야함
-								{
-									m_pPlayer->SetVelocity
-									(
-										Vector3::Sliding(box->GetPlaneNormal(x), m_pPlayer->GetVelocity())
-									);
-								}
-							}
-						}
-					}
-
+					m_pPlayer->SetVelocity(slideVector);
 				}
+				 
 			}
 		}
 	}

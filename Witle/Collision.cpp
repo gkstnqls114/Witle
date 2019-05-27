@@ -17,10 +17,12 @@ bool Collision::isCollide(MyCollider* collider, const XMFLOAT3 & origin, const X
 	}
 }
 
-bool Collision::ProcessCollision(const BoundingOrientedBox & moveObject, const MyBOBox & staticObject,
+bool Collision::ProcessCollision(const BoundingOrientedBox & moveObject,
+	const MyBOBox & staticObject, 
 	const XMFLOAT3 & beforUpdatePosition,
 	const XMFLOAT3 & nowVelocity,
 	float fElapsedTime,
+	bool StaticObjIsMove,
 	XMFLOAT3 & SlideVector)
 {
 	// 이동한 박스를 통해 충돌한다.
@@ -31,7 +33,16 @@ bool Collision::ProcessCollision(const BoundingOrientedBox & moveObject, const M
 		{
 			XMFLOAT3 intersectionPoint;
 			// 여기서 d란... 원점과 평면과의 거리를 의미한다. (양수/음수)
-			float d = staticObject.GetPlane(x).w;
+			float d = 0;
+			if (StaticObjIsMove)
+			{
+				d = Plane::CaculateD(staticObject.GetPlane(x), staticObject.GetPosOnPlane(x));		
+			}
+			else
+			{
+				d = staticObject.GetPlane(x).w;
+			}
+			
 			// 시간에 따른 이동을 기준으로 하므로 velocity 는 프레임 시간을 곱한다.
 			bool isFront = Plane::IsFront(staticObject.GetPlaneNormal(x), d, beforUpdatePosition); // 업데이트 이전 위치
 			// 만약 무한한 평면에 교차했다면...

@@ -49,7 +49,7 @@ public:
 		return m_BoBoxPlane[index]; 
 	}
 
-	const XMFLOAT3 GetPosOnPlane(int index)
+	XMFLOAT3 GetPosOnPlane(int index) const
 	{
 		assert(!(index < 0 && index >= 4)); 
 		switch (index)
