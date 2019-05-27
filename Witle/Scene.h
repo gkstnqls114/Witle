@@ -17,6 +17,7 @@ public:
 	virtual void ReleaseUploadBuffers() = 0;
 
 	// GameFramework의 UpdateGamelogic 함수 내부에서 UpdateGamelogic, LastUpdate 순으로 호출되는 함수이다. 
+	virtual void UpdatePhysics(float ElapsedTime) = 0;
 	virtual void Update(float ElapsedTime) = 0;
 	virtual void LastUpdate(float ElapsedTime) = 0;
 

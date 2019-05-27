@@ -532,6 +532,7 @@ void CGameFramework::UpdateGamelogic(float fElapsedTime)
 	if (m_pScene) {
 		GameInput::Update(m_hWnd);
 		m_pScene->ProcessInput(m_hWnd, fElapsedTime);
+		m_pScene->UpdatePhysics(fElapsedTime);
 		m_pScene->Update(fElapsedTime);
 		m_pScene->AnimateObjects(fElapsedTime);
 		m_pScene->LastUpdate(fElapsedTime);

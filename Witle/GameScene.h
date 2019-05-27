@@ -87,6 +87,7 @@ public:
 
 	virtual void ReleaseUploadBuffers() override;
 
+	virtual void UpdatePhysics(float ElapsedTime) override; // 정확히는 가속도 변경을 실행한다.
 	virtual void Update(float ElapsedTime) override;
 	virtual void LastUpdate(float ElapsedTime) override;
 

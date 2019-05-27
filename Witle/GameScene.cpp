@@ -401,8 +401,14 @@ bool GameScene::ProcessInput(HWND hWnd, float fElapsedTime)
 		} 
 	}
 	
-	m_TestMonster->UpdateState(fElapsedTime);
 	return true;
+}
+
+void GameScene::UpdatePhysics(float fElapsedTime)
+{
+	m_TestMonster->UpdateState(fElapsedTime); // State와 업데이트 처리...
+
+	UpdateCollision(fElapsedTime); 
 }
 
 // ProcessInput에 의한 right, up, look, pos 를 월드변환 행렬에 갱신한다.
@@ -419,7 +425,6 @@ void GameScene::Update(float fElapsedTime)
 	}
 
 	//// 순서 변경 X ////
-	UpdateCollision(fElapsedTime);
 
 	if(m_pPlayer) m_pPlayer->Update(fElapsedTime); //Velocity를 통해 pos 이동
 	if(m_pOtherPlayer) m_pOtherPlayer->Update(fElapsedTime);
@@ -574,38 +579,21 @@ void GameScene::UpdateCollision(float fElapsedTime)
 	};
 
 	for (int i = 0; i < 4; ++i)
-	{  
-		// 이동한 박스를 통해 충돌한다.
-		bool isAlreadyCollide = Collision::isCollide(AlreadyPlayerBBox, outside_box[i].GetBOBox());
-		if (isAlreadyCollide)
-		{
-			for (int x = 0; x < 4; ++x) //  plane 4 면에 대해 체크한다..
-			{
-				XMFLOAT3 intersectionPoint;
-				// 여기서 d란... 원점과 평면과의 거리를 의미한다. (양수/음수)
-				float d = outside_box[i].GetPlane(x).w;
-				// 시간에 따른 이동을 기준으로 하므로 velocity 는 프레임 시간을 곱한다.
-				bool isFront = Plane::IsFront(outside_box[i].GetPlaneNormal(x), d, m_pPlayer->GetTransform().GetPosition()); // 업데이트 이전 위치
-				// 만약 무한한 평면에 교차했다면...
-				if (isFront)
-				{
-					bool isIntersect = Plane::Intersect(outside_box[i].GetPlaneNormal(x), d, m_pPlayer->GetTransform().GetPosition(), Vector3::ScalarProduct(m_pPlayer->GetVelocity(), fElapsedTime, false), intersectionPoint);
+	{
+		XMFLOAT3 slideVector{ 0.f, 0.f, 0.f };
 
-					if (isIntersect)
-					{
-						// 해당 교차점이 유한평면안에 존재하는지 확인한다.
-						// outside_box[i].IsIn(x, intersectionPoint)
-						// 
-						if (Collision::isIn(outside_box[i].GetBOBox(), intersectionPoint)) //isIn 함수 나중에 수정해야함
-						{
-							m_pPlayer->SetVelocity
-							(
-								Vector3::Sliding(outside_box[i].GetPlaneNormal(x), m_pPlayer->GetVelocity())
-							);
-						}
-					}
-				}
-			}
+		// 이동한 박스를 통해 충돌한다.
+		bool isSlide = Collision::ProcessCollision(
+			AlreadyPlayerBBox, 
+			outside_box[i], 
+			m_pPlayer->GetTransform().GetPosition(),
+			m_pPlayer->GetVelocity(), 
+			fElapsedTime,
+			slideVector);
+
+		if (isSlide)
+		{ 
+			m_pPlayer->SetVelocity(slideVector);
 		}
 	}
 
