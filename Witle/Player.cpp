@@ -241,6 +241,13 @@ void Player::ReleaseMemberUploadBuffers()
 	if (m_pMyBOBox)m_pMyBOBox->ReleaseUploadBuffers();
 }
 
+void Player::SetAnimationState(int state)
+{ 
+	m_CurrAnimation = state;
+	m_pLoadObject_Cloth->SetTrackAnimationSet(0, m_CurrAnimation);
+	m_pLoadObject_Body->SetTrackAnimationSet(0, m_CurrAnimation);
+}
+
 void Player::Update(float fElapsedTime)
 {  
 	m_Broom->Update(fElapsedTime);
@@ -344,7 +351,8 @@ void Player::ProcessInput(float fTimeElapsed)
 {   
 	if (m_CurrAnimation == ANIMATION_BEATTACKED.ID)
 	{
-		if (!m_pLoadObject_Cloth->IsTrackAnimationSetFinish(0, ANIMATION_BEATTACKED.ID))
+		if (!m_pLoadObject_Cloth->IsTrackAnimationSetFinish(0, ANIMATION_BEATTACKED.ID) &&
+			!m_pLoadObject_Body->IsTrackAnimationSetFinish(0, ANIMATION_BEATTACKED.ID))
 		{
 			return;
 		}
@@ -372,7 +380,8 @@ void Player::ProcessInput(float fTimeElapsed)
 
 	if (m_isAttacking)
 	{
-		if (m_pLoadObject_Cloth->IsTrackAnimationSetFinish(0, ANIMATION_ATTACK.ID))
+		if (m_pLoadObject_Cloth->IsTrackAnimationSetFinish(0, ANIMATION_ATTACK.ID) && 
+			m_pLoadObject_Body->IsTrackAnimationSetFinish(0, ANIMATION_ATTACK.ID))
 		{
 			m_isAttacking = false;
 		} 
@@ -383,7 +392,8 @@ void Player::ProcessInput(float fTimeElapsed)
 	{
 		m_CurrAnimation = ANIMATION_BROOMPREPARE.ID;
 
-		if (m_pLoadObject_Cloth->IsTrackAnimationSetFinish(0, ANIMATION_BROOMPREPARE.ID))
+		if (m_pLoadObject_Cloth->IsTrackAnimationSetFinish(0, ANIMATION_BROOMPREPARE.ID) &&
+			m_pLoadObject_Body->IsTrackAnimationSetFinish(0, ANIMATION_BROOMPREPARE.ID))
 		{
 			m_Broom->DoUse();
 		}
@@ -442,16 +452,7 @@ void Player::ProcessInput(float fTimeElapsed)
 }
 
 void Player::ProcessInputAI(float fTimeElapsed)
-{ 
-	if (m_CurrAnimation == ANIMATION_BEATTACKED.ID)
-	{
-		if (!m_pLoadObject_Cloth->IsTrackAnimationSetFinish(0, ANIMATION_BEATTACKED.ID))
-		{
-			return;
-		}
-	} 
-
-	m_CurrAnimation = ANIMATION_IDLE.ID;
+{  
 
 }
 

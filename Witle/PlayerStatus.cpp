@@ -1,12 +1,13 @@
 #include "stdafx.h"
 #include "GameScreen.h"
 #include "MyRectangle.h"
+#include "Player.h"
 #include "ShaderManager.h"
 #include "PlayerStatus.h"
 
 void PlayerStatus::SetAnimationState(int state)
-{
-	
+{ 
+	static_cast<Player*>(m_pOwner)->SetAnimationState(state);
 }
 
 void PlayerStatus::ReleaseObjects()

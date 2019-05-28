@@ -249,7 +249,7 @@
     <ClInclude Include="SkyBox.h" />
     <ClInclude Include="SkyBoxShader.h" />
     <ClInclude Include="SkyPlane.h" />
-    <ClInclude Include="Slime.h" />
+    <ClInclude Include="SpaceCat.h" />
     <ClInclude Include="Sniping.h" />
     <ClInclude Include="SoundManager.h" />
     <ClInclude Include="SpeedReduction.h" />
@@ -365,7 +365,7 @@
     <ClCompile Include="SkinnedShader.cpp" />
     <ClCompile Include="SkyBox.cpp" />
     <ClCompile Include="SkyBoxShader.cpp" />
-    <ClCompile Include="Slime.cpp" />
+    <ClCompile Include="SpaceCat.cpp" />
     <ClCompile Include="Sniping.cpp" />
     <ClCompile Include="SoundManager.cpp" />
     <ClCompile Include="SpeedReduction.cpp" />

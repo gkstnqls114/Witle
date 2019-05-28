@@ -55,9 +55,6 @@
     <Filter Include="05.Shader\TerrainShader">
       <UniqueIdentifier>{aa6b6413-fd8b-46d0-9a8c-ff8f7919a135}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03.GameObject\Player">
-      <UniqueIdentifier>{79d88ce3-72d5-440a-881b-7a9ae6ed8439}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.Component\MyRigidbody">
       <UniqueIdentifier>{ea387169-77ab-4066-8583-c032c53a4038}</UniqueIdentifier>
     </Filter>
@@ -193,17 +190,11 @@
     <Filter Include="05.Shader\PickingPointShader">
       <UniqueIdentifier>{e1b1da95-c95f-47f7-aeb8-f808f2605157}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03.GameObject\Monster">
-      <UniqueIdentifier>{8062d154-08a1-41ca-a30a-ff569f779ccb}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.Component\ForMonster">
       <UniqueIdentifier>{6f6f0da4-460e-4a1c-ad74-3a573093c8c3}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.Component\ForMonster\MonsterMovement">
       <UniqueIdentifier>{692a14ef-ebae-4df5-a360-50a94d6057b4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03.GameObject\Monster\Slime">
-      <UniqueIdentifier>{e58f492a-8b9e-4d14-8f6d-d915c5c785c3}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.Component\02.Camera">
       <UniqueIdentifier>{97a51fee-d2d6-4527-a559-c0e182ff3bb1}</UniqueIdentifier>
@@ -349,6 +340,15 @@
     <Filter Include="02.Component\09.Status\MonsterStatus">
       <UniqueIdentifier>{ab995979-ee05-40e1-beb5-de7c89b328f6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.GameObject\01.Player">
+      <UniqueIdentifier>{79d88ce3-72d5-440a-881b-7a9ae6ed8439}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameObject\02.Monster">
+      <UniqueIdentifier>{8062d154-08a1-41ca-a30a-ff569f779ccb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameObject\02.Monster\Slime">
+      <UniqueIdentifier>{e58f492a-8b9e-4d14-8f6d-d915c5c785c3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -439,7 +439,7 @@
       <Filter>05.Shader\TerrainShader</Filter>
     </ClInclude>
     <ClInclude Include="Player.h">
-      <Filter>03.GameObject\Player</Filter>
+      <Filter>03.GameObject\01.Player</Filter>
     </ClInclude>
     <ClInclude Include="GameInput.h">
       <Filter>01.GameBase</Filter>
@@ -646,13 +646,10 @@
       <Filter>02.Component\03.Mesh\SphereMesh</Filter>
     </ClInclude>
     <ClInclude Include="Monster.h">
-      <Filter>03.GameObject\Monster</Filter>
+      <Filter>03.GameObject\02.Monster</Filter>
     </ClInclude>
     <ClInclude Include="MonsterStatus.h">
       <Filter>02.Component\09.Status\MonsterStatus</Filter>
-    </ClInclude>
-    <ClInclude Include="Slime.h">
-      <Filter>03.GameObject\Monster\Slime</Filter>
     </ClInclude>
     <ClInclude Include="MyCollider.h">
       <Filter>02.Component\05.MyCollider</Filter>
@@ -722,6 +719,9 @@
     </ClInclude>
     <ClInclude Include="Status.h">
       <Filter>02.Component\09.Status</Filter>
+    </ClInclude>
+    <ClInclude Include="SpaceCat.h">
+      <Filter>03.GameObject\02.Monster\Slime</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -804,7 +804,7 @@
       <Filter>05.Shader\TerrainShader</Filter>
     </ClCompile>
     <ClCompile Include="Player.cpp">
-      <Filter>03.GameObject\Player</Filter>
+      <Filter>03.GameObject\01.Player</Filter>
     </ClCompile>
     <ClCompile Include="GameInput.cpp">
       <Filter>01.GameBase</Filter>
@@ -1002,13 +1002,10 @@
       <Filter>02.Component\03.Mesh\SphereMesh</Filter>
     </ClCompile>
     <ClCompile Include="Monster.cpp">
-      <Filter>03.GameObject\Monster</Filter>
+      <Filter>03.GameObject\02.Monster</Filter>
     </ClCompile>
     <ClCompile Include="MonsterStatus.cpp">
       <Filter>02.Component\09.Status\MonsterStatus</Filter>
-    </ClCompile>
-    <ClCompile Include="Slime.cpp">
-      <Filter>03.GameObject\Monster\Slime</Filter>
     </ClCompile>
     <ClCompile Include="MyCollider.cpp">
       <Filter>02.Component\05.MyCollider</Filter>
@@ -1078,6 +1075,9 @@
     </ClCompile>
     <ClCompile Include="Status.cpp">
       <Filter>02.Component\09.Status</Filter>
+    </ClCompile>
+    <ClCompile Include="SpaceCat.cpp">
+      <Filter>03.GameObject\02.Monster\Slime</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

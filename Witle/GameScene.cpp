@@ -48,7 +48,7 @@
 #include "CameraObject.h"
 #include "QuadTreeTerrain.h"
 #include "BasicCam.h" 
-#include "Slime.h"
+#include "SpaceCat.h"
 #include "GameScene.h"
 
 ID3D12DescriptorHeap*		GameScene::m_pd3dCbvSrvDescriptorHeap;
@@ -236,7 +236,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	// 테스트용 
 
 	// 몬스터
-	m_TestMonster = new Slime("Slime", XMFLOAT3(1000, 0, 1000), pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
+	m_TestMonster = new SpaceCat("Slime", XMFLOAT3(1000, 0, 1000), pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
 
 	//// 테스트 쿼드트리 터레인 생성 
 	m_pQuadtreeTerrain = new QuadtreeTerrain(pd3dDevice, pd3dCommandList, 257, 257, xmf3Scale, xmf4Color, m_Terrain->GetHeightMapImage());
@@ -423,9 +423,16 @@ void GameScene::Update(float fElapsedTime)
 	// 플레이어 공격
 	if (GameInput::GetDragMode()) // 만약 드래그로 회전한다면...
 	{ 
+		//m_pPlayer->Attack(
+		//	static_cast<Status*>(m_TestMonster->GetStatus()),
+		//	m_TestMonster->GetBOBox(),
+		//	m_AimPoint->GetPickingPoint(),
+		//	m_pMainCamera->GetCamera());
+
+
 		m_pPlayer->Attack(
-			static_cast<Status*>(m_TestMonster->GetStatus()),
-			m_TestMonster->GetBOBox(),
+			static_cast<Status*>(m_pOtherPlayer->GetStatus()),
+			m_pOtherPlayer->GetBOBox(),
 			m_AimPoint->GetPickingPoint(),
 			m_pMainCamera->GetCamera());
 	}

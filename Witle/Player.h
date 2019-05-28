@@ -59,6 +59,10 @@ protected:
 	virtual void ReleaseMemberUploadBuffers() override;
 
 public:
+
+
+	void SetAnimationState(int state);
+
 	virtual void Update(float fElapsedTime) override;
 
 private:

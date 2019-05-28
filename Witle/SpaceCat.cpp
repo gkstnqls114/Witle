@@ -11,9 +11,9 @@
 #include "Object.h"
 #include "MyBOBox.h"
 #include "Texture.h"
-#include "Slime.h"
+#include "SpaceCat.h"
 
-Slime::Slime(const std::string & entityID, const XMFLOAT3& SpawnPoint, 
+SpaceCat::SpaceCat(const std::string & entityID, const XMFLOAT3& SpawnPoint, 
 	ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature)
 	: Monster(entityID, SpawnPoint, pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature)
 { 
@@ -34,11 +34,11 @@ Slime::Slime(const std::string & entityID, const XMFLOAT3& SpawnPoint,
 	m_Transform.SetPosition(SpawnPoint); 
 }
 
-Slime::~Slime()
+SpaceCat::~SpaceCat()
 {
 }
 
-void Slime::Update(float fElapsedTime)
+void SpaceCat::Update(float fElapsedTime)
 {
 	// 이동량을 계산한다. 
 	m_MonsterMovement->Update(fElapsedTime);
@@ -54,7 +54,7 @@ void Slime::Update(float fElapsedTime)
 	); 
 }
  
-void Slime::UpdateState(float fElapsedTime)
+void SpaceCat::UpdateState(float fElapsedTime)
 {
 	m_MonsterMovement->UpdateState(fElapsedTime);
 }
