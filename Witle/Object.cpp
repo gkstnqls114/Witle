@@ -312,15 +312,8 @@ void *CAnimationSet::GetCallbackData()
 	return(NULL);
 }
 
-static bool isEnd = false;
-static float prevTime = 0.f;
-static float Accumulate = 0.f;
-void CAnimationSet::SetPosition(float fTrackPosition)
+void CAnimationSet::SetPosition(float fTrackPosition, float Accumulate)
 {
-	float ElapsedTime = fTrackPosition - prevTime;
-	Accumulate = Accumulate + ElapsedTime;
-	// std::cout << fTrackPosition << " - " << prevTime << " = >" << ElapsedTime << " : " << Accumulate << std::endl;
-
 	switch (m_nType)
 	{
 	case ANIMATION_TYPE_LOOP:
@@ -331,8 +324,7 @@ void CAnimationSet::SetPosition(float fTrackPosition)
 	case ANIMATION_TYPE_ONCE:
 	{
 		if (Accumulate >= (m_fEndTime - m_fStartTime))
-		{
-			isEnd = false;
+		{ 
 			m_fPosition = m_fEndTime;
 		}
 		else
@@ -347,9 +339,7 @@ void CAnimationSet::SetPosition(float fTrackPosition)
 		break;
 	}
 	}
-
-	prevTime = fTrackPosition;
-
+	 
 	if (m_pAnimationCallbackHandler)
 	{
 		void *pCallbackData = GetCallbackData();
@@ -357,9 +347,9 @@ void CAnimationSet::SetPosition(float fTrackPosition)
 	}
 }
 
-void CAnimationSet::Animate(float fTrackPosition, float fTrackWeight)
+void CAnimationSet::Animate(float fTrackPosition, float fTrackWeight, float Accumulate)
 {
-	SetPosition(fTrackPosition);
+	SetPosition(fTrackPosition, Accumulate);
 
 	for (int i = 0; i < m_nAnimationLayers; i++)
 	{
@@ -485,15 +475,20 @@ void CAnimationController::SetAnimationCallbackHandler(int nAnimationSet, CAnima
 	if (m_pAnimationSets) m_pAnimationSets->SetAnimationCallbackHandler(nAnimationSet, pCallbackHandler);
 }
 
+// ANIMATION_TYPE_ONCE 이 아닌경우 언제나 true 반환
 bool CAnimationController::IsTrackAnimationSetFinish(int nAnimationTrack, int nAnimationSet)
 {
 	if (m_pAnimationTracks)
 	{
-		float fPos = m_pAnimationSets[0].m_ppAnimationSets[nAnimationSet]->m_fPosition;
-		float fEnd = m_pAnimationSets[0].m_ppAnimationSets[nAnimationSet]->m_fEndTime;
-		bool isEnd = fabsf(fPos - fEnd) < EPSILON;
-		if(isEnd) Accumulate = 0.f;
-
+		bool isEnd = true;
+		if (m_pAnimationSets[0].m_ppAnimationSets[nAnimationSet]->m_nType == ANIMATION_TYPE_ONCE)
+		{ 
+			float fPos = m_pAnimationSets[0].m_ppAnimationSets[nAnimationSet]->m_fPosition;
+			float fEnd = m_pAnimationSets[0].m_ppAnimationSets[nAnimationSet]->m_fEndTime;
+			isEnd = fabsf(fPos - fEnd) < EPSILON;
+			if (isEnd) Accumulate = 0.f;
+		}
+		
 		return isEnd;
 	}
 	else
@@ -590,7 +585,20 @@ void CAnimationController::AdvanceTime(float fTimeElapsed, LoadObject *pRootGame
 			if (m_pAnimationTracks[k].m_bEnable)
 			{
 				CAnimationSet *pAnimationSet = m_pAnimationSets->m_ppAnimationSets[m_pAnimationTracks[k].m_nAnimationSet];
-				pAnimationSet->Animate(m_pAnimationTracks[k].m_fPosition, m_pAnimationTracks[k].m_fWeight);
+				
+				//추가
+				float fTrackPosition = m_pAnimationTracks[k].m_fPosition;
+				
+				float ElapsedTime = fTrackPosition - prevTime;
+				Accumulate = Accumulate + ElapsedTime;
+				//추가
+
+				pAnimationSet->Animate(fTrackPosition, m_pAnimationTracks[k].m_fWeight, Accumulate);
+
+				//추가
+				prevTime = fTrackPosition; 
+				//추가
+
 			}
 		}
 

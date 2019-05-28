@@ -220,9 +220,7 @@ public:
 	~CAnimationSet();
 
 public:
-	void ReleaseObject();
-
-	float m_fAccumulate = 0.f;
+	void ReleaseObject(); 
 
 	char							m_pstrAnimationSetName[64];
 
@@ -242,9 +240,9 @@ public:
 	CAnimationCallbackHandler 		*m_pAnimationCallbackHandler = NULL;
 
 public:
-	void SetPosition(float fTrackPosition);
+	void SetPosition(float fTrackPosition, float Accumulate);
 
-	void Animate(float fTrackPosition, float fTrackWeight);
+	void Animate(float fTrackPosition, float fTrackWeight, float Accumulate);
 
 	void SetCallbackKeys(int nCallbackKeys);
 	void SetCallbackKey(int nKeyIndex, float fTime, void *pData);
@@ -328,6 +326,13 @@ public:
 	~CAnimationController();
 
 public:
+
+	// 추가 //////////////////////
+	bool  isEnd = false;
+	float prevTime = 0.f;
+	float Accumulate = 0.f;
+	// 추가 //////////////////////
+
 	float 							m_fTime = 0.0f;
 
 	int 							m_nAnimationTracks = 0;
