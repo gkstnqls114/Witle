@@ -1,8 +1,14 @@
 #include "stdafx.h"
 #include "GameScreen.h"
 #include "MyRectangle.h"
+#include "Monster.h"
 #include "ShaderManager.h"
 #include "MonsterStatus.h"
+
+void MonsterStatus::SetAnimationState(int state)
+{ 
+	static_cast<Monster*>(m_pOwner)->SetAnimationState(state);
+}
 
 void MonsterStatus::ReleaseObjects()
 {

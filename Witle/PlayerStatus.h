@@ -8,6 +8,10 @@ class MyRectangle;
 class PlayerStatus
 	: public Status
 {
+private:
+	virtual void SetAnimationState(int state) override;
+
+private:
 	Shader* m_pHPBarShader{ nullptr };
 	MyRectangle* m_HpBar{ nullptr };
 	 

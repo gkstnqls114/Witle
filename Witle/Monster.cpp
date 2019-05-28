@@ -246,4 +246,10 @@ void Monster::Rotate(float x, float y, float z)
 	m_Transform.Rotate(x, y, z);
 	m_pMyBOBox->Rotate(m_MonsterMovement->m_fRoll, m_MonsterMovement->m_fYaw, m_MonsterMovement->m_fPitch);
 }
+
+void Monster::SetAnimationState(int state)
+{
+	m_CurrAnimation = state;
+	m_pLoadObject->SetTrackAnimationSet(0, m_CurrAnimation);
+}
  

@@ -467,7 +467,7 @@ bool Player::Attack(Status* status, MyCollider* collider, XMFLOAT2 aimPoint, Cam
 	if (isNearMonster) // 몬스터와 가까운 경우 근접 공격
 	{  
 		std::cout << "근접공격" << std::endl;
-		status->Damage(500);
+		status->Damage(500, ANIMATION_BEATTACKED.ID);
 	}
 	else
 	{  
@@ -481,7 +481,7 @@ bool Player::Attack(Status* status, MyCollider* collider, XMFLOAT2 aimPoint, Cam
 		if (isCollide && Playerdist < 3000.f)
 		{
 			std::cout << "원거리공격" << std::endl;
-			status->Damage(500); 
+			status->Damage(500, ANIMATION_BEATTACKED.ID);
 		}
 
 	}

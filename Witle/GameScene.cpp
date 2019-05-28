@@ -434,8 +434,7 @@ void GameScene::Update(float fElapsedTime)
 
 	}
 
-	//// 순서 변경 X ////
-
+	//// 순서 변경 X //// 
 	if(m_pPlayer) m_pPlayer->Update(fElapsedTime); //Velocity를 통해 pos 이동
 	if(m_pOtherPlayer) m_pOtherPlayer->Update(fElapsedTime);
 	if(m_TestMonster) m_TestMonster->Update(fElapsedTime);

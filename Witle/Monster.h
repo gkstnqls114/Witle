@@ -93,5 +93,9 @@ public:
 	XMFLOAT3 GetSpawnPoint() const { return m_SpawnPoint; }
 	float GetSpawnRange() const { return m_SpawnRange; }
 	//// Get /////////////////// 
-	 
+	
+	//// Set /////////////////// 
+	void SetAnimationState(int state);
+	//// Set /////////////////// 
+
 };

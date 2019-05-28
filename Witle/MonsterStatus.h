@@ -6,7 +6,11 @@ class MyRectangle;
 // HP 관련 정보
 class MonsterStatus
 	: public Status
-{
+{ 
+private:
+	virtual void SetAnimationState(int state) override;
+	 
+private:
 	MyRectangle* m_HpBar{ nullptr };
 	 
 public:

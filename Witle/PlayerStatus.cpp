@@ -4,6 +4,11 @@
 #include "ShaderManager.h"
 #include "PlayerStatus.h"
 
+void PlayerStatus::SetAnimationState(int state)
+{
+	
+}
+
 void PlayerStatus::ReleaseObjects()
 {
 	if (m_HpBar)
