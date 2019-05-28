@@ -159,6 +159,7 @@
     <ClInclude Include="Broom.h" />
     <ClInclude Include="GraphicsRootSignatureMgr.h" />
     <ClInclude Include="MainCameraMgr.h" />
+    <ClInclude Include="Movement.h" />
     <ClInclude Include="UI3DImage.h" />
     <ClInclude Include="UI3D.h" />
     <ClInclude Include="UI2DImage.h" />
@@ -339,6 +340,7 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="GraphicsRootSignatureMgr.cpp" />
     <ClCompile Include="PlayerManager.cpp" />
+    <ClCompile Include="Movement.cpp" />
     <ClCompile Include="PlayerMovement.cpp" />
     <ClCompile Include="PlayerStatus.cpp" />
     <ClCompile Include="PointLight.cpp" />

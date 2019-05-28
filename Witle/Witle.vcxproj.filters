@@ -343,6 +343,15 @@
     <Filter Include="13.Storage/Manager\09.MainCameraMgr">
       <UniqueIdentifier>{77e59bf6-ba18-4c91-9800-d502e21c3fd4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.Component\08.Movement">
+      <UniqueIdentifier>{6bcec01c-85e1-4eeb-b9f3-bc71c017ab7c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\08.Movement\01.PlayerMovement">
+      <UniqueIdentifier>{6bb3feae-66cd-4747-b769-fe1261304bd4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\08.Movement\02.MonsteMovement">
+      <UniqueIdentifier>{1db78e68-d277-41d6-9da7-ba1ca04b7e1c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -600,9 +609,6 @@
     <ClInclude Include="PlayerStatus.h">
       <Filter>02.Component\ForPlayer\PlayerStatus</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerMovement.h">
-      <Filter>02.Component\ForPlayer\PlayerMovement</Filter>
-    </ClInclude>
     <ClInclude Include="Broom.h">
       <Filter>12.Skill\Broom</Filter>
     </ClInclude>
@@ -647,9 +653,6 @@
     </ClInclude>
     <ClInclude Include="MonsterStatus.h">
       <Filter>02.Component\ForMonster\MonsterStatus</Filter>
-    </ClInclude>
-    <ClInclude Include="MonsterMovement.h">
-      <Filter>02.Component\ForMonster\MonsterMovement</Filter>
     </ClInclude>
     <ClInclude Include="Slime.h">
       <Filter>03.GameObject\Monster\Slime</Filter>
@@ -710,6 +713,15 @@
     </ClInclude>
     <ClInclude Include="MainCameraMgr.h">
       <Filter>13.Storage/Manager\09.MainCameraMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="Movement.h">
+      <Filter>02.Component\08.Movement</Filter>
+    </ClInclude>
+    <ClInclude Include="MonsterMovement.h">
+      <Filter>02.Component\08.Movement\02.MonsteMovement</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerMovement.h">
+      <Filter>02.Component\08.Movement\01.PlayerMovement</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -953,9 +965,6 @@
     <ClCompile Include="PlayerStatus.cpp">
       <Filter>02.Component\ForPlayer\PlayerStatus</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerMovement.cpp">
-      <Filter>02.Component\ForPlayer\PlayerMovement</Filter>
-    </ClCompile>
     <ClCompile Include="Broom.cpp">
       <Filter>12.Skill\Broom</Filter>
     </ClCompile>
@@ -997,9 +1006,6 @@
     </ClCompile>
     <ClCompile Include="MonsterStatus.cpp">
       <Filter>02.Component\ForMonster\MonsterStatus</Filter>
-    </ClCompile>
-    <ClCompile Include="MonsterMovement.cpp">
-      <Filter>02.Component\ForMonster\MonsterMovement</Filter>
     </ClCompile>
     <ClCompile Include="Slime.cpp">
       <Filter>03.GameObject\Monster\Slime</Filter>
@@ -1060,6 +1066,15 @@
     </ClCompile>
     <ClCompile Include="MainCameraMgr.cpp">
       <Filter>13.Storage/Manager\09.MainCameraMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="Movement.cpp">
+      <Filter>02.Component\08.Movement</Filter>
+    </ClCompile>
+    <ClCompile Include="MonsterMovement.cpp">
+      <Filter>02.Component\08.Movement\02.MonsteMovement</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerMovement.cpp">
+      <Filter>02.Component\08.Movement\01.PlayerMovement</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

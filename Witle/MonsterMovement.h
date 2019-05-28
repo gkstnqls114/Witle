@@ -1,5 +1,5 @@
 #pragma once
-#include "ComponentBase.h"
+#include "Movement.h"
 
 class Player;
 
@@ -13,7 +13,7 @@ class DeadAction;
 	
 // 플레이어에 이동에 필요한 가속도, 회전량에 대한 설정
 class MonsterMovement
-	: public ComponentBase
+	: public Movement
 {
 	MonsterAction*  m_CurrMonsterAction  { nullptr };
 	MonsterAction*  m_IdleAction         { nullptr };
@@ -26,19 +26,7 @@ class MonsterMovement
 	const float m_IdleTime{ 1.f }; //Idle 상태로 있는 시간
 	const float m_MoveTime{ 6.f }; //Move 상태로 있는 시간
 
-public:  
-	XMFLOAT3 m_xmf3Velocity = XMFLOAT3(0.0f, 0.0f, 0.0f);
-	XMFLOAT3 m_xmf3Gravity = XMFLOAT3(0.0f, 0.0f, 0.0f);
-	float m_fMaxVelocityY{ 400.0f };
-	float m_fMaxVelocityXZ{ 2000.0f };
-	float m_fFriction = 1700.0f;
-	float m_fDistance = 2000.f; // 20m / 초
-
-	// 회전량
-	float m_fPitch = 0.0f;
-	float m_fRoll = 0.0f;
-	float m_fYaw = 0.0f;
-
+public:   
 	const float m_fNearDistance{ 0.f };
  
 private:
@@ -57,9 +45,7 @@ public:
 	virtual void Update(float) override;
 
 	// Update 수행 이전 반드시 호출
-	virtual void UpdateState(float fElpasedTime);
-
-	XMFLOAT3 AlreadyUpdate(float);
+	 void UpdateState(float fElpasedTime);
 	 
 	void MoveVelocity(const XMFLOAT3& shift);
 

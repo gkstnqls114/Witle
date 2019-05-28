@@ -408,6 +408,8 @@ void GameScene::UpdatePhysics(float fElapsedTime)
 {
 	m_TestMonster->UpdateState(fElapsedTime); // State와 업데이트 처리...
 
+	// 반드시 마지막에 충돌 처리를 해야함.
+	// 그래야 충돌된 것에 따라 가속도 처리를 할 수 있음.
 	UpdateCollision(fElapsedTime); 
 }
 
@@ -564,9 +566,13 @@ void GameScene::ReleaseUploadBuffers()
 }
 
  
+void GameScene::UpdateCollision(const BoundingOrientedBox & AlreadyPlayerBBox, float fElapsedTime)
+{
+}
+
 void GameScene::UpdateCollision(float fElapsedTime)
 {
-	// 충돌체크 ///////////////////////// 
+	// 플레이어 충돌체크 ///////////////////////// 
 	BoundingOrientedBox AlreadyPlayerBBox = m_pPlayer->CalculateAlreadyBoundingBox(fElapsedTime);
 	XMFLOAT3 AlreadyPositon{ AlreadyPlayerBBox.Center.x, AlreadyPlayerBBox.Center.y, AlreadyPlayerBBox.Center.z };
 	
@@ -578,6 +584,7 @@ void GameScene::UpdateCollision(float fElapsedTime)
 		{XMFLOAT3(15000, 0, -100), XMFLOAT3(30000, 3000, 100)},
 	};
 
+	// 외곽부분 나가지 못하도록 충돌체크
 	for (int i = 0; i < 4; ++i)
 	{
 		XMFLOAT3 slideVector{ 0.f, 0.f, 0.f };
@@ -601,6 +608,7 @@ void GameScene::UpdateCollision(float fElapsedTime)
 	XMINT4 IDs = m_pQuadtreeTerrain->GetIDs(AlreadyPositon);
 	int TerrainCount = m_pQuadtreeTerrain->GetTerrainPieceCount();
 
+	// 오브젝트들 충돌체크
 	// Ti: Terrain Index
 	for (int Ti = 0; Ti < TerrainCount; ++Ti)
 	{ 
@@ -647,6 +655,13 @@ void GameScene::UpdateCollision(float fElapsedTime)
 			}
 		}
 	}
+	// 플레이어 충돌체크 ///////////////////////// 
+
+
+
+	// 몬스터 충돌체크 ///////////////////////// 
+
+	// 몬스터 충돌체크 ///////////////////////// 
 }
 
 void GameScene::BuildLightsAndMaterials(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList)
