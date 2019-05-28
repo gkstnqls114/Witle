@@ -1,17 +1,14 @@
 #pragma once
-#include "ComponentBase.h"
+#include "Status.h"
 
 class MyRectangle;
 
 // HP 관련 정보
 class MonsterStatus
-	: ComponentBase
+	: public Status
 {
 	MyRectangle* m_HpBar{ nullptr };
-
-public:
-	int m_HP{ 1000 };
-
+	 
 public:
 	virtual void ReleaseObjects() override;
 	virtual void ReleaseUploadBuffers() override;

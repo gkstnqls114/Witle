@@ -20,7 +20,7 @@ void MonsterStatus::ReleaseUploadBuffers()
 }
 
 MonsterStatus::MonsterStatus(GameObject * pOwner, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList)
-	: ComponentBase(pOwner)
+	: Status(pOwner)
 {
 
 }

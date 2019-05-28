@@ -20,7 +20,7 @@ void PlayerStatus::ReleaseUploadBuffers()
 }
 
 PlayerStatus::PlayerStatus(GameObject * pOwner, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList)
-	: ComponentBase(pOwner)
+	: Status(pOwner)
 {
 	m_pHPBarShader = ShaderManager::GetInstance()->GetShader(SHADER_SCREEN);
 

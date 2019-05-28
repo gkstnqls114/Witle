@@ -169,15 +169,6 @@
     <Filter Include="05.Shader\ScreenShader">
       <UniqueIdentifier>{e11c642f-3db6-462a-afa9-ea97701a5168}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.Component\ForPlayer">
-      <UniqueIdentifier>{312e3404-8af8-4767-bcd1-0890bedfebe4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.Component\ForPlayer\PlayerMovement">
-      <UniqueIdentifier>{9ec62c01-4c38-4a62-9a19-4ca89e5c286c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.Component\ForPlayer\PlayerStatus">
-      <UniqueIdentifier>{a15bc817-37c9-4328-8056-352a1ebe9b63}</UniqueIdentifier>
-    </Filter>
     <Filter Include="12.Skill\Broom">
       <UniqueIdentifier>{20d5a4b8-c8a4-495a-98e6-3397c27f571d}</UniqueIdentifier>
     </Filter>
@@ -210,9 +201,6 @@
     </Filter>
     <Filter Include="02.Component\ForMonster\MonsterMovement">
       <UniqueIdentifier>{692a14ef-ebae-4df5-a360-50a94d6057b4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.Component\ForMonster\MonsterStatus">
-      <UniqueIdentifier>{ab995979-ee05-40e1-beb5-de7c89b328f6}</UniqueIdentifier>
     </Filter>
     <Filter Include="03.GameObject\Monster\Slime">
       <UniqueIdentifier>{e58f492a-8b9e-4d14-8f6d-d915c5c785c3}</UniqueIdentifier>
@@ -351,6 +339,15 @@
     </Filter>
     <Filter Include="02.Component\08.Movement\02.MonsteMovement">
       <UniqueIdentifier>{1db78e68-d277-41d6-9da7-ba1ca04b7e1c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\09.Status">
+      <UniqueIdentifier>{51083be0-bc62-443d-aa4c-8fcf8f830647}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\09.Status\PlayerStatus">
+      <UniqueIdentifier>{a15bc817-37c9-4328-8056-352a1ebe9b63}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\09.Status\MonsterStatus">
+      <UniqueIdentifier>{ab995979-ee05-40e1-beb5-de7c89b328f6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -607,7 +604,7 @@
       <Filter>05.Shader\ScreenShader</Filter>
     </ClInclude>
     <ClInclude Include="PlayerStatus.h">
-      <Filter>02.Component\ForPlayer\PlayerStatus</Filter>
+      <Filter>02.Component\09.Status\PlayerStatus</Filter>
     </ClInclude>
     <ClInclude Include="Broom.h">
       <Filter>12.Skill\Broom</Filter>
@@ -652,7 +649,7 @@
       <Filter>03.GameObject\Monster</Filter>
     </ClInclude>
     <ClInclude Include="MonsterStatus.h">
-      <Filter>02.Component\ForMonster\MonsterStatus</Filter>
+      <Filter>02.Component\09.Status\MonsterStatus</Filter>
     </ClInclude>
     <ClInclude Include="Slime.h">
       <Filter>03.GameObject\Monster\Slime</Filter>
@@ -722,6 +719,9 @@
     </ClInclude>
     <ClInclude Include="PlayerMovement.h">
       <Filter>02.Component\08.Movement\01.PlayerMovement</Filter>
+    </ClInclude>
+    <ClInclude Include="Status.h">
+      <Filter>02.Component\09.Status</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -963,7 +963,7 @@
       <Filter>05.Shader\ScreenShader</Filter>
     </ClCompile>
     <ClCompile Include="PlayerStatus.cpp">
-      <Filter>02.Component\ForPlayer\PlayerStatus</Filter>
+      <Filter>02.Component\09.Status\PlayerStatus</Filter>
     </ClCompile>
     <ClCompile Include="Broom.cpp">
       <Filter>12.Skill\Broom</Filter>
@@ -1005,7 +1005,7 @@
       <Filter>03.GameObject\Monster</Filter>
     </ClCompile>
     <ClCompile Include="MonsterStatus.cpp">
-      <Filter>02.Component\ForMonster\MonsterStatus</Filter>
+      <Filter>02.Component\09.Status\MonsterStatus</Filter>
     </ClCompile>
     <ClCompile Include="Slime.cpp">
       <Filter>03.GameObject\Monster\Slime</Filter>
@@ -1075,6 +1075,9 @@
     </ClCompile>
     <ClCompile Include="PlayerMovement.cpp">
       <Filter>02.Component\08.Movement\01.PlayerMovement</Filter>
+    </ClCompile>
+    <ClCompile Include="Status.cpp">
+      <Filter>02.Component\09.Status</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
