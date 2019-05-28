@@ -160,6 +160,7 @@
     <ClInclude Include="GraphicsRootSignatureMgr.h" />
     <ClInclude Include="MainCameraMgr.h" />
     <ClInclude Include="Movement.h" />
+    <ClInclude Include="MyAnimationInfos.h" />
     <ClInclude Include="Status.h" />
     <ClInclude Include="UI3DImage.h" />
     <ClInclude Include="UI3D.h" />

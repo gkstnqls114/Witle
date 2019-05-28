@@ -9,7 +9,7 @@ class Status
 	: public ComponentBase
 { 
 private:
-	virtual void SetAnimationState(int state) = 0;
+	virtual void SetAnimationStateToHit() = 0;
 	void SubstractHP(int damage);
 
 public:

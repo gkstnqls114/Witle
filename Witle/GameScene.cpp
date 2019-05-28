@@ -423,18 +423,17 @@ void GameScene::Update(float fElapsedTime)
 	// 플레이어 공격
 	if (GameInput::GetDragMode()) // 만약 드래그로 회전한다면...
 	{ 
-		//m_pPlayer->Attack(
-		//	static_cast<Status*>(m_TestMonster->GetStatus()),
-		//	m_TestMonster->GetBOBox(),
-		//	m_AimPoint->GetPickingPoint(),
-		//	m_pMainCamera->GetCamera());
-
-
 		m_pPlayer->Attack(
-			static_cast<Status*>(m_pOtherPlayer->GetStatus()),
-			m_pOtherPlayer->GetBOBox(),
+			static_cast<Status*>(m_TestMonster->GetStatus()),
+			m_TestMonster->GetBOBox(),
 			m_AimPoint->GetPickingPoint(),
 			m_pMainCamera->GetCamera());
+		 
+		//m_pPlayer->Attack(
+		//	static_cast<Status*>(m_pOtherPlayer->GetStatus()),
+		//	m_pOtherPlayer->GetBOBox(),
+		//	m_AimPoint->GetPickingPoint(),
+		//	m_pMainCamera->GetCamera());
 	}
 	else // 드래그로 회전하지 않는다면...
 	{

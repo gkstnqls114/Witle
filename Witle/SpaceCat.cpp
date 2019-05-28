@@ -25,7 +25,14 @@ SpaceCat::SpaceCat(const std::string & entityID, const XMFLOAT3& SpawnPoint,
 	
 	m_pHaep->CreateShaderResourceViews(pd3dDevice, pd3dCommandList, m_pTexture, ROOTPARAMETER_TEXTURE, false, 0);
 	
-	m_MonsterModel = LoadObject::LoadGeometryAndAnimationFromFile_forPlayer(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/M_Cat.bin", NULL);
+	ANIMATION_INFO infos[SPACECAT_ANIMATIONE];
+	infos[0] = SPACECAT_IDLE;
+	infos[1] = SPACECAT_MOVE;
+	infos[2] = SPACECAT_ATTACK;
+	infos[3] = SPACECAT_DIE;
+	 
+	m_MonsterModel = LoadObject::LoadGeometryAndAnimationFromFile_forMonster(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/M_Cat.bin", NULL,
+		SPACECAT_ANIMATIONE, infos);
 	m_pLoadObject = m_MonsterModel->m_pModelRootObject;
 
 	m_pLoadObject->m_pSkinnedAnimationController = new CAnimationController(pd3dDevice, pd3dCommandList, 1, m_MonsterModel);

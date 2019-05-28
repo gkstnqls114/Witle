@@ -469,9 +469,9 @@ public:
 	static CLoadedModelInfo *LoadGeometryAndAnimationFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, const char *pstrFileName, Shader *pShader);
 
 	static void LoadAnimationFromFile_forPlayer(FILE *pInFile, CLoadedModelInfo *pLoadedModel);
-	static void LoadAnimationFromFile_forMonster(FILE *pInFile, CLoadedModelInfo *pLoadedModel);
+	static void LoadAnimationFromFile_forMonster(FILE *pInFile, CLoadedModelInfo *pLoadedModel, int AnimationCount, ANIMATION_INFO* infos);
 	static CLoadedModelInfo *LoadGeometryAndAnimationFromFile_forPlayer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, const char *pstrFileName, Shader *pShader);
-	static CLoadedModelInfo *LoadGeometryAndAnimationFromFile_forMonster(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, const char *pstrFileName, Shader *pShader);
+	static CLoadedModelInfo *LoadGeometryAndAnimationFromFile_forMonster(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, const char *pstrFileName, Shader *pShader, int AnimationCount, ANIMATION_INFO* infos);
 
 	static void PrintFrameInfo(LoadObject *pGameObject, LoadObject *pParent);
 

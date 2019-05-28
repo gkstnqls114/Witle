@@ -5,9 +5,9 @@
 #include "ShaderManager.h"
 #include "MonsterStatus.h"
 
-void MonsterStatus::SetAnimationState(int state)
+void MonsterStatus::SetAnimationStateToHit()
 { 
-	static_cast<Monster*>(m_pOwner)->SetAnimationState(state);
+	static_cast<Monster*>(m_pOwner)->SetAnimationState(SPACECAT_DIE.ID);
 }
 
 void MonsterStatus::ReleaseObjects()

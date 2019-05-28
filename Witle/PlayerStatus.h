@@ -9,7 +9,7 @@ class PlayerStatus
 	: public Status
 {
 private:
-	virtual void SetAnimationState(int state) override;
+	virtual void SetAnimationStateToHit() override;
 
 private:
 	Shader* m_pHPBarShader{ nullptr };

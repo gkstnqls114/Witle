@@ -20,7 +20,7 @@ Status::~Status()
 
 void Status::Damage(int damage, int state)
 {
-	SetAnimationState(state); 
+	SetAnimationStateToHit(); 
 	SubstractHP(damage);
 	std::cout << m_pOwner->GetName() << " " << m_HP << std::endl;
 }

@@ -5,9 +5,9 @@
 #include "ShaderManager.h"
 #include "PlayerStatus.h"
 
-void PlayerStatus::SetAnimationState(int state)
+void PlayerStatus::SetAnimationStateToHit()
 { 
-	static_cast<Player*>(m_pOwner)->SetAnimationState(state);
+	static_cast<Player*>(m_pOwner)->SetAnimationState(ANIMATION_BEATTACKED.ID);
 }
 
 void PlayerStatus::ReleaseObjects()
