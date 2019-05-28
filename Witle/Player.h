@@ -7,6 +7,7 @@ class MyCollider;
 class LoadObject;
 class MyBOBox;
 class PlayerStatus;
+class  Status;
 class PlayerMovement;
 class Broom;
 class Sniping;
@@ -93,13 +94,14 @@ public:
 	void ProcessInput(float fTimeElapsed);
 	void ProcessInputAI(float fTimeElapsed);
 
-	bool Attack(Player* player, MyCollider* collider, XMFLOAT2 aimPoint ,Camera* pMainCaemra);
+	bool Attack(Status* status, MyCollider* collider, XMFLOAT2 aimPoint ,Camera* pMainCaemra);
 
 	/////////////////////// Skill
 	void UseSkill_Broom();
 	/////////////////////// Skill
 
 	/////////////////////// Get
+	PlayerStatus* GetStatus() { return m_pPlayerStatus; };
 	AXIS GetCoorAxis() { return m_Transform.GetCoorAxis(); }
 	XMFLOAT3 GetVelocity() const;
 	MyBOBox* GetBOBox() { return m_pMyBOBox; }

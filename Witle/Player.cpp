@@ -277,8 +277,7 @@ void Player::SubstractHP(int sub)
 	m_pLoadObject_Body->SetTrackAnimationSet(0, m_CurrAnimation);
 	m_pLoadObject_Cloth->SetTrackAnimationSet(0, m_CurrAnimation);
 
-	m_pPlayerStatus->m_HP -= sub; 
-	std::cout << m_pPlayerStatus->m_HP << std::endl;
+	m_pPlayerStatus->m_HP -= sub;  
 }
 
 void Player::Animate(float fElapsedTime)
@@ -457,18 +456,18 @@ void Player::ProcessInputAI(float fTimeElapsed)
 }
 
 //  
-bool Player::Attack(Player* player, MyCollider* collider, XMFLOAT2 aimPoint, Camera* pMainCaemra)
+bool Player::Attack(Status* status, MyCollider* collider, XMFLOAT2 aimPoint, Camera* pMainCaemra)
 {   
 	if (!GameInput::IsKeydownE()) return false; // e를 누르지 않았다면 아무것도 실행하지 않는다.
 	if (IsAttacking()) return false; 
 	if (m_Broom->GetisUsing()) return false;
 	 
 	// 시행된다면..
-	bool isNearMonster = Vector3::Length(player->GetTransform().GetPosition(), m_Transform.GetPosition()) < 100;
+	bool isNearMonster = Vector3::Length(collider->GetpOwner()->GetTransform().GetPosition(), m_Transform.GetPosition()) < 100;
 	if (isNearMonster) // 몬스터와 가까운 경우 근접 공격
 	{  
 		std::cout << "근접공격" << std::endl;
-		player->SubstractHP(500);
+		status->Damage(500);
 	}
 	else
 	{  
@@ -482,7 +481,7 @@ bool Player::Attack(Player* player, MyCollider* collider, XMFLOAT2 aimPoint, Cam
 		if (isCollide && Playerdist < 3000.f)
 		{
 			std::cout << "원거리공격" << std::endl;
-			player->SubstractHP(500);
+			status->Damage(500); 
 		}
 
 	}
@@ -500,6 +499,7 @@ void Player::UseSkill_Broom()
 		m_Broom->Prepare();
 	}
 }
+ 
 
 XMFLOAT3 Player::GetVelocity() const
 {

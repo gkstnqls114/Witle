@@ -6,7 +6,7 @@ class MyRectangle;
 
 // HP 관련 정보
 class Status
-	: ComponentBase
+	: public ComponentBase
 { 
 public:
 	int m_HP{ 1000 };
@@ -14,9 +14,10 @@ public:
 public:
 	virtual void ReleaseObjects() override {};
 	virtual void ReleaseUploadBuffers() override {};
-
+	  
 public:
 	Status(GameObject* pOwner );
 	virtual ~Status(); 
 
+	void Damage(int damage);
 };
