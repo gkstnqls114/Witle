@@ -184,13 +184,8 @@ void Monster::Animate(float fElapsedTime)
 
 	// 반드시 트랜스폼 업데이트..! 
 	m_Transform.Update(fElapsedTime);
-
-	//// 위치가 안맞아서 재조정  
-	float fPitch = -90.f;
-	float fYaw = 0.f;
-	float fRoll = 0.f;
-	XMMATRIX mtxRotate = XMMatrixRotationRollPitchYaw(XMConvertToRadians(fPitch), XMConvertToRadians(fYaw), XMConvertToRadians(fRoll));
-	m_pLoadObject->m_xmf4x4ToParent = Matrix4x4::Multiply(mtxRotate, m_Transform.GetWorldMatrix());
+	 
+	m_pLoadObject->m_xmf4x4ToParent = m_Transform.GetWorldMatrix();
 	
 	m_pLoadObject->Animate(fElapsedTime); 
 }
