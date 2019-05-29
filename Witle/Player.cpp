@@ -280,7 +280,7 @@ void Player::Update(float fElapsedTime)
 
 void Player::SubstractHP(int sub)
 { 
-	m_CurrAnimation = ANIMATION_BEATTACKED.ID;
+	m_CurrAnimation = ANIMATION_HIT.ID;
 	m_pLoadObject_Body->SetTrackAnimationSet(0, m_CurrAnimation);
 	m_pLoadObject_Cloth->SetTrackAnimationSet(0, m_CurrAnimation);
 
@@ -349,10 +349,10 @@ void Player::Rotate(float x, float y, float z)
  
 void Player::ProcessInput(float fTimeElapsed)
 {   
-	if (m_CurrAnimation == ANIMATION_BEATTACKED.ID)
+	if (m_CurrAnimation == ANIMATION_HIT.ID)
 	{
-		if (!m_pLoadObject_Cloth->IsTrackAnimationSetFinish(0, ANIMATION_BEATTACKED.ID) &&
-			!m_pLoadObject_Body->IsTrackAnimationSetFinish(0, ANIMATION_BEATTACKED.ID))
+		if (!m_pLoadObject_Cloth->IsTrackAnimationSetFinish(0, ANIMATION_HIT.ID) &&
+			!m_pLoadObject_Body->IsTrackAnimationSetFinish(0, ANIMATION_HIT.ID))
 		{
 			return;
 		}
@@ -468,7 +468,7 @@ bool Player::Attack(Status* status, MyCollider* collider, XMFLOAT2 aimPoint, Cam
 	if (isNearMonster) // 몬스터와 가까운 경우 근접 공격
 	{  
 		std::cout << "근접공격" << std::endl;
-		status->Damage(500, ANIMATION_BEATTACKED.ID);
+		status->Damage(500, ANIMATION_HIT.ID);
 	}
 	else
 	{  
@@ -482,7 +482,7 @@ bool Player::Attack(Status* status, MyCollider* collider, XMFLOAT2 aimPoint, Cam
 		if (isCollide && Playerdist < 3000.f)
 		{
 			std::cout << "원거리공격" << std::endl;
-			status->Damage(500, ANIMATION_BEATTACKED.ID);
+			status->Damage(500, ANIMATION_HIT.ID);
 		}
 
 	}

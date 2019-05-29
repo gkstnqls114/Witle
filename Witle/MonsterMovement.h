@@ -11,7 +11,7 @@ class ChaseAction;
 class SearchAction;
 class DeadAction;
 	
-// 플레이어에 이동에 필요한 가속도, 회전량에 대한 설정
+// 
 class MonsterMovement
 	: public Movement
 {

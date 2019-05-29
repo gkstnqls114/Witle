@@ -346,8 +346,11 @@
     <Filter Include="03.GameObject\02.Monster">
       <UniqueIdentifier>{8062d154-08a1-41ca-a30a-ff569f779ccb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03.GameObject\02.Monster\Slime">
+    <Filter Include="03.GameObject\02.Monster\SpaceCat">
       <UniqueIdentifier>{e58f492a-8b9e-4d14-8f6d-d915c5c785c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\ForMonster\MonsterAction\MonsterActionMgr">
+      <UniqueIdentifier>{087791ad-0703-44b8-a9f4-5b49840722d4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -721,10 +724,13 @@
       <Filter>02.Component\09.Status</Filter>
     </ClInclude>
     <ClInclude Include="SpaceCat.h">
-      <Filter>03.GameObject\02.Monster\Slime</Filter>
+      <Filter>03.GameObject\02.Monster\SpaceCat</Filter>
     </ClInclude>
     <ClInclude Include="MyAnimationInfos.h">
       <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="MonsterActionMgr.h">
+      <Filter>02.Component\ForMonster\MonsterAction\MonsterActionMgr</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1080,7 +1086,10 @@
       <Filter>02.Component\09.Status</Filter>
     </ClCompile>
     <ClCompile Include="SpaceCat.cpp">
-      <Filter>03.GameObject\02.Monster\Slime</Filter>
+      <Filter>03.GameObject\02.Monster\SpaceCat</Filter>
+    </ClCompile>
+    <ClCompile Include="MonsterActionMgr.cpp">
+      <Filter>02.Component\ForMonster\MonsterAction\MonsterActionMgr</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -7,7 +7,7 @@
 
 void PlayerStatus::SetAnimationStateToHit()
 { 
-	static_cast<Player*>(m_pOwner)->SetAnimationState(ANIMATION_BEATTACKED.ID);
+	static_cast<Player*>(m_pOwner)->SetAnimationState(ANIMATION_HIT.ID);
 }
 
 void PlayerStatus::ReleaseObjects()

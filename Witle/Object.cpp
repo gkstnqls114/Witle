@@ -1374,8 +1374,8 @@ void LoadObject::LoadAnimationFromFile_forPlayer(FILE * pInFile, CLoadedModelInf
 			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[ANIMATION_DEAD.ID] = new CAnimationSet(ANIMATION_DEAD.StartTime, ANIMATION_DEAD.EndTime, pstrToken);
 			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[ANIMATION_DEAD.ID]->m_nType = ANIMATION_TYPE_ONCE;
 
-			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[ANIMATION_BEATTACKED.ID] = new CAnimationSet(ANIMATION_BEATTACKED.StartTime, ANIMATION_BEATTACKED.EndTime, pstrToken);
-			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[ANIMATION_BEATTACKED.ID]->m_nType = ANIMATION_TYPE_ONCE;
+			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[ANIMATION_HIT.ID] = new CAnimationSet(ANIMATION_HIT.StartTime, ANIMATION_HIT.EndTime, pstrToken);
+			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[ANIMATION_HIT.ID]->m_nType = ANIMATION_TYPE_ONCE;
 
 			CAnimationSet *pAnimationSet = pLoadedModel->m_pAnimationSets->m_ppAnimationSets[nAnimationSet];
 
