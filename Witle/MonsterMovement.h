@@ -1,4 +1,5 @@
 #pragma once
+#include "MonsterActionMgr.h"
 #include "Movement.h"
 
 class Player;
@@ -15,16 +16,8 @@ class DeadAction;
 class MonsterMovement
 	: public Movement
 {
-	MonsterAction*  m_CurrMonsterAction  { nullptr };
-	MonsterAction*  m_IdleAction         { nullptr };
-	MonsterAction*  m_MoveAction         { nullptr };
-	MonsterAction*  m_ChaseAction        { nullptr };
-	MonsterAction*  m_SearchAction       { nullptr };
-	MonsterAction*  m_DeadAction         { nullptr };
+	MonsterActionMgr* m_MonsterActionMgr { nullptr };
 
-	float m_TotalTime{ 0.f };
-	const float m_IdleTime{ 1.f }; //Idle 상태로 있는 시간
-	const float m_MoveTime{ 6.f }; //Move 상태로 있는 시간
 
 public:   
 	const float m_fNearDistance{ 0.f };

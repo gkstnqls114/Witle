@@ -352,6 +352,9 @@
     <Filter Include="02.Component\ForMonster\MonsterAction\MonsterActionMgr">
       <UniqueIdentifier>{087791ad-0703-44b8-a9f4-5b49840722d4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.Component\ForMonster\MonsterAction\06.HitAction">
+      <UniqueIdentifier>{0c76bd52-ef44-43bd-a692-c57b5c707524}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -732,6 +735,9 @@
     <ClInclude Include="MonsterActionMgr.h">
       <Filter>02.Component\ForMonster\MonsterAction\MonsterActionMgr</Filter>
     </ClInclude>
+    <ClInclude Include="HitAction.h">
+      <Filter>02.Component\ForMonster\MonsterAction\06.HitAction</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1090,6 +1096,9 @@
     </ClCompile>
     <ClCompile Include="MonsterActionMgr.cpp">
       <Filter>02.Component\ForMonster\MonsterAction\MonsterActionMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="HitAction.cpp">
+      <Filter>02.Component\ForMonster\MonsterAction\06.HitAction</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
