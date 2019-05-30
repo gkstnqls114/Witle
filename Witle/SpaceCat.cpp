@@ -43,7 +43,7 @@ SpaceCat::SpaceCat(const std::string & entityID, const XMFLOAT3& SpawnPoint,
 	m_Transform.SetPosition(SpawnPoint); 
 
 
-	XMFLOAT3 extents{ 100.f, 50.f, 100.f };
+	XMFLOAT3 extents{ 50.f, 50.f, 50.f };
 	m_pMyBOBox = new MyBOBox(this, pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 75.F, 0.F }, extents);
 
 }
@@ -71,10 +71,8 @@ void SpaceCat::Animate(float fElapsedTime)
 {
 	Monster::Animate(fElapsedTime);
 	  
-	m_pMyBOBox->SetPosition(
-		XMFLOAT3(
-			m_Transform.GetPosition().x,
-			150.f,
-			m_Transform.GetPosition().z)
-	);
+	LoadObject* p = m_pLoadObject->FindFrame("Bone001");
+	XMFLOAT3 pos = XMFLOAT3(p->m_xmf4x4World._41, p->m_xmf4x4World._42 + 50, p->m_xmf4x4World._43);
+
+	m_pMyBOBox->SetPosition( pos );
 }
