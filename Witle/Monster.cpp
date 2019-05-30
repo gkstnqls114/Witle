@@ -75,9 +75,6 @@ Monster::Monster(const std::string & entityID, const XMFLOAT3& SpawnPoint, ID3D1
 	m_RecognitionRange = new RecognitionRange(this, 500.f, 3.f);
 	m_RecognitionRange->CreateDebugMesh(pd3dDevice, pd3dCommandList);
 
-	XMFLOAT3 extents{ 25.f, 75.f, 25.f };
-	m_pMyBOBox = new MyBOBox(this, pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 75.F, 0.F }, extents);
-
 	m_MonsterStatus = new MonsterStatus(this, pd3dDevice, pd3dCommandList);
 	m_MonsterMovement = new MonsterMovement(this);
 

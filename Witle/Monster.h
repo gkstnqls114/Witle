@@ -47,6 +47,7 @@ protected:
 	CLoadedModelInfo*  m_MonsterModel{ nullptr };
 	LoadObject*		   m_pLoadObject{ nullptr };
 
+	bool m_isAttacking{ false };
 
 	XMFLOAT3 m_SpawnPoint;
 	const float    m_SpawnRange{ 1500.f };
@@ -77,7 +78,7 @@ public:
 	XMFLOAT3 CalculateAlreadyPosition(float fTimeElapsed);
 
 	void SubstractHP(int sub);
-	void Animate(float fElapsedTime);
+	virtual void Animate(float fElapsedTime);
 
 	void Move(ULONG nDirection, float fDistance, bool bVelocity = false);
 	void Move(const XMFLOAT3& xmf3Shift);
@@ -97,6 +98,7 @@ public:
 	
 	//// Set /////////////////// 
 	void SetAnimationState(int state);
+	void SetisAttacking(bool b) { m_isAttacking = b; }
 	//// Set /////////////////// 
 
 };

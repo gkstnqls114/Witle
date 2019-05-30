@@ -41,6 +41,11 @@ SpaceCat::SpaceCat(const std::string & entityID, const XMFLOAT3& SpawnPoint,
 	m_pLoadObject->m_pSkinnedAnimationController->SetTrackAnimationSet(0, 0);
 
 	m_Transform.SetPosition(SpawnPoint); 
+
+
+	XMFLOAT3 extents{ 100.f, 50.f, 100.f };
+	m_pMyBOBox = new MyBOBox(this, pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 75.F, 0.F }, extents);
+
 }
 
 SpaceCat::~SpaceCat()
@@ -55,15 +60,21 @@ void SpaceCat::Update(float fElapsedTime)
 	// 이동량만큼 움직인다. 
 	Move(Vector3::ScalarProduct(m_MonsterMovement->m_xmf3Velocity, fElapsedTime, false));
 
-	m_pMyBOBox->SetPosition(
-		XMFLOAT3(
-			m_Transform.GetPosition().x,
-			75.f,
-			m_Transform.GetPosition().z)
-	); 
 }
  
 void SpaceCat::UpdateState(float fElapsedTime)
 {
 	m_MonsterMovement->UpdateState(fElapsedTime);
+}
+
+void SpaceCat::Animate(float fElapsedTime)
+{
+	Monster::Animate(fElapsedTime);
+	  
+	m_pMyBOBox->SetPosition(
+		XMFLOAT3(
+			m_Transform.GetPosition().x,
+			150.f,
+			m_Transform.GetPosition().z)
+	);
 }
