@@ -18,7 +18,7 @@ VS_SCREEN_OUTPUT VSUIWorld(VS_SCREEN_INPUT input)
      
     float3 positionW = (float3) mul(float4(input.position, 1.0f), gmtxWorld);
     output.position = mul(mul(float4(positionW, 1.0f), gmtxView), gmtxProjection);
-    output.uv = input.uv;
+    output.uv = input.uv * 100.f; // hp 퍼센트 위해...
      
     return output;
 }
@@ -27,5 +27,9 @@ VS_SCREEN_OUTPUT VSUIWorld(VS_SCREEN_INPUT input)
 float4 PSUIWorld(VS_SCREEN_OUTPUT input) : SV_TARGET
 {
     float4 color = gtxtTexture.Sample(gWrapSamplerState, input.uv);
+    
+    if (input.uv.x > HPpercentage)
+        color = float4(1.f, 1.f, 1.f, 1.f);
+
     return color;
 }

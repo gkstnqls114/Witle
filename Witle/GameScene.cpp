@@ -419,7 +419,6 @@ void GameScene::UpdatePhysics(float fElapsedTime)
 // ProcessInput에 의한 right, up, look, pos 를 월드변환 행렬에 갱신한다.
 void GameScene::Update(float fElapsedTime)
 { 
-
 	// 플레이어 공격
 	if (GameInput::GetDragMode()) // 만약 드래그로 회전한다면...
 	{ 

@@ -200,10 +200,15 @@ void Monster::Render(ID3D12GraphicsCommandList * pd3dCommandList)
 	m_pTexture->UpdateShaderVariable(pd3dCommandList, 0);
 	m_pLoadObject->Render(pd3dCommandList);
 
+	RenderHpStatus(pd3dCommandList); 
+}
+
+void Monster::RenderHpStatus(ID3D12GraphicsCommandList * pd3dCommandList)
+{ 
 	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_UIWORLD);
 
 	// set look at.... ºôº¸µå Ã³¸®...
-	XMFLOAT4X4 uiWorld = m_Transform.GetWorldMatrix(); 
+	XMFLOAT4X4 uiWorld = m_Transform.GetWorldMatrix();
 	uiWorld._42 += 200;
 
 	XMFLOAT3 xmf3Position(uiWorld._41, uiWorld._42, uiWorld._43);
@@ -214,12 +219,10 @@ void Monster::Render(ID3D12GraphicsCommandList * pd3dCommandList)
 	uiWorld._31 = mtxLookAt._13; uiWorld._32 = mtxLookAt._23; uiWorld._33 = mtxLookAt._33;
 	// set look at....
 
-	m_MonsterHP->Render(pd3dCommandList, uiWorld);
-}
+	float percentage = float(m_MonsterStatus->m_HP) / 1000.f * 100.f;
+	pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_HPPERCENTAGE, 1, &percentage, 0);
 
-void Monster::RenderHpStatus(ID3D12GraphicsCommandList * pd3dCommandList)
-{
-	m_MonsterStatus->Render(pd3dCommandList);
+	m_MonsterHP->Render(pd3dCommandList, uiWorld);
 }
 
 void Monster::SetTrackAnimationSet()
