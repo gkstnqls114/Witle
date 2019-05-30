@@ -118,13 +118,6 @@ const UINT ROOTPARAMETER_TIME = 20;
 //// Load Material /////////////////////////////////////////// 
 
 
-//// Animation Type /////////////////////////////////////////// 
-#define ANIMATION_TYPE_ONCE			0
-#define ANIMATION_TYPE_LOOP			1
-#define ANIMATION_TYPE_PINGPONG		2
-
-#define ANIMATION_CALLBACK_EPSILON	0.015f
-//// Animation Type /////////////////////////////////////////// 
 
 
 //// Animation Type /////////////////////////////////////////// 

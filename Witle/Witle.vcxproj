@@ -157,6 +157,7 @@
     <ClInclude Include="Avoidance.h" />
     <ClInclude Include="BasicCam.h" />
     <ClInclude Include="Broom.h" />
+    <ClInclude Include="AttackAction.h" />
     <ClInclude Include="HitAction.h" />
     <ClInclude Include="GraphicsRootSignatureMgr.h" />
     <ClInclude Include="MainCameraMgr.h" />
@@ -298,6 +299,7 @@
     <ClCompile Include="CylinderMesh.cpp" />
     <ClCompile Include="d3dUtil.cpp" />
     <ClCompile Include="DDSTextureLoader12.cpp" />
+    <ClCompile Include="AttackAction.cpp" />
     <ClCompile Include="HitAction.cpp" />
     <ClCompile Include="DeadAction.cpp" />
     <ClCompile Include="DirectionalLight.cpp" />

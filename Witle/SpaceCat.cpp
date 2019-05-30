@@ -29,10 +29,11 @@ SpaceCat::SpaceCat(const std::string & entityID, const XMFLOAT3& SpawnPoint,
 	infos[0] = SPACECAT_IDLE;
 	infos[1] = SPACECAT_MOVE;
 	infos[2] = SPACECAT_ATTACK;
-	infos[3] = SPACECAT_DIE;
+	infos[3] = SPACECAT_DEAD;
 	infos[4] = SPACECAT_HIT;
 	 
-	m_MonsterModel = LoadObject::LoadGeometryAndAnimationFromFile_forMonster(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/SpaceCat.bin", NULL,
+	m_MonsterModel = LoadObject::LoadGeometryAndAnimationFromFile_forMonster(
+		pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/SpaceCat.bin", NULL,
 		SPACECAT_ANIMATIONE, infos);
 	m_pLoadObject = m_MonsterModel->m_pModelRootObject;
 

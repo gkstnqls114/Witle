@@ -92,6 +92,7 @@ public:
 	MyBOBox* GetBOBox() const { return m_pMyBOBox; }
 	XMFLOAT3 GetSpawnPoint() const { return m_SpawnPoint; }
 	float GetSpawnRange() const { return m_SpawnRange; }
+	LoadObject* GetpLoadObject() const { return m_pLoadObject; }
 	//// Get /////////////////// 
 	
 	//// Set /////////////////// 

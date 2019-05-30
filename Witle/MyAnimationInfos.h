@@ -1,10 +1,22 @@
 #pragma once
+
+//// Animation Type /////////////////////////////////////////// 
+#define ANIMATION_TYPE_ONCE			0
+#define ANIMATION_TYPE_LOOP			1
+#define ANIMATION_TYPE_PINGPONG		2
+
+#define ANIMATION_CALLBACK_EPSILON	0.015f
+
+//// Animation Type /////////////////////////////////////////// 
+
 #define SECOND_PER_FRAME float(1.f/30.f) // 1 프레임당 몇초인가?
+
 struct ANIMATION_INFO
 {
 	int ID{ -1 };
 	float StartTime{ -1 };
 	float EndTime{ -1 };
+	int Type{ ANIMATION_TYPE_LOOP };
 };
 
 // Player ////////////////////////////////////
@@ -29,7 +41,7 @@ const ANIMATION_INFO ANIMATION_HIT{ 10, 314.f * SECOND_PER_FRAME, 334.f * SECOND
 
 const ANIMATION_INFO SPACECAT_IDLE{ 0, 0.f * SECOND_PER_FRAME,   30.f * SECOND_PER_FRAME };
 const ANIMATION_INFO SPACECAT_MOVE{ 1, 31.f * SECOND_PER_FRAME,  60.f * SECOND_PER_FRAME };
-const ANIMATION_INFO SPACECAT_ATTACK{ 2, 61.f * SECOND_PER_FRAME,  95.f * SECOND_PER_FRAME };
-const ANIMATION_INFO SPACECAT_DIE{ 3, 96.f * SECOND_PER_FRAME, 115.f * SECOND_PER_FRAME };
-const ANIMATION_INFO SPACECAT_HIT{ 4, 116.f * SECOND_PER_FRAME, 135.f * SECOND_PER_FRAME };
+const ANIMATION_INFO SPACECAT_ATTACK{ 2, 61.f * SECOND_PER_FRAME,  95.f * SECOND_PER_FRAME , ANIMATION_TYPE_ONCE };
+const ANIMATION_INFO SPACECAT_DEAD{ 3, 96.f * SECOND_PER_FRAME, 115.f * SECOND_PER_FRAME , ANIMATION_TYPE_ONCE };
+const ANIMATION_INFO SPACECAT_HIT{ 4, 116.f * SECOND_PER_FRAME, 135.f * SECOND_PER_FRAME , ANIMATION_TYPE_ONCE };
 // SpaceCat ////////////////////////////////////

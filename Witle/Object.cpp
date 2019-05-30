@@ -1479,6 +1479,7 @@ void LoadObject::LoadAnimationFromFile_forMonster(FILE * pInFile, CLoadedModelIn
 			for (int i = 0; i < AnimationCount; ++i)
 			{
 				pLoadedModel->m_pAnimationSets->m_ppAnimationSets[i] = new CAnimationSet(infos[i].StartTime, infos[i].EndTime, pstrToken);
+				pLoadedModel->m_pAnimationSets->m_ppAnimationSets[i]->m_nType = infos[i].Type;
 			} 
 			CAnimationSet *pAnimationSet = pLoadedModel->m_pAnimationSets->m_ppAnimationSets[nAnimationSet];
 

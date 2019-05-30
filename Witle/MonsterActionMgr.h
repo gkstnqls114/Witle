@@ -5,6 +5,7 @@
 #include "MoveAction.h"
 #include "SearchAction.h"
 #include "HitAction.h"
+#include "AttackAction.h"
 
 #include "ComponentBase.h"
 
@@ -17,6 +18,7 @@ class MonsterActionMgr
 	: public ComponentBase
 {
 	MonsterAction*  m_CurrMonsterAction{ nullptr };
+	MonsterAction*  m_BeforeMonsterAction{ nullptr };
 
 	IdleAction      m_IdleAction;
 	MoveAction      m_MoveAction;
@@ -24,10 +26,11 @@ class MonsterActionMgr
 	SearchAction    m_SearchAction;
 	DeadAction      m_DeadAction;
 	HitAction       m_HitAction;
+	AttackAction    m_AttackAction;
 	 
 	float m_TotalTime{ 0.f };
-	const float m_IdleTime{ 1.f }; //Idle 상태로 있는 시간
-	const float m_MoveTime{ 6.f }; //Move 상태로 있는 시간
+	const float m_IdleTime{ 3.f }; //Idle 상태로 있는 시간
+	const float m_MoveTime{ 3.f }; //Move 상태로 있는 시간
 
 private:
 	bool IsNearPlayer(const Player * target, float distance);
@@ -44,7 +47,8 @@ public:
 		m_ChaseAction(pOwner),
 		m_SearchAction(pOwner),
 		m_DeadAction(pOwner),
-		m_HitAction(pOwner)
+		m_HitAction(pOwner),
+		m_AttackAction(pOwner)
 	{
 		m_CurrMonsterAction = &m_IdleAction;
 	};
@@ -61,4 +65,5 @@ public:
 	void ChangeStateToSearch();
 	void ChangeStateToDead();
 	void ChangeStateToHit();
+	void ChangeStateToAttack();
 };

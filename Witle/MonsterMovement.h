@@ -43,5 +43,5 @@ public:
 	void MoveVelocity(const XMFLOAT3& shift);
 
 	void ReduceVelocity(float);
-	 
+	MonsterActionMgr* GetMonsterActionMgr() const { return m_MonsterActionMgr; }
 };

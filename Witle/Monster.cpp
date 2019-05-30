@@ -246,5 +246,9 @@ void Monster::SetAnimationState(int state)
 {
 	m_CurrAnimation = state;
 	m_pLoadObject->SetTrackAnimationSet(0, m_CurrAnimation);
+	if (state == SPACECAT_HIT.ID)
+	{
+		m_MonsterMovement->GetMonsterActionMgr()->ChangeStateToHit();
+	}
 }
  
