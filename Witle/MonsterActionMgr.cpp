@@ -21,12 +21,13 @@ void MonsterActionMgr::UpdateVelocity(float fElpasedTime, MonsterMovement * move
 
 void MonsterActionMgr::UpdateState(float fElpasedTime)
 { 
+	if (m_CurrMonsterAction == &m_DeadAction) return;
+
 	if (static_cast<Monster*>(m_pOwner)->GetStatus()->m_HP <= 0)
 	{
 		ChangeStateToDead();
 	}
 
-	if (m_CurrMonsterAction == &m_DeadAction) return;
 
 	if (m_CurrMonsterAction == &m_HitAction)
 	{
