@@ -103,9 +103,7 @@ protected:
 	Sniping*				m_Sniping{ nullptr };
 	WideareaMagic*          m_WideareaMagic{ nullptr };
 	Player*                 m_pPlayer{ nullptr };
-
-	Player*                 m_pOtherPlayer{ nullptr };
-	  
+	 
 	Terrain*                m_Terrain{ nullptr }; 
 	CameraObject*           m_pMainCamera{ nullptr }; // 실제로 화면에 그려지는 카메라
 	

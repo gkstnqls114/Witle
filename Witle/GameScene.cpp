@@ -231,7 +231,6 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	
 	// 플레이어
 	m_pPlayer = new Player("Player", pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
-	m_pOtherPlayer = new Player("OtherPlayer", pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
 	m_SkyBox->SetpPlayerTransform(&m_pPlayer->GetTransform());
 	PlayerManager::SetMainPlayer(m_pPlayer);
 	// 테스트용 
@@ -356,13 +355,7 @@ void GameScene::ReleaseObjects()
 		m_AimPoint->ReleaseObjects();
 		delete m_AimPoint;
 		m_AimPoint = nullptr;
-	}
-	if (m_pOtherPlayer)
-	{
-		m_pOtherPlayer->ReleaseObjects(); 
-		delete m_pOtherPlayer;
-		m_pOtherPlayer = nullptr;
-	}
+	} 
 	if (m_pPlayer)
 	{
 		m_pPlayer->ReleaseObjects();
@@ -454,15 +447,14 @@ void GameScene::Update(float fElapsedTime)
 
 	//// 순서 변경 X //// 
 	if(m_pPlayer) m_pPlayer->Update(fElapsedTime); //Velocity를 통해 pos 이동
-	if(m_pOtherPlayer) m_pOtherPlayer->Update(fElapsedTime);
+	 
+	if(m_SkyBox) m_SkyBox->Update(fElapsedTime); 
+	if(m_WideareaMagic) m_WideareaMagic->Update(fElapsedTime);
 
 	for (int i = 0; i < m_TestMonsterCount; ++i)
 	{
-		if (m_TestMonster[i]) m_TestMonster[i]->Update(fElapsedTime);
+		m_TestMonster[i]->Update(fElapsedTime);
 	}
-
-	if(m_SkyBox) m_SkyBox->Update(fElapsedTime); 
-	if(m_WideareaMagic) m_WideareaMagic->Update(fElapsedTime);
 	//// 순서 변경 X ////
 
 	// light update
@@ -513,8 +505,7 @@ void GameScene::TESTSetRootDescriptor(ID3D12GraphicsCommandList * pd3dCommandLis
 }
 
 void GameScene::AnimateObjects(float fTimeElapsed)
-{ 
-	if (m_pOtherPlayer) m_pOtherPlayer->Animate(fTimeElapsed);
+{  
 	if (m_pPlayer) m_pPlayer->Animate(fTimeElapsed);
 	for (int i = 0; i < m_TestMonsterCount; ++i)
 	{
@@ -557,8 +548,7 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	pd3dCommandList->SetDescriptorHeaps(1, &m_pd3dCbvSrvDescriptorHeap);
 	 
 	if (m_pPlayer) m_pPlayer->Render(pd3dCommandList);
-	if (m_pOtherPlayer) m_pOtherPlayer->Render(pd3dCommandList);
-
+	 
 	if(m_WideareaMagic) m_WideareaMagic->Render(pd3dCommandList);
 
 
@@ -604,8 +594,7 @@ void GameScene::ReleaseUploadBuffers()
 	if (m_Sniping) m_Sniping->ReleaseUploadBuffers();
 	if (m_WideareaMagic) m_WideareaMagic->ReleaseUploadBuffers();
 	if (m_SkyBox) m_SkyBox->ReleaseUploadBuffers();
-	if (m_pOtherPlayer) m_pOtherPlayer->ReleaseUploadBuffers();
-	if (m_pPlayer) m_pPlayer->ReleaseUploadBuffers();
+	 if (m_pPlayer) m_pPlayer->ReleaseUploadBuffers();
 	if (m_Terrain) m_Terrain->ReleaseUploadBuffers();
 	if (m_pQuadtreeTerrain) m_pQuadtreeTerrain->ReleaseUploadBuffers();
 	for (int i = 0; i < m_TestMonsterCount; ++i)
