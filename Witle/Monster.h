@@ -94,6 +94,7 @@ public:
 	XMFLOAT3 GetSpawnPoint() const { return m_SpawnPoint; }
 	float GetSpawnRange() const { return m_SpawnRange; }
 	LoadObject* GetpLoadObject() const { return m_pLoadObject; }
+	bool GetisAttacking() const { return m_isAttacking; }
 	//// Get /////////////////// 
 	
 	//// Set /////////////////// 

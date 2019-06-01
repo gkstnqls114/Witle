@@ -236,7 +236,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	// 테스트용 
 
 	// 몬스터
-	m_TestMonster = new SpaceCat("Slime", XMFLOAT3(1000, 0, 1000), pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
+	m_TestMonster = new SpaceCat("SpaceCat", XMFLOAT3(1000, 0, 1000), pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
 
 	//// 테스트 쿼드트리 터레인 생성 
 	m_pQuadtreeTerrain = new QuadtreeTerrain(pd3dDevice, pd3dCommandList, 257, 257, xmf3Scale, xmf4Color, m_Terrain->GetHeightMapImage());
@@ -469,11 +469,13 @@ void GameScene::LastUpdate(float fElapsedTime)
 	if (m_pSkyCameraObj) m_pSkyCameraObj->LastUpdate(fElapsedTime);
 
 	// Update한 위치로 몬스터/플레이어충돌체크 확인
-	//if (Collision::isCollide(m_pPlayer->GetBOBox()->GetBOBox(), m_TestMonster->GetBOBox()->GetBOBox()))
-	//{
-	//	std::cout << "Monster, Player Collision" << std::endl;
-	//	m_pPlayer->SubstractHP(1);
-	//}
+	if (m_TestMonster->GetisAttacking())
+	{
+		if (Collision::isCollide(m_pPlayer->GetBOBox()->GetBOBox(), m_TestMonster->GetBOBox()->GetBOBox()))
+		{
+			m_pPlayer->SubstractHP(5);
+		}
+	}
 
 	// 카메라 프러스텀과 쿼드트리 지형 렌더링 체크
 	if (m_pMainCamera && m_pQuadtreeTerrain)
