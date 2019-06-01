@@ -472,6 +472,7 @@ void GameScene::LastUpdate(float fElapsedTime)
 	if (Collision::isCollide(m_pPlayer->GetBOBox()->GetBOBox(), m_TestMonster->GetBOBox()->GetBOBox()))
 	{
 		std::cout << "Monster, Player Collision" << std::endl;
+		m_pPlayer->SubstractHP(1);
 	}
 
 	// 카메라 프러스텀과 쿼드트리 지형 렌더링 체크

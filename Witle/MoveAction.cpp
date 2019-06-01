@@ -4,5 +4,5 @@
 
 void MoveAction::UpdateVelocity(float fElpasedTime, MonsterMovement * movement)
 { 
-	movement->m_xmf3Velocity = m_Direction;
+	movement->m_xmf3Velocity = Vector3::ScalarProduct(m_Direction, movement->m_fDistance, false);
 }

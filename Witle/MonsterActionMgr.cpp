@@ -117,13 +117,15 @@ void MonsterActionMgr::UpdateState(float fElpasedTime)
 			{
 				// 이전에 갔던 방향을 반대로 이동
 				pMoveAction->SetDirection(
-					Vector3::ScalarProduct(pMoveAction->GetDirection(), -1, false)
+					Vector3::ScalarProduct(pMoveAction->GetDirection(), -1, true)
 				);
 			}
 			else
 			{
 				// 스폰거리에서 일정거리 멀어진것이 아니라면 그냥 랜덤으로 돌아간다..
-				static_cast<MoveAction*>(m_CurrMonsterAction)->SetDirection(XMFLOAT3(50 + rand() % 100, 0, 50 + rand() % 100));
+				static_cast<MoveAction*>(m_CurrMonsterAction)->SetDirection(
+				  Vector3::Random(false, true, false)
+				);
 			}
 			return;
 		}
