@@ -236,7 +236,12 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	// 테스트용 
 
 	// 몬스터
-	m_TestMonster = new SpaceCat("SpaceCat", XMFLOAT3(1000, 0, 1000), pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
+	m_TestMonster = new Monster*[m_TestMonsterCount];
+	for (int i = 0; i < m_TestMonsterCount; ++i) {
+		m_TestMonster[i] = new SpaceCat("SpaceCat", 
+			XMFLOAT3(1000, 0, 1000), 
+			pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
+	}
 
 	//// 테스트 쿼드트리 터레인 생성 
 	m_pQuadtreeTerrain = new QuadtreeTerrain(pd3dDevice, pd3dCommandList, 257, 257, xmf3Scale, xmf4Color, m_Terrain->GetHeightMapImage());
@@ -409,7 +414,9 @@ bool GameScene::ProcessInput(HWND hWnd, float fElapsedTime)
 
 void GameScene::UpdatePhysics(float fElapsedTime)
 {
-	m_TestMonster->UpdateState(fElapsedTime); // State와 업데이트 처리...
+	for (int i = 0; i < m_TestMonsterCount; ++i) {
+		m_TestMonster[i]->UpdateState(fElapsedTime); // State와 업데이트 처리...
+	}
 
 	// 반드시 마지막에 충돌 처리를 해야함.
 	// 그래야 충돌된 것에 따라 가속도 처리를 할 수 있음.
@@ -422,12 +429,14 @@ void GameScene::Update(float fElapsedTime)
 	// 플레이어 공격
 	if (GameInput::GetDragMode()) // 만약 드래그로 회전한다면...
 	{ 
-		m_pPlayer->Attack(
-			static_cast<Status*>(m_TestMonster->GetStatus()),
-			m_TestMonster->GetBOBox(),
-			m_AimPoint->GetPickingPoint(),
-			m_pMainCamera->GetCamera());
-		 
+
+		for (int i = 0; i < m_TestMonsterCount; ++i) {
+			m_pPlayer->Attack(
+				static_cast<Status*>(m_TestMonster[i]->GetStatus()),
+				m_TestMonster[i]->GetBOBox(),
+				m_AimPoint->GetPickingPoint(),
+				m_pMainCamera->GetCamera());
+		}
 		//m_pPlayer->Attack(
 		//	static_cast<Status*>(m_pOtherPlayer->GetStatus()),
 		//	m_pOtherPlayer->GetBOBox(),
@@ -442,7 +451,11 @@ void GameScene::Update(float fElapsedTime)
 	//// 순서 변경 X //// 
 	if(m_pPlayer) m_pPlayer->Update(fElapsedTime); //Velocity를 통해 pos 이동
 	if(m_pOtherPlayer) m_pOtherPlayer->Update(fElapsedTime);
-	if(m_TestMonster) m_TestMonster->Update(fElapsedTime);
+
+	for (int i = 0; i < m_TestMonsterCount; ++i)
+	{
+		if (m_TestMonster[i]) m_TestMonster[i]->Update(fElapsedTime);
+	}
 
 	if(m_SkyBox) m_SkyBox->Update(fElapsedTime); 
 	if(m_WideareaMagic) m_WideareaMagic->Update(fElapsedTime);
@@ -469,11 +482,14 @@ void GameScene::LastUpdate(float fElapsedTime)
 	if (m_pSkyCameraObj) m_pSkyCameraObj->LastUpdate(fElapsedTime);
 
 	// Update한 위치로 몬스터/플레이어충돌체크 확인
-	if (m_TestMonster->GetisAttacking())
+	for (int i = 0; i < m_TestMonsterCount; ++i)
 	{
-		if (Collision::isCollide(m_pPlayer->GetBOBox()->GetBOBox(), m_TestMonster->GetBOBox()->GetBOBox()))
+		if (m_TestMonster[i]->GetisAttacking())
 		{
-			m_pPlayer->SubstractHP(5);
+			if (Collision::isCollide(m_pPlayer->GetBOBox()->GetBOBox(), m_TestMonster[i]->GetBOBox()->GetBOBox()))
+			{
+				m_pPlayer->SubstractHP(5);
+			}
 		}
 	}
 
@@ -496,7 +512,10 @@ void GameScene::AnimateObjects(float fTimeElapsed)
 { 
 	if (m_pOtherPlayer) m_pOtherPlayer->Animate(fTimeElapsed);
 	if (m_pPlayer) m_pPlayer->Animate(fTimeElapsed);
-	if (m_TestMonster) m_TestMonster->Animate(fTimeElapsed);
+	for (int i = 0; i < m_TestMonsterCount; ++i)
+	{
+		if (m_TestMonster) m_TestMonster[i]->Animate(fTimeElapsed);
+	}
 }
 
 void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
@@ -566,9 +585,10 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 		}
 	}
 
-	if (m_TestMonster)
+
+	for (int i = 0; i < m_TestMonsterCount; ++i)
 	{
-		m_TestMonster->Render(pd3dCommandList);
+		if (m_TestMonster[i]) m_TestMonster[i]->Render(pd3dCommandList);
 	}
 
 }

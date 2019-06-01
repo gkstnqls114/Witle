@@ -114,7 +114,8 @@ protected:
 	//
 	SkyBox*					m_SkyBox{ nullptr };
 	 
-	Monster*				m_TestMonster{ nullptr };
+	int						m_TestMonsterCount{ 100 };
+	Monster**				m_TestMonster{ nullptr };
 
 #ifdef CHECK_SUBVIEWS
 	CameraObject*			m_lookAboveCamera{ nullptr };
