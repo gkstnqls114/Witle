@@ -155,6 +155,7 @@ bool GameScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM w
 		switch (wParam) { 
 		case VK_F2:
 			MyBOBox::CHANGEMODE();
+			Monster::CHANGEMODE();
 			break;
 
 		case 'L': 
@@ -235,11 +236,15 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	PlayerManager::SetMainPlayer(m_pPlayer);
 	// 테스트용 
 
+	 std::random_device rd;
+	  std::mt19937 mersenne(rd());
+	  std::uniform_int_distribution<> die(500, 10000);
+
 	// 몬스터
 	m_TestMonster = new Monster*[m_TestMonsterCount];
 	for (int i = 0; i < m_TestMonsterCount; ++i) {
 		m_TestMonster[i] = new SpaceCat("SpaceCat", 
-			XMFLOAT3(1000, 0, 1000), 
+			XMFLOAT3(die(mersenne), 0, die(mersenne)),
 			pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
 	}
 
@@ -428,20 +433,19 @@ void GameScene::Update(float fElapsedTime)
 { 
 	// 플레이어 공격
 	if (GameInput::GetDragMode()) // 만약 드래그로 회전한다면...
-	{ 
-
-		for (int i = 0; i < m_TestMonsterCount; ++i) {
-			m_pPlayer->Attack(
-				static_cast<Status*>(m_TestMonster[i]->GetStatus()),
-				m_TestMonster[i]->GetBOBox(),
-				m_AimPoint->GetPickingPoint(),
-				m_pMainCamera->GetCamera());
+	{  
+		if (GameInput::IsKeydownE() && !m_pPlayer->IsAttacking() && !m_pPlayer->GetpBroom()->GetisUsing())
+		{
+			for (int i = 0; i < m_TestMonsterCount; ++i) {
+				m_pPlayer->Attack(
+					static_cast<Status*>(
+						m_TestMonster[i]->GetStatus()),
+					m_TestMonster[i]->GetBOBox(),
+					m_AimPoint->GetPickingPoint(),
+					m_pMainCamera->GetCamera());
+			}
 		}
-		//m_pPlayer->Attack(
-		//	static_cast<Status*>(m_pOtherPlayer->GetStatus()),
-		//	m_pOtherPlayer->GetBOBox(),
-		//	m_AimPoint->GetPickingPoint(),
-		//	m_pMainCamera->GetCamera());
+
 	}
 	else // 드래그로 회전하지 않는다면...
 	{
@@ -514,7 +518,7 @@ void GameScene::AnimateObjects(float fTimeElapsed)
 	if (m_pPlayer) m_pPlayer->Animate(fTimeElapsed);
 	for (int i = 0; i < m_TestMonsterCount; ++i)
 	{
-		if (m_TestMonster) m_TestMonster[i]->Animate(fTimeElapsed);
+		if (m_TestMonster[i]) m_TestMonster[i]->Animate(fTimeElapsed);
 	}
 }
 
@@ -555,12 +559,6 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	if (m_pPlayer) m_pPlayer->Render(pd3dCommandList);
 	if (m_pOtherPlayer) m_pOtherPlayer->Render(pd3dCommandList);
 
-	// 터레인
-	if (m_Terrain)
-	{  
-		Mesh* terrainMesh = m_Terrain->GetComponent<Mesh>("TerrainMesh");
-		m_pQuadtreeTerrain->Render(pd3dCommandList, m_Terrain, m_pd3dCbvSrvDescriptorHeap); 
-	}
 	if(m_WideareaMagic) m_WideareaMagic->Render(pd3dCommandList);
 
 
@@ -591,6 +589,12 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 		if (m_TestMonster[i]) m_TestMonster[i]->Render(pd3dCommandList);
 	}
 
+	// 터레인
+	if (m_Terrain)
+	{
+		Mesh* terrainMesh = m_Terrain->GetComponent<Mesh>("TerrainMesh");
+		m_pQuadtreeTerrain->Render(pd3dCommandList, m_Terrain, m_pd3dCbvSrvDescriptorHeap);
+	}
 }
 
 void GameScene::ReleaseUploadBuffers()

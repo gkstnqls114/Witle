@@ -900,6 +900,43 @@ void LoadObject::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	}
 }
 
+void LoadObject::Render(ID3D12GraphicsCommandList * pd3dCommandList, CAnimationController * pSkinnedAnimationController)
+{
+	if (pSkinnedAnimationController) pSkinnedAnimationController->UpdateShaderVariables(pd3dCommandList, m_xmf4x4World);
+
+	if (m_pMesh)
+	{
+		UpdateShaderVariable(pd3dCommandList, &m_xmf4x4World);
+
+		if (m_nMaterials > 0)
+		{
+			for (int i = 0; i < m_nMaterials; i++)
+			{
+				if (m_ppMaterials[i])
+				{
+					if (m_ppMaterials[i]->m_pShader)
+					{
+						// m_ppMaterials[i]->m_pShader->Render(pd3dCommandList);
+						m_ppMaterials[i]->m_pShader->OnPrepareRender(pd3dCommandList);
+					}
+					m_ppMaterials[i]->UpdateShaderVariable(pd3dCommandList);
+				}
+
+				m_pMesh->Render(pd3dCommandList, i);
+			}
+		}
+	}
+
+	if (m_pSibling)
+	{
+		m_pSibling->Render(pd3dCommandList);
+	}
+	if (m_pChild)
+	{
+		m_pChild->Render(pd3dCommandList);
+	}
+}
+
 void LoadObject::RenderInstancing(ID3D12GraphicsCommandList * pd3dCommandList, int InstanceCount)
 {
 	if (m_pSkinnedAnimationController) m_pSkinnedAnimationController->UpdateShaderVariables(pd3dCommandList, m_xmf4x4World);
@@ -1154,6 +1191,75 @@ LoadObject *LoadObject::LoadFrameHierarchyFromFile(ID3D12Device *pd3dDevice, ID3
 	}
 	return(pGameObject);
 }
+
+LoadObject * LoadObject::NotLoadFrameHierarchyFromFile(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, LoadObject * pParent, FILE * pInFile, Shader * pShader, int * pnSkinnedMeshes)
+{ 
+	char pstrToken[64] = { '\0' };
+	UINT nReads = 0;
+
+	int nFrame = ::ReadIntegerFromFile(pInFile);
+
+	LoadObject *pGameObject = new LoadObject(1);
+	::ReadStringFromFile(pInFile, pstrToken);
+
+	printf("%s\n", pstrToken);
+
+	for (; ; )
+	{
+		::ReadStringFromFile(pInFile, pstrToken);
+		if (!strcmp(pstrToken, "<Transform>:"))
+		{
+			XMFLOAT4X4 matrix;
+			nReads = (UINT)::fread(&matrix, sizeof(XMFLOAT4X4), 1, pInFile);
+		}
+		else if (!strcmp(pstrToken, "<Mesh>:"))
+		{
+			CMesh::NotLoadMeshFromFile(pd3dDevice, pd3dCommandList, pInFile);
+		}
+		else if (!strcmp(pstrToken, "<SkinDeformations>:"))
+		{
+			if (pnSkinnedMeshes) (*pnSkinnedMeshes)++;
+
+			CSkinnedMesh::NotLoadSkinDeformationsFromFile(pd3dDevice, pd3dCommandList, pInFile); 
+
+			::ReadStringFromFile(pInFile, pstrToken); //<Mesh>:
+			if (!strcmp(pstrToken, "<Mesh>:")) { 
+				CMesh::NotLoadMeshFromFile(pd3dDevice, pd3dCommandList, pInFile);
+			}
+
+			// pGameObject->SetMesh(pSkinnedMesh);
+
+			// pGameObject->SetSkinnedAnimationWireFrameShader();
+		}
+		else if (!strcmp(pstrToken, "<Children>:"))
+		{
+			int nChilds = ::ReadIntegerFromFile(pInFile);
+			if (nChilds > 0)
+			{
+				for (int i = 0; i < nChilds; i++)
+				{
+					::ReadStringFromFile(pInFile, pstrToken);
+					if (!strcmp(pstrToken, "<Frame>:"))
+					{
+						LoadObject *pChild = LoadObject::NotLoadFrameHierarchyFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, pGameObject, pInFile, pShader, pnSkinnedMeshes);
+						if (pChild) pGameObject->SetChild(pChild);
+#ifdef _WITH_DEBUG_FRAME_HIERARCHY
+						TCHAR pstrDebug[256] = { 0 };
+						_stprintf_s(pstrDebug, 256, _T("(Frame: %p) (Parent: %p)\n"), pChild, pGameObject);
+						OutputDebugString(pstrDebug);
+#endif
+					}
+				}
+			}
+		}
+		else if (!strcmp(pstrToken, "</Frame>"))
+		{
+			break;
+		}
+	}
+	return(pGameObject);
+}
+ 
 
 void LoadObject::PrintFrameInfo(LoadObject *pGameObject, LoadObject *pParent)
 {
@@ -1678,6 +1784,67 @@ CLoadedModelInfo * LoadObject::LoadGeometryAndAnimationFromFile_forMonster(ID3D1
 
 	return(pLoadedModel);
 }
+
+CLoadedModelInfo * LoadObject::LoadJustAnimationFromFile(CLoadedModelInfo* pModelInfo, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, const char * pstrFileName, Shader * pShader, int AnimationCount, ANIMATION_INFO * infos)
+{
+	FILE *pInFile = NULL;
+	::fopen_s(&pInFile, pstrFileName, "rb");
+	::rewind(pInFile);
+
+	//CLoadedModelInfo *pLoadedModel = new CLoadedModelInfo();
+	//pLoadedModel->m_pModelRootObject = new LoadObject();
+	//strcpy_s(pLoadedModel->m_pModelRootObject->m_pstrFrameName, "RootNode");
+
+	char pstrToken[64] = { '\0' };
+
+	for (; ; )
+	{
+		if (::ReadStringFromFile(pInFile, pstrToken))
+		{
+			if (!strcmp(pstrToken, "<Hierarchy>"))
+			{
+				for (; ; )
+				{
+					::ReadStringFromFile(pInFile, pstrToken);
+					if (!strcmp(pstrToken, "<Frame>:"))
+					{
+						LoadObject::NotLoadFrameHierarchyFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, NULL, pInFile, pShader, &pModelInfo->m_nSkinnedMeshes);
+					}
+					else if (!strcmp(pstrToken, "</Hierarchy>"))
+					{
+						break;
+					}
+				}
+			}
+			else if (!strcmp(pstrToken, "<Animation>"))
+			{
+				LoadObject::LoadAnimationFromFile_forMonster(pInFile, pModelInfo, AnimationCount, infos);
+				pModelInfo->PrepareSkinning();
+			}
+			else if (!strcmp(pstrToken, "</Animation>"))
+			{
+				break;
+			}
+		}
+		else
+		{
+			break;
+		}
+	}
+
+#ifdef _WITH_DEBUG_FRAME_HIERARCHY
+	TCHAR pstrDebug[256] = { 0 };
+	_stprintf_s(pstrDebug, 256, _T("Frame Hierarchy\n"));
+	OutputDebugString(pstrDebug);
+
+	LoadObject::PrintFrameInfo(pLoadedModel->m_pModelRootObject, NULL);
+#endif
+
+	::fclose(pInFile);
+
+	return(pModelInfo);
+}
+ 
  
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //

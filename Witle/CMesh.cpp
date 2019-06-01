@@ -358,6 +358,153 @@ void CMesh::LoadMeshFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList
 	}
 }
 
+void CMesh::NotLoadMeshFromFile(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, FILE * pInFile)
+{ 
+	char pstrToken[64] = { '\0' };
+	BYTE nStrLength = 0;
+	UINT nReads = 0;
+
+	int nColors = 0, nIndices = 0, nSubMeshes = 0, nSubIndices = 0;
+
+	::ReadStringFromFile(pInFile, pstrToken);
+
+	for (; ; )
+	{
+		::ReadStringFromFile(pInFile, pstrToken);
+
+		if (!strcmp(pstrToken, "<Bounds>:"))
+		{
+			XMFLOAT3 xmf3AABBCenter;
+			XMFLOAT3 xmf3AABBExtents;
+			nReads = (UINT)::fread(&xmf3AABBCenter, sizeof(XMFLOAT3), 1, pInFile);
+			nReads = (UINT)::fread(&xmf3AABBExtents, sizeof(XMFLOAT3), 1, pInFile);
+		}
+		else if (!strcmp(pstrToken, "<ControlPoints>:"))
+		{
+			int nVertices;
+			nReads = (UINT)::fread(&nVertices, sizeof(int), 1, pInFile);
+			if (nVertices > 0)
+			{ 
+				XMFLOAT3* m_pxmf3Positions = new XMFLOAT3[nVertices];
+				nReads = (UINT)::fread(m_pxmf3Positions, sizeof(XMFLOAT3), nVertices, pInFile);
+				delete[] m_pxmf3Positions;
+				m_pxmf3Positions = nullptr; 
+			}
+		}
+		else if (!strcmp(pstrToken, "<Polygons>:"))
+		{
+			int nPolygons = 0;
+			nReads = (UINT)::fread(&nPolygons, sizeof(int), 1, pInFile);
+			for (; ; )
+			{
+				::ReadStringFromFile(pInFile, pstrToken);
+
+				if (!strcmp(pstrToken, "<Indices>:"))
+				{
+					int nVertices = d3dUtil::ReadIntegerFromFile(pInFile);
+					assert(!(nVertices != nPolygons * 3));
+					assert(!(nVertices <= 0));
+					if (nVertices > 0)
+					{ 
+						XMFLOAT3* m_pxmf3Positions = new XMFLOAT3[nVertices];
+						nReads = (UINT)::fread(m_pxmf3Positions, sizeof(XMFLOAT3), nVertices, pInFile);
+						delete[] m_pxmf3Positions;
+					}
+
+				}
+				else if (!strcmp(pstrToken, "<UVs>:"))
+				{
+					int nUVsPerVertex, k;
+					int nTextureCoords = d3dUtil::ReadIntegerFromFile(pInFile); // nUVs
+					nUVsPerVertex = d3dUtil::ReadIntegerFromFile(pInFile); // nUVsPerVertex 
+					if (nTextureCoords > 0)
+					{
+						//d3dUtil::ReadStringFromFile(pInFile, pstrToken); // <UV>:
+						//k = d3dUtil::ReadIntegerFromFile(pInFile); // k 번째...
+ 
+						XMFLOAT2* m_pxmf2TextureCoords0 = new XMFLOAT2[nTextureCoords];
+						nReads = (UINT)::fread(m_pxmf2TextureCoords0, sizeof(XMFLOAT2), nTextureCoords, pInFile);
+						delete[] m_pxmf2TextureCoords0; 
+					}
+				}
+				/*else if (!strcmp(pstrToken, "<TextureCoords0>:"))
+				{
+					nReads = (UINT)::fread(&nTextureCoords, sizeof(int), 1, pInFile);
+					if (nTextureCoords > 0)
+					{
+						m_nType |= VERTEXT_TEXTURE_COORD0;
+						m_pxmf2TextureCoords0 = new XMFLOAT2[nTextureCoords];
+						nReads = (UINT)::fread(m_pxmf2TextureCoords0, sizeof(XMFLOAT2), nTextureCoords, pInFile);
+
+						m_pd3dTextureCoord0Buffer = d3dUtil::CreateBufferResource(pd3dDevice, pd3dCommandList, m_pxmf2TextureCoords0, sizeof(XMFLOAT2) * m_nVertices, D3D12_HEAP_TYPE_DEFAULT, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, &m_pd3dTextureCoord0UploadBuffer);
+
+						m_d3dTextureCoord0BufferView.BufferLocation = m_pd3dTextureCoord0Buffer->GetGPUVirtualAddress();
+						m_d3dTextureCoord0BufferView.StrideInBytes = sizeof(XMFLOAT2);
+						m_d3dTextureCoord0BufferView.SizeInBytes = sizeof(XMFLOAT2) * m_nVertices;
+					}
+				}*/
+				else if (!strcmp(pstrToken, "<TextureCoords1>:"))
+				{
+					int nTextureCoords = 0;
+					nReads = (UINT)::fread(&nTextureCoords, sizeof(int), 1, pInFile);
+					if (nTextureCoords > 0)
+					{ 
+						XMFLOAT2* m_pxmf2TextureCoords1 = new XMFLOAT2[nTextureCoords];
+						nReads = (UINT)::fread(m_pxmf2TextureCoords1, sizeof(XMFLOAT2), nTextureCoords, pInFile);
+
+						delete[] m_pxmf2TextureCoords1;
+					}
+				}
+				else if (!strcmp(pstrToken, "<Normals>:"))
+				{
+					// nReads = (UINT)::fread(&nNormals, sizeof(int), 1, pInFile); // 노말개수
+					int nNormals = d3dUtil::ReadIntegerFromFile(pInFile); // 노말개수
+					int nNormalsPerVertex = d3dUtil::ReadIntegerFromFile(pInFile); // 하나의 정점에 존재하는 노말
+					 
+					if (nNormals > 0)
+					{ 
+						XMFLOAT3* m_pxmf3Normals = new XMFLOAT3[nNormals];
+						nReads = (UINT)::fread(m_pxmf3Normals, sizeof(XMFLOAT3), nNormals, pInFile);
+
+						delete[] m_pxmf3Normals;
+					}
+				}
+				else if (!strcmp(pstrToken, "<Tangents>:"))
+				{
+					int nTangents = 0;
+					nReads = (UINT)::fread(&nTangents, sizeof(int), 1, pInFile);
+					if (nTangents > 0)
+					{ 
+						XMFLOAT3* m_pxmf3Tangents = new XMFLOAT3[nTangents];
+						nReads = (UINT)::fread(m_pxmf3Tangents, sizeof(XMFLOAT3), nTangents, pInFile);
+
+						delete[] m_pxmf3Tangents;
+					}
+				}
+				else if (!strcmp(pstrToken, "<BiTangents>:"))
+				{
+					int nBiTangents = 0;
+					nReads = (UINT)::fread(&nBiTangents, sizeof(int), 1, pInFile);
+					if (nBiTangents > 0)
+					{
+						XMFLOAT3 * m_pxmf3BiTangents = new XMFLOAT3[nBiTangents];
+						nReads = (UINT)::fread(m_pxmf3BiTangents, sizeof(XMFLOAT3), nBiTangents, pInFile);
+						delete[]m_pxmf3BiTangents;
+					}
+				}
+				else if (!strcmp(pstrToken, "</Polygons>"))
+				{
+					break;
+				}
+			}
+		}
+		else if (!strcmp(pstrToken, "</Mesh>"))
+		{
+			break;
+		}
+	}
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // 
 CHeightMapImage::CHeightMapImage(LPCTSTR pFileName, int nWidth, int nLength, XMFLOAT3 xmf3Scale)
@@ -834,6 +981,76 @@ void CSkinnedMesh::LoadSkinDeformationsFromFile(ID3D12Device *pd3dDevice, ID3D12
 				m_d3dBoneWeightBufferView.BufferLocation = m_pd3dBoneWeightBuffer->GetGPUVirtualAddress();
 				m_d3dBoneWeightBufferView.StrideInBytes = sizeof(XMFLOAT4);
 				m_d3dBoneWeightBufferView.SizeInBytes = sizeof(XMFLOAT4) * m_nVertices;
+			}
+		}
+		else if (!strcmp(pstrToken, "</SkinDeformations>"))
+		{
+			break;
+		}
+	}
+}
+
+void CSkinnedMesh::NotLoadSkinDeformationsFromFile(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, FILE * pInFile)
+{
+	char pstrToken[64] = { '\0' };
+	BYTE nStrLength = 0;
+	UINT nReads = 0;
+
+	for (; ; )
+	{
+		::ReadStringFromFile(pInFile, pstrToken);
+		if (!strcmp(pstrToken, "<BonesPerVertex>:"))
+		{
+			int m_nBonesPerVertex = ::ReadIntegerFromFile(pInFile);
+		}
+		else if (!strcmp(pstrToken, "<Bounds>:"))
+		{
+			XMFLOAT3 xmf3AABBCenter;
+			XMFLOAT3 xmf3AABBExtents;
+			nReads = (UINT)::fread(&xmf3AABBCenter, sizeof(XMFLOAT3), 1, pInFile);
+			nReads = (UINT)::fread(&xmf3AABBExtents, sizeof(XMFLOAT3), 1, pInFile);
+		}
+		else if (!strcmp(pstrToken, "<BoneNames>:"))
+		{
+			int m_nSkinningBones = ::ReadIntegerFromFile(pInFile);
+			if (m_nSkinningBones > 0)
+			{ 
+				char m_ppstrSkinningBoneNames[64];
+				for (int i = 0; i < m_nSkinningBones; i++)
+				{
+					::ReadStringFromFile(pInFile, m_ppstrSkinningBoneNames); 
+				}
+			}
+		}
+		else if (!strcmp(pstrToken, "<BoneOffsets>:"))
+		{
+			int m_nSkinningBones = ::ReadIntegerFromFile(pInFile);
+			if (m_nSkinningBones > 0)
+			{
+				XMFLOAT4X4* m_pxmf4x4BindPoseBoneOffsets = new XMFLOAT4X4[m_nSkinningBones];
+				nReads = (UINT)::fread(m_pxmf4x4BindPoseBoneOffsets, sizeof(XMFLOAT4X4), m_nSkinningBones, pInFile);
+				delete[] m_pxmf4x4BindPoseBoneOffsets; 
+			}
+		}
+		else if (!strcmp(pstrToken, "<BoneIndices>:"))
+		{ 
+			int m_nVertices = ::ReadIntegerFromFile(pInFile); 
+			if (m_nVertices > 0)
+			{
+				XMINT4* m_pxmn4BoneIndices = new XMINT4[m_nVertices];
+
+				nReads = (UINT)::fread(m_pxmn4BoneIndices, sizeof(XMINT4), m_nVertices, pInFile);
+				delete[] m_pxmn4BoneIndices;
+			}
+		}
+		else if (!strcmp(pstrToken, "<BoneWeights>:"))
+		{ 
+			int m_nVertices = ::ReadIntegerFromFile(pInFile); 
+			if (m_nVertices > 0)
+			{
+				XMFLOAT4* m_pxmf4BoneWeights = new XMFLOAT4[m_nVertices]; 
+				nReads = (UINT)::fread(m_pxmf4BoneWeights, sizeof(XMFLOAT4), m_nVertices, pInFile);
+				delete[] m_pxmf4BoneWeights;
 			}
 		}
 		else if (!strcmp(pstrToken, "</SkinDeformations>"))

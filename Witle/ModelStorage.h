@@ -6,6 +6,7 @@ class MyBOBox;
 class LoadObject;
 class Texture;
 class EmptyGameObject;
+class CAnimationController;
 
 class ModelStorage
 {
@@ -34,7 +35,9 @@ public:
 
 	LoadObject * GetRootObject(std::string name);
 	MyBOBox * GetBOBox(std::string name);
+	CLoadedModelInfo * GetModelInfo(std::string name);
 
 	void RenderBOBoxInstancing(ID3D12GraphicsCommandList * pd3dCommandList, const std::string& name, int InstancingCount);
 
+	void Render(ID3D12GraphicsCommandList * pd3dCommandList, const std::string& name, CAnimationController* Controller);
 };

@@ -36,7 +36,9 @@
 static float MonsterOffestX = 0.f;
 static float MonsterOffestY = 57.f;
 static float MonsterOffestZ = 50.f;
-  
+
+bool Monster::RENDER_DEBUG{ true };
+
 XMFLOAT3 Monster::CalculateAlreadyVelocity(float fTimeElapsed)
 {
 	XMFLOAT3 AlreadyVelocity = Vector3::Add(m_MonsterMovement->m_xmf3Velocity, m_MonsterMovement->m_xmf3Gravity);
@@ -95,6 +97,22 @@ Monster::Monster(const std::string & entityID, const XMFLOAT3& SpawnPoint, ID3D1
 Monster::~Monster()
 {
 
+}
+
+void Monster::Render(ID3D12GraphicsCommandList * pd3dCommandList)
+{
+	if (RENDER_DEBUG)
+	{
+		m_pMyBOBox->Render(pd3dCommandList);
+		m_pDebugSpawnMesh->Render(pd3dCommandList);
+		m_RecognitionRange->RenderDebug(pd3dCommandList);
+	}
+
+	m_pHaep->UpdateShaderVariable(pd3dCommandList);
+	m_pTexture->UpdateShaderVariable(pd3dCommandList, 0);
+	m_pLoadObject->Render(pd3dCommandList);
+
+	RenderHpStatus(pd3dCommandList);
 }
 
 void Monster::ReleaseMembers()
@@ -187,20 +205,7 @@ void Monster::Animate(float fElapsedTime)
 	
 	m_pLoadObject->Animate(fElapsedTime); 
 }
-
-void Monster::Render(ID3D12GraphicsCommandList * pd3dCommandList)
-{  
-	m_pMyBOBox->Render(pd3dCommandList); 
-	m_pDebugSpawnMesh->Render(pd3dCommandList);
-	m_RecognitionRange->RenderDebug(pd3dCommandList);
-
-	m_pHaep->UpdateShaderVariable(pd3dCommandList);
-	m_pTexture->UpdateShaderVariable(pd3dCommandList, 0);
-	m_pLoadObject->Render(pd3dCommandList);
-
-	RenderHpStatus(pd3dCommandList); 
-}
-
+ 
 void Monster::RenderHpStatus(ID3D12GraphicsCommandList * pd3dCommandList)
 { 
 	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_UIWORLD);

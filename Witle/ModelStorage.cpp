@@ -58,6 +58,19 @@ void ModelStorage::CreateModels(ID3D12Device * pd3dDevice, ID3D12GraphicsCommand
 		m_ModelStorage[name].loadmodelInfo = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, path.c_str(), NULL);
 	}
 
+	// 몬스터 개별로 추가
+	ANIMATION_INFO infos[SPACECAT_ANIMATIONE];
+	infos[0] = SPACECAT_IDLE;
+	infos[1] = SPACECAT_MOVE;
+	infos[2] = SPACECAT_ATTACK;
+	infos[3] = SPACECAT_DEAD;
+	infos[4] = SPACECAT_HIT;
+
+	m_NameList.push_back(SPACECAT); 
+	m_ModelStorage[SPACECAT].loadmodelInfo = LoadObject::LoadGeometryAndAnimationFromFile_forMonster(
+		pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/SpaceCat.bin", NULL,
+		SPACECAT_ANIMATIONE, infos);
+
 	// 충돌박스 목록
 	test = new EmptyGameObject("Empty");
 
@@ -116,6 +129,12 @@ LoadObject * ModelStorage::GetRootObject(std::string name)
 
 	return newRootObject;
 }
+ 
+CLoadedModelInfo * ModelStorage::GetModelInfo(std::string name)
+{
+	if (!m_ModelStorage[name].loadmodelInfo) return nullptr;
+	return m_ModelStorage[name].loadmodelInfo;
+}
 
 MyBOBox * ModelStorage::GetBOBox(std::string name)
 { 
@@ -129,5 +148,13 @@ void ModelStorage::RenderBOBoxInstancing(ID3D12GraphicsCommandList * pd3dCommand
 	if (!m_ModelStorage[name].modelBOBox) return;
 
 	m_ModelStorage[name].modelBOBox->RenderInstancing(pd3dCommandList, InstancingCount);
+}
+
+
+void ModelStorage::Render(ID3D12GraphicsCommandList * pd3dCommandList, const std::string& name, CAnimationController* Controller)
+{
+	auto p = m_ModelStorage[name].loadmodelInfo;
+	if (!p) return ;
+	p->m_pModelRootObject->Render(pd3dCommandList, Controller);
 }
 

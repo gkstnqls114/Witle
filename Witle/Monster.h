@@ -29,9 +29,12 @@ enum MONSTER_STATE
 class Monster :
 	public GameObject
 {
+	static bool RENDER_DEBUG;
+
 public:
 	virtual void Update(float fElapsedTime) = 0;
 	virtual void UpdateState(float fElapsedTime) = 0;
+	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList);
 
 protected:
 	UI3DImage*			m_MonsterHP{ nullptr };
@@ -39,8 +42,7 @@ protected:
 	MonsterMovement*    m_MonsterMovement{ nullptr };
 	MonsterStatus*	   m_MonsterStatus{ nullptr };
 	MyBOBox*		   m_pMyBOBox{ nullptr };
-
-
+	 
 	Texture*			m_pTexture{ nullptr };
 	MyDescriptorHeap*	m_pHaep{ nullptr };
 
@@ -67,10 +69,14 @@ private:
 	void SetTrackAnimationSet();
 
 public:
+	static void CHANGEMODE()
+	{
+		RENDER_DEBUG = !RENDER_DEBUG;
+	}
+
 	Monster(const std::string& entityID, const XMFLOAT3& SpwanPoint, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature);
 	virtual ~Monster();
 	 
-	void Render(ID3D12GraphicsCommandList *pd3dCommandList);
 	void RenderHpStatus(ID3D12GraphicsCommandList *pd3dCommandList);
 	  
 	XMFLOAT3 CalculateAlreadyVelocity(float fTimeElapsed);

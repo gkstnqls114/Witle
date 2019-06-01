@@ -309,14 +309,14 @@ public:
 	LoadObject						*m_pModelRootObject = nullptr;
 
 	CAnimationSets					*m_pAnimationSets = nullptr;
-
+	 
 	int 							m_nSkinnedMeshes = 0;
 	CSkinnedMesh					**m_ppSkinnedMeshes = nullptr; //[SkinnedMeshes], Skinned Mesh Cache
 
 public:
 	void ReleaseUploadBuffers();
 	void ReleaseObjects();
-	void PrepareSkinning();
+	void PrepareSkinning(); 
 };
 
 class CAnimationController
@@ -417,6 +417,7 @@ public:
 
 	virtual void OnPrepareRender() { }
 	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList);
+	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, CAnimationController* pSkinnedAnimationController);
 	virtual void RenderInstancing(ID3D12GraphicsCommandList *pd3dCommandList, int InstanceCount);
 
 	virtual void CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
@@ -454,6 +455,7 @@ public:
 
 	UINT GetMeshType() { return((m_pMesh) ? m_pMesh->GetType() : 0x00); }
 
+	
 public:
 	CAnimationController 			*m_pSkinnedAnimationController = NULL;
 
@@ -464,15 +466,20 @@ public:
 	bool IsTrackAnimationSetFinish(int nAnimationTrack, int nAnimationSet);
 	void SetTrackAnimationPosition(int nAnimationTrack, float fPosition);
 
+private:
 	static void LoadAnimationFromFile(FILE *pInFile, CLoadedModelInfo *pLoadedModel);
 	static LoadObject *LoadFrameHierarchyFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, LoadObject *pParent, FILE *pInFile, Shader *pShader, int *pnSkinnedMeshes);
-	static CLoadedModelInfo *LoadGeometryAndAnimationFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, const char *pstrFileName, Shader *pShader);
-
+	static LoadObject *NotLoadFrameHierarchyFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, LoadObject *pParent, FILE *pInFile, Shader *pShader, int *pnSkinnedMeshes);
 	static void LoadAnimationFromFile_forPlayer(FILE *pInFile, CLoadedModelInfo *pLoadedModel);
 	static void LoadAnimationFromFile_forMonster(FILE *pInFile, CLoadedModelInfo *pLoadedModel, int AnimationCount, ANIMATION_INFO* infos);
+
+public:
+
+	static CLoadedModelInfo *LoadGeometryAndAnimationFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, const char *pstrFileName, Shader *pShader);
 	static CLoadedModelInfo *LoadGeometryAndAnimationFromFile_forPlayer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, const char *pstrFileName, Shader *pShader);
 	static CLoadedModelInfo *LoadGeometryAndAnimationFromFile_forMonster(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, const char *pstrFileName, Shader *pShader, int AnimationCount, ANIMATION_INFO* infos);
-
+	static CLoadedModelInfo *LoadJustAnimationFromFile(CLoadedModelInfo* rootobj, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, const char *pstrFileName, Shader *pShader, int AnimationCount, ANIMATION_INFO* infos);
+	
 	static void PrintFrameInfo(LoadObject *pGameObject, LoadObject *pParent);
 
 	static void CopyWorldMatrix(LoadObject* copy, LoadObject* copyed)

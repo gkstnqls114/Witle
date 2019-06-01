@@ -27,7 +27,10 @@
 #define TREE_2 "TreeTwo"
 #define TREE_BG_2 "TreeTwo_Big"
 
-// 유적 지형 
+// 몬스터
+
+#define SPACECAT "SpaceCat"
+
 
 
 

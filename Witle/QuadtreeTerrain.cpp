@@ -419,6 +419,7 @@ void QuadtreeTerrain::Render(ID3D12GraphicsCommandList * pd3dCommandList, Terrai
 	pTerrain->UpdateShaderVariables(pd3dCommandList);
 
 	RecursiveRender(m_pRootNode, pd3dCommandList); // ÁöÇü ·»´õ	 
+
 }
 
 void QuadtreeTerrain::Render(int index, ID3D12GraphicsCommandList * pd3dCommandList)

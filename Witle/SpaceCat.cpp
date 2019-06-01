@@ -7,27 +7,26 @@
 #include "PlayerManager.h"
 // For Monster ///////////////
 
+#include "ModelStorage.h"
 #include "MyDescriptorHeap.h"
 #include "Object.h"
 #include "MyBOBox.h"
 #include "Texture.h"
 #include "SpaceCat.h"
  
-
-SpaceCat::SpaceCat(const std::string & entityID, const XMFLOAT3& SpawnPoint, 
+ 
+SpaceCat::SpaceCat(const std::string & entityID, const XMFLOAT3& SpawnPoint,
 	ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature)
 	: Monster(entityID, SpawnPoint, pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature)
-{ 
-	if (nullptr == m_pHaep)
-	{
-		m_pHaep = new MyDescriptorHeap();
-		m_pHaep->CreateCbvSrvUavDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 1, 0);
+{  
+	m_pHaep = new MyDescriptorHeap();
+	m_pHaep->CreateCbvSrvUavDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 1, 0);
 
-		m_pTexture = new Texture(1, RESOURCE_TEXTURE2D);
-		m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/M_Cat_DA.dds", 0);
+	m_pTexture = new Texture(1, RESOURCE_TEXTURE2D);
+	m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/M_Cat_DA.dds", 0);
 
-		m_pHaep->CreateShaderResourceViews(pd3dDevice, pd3dCommandList, m_pTexture, ROOTPARAMETER_TEXTURE, false, 0);
-	}
+	m_pHaep->CreateShaderResourceViews(pd3dDevice, pd3dCommandList, m_pTexture, ROOTPARAMETER_TEXTURE, false, 0);
+	
 
 	ANIMATION_INFO infos[SPACECAT_ANIMATIONE];
 	infos[0] = SPACECAT_IDLE;
@@ -39,8 +38,10 @@ SpaceCat::SpaceCat(const std::string & entityID, const XMFLOAT3& SpawnPoint,
 	m_MonsterModel = LoadObject::LoadGeometryAndAnimationFromFile_forMonster(
 		pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/SpaceCat.bin", NULL,
 		SPACECAT_ANIMATIONE, infos);
+	 
+	// m_MonsterModel = ModelStorage::GetInstance()->GetModelInfo(SPACECAT);
+	
 	m_pLoadObject = m_MonsterModel->m_pModelRootObject;
-
 	m_pLoadObject->m_pSkinnedAnimationController = new CAnimationController(pd3dDevice, pd3dCommandList, 1, m_MonsterModel);
 	m_pLoadObject->m_pSkinnedAnimationController->SetTrackAnimationSet(0, 0);
 

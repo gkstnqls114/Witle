@@ -105,6 +105,7 @@ public:
 	/////////////////////// Skill
 
 	/////////////////////// Get
+	const Broom* GetpBroom() { return m_Broom; }
 	PlayerStatus* GetStatus() { return m_pPlayerStatus; };
 	AXIS GetCoorAxis() { return m_Transform.GetCoorAxis(); }
 	XMFLOAT3 GetVelocity() const;
