@@ -55,6 +55,40 @@ void Transform::Rotate(float x, float y, float z)
 	SetTransform(m_Right, m_Up, m_Look, m_Position);
 }
 
+void Transform::SetRotate(float x, float y, float z)
+{
+	XMFLOAT3 right{ 1, 0, 0 };
+	XMFLOAT3 up{ 0, 1, 0 };
+	XMFLOAT3 look{ 0, 0, 1 };
+
+	if (x != 0.0f)
+	{
+		XMMATRIX xmmtxRotate = XMMatrixRotationAxis(XMLoadFloat3(&right), XMConvertToRadians(x));
+		look = Vector3::TransformNormal(look, xmmtxRotate);
+		up = Vector3::TransformNormal(up, xmmtxRotate);
+	}
+	if (y != 0.0f)
+	{
+		XMMATRIX xmmtxRotate = XMMatrixRotationAxis(XMLoadFloat3(&up), XMConvertToRadians(y));
+		look = Vector3::TransformNormal(look, xmmtxRotate);
+		right = Vector3::TransformNormal(right, xmmtxRotate);
+	}
+	if (z != 0.0f)
+	{
+		XMMATRIX xmmtxRotate = XMMatrixRotationAxis(XMLoadFloat3(&look), XMConvertToRadians(z));
+		up = Vector3::TransformNormal(up, xmmtxRotate);
+		right = Vector3::TransformNormal(right, xmmtxRotate);
+	}
+
+	/*회전으로 인해 플레이어의 로컬 x-축, y-축, z-축이 서로 직교하지 않을 수 있으므로 z-축(LookAt 벡터)을 기준으
+	로 하여 서로 직교하고 단위벡터가 되도록 한다.*/
+	m_Look = Vector3::Normalize(look);
+	m_Right = Vector3::CrossProduct(up, look, true);
+	m_Up = Vector3::CrossProduct(look, right, true);
+
+	SetTransform(m_Right, m_Up, m_Look, m_Position);
+}
+
 void Transform::Move(const XMFLOAT3 & vMove)
 {
 	m_Position = Vector3::Add(m_Position, vMove); 

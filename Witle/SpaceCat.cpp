@@ -57,6 +57,9 @@ void SpaceCat::Update(float fElapsedTime)
 	// 이동량을 계산한다. 
 	m_MonsterMovement->Update(fElapsedTime);
 
+	// 회전 각도를 고정시킨다.
+	m_Transform.SetRotate(m_MonsterMovement->m_fRoll, m_MonsterMovement->m_fPitch, m_MonsterMovement->m_fYaw);
+
 	// 이동량만큼 움직인다. 
 	Move(Vector3::ScalarProduct(m_MonsterMovement->m_xmf3Velocity, fElapsedTime, false));
 
