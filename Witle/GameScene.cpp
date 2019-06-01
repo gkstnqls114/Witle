@@ -604,6 +604,10 @@ void GameScene::ReleaseUploadBuffers()
 	if (m_pPlayer) m_pPlayer->ReleaseUploadBuffers();
 	if (m_Terrain) m_Terrain->ReleaseUploadBuffers();
 	if (m_pQuadtreeTerrain) m_pQuadtreeTerrain->ReleaseUploadBuffers();
+	for (int i = 0; i < m_TestMonsterCount; ++i)
+	{
+		m_TestMonster[i]->ReleaseUploadBuffers();
+	}
 }
 
  
