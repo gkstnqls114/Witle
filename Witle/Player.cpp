@@ -287,9 +287,12 @@ void Player::Update(float fElapsedTime)
 
 void Player::SubstractHP(int sub)
 { 
-	m_CurrAnimation = ANIMATION_HIT.ID;
-	m_pLoadObject_Body->SetTrackAnimationSet(0, m_CurrAnimation);
-	m_pLoadObject_Cloth->SetTrackAnimationSet(0, m_CurrAnimation);
+	if (m_CurrAnimation != ANIMATION_HIT.ID)
+	{
+		m_CurrAnimation = ANIMATION_HIT.ID;
+		m_pLoadObject_Body->SetTrackAnimationSet(0, m_CurrAnimation);
+		m_pLoadObject_Cloth->SetTrackAnimationSet(0, m_CurrAnimation);
+	}
 
 	m_pPlayerStatus->m_HP -= sub;  
 }
