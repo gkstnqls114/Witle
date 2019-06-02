@@ -287,6 +287,12 @@ void Player::Update(float fElapsedTime)
 
 void Player::SubstractHP(int sub)
 { 
+	m_pPlayerStatus->m_HP -= sub;  
+
+	if (m_CurrAnimation == ANIMATION_BROOMIDLE.ID) return;
+	if (m_CurrAnimation == ANIMATION_BROOMFORWARD.ID) return;
+	if (m_CurrAnimation == ANIMATION_BROOMPREPARE.ID) return;
+
 	if (m_CurrAnimation != ANIMATION_HIT.ID)
 	{
 		m_CurrAnimation = ANIMATION_HIT.ID;
@@ -294,7 +300,6 @@ void Player::SubstractHP(int sub)
 		m_pLoadObject_Cloth->SetTrackAnimationSet(0, m_CurrAnimation);
 	}
 
-	m_pPlayerStatus->m_HP -= sub;  
 }
 
 void Player::Animate(float fElapsedTime)
