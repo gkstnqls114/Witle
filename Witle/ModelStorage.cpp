@@ -20,6 +20,12 @@ ModelStorage * ModelStorage::GetInstance()
 
 void ModelStorage::ReleaseInstance()
 {
+	if (test)
+	{
+		test->ReleaseObjects();
+		delete test;
+		test = nullptr;
+	}
 	m_Instance->ReleaseObjects();
 	delete m_Instance;
 	m_Instance = nullptr;
@@ -117,7 +123,7 @@ void ModelStorage::ReleaseObjects()
 	}
 	 
 	m_ModelStorage.clear(); 
-	m_NameList.clear();
+	m_NameList.clear(); 
 }
 
 LoadObject * ModelStorage::GetRootObject(std::string name)
