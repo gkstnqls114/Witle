@@ -11,6 +11,10 @@ class Shape :
 	public ComponentBase
 {
 public:
+	virtual void ReleaseObjects() override;
+	virtual void ReleaseUploadBuffers() override;
+
+public:
 	virtual void Render(ID3D12GraphicsCommandList * pd3dCommandList, const Shader* shader) = 0;
 
 protected:
@@ -45,9 +49,7 @@ public:
 	virtual ~Shape();
 
 	virtual void Update(float fTimeElapsed) override {};
-	void ReleaseObjects();
-	void ReleaseUploadBuffers();
-
+	
 	/////////////////////////////////////////////////////////////////////////// Get
 	UINT GetVertexCount() const { return m_vertexCount; }
 	const ID3D12Resource* GetPositonBuffer() const { m_pPositionBuffer; }

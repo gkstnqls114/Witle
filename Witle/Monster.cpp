@@ -116,7 +116,13 @@ void Monster::Render(ID3D12GraphicsCommandList * pd3dCommandList)
 }
 
 void Monster::ReleaseMembers()
-{ 
+{
+	if (m_pDebugSpawnMesh)
+	{
+		m_pDebugSpawnMesh->ReleaseObjects();
+		delete m_pDebugSpawnMesh;
+		m_pDebugSpawnMesh = nullptr;
+	}
 	if (m_MonsterHP)
 	{
 		m_MonsterHP->ReleaseObjects();

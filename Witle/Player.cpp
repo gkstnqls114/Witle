@@ -155,6 +155,13 @@ void Player::ReleaseMembers()
 {
 	m_pPlayerUpdatedContext = nullptr;
 	m_pCameraUpdatedContext = nullptr;
+
+	if (m_pHaep)
+	{
+		m_pHaep->ReleaseObjects();
+		delete m_pHaep;
+		m_pHaep = nullptr;
+	}
 	if (m_BroomEffectRect)
 	{
 		m_BroomEffectRect->ReleaseObjects();
