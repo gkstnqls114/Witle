@@ -9,18 +9,6 @@
 
 void UI3DImage::ReleaseObjects()
 {
-	if (m_pHeap)
-	{
-		m_pHeap->ReleaseObjects();
-		delete m_pHeap;
-		m_pHeap = nullptr;
-	}
-	if (m_pTexture)
-	{
-		m_pTexture->ReleaseObjects();
-		delete m_pTexture;
-		m_pTexture = nullptr;
-	}
 }
 
 void UI3DImage::ReleaseUploadBuffers()

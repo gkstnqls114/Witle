@@ -9,11 +9,6 @@ class Texture;
 class BroomEffectRect
 	: public Shape
 {
-public:
-	virtual void ReleaseObjects() override;
-	virtual void ReleaseUploadBuffers() override;
-
-private:
 	struct RectVertex
 	{
 		XMFLOAT3 position;

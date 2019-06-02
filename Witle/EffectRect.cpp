@@ -9,27 +9,6 @@
 
 #define RECTANGLE_VERTEX_COUNT 6
 
-void BroomEffectRect::ReleaseObjects()
-{
-	Shape::ReleaseObjects();
-	if (m_pHeap)
-	{
-		m_pHeap->ReleaseObjects();
-		delete m_pHeap;
-	}
-	if (m_pTexture)
-	{
-		m_pTexture->ReleaseObjects();
-		delete m_pTexture;
-	}
-}
-
-void BroomEffectRect::ReleaseUploadBuffers()
-{
-	Shape::ReleaseUploadBuffers(); 
-	if (m_pTexture) m_pTexture->ReleaseUploadBuffers(); 
-}
-
 BroomEffectRect::BroomEffectRect(GameObject * pOwner, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList)
 	: Shape(pOwner)
 {

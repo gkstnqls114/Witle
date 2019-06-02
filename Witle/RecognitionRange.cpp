@@ -9,12 +9,7 @@
 
 void RecognitionRange::ReleaseObjects()
 {
-	if (m_DebugMesh)
-	{
-		m_DebugMesh->ReleaseObjects();
-		delete m_DebugMesh;
-		m_DebugMesh = nullptr;
-	}
+	if (m_DebugMesh) m_DebugMesh->ReleaseObjects();
 }
 
 void RecognitionRange::ReleaseUploadBuffers()

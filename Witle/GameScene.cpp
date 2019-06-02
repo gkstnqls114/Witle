@@ -388,18 +388,6 @@ void GameScene::ReleaseObjects()
 		delete m_pQuadtreeTerrain;
 		m_pQuadtreeTerrain = nullptr;
 	}
-	if (m_TestMonster)
-	{
-		for (int i = 0; i < m_TestMonsterCount; ++i)
-		{
-			m_TestMonster[i]->ReleaseObjects();
-			delete m_TestMonster[i];
-			m_TestMonster[i] = nullptr;
-		}
-		 
-		delete m_TestMonster;
-		m_TestMonster = nullptr;
-	}
 }
 
 bool GameScene::ProcessInput(HWND hWnd, float fElapsedTime)
