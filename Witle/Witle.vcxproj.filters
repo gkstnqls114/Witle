@@ -358,6 +358,9 @@
     <Filter Include="02.Component\ForMonster\MonsterAction\07.AttackAction">
       <UniqueIdentifier>{8a32609d-af34-4af2-9db9-7a448ff56fc9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.GameObject\02.Monster\CreepyMonster">
+      <UniqueIdentifier>{21fe2a35-bb86-477f-84d9-5520a418f295}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -744,6 +747,9 @@
     <ClInclude Include="AttackAction.h">
       <Filter>02.Component\ForMonster\MonsterAction\07.AttackAction</Filter>
     </ClInclude>
+    <ClInclude Include="CreepyMonster.h">
+      <Filter>03.GameObject\02.Monster\CreepyMonster</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1108,6 +1114,9 @@
     </ClCompile>
     <ClCompile Include="AttackAction.cpp">
       <Filter>02.Component\ForMonster\MonsterAction\07.AttackAction</Filter>
+    </ClCompile>
+    <ClCompile Include="CreepyMonster.cpp">
+      <Filter>03.GameObject\02.Monster\CreepyMonster</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

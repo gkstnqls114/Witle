@@ -158,6 +158,7 @@
     <ClInclude Include="BasicCam.h" />
     <ClInclude Include="Broom.h" />
     <ClInclude Include="AttackAction.h" />
+    <ClInclude Include="CreepyMonster.h" />
     <ClInclude Include="HitAction.h" />
     <ClInclude Include="GraphicsRootSignatureMgr.h" />
     <ClInclude Include="MainCameraMgr.h" />
@@ -294,6 +295,7 @@
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="ComponentBase.cpp" />
     <ClCompile Include="ComputeShader.cpp" />
+    <ClCompile Include="CreepyMonster.cpp" />
     <ClCompile Include="CubeMesh.cpp" />
     <ClCompile Include="CubeShader.cpp" />
     <ClCompile Include="CylinderMesh.cpp" />

@@ -2,7 +2,7 @@
 #include "GameObject.h"
 #include "PlayerMovement.h"
 
-#define RUN_MAX_VELOCITY 1000.F
+#define RUN_MAX_VELOCITY 950.F
 
 void PlayerMovement::MoveVelocity(const XMFLOAT3 & xmf3Shift)
 {

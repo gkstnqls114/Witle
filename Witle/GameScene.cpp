@@ -28,6 +28,7 @@
 #include "GameScreen.h"
 #include "GameTimer.h"
  
+#include "CreepyMonster.h"
 #include "PlayerStatus.h"
 #include "MonsterStatus.h"
 #include "MyBOBox.h"
@@ -238,13 +239,26 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	 std::random_device rd;
 	  std::mt19937 mersenne(rd());
 	  std::uniform_int_distribution<> die(500, 10000);
+	  std::uniform_int_distribution<> monstertype(0, 1);
 
 	// 몬스터
 	m_TestMonster = new Monster*[m_TestMonsterCount];
 	for (int i = 0; i < m_TestMonsterCount; ++i) {
-		m_TestMonster[i] = new SpaceCat("SpaceCat", 
+		m_TestMonster[i] = new SpaceCat("CreepyMonster",
 			XMFLOAT3(die(mersenne), 0, die(mersenne)),
 			pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
+
+		//int value = monstertype(mersenne);
+		//if (value == 0)
+		//{
+		//	m_TestMonster[i] = new SpaceCat("SpaceCat",
+		//		XMFLOAT3(die(mersenne), 0, die(mersenne)),
+		//		pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
+		//}
+		//else
+		//{
+
+		//}
 	}
 
 	//// 테스트 쿼드트리 터레인 생성 
