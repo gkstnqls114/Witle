@@ -44,9 +44,21 @@ SpaceCat::SpaceCat(const std::string & entityID, const XMFLOAT3& SpawnPoint,
 {  
 	m_pHaep = new MyDescriptorHeap();
 	m_pHaep->CreateCbvSrvUavDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 1, 0);
-
 	m_pTexture = new Texture(1, RESOURCE_TEXTURE2D);
-	m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/M_Cat_DA.dds", 0);
+
+	int val = rand() % 3;
+	if (val == 0)
+	{
+		m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/SpaceCat_Green.dds", 0);
+	}
+	else if (val == 1)
+	{
+		m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/SpaceCat_Blue.dds", 0);
+	}
+	else
+	{
+		m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/SpaceCat_Pink.dds", 0);
+	}
 
 	m_pHaep->CreateShaderResourceViews(pd3dDevice, pd3dCommandList, m_pTexture, ROOTPARAMETER_TEXTURE, false, 0);
 	
