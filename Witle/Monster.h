@@ -52,7 +52,7 @@ protected:
 	bool m_isAttacking{ false };
 
 	XMFLOAT3 m_SpawnPoint;
-	const float    m_SpawnRange{ 1500.f };
+	const float    m_SpawnRange{ 500.f };
 	// Spawn Point 주위로 Range를 확인하기 위해 임시로 설정
 	GameObject * m_pDebugObject{ nullptr };
 	LineMesh* m_pDebugSpawnMesh{ nullptr };

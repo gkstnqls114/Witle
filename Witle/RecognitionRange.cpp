@@ -28,7 +28,7 @@ RecognitionRange::~RecognitionRange()
 
 void RecognitionRange::CreateDebugMesh(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList)
 {
-	m_DebugMesh = new LineSphere(m_pOwner, pd3dDevice, pd3dCommandList, m_RecognitionRange, m_RecognitionRange);
+	m_DebugMesh = new LineSphere(m_pOwner, pd3dDevice, pd3dCommandList, XMFLOAT4(1, 0, 0, 0), m_RecognitionRange, m_RecognitionRange);
 }
 
 void RecognitionRange::Update(float fTimeElapsed)

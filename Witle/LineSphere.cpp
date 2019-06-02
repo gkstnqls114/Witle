@@ -123,7 +123,7 @@ void LineSphere::ReleaseUploadBuffers()
 	Mesh::ReleaseUploadBuffers();
 }
   
-LineSphere::LineSphere(GameObject * pOwner, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, float radius, float height, float topRadius, float bottomRadius, int sectorCount, int stackCount)
+LineSphere::LineSphere(GameObject * pOwner, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, XMFLOAT4 color, float radius, float height, float topRadius, float bottomRadius, int sectorCount, int stackCount)
 	:LineMesh(pOwner)
 {
 	m_ComponenetID = MESH_TYPE_ID::CYLINDER_MESH;
@@ -162,6 +162,7 @@ LineSphere::LineSphere(GameObject * pOwner, ID3D12Device * pd3dDevice, ID3D12Gra
 			x = xy * cosf(sectorAngle);             // r * cos(u) * cos(v)
 			y = xy * sinf(sectorAngle);             // r * cos(u) * sin(v)
 			pControlPointVertices[Cindex].position = XMFLOAT3(x, y, z);
+			pControlPointVertices[Cindex].diffuse = color;
 			 
 			Cindex += 1;
 		}

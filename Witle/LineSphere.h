@@ -38,7 +38,7 @@ public:
 	virtual void ReleaseUploadBuffers() override;
 
 public:
-	LineSphere(GameObject* pOwner, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList,
+	LineSphere(GameObject* pOwner, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, XMFLOAT4 color,
 		float radius = 500, float height = 500, float topRadius = 10, float bottomRadius = 10, int sectorCount = 10, int stackCount = 10
 	);
 	virtual ~LineSphere();

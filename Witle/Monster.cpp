@@ -74,7 +74,7 @@ XMFLOAT3 Monster::CalculateAlreadyPosition(float fTimeElapsed)
 Monster::Monster(const std::string & entityID, const XMFLOAT3& SpawnPoint, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature)
 	: m_SpawnPoint(SpawnPoint), GameObject(entityID)
 {
-	m_RecognitionRange = new RecognitionRange(this, 500.f, 3.f);
+	m_RecognitionRange = new RecognitionRange(this, 1000.f, 3.f);
 	m_RecognitionRange->CreateDebugMesh(pd3dDevice, pd3dCommandList);
 
 	m_MonsterStatus = new MonsterStatus(this, pd3dDevice, pd3dCommandList);
@@ -91,7 +91,7 @@ Monster::Monster(const std::string & entityID, const XMFLOAT3& SpawnPoint, ID3D1
 	m_pDebugObject = new EmptyGameObject("SpawnPosition");
 	m_pDebugObject->GetTransform().SetPosition(SpawnPoint);
 	m_pDebugObject->GetTransform().Update(0.f); // position update¿ß«ÿ...
-	m_pDebugSpawnMesh = new LineSphere(m_pDebugObject, pd3dDevice, pd3dCommandList, m_SpawnRange, m_SpawnRange);
+	m_pDebugSpawnMesh = new LineSphere(m_pDebugObject, pd3dDevice, pd3dCommandList, XMFLOAT4(0, 0, 1, 0), m_SpawnRange, m_SpawnRange);
 }
 
 Monster::~Monster()
