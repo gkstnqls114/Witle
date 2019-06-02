@@ -226,6 +226,12 @@ void Player::ReleaseMembers()
 		delete m_pPlayerMovement;
 		m_pPlayerMovement = nullptr;
 	}
+	if (m_pHaep)
+	{
+		m_pHaep->ReleaseObjects();
+		delete m_pHaep;
+		m_pHaep = nullptr;
+	}
 }
 
 void Player::ReleaseMemberUploadBuffers()

@@ -37,6 +37,10 @@ public:
 	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList);
 
 protected:
+	virtual void ReleaseMembers() override;
+	virtual void ReleaseMemberUploadBuffers() override;
+
+protected:
 	UI3DImage*			m_MonsterHP{ nullptr };
 	RecognitionRange*   m_RecognitionRange{ nullptr };
 	MonsterMovement*    m_MonsterMovement{ nullptr };
@@ -61,9 +65,6 @@ private:
 	int m_CurrAnimation{ 0 }; // 현재 사용하는 애니메이션
 	int m_PrevAnimation{ 0 }; // 현재 사용하는 애니메이션
 
-protected:
-	virtual void ReleaseMembers() override;
-	virtual void ReleaseMemberUploadBuffers() override;
 	 
 private: 
 	void SetTrackAnimationSet();
