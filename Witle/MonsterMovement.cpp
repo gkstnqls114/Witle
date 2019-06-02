@@ -27,6 +27,7 @@ MonsterMovement::MonsterMovement(GameObject * pOwner)
 	:Movement(pOwner)
 {
 	m_MonsterActionMgr = new MonsterActionMgr(pOwner);
+
 }
 
 MonsterMovement::~MonsterMovement()

@@ -37,13 +37,17 @@ void MonsterActionMgr::UpdateState(float fElpasedTime)
 			m_CurrMonsterAction = m_BeforeMonsterAction;
 			m_BeforeMonsterAction = temp;
 
-			if (m_CurrMonsterAction == &m_ChaseAction || m_CurrMonsterAction == &m_MoveAction)
+			if (m_CurrMonsterAction == &m_ChaseAction)
 			{ 
-				static_cast<Monster*>(m_pOwner)->SetAnimationState(SPACECAT_MOVE.ID);
+				ChangeStateToChase();  
+			}
+			else if (m_CurrMonsterAction == &m_MoveAction)
+			{
+				ChangeStateToMove();
 			}
 			else
-			{ 
-				static_cast<Monster*>(m_pOwner)->SetAnimationState(SPACECAT_IDLE.ID);
+			{
+				ChangeStateToIdle();
 			}
 		}
 		return;

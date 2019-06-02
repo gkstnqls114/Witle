@@ -14,7 +14,7 @@
 #include "Texture.h"
 #include "SpaceCat.h"
  
-
+ 
 void SpaceCat::ReleaseMembers()
 {
 	Monster::ReleaseMembers();
@@ -37,7 +37,6 @@ void SpaceCat::ReleaseMemberUploadBuffers()
 	Monster::ReleaseMemberUploadBuffers();
 	if (m_pTexture)m_pTexture->ReleaseUploadBuffers();
 }
-
 
 SpaceCat::SpaceCat(const std::string & entityID, const XMFLOAT3& SpawnPoint,
 	ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature)
@@ -75,6 +74,15 @@ SpaceCat::SpaceCat(const std::string & entityID, const XMFLOAT3& SpawnPoint,
 	XMFLOAT3 extents{ 50.f, 50.f, 50.f };
 	m_pMyBOBox = new MyBOBox(this, pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 75.F, 0.F }, extents);
 
+
+	if (rand() % 2)
+	{
+		m_MonsterMovement->GetMonsterActionMgr()->ChangeStateToMove();
+	}
+	else
+	{
+		m_MonsterMovement->GetMonsterActionMgr()->ChangeStateToIdle();
+	}
 }
 
 SpaceCat::~SpaceCat()

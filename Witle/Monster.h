@@ -93,6 +93,7 @@ public:
 	void Rotate(float x, float y, float z);
 	  
 	//// Get /////////////////// 
+	MonsterMovement* GetMovement() { return m_MonsterMovement; }
 	MonsterStatus* GetStatus() { return m_MonsterStatus; }
 	RecognitionRange* GetRecognitionRange() const { return m_RecognitionRange;};
 	AXIS GetCoorAxis() const { return m_Transform.GetCoorAxis(); } 

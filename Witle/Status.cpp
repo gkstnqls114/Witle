@@ -1,4 +1,6 @@
 #include "stdafx.h" 
+#include "Monster.h"
+#include "MonsterMovement.h"
 #include "GameObject.h"
 #include "Status.h"
   
@@ -19,8 +21,8 @@ Status::~Status()
 }
 
 void Status::Damage(int damage, int state)
-{
-	SetAnimationStateToHit(); 
+{ 
+	static_cast<Monster*>(m_pOwner)->GetMovement()->GetMonsterActionMgr()->ChangeStateToHit();
 	SubstractHP(damage);
 	std::cout << m_pOwner->GetName() << " " << m_HP << std::endl;
 }
