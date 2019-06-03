@@ -245,7 +245,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	m_TestMonster = new Monster*[m_TestMonsterCount];
 
 	m_TestMonster[0] = new SpaceCat("SpaceCat",
-		XMFLOAT3(1500, 0, 1500),
+		XMFLOAT3(1500, 0, 1000),
 		pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
 
 	for (int i = 1; i < m_TestMonsterCount; ++i) 
