@@ -409,9 +409,6 @@ void QuadtreeTerrain::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 
 void QuadtreeTerrain::Render(ID3D12GraphicsCommandList * pd3dCommandList, Terrain * pTerrain, ID3D12DescriptorHeap* pHeap)
 {
-	// ÁöÇü ¿ÀºêÁ§Æ® ·»´õ
-	RenderTerrainObjects(pd3dCommandList);
-
 	// ÁöÇü ·»´õ
 	pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Terrain")->GetPSO());
 	pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_WORLD, 16, &Matrix4x4::Identity(), 0);
@@ -419,6 +416,9 @@ void QuadtreeTerrain::Render(ID3D12GraphicsCommandList * pd3dCommandList, Terrai
 	pTerrain->UpdateShaderVariables(pd3dCommandList);
 
 	RecursiveRender(m_pRootNode, pd3dCommandList); // ÁöÇü ·»´õ	 
+
+	// ÁöÇü ¿ÀºêÁ§Æ® ·»´õ
+	RenderTerrainObjects(pd3dCommandList);
 
 }
 
