@@ -106,6 +106,9 @@ void CreepyMonster::UpdateState(float fElapsedTime)
 void CreepyMonster::Animate(float fElapsedTime)
 {
 	Monster::Animate(fElapsedTime);
-	 
-	m_pMyBOBox->SetPosition(m_Transform.GetPosition());
+	
+	LoadObject* p = m_pLoadObject->FindFrame("Bip001");
+	XMFLOAT3 pos = XMFLOAT3(p->m_xmf4x4World._41, p->m_xmf4x4World._42 + 50, p->m_xmf4x4World._43);
+
+	m_pMyBOBox->SetPosition(pos);
 }

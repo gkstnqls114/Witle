@@ -243,22 +243,21 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 
 	// 몬스터
 	m_TestMonster = new Monster*[m_TestMonsterCount];
-	for (int i = 0; i < m_TestMonsterCount; ++i) {
-		m_TestMonster[i] = new SpaceCat("CreepyMonster",
-			XMFLOAT3(die(mersenne), 0, die(mersenne)),
-			pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
-
-		//int value = monstertype(mersenne);
-		//if (value == 0)
-		//{
-		//	m_TestMonster[i] = new SpaceCat("SpaceCat",
-		//		XMFLOAT3(die(mersenne), 0, die(mersenne)),
-		//		pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
-		//}
-		//else
-		//{
-
-		//}
+	for (int i = 0; i < m_TestMonsterCount; ++i) 
+	{
+		int value = monstertype(mersenne);
+		if (value == 0)
+		{
+			m_TestMonster[i] = new SpaceCat("SpaceCat",
+				XMFLOAT3(die(mersenne), 0, die(mersenne)),
+				pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
+		}
+		else
+		{ 
+			m_TestMonster[i] = new CreepyMonster("CreepyMonster",
+				XMFLOAT3(die(mersenne), 0, die(mersenne)),
+				pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
+		}
 	}
 
 	//// 테스트 쿼드트리 터레인 생성 
