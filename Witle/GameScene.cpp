@@ -238,14 +238,20 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 
 	 std::random_device rd;
 	  std::mt19937 mersenne(rd());
-	  std::uniform_int_distribution<> die(500, 10000);
+	  std::uniform_int_distribution<> die(1500, 15000);
 	  std::uniform_int_distribution<> monstertype(0, 1);
 
 	// ∏ÛΩ∫≈Õ
 	m_TestMonster = new Monster*[m_TestMonsterCount];
-	for (int i = 0; i < m_TestMonsterCount; ++i) 
+
+	m_TestMonster[0] = new SpaceCat("SpaceCat",
+		XMFLOAT3(1000, 0, 1000),
+		pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
+
+	for (int i = 1; i < m_TestMonsterCount; ++i) 
 	{
 		int value = monstertype(mersenne);
+
 		if (value == 0)
 		{
 			m_TestMonster[i] = new SpaceCat("SpaceCat",
