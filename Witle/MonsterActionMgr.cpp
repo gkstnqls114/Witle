@@ -10,6 +10,15 @@
 #include "MonsterActionMgr.h"
   
 
+void MonsterActionMgr::ChangeAction(MonsterAction * action)
+{
+	// 현재 상태와 동일하다면 바꾸지 않는다.
+	if (m_CurrMonsterAction == action) return;
+
+	m_BeforeMonsterAction = m_CurrMonsterAction;
+	m_CurrMonsterAction = action;
+}
+
 void MonsterActionMgr::UpdateVelocity(float fElpasedTime, MonsterMovement * movement)
 {
 	m_CurrMonsterAction->UpdateVelocity(fElpasedTime, movement);
@@ -40,10 +49,14 @@ void MonsterActionMgr::UpdateState(float fElpasedTime)
 
 void MonsterActionMgr::ChangeStateBefore()
 { 
-	MonsterAction* temp = m_CurrMonsterAction;
-	m_CurrMonsterAction = m_BeforeMonsterAction;
-	m_BeforeMonsterAction = temp;
-	 
+	// 상태가 이전하고 다른 경우에만 서로 변경한다.
+	if (m_CurrMonsterAction != m_BeforeMonsterAction)
+	{
+		MonsterAction* temp = m_CurrMonsterAction;
+		m_CurrMonsterAction = m_BeforeMonsterAction;
+		m_BeforeMonsterAction = temp;
+	}
+
 	if (m_CurrMonsterAction == &m_IdleAction)
 	{
 		ChangeStateToIdle();
@@ -76,8 +89,7 @@ void MonsterActionMgr::ChangeStateBefore()
 
 void MonsterActionMgr::ChangeStateToIdle()
 {
-	m_BeforeMonsterAction = m_CurrMonsterAction;
-	m_CurrMonsterAction = &m_IdleAction;
+	ChangeAction(&m_IdleAction);
 	m_CurrMonsterAction->Init();
 	static_cast<Monster*>(m_pOwner)->SetAnimationState(SPACECAT_IDLE.ID);
 	static_cast<Monster*>(m_pOwner)->SetisAttacking(false);
@@ -85,8 +97,7 @@ void MonsterActionMgr::ChangeStateToIdle()
 
 void MonsterActionMgr::ChangeStateToMove()
 {
-	m_BeforeMonsterAction = m_CurrMonsterAction;
-	m_CurrMonsterAction = &m_MoveAction;
+	ChangeAction(&m_MoveAction); 
 	m_CurrMonsterAction->Init();
 	static_cast<Monster*>(m_pOwner)->SetAnimationState(SPACECAT_MOVE.ID);
 	static_cast<Monster*>(m_pOwner)->SetisAttacking(false);
@@ -94,8 +105,7 @@ void MonsterActionMgr::ChangeStateToMove()
 
 void MonsterActionMgr::ChangeStateToChase()
 {
-	m_BeforeMonsterAction = m_CurrMonsterAction;
-	m_CurrMonsterAction = &m_ChaseAction;
+	ChangeAction(&m_ChaseAction);
 	m_CurrMonsterAction->Init();
 	static_cast<Monster*>(m_pOwner)->SetAnimationState(SPACECAT_MOVE.ID);
 	static_cast<Monster*>(m_pOwner)->SetisAttacking(false);
@@ -103,8 +113,7 @@ void MonsterActionMgr::ChangeStateToChase()
 
 void MonsterActionMgr::ChangeStateToSearch()
 {
-	m_BeforeMonsterAction = m_CurrMonsterAction;
-	m_CurrMonsterAction = &m_SearchAction;
+	ChangeAction(&m_SearchAction);
 	m_CurrMonsterAction->Init();
 	static_cast<Monster*>(m_pOwner)->SetAnimationState(SPACECAT_MOVE.ID);
 	static_cast<Monster*>(m_pOwner)->SetisAttacking(false);
@@ -112,8 +121,7 @@ void MonsterActionMgr::ChangeStateToSearch()
 
 void MonsterActionMgr::ChangeStateToDead()
 {
-	m_BeforeMonsterAction = m_CurrMonsterAction;
-	m_CurrMonsterAction = &m_DeadAction;
+	ChangeAction(&m_DeadAction);
 	m_CurrMonsterAction->Init();
 	static_cast<Monster*>(m_pOwner)->SetAnimationState(SPACECAT_DEAD.ID);
 	static_cast<Monster*>(m_pOwner)->SetisAttacking(false);
@@ -121,8 +129,7 @@ void MonsterActionMgr::ChangeStateToDead()
 
 void MonsterActionMgr::ChangeStateToHit()
 {
-	m_BeforeMonsterAction = m_CurrMonsterAction;
-	m_CurrMonsterAction = &m_HitAction;
+	ChangeAction(&m_HitAction);
 	m_CurrMonsterAction->Init();
 	static_cast<Monster*>(m_pOwner)->SetAnimationState(SPACECAT_HIT.ID);
 	static_cast<Monster*>(m_pOwner)->SetisAttacking(false);
@@ -130,8 +137,7 @@ void MonsterActionMgr::ChangeStateToHit()
 
 void MonsterActionMgr::ChangeStateToAttack()
 {
-	m_BeforeMonsterAction = m_CurrMonsterAction;
-	m_CurrMonsterAction = &m_AttackAction;
+	ChangeAction(&m_AttackAction);
 	m_CurrMonsterAction->Init();
 	static_cast<Monster*>(m_pOwner)->SetAnimationState(SPACECAT_ATTACK.ID);
 	static_cast<Monster*>(m_pOwner)->SetisAttacking(true);

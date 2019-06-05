@@ -22,8 +22,7 @@ class MonsterMovement
 public:   
 	const float m_fNearDistance{ 0.f };
  
-private:
-	bool IsNearPlayer(const Player* Target, float distance);
+private: 
 	void UpdateVelocity(float);
 
 public:

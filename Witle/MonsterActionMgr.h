@@ -33,6 +33,9 @@ class MonsterActionMgr
 public:
 	virtual void ReleaseObjects() override {};
 	virtual void ReleaseUploadBuffers() override {};
+	 
+private:
+	void ChangeAction(MonsterAction* );
 
 public:
 	MonsterActionMgr(GameObject* pOwner) : 
@@ -52,9 +55,23 @@ public:
 	// Update 수행 이전 반드시 호출
 	void UpdateVelocity(float fElpasedTime, MonsterMovement* movement);
 	void UpdateState(float fElpasedTime);
-
+	
 	float GetTotalTime() const { return m_TotalTime; }
 	void SetZeroTotalTime() { m_TotalTime = 0.f; }
+
+	// State Check //////////////////////////////////////
+
+	bool isIdle() const { return (m_CurrMonsterAction == &m_IdleAction); }
+	bool isMove() const { return (m_CurrMonsterAction == &m_MoveAction); }
+	bool isChase() const { return (m_CurrMonsterAction == &m_ChaseAction); }
+	bool isSearch() const { return (m_CurrMonsterAction == &m_SearchAction); }
+	bool isDead() const { return (m_CurrMonsterAction == &m_DeadAction); }
+	bool isHit() const { return (m_CurrMonsterAction == &m_HitAction); }
+	bool isAttack() const { return (m_CurrMonsterAction == &m_AttackAction); }
+	
+	// State Check //////////////////////////////////////
+
+	
 	// ChageState //////////////////////////////////////
 	
 	// 이전 상태로 되돌아갑니다.
