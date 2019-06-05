@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "MonsterMovement.h"
 #include "Player.h"
+#include "GeneralMonsterActionMgr.h"
 #include "PlayerManager.h"
 #include "ChaseAction.h"
 
@@ -24,10 +25,10 @@ void ChaseAction::UpdateVelocity(float fElpasedTime, MonsterMovement * movement)
 	}
 }
 
-void ChaseAction::UpdateState(float fElpasedTime, MonsterActionMgr * actionMgr)
+void ChaseAction::UpdateState(float fElpasedTime, GeneralMonsterActionMgr * actionMgr)
 {
 	if (PlayerManager::IsNearPlayer(m_pOwner->GetTransform().GetPosition(), 150))
 	{
-		actionMgr->ChangeStateToAttack();
+		(actionMgr)->ChangeStateToAttack();
 	} 
 }

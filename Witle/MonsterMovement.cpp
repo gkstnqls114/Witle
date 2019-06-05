@@ -1,6 +1,6 @@
 #include "stdafx.h"
 
-#include "MonsterActionMgr.h"
+#include "GeneralMonsterActionMgr.h"
 
 #include "Monster.h"
 #include "RecognitionRange.h"
@@ -26,7 +26,7 @@ void MonsterMovement::MoveVelocity(const XMFLOAT3 & xmf3Shift)
 MonsterMovement::MonsterMovement(GameObject * pOwner)
 	:Movement(pOwner)
 {
-	m_MonsterActionMgr = new MonsterActionMgr(pOwner);
+	m_MonsterActionMgr = new GeneralMonsterActionMgr(pOwner);
 
 }
 

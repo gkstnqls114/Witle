@@ -16,8 +16,7 @@ class DeadAction;
 class MonsterMovement
 	: public Movement
 {
-	MonsterActionMgr* m_MonsterActionMgr { nullptr };
-
+	GeneralMonsterActionMgr* m_MonsterActionMgr { nullptr };
 
 public:   
 	const float m_fNearDistance{ 0.f };
@@ -42,5 +41,5 @@ public:
 	void MoveVelocity(const XMFLOAT3& shift);
 
 	void ReduceVelocity(float);
-	MonsterActionMgr* GetMonsterActionMgr() const { return m_MonsterActionMgr; }
+	GeneralMonsterActionMgr* GetMonsterActionMgr() const { return m_MonsterActionMgr; }
 };

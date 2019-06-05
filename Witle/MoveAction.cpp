@@ -4,6 +4,8 @@
 #include "PlayerManager.h" 
 #include "RecognitionRange.h"
 #include "MonsterMovement.h"
+#include "GeneralMonsterActionMgr.h"
+
 #include "MoveAction.h"
   
 void MoveAction::UpdateVelocity(float fElpasedTime, MonsterMovement * movement)
@@ -39,7 +41,7 @@ void MoveAction::Init()
 	}
 }
 
-void MoveAction::UpdateState(float fElpasedTime, MonsterActionMgr * actionMgr)
+void MoveAction::UpdateState(float fElpasedTime, GeneralMonsterActionMgr * actionMgr)
 {
 	Monster* pMonsterOwner = static_cast<Monster*>(m_pOwner);
 

@@ -5,6 +5,7 @@
 #include "MonsterStatus.h"
 #include "RecognitionRange.h"
 #include "PlayerManager.h"
+#include "GeneralMonsterActionMgr.h"
 // For Monster ///////////////
 
 #include "ModelStorage.h"

@@ -256,24 +256,6 @@
     <Filter Include="02.Component\ForMonster\RecognitionRange">
       <UniqueIdentifier>{6a6ef169-afe8-4c4d-b4d3-243ccbd3687b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.Component\ForMonster\MonsterAction">
-      <UniqueIdentifier>{7af56684-3251-42e9-8b80-d6e616723689}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.Component\ForMonster\MonsterAction\01.IdleAction">
-      <UniqueIdentifier>{602963d6-a3df-499b-acb2-efa1792d6833}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.Component\ForMonster\MonsterAction\02.MoveAction">
-      <UniqueIdentifier>{064dbc3b-3bac-4ac7-b13a-fa2f75bf7617}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.Component\ForMonster\MonsterAction\03.ChaseAction">
-      <UniqueIdentifier>{9b4fd1be-3609-4380-8add-bd721aa9baa8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.Component\ForMonster\MonsterAction\04.SearchAction">
-      <UniqueIdentifier>{1c69dd90-bcd3-4fcb-9239-46163349daca}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.Component\ForMonster\MonsterAction\05.DeadAction">
-      <UniqueIdentifier>{f34ded6a-1a2a-4110-a759-a0c457ba548d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="05.Shader\UIScreenShader">
       <UniqueIdentifier>{1b5f46a2-13a1-4158-a293-88a85f35d540}</UniqueIdentifier>
     </Filter>
@@ -349,17 +331,41 @@
     <Filter Include="03.GameObject\02.Monster\SpaceCat">
       <UniqueIdentifier>{e58f492a-8b9e-4d14-8f6d-d915c5c785c3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.Component\ForMonster\MonsterAction\MonsterActionMgr">
-      <UniqueIdentifier>{087791ad-0703-44b8-a9f4-5b49840722d4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.Component\ForMonster\MonsterAction\06.HitAction">
-      <UniqueIdentifier>{0c76bd52-ef44-43bd-a692-c57b5c707524}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.Component\ForMonster\MonsterAction\07.AttackAction">
-      <UniqueIdentifier>{8a32609d-af34-4af2-9db9-7a448ff56fc9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="03.GameObject\02.Monster\CreepyMonster">
       <UniqueIdentifier>{21fe2a35-bb86-477f-84d9-5520a418f295}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\ForMonster\GeneralMonsterAction">
+      <UniqueIdentifier>{7af56684-3251-42e9-8b80-d6e616723689}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\ForMonster\GeneralMonsterAction\01.IdleAction">
+      <UniqueIdentifier>{602963d6-a3df-499b-acb2-efa1792d6833}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\ForMonster\GeneralMonsterAction\02.MoveAction">
+      <UniqueIdentifier>{064dbc3b-3bac-4ac7-b13a-fa2f75bf7617}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\ForMonster\GeneralMonsterAction\03.ChaseAction">
+      <UniqueIdentifier>{9b4fd1be-3609-4380-8add-bd721aa9baa8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\ForMonster\GeneralMonsterAction\04.SearchAction">
+      <UniqueIdentifier>{1c69dd90-bcd3-4fcb-9239-46163349daca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\ForMonster\GeneralMonsterAction\05.DeadAction">
+      <UniqueIdentifier>{f34ded6a-1a2a-4110-a759-a0c457ba548d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\ForMonster\GeneralMonsterAction\MonsterActionMgr">
+      <UniqueIdentifier>{087791ad-0703-44b8-a9f4-5b49840722d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\ForMonster\GeneralMonsterAction\06.HitAction">
+      <UniqueIdentifier>{0c76bd52-ef44-43bd-a692-c57b5c707524}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\ForMonster\GeneralMonsterAction\07.AttackAction">
+      <UniqueIdentifier>{8a32609d-af34-4af2-9db9-7a448ff56fc9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\ForMonster\GeneralMonsterAction\MonsterActionMgr\GeneralMonsterActionMgr">
+      <UniqueIdentifier>{a77c9baf-aee2-4841-a2c1-dcb4a62970aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\ForMonster\GeneralMonsterAction\MonsterActionMgr\BossMonsterActionMgr">
+      <UniqueIdentifier>{31ceca84-3670-4740-a04e-9919c7d8f659}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -673,22 +679,22 @@
       <Filter>02.Component\ForMonster\RecognitionRange</Filter>
     </ClInclude>
     <ClInclude Include="MonsterAction.h">
-      <Filter>02.Component\ForMonster\MonsterAction</Filter>
+      <Filter>02.Component\ForMonster\GeneralMonsterAction</Filter>
     </ClInclude>
     <ClInclude Include="IdleAction.h">
-      <Filter>02.Component\ForMonster\MonsterAction\01.IdleAction</Filter>
+      <Filter>02.Component\ForMonster\GeneralMonsterAction\01.IdleAction</Filter>
     </ClInclude>
     <ClInclude Include="MoveAction.h">
-      <Filter>02.Component\ForMonster\MonsterAction\02.MoveAction</Filter>
+      <Filter>02.Component\ForMonster\GeneralMonsterAction\02.MoveAction</Filter>
     </ClInclude>
     <ClInclude Include="ChaseAction.h">
-      <Filter>02.Component\ForMonster\MonsterAction\03.ChaseAction</Filter>
+      <Filter>02.Component\ForMonster\GeneralMonsterAction\03.ChaseAction</Filter>
     </ClInclude>
     <ClInclude Include="SearchAction.h">
-      <Filter>02.Component\ForMonster\MonsterAction\04.SearchAction</Filter>
+      <Filter>02.Component\ForMonster\GeneralMonsterAction\04.SearchAction</Filter>
     </ClInclude>
     <ClInclude Include="DeadAction.h">
-      <Filter>02.Component\ForMonster\MonsterAction\05.DeadAction</Filter>
+      <Filter>02.Component\ForMonster\GeneralMonsterAction\05.DeadAction</Filter>
     </ClInclude>
     <ClInclude Include="PlayerManager.h">
       <Filter>13.Storage/Manager\05.PlayerManager</Filter>
@@ -739,16 +745,22 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="MonsterActionMgr.h">
-      <Filter>02.Component\ForMonster\MonsterAction\MonsterActionMgr</Filter>
+      <Filter>02.Component\ForMonster\GeneralMonsterAction\MonsterActionMgr</Filter>
     </ClInclude>
     <ClInclude Include="HitAction.h">
-      <Filter>02.Component\ForMonster\MonsterAction\06.HitAction</Filter>
+      <Filter>02.Component\ForMonster\GeneralMonsterAction\06.HitAction</Filter>
     </ClInclude>
     <ClInclude Include="AttackAction.h">
-      <Filter>02.Component\ForMonster\MonsterAction\07.AttackAction</Filter>
+      <Filter>02.Component\ForMonster\GeneralMonsterAction\07.AttackAction</Filter>
     </ClInclude>
     <ClInclude Include="CreepyMonster.h">
       <Filter>03.GameObject\02.Monster\CreepyMonster</Filter>
+    </ClInclude>
+    <ClInclude Include="BossMonsterActionMgr.h">
+      <Filter>02.Component\ForMonster\GeneralMonsterAction\MonsterActionMgr\BossMonsterActionMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneralMonsterActionMgr.h">
+      <Filter>02.Component\ForMonster\GeneralMonsterAction\MonsterActionMgr\GeneralMonsterActionMgr</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1044,22 +1056,22 @@
       <Filter>02.Component\ForMonster\RecognitionRange</Filter>
     </ClCompile>
     <ClCompile Include="IdleAction.cpp">
-      <Filter>02.Component\ForMonster\MonsterAction\01.IdleAction</Filter>
+      <Filter>02.Component\ForMonster\GeneralMonsterAction\01.IdleAction</Filter>
     </ClCompile>
     <ClCompile Include="MoveAction.cpp">
-      <Filter>02.Component\ForMonster\MonsterAction\02.MoveAction</Filter>
+      <Filter>02.Component\ForMonster\GeneralMonsterAction\02.MoveAction</Filter>
     </ClCompile>
     <ClCompile Include="ChaseAction.cpp">
-      <Filter>02.Component\ForMonster\MonsterAction\03.ChaseAction</Filter>
+      <Filter>02.Component\ForMonster\GeneralMonsterAction\03.ChaseAction</Filter>
     </ClCompile>
     <ClCompile Include="SearchAction.cpp">
-      <Filter>02.Component\ForMonster\MonsterAction\04.SearchAction</Filter>
+      <Filter>02.Component\ForMonster\GeneralMonsterAction\04.SearchAction</Filter>
     </ClCompile>
     <ClCompile Include="DeadAction.cpp">
-      <Filter>02.Component\ForMonster\MonsterAction\05.DeadAction</Filter>
+      <Filter>02.Component\ForMonster\GeneralMonsterAction\05.DeadAction</Filter>
     </ClCompile>
     <ClCompile Include="MonsterAction.cpp">
-      <Filter>02.Component\ForMonster\MonsterAction</Filter>
+      <Filter>02.Component\ForMonster\GeneralMonsterAction</Filter>
     </ClCompile>
     <ClCompile Include="PlayerManager.cpp">
       <Filter>13.Storage/Manager\05.PlayerManager</Filter>
@@ -1107,16 +1119,22 @@
       <Filter>03.GameObject\02.Monster\SpaceCat</Filter>
     </ClCompile>
     <ClCompile Include="MonsterActionMgr.cpp">
-      <Filter>02.Component\ForMonster\MonsterAction\MonsterActionMgr</Filter>
+      <Filter>02.Component\ForMonster\GeneralMonsterAction\MonsterActionMgr</Filter>
     </ClCompile>
     <ClCompile Include="HitAction.cpp">
-      <Filter>02.Component\ForMonster\MonsterAction\06.HitAction</Filter>
+      <Filter>02.Component\ForMonster\GeneralMonsterAction\06.HitAction</Filter>
     </ClCompile>
     <ClCompile Include="AttackAction.cpp">
-      <Filter>02.Component\ForMonster\MonsterAction\07.AttackAction</Filter>
+      <Filter>02.Component\ForMonster\GeneralMonsterAction\07.AttackAction</Filter>
     </ClCompile>
     <ClCompile Include="CreepyMonster.cpp">
       <Filter>03.GameObject\02.Monster\CreepyMonster</Filter>
+    </ClCompile>
+    <ClCompile Include="BossMonsterActionMgr.cpp">
+      <Filter>02.Component\ForMonster\GeneralMonsterAction\MonsterActionMgr\BossMonsterActionMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneralMonsterActionMgr.cpp">
+      <Filter>02.Component\ForMonster\GeneralMonsterAction\MonsterActionMgr\GeneralMonsterActionMgr</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

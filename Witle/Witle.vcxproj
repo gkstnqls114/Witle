@@ -162,6 +162,8 @@
     <ClInclude Include="HitAction.h" />
     <ClInclude Include="GraphicsRootSignatureMgr.h" />
     <ClInclude Include="MainCameraMgr.h" />
+    <ClInclude Include="GeneralMonsterActionMgr.h" />
+    <ClInclude Include="BossMonsterActionMgr.h" />
     <ClInclude Include="MonsterActionMgr.h" />
     <ClInclude Include="Movement.h" />
     <ClInclude Include="MyAnimationInfos.h" />
@@ -335,6 +337,8 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Monster.cpp" />
     <ClCompile Include="MonsterAction.cpp" />
+    <ClCompile Include="GeneralMonsterActionMgr.cpp" />
+    <ClCompile Include="BossMonsterActionMgr.cpp" />
     <ClCompile Include="MonsterActionMgr.cpp" />
     <ClCompile Include="MonsterMovement.cpp" />
     <ClCompile Include="MonsterStatus.cpp" />

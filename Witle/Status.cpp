@@ -1,6 +1,6 @@
 #include "stdafx.h" 
 #include "Monster.h"
-#include "MonsterActionMgr.h"
+#include "GeneralMonsterActionMgr.h"
 #include "MonsterMovement.h"
 #include "GameObject.h"
 #include "Status.h"
@@ -23,7 +23,7 @@ Status::~Status()
 
 void Status::Damage(int damage, int state)
 { 
-	MonsterActionMgr* pMonsterActionMgr = static_cast<Monster*>(m_pOwner)->GetMovement()->GetMonsterActionMgr();
+	GeneralMonsterActionMgr* pMonsterActionMgr = static_cast<Monster*>(m_pOwner)->GetMovement()->GetMonsterActionMgr();
 	if (pMonsterActionMgr->isDead()) return; // 만약에 죽은 경우 리턴한다.
 
 	pMonsterActionMgr->ChangeStateToHit();

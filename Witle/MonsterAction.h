@@ -3,6 +3,8 @@
 
 class MonsterMovement;
 class MonsterActionMgr;
+class BossMonsterActionMgr;
+class GeneralMonsterActionMgr;
 
 // MonsterMovement를 인자로 받아 가속도를 처리해주는 클래스.
 class MonsterAction
@@ -11,8 +13,7 @@ class MonsterAction
 public:
 	// Update 수행 이전 반드시 호출
 	virtual void Init() = 0;
-	virtual void UpdateVelocity(float fElpasedTime, MonsterMovement* movement) = 0;
-	virtual void UpdateState(float fElpasedTime, MonsterActionMgr* actionMgr) = 0;
+	virtual void UpdateVelocity(float fElpasedTime, MonsterMovement* movement) = 0; 
 
 public:
 	virtual void ReleaseObjects() override {};
@@ -35,11 +36,26 @@ class BossMonsterAction
 { 
 public:
 	// Update 수행 이전 반드시 호출
-	virtual void Init() = 0;
-	virtual void UpdateVelocity(float fElpasedTime, MonsterMovement* movement) = 0;
-	virtual void UpdateState(float fElpasedTime, MonsterActionMgr* actionMgr) = 0;
+	virtual void Init() override = 0;
+	virtual void UpdateVelocity(float fElpasedTime, MonsterMovement* movement) override = 0;
+	virtual void UpdateState(float fElpasedTime, BossMonsterActionMgr* actionMgr) = 0;
 
 public:
 	BossMonsterAction(GameObject* pOwner) : MonsterAction(pOwner) {};
 	virtual ~BossMonsterAction() {};
+};
+
+
+class GeneralMonsterAction
+	: public MonsterAction
+{
+public:
+	// Update 수행 이전 반드시 호출
+	virtual void Init() override = 0;
+	virtual void UpdateVelocity(float fElpasedTime, MonsterMovement* movement) override  = 0;
+	virtual void UpdateState(float fElpasedTime, GeneralMonsterActionMgr* actionMgr) = 0;
+
+public:
+	GeneralMonsterAction(GameObject* pOwner) : MonsterAction(pOwner) {};
+	virtual ~GeneralMonsterAction() {};
 };

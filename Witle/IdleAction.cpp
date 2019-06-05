@@ -4,6 +4,7 @@
 #include "Monster.h"
 #include "RecognitionRange.h"
 #include "MonsterMovement.h"
+#include "GeneralMonsterActionMgr.h"
 #include "IdleAction.h"
   
 void IdleAction::UpdateVelocity(float fElpasedTime, MonsterMovement * movement)
@@ -12,7 +13,7 @@ void IdleAction::UpdateVelocity(float fElpasedTime, MonsterMovement * movement)
 	movement->m_xmf3Velocity = XMFLOAT3(0.f, 0.f, 0.f);
 }
 
-void IdleAction::UpdateState(float fElpasedTime, MonsterActionMgr * actionMgr)
+void IdleAction::UpdateState(float fElpasedTime, GeneralMonsterActionMgr * actionMgr)
 {
 	Monster* pMonsterOwner = static_cast<Monster*>(m_pOwner);
 

@@ -7,6 +7,6 @@ void SearchAction::UpdateVelocity(float fElpasedTime, MonsterMovement * movement
 
 }
 
-void SearchAction::UpdateState(float fElpasedTime, MonsterActionMgr * actionMgr)
+void SearchAction::UpdateState(float fElpasedTime, GeneralMonsterActionMgr * actionMgr)
 {
 }
