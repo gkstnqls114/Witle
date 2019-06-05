@@ -1,4 +1,6 @@
 #include "stdafx.h"
+#include "Monster.h"
+#include "Object.h" 
 #include "MonsterMovement.h"
 #include "HitAction.h"
 
@@ -8,5 +10,9 @@ void HitAction::UpdateVelocity(float fElpasedTime, MonsterMovement * movement)
 }
 
 void HitAction::UpdateState(float fElpasedTime, MonsterActionMgr * actionMgr)
-{
+{ 
+	if (static_cast<Monster*>(m_pOwner)->GetpLoadObject()->IsTrackAnimationSetFinish(0, SPACECAT_HIT.ID))
+	{
+		actionMgr->ChangeStateBefore();
+	} 
 }

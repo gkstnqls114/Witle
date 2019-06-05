@@ -16,4 +16,6 @@ public:
 		m_pMainPlayer = player; 
 	}
 	static const Player* GetMainPlayer() { return m_pMainPlayer; }
+
+	static bool IsNearPlayer(const XMFLOAT3 pos, float distance);
 };

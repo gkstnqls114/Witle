@@ -8,11 +8,7 @@
 #include "Monster.h"
 
 #include "MonsterActionMgr.h"
- 
-bool MonsterActionMgr::IsNearPlayer(const Player * target, float distance)
-{
-	return Vector3::Length(Vector3::Subtract(m_pOwner->GetTransform().GetPosition(), target->GetTransform().GetPosition())) < distance;
-}
+  
 
 void MonsterActionMgr::UpdateVelocity(float fElpasedTime, MonsterMovement * movement)
 {
@@ -21,62 +17,16 @@ void MonsterActionMgr::UpdateVelocity(float fElpasedTime, MonsterMovement * move
 
 void MonsterActionMgr::UpdateState(float fElpasedTime)
 { 
-	if (m_CurrMonsterAction == &m_DeadAction) return;
-
-	if (static_cast<Monster*>(m_pOwner)->GetStatus()->m_HP <= 0)
+	m_TotalTime += fElpasedTime;
+	 
+	// Dead 상태만 제외하고 공통적으로 들어가야함
+	if (m_CurrMonsterAction != &m_DeadAction && static_cast<Monster*>(m_pOwner)->GetStatus()->m_HP <= 0)
 	{
 		ChangeStateToDead();
 	}
 
-
-	if (m_CurrMonsterAction == &m_HitAction)
-	{
-		if (static_cast<Monster*>(m_pOwner)->GetpLoadObject()->IsTrackAnimationSetFinish(0, SPACECAT_HIT.ID))
-		{ 
-			MonsterAction* temp = m_CurrMonsterAction;
-			m_CurrMonsterAction = m_BeforeMonsterAction;
-			m_BeforeMonsterAction = temp;
-
-			if (m_CurrMonsterAction == &m_ChaseAction)
-			{ 
-				ChangeStateToChase();  
-			}
-			else if (m_CurrMonsterAction == &m_MoveAction)
-			{
-				ChangeStateToMove();
-			}
-			else
-			{
-				ChangeStateToIdle();
-			}
-		}
-		return;
-	}
-
-	Monster* pMonsterOwner = static_cast<Monster*>(m_pOwner);
-
-	// 어떤 상황이던간에(chase가 아닌경우) 인식 근처에 플레이어가 있는 경우 따라간다.
-	if (m_CurrMonsterAction != &m_ChaseAction &&
-		IsNearPlayer(PlayerManager::GetMainPlayer(), pMonsterOwner->GetRecognitionRange()->m_RecognitionRange))
-	{
-		m_TotalTime = 0.f;
-
-		pMonsterOwner->GetRecognitionRange()->m_TotalTime += fElpasedTime;
-
-		// 만약 인식시간이 되었을 경우...
-		if (pMonsterOwner->GetRecognitionRange()->m_TotalTime >= pMonsterOwner->GetRecognitionRange()->m_RecognitionTime)
-		{
-			pMonsterOwner->GetRecognitionRange()->m_TotalTime = 0;
-			ChangeStateToChase();
-		}
-		return;
-	}
-	else if ((m_CurrMonsterAction != &m_ChaseAction &&
-		!IsNearPlayer(PlayerManager::GetMainPlayer(), pMonsterOwner->GetRecognitionRange()->m_RecognitionRange)))
-	{
-		pMonsterOwner->GetRecognitionRange()->m_TotalTime = 0;
-	}
-
+	m_CurrMonsterAction->UpdateState(fElpasedTime, this);
+	    
 	// CHASE에서 IDLE로...
 	//if (m_CurrMonsterAction == &m_ChaseAction
 	//	&& !IsNearPlayer(PlayerManager::GetMainPlayer(), pMonsterOwner->GetRecognitionRange()->m_RecognitionRange))
@@ -85,68 +35,50 @@ void MonsterActionMgr::UpdateState(float fElpasedTime)
 	//	m_TotalTime = 0.f;
 	//	m_CurrMonsterAction = &m_IdleAction;
 	//	return;
-	//}
+	//} 
+}
 
-	if (m_CurrMonsterAction == &m_ChaseAction)
-	{
-		if (IsNearPlayer(PlayerManager::GetMainPlayer(), 150))
-		{
-			ChangeStateToAttack();
-		} 
-		return;
-	}
-	if (m_CurrMonsterAction == &m_AttackAction)
-	{ 
-		if (!IsNearPlayer(PlayerManager::GetMainPlayer(), 150))
-		{
-			ChangeStateToChase();
-		}
-		return; 
-	}
-
-	m_TotalTime += fElpasedTime;
+void MonsterActionMgr::ChangeStateBefore()
+{ 
+	MonsterAction* temp = m_CurrMonsterAction;
+	m_CurrMonsterAction = m_BeforeMonsterAction;
+	m_BeforeMonsterAction = temp;
+	 
 	if (m_CurrMonsterAction == &m_IdleAction)
 	{
-		if (m_TotalTime > m_IdleTime)
-		{
-			m_TotalTime = 0.f;
-			ChangeStateToMove();
-
-			MoveAction* pMoveAction = static_cast<MoveAction*>(m_CurrMonsterAction);
-			// 만약 스폰위치에서 일정거리 멀어졌을 경우...
-			if (Vector3::Length(m_pOwner->GetTransform().GetPosition(), pMonsterOwner->GetSpawnPoint()) > pMonsterOwner->GetSpawnRange())
-			{
-				// 이전에 갔던 방향을 반대로 이동
-				pMoveAction->SetDirection(
-					Vector3::ScalarProduct(pMoveAction->GetDirection(), -1, true)
-				);
-			}
-			else
-			{
-				// 스폰거리에서 일정거리 멀어진것이 아니라면 그냥 랜덤으로 돌아간다..
-				static_cast<MoveAction*>(m_CurrMonsterAction)->SetDirection(
-				  Vector3::Random(false, true, false)
-				);
-			}
-			return;
-		}
+		ChangeStateToIdle();
 	}
-
-	if (m_CurrMonsterAction == &m_MoveAction)
+	else if (m_CurrMonsterAction == &m_MoveAction)
 	{
-		if (m_TotalTime > m_MoveTime)
-		{
-			m_TotalTime = 0.f;
-			ChangeStateToIdle();
-			return;
-		}
+		ChangeStateToMove();
+	}
+	else if (m_CurrMonsterAction == &m_ChaseAction)
+	{
+		ChangeStateToChase();
+	}
+	else if (m_CurrMonsterAction == &m_SearchAction)
+	{ 
+		ChangeStateToSearch();
+	}
+	else if (m_CurrMonsterAction == &m_DeadAction)
+	{
+		ChangeStateToDead();
 	} 
+	else if (m_CurrMonsterAction == &m_HitAction)
+	{
+		ChangeStateToHit();
+	}
+	else if (m_CurrMonsterAction == &m_AttackAction)
+	{
+		ChangeStateToAttack();
+	}
 }
 
 void MonsterActionMgr::ChangeStateToIdle()
 {
 	m_BeforeMonsterAction = m_CurrMonsterAction;
 	m_CurrMonsterAction = &m_IdleAction;
+	m_CurrMonsterAction->Init();
 	static_cast<Monster*>(m_pOwner)->SetAnimationState(SPACECAT_IDLE.ID);
 	static_cast<Monster*>(m_pOwner)->SetisAttacking(false);
 }
@@ -155,6 +87,7 @@ void MonsterActionMgr::ChangeStateToMove()
 {
 	m_BeforeMonsterAction = m_CurrMonsterAction;
 	m_CurrMonsterAction = &m_MoveAction;
+	m_CurrMonsterAction->Init();
 	static_cast<Monster*>(m_pOwner)->SetAnimationState(SPACECAT_MOVE.ID);
 	static_cast<Monster*>(m_pOwner)->SetisAttacking(false);
 }
@@ -163,6 +96,7 @@ void MonsterActionMgr::ChangeStateToChase()
 {
 	m_BeforeMonsterAction = m_CurrMonsterAction;
 	m_CurrMonsterAction = &m_ChaseAction;
+	m_CurrMonsterAction->Init();
 	static_cast<Monster*>(m_pOwner)->SetAnimationState(SPACECAT_MOVE.ID);
 	static_cast<Monster*>(m_pOwner)->SetisAttacking(false);
 }
@@ -171,6 +105,7 @@ void MonsterActionMgr::ChangeStateToSearch()
 {
 	m_BeforeMonsterAction = m_CurrMonsterAction;
 	m_CurrMonsterAction = &m_SearchAction;
+	m_CurrMonsterAction->Init();
 	static_cast<Monster*>(m_pOwner)->SetAnimationState(SPACECAT_MOVE.ID);
 	static_cast<Monster*>(m_pOwner)->SetisAttacking(false);
 }
@@ -179,6 +114,7 @@ void MonsterActionMgr::ChangeStateToDead()
 {
 	m_BeforeMonsterAction = m_CurrMonsterAction;
 	m_CurrMonsterAction = &m_DeadAction;
+	m_CurrMonsterAction->Init();
 	static_cast<Monster*>(m_pOwner)->SetAnimationState(SPACECAT_DEAD.ID);
 	static_cast<Monster*>(m_pOwner)->SetisAttacking(false);
 }
@@ -186,7 +122,8 @@ void MonsterActionMgr::ChangeStateToDead()
 void MonsterActionMgr::ChangeStateToHit()
 {
 	m_BeforeMonsterAction = m_CurrMonsterAction;
-	m_CurrMonsterAction = &m_HitAction;  
+	m_CurrMonsterAction = &m_HitAction;
+	m_CurrMonsterAction->Init();
 	static_cast<Monster*>(m_pOwner)->SetAnimationState(SPACECAT_HIT.ID);
 	static_cast<Monster*>(m_pOwner)->SetisAttacking(false);
 }
@@ -195,6 +132,7 @@ void MonsterActionMgr::ChangeStateToAttack()
 {
 	m_BeforeMonsterAction = m_CurrMonsterAction;
 	m_CurrMonsterAction = &m_AttackAction;
+	m_CurrMonsterAction->Init();
 	static_cast<Monster*>(m_pOwner)->SetAnimationState(SPACECAT_ATTACK.ID);
 	static_cast<Monster*>(m_pOwner)->SetisAttacking(true);
 }

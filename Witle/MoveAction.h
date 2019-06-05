@@ -9,17 +9,18 @@ class MoveAction
 	: public MonsterAction
 {
 	XMFLOAT3 m_Direction{ 0.f, 0.f, 0.f }; // 움직이는 방향
+	const float m_MoveTime{ 3.f }; //Move 상태로 있는 시간
 
 public:
 	// Update 수행 이전 반드시 호출
 	virtual void UpdateVelocity(float fElpasedTime, MonsterMovement* movement) override;
-	virtual void Init() override {};
+	virtual void Init() override;
 	virtual void UpdateState(float fElpasedTime, MonsterActionMgr* actionMgr) override;
 
 public:
 	virtual void ReleaseObjects() override {};
 	virtual void ReleaseUploadBuffers() override {};
-
+	 
 public:
 	MoveAction(GameObject* pOwner) : MonsterAction(pOwner) {};
 	virtual ~MoveAction() {};

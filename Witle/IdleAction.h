@@ -8,6 +8,8 @@ class MonsterMovement;
 class IdleAction
 	: public MonsterAction
 {
+	const float m_IdleTime{ 3.f }; //Idle 상태로 있는 시간
+	 
 public:
 	// Update 수행 이전 반드시 호출
 	virtual void UpdateVelocity(float fElpasedTime, MonsterMovement* movement) override;

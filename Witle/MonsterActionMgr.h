@@ -29,12 +29,7 @@ class MonsterActionMgr
 	AttackAction    m_AttackAction;
 	 
 	float m_TotalTime{ 0.f };
-	const float m_IdleTime{ 3.f }; //Idle 상태로 있는 시간
-	const float m_MoveTime{ 3.f }; //Move 상태로 있는 시간
-
-private:
-	bool IsNearPlayer(const Player * target, float distance);
-
+	 
 public:
 	virtual void ReleaseObjects() override {};
 	virtual void ReleaseUploadBuffers() override {};
@@ -58,7 +53,12 @@ public:
 	void UpdateVelocity(float fElpasedTime, MonsterMovement* movement);
 	void UpdateState(float fElpasedTime);
 
-	// ChageState
+	float GetTotalTime() const { return m_TotalTime; }
+	void SetZeroTotalTime() { m_TotalTime = 0.f; }
+	// ChageState //////////////////////////////////////
+	
+	// 이전 상태로 되돌아갑니다.
+	void ChangeStateBefore();
 	void ChangeStateToIdle();
 	void ChangeStateToMove();
 	void ChangeStateToChase();
@@ -66,4 +66,6 @@ public:
 	void ChangeStateToDead();
 	void ChangeStateToHit();
 	void ChangeStateToAttack();
+
+	// ChageState //////////////////////////////////////
 };

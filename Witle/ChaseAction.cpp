@@ -26,4 +26,8 @@ void ChaseAction::UpdateVelocity(float fElpasedTime, MonsterMovement * movement)
 
 void ChaseAction::UpdateState(float fElpasedTime, MonsterActionMgr * actionMgr)
 {
+	if (PlayerManager::IsNearPlayer(m_pOwner->GetTransform().GetPosition(), 150))
+	{
+		actionMgr->ChangeStateToAttack();
+	} 
 }
