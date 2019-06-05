@@ -238,7 +238,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 
 	 std::random_device rd;
 	  std::mt19937 mersenne(rd());
-	  std::uniform_int_distribution<> die(1500, 15000);
+	  std::uniform_int_distribution<> die(2000, 15000);
 	  std::uniform_int_distribution<> monstertype(0, 1);
 
 	// ∏ÛΩ∫≈Õ

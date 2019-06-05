@@ -23,3 +23,7 @@ void ChaseAction::UpdateVelocity(float fElpasedTime, MonsterMovement * movement)
 		movement->m_fPitch = -value;
 	}
 }
+
+void ChaseAction::UpdateState(float fElpasedTime, MonsterActionMgr * actionMgr)
+{
+}

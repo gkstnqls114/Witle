@@ -9,15 +9,16 @@ class DeadAction
 	: public MonsterAction
 {
 public:
+	// Update 수행 이전 반드시 호출
+	virtual void UpdateVelocity(float fElpasedTime, MonsterMovement* movement) override;
+	virtual void Init() override {};
+	virtual void UpdateState(float fElpasedTime, MonsterActionMgr* actionMgr) override;
+
+public:
 	virtual void ReleaseObjects() override {};
 	virtual void ReleaseUploadBuffers() override {};
 
 public:
 	DeadAction(GameObject* pOwner) : MonsterAction( pOwner) {};
-	virtual ~DeadAction() {};
-
-	// Update 수행 이전 반드시 호출
-	virtual void UpdateVelocity(float fElpasedTime, MonsterMovement* movement) override;
-	virtual void Init() override {};
-
+	virtual ~DeadAction() {}; 
 };

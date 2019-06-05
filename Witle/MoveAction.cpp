@@ -18,3 +18,7 @@ void MoveAction::UpdateVelocity(float fElpasedTime, MonsterMovement * movement)
 	} 
 
 }
+
+void MoveAction::UpdateState(float fElpasedTime, MonsterActionMgr * actionMgr)
+{
+}
