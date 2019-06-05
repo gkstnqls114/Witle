@@ -78,9 +78,7 @@ Monster::Monster(const std::string & entityID, const XMFLOAT3& SpawnPoint, ID3D1
 	m_RecognitionRange->CreateDebugMesh(pd3dDevice, pd3dCommandList);
 
 	m_MonsterStatus = new MonsterStatus(this, pd3dDevice, pd3dCommandList);
-	m_MonsterMovement = new MonsterMovement(this);
-	m_MonsterMovement->m_fDistance = 100;
-
+	
 	m_MonsterHP = new UI3DImage(this, pd3dDevice, pd3dCommandList, POINT{0, 0},
 		100.F,
 		30.f,

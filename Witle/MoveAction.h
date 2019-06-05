@@ -22,7 +22,7 @@ public:
 	virtual void ReleaseUploadBuffers() override {};
 	 
 public:
-	MoveAction(GameObject* pOwner) : GeneralMonsterAction(pOwner) {};
+	MoveAction(GameObject* pOwner, float idleTime) : GeneralMonsterAction(pOwner), m_MoveTime(idleTime) {};
 	virtual ~MoveAction() {};
 	 
 	void SetDirection(const XMFLOAT3& direction) { m_Direction = direction; }

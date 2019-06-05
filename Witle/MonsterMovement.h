@@ -29,7 +29,7 @@ public:
 	virtual void ReleaseUploadBuffers() override {};
 
 public:
-	MonsterMovement(GameObject* pOwner);
+	MonsterMovement(GameObject* pOwner, float idleTime, float moveTime);
 	virtual ~MonsterMovement();
 
 	// 이동에 관련된 호출

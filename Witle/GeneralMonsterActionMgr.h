@@ -35,10 +35,10 @@ public:
 	virtual void ReleaseUploadBuffers() override {};
 
 public:
-	GeneralMonsterActionMgr(GameObject* pOwner) : 
+	GeneralMonsterActionMgr(GameObject* pOwner, float idleTime, float moveTime) : 
 		MonsterActionMgr(pOwner) ,
-		m_IdleAction(pOwner),
-		m_MoveAction(pOwner),
+		m_IdleAction(pOwner, idleTime),
+		m_MoveAction(pOwner, moveTime),
 		m_ChaseAction(pOwner),
 		m_SearchAction(pOwner),
 		m_DeadAction(pOwner),

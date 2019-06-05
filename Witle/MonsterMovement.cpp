@@ -23,11 +23,10 @@ void MonsterMovement::MoveVelocity(const XMFLOAT3 & xmf3Shift)
 	m_xmf3Velocity = Vector3::Add(m_xmf3Velocity, xmf3Shift);
 }
 
-MonsterMovement::MonsterMovement(GameObject * pOwner)
+MonsterMovement::MonsterMovement(GameObject * pOwner, float idleTime, float moveTime)
 	:Movement(pOwner)
 {
-	m_MonsterActionMgr = new GeneralMonsterActionMgr(pOwner);
-
+	m_MonsterActionMgr = new GeneralMonsterActionMgr(pOwner, idleTime, moveTime);
 }
 
 MonsterMovement::~MonsterMovement()
