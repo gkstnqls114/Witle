@@ -58,6 +58,7 @@ public:
 
 	virtual void ReleaseUploadBuffers() override;
 
+	virtual void UpdatePhysics(float ElapsedTime) override;
 	virtual void Update(float ElapsedTime) override;
 	virtual void LastUpdate(float ElapsedTime) override;
 

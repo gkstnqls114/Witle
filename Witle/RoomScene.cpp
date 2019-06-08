@@ -150,6 +150,10 @@ bool RoomScene::ProcessInput(HWND hWnd, float ElapsedTime)
 	return true;
 }
 
+void RoomScene::UpdatePhysics(float ElapsedTime)
+{
+}
+
 // ProcessInput에 의한 right, up, look, pos 를 월드변환 행렬에 갱신한다.
 void RoomScene::Update(float fElapsedTime)
 { 
