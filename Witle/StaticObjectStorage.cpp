@@ -19,44 +19,27 @@ StaticObjectStorage* StaticObjectStorage::m_Instance{ nullptr };
 void StaticObjectStorage::UpdateShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList, int count, XMFLOAT4X4 * transforms)
 { 
 }
-
-bool StaticObjectStorage::LoadTransform(char * name, const char * comp_name, const XMINT4& IDs, const XMFLOAT3& pos)
-{
-	bool result = false;
-	if (!strcmp(name, comp_name))
-	{
-		for (int Ti = 0; Ti < 4; ++Ti)
-		{
-			int terrainIDs = -1; 
-			if (Ti == 0) terrainIDs = IDs.x;
-			else if (Ti == 1) terrainIDs = IDs.y;
-			else if (Ti == 2) terrainIDs = IDs.z;
-			else if (Ti == 3) terrainIDs = IDs.w;
-
-			if (terrainIDs == -1) continue;
-
-			m_StaticObjectStorage[comp_name][terrainIDs].TerrainObjectCount += 1;
-
-			LoadObject* TestObject = ModelStorage::GetInstance()->GetRootObject(comp_name);
-			TestObject->SetPosition(pos);
-			TestObject->UpdateTransform(NULL);
-
-			m_StaticObjectStorage[comp_name][terrainIDs].TransformList.emplace_back(TestObject->m_pChild->m_xmf4x4World);
-			 
-			delete TestObject;
-			TestObject = nullptr;
-
-			result = true;
-		}
-	}
-	return result;
-}
-
+ 
 bool StaticObjectStorage::LoadTransform(char * name, const char * comp_name, const XMINT4 & IDs, const XMFLOAT4X4 & tr)
 { 
 	bool result = false;
+
 	if (!strcmp(name, comp_name))
 	{
+		// 만약 name이 절벽인 경우...
+		if (!strcmp(name, Cliff))
+		{ 
+			for (int x = 0; x < TerrainPieceCount; ++x)
+			{
+				//m_StaticObjectStorage[comp_name][x].TerrainObjectCount += 1; 
+				//XMFLOAT4X4 identity = Matrix4x4::RotateMatrix(0.f, 0.f, 90.f);
+				//identity._41 = 15000.f;
+				//identity._43 = 15000.f;
+				//m_StaticObjectStorage[comp_name][x].TransformList.emplace_back(identity);
+			}
+			return true; // 절벽인 경우 만 예외 처리
+		}
+
 		for (int Ti = 0; Ti < 4; ++Ti)
 		{
 			int terrainIDs = -1;
@@ -173,7 +156,7 @@ void StaticObjectStorage::LoadNameAndPositionFromFile(ID3D12Device * pd3dDevice,
 			XMFLOAT4 rotationXYZ;
 			nReads = (UINT)::fread(&rotationXYZ, sizeof(XMFLOAT4), 1, pInFile);
 			XMFLOAT4X4 rotate180Y = Matrix4x4::RotateMatrix(0.f, 0.f, 0.f);
-			XMFLOAT4X4 rotateInfo = Matrix4x4::RotateMatrix(0.f, rotationXYZ.z, rotationXYZ.y);
+			XMFLOAT4X4 rotateInfo = Matrix4x4::RotateMatrix(0.f, rotationXYZ.z, 0.f);
 			
 			XMFLOAT4X4 transform = Matrix4x4::Multiply(rotate180Y, rotateInfo);
 			
@@ -182,28 +165,10 @@ void StaticObjectStorage::LoadNameAndPositionFromFile(ID3D12Device * pd3dDevice,
 			transform._42 = 0;
 			if (!strcmp(name, Flower)) transform._42 = temp._42;
 			transform._43 =  -(temp._43);
-
-			if (!strcmp(name, Cliff))
-			{
-				transform._41 = -(temp._41);
-				transform._42 = 0; 
-				transform._43 = -(temp._43);
-			}
+			 
 			assert(!(temp._41 >= 40000));
 			assert(!(temp._43 >= 40000));
-			 
-			//bool isCliffExist = true; 
-			//if (!strcmp(name, Cliff))
-			//{
-			//	if (rotationXYZ.z <= -10) isCliffExist = false;
-			//	else if (rotationXYZ.z > 10) isCliffExist = false;
-			//	else 
-			//		std::cout << "Cliff 위치: " << transform._41 << " , " << transform._42 
-			//		<<" , " << transform._43 << " 회전 각도: " <<
-			//		-rotationXYZ.z << std::endl;
-
-			//} 
-
+			   
 			// 계산을 통해 몇번째 아이디인지 즉 어디의 리프노드에 존재하는 위치인지 알아낸다...
 			// fbx sdk 에서 꺼내올때 무슨 문제가 있는지 x, z좌표에 -부호 붙여야함 ...
 			// 그리고 위치 차이때문에 
@@ -212,8 +177,7 @@ void StaticObjectStorage::LoadNameAndPositionFromFile(ID3D12Device * pd3dDevice,
 			XMINT4 terrainIDs = pTerrain->GetIDs(position);
 		 
 			for (const auto& modelname : ModelStorage::GetInstance()->m_NameList)
-			{ 
-				// if (!isCliffExist) break;
+			{  
 				bool isLocated = LoadTransform(name, modelname.c_str(), terrainIDs, transform);
 				if (isLocated) break;
 			} 
