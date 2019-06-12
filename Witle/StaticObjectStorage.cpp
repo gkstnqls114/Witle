@@ -172,26 +172,37 @@ void StaticObjectStorage::LoadNameAndPositionFromFile(ID3D12Device * pd3dDevice,
 			::ReadStringFromFile(pInFile, pstrToken); // <GlobalRotation>:
 			XMFLOAT4 rotationXYZ;
 			nReads = (UINT)::fread(&rotationXYZ, sizeof(XMFLOAT4), 1, pInFile);
-			XMFLOAT4X4 transform = Matrix4x4::RotateMatrix(0.f, 0.F, 0.f);
+			XMFLOAT4X4 rotate180Y = Matrix4x4::RotateMatrix(0.f, 0.f, 0.f);
+			XMFLOAT4X4 rotateInfo = Matrix4x4::RotateMatrix(0.f, rotationXYZ.z, rotationXYZ.y);
+			
+			XMFLOAT4X4 transform = Matrix4x4::Multiply(rotate180Y, rotateInfo);
 			
 			// XMFLOAT4X4 transform = Matrix4x4::Identity();
 			transform._41 =  -(temp._41);
 			transform._42 = 0;
+			if (!strcmp(name, Flower)) transform._42 = temp._42;
 			transform._43 =  -(temp._43);
 
+			if (!strcmp(name, Cliff))
+			{
+				transform._41 = -(temp._41);
+				transform._42 = 0; 
+				transform._43 = -(temp._43);
+			}
 			assert(!(temp._41 >= 40000));
 			assert(!(temp._43 >= 40000));
 			 
-			bool isCliffExist = true; 
-			if (!strcmp(name, Cliff))
-			{
-				if (rotationXYZ.z <= -10) isCliffExist = false;
-				else if (rotationXYZ.z > 10) isCliffExist = false;
-				else 
-					std::cout << "Cliff 위치: " << transform._41 << " , " << transform._43 << " 회전 각도: " <<
-					-rotationXYZ.z << std::endl;
+			//bool isCliffExist = true; 
+			//if (!strcmp(name, Cliff))
+			//{
+			//	if (rotationXYZ.z <= -10) isCliffExist = false;
+			//	else if (rotationXYZ.z > 10) isCliffExist = false;
+			//	else 
+			//		std::cout << "Cliff 위치: " << transform._41 << " , " << transform._42 
+			//		<<" , " << transform._43 << " 회전 각도: " <<
+			//		-rotationXYZ.z << std::endl;
 
-			} 
+			//} 
 
 			// 계산을 통해 몇번째 아이디인지 즉 어디의 리프노드에 존재하는 위치인지 알아낸다...
 			// fbx sdk 에서 꺼내올때 무슨 문제가 있는지 x, z좌표에 -부호 붙여야함 ...
@@ -202,7 +213,7 @@ void StaticObjectStorage::LoadNameAndPositionFromFile(ID3D12Device * pd3dDevice,
 		 
 			for (const auto& modelname : ModelStorage::GetInstance()->m_NameList)
 			{ 
-				if (!isCliffExist) break;
+				// if (!isCliffExist) break;
 				bool isLocated = LoadTransform(name, modelname.c_str(), terrainIDs, transform);
 				if (isLocated) break;
 			} 
