@@ -225,6 +225,8 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	m_SkyBox = new SkyBox(pd3dDevice, pd3dCommandList, 3000.F, 3000.F, 3000.F);
 
 	// 터레인 생성 
+	// XMFLOAT3 xmf3Scale(156.25f, 1.0f, 156.25f);
+
 	XMFLOAT3 xmf3Scale(39.0625f * 3.f, 1.0f, 39.0625f * 3.f);
 	// XMFLOAT3 xmf3Scale(1.f, 1.0f, 1.f);
 	XMFLOAT4 xmf4Color(0.0f, 0.5f, 0.0f, 0.0f);
@@ -646,34 +648,34 @@ void GameScene::UpdateCollision(float fElapsedTime)
 	BoundingOrientedBox AlreadyPlayerBBox = m_pPlayer->CalculateAlreadyBoundingBox(fElapsedTime);
 	XMFLOAT3 AlreadyPositon{ AlreadyPlayerBBox.Center.x, AlreadyPlayerBBox.Center.y, AlreadyPlayerBBox.Center.z };
 	
-	// 외곽처리
-	MyBOBox outside_box[4]{ 
-		{XMFLOAT3(-100, 0, 15000), XMFLOAT3(100, 3000, 20000)},
-		{XMFLOAT3(15000, 0, 30100), XMFLOAT3(20000, 3000, 100)},
-		{XMFLOAT3(30100, 0, 15000), XMFLOAT3(100, 3000, 20000)},
-		{XMFLOAT3(15000, 0, -100), XMFLOAT3(30000, 3000, 100)},
-	};
+	//// 외곽처리
+	//MyBOBox outside_box[4]{ 
+	//	{XMFLOAT3(-100, 0, 15000), XMFLOAT3(100, 3000, 20000)},
+	//	{XMFLOAT3(15000, 0, 30100), XMFLOAT3(20000, 3000, 100)},
+	//	{XMFLOAT3(30100, 0, 15000), XMFLOAT3(100, 3000, 20000)},
+	//	{XMFLOAT3(15000, 0, -100), XMFLOAT3(30000, 3000, 100)},
+	//};
 
-	// 외곽부분 나가지 못하도록 충돌체크
-	for (int i = 0; i < 4; ++i)
-	{
-		XMFLOAT3 slideVector{ 0.f, 0.f, 0.f };
+	//// 외곽부분 나가지 못하도록 충돌체크
+	//for (int i = 0; i < 4; ++i)
+	//{
+	//	XMFLOAT3 slideVector{ 0.f, 0.f, 0.f };
 
-		// 이동한 박스를 통해 충돌한다.
-		bool isSlide = Collision::ProcessCollision(
-			AlreadyPlayerBBox, 
-			outside_box[i], 
-			m_pPlayer->GetTransform().GetPosition(),
-			m_pPlayer->GetVelocity(), 
-			fElapsedTime,
-			false,
-			slideVector);
+	//	// 이동한 박스를 통해 충돌한다.
+	//	bool isSlide = Collision::ProcessCollision(
+	//		AlreadyPlayerBBox, 
+	//		outside_box[i], 
+	//		m_pPlayer->GetTransform().GetPosition(),
+	//		m_pPlayer->GetVelocity(), 
+	//		fElapsedTime,
+	//		false,
+	//		slideVector);
 
-		if (isSlide)
-		{ 
-			m_pPlayer->SetVelocity(slideVector);
-		}
-	}
+	//	if (isSlide)
+	//	{ 
+	//		m_pPlayer->SetVelocity(slideVector);
+	//	}
+	//}
 
 	XMINT4 IDs = m_pQuadtreeTerrain->GetIDs(AlreadyPositon);
 	int TerrainCount = m_pQuadtreeTerrain->GetTerrainPieceCount();

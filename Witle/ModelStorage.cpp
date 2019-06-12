@@ -40,8 +40,8 @@ void ModelStorage::CreateModels(ID3D12Device * pd3dDevice, ID3D12GraphicsCommand
 	m_NameList.push_back(ALTAR_OUT);
 	m_NameList.push_back(BUSH);
 	m_NameList.push_back(BUSHSQUARE);
-	// m_NameList.push_back(Cliff);
-	// m_NameList.push_back(Flower);
+	m_NameList.push_back(Cliff);
+	m_NameList.push_back(Flower);
 	m_NameList.push_back(REED);
 	m_NameList.push_back(RUIN_ARCH);
 	m_NameList.push_back(RUIN_BROKENPILLA);
