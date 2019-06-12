@@ -133,7 +133,7 @@ Player::Player(const std::string & entityID, ID3D12Device * pd3dDevice, ID3D12Gr
 	 
 	m_Broom = new Broom(m_pPlayerMovement);
 
-	m_Transform.SetPosition(100.f, 0.f, 100.f);// 캐릭터가 중앙에 있지않아서 어쩔수없이 설정;
+	m_Transform.SetPosition(20000.f, 0.f, 20000.f);// 맵 중앙에 위치
 
 	// 빗자루 스킬 이펙트 준비
 	m_BroomEffectRect = new BroomEffectRect(this, pd3dDevice, pd3dCommandList);

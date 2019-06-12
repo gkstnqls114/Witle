@@ -175,9 +175,9 @@ void StaticObjectStorage::LoadNameAndPositionFromFile(ID3D12Device * pd3dDevice,
 			XMFLOAT4X4 transform = Matrix4x4::RotateMatrix(0.f, rotationXYZ.z, rotationXYZ.y);
 			
 			// XMFLOAT4X4 transform = Matrix4x4::Identity();
-			transform._41 =  -(temp._41) + 15000;
+			transform._41 =  -(temp._41);
 			transform._42 = 0;
-			transform._43 =  -(temp._43) + 15000;
+			transform._43 =  -(temp._43);
 
 			// 계산을 통해 몇번째 아이디인지 즉 어디의 리프노드에 존재하는 위치인지 알아낸다...
 			// fbx sdk 에서 꺼내올때 무슨 문제가 있는지 x, z좌표에 -부호 붙여야함 ...

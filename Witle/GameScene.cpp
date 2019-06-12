@@ -225,9 +225,9 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	m_SkyBox = new SkyBox(pd3dDevice, pd3dCommandList, 3000.F, 3000.F, 3000.F);
 
 	// 터레인 생성 
-	// XMFLOAT3 xmf3Scale(156.25f, 1.0f, 156.25f);
+	XMFLOAT3 xmf3Scale(156.25f, 1.0f, 156.25f);
 
-	XMFLOAT3 xmf3Scale(39.0625f * 3.f, 1.0f, 39.0625f * 3.f);
+	// XMFLOAT3 xmf3Scale(39.0625f * 3.f, 1.0f, 39.0625f * 3.f); 
 	// XMFLOAT3 xmf3Scale(1.f, 1.0f, 1.f);
 	XMFLOAT4 xmf4Color(0.0f, 0.5f, 0.0f, 0.0f);
 	m_Terrain = new Terrain("Terrain", pd3dDevice, pd3dCommandList, L"Image/HeightMap.raw", 257, 257, 257, 257, xmf3Scale, xmf4Color);
