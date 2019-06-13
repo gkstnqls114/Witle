@@ -27,7 +27,7 @@ VS_TERRAIN_OUTPUT VSTerrain(VS_TERRAIN_INPUT input)
 	output.position = mul(mul(mul(float4(input.position, 1.0f), gmtxWorld), gmtxView), gmtxProjection);
 //#endif
 	output.color = input.color;
-	output.uv0 = input.uv0;
+	output.uv0 = input.uv0 * 20;
 	output.uv1 = input.uv1;
 
     float4 positionW = mul(float4(input.position, 1.0f), gmtxWorld);

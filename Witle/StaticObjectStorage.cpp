@@ -29,14 +29,21 @@ bool StaticObjectStorage::LoadTransform(char * name, const char * comp_name, con
 		// 만약 name이 절벽인 경우...
 		if (!strcmp(name, Cliff))
 		{ 
+
+			LoadObject* TestObject = ModelStorage::GetInstance()->GetRootObject(comp_name);
+			TestObject->SetTransform(tr); // 여기서 Scale 과 다이렉트 X축에 대한 회전 일어나므로 절대 빼먹으면 안됨..
+			TestObject->UpdateTransform(NULL);
+
 			for (int x = 0; x < TerrainPieceCount; ++x)
 			{
-				//m_StaticObjectStorage[comp_name][x].TerrainObjectCount += 1; 
-				//XMFLOAT4X4 identity = Matrix4x4::RotateMatrix(0.f, 0.f, 90.f);
-				//identity._41 = 15000.f;
-				//identity._43 = 15000.f;
-				//m_StaticObjectStorage[comp_name][x].TransformList.emplace_back(identity);
+				m_StaticObjectStorage[comp_name][x].TerrainObjectCount += 1;
+
+				m_StaticObjectStorage[comp_name][x].TransformList.emplace_back(TestObject->m_pChild->m_xmf4x4World);
 			}
+
+			delete TestObject;
+			TestObject = nullptr;
+
 			return true; // 절벽인 경우 만 예외 처리
 		}
 

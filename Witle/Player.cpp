@@ -133,7 +133,7 @@ Player::Player(const std::string & entityID, ID3D12Device * pd3dDevice, ID3D12Gr
 	 
 	m_Broom = new Broom(m_pPlayerMovement);
 
-	m_Transform.SetPosition(20000.f, 0.f, 20000.f);// ¸Ê Áß¾Ó¿¡ À§Ä¡
+	m_Transform.SetPosition(15000.f, 0.f, 15000.f);// ¸Ê Áß¾Ó¿¡ À§Ä¡
 
 	// ºøÀÚ·ç ½ºÅ³ ÀÌÆåÆ® ÁØºñ
 	m_BroomEffectRect = new BroomEffectRect(this, pd3dDevice, pd3dCommandList);
