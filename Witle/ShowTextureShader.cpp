@@ -1,38 +1,36 @@
 #include "stdafx.h"
-#include "TESTShader.h"
+#include "ShowTextureShader.h"
 
-D3D12_SHADER_BYTECODE TESTShader::CreateGeometryShader(ID3DBlob ** ppd3dShaderBlob)
+D3D12_SHADER_BYTECODE ShowTextureShader::CreateGeometryShader(ID3DBlob ** ppd3dShaderBlob)
 {
 	return D3D12_SHADER_BYTECODE();
 }
 
-TESTShader::TESTShader()
+ShowTextureShader::ShowTextureShader()
 {
 }
 
-TESTShader::~TESTShader()
+ShowTextureShader::~ShowTextureShader()
 {
 }
 
-void TESTShader::CreateShader(ID3D12Device * pd3dDevice, ID3D12RootSignature * const pd3dGraphicsRootSignature)
+void ShowTextureShader::CreateShader(ID3D12Device * pd3dDevice, ID3D12RootSignature * const pd3dGraphicsRootSignature)
 {
 	Shader::CreatePipelineState(pd3dDevice, pd3dGraphicsRootSignature);
 }
 
-void TESTShader::Update(float ElapsedTime)
+void ShowTextureShader::Update(float ElapsedTime)
 {
 }
 
-D3D12_INPUT_LAYOUT_DESC TESTShader::CreateInputLayout()
+D3D12_INPUT_LAYOUT_DESC ShowTextureShader::CreateInputLayout()
 {
-	UINT nInputElementDescs = 4;
+	UINT nInputElementDescs = 2;
 	D3D12_INPUT_ELEMENT_DESC *pd3dInputElementDescs = new D3D12_INPUT_ELEMENT_DESC[nInputElementDescs];
 
 	pd3dInputElementDescs[0] = { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 };
-	pd3dInputElementDescs[1] = { "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 };
-	pd3dInputElementDescs[2] = { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 28, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 };
-	pd3dInputElementDescs[3] = { "TEXCOORD", 1, DXGI_FORMAT_R32G32_FLOAT, 0, 36, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 };
-
+	pd3dInputElementDescs[1] = { "TEXTCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 };
+	
 	D3D12_INPUT_LAYOUT_DESC d3dInputLayoutDesc;
 	d3dInputLayoutDesc.pInputElementDescs = pd3dInputElementDescs;
 	d3dInputLayoutDesc.NumElements = nInputElementDescs;
@@ -40,7 +38,7 @@ D3D12_INPUT_LAYOUT_DESC TESTShader::CreateInputLayout()
 	return(d3dInputLayoutDesc);
 }
 
-D3D12_RASTERIZER_DESC TESTShader::CreateRasterizerState()
+D3D12_RASTERIZER_DESC ShowTextureShader::CreateRasterizerState()
 {
 	//래스터라이저 상태를 설정한다.
 	D3D12_RASTERIZER_DESC d3dRasterizerDesc;
@@ -60,7 +58,7 @@ D3D12_RASTERIZER_DESC TESTShader::CreateRasterizerState()
 	return(d3dRasterizerDesc);
 }
 
-D3D12_BLEND_DESC TESTShader::CreateBlendState()
+D3D12_BLEND_DESC ShowTextureShader::CreateBlendState()
 {
 	D3D12_BLEND_DESC d3dBlendDesc;
 	::ZeroMemory(&d3dBlendDesc, sizeof(D3D12_BLEND_DESC));
@@ -80,7 +78,7 @@ D3D12_BLEND_DESC TESTShader::CreateBlendState()
 	return d3dBlendDesc;
 }
 
-D3D12_DEPTH_STENCIL_DESC TESTShader::CreateDepthStencilState()
+D3D12_DEPTH_STENCIL_DESC ShowTextureShader::CreateDepthStencilState()
 {
 	D3D12_DEPTH_STENCIL_DESC d3dDepthStencilDesc;
 	::ZeroMemory(&d3dDepthStencilDesc, sizeof(D3D12_DEPTH_STENCIL_DESC));
@@ -102,17 +100,17 @@ D3D12_DEPTH_STENCIL_DESC TESTShader::CreateDepthStencilState()
 	return(d3dDepthStencilDesc);
 }
 
-D3D12_PRIMITIVE_TOPOLOGY_TYPE TESTShader::CreatePrimitiveTopologyType()
+D3D12_PRIMITIVE_TOPOLOGY_TYPE ShowTextureShader::CreatePrimitiveTopologyType()
 {
 	return D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
 }
 
-D3D12_SHADER_BYTECODE TESTShader::CreateVertexShader(ID3DBlob ** ppd3dShaderBlob)
+D3D12_SHADER_BYTECODE ShowTextureShader::CreateVertexShader(ID3DBlob ** ppd3dShaderBlob)
 {
 	return(Shader::CompileShaderFromFile(L"ShowTextureShader.hlsl", "VSMain", "vs_5_1", ppd3dShaderBlob));
 }
 
-D3D12_SHADER_BYTECODE TESTShader::CreatePixelShader(ID3DBlob ** ppd3dShaderBlob)
+D3D12_SHADER_BYTECODE ShowTextureShader::CreatePixelShader(ID3DBlob ** ppd3dShaderBlob)
 {
 	return(Shader::CompileShaderFromFile(L"ShowTextureShader.hlsl", "PSMain", "ps_5_1", ppd3dShaderBlob));
 }

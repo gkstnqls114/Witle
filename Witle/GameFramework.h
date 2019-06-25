@@ -58,19 +58,17 @@ private:
 #endif
 	
 private:
-	////////////////////////////// ½¦µµ¿ì¸Ê
-	void RenderShadowMap();
+	////////////////////////////// ½¦µµ¿ì¸Ê 
 	const UINT m_DsvDescriptorsCount{ 2 };
-	D3D12_CPU_DESCRIPTOR_HANDLE m_ShadowMapCPUHandle;
-	ID3D12Resource*			m_pShadowMap;
+	//D3D12_CPU_DESCRIPTOR_HANDLE m_ShadowMapCPUHandle;
+	//ID3D12Resource*			m_pShadowMap;
 	////////////////////////////// ½¦µµ¿ì¸Ê
 	 
 	//// GBuffer 
-	static const UINT m_GBuffersCount{ 2 };
+	static const UINT m_GBuffersCount{ 4 };
 
 	ID3D12Resource*				m_GBuffers[m_GBuffersCount];
 	D3D12_CPU_DESCRIPTOR_HANDLE m_GBufferCPUHandle[m_GBuffersCount];
-	ID3D12DescriptorHeap* m_GBufferHeap;
 	UINT m_GBufferDescriptorSize;
 
 	//CTriangleShader m_RedShader;
@@ -79,10 +77,11 @@ private:
 	//CRenderComputeShader m_RenderComputeShader;
 
 	// Texture*		m_pGBufferTexture;
-	float	m_GBufferClearValue[3][4]{
+	float	m_GBufferClearValue[4][4]{
 		{ 1.f, 0.f, 0.f, 1.f },
 		{ 0.f, 1.f, 0.f, 1.f },
-		{ 0.f, 0.f, 1.f, 1.f }
+		{ 0.f, 0.f, 1.f, 1.f },
+		{ 1.f, 1.f, 1.f, 1.f }
 	};
 
 	///////////////////// ÄÄÇ»Æ® ½¦ÀÌ´õ¸¦ À§ÇÑ º¯¼ö
@@ -97,6 +96,10 @@ private:
 	// OnCreate() ³»ºÎ¿¡¼­ »ç¿ëÇÑ´Ù.
 	void CreateRWResourceViews() ;
 	
+	void ReleaseSwapChainBuffer();
+	void ReleaseGBuffers();
+	void ReleaseDepthStencilBuffer();
+
 	void CreateSwapChain();
 	void CreateDirect3DDevice();
 	void CreateRtvAndDsvDescriptorHeaps();
@@ -158,6 +161,6 @@ private:
 	ComputeShader* m_horizenShader{ nullptr };
 	ComputeShader* m_verticalShader{ nullptr };
 
-	MyDescriptorHeap* m_TESTHeap_1{ nullptr };
+	MyDescriptorHeap* m_GBufferHeap{ nullptr };
 };
 

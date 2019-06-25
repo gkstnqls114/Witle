@@ -94,9 +94,6 @@
     <Filter Include="02.Component\Material">
       <UniqueIdentifier>{45556834-d31a-470b-8819-1c89e3a59b31}</UniqueIdentifier>
     </Filter>
-    <Filter Include="05.Shader\TESTShader">
-      <UniqueIdentifier>{fbd787c7-444a-4e68-98f3-306d0a71a446}</UniqueIdentifier>
-    </Filter>
     <Filter Include="12.Skill">
       <UniqueIdentifier>{0f80f977-3e90-4509-87ff-01987697acb0}</UniqueIdentifier>
     </Filter>
@@ -367,6 +364,9 @@
     <Filter Include="02.Component\ForMonster\GeneralMonsterAction\MonsterActionMgr\BossMonsterActionMgr">
       <UniqueIdentifier>{31ceca84-3670-4740-a04e-9919c7d8f659}</UniqueIdentifier>
     </Filter>
+    <Filter Include="05.Shader\ShowTextureShader">
+      <UniqueIdentifier>{fbd787c7-444a-4e68-98f3-306d0a71a446}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -506,9 +506,6 @@
     </ClInclude>
     <ClInclude Include="SkyPlane.h">
       <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="TESTShader.h">
-      <Filter>05.Shader\TESTShader</Filter>
     </ClInclude>
     <ClInclude Include="LightManager.h">
       <Filter>13.Storage/Manager\02.LightManager</Filter>
@@ -762,6 +759,9 @@
     <ClInclude Include="GeneralMonsterActionMgr.h">
       <Filter>02.Component\ForMonster\GeneralMonsterAction\MonsterActionMgr\GeneralMonsterActionMgr</Filter>
     </ClInclude>
+    <ClInclude Include="ShowTextureShader.h">
+      <Filter>05.Shader\ShowTextureShader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -886,9 +886,6 @@
     </ClCompile>
     <ClCompile Include="SkyPlane.cpp">
       <Filter>99.etc</Filter>
-    </ClCompile>
-    <ClCompile Include="TESTShader.cpp">
-      <Filter>05.Shader\TESTShader</Filter>
     </ClCompile>
     <ClCompile Include="LightManager.cpp">
       <Filter>13.Storage/Manager\02.LightManager</Filter>
@@ -1135,6 +1132,9 @@
     </ClCompile>
     <ClCompile Include="GeneralMonsterActionMgr.cpp">
       <Filter>02.Component\ForMonster\GeneralMonsterAction\MonsterActionMgr\GeneralMonsterActionMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="ShowTextureShader.cpp">
+      <Filter>05.Shader\ShowTextureShader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

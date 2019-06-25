@@ -272,7 +272,7 @@
     <ClInclude Include="TerrainMesh.h" />
     <ClInclude Include="SkinnedMeshRenderer.h" />
     <ClInclude Include="TerrainObjectID.h" />
-    <ClInclude Include="TESTShader.h" />
+    <ClInclude Include="ShowTextureShader.h" />
     <ClInclude Include="TextureStorage.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="UIWorldShader.h" />
@@ -398,7 +398,7 @@
     <ClCompile Include="TerrainMesh.cpp" />
     <ClCompile Include="SkinnedMeshRenderer.cpp" />
     <ClCompile Include="TerrainObjectID.cpp" />
-    <ClCompile Include="TESTShader.cpp" />
+    <ClCompile Include="ShowTextureShader.cpp" />
     <ClCompile Include="TextureStorage.cpp" />
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="UI3DImage.cpp" />

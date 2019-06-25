@@ -8,7 +8,7 @@
 #include "HorizonBlurShader.h"
 #include "VerticalBlurShader.h"
 #include "InstancingStandardShader.h"
-#include "TESTShader.h"
+#include "ShowTextureShader.h"
 #include "ScreenShader.h"
 #include "CubeShader.h"
 #include "InstancingLineShader.h"
@@ -115,6 +115,10 @@ void ShaderManager::BuildShaders(ID3D12Device * pd3dDevice, ID3D12RootSignature 
 	Shader* pUIWorldShader = new UIWorldShader();
 	pUIWorldShader->CreateShader(pd3dDevice, pd3dGraphicsRootSignature);
 	InsertShader(SHADER_UIWORLD, pUIWorldShader); 
+
+	Shader* pShowTextureShader = new ShowTextureShader();
+	pShowTextureShader->CreateShader(pd3dDevice, pd3dGraphicsRootSignature);
+	InsertShader(SHADER_SHOWTEXTURE, pShowTextureShader);
 }
 
 bool ShaderManager::InsertShader(const std::string& s, Shader * pso)

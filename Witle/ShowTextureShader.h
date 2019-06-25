@@ -1,6 +1,6 @@
 #pragma once
 #include "Shader.h"
-class TESTShader :
+class ShowTextureShader :
 	public Shader
 {
 	// PSO 를 생성할 때 필요한 인자들
@@ -18,8 +18,8 @@ class TESTShader :
 
 
 public:
-	TESTShader();
-	virtual ~TESTShader();
+	ShowTextureShader();
+	virtual ~ShowTextureShader();
 
 	virtual void						CreateShader(ID3D12Device *pd3dDevice, ID3D12RootSignature*const pd3dGraphicsRootSignature) override;
 	virtual void						Update(float ElapsedTime) override;

@@ -41,3 +41,4 @@
 #define SHADER_BROOMEFFECT "BroomEffect"
 #define SHADER_UISCREEN "UIScreen"
 #define SHADER_UIWORLD "UIWorld" 
+#define SHADER_SHOWTEXTURE "ShowTexture" 
