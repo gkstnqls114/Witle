@@ -24,5 +24,6 @@ public:
 	Shader * GetShader(const std::string & s) const;
 
 	void SetPSO(ID3D12GraphicsCommandList * pd3dCommandList, const std::string name) const;
+	void SetPSOForGBuffers(ID3D12GraphicsCommandList * pd3dCommandList, const std::string name) const;
 };
 

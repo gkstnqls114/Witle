@@ -546,7 +546,7 @@ void GameScene::AnimateObjects(float fTimeElapsed)
 	}
 }
 
-void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
+void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers)
 { 
 	RenderShadowMap(pd3dCommandList);
 

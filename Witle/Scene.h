@@ -13,7 +13,7 @@ public:
 	virtual void ReleaseObjects() = 0;
 	virtual bool ProcessInput(HWND hWnd, float ElapsedTime) = 0;
 	virtual void AnimateObjects(float fTimeElapsed) = 0;
-	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList) = 0;
+	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers) = 0;
 	virtual void ReleaseUploadBuffers() = 0;
 
 	// GameFramework의 UpdateGamelogic 함수 내부에서 UpdateGamelogic, LastUpdate 순으로 호출되는 함수이다. 

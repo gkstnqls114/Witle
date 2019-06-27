@@ -717,7 +717,7 @@ void CGameFramework::RenderOnGbuffer()
 
 	if (m_pScene) 
 	{
-		m_pScene->Render(m_CommandList.Get());
+		m_pScene->Render(m_CommandList.Get(), true);
 	}
 
 	for (int x = 0; x < m_GBuffersCount; ++x)
@@ -825,7 +825,7 @@ void CGameFramework::RenderSwapChain()
 	// 장면을 렌더합니다.
 	if (m_pScene) 
 	{ 
-		m_pScene->Render(m_CommandList.Get());
+		m_pScene->Render(m_CommandList.Get(), false);
 	}
 
 }

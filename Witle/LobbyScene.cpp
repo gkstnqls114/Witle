@@ -154,7 +154,7 @@ void LobbyScene::AnimateObjects(float fTimeElapsed)
 {
 }
 
-void LobbyScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
+void LobbyScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers)
 {
 
 }

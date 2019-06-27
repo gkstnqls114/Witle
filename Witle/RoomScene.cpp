@@ -168,7 +168,7 @@ void RoomScene::AnimateObjects(float fTimeElapsed)
 {
 }
 
-void RoomScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
+void RoomScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers)
 {
 	pd3dCommandList->SetGraphicsRootSignature(GraphicsRootSignatureMgr::GetGraphicsRootSignature());
 

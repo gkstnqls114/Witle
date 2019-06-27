@@ -38,6 +38,7 @@ public:
 
 	virtual void						Update(float ElapsedTime) = 0;
 	ID3D12PipelineState*                GetPSO() const { return m_PipelineState; }
+	ID3D12PipelineState*                GetPSOForGBuffers() const { return m_PipelineStateForGBuffers; }
 	void                                ReleaseObjects();
 
 protected:

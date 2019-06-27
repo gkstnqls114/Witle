@@ -141,4 +141,9 @@ void ShaderManager::SetPSO(ID3D12GraphicsCommandList * pd3dCommandList, const st
 {
 	pd3dCommandList->SetPipelineState(GetShader(name)->GetPSO());
 }
+
+void ShaderManager::SetPSOForGBuffers(ID3D12GraphicsCommandList * pd3dCommandList, const std::string name) const
+{
+	pd3dCommandList->SetPipelineState(GetShader(name)->GetPSOForGBuffers());
+}
  
