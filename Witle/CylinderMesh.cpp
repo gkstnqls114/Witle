@@ -207,9 +207,9 @@ void CylinderMesh::CreateTexture(ID3D12Device * pd3dDevice, ID3D12GraphicsComman
 	m_Heap->CreateShaderResourceViews(pd3dDevice, pd3dCommandList, m_Texture, ROOTPARAMETER_TEXTURE, false);
 }
 
-void CylinderMesh::Render(ID3D12GraphicsCommandList * commandList)
+void CylinderMesh::Render(ID3D12GraphicsCommandList * commandList, bool isGBuffers)
 { 
-	ShaderManager::GetInstance()->SetPSO(commandList, "Cube");
+	ShaderManager::GetInstance()->SetPSO(commandList, "Cube", isGBuffers);
 	commandList->IASetPrimitiveTopology( GetPrimitiveTopology());
 
 	if (m_Heap) m_Heap->UpdateShaderVariable(commandList);

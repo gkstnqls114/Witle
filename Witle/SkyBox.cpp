@@ -71,7 +71,7 @@ void SkyBox::Update(float fElapsedTime)
 
 void SkyBox::Render(ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffers)
 {
-	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, "SkyBoxShader");
+	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, "SkyBoxShader", isGBuffers);
 	m_Heap->UpdateShaderVariable(pd3dCommandList);
 	m_Texture->UpdateShaderVariables(pd3dCommandList);
 	m_LoadObject->Render(pd3dCommandList);

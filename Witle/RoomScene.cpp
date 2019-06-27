@@ -176,7 +176,7 @@ void RoomScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 	pd3dCommandList->RSSetViewports(1, &m_d3dViewport);
 	pd3dCommandList->RSSetScissorRects(1, &m_d3dScissorRect);
 	 
-	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_UISCREEN);
+	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_UISCREEN, isGBuffers);
 
 	m_SampleUIImage->Render(pd3dCommandList);
 }

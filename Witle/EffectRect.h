@@ -36,5 +36,5 @@ public:
 
 	virtual void Render(ID3D12GraphicsCommandList * pd3dCommandList, const Shader* shader) override;
 
-	void Render(ID3D12GraphicsCommandList * pd3dCommandList, float fElapsedTime);
+	void Render(ID3D12GraphicsCommandList * pd3dCommandList, float fElapsedTime, bool isGBuffers);
 };

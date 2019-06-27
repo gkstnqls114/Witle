@@ -8,7 +8,7 @@ class SphereMesh :
 	public Mesh
 {
 public:
-	virtual void Render(ID3D12GraphicsCommandList * commandList) override;
+	virtual void Render(ID3D12GraphicsCommandList * commandList, bool isGBuffers) override;
 
 private:
 	class SphereVertex

@@ -14,6 +14,10 @@ private:
 	
 	std::map<std::string, Shader*> m_Shaders;
 
+private:
+	void SetPSOForSwapChain(ID3D12GraphicsCommandList * pd3dCommandList, const std::string& name) const;
+	void SetPSOForGBuffers(ID3D12GraphicsCommandList * pd3dCommandList, const std::string& name) const;
+
 public:
 	static ShaderManager* GetInstance();
 	static void ReleaseInstance();
@@ -23,7 +27,7 @@ public:
 	bool InsertShader(const std::string& s, Shader* pso);
 	Shader * GetShader(const std::string & s) const;
 
-	void SetPSO(ID3D12GraphicsCommandList * pd3dCommandList, const std::string name) const;
-	void SetPSOForGBuffers(ID3D12GraphicsCommandList * pd3dCommandList, const std::string name) const;
+	void SetPSO(ID3D12GraphicsCommandList * pd3dCommandList, const std::string& name, bool isGBuffers) const;
+
 };
 

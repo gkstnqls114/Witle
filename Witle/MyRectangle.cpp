@@ -174,7 +174,7 @@ void MyRectangle::Render(ID3D12GraphicsCommandList * pd3dCommandList, const Shad
 
 void MyRectangle::Render(ID3D12GraphicsCommandList * pd3dCommandList, XMFLOAT2 pos, float time)
 {
-	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_PICKINGPOINT);
+	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_PICKINGPOINT, false);
 
 	pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_PICKINGPOINT, 2, &pos, 0);	 
 	pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_TIME, 1, &time, 0);

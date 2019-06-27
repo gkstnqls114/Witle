@@ -6,9 +6,9 @@
 
 #define CUBE_VERTEX_COUNT 60 
 
-void LineSphere::Render(ID3D12GraphicsCommandList * pd3dCommandList)
+void LineSphere::Render(ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffers)
 { 
-	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, "Line");
+	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, "Line", isGBuffers);
 	 
 	XMFLOAT4X4 xmf4x4World;
 	XMStoreFloat4x4(&xmf4x4World, XMMatrixTranspose(XMLoadFloat4x4(&m_pOwner->GetTransform().GetWorldMatrix())));
@@ -218,9 +218,9 @@ LineSphere::~LineSphere()
 {
 }
 
-void LineSphere::Render(ID3D12GraphicsCommandList * pd3dCommandList, const XMFLOAT4X4& world, bool isMoved)
+void LineSphere::Render(ID3D12GraphicsCommandList * pd3dCommandList, const XMFLOAT4X4& world, bool isMoved, bool isGBuffers)
 {
-	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, "Line");
+	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, "Line", isGBuffers);
 
 	XMFLOAT4X4 xmf4x4World;
 	if (isMoved)

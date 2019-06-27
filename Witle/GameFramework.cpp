@@ -129,7 +129,7 @@ void CGameFramework::RenderGBuffers()
 	m_CommandList->SetGraphicsRootSignature(GraphicsRootSignatureMgr::GetGraphicsRootSignature());
 
 	////파이프라인 상태를 설정한다.
-	ShaderManager::GetInstance()->SetPSO(m_CommandList.Get(), SHADER_SHOWTEXTURE);
+	ShaderManager::GetInstance()->SetPSO(m_CommandList.Get(), SHADER_SHOWTEXTURE, false);
 	
 	float anotherWidth = static_cast<float>(GameScreen::GetClientWidth()) / 4;
 	float anotherHeight = static_cast<float>(GameScreen::GetClientHeight()) / 4;

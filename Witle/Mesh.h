@@ -7,7 +7,7 @@ class Mesh :
 	public ComponentBase
 {
 public:
-	virtual void Render(ID3D12GraphicsCommandList * commandList) = 0;
+	virtual void Render(ID3D12GraphicsCommandList * commandList, bool isGBuffers) = 0;
 
 private:
 	D3D12_PRIMITIVE_TOPOLOGY		m_d3dPrimitiveTopology;

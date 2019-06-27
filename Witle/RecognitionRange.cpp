@@ -45,6 +45,6 @@ void RecognitionRange::RenderDebug(ID3D12GraphicsCommandList * pd3dCommandList)
 {
 	if (m_DebugMesh)
 	{
-		m_DebugMesh->Render(pd3dCommandList);
+		m_DebugMesh->Render(pd3dCommandList, false);
 	}
 }

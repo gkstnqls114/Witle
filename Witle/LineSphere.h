@@ -8,7 +8,7 @@ class LineSphere :
 	public LineMesh
 {
 public:
-	virtual void Render(ID3D12GraphicsCommandList * commandList) override;
+	virtual void Render(ID3D12GraphicsCommandList * commandList, bool isGBuffers) override;
 
 private:
 
@@ -45,7 +45,7 @@ public:
 	
 	virtual void Update(float ElapsedTime) override {};
 
-	void Render(ID3D12GraphicsCommandList *pd3dCommandLis, const XMFLOAT4X4&, bool);
+	void Render(ID3D12GraphicsCommandList *pd3dCommandLis, const XMFLOAT4X4&, bool isMoved, bool isGBuffers);
 	void RenderInstancing(ID3D12GraphicsCommandList *pd3dCommandList, int count);
 
 };

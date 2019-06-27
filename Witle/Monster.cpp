@@ -99,7 +99,7 @@ void Monster::Render(ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffer
 	if (RENDER_DEBUG)
 	{
 		m_pMyBOBox->Render(pd3dCommandList);
-		m_pDebugSpawnMesh->Render(pd3dCommandList);
+		m_pDebugSpawnMesh->Render(pd3dCommandList, isGBuffers);
 		m_RecognitionRange->RenderDebug(pd3dCommandList);
 	}
 
@@ -209,7 +209,7 @@ void Monster::Animate(float fElapsedTime)
  
 void Monster::RenderHpStatus(ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffers)
 { 
-	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_UIWORLD);
+	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_UIWORLD, isGBuffers);
 
 	// set look at.... ºôº¸µå Ã³¸®...
 	XMFLOAT4X4 uiWorld = m_Transform.GetWorldMatrix();

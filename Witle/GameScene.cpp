@@ -582,7 +582,7 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 	 
 	if (m_pPlayer) m_pPlayer->Render(pd3dCommandList, isGBuffers);
 	 
-	if(m_WideareaMagic) m_WideareaMagic->Render(pd3dCommandList);
+	if(m_WideareaMagic) m_WideareaMagic->Render(pd3dCommandList, isGBuffers);
 
 
 #ifdef CHECK_SUBVIEWS

@@ -137,12 +137,18 @@ Shader * ShaderManager::GetShader(const std::string & s) const
 	return (*(m_Shaders.find(s))).second;
 }
 
-void ShaderManager::SetPSO(ID3D12GraphicsCommandList * pd3dCommandList, const std::string name) const
+void ShaderManager::SetPSO(ID3D12GraphicsCommandList * pd3dCommandList, const std::string& name, bool isGBuffers) const
+{
+	if (isGBuffers) SetPSOForGBuffers(pd3dCommandList, name);
+	else SetPSOForSwapChain(pd3dCommandList, name);
+}
+
+void ShaderManager::SetPSOForSwapChain(ID3D12GraphicsCommandList * pd3dCommandList, const std::string& name) const
 {
 	pd3dCommandList->SetPipelineState(GetShader(name)->GetPSO());
 }
 
-void ShaderManager::SetPSOForGBuffers(ID3D12GraphicsCommandList * pd3dCommandList, const std::string name) const
+void ShaderManager::SetPSOForGBuffers(ID3D12GraphicsCommandList * pd3dCommandList, const std::string& name) const
 {
 	pd3dCommandList->SetPipelineState(GetShader(name)->GetPSOForGBuffers());
 }

@@ -121,9 +121,9 @@ void BroomEffectRect::Render(ID3D12GraphicsCommandList * pd3dCommandList, const 
 	pd3dCommandList->DrawInstanced(m_vertexCount, 1, m_nOffset, 0);
 }
 
-void BroomEffectRect::Render(ID3D12GraphicsCommandList * pd3dCommandList, float fElapsedTime)
+void BroomEffectRect::Render(ID3D12GraphicsCommandList * pd3dCommandList, float fElapsedTime, bool isGBuffers)
 {
-	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_PICKINGPOINT);
+	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_PICKINGPOINT, isGBuffers);
 	m_pHeap->UpdateShaderVariable(pd3dCommandList);
 	m_pTexture->UpdateShaderVariables(pd3dCommandList);
 	pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_HPPERCENTAGE, 1, &fElapsedTime, 0);
