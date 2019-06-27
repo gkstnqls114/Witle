@@ -29,6 +29,10 @@ struct QUAD_TREE_NODE
 class QuadtreeTerrain
 	: public GameObject
 {
+public:
+	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers) override;
+
+private:
 	static int gTreePieceCount;
 	
 	// 컴포넌트가 아닌, 게임오브젝트 내에서 동적할당된 멤버변수를 해제한다.
@@ -87,10 +91,9 @@ public:
 	// 해당 포지션에 속하는 리프노드의 아이디들을 리턴한다. 쿼드트리이므로 최대 4개가 존재한다.
 	XMINT4 const GetIDs(const XMFLOAT3& position) const;
 	int * const GetIndex(const XMFLOAT3& position) const;
-
-	void Render(ID3D12GraphicsCommandList *pd3dCommandList);
-	void Render(ID3D12GraphicsCommandList *pd3dCommandList, Terrain* pTerrain, ID3D12DescriptorHeap* pHeap);
-	void Render(int index, ID3D12GraphicsCommandList *pd3dCommandList);
+	 
+	void Render(ID3D12GraphicsCommandList *pd3dCommandList, Terrain* pTerrain, ID3D12DescriptorHeap* pHeap, bool isGBuffers);
+	void Render(int index, ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers);
 	static int GetTerrainPieceCount() { return gTreePieceCount; }
 	QUAD_TREE_NODE* GetReafNode(int index) { return m_pReafNodes[index]; }
 	QUAD_TREE_NODE* GetReafNodeByID(int id);

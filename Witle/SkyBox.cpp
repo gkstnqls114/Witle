@@ -69,7 +69,7 @@ void SkyBox::Update(float fElapsedTime)
 	m_LoadObject->UpdateTransform(m_Transform.GetpWorldMatrix());
 }
 
-void SkyBox::Render(ID3D12GraphicsCommandList * pd3dCommandList)
+void SkyBox::Render(ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffers)
 {
 	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, "SkyBoxShader");
 	m_Heap->UpdateShaderVariable(pd3dCommandList);

@@ -29,12 +29,15 @@ enum MONSTER_STATE
 class Monster :
 	public GameObject
 {
+public:
+	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers) override;
+
+private:
 	static bool RENDER_DEBUG;
 
 public:
 	virtual void Update(float fElapsedTime) = 0;
-	virtual void UpdateState(float fElapsedTime) = 0;
-	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList);
+	virtual void UpdateState(float fElapsedTime) = 0; 
 
 protected:
 	UI3DImage*			m_MonsterHP{ nullptr };
@@ -77,7 +80,7 @@ public:
 	Monster(const std::string& entityID, float spawnRange, const XMFLOAT3& SpwanPoint, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature);
 	virtual ~Monster();
 	 
-	void RenderHpStatus(ID3D12GraphicsCommandList *pd3dCommandList);
+	void RenderHpStatus(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers);
 	  
 	XMFLOAT3 CalculateAlreadyVelocity(float fTimeElapsed);
 	BoundingOrientedBox CalculateAlreadyBoundingBox(float fTimeElapsed);

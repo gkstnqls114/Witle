@@ -569,7 +569,7 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 	}
 	 
 	// 스카이박스 렌더
-	if(m_SkyBox) m_SkyBox->Render(pd3dCommandList);
+	if(m_SkyBox) m_SkyBox->Render(pd3dCommandList, isGBuffers);
 	 
 	//  조명
 	D3D12_GPU_VIRTUAL_ADDRESS d3dcbLightsGpuVirtualAddress = m_pd3dcbLights->GetGPUVirtualAddress();
@@ -580,7 +580,7 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 
 	pd3dCommandList->SetDescriptorHeaps(1, &m_pd3dCbvSrvDescriptorHeap);
 	 
-	if (m_pPlayer) m_pPlayer->Render(pd3dCommandList);
+	if (m_pPlayer) m_pPlayer->Render(pd3dCommandList, isGBuffers);
 	 
 	if(m_WideareaMagic) m_WideareaMagic->Render(pd3dCommandList);
 
@@ -599,24 +599,24 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 	//// Aim point Render 
 	if (!m_isSkyMode)
 	{
-		if (m_pPlayer) m_pPlayer->RenderHpStatus(pd3dCommandList);
+		if (m_pPlayer) m_pPlayer->RenderHpStatus(pd3dCommandList, isGBuffers);
 		if (!m_pPlayer->GetBroom()->GetisPrepare() && !m_pPlayer->GetBroom()->GetisUsing())
 		{
-			if(m_AimPoint) m_AimPoint->Render(pd3dCommandList);
+			if(m_AimPoint) m_AimPoint->Render(pd3dCommandList, isGBuffers);
 		}
 	}
 
 
 	for (int i = 0; i < m_TestMonsterCount; ++i)
 	{
-		if (m_TestMonster[i]) m_TestMonster[i]->Render(pd3dCommandList);
+		if (m_TestMonster[i]) m_TestMonster[i]->Render(pd3dCommandList, isGBuffers);
 	}
 
 	// 터레인
 	if (m_Terrain)
 	{
 		Mesh* terrainMesh = m_Terrain->GetComponent<Mesh>("TerrainMesh");
-		m_pQuadtreeTerrain->Render(pd3dCommandList, m_Terrain, m_pd3dCbvSrvDescriptorHeap);
+		m_pQuadtreeTerrain->Render(pd3dCommandList, m_Terrain, m_pd3dCbvSrvDescriptorHeap, isGBuffers);
 	}
 }
 

@@ -7,6 +7,10 @@ class Texture;
 class Widget
 	: public GameObject
 {
+public:
+	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers) override = 0;
+
+private:
 	RECT m_rect;
 
 protected:
@@ -22,15 +26,16 @@ public:
 	virtual ~Widget();
 
 	virtual void Update(float fElapsedTime) override;
-	  
-	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList);
-	 
+	   
 	Texture* GetTexture();
 };
 
 class AimPoint
 	: public Widget
-{
+{ 
+public:
+	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers) override;
+
 private:
 	XMFLOAT2 m_PickingPoint;
 	
@@ -40,6 +45,5 @@ public:
 
 	XMFLOAT2 GetPickingPoint() const { return m_PickingPoint; }
 	void MovePickingPoint(const XMFLOAT2& shift);
-
-	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList) override;
+	 
 };

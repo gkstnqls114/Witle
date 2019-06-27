@@ -5,6 +5,10 @@ class PlayerMovement;
 class Broom
 	: public Skill
 {
+public:
+	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers) override {};
+
+private:
 	PlayerMovement* m_pPlayerMovement{ nullptr };
 
 protected:

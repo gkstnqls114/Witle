@@ -24,7 +24,7 @@ UINT QuadtreeTerrain::CalculateTriangles(UINT widthPixel, UINT lengthPixel)
 	
 	return (widthPixel - 1) * (lengthPixel -1) * 2;
 }
-
+ 
 void QuadtreeTerrain::ReleaseMembers()
 {
 	delete[] m_pReafNodes; 
@@ -399,7 +399,7 @@ int * const QuadtreeTerrain::GetIndex(const XMFLOAT3 & position) const
 	return pIndeics;
 }
 
-void QuadtreeTerrain::Render(ID3D12GraphicsCommandList *pd3dCommandList)
+void QuadtreeTerrain::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers)
 { 
 	RenderTerrainObjects(pd3dCommandList); // ÁöÇü ¿ÀºêÁ§Æ® ·»´õ
 
@@ -407,7 +407,7 @@ void QuadtreeTerrain::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	RecursiveRender(m_pRootNode, pd3dCommandList); // ÁöÇü ·»´õ	 
 }
 
-void QuadtreeTerrain::Render(ID3D12GraphicsCommandList * pd3dCommandList, Terrain * pTerrain, ID3D12DescriptorHeap* pHeap)
+void QuadtreeTerrain::Render(ID3D12GraphicsCommandList * pd3dCommandList, Terrain * pTerrain, ID3D12DescriptorHeap* pHeap, bool isGBuffers)
 {
 	// ÁöÇü ·»´õ
 	pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Terrain")->GetPSO());
@@ -422,7 +422,7 @@ void QuadtreeTerrain::Render(ID3D12GraphicsCommandList * pd3dCommandList, Terrai
 
 }
 
-void QuadtreeTerrain::Render(int index, ID3D12GraphicsCommandList * pd3dCommandList)
+void QuadtreeTerrain::Render(int index, ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffers)
 {
 	// ·»´õ¸µ
 	extern MeshRenderer gMeshRenderer; 

@@ -64,11 +64,7 @@ void Sniping::Rotate(float x, float y, float z)
 void Sniping::LastUpdate(float , const XMFLOAT2& ScreenPos)
 {  
 }
-
-void Sniping::Render(ID3D12GraphicsCommandList * pd3dCommandList)
-{ 
-}
-
+ 
 void Sniping::DoNotUse()
 {
 	m_isUsing = false;

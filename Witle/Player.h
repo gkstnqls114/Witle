@@ -21,6 +21,9 @@ class Player :
 	public GameObject
 {
 public:
+	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers) override;
+
+public:
 	// 임시
 	int m_CurrAnimation{ 0 }; // 현재 사용하는 애니메이션
 
@@ -85,9 +88,8 @@ public:
 	XMFLOAT3 CalculateAlreadyPosition(float fTimeElapsed);
 
 	void SubstractHP(int sub);
-	void Animate(float fElapsedTime);
-	void Render(ID3D12GraphicsCommandList *pd3dCommandList);
-	void RenderHpStatus(ID3D12GraphicsCommandList *pd3dCommandList);
+	void Animate(float fElapsedTime); 
+	void RenderHpStatus(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers);
   
 	void Move(ULONG nDirection, float fDistance, bool bVelocity = false);
 	void Move(const XMFLOAT3& xmf3Shift);

@@ -27,5 +27,5 @@ public:
 	virtual ~SkyBox();
 	 
 	void SetpPlayerTransform(Transform* tr) { m_pPlayerTransform = tr; }
-	void Render(ID3D12GraphicsCommandList *pd3dCommandList);
+	void Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers) override;
 };

@@ -9,6 +9,9 @@ class CameraObject
 {
 	Camera*      m_pCameraComponent{ nullptr };
 
+public:
+	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers) override {};
+
 protected:
 	// 컴포넌트가 아닌, 게임오브젝트 내에서 동적할당된 멤버변수를 해제한다.
 	virtual void ReleaseMembers() override;

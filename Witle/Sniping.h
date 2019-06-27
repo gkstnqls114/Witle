@@ -10,6 +10,10 @@ class Player;
 class Sniping :
 	public Skill
 { 
+public:
+	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers) override {};
+
+private:
 	Player* m_pPlayer{ nullptr };
 	CameraObject* m_pCameraObject{ nullptr };
 
@@ -39,8 +43,7 @@ public:
 	}
 	
 	void Rotate(float x, float y, float z); 
-	void LastUpdate(float, const XMFLOAT2& ScreenPos); 
-	void Render(ID3D12GraphicsCommandList * pd3dCommandList);
+	void LastUpdate(float, const XMFLOAT2& ScreenPos);  
 
 public:
 	virtual void DoNotUse() override;

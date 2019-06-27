@@ -19,6 +19,13 @@ public:
 class GameObject
 	: public IGameObject
 {
+protected:
+	virtual void ReleaseMembers() = 0;
+	virtual void ReleaseMemberUploadBuffers() = 0;
+
+public:
+	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers) = 0;
+
 private:
 	std::map< std::string, ComponentBase*> m_Components;
 	std::string m_EntityID; 
@@ -27,9 +34,6 @@ protected:
 	Transform m_Transform; //월드변환을 위한 좌표계
 	ComponentBase* GetComponent(const std::string& id) const;
 
-protected:
-	virtual void ReleaseMembers() = 0;
-	virtual void ReleaseMemberUploadBuffers()  = 0;
 
 private:
 	void ReleaseComponents();
@@ -62,7 +66,10 @@ public:
 
 class EmptyGameObject
 	: public GameObject
-{ 
+{
+public:
+	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers) override {};
+
 protected:
 	virtual void ReleaseMembers() {};
 	virtual void ReleaseMemberUploadBuffers() {};

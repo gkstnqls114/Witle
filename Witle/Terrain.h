@@ -9,6 +9,10 @@ class Texture;
 class Terrain :
 	public GameObject
 {
+public:
+	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers) override;
+
+private:
 	Texture * m_ResourceBase{ nullptr };
 
 protected:

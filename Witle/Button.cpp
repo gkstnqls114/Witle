@@ -4,6 +4,18 @@
 #include "MyRectangle.h"
 #include "Button.h"
 
+void Button::Render(ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffers)
+{
+	if (m_isClick)
+	{
+		m_pButtonON->Render(pd3dCommandList, m_pButtonShader);
+	}
+	else
+	{
+		m_pButtonOFF->Render(pd3dCommandList, m_pButtonShader);
+	}
+}
+
 void Button::ReleaseMembers()
 {
 	
@@ -64,19 +76,7 @@ void Button::Update(float fElapsedTime)
 {
 
 }
-
-void Button::Render(ID3D12GraphicsCommandList * pd3dCommandList)
-{
-	if (m_isClick)
-	{
-		m_pButtonON->Render(pd3dCommandList, m_pButtonShader);
-	}
-	else
-	{
-		m_pButtonOFF->Render(pd3dCommandList, m_pButtonShader);
-	}
-}
-
+ 
 Texture * Button::GetTexture(bool isON)
 {
 	if (isON)

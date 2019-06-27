@@ -93,8 +93,8 @@ Monster::~Monster()
 {
 
 }
-
-void Monster::Render(ID3D12GraphicsCommandList * pd3dCommandList)
+ 
+void Monster::Render(ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffers)
 {
 	if (RENDER_DEBUG)
 	{
@@ -107,7 +107,7 @@ void Monster::Render(ID3D12GraphicsCommandList * pd3dCommandList)
 	m_pTexture->UpdateShaderVariable(pd3dCommandList, 0);
 	m_pLoadObject->Render(pd3dCommandList);
 
-	RenderHpStatus(pd3dCommandList);
+	RenderHpStatus(pd3dCommandList, isGBuffers);
 }
 
 void Monster::ReleaseMembers()
@@ -207,7 +207,7 @@ void Monster::Animate(float fElapsedTime)
 	m_pLoadObject->Animate(fElapsedTime); 
 }
  
-void Monster::RenderHpStatus(ID3D12GraphicsCommandList * pd3dCommandList)
+void Monster::RenderHpStatus(ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffers)
 { 
 	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_UIWORLD);
 

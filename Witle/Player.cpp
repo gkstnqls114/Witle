@@ -151,6 +151,25 @@ Player::~Player()
 	m_pCameraUpdatedContext = nullptr;
 }
  
+void Player::Render(ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffers)
+{
+	if (m_pSniping) m_pSniping->Render(pd3dCommandList, isGBuffers);
+	m_pMyBOBox->Render(pd3dCommandList);
+
+	if (!m_isRendering) return; //만약 스나이핑 모드라면 플레이어를 렌더링하지 않는다.
+	m_pHaep->UpdateShaderVariable(pd3dCommandList);
+	m_pTexture_Cloth->UpdateShaderVariable(pd3dCommandList, 0);
+	m_pLoadObject_Cloth->Render(pd3dCommandList);
+	m_pTexture_Body->UpdateShaderVariable(pd3dCommandList, 0);
+	m_pLoadObject_Body->Render(pd3dCommandList);
+
+	bool isMoving = GameInput::IsKeydownW() || GameInput::IsKeydownA() || GameInput::IsKeydownS() || GameInput::IsKeydownD();
+	if (m_Broom->GetisUsing() && isMoving)
+	{
+		m_BroomLineEffectRect->Render(pd3dCommandList, XMFLOAT2(0.f, 0.f), CGameTimer::GetInstance()->GetTotalTime());
+	}
+}
+
 void Player::ReleaseMembers()
 {
 	m_pPlayerUpdatedContext = nullptr;
@@ -317,26 +336,7 @@ void Player::Animate(float fElapsedTime)
 	m_pLoadObject_Body->Animate(fElapsedTime);
 }
 
-void Player::Render(ID3D12GraphicsCommandList * pd3dCommandList)
-{ 
-	if (m_pSniping) m_pSniping->Render(pd3dCommandList);
-	m_pMyBOBox->Render(pd3dCommandList); 
-	 
-	if (!m_isRendering) return; //만약 스나이핑 모드라면 플레이어를 렌더링하지 않는다.
-	m_pHaep->UpdateShaderVariable(pd3dCommandList);
-	m_pTexture_Cloth->UpdateShaderVariable(pd3dCommandList, 0);
-	m_pLoadObject_Cloth->Render(pd3dCommandList);
-	m_pTexture_Body->UpdateShaderVariable(pd3dCommandList, 0); 
-	m_pLoadObject_Body->Render(pd3dCommandList);
-
-	bool isMoving = GameInput::IsKeydownW() || GameInput::IsKeydownA() || GameInput::IsKeydownS() || GameInput::IsKeydownD();
-	if (m_Broom->GetisUsing() && isMoving)
-	{
-		m_BroomLineEffectRect->Render(pd3dCommandList, XMFLOAT2(0.f, 0.f), CGameTimer::GetInstance()->GetTotalTime());
-	}
-}
-
-void Player::RenderHpStatus(ID3D12GraphicsCommandList * pd3dCommandList)
+void Player::RenderHpStatus(ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffers)
 {
 	m_pPlayerStatus->Render(pd3dCommandList);
 }

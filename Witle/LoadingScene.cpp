@@ -175,7 +175,7 @@ void LoadingScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBu
 	pd3dCommandList->RSSetScissorRects(1, &m_d3dScissorRect);
 
 	// pd3dCommandList->SetDescriptorHeaps(1, &m_pd3dCbvSrvDescriptorHeap);
-	m_pBackGround->Render(pd3dCommandList);
+	m_pBackGround->Render(pd3dCommandList, isGBuffers);
 }
 
 void LoadingScene::ReleaseUploadBuffers()

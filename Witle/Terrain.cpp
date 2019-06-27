@@ -80,6 +80,10 @@ void Terrain::UpdateShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList)
 	static_cast<Texture *>(m_ResourceBase)->UpdateShaderVariables(pd3dCommandList);
 }
 
+void Terrain::Render(ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffers)
+{
+}
+
 void Terrain::ReleaseMembers()
 {
 	if (m_ResourceBase)

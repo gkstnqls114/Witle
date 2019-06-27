@@ -5,6 +5,10 @@
 #include "MyRectangle.h"
 #include "Widget.h"
 
+void Widget::Render(ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffers)
+{
+}
+
 void Widget::ReleaseMembers()
 {
 	if (m_AimPoint)
@@ -47,14 +51,15 @@ void Widget::Update(float fElapsedTime)
 
 }
 
-void Widget::Render(ID3D12GraphicsCommandList * pd3dCommandList)
-{
-	m_AimPoint->Render(pd3dCommandList, ShaderManager::GetInstance()->GetShader(SHADER_SCREEN));
-}
-
 Texture * Widget::GetTexture()
 { 
 	return m_AimPoint->GetTexture(); 
+}
+
+void AimPoint::Render(ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffers)
+{
+	// 피킹 포인트 위해 설정
+	m_AimPoint->Render(pd3dCommandList, m_PickingPoint, 0.f);
 }
 
 AimPoint::AimPoint(const std::string & entityID, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, POINT center, float width, float height, const wchar_t * filepath)
@@ -67,14 +72,9 @@ AimPoint::~AimPoint()
 {
 }
 
-//// AimPoint /////////////////////////////////////////////////
 void AimPoint::MovePickingPoint(const XMFLOAT2 & shift)
 {
 	m_PickingPoint = Vector2::Add(m_PickingPoint, shift);
 }
-
-void AimPoint::Render(ID3D12GraphicsCommandList * pd3dCommandList)
-{
-	// 피킹 포인트 위해 설정
-	m_AimPoint->Render(pd3dCommandList, m_PickingPoint, 0.f);
-}
+//// AimPoint /////////////////////////////////////////////////
+ 

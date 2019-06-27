@@ -7,7 +7,11 @@ class Shader;
 
 class Button
 	: public GameObject
-{
+{ 
+public:
+	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers) override;
+
+private:
 	RECT m_rect;
 	MyRectangle* m_pButtonON{ nullptr };
 	MyRectangle* m_pButtonOFF{ nullptr };
@@ -32,8 +36,7 @@ public:
 
 	void IsNotClick() { m_isClick = false; };
 	void IsClick() { m_isClick = true; };
-	bool GetisClick() const { return m_isClick; }
-	void Render(ID3D12GraphicsCommandList *pd3dCommandList);
+	bool GetisClick() const { return m_isClick; } 
 
 	Texture* GetTexture(bool isON);
 };
