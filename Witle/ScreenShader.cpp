@@ -17,6 +17,7 @@ ScreenShader::~ScreenShader()
 void ScreenShader::CreateShader(ID3D12Device * pd3dDevice, ID3D12RootSignature * const pd3dGraphicsRootSignature)
 {
 	Shader::CreatePipelineState(pd3dDevice, pd3dGraphicsRootSignature);
+	Shader::CreatePipelineStateForGBuffers(pd3dDevice, pd3dGraphicsRootSignature);
 }
 
 void ScreenShader::Update(float ElapsedTime)
@@ -114,4 +115,9 @@ D3D12_SHADER_BYTECODE ScreenShader::CreateVertexShader(ID3DBlob ** ppd3dShaderBl
 D3D12_SHADER_BYTECODE ScreenShader::CreatePixelShader(ID3DBlob ** ppd3dShaderBlob)
 {
 	return(Shader::CompileShaderFromFile(L"ScreenShader.hlsl", "PSScreen", "ps_5_1", ppd3dShaderBlob));
+}
+
+D3D12_SHADER_BYTECODE ScreenShader::CreatePixelShaderForGBuffers(ID3DBlob ** ppd3dShaderBlob)
+{
+	return D3D12_SHADER_BYTECODE();
 }

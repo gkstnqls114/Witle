@@ -14,6 +14,7 @@ SkyBoxShader::~SkyBoxShader()
 void SkyBoxShader::CreateShader(ID3D12Device * pd3dDevice, ID3D12RootSignature * const pd3dGraphicsRootSignature)
 {
 	Shader::CreatePipelineState(pd3dDevice, pd3dGraphicsRootSignature);
+	Shader::CreatePipelineStateForGBuffers(pd3dDevice, pd3dGraphicsRootSignature);
 }
 
 void SkyBoxShader::Update(float ElapsedTime)
@@ -109,6 +110,11 @@ D3D12_SHADER_BYTECODE SkyBoxShader::CreateVertexShader(ID3DBlob ** ppd3dShaderBl
 D3D12_SHADER_BYTECODE SkyBoxShader::CreatePixelShader(ID3DBlob ** ppd3dShaderBlob)
 {
 	return Shader::CompileShaderFromFile(L"SkyBoxShader.hlsl", "PS", "ps_5_1", ppd3dShaderBlob);
+}
+
+D3D12_SHADER_BYTECODE SkyBoxShader::CreatePixelShaderForGBuffers(ID3DBlob ** ppd3dShaderBlob)
+{
+	return D3D12_SHADER_BYTECODE();
 }
 
 D3D12_SHADER_BYTECODE SkyBoxShader::CreateGeometryShader(ID3DBlob ** ppd3dShaderBlob)

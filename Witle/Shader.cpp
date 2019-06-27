@@ -188,10 +188,59 @@ void Shader::CreatePipelineState(ID3D12Device * pd3dDevice, ID3D12RootSignature 
 	if (d3dPipelineStateDesc.InputLayout.pInputElementDescs) delete[] d3dPipelineStateDesc.InputLayout.pInputElementDescs;
 }
 
+void Shader::CreatePipelineStateForGBuffers(ID3D12Device * pd3dDevice, ID3D12RootSignature * pd3dGraphicsRootSignature)
+{
+	ID3DBlob *pd3dVertexShaderBlob = nullptr;
+	ID3DBlob *pd3dPixelShaderBlob = nullptr;
+	ID3DBlob *pd3dGeometryShaderBlob = nullptr;
+
+	D3D12_GRAPHICS_PIPELINE_STATE_DESC d3dPipelineStateDesc;
+	::ZeroMemory(&d3dPipelineStateDesc, sizeof(D3D12_GRAPHICS_PIPELINE_STATE_DESC));
+
+	d3dPipelineStateDesc.pRootSignature = pd3dGraphicsRootSignature;
+
+	d3dPipelineStateDesc.VS = CreateVertexShader(&pd3dVertexShaderBlob);
+	d3dPipelineStateDesc.PS = CreatePixelShaderForGBuffers(&pd3dPixelShaderBlob);
+	d3dPipelineStateDesc.GS = CreateGeometryShader(&pd3dGeometryShaderBlob);
+
+	d3dPipelineStateDesc.RasterizerState = CreateRasterizerState();
+	d3dPipelineStateDesc.BlendState = CreateBlendState();
+	d3dPipelineStateDesc.DepthStencilState = CreateDepthStencilState();
+	d3dPipelineStateDesc.InputLayout = CreateInputLayout();
+
+	d3dPipelineStateDesc.SampleMask = UINT_MAX;
+	d3dPipelineStateDesc.PrimitiveTopologyType = CreatePrimitiveTopologyType();
+
+	d3dPipelineStateDesc.NumRenderTargets = 3;
+	d3dPipelineStateDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM; // 32bit RGBA
+	d3dPipelineStateDesc.RTVFormats[1] = DXGI_FORMAT_R8G8B8A8_UNORM; // 32bit RGBA
+	d3dPipelineStateDesc.RTVFormats[2] = DXGI_FORMAT_R8G8B8A8_UNORM; // 32bit RGBA
+
+	d3dPipelineStateDesc.DSVFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	d3dPipelineStateDesc.SampleDesc.Count = 1;
+	d3dPipelineStateDesc.SampleDesc.Quality = 0; //추가
+	d3dPipelineStateDesc.Flags = D3D12_PIPELINE_STATE_FLAG_NONE;
+
+	HRESULT hResult = pd3dDevice->CreateGraphicsPipelineState(&d3dPipelineStateDesc, IID_PPV_ARGS(&m_PipelineStateForGBuffers));
+	assert(hResult == S_OK);
+
+	if (pd3dVertexShaderBlob) pd3dVertexShaderBlob->Release();
+	if (pd3dPixelShaderBlob) pd3dPixelShaderBlob->Release();
+	if (pd3dGeometryShaderBlob) pd3dGeometryShaderBlob->Release();
+
+	if (d3dPipelineStateDesc.InputLayout.pInputElementDescs) delete[] d3dPipelineStateDesc.InputLayout.pInputElementDescs;
+}
+
 void Shader::OnPrepareRender(ID3D12GraphicsCommandList *pd3dCommandList)
 {
 	//파이프라인에 그래픽스 상태 객체를 설정한다.
 	pd3dCommandList->SetPipelineState(m_PipelineState);
+}
+
+void Shader::OnPrepareRenderForGBuffers(ID3D12GraphicsCommandList * pd3dCommandList)
+{
+	//파이프라인에 그래픽스 상태 객체를 설정한다.
+	pd3dCommandList->SetPipelineState(m_PipelineStateForGBuffers);
 }
 
 void Shader::ReleaseObjects()

@@ -17,6 +17,7 @@ PickingPointShader::~PickingPointShader()
 void PickingPointShader::CreateShader(ID3D12Device * pd3dDevice, ID3D12RootSignature * const pd3dGraphicsRootSignature)
 {
 	Shader::CreatePipelineState(pd3dDevice, pd3dGraphicsRootSignature);
+	Shader::CreatePipelineStateForGBuffers(pd3dDevice, pd3dGraphicsRootSignature);
 }
 
 void PickingPointShader::Update(float ElapsedTime)
@@ -114,4 +115,9 @@ D3D12_SHADER_BYTECODE PickingPointShader::CreateVertexShader(ID3DBlob ** ppd3dSh
 D3D12_SHADER_BYTECODE PickingPointShader::CreatePixelShader(ID3DBlob ** ppd3dShaderBlob)
 {
 	return(Shader::CompileShaderFromFile(L"PickingPointShader.hlsl", "PSScreen", "ps_5_1", ppd3dShaderBlob));
+}
+
+D3D12_SHADER_BYTECODE PickingPointShader::CreatePixelShaderForGBuffers(ID3DBlob ** ppd3dShaderBlob)
+{
+	return D3D12_SHADER_BYTECODE();
 }

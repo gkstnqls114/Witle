@@ -17,6 +17,7 @@ UIWorldShader::~UIWorldShader()
 void UIWorldShader::CreateShader(ID3D12Device * pd3dDevice, ID3D12RootSignature * const pd3dGraphicsRootSignature)
 {
 	Shader::CreatePipelineState(pd3dDevice, pd3dGraphicsRootSignature);
+	Shader::CreatePipelineStateForGBuffers(pd3dDevice, pd3dGraphicsRootSignature);
 }
 
 void UIWorldShader::Update(float ElapsedTime)
@@ -113,4 +114,9 @@ D3D12_SHADER_BYTECODE UIWorldShader::CreateVertexShader(ID3DBlob ** ppd3dShaderB
 D3D12_SHADER_BYTECODE UIWorldShader::CreatePixelShader(ID3DBlob ** ppd3dShaderBlob)
 {
 	return(Shader::CompileShaderFromFile(L"UIWorldShader.hlsl", "PSUIWorld", "ps_5_1", ppd3dShaderBlob));
+}
+
+D3D12_SHADER_BYTECODE UIWorldShader::CreatePixelShaderForGBuffers(ID3DBlob ** ppd3dShaderBlob)
+{
+	return D3D12_SHADER_BYTECODE();
 }

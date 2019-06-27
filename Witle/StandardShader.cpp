@@ -13,6 +13,7 @@ StandardShader::~StandardShader()
 void StandardShader::CreateShader(ID3D12Device * pd3dDevice, ID3D12RootSignature * const pd3dGraphicsRootSignature)
 {
 	Shader::CreatePipelineState(pd3dDevice, pd3dGraphicsRootSignature);
+	Shader::CreatePipelineStateForGBuffers(pd3dDevice, pd3dGraphicsRootSignature);
 }
 
 void StandardShader::Update(float ElapsedTime)
@@ -106,6 +107,11 @@ D3D12_PRIMITIVE_TOPOLOGY_TYPE StandardShader::CreatePrimitiveTopologyType()
 D3D12_SHADER_BYTECODE StandardShader::CreateVertexShader(ID3DBlob ** ppd3dShaderBlob)
 {
 	return Shader::CompileShaderFromFile(L"StandardShader.hlsl", "VSStandard", "vs_5_1", ppd3dShaderBlob);
+}
+
+D3D12_SHADER_BYTECODE StandardShader::CreatePixelShaderForGBuffers(ID3DBlob ** ppd3dShaderBlob)
+{
+	return D3D12_SHADER_BYTECODE();
 }
 
 D3D12_SHADER_BYTECODE StandardShader::CreatePixelShader(ID3DBlob ** ppd3dShaderBlob)

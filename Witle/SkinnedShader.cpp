@@ -13,6 +13,7 @@ SkinnedShader::~SkinnedShader()
 void SkinnedShader::CreateShader(ID3D12Device * pd3dDevice, ID3D12RootSignature * const pd3dGraphicsRootSignature)
 {
 	Shader::CreatePipelineState(pd3dDevice, pd3dGraphicsRootSignature);
+	Shader::CreatePipelineStateForGBuffers(pd3dDevice, pd3dGraphicsRootSignature);
 }
 
 void SkinnedShader::Update(float ElapsedTime)
@@ -114,6 +115,11 @@ D3D12_SHADER_BYTECODE SkinnedShader::CreateVertexShader(ID3DBlob ** ppd3dShaderB
 D3D12_SHADER_BYTECODE SkinnedShader::CreatePixelShader(ID3DBlob ** ppd3dShaderBlob)
 {
 	return Shader::CompileShaderFromFile(L"SkinnedAnimationShader.hlsl", "PSStandard", "ps_5_1", ppd3dShaderBlob);
+}
+
+D3D12_SHADER_BYTECODE SkinnedShader::CreatePixelShaderForGBuffers(ID3DBlob ** ppd3dShaderBlob)
+{
+	return D3D12_SHADER_BYTECODE();
 }
 
 D3D12_SHADER_BYTECODE SkinnedShader::CreateGeometryShader(ID3DBlob ** ppd3dShaderBlob)

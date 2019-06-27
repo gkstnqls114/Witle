@@ -14,6 +14,7 @@ CubeShader::~CubeShader()
 void CubeShader::CreateShader(ID3D12Device * pd3dDevice, ID3D12RootSignature * const pd3dGraphicsRootSignature)
 {
 	Shader::CreatePipelineState(pd3dDevice, pd3dGraphicsRootSignature);
+	Shader::CreatePipelineStateForGBuffers(pd3dDevice, pd3dGraphicsRootSignature);
 }
 
 void CubeShader::Update(float ElapsedTime)
@@ -115,6 +116,11 @@ D3D12_SHADER_BYTECODE CubeShader::CreateVertexShader(ID3DBlob ** ppd3dShaderBlob
 D3D12_SHADER_BYTECODE CubeShader::CreatePixelShader(ID3DBlob ** ppd3dShaderBlob)
 {
 	return Shader::CompileShaderFromFile(L"CubeShader.hlsl", "PS", "ps_5_1", ppd3dShaderBlob);
+}
+
+D3D12_SHADER_BYTECODE CubeShader::CreatePixelShaderForGBuffers(ID3DBlob ** ppd3dShaderBlob)
+{
+	return D3D12_SHADER_BYTECODE();
 }
 
 D3D12_SHADER_BYTECODE CubeShader::CreateGeometryShader(ID3DBlob ** ppd3dShaderBlob)
