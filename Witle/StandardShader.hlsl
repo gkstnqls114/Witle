@@ -51,9 +51,7 @@ PS_OUTPUT_FOR_GBUFFERS PSStandardForGBuffers(VS_STANDARD_OUTPUT input)
 
     // gbuffer 구조체에 패킹
     float SpecPowerNorm = NormalizeSpecPower(1); // 스페큘러 파워 정규화
-    float SpecIntensity = 1;
-    float depth = input.position.w * 256;
-    output.Depth = float4(depth, depth, depth, depth);
+    float SpecIntensity = 1; 
     output.ColorSpecInt = float4(cColor.rgb, SpecIntensity);
     output.Normal = float4(input.normalW.xyz * 0.5 + 0.5, 0.0);
     output.SpecPow = float4(SpecPowerNorm, 0, 0, 0);

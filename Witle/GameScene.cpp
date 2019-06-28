@@ -569,7 +569,7 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 	}
 	 
 	// 스카이박스 렌더
-	if(m_SkyBox) m_SkyBox->Render(pd3dCommandList, isGBuffers);
+	// if(m_SkyBox) m_SkyBox->Render(pd3dCommandList, isGBuffers);
 	 
 	//  조명
 	D3D12_GPU_VIRTUAL_ADDRESS d3dcbLightsGpuVirtualAddress = m_pd3dcbLights->GetGPUVirtualAddress();

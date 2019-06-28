@@ -152,10 +152,11 @@ void CGameFramework::RenderGBuffers()
 		m_CommandList->RSSetScissorRects(1, &ScissorRect);
 
 		m_CommandList->SetGraphicsRootDescriptorTable(ROOTPARAMETER_TEXTUREBASE, handle);
-		handle.ptr += d3dUtil::gnCbvSrvDescriptorIncrementSize;
 
 		m_CommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 		m_CommandList->DrawInstanced(6, 1, 0, 0);
+
+		handle.ptr += d3dUtil::gnCbvSrvDescriptorIncrementSize;
 	}
 }
 
@@ -195,9 +196,9 @@ void CGameFramework::ReleaseGBuffers()
 		m_GBufferHeap = nullptr;
 	}
 
-	for (int i = 0; i < m_GBuffersCount; ++i)
+	for (int i = 0; i < m_GBuffersCountForRenderTarget; ++i)
 	{
-		if(m_GBuffers[i]) m_GBuffers[i]->Release();
+		if(m_GBuffersForRenderTarget[i]) m_GBuffersForRenderTarget[i]->Release();
 	}
 }
 
@@ -254,8 +255,7 @@ void CGameFramework::CreateDirect3DDevice()
 	// 디버그 레이어 층을 생성한다.
 #if defined(_DEBUG)
 	D3D12GetDebugInterface(IID_PPV_ARGS(&m_pd3dDebugController));
-	m_pd3dDebugController->EnableDebugLayer();
-	OutputDebugString(L"...EnableDebugLayer\n");
+	m_pd3dDebugController->EnableDebugLayer(); 
 #endif
 	
 	// DXGI 팩토리를 생성한다.
@@ -322,7 +322,7 @@ void CGameFramework::CreateRtvAndDsvDescriptorHeaps()
 
 	D3D12_DESCRIPTOR_HEAP_DESC d3dDescriptorHeapDesc;
 	::ZeroMemory(&d3dDescriptorHeapDesc, sizeof(D3D12_DESCRIPTOR_HEAP_DESC));
-	d3dDescriptorHeapDesc.NumDescriptors = m_SwapChainBuffersCount + m_GBuffersCount;
+	d3dDescriptorHeapDesc.NumDescriptors = m_SwapChainBuffersCount + (m_GBuffersCountForRenderTarget); 
 	d3dDescriptorHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV; // 렌더 타겟 뷰
 	d3dDescriptorHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
 	d3dDescriptorHeapDesc.NodeMask = 0;
@@ -429,46 +429,64 @@ void CGameFramework::CreateDepthStencilView()
 	ClearValue.DepthStencil.Stencil = 0;
 
 	//깊이-스텐실 버퍼를 생성한다.
+
+	// 깊이 스텐실 리소스 생성
 	m_d3dDevice->CreateCommittedResource(&HeapProperties, D3D12_HEAP_FLAG_NONE,
 		&ResourceDesc, D3D12_RESOURCE_STATE_DEPTH_WRITE, &ClearValue, IID_PPV_ARGS(&m_DepthStencilBuffer));
+	
 	m_DepthStencilCPUHandle = m_DsvHeap->GetCPUDescriptorHandleForHeapStart();
+
 	m_d3dDevice->CreateDepthStencilView(m_DepthStencilBuffer, &d3dDepthStencilViewDesc, m_DepthStencilCPUHandle);
 
-	//깊이 값을 저장할 쉐도우 맵을 생성한다.
-	//m_d3dDevice->CreateCommittedResource(&HeapProperties, D3D12_HEAP_FLAG_NONE,
-	//	&ResourceDesc, D3D12_RESOURCE_STATE_DEPTH_WRITE, &ClearValue, IID_PPV_ARGS(&m_pShadowMap));
-	//m_ShadowMapCPUHandle = m_DsvHeap->GetCPUDescriptorHandleForHeapStart();
-	//m_ShadowMapCPUHandle.ptr += m_DsvDescriptorSize;
-	//m_d3dDevice->CreateDepthStencilView(m_pShadowMap, &d3dDepthStencilViewDesc, m_ShadowMapCPUHandle);
+	// GBuffer ///////////////////////////////////////////////
+	//// 깊이 스텐실 뷰 생성
+	ResourceDesc.Format = DXGI_FORMAT_R24G8_TYPELESS; 
+
+	m_GBufferCPUHandleForDepth[0] = m_DepthStencilCPUHandle;
+	m_GBufferCPUHandleForDepth[0].ptr += m_DsvDescriptorSize; // 2번째 깊이 스텐실 뷰.
+	
+	// GBUFFER 깊이 리소스 자원 생성
+	m_d3dDevice->CreateCommittedResource(&HeapProperties, D3D12_HEAP_FLAG_NONE,
+		&ResourceDesc, D3D12_RESOURCE_STATE_DEPTH_WRITE, &ClearValue, IID_PPV_ARGS(&m_GBuffersForDepth[0]));
+
+	m_d3dDevice->CreateDepthStencilView(m_GBuffersForDepth[0], &d3dDepthStencilViewDesc, m_GBufferCPUHandleForDepth[0]);
+	m_GBufferHeap->CreateShaderResourceViews(m_d3dDevice.Get(), m_CommandList.Get(), m_GBuffersForDepth[0], RESOURCE_TEXTURE2D, m_GBuffersCount - 1/*맨 마지막에 배치*/, DXGI_FORMAT_R24_UNORM_X8_TYPELESS);
 }
 
 void CGameFramework::CreateGBufferView()
 { 
-	for (UINT i = 0; i < m_GBuffersCount; i++)
-	{
-		auto textureType = DXGI_FORMAT_R8G8B8A8_UNORM;
-		if (i == 1)
+	for (UINT i = 0; i < m_GBuffersCountForRenderTarget; i++)
+	{ 
+		DXGI_FORMAT textureType ;
+		D3D12_RESOURCE_FLAGS flag = D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET;
+		 
+		if (i == 1) // 노말값
 		{
-			textureType = DXGI_FORMAT_R11G11B10_FLOAT;
-		}
+			textureType = DXGI_FORMAT_R11G11B10_FLOAT; // 32BIT 노멀 
 
+		}
+		else
+		{
+			textureType = DXGI_FORMAT_R8G8B8A8_UNORM; 
+			 
+		}
 		D3D12_CLEAR_VALUE d3dClearValue = { textureType,
 		{m_GBufferClearValue[i][0], m_GBufferClearValue[i][1], m_GBufferClearValue[i][2], m_GBufferClearValue[i][3] } };
 
 		// 해당 텍스쳐를 2디 텍스쳐로 만들어서 담는다.
-		m_GBuffers[i] =
+		m_GBuffersForRenderTarget[i] =
 			d3dUtil::CreateTexture2DResource(
 				m_d3dDevice.Get(), m_CommandList.Get(),
 				GameScreen::GetClientWidth(), GameScreen::GetClientHeight(),
 				textureType, // 32bit 
-				D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET,
+				flag,
 				D3D12_RESOURCE_STATE_GENERIC_READ, &d3dClearValue
 			);
 	}
 
 	// 디스크립터 핸들 생성
 	D3D12_CPU_DESCRIPTOR_HANDLE d3dRtvCPUDescriptorHandle = m_RtvHeap->GetCPUDescriptorHandleForHeapStart();
-	d3dRtvCPUDescriptorHandle.ptr += (m_SwapChainBuffersCount * m_RtvDescriptorSize);
+	d3dRtvCPUDescriptorHandle.ptr += (m_SwapChainBuffersCount * m_RtvDescriptorSize); // SWAP CHAIN 이후로 설정하기 위해...
 
 	// 렌더타겟 뷰 생성
 	D3D12_RENDER_TARGET_VIEW_DESC d3dRenderTargetViewDesc;
@@ -477,32 +495,33 @@ void CGameFramework::CreateGBufferView()
 	d3dRenderTargetViewDesc.Texture2D.MipSlice = 0;
 	d3dRenderTargetViewDesc.Texture2D.PlaneSlice = 0;
 
-	for (UINT i = 0; i < m_GBuffersCount; i++)
-	{
-
+	for (UINT i = 0; i < m_GBuffersCountForRenderTarget; i++)
+	{ 
 		// 렌더타겟 뷰 생성
-		m_GBufferCPUHandle[i] = d3dRtvCPUDescriptorHandle;
-		m_GBufferCPUHandle[i].ptr += (m_RtvDescriptorSize * i);
-
+		m_GBufferCPUHandleForRenderTarget[i] = d3dRtvCPUDescriptorHandle;
+		m_GBufferCPUHandleForRenderTarget[i].ptr += (m_RtvDescriptorSize * i);
+		 
 		if (i == 1)
 		{
+			d3dRenderTargetViewDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
 			d3dRenderTargetViewDesc.Format = DXGI_FORMAT_R11G11B10_FLOAT;
 		}
 		else
 		{
+			d3dRenderTargetViewDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
 			d3dRenderTargetViewDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 		}
 		// 디바이스에 렌더타겟뷰를 해당 텍스쳐로 설정된다...
-		m_d3dDevice->CreateRenderTargetView(m_GBuffers[i], &d3dRenderTargetViewDesc, m_GBufferCPUHandle[i]);
+		m_d3dDevice->CreateRenderTargetView(m_GBuffersForRenderTarget[i], &d3dRenderTargetViewDesc, m_GBufferCPUHandleForRenderTarget[i]);
 	}
 
 	if (!m_GBufferHeap)
 	{
 		m_GBufferHeap = new MyDescriptorHeap;
 		m_GBufferHeap->CreateCbvSrvUavDescriptorHeaps(m_d3dDevice.Get(), m_CommandList.Get(), 0, m_GBuffersCount, 0);
-		for (int i = 0; i < m_GBuffersCount; ++i)
+		for (int i = 0; i < m_GBuffersCountForRenderTarget; ++i)
 		{
-			m_GBufferHeap->CreateShaderResourceViews(m_d3dDevice.Get(), m_CommandList.Get(), m_GBuffersCount, m_GBuffers[i], RESOURCE_TEXTURE2D, i);
+			m_GBufferHeap->CreateShaderResourceViews(m_d3dDevice.Get(), m_CommandList.Get(), m_GBuffersCountForRenderTarget, m_GBuffersForRenderTarget[i], RESOURCE_TEXTURE2D, i);
 		}
 	}
 }
@@ -693,8 +712,7 @@ void CGameFramework::RenderOnSwapchain()
 
 	m_CommandList->ClearRenderTargetView(m_SwapChainCPUHandle[m_SwapChainBufferIndex], /*pfClearColor*/Colors::Gray, 0, NULL);
 	m_CommandList->ClearDepthStencilView(m_DepthStencilCPUHandle, D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, NULL);
-	// m_CommandList->ClearDepthStencilView(m_ShadowMapCPUHandle, D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, NULL);
-
+	
 	// 기본 게임 장면을 렌더한다.
 	RenderSwapChain();
 
@@ -721,23 +739,23 @@ void CGameFramework::BuildTESTObjects()
  
 void CGameFramework::RenderOnGbuffer()
 {
-	for (int i = 0; i < m_GBuffersCount; i++)
+	for (int i = 0; i < m_GBuffersCountForRenderTarget; i++)
 	{ 
-		d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_GBuffers[i], D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_RENDER_TARGET);
-		m_CommandList->ClearRenderTargetView(m_GBufferCPUHandle[i], m_GBufferClearValue[i], 0, NULL);
-	}
- 
-	m_CommandList->ClearDepthStencilView(m_DepthStencilCPUHandle, D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, NULL);
-	m_CommandList->OMSetRenderTargets(m_GBuffersCount, m_GBufferCPUHandle, TRUE, &m_DepthStencilCPUHandle);
+		d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_GBuffersForRenderTarget[i], D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_RENDER_TARGET);
+		m_CommandList->ClearRenderTargetView(m_GBufferCPUHandleForRenderTarget[i], m_GBufferClearValue[i], 0, NULL);
+	}  
 
+	m_CommandList->ClearDepthStencilView(m_GBufferCPUHandleForDepth[0], D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, NULL);
+	m_CommandList->OMSetRenderTargets(m_GBuffersCountForRenderTarget, m_GBufferCPUHandleForRenderTarget, TRUE, &m_GBufferCPUHandleForDepth[0]);
+	
 	if (m_pScene) 
 	{
 		m_pScene->Render(m_CommandList.Get(), true);
 	}
 
-	for (int x = 0; x < m_GBuffersCount; ++x)
+	for (int x = 0; x < m_GBuffersCountForRenderTarget; ++x)
 	{
-		d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_GBuffers[x], D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_GENERIC_READ);
+		d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_GBuffersForRenderTarget[x], D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_GENERIC_READ);
 	}
 }
 
@@ -796,12 +814,12 @@ void CGameFramework::OnResizeBackBuffers()
 
 	m_CommandList->Reset(m_CommandAllocator.Get(), NULL);
 	
+	// 순서변경X ////////////
 	ReleaseSwapChainBuffer();
 	ReleaseGBuffers();
 	ReleaseDepthStencilBuffer();
+	// 순서변경X ////////////
 
-
-	 
 
 #ifdef _WITH_ONLY_RESIZE_BACKBUFFERS
 	DXGI_SWAP_CHAIN_DESC SwapChainDesc;
@@ -816,10 +834,12 @@ void CGameFramework::OnResizeBackBuffers()
 	m_SwapChainBufferIndex = 0;
 #endif
 
+	// 순서변경X ////////////
 	CreateRenderTargetView();
 	CreateGBufferView();
 	CreateDepthStencilView(); 
-	
+	// 순서변경X ////////////
+
 	m_CommandList->Close();
 	
 	ID3D12CommandList *ppd3dCommandLists[] = { m_CommandList.Get() };

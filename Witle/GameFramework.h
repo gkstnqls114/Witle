@@ -57,31 +57,30 @@ private:
 	ComPtr<ID3D12DebugDevice> m_pd3dDebugDevice;
 #endif
 	
-private:
-	////////////////////////////// ½¦µµ¿ì¸Ê 
-	const UINT m_DsvDescriptorsCount{ 2 };
-	//D3D12_CPU_DESCRIPTOR_HANDLE m_ShadowMapCPUHandle;
-	//ID3D12Resource*			m_pShadowMap;
-	////////////////////////////// ½¦µµ¿ì¸Ê
-	 
+private:  
 	//// GBuffer 
-	static const UINT m_GBuffersCount{ 4 };
+	static const UINT m_GBuffersCountForDepth{ 1 };
+	static const UINT m_GBuffersCountForRenderTarget{ 3 };
+	const UINT m_DsvDescriptorsCount{ 1 + m_GBuffersCountForDepth };
+	static const UINT m_GBuffersCount{ m_GBuffersCountForDepth + m_GBuffersCountForRenderTarget };
 
-	ID3D12Resource*				m_GBuffers[m_GBuffersCount];
-	D3D12_CPU_DESCRIPTOR_HANDLE m_GBufferCPUHandle[m_GBuffersCount];
+	ID3D12Resource*				m_GBuffersForRenderTarget[m_GBuffersCountForRenderTarget];
+	D3D12_CPU_DESCRIPTOR_HANDLE m_GBufferCPUHandleForRenderTarget[m_GBuffersCountForRenderTarget];
+
+	ID3D12Resource*				m_GBuffersForDepth[m_GBuffersCountForDepth];
+	D3D12_CPU_DESCRIPTOR_HANDLE m_GBufferCPUHandleForDepth[m_GBuffersCountForDepth];
+
 	UINT m_GBufferDescriptorSize;
 
 	//CTriangleShader m_RedShader;
 	//CGreenShader m_GreenShader;
 	//CBlueShader m_BlueShader;
 	//CRenderComputeShader m_RenderComputeShader;
-
-	// Texture*		m_pGBufferTexture;
-	float	m_GBufferClearValue[4][4]{
-		{ 1.f, 0.f, 0.f, 1.f },
+	 
+	float	m_GBufferClearValue[3][4]{
+		{ 0.f, 0.f, 0.f, 1.f },
 		{ 0.f, 1.f, 0.f, 1.f },
-		{ 0.f, 0.f, 1.f, 1.f },
-		{ 1.f, 1.f, 1.f, 1.f }
+		{ 0.f, 0.f, 1.f, 1.f }
 	};
 
 	///////////////////// ÄÄÇ»Æ® ½¦ÀÌ´õ¸¦ À§ÇÑ º¯¼ö
