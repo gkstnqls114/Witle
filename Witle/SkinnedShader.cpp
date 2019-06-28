@@ -119,7 +119,7 @@ D3D12_SHADER_BYTECODE SkinnedShader::CreatePixelShader(ID3DBlob ** ppd3dShaderBl
 
 D3D12_SHADER_BYTECODE SkinnedShader::CreatePixelShaderForGBuffers(ID3DBlob ** ppd3dShaderBlob)
 {
-	return D3D12_SHADER_BYTECODE();
+	return Shader::CompileShaderFromFile(L"SkinnedAnimationShader.hlsl", "PSStandardForGBuffers", "ps_5_1", ppd3dShaderBlob);
 }
 
 D3D12_SHADER_BYTECODE SkinnedShader::CreateGeometryShader(ID3DBlob ** ppd3dShaderBlob)

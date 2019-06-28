@@ -105,7 +105,7 @@ void Monster::Render(ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffer
 
 	m_pHaep->UpdateShaderVariable(pd3dCommandList);
 	m_pTexture->UpdateShaderVariable(pd3dCommandList, 0);
-	m_pLoadObject->Render(pd3dCommandList);
+	m_pLoadObject->Render(pd3dCommandList, isGBuffers);
 
 	RenderHpStatus(pd3dCommandList, isGBuffers);
 }

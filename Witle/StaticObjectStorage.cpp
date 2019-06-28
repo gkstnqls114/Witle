@@ -356,15 +356,15 @@ void StaticObjectStorage::CreateInfo(ID3D12Device * pd3dDevice, ID3D12GraphicsCo
 	m_isCreate = true;
 }
  
-void StaticObjectStorage::RenderAll(ID3D12GraphicsCommandList * pd3dCommandList)
+void StaticObjectStorage::RenderAll(ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffers)
 {
 	for (int i = 0; i < TerrainPieceCount; ++i)
 	{
-		Render(pd3dCommandList, i);
+		Render(pd3dCommandList, i, isGBuffers);
 	}
 }
 
-void StaticObjectStorage::Render(ID3D12GraphicsCommandList * pd3dCommandList, int index)
+void StaticObjectStorage::Render(ID3D12GraphicsCommandList * pd3dCommandList, int index, bool isGBuffers)
 {  
 	// info.first = ¸ðµ¨ ÀÌ¸§
 	// info.second = TerrainObjectInfo¶ó´Â ¸ðµ¨ Á¤º¸
@@ -377,7 +377,7 @@ void StaticObjectStorage::Render(ID3D12GraphicsCommandList * pd3dCommandList, in
 		  
 		m_StaticObjectModelsStorage[info.first].pTexture->UpdateShaderVariables(pd3dCommandList);
 		
-		m_StaticObjectModelsStorage[info.first].pLoadObject->RenderInstancing(pd3dCommandList, info.second[index].TerrainObjectCount);
+		m_StaticObjectModelsStorage[info.first].pLoadObject->RenderInstancing(pd3dCommandList, info.second[index].TerrainObjectCount, isGBuffers);
 	}  
 }
 

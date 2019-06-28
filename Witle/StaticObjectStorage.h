@@ -60,7 +60,7 @@ public:
 	void CreateInfo(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, const QuadtreeTerrain const * pTerrain);
 	
 	// 인스턴싱을 통해 렌더합니다.
-	void RenderAll(ID3D12GraphicsCommandList * pd3dCommandList);
-	void Render(ID3D12GraphicsCommandList * pd3dCommandList, int index);
+	void RenderAll(ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffers);
+	void Render(ID3D12GraphicsCommandList * pd3dCommandList, int index, bool isGBuffers);
 	void RenderBOBox(ID3D12GraphicsCommandList * pd3dCommandList, int index);
 };

@@ -120,5 +120,5 @@ D3D12_SHADER_BYTECODE TerrainShader::CreatePixelShader(ID3DBlob ** ppd3dShaderBl
 
 D3D12_SHADER_BYTECODE TerrainShader::CreatePixelShaderForGBuffers(ID3DBlob ** ppd3dShaderBlob)
 {
-	return D3D12_SHADER_BYTECODE();
+	return(Shader::CompileShaderFromFile(L"TerrainShader.hlsl", "PSTerrainForGBuffers", "ps_5_1", ppd3dShaderBlob));
 }

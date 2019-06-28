@@ -863,7 +863,7 @@ void LoadObject::Animate(float fTimeElapsed)
 	if (m_pChild) m_pChild->Animate(fTimeElapsed);
 }
 
-void LoadObject::Render(ID3D12GraphicsCommandList *pd3dCommandList)
+void LoadObject::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers)
 {
 	if (m_pSkinnedAnimationController) m_pSkinnedAnimationController->UpdateShaderVariables(pd3dCommandList, m_xmf4x4World);
 
@@ -880,7 +880,8 @@ void LoadObject::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 					if (m_ppMaterials[i]->m_pShader)
 					{ 
 						// m_ppMaterials[i]->m_pShader->Render(pd3dCommandList);
-						m_ppMaterials[i]->m_pShader->OnPrepareRender(pd3dCommandList);
+						if(isGBuffers) m_ppMaterials[i]->m_pShader->OnPrepareRenderForGBuffers(pd3dCommandList);
+						else  m_ppMaterials[i]->m_pShader->OnPrepareRender(pd3dCommandList);
 					} 
 					m_ppMaterials[i]->UpdateShaderVariable(pd3dCommandList);
 				}
@@ -892,15 +893,15 @@ void LoadObject::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 
 	if (m_pSibling)
 	{
-		m_pSibling->Render(pd3dCommandList);
+		m_pSibling->Render(pd3dCommandList, isGBuffers);
 	}
 	if (m_pChild)
 	{
-		m_pChild->Render(pd3dCommandList);
+		m_pChild->Render(pd3dCommandList, isGBuffers);
 	}
 }
 
-void LoadObject::Render(ID3D12GraphicsCommandList * pd3dCommandList, CAnimationController * pSkinnedAnimationController)
+void LoadObject::Render(ID3D12GraphicsCommandList * pd3dCommandList, CAnimationController * pSkinnedAnimationController, bool isGBuffers)
 {
 	if (pSkinnedAnimationController) pSkinnedAnimationController->UpdateShaderVariables(pd3dCommandList, m_xmf4x4World);
 
@@ -929,15 +930,15 @@ void LoadObject::Render(ID3D12GraphicsCommandList * pd3dCommandList, CAnimationC
 
 	if (m_pSibling)
 	{
-		m_pSibling->Render(pd3dCommandList);
+		m_pSibling->Render(pd3dCommandList, isGBuffers);
 	}
 	if (m_pChild)
 	{
-		m_pChild->Render(pd3dCommandList);
+		m_pChild->Render(pd3dCommandList, isGBuffers);
 	}
 }
 
-void LoadObject::RenderInstancing(ID3D12GraphicsCommandList * pd3dCommandList, int InstanceCount)
+void LoadObject::RenderInstancing(ID3D12GraphicsCommandList * pd3dCommandList, int InstanceCount, bool isGBuffers)
 {
 	if (m_pSkinnedAnimationController) m_pSkinnedAnimationController->UpdateShaderVariables(pd3dCommandList, m_xmf4x4World);
 
@@ -946,8 +947,8 @@ void LoadObject::RenderInstancing(ID3D12GraphicsCommandList * pd3dCommandList, i
 		m_pMesh->RenderInstancing(pd3dCommandList, 0, InstanceCount); 
 	}
 
-	if (m_pSibling) m_pSibling->RenderInstancing(pd3dCommandList, InstanceCount);
-	if (m_pChild) m_pChild->RenderInstancing(pd3dCommandList, InstanceCount);
+	if (m_pSibling) m_pSibling->RenderInstancing(pd3dCommandList, InstanceCount, isGBuffers);
+	if (m_pChild) m_pChild->RenderInstancing(pd3dCommandList, InstanceCount, isGBuffers);
 }
 
 void LoadObject::CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList)

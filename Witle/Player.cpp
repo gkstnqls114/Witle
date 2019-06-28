@@ -159,9 +159,9 @@ void Player::Render(ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffers
 	if (!m_isRendering) return; //만약 스나이핑 모드라면 플레이어를 렌더링하지 않는다.
 	m_pHaep->UpdateShaderVariable(pd3dCommandList);
 	m_pTexture_Cloth->UpdateShaderVariable(pd3dCommandList, 0);
-	m_pLoadObject_Cloth->Render(pd3dCommandList);
+	m_pLoadObject_Cloth->Render(pd3dCommandList, isGBuffers);
 	m_pTexture_Body->UpdateShaderVariable(pd3dCommandList, 0);
-	m_pLoadObject_Body->Render(pd3dCommandList);
+	m_pLoadObject_Body->Render(pd3dCommandList, isGBuffers);
 
 	bool isMoving = GameInput::IsKeydownW() || GameInput::IsKeydownA() || GameInput::IsKeydownS() || GameInput::IsKeydownD();
 	if (m_Broom->GetisUsing() && isMoving)

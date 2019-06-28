@@ -63,31 +63,28 @@ void QuadtreeTerrain::RenderTerrainObjects(ID3D12GraphicsCommandList * pd3dComma
 	
 	// 설명자 힙 설정
 	TextureStorage::GetInstance()->SetHeap(pd3dCommandList);
-	RecursiveRenderTerrainObjects(m_pRootNode, pd3dCommandList);
-	 
-
+	RecursiveRenderTerrainObjects(m_pRootNode, pd3dCommandList, isGBuffers);
+	  
 	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, "InstancingLine", isGBuffers);
-	RecursiveRenderTerrainObjects_BOBox(m_pRootNode, pd3dCommandList);
-
-
+	RecursiveRenderTerrainObjects_BOBox(m_pRootNode, pd3dCommandList); 
 }
 
-void QuadtreeTerrain::RecursiveRenderTerrainObjects(const QUAD_TREE_NODE * node, ID3D12GraphicsCommandList * pd3dCommandList)
+void QuadtreeTerrain::RecursiveRenderTerrainObjects(const QUAD_TREE_NODE * node, ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffers)
 { 
 	if (node->isRendering)
 	{
 		if (node->terrainMesh)
 		{
-			StaticObjectStorage::GetInstance(this)->Render(pd3dCommandList, node->id);
+			StaticObjectStorage::GetInstance(this)->Render(pd3dCommandList, node->id, isGBuffers);
 
 		}
 		else
 		{
 
-			if (node->children[0]->isRendering) RecursiveRenderTerrainObjects(node->children[0], pd3dCommandList);
-			if (node->children[1]->isRendering) RecursiveRenderTerrainObjects(node->children[1], pd3dCommandList);
-			if (node->children[2]->isRendering) RecursiveRenderTerrainObjects(node->children[2], pd3dCommandList);
-			if (node->children[3]->isRendering) RecursiveRenderTerrainObjects(node->children[3], pd3dCommandList);
+			if (node->children[0]->isRendering) RecursiveRenderTerrainObjects(node->children[0], pd3dCommandList, isGBuffers);
+			if (node->children[1]->isRendering) RecursiveRenderTerrainObjects(node->children[1], pd3dCommandList, isGBuffers);
+			if (node->children[2]->isRendering) RecursiveRenderTerrainObjects(node->children[2], pd3dCommandList, isGBuffers);
+			if (node->children[3]->isRendering) RecursiveRenderTerrainObjects(node->children[3], pd3dCommandList, isGBuffers);
 
 		} 
  	} 
@@ -429,7 +426,7 @@ void QuadtreeTerrain::Render(int index, ID3D12GraphicsCommandList * pd3dCommandL
 	if (index < 0 || index >= m_ReafNodeCount) return;
 	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_TERRAIN, isGBuffers);
 	gMeshRenderer.Render(pd3dCommandList, m_pReafNodes[index]->terrainMesh);
-	StaticObjectStorage::GetInstance(this)->Render(pd3dCommandList, index);
+	StaticObjectStorage::GetInstance(this)->Render(pd3dCommandList, index, isGBuffers);
 }
 
 QUAD_TREE_NODE * QuadtreeTerrain::GetReafNodeByID(int id)

@@ -416,9 +416,9 @@ public:
 	virtual void Animate(float fTimeElapsed);
 
 	virtual void OnPrepareRender() { }
-	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList);
-	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, CAnimationController* pSkinnedAnimationController);
-	virtual void RenderInstancing(ID3D12GraphicsCommandList *pd3dCommandList, int InstanceCount);
+	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers);
+	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, CAnimationController* pSkinnedAnimationController, bool isGBuffers);
+	virtual void RenderInstancing(ID3D12GraphicsCommandList *pd3dCommandList, int InstanceCount, bool isGBuffers);
 
 	virtual void CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
 	virtual void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList);
