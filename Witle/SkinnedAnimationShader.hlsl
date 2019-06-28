@@ -103,16 +103,14 @@ PS_OUTPUT_FOR_GBUFFERS PSStandardForGBuffers(VS_STANDARD_OUTPUT input)
     PS_OUTPUT_FOR_GBUFFERS output;
       
 	// 임시로 사용할 컬러 색깔
-    float4 TESTColor = gtxtTexture.Sample(gWrapSamplerState, input.uv);
-    float4 cIllumination = Lighting(input.positionW, input.normalW);
-    float4 ContrastColor = lerp(TESTColor, cIllumination, 0.5f); // 명암처리된 픽셀 색깔
+    float4 cColor = gtxtTexture.Sample(gWrapSamplerState, input.uv); 
 
     // gbuffer 구조체에 패킹
     float SpecPowerNorm = NormalizeSpecPower(1); // 스페큘러 파워 정규화
     float SpecIntensity = 1;
     float depth = input.position.w * 256;
     output.Depth = float4(depth, depth, depth, depth);
-    output.ColorSpecInt = float4(ContrastColor.rgb, SpecIntensity);
+    output.ColorSpecInt = float4(cColor.rgb, SpecIntensity);
     output.Normal = float4(input.normalW.xyz * 0.5 + 0.5, 0.0);
     output.SpecPow = float4(SpecPowerNorm, 0, 0, 0);
 
