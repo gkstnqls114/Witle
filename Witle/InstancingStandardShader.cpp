@@ -116,7 +116,7 @@ D3D12_SHADER_BYTECODE InstancingStandardShader::CreatePixelShader(ID3DBlob ** pp
 
 D3D12_SHADER_BYTECODE InstancingStandardShader::CreatePixelShaderForGBuffers(ID3DBlob ** ppd3dShaderBlob)
 {
-	return D3D12_SHADER_BYTECODE();
+	return Shader::CompileShaderFromFile(L"StandardShader.hlsl", "PSStandardForGBuffers", "ps_5_1", ppd3dShaderBlob);
 }
 
 D3D12_SHADER_BYTECODE InstancingStandardShader::CreateGeometryShader(ID3DBlob ** ppd3dShaderBlob)

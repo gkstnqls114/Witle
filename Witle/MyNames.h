@@ -36,6 +36,7 @@
 
 // 쉐이더 이름들
 
+#define SHADER_TERRAIN "Terrain"
 #define SHADER_SCREEN "Screen"
 #define SHADER_PICKINGPOINT "PikcingPoint"
 #define SHADER_BROOMEFFECT "BroomEffect"

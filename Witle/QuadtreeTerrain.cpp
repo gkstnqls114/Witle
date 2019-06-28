@@ -57,16 +57,16 @@ void QuadtreeTerrain::RecursiveRenderTerrainObjects_BOBox(const QUAD_TREE_NODE *
 }
 
 
-void QuadtreeTerrain::RenderTerrainObjects(ID3D12GraphicsCommandList * pd3dCommandList)
+void QuadtreeTerrain::RenderTerrainObjects(ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffers)
 {
-	pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("InstancingStandardShader")->GetPSO());
+	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, "InstancingStandardShader", isGBuffers);
 	
 	// ¼³¸íÀÚ Èü ¼³Á¤
 	TextureStorage::GetInstance()->SetHeap(pd3dCommandList);
 	RecursiveRenderTerrainObjects(m_pRootNode, pd3dCommandList);
 	 
 
-	 pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("InstancingLine")->GetPSO());
+	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, "InstancingLine", isGBuffers);
 	RecursiveRenderTerrainObjects_BOBox(m_pRootNode, pd3dCommandList);
 
 
@@ -95,7 +95,7 @@ void QuadtreeTerrain::RecursiveRenderTerrainObjects(const QUAD_TREE_NODE * node,
 
 static std::unordered_set<int> set;
 
-void QuadtreeTerrain::RecursiveRender(const QUAD_TREE_NODE * node, ID3D12GraphicsCommandList * pd3dCommandList)
+void QuadtreeTerrain::RecursiveRender(const QUAD_TREE_NODE * node, ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffers)
 {
 	// ·»´õ¸µ
 	extern MeshRenderer gMeshRenderer;
@@ -107,10 +107,10 @@ void QuadtreeTerrain::RecursiveRender(const QUAD_TREE_NODE * node, ID3D12Graphic
 	}
 	else
 	{
-		if (node->children[0]->isRendering) RecursiveRender(node->children[0], pd3dCommandList);
-		if (node->children[1]->isRendering) RecursiveRender(node->children[1], pd3dCommandList);
-		if (node->children[2]->isRendering) RecursiveRender(node->children[2], pd3dCommandList);
-		if (node->children[3]->isRendering) RecursiveRender(node->children[3], pd3dCommandList);
+		if (node->children[0]->isRendering) RecursiveRender(node->children[0], pd3dCommandList, isGBuffers);
+		if (node->children[1]->isRendering) RecursiveRender(node->children[1], pd3dCommandList, isGBuffers);
+		if (node->children[2]->isRendering) RecursiveRender(node->children[2], pd3dCommandList, isGBuffers);
+		if (node->children[3]->isRendering) RecursiveRender(node->children[3], pd3dCommandList, isGBuffers);
 	}
 }
 
@@ -401,24 +401,24 @@ int * const QuadtreeTerrain::GetIndex(const XMFLOAT3 & position) const
 
 void QuadtreeTerrain::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers)
 { 
-	RenderTerrainObjects(pd3dCommandList); // ÁöÇü ¿ÀºêÁ§Æ® ·»´õ
+	RenderTerrainObjects(pd3dCommandList, isGBuffers); // ÁöÇü ¿ÀºêÁ§Æ® ·»´õ
 
-	pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Terrain")->GetPSO());
-	RecursiveRender(m_pRootNode, pd3dCommandList); // ÁöÇü ·»´õ	 
+	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_TERRAIN, isGBuffers);
+	RecursiveRender(m_pRootNode, pd3dCommandList, isGBuffers); // ÁöÇü ·»´õ	 
 }
 
 void QuadtreeTerrain::Render(ID3D12GraphicsCommandList * pd3dCommandList, Terrain * pTerrain, ID3D12DescriptorHeap* pHeap, bool isGBuffers)
 {
 	// ÁöÇü ·»´õ
-	pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Terrain")->GetPSO());
+	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_TERRAIN, isGBuffers);
 	pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_WORLD, 16, &Matrix4x4::Identity(), 0);
 	pd3dCommandList->SetDescriptorHeaps(1, &pHeap);
 	pTerrain->UpdateShaderVariables(pd3dCommandList);
 
-	RecursiveRender(m_pRootNode, pd3dCommandList); // ÁöÇü ·»´õ	 
+	RecursiveRender(m_pRootNode, pd3dCommandList, isGBuffers); // ÁöÇü ·»´õ	 
 
 	// ÁöÇü ¿ÀºêÁ§Æ® ·»´õ
-	RenderTerrainObjects(pd3dCommandList);
+	RenderTerrainObjects(pd3dCommandList, isGBuffers);
 
 }
 
@@ -427,7 +427,7 @@ void QuadtreeTerrain::Render(int index, ID3D12GraphicsCommandList * pd3dCommandL
 	// ·»´õ¸µ
 	extern MeshRenderer gMeshRenderer; 
 	if (index < 0 || index >= m_ReafNodeCount) return;
-	pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Terrain")->GetPSO());
+	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_TERRAIN, isGBuffers);
 	gMeshRenderer.Render(pd3dCommandList, m_pReafNodes[index]->terrainMesh);
 	StaticObjectStorage::GetInstance(this)->Render(pd3dCommandList, index);
 }

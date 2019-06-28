@@ -446,15 +446,21 @@ void CGameFramework::CreateGBufferView()
 { 
 	for (UINT i = 0; i < m_GBuffersCount; i++)
 	{
-		D3D12_CLEAR_VALUE d3dClearValue = { DXGI_FORMAT_R8G8B8A8_UNORM,
+		auto textureType = DXGI_FORMAT_R8G8B8A8_UNORM;
+		if (i == 1)
+		{
+			textureType = DXGI_FORMAT_R11G11B10_FLOAT;
+		}
+
+		D3D12_CLEAR_VALUE d3dClearValue = { textureType,
 		{m_GBufferClearValue[i][0], m_GBufferClearValue[i][1], m_GBufferClearValue[i][2], m_GBufferClearValue[i][3] } };
-		
+
 		// 해당 텍스쳐를 2디 텍스쳐로 만들어서 담는다.
 		m_GBuffers[i] =
 			d3dUtil::CreateTexture2DResource(
 				m_d3dDevice.Get(), m_CommandList.Get(),
 				GameScreen::GetClientWidth(), GameScreen::GetClientHeight(),
-				DXGI_FORMAT_R8G8B8A8_UNORM, // 32bit 
+				textureType, // 32bit 
 				D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET,
 				D3D12_RESOURCE_STATE_GENERIC_READ, &d3dClearValue
 			);
@@ -473,10 +479,19 @@ void CGameFramework::CreateGBufferView()
 
 	for (UINT i = 0; i < m_GBuffersCount; i++)
 	{
+
 		// 렌더타겟 뷰 생성
 		m_GBufferCPUHandle[i] = d3dRtvCPUDescriptorHandle;
 		m_GBufferCPUHandle[i].ptr += (m_RtvDescriptorSize * i);
 
+		if (i == 1)
+		{
+			d3dRenderTargetViewDesc.Format = DXGI_FORMAT_R11G11B10_FLOAT;
+		}
+		else
+		{
+			d3dRenderTargetViewDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+		}
 		// 디바이스에 렌더타겟뷰를 해당 텍스쳐로 설정된다...
 		m_d3dDevice->CreateRenderTargetView(m_GBuffers[i], &d3dRenderTargetViewDesc, m_GBufferCPUHandle[i]);
 	}

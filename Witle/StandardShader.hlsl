@@ -41,19 +41,11 @@ VS_STANDARD_OUTPUT VSStandard(VS_STANDARD_INPUT input)
 }
 
 // Instancing for gbuffers ////////////////////////////////////////////////////////////
-struct VS_INSTANCING_OUTPUT_FOR_GBUFFERS
-{
-    float4 ColorSpecInt : SV_TARGET0;
-    float4 Normal : SV_TARGET1; // w컴포넌트는 상관없음
-    float4 SpecPow : SV_TARGET2;
-};
 
-VS_INSTANCING_OUTPUT_FOR_GBUFFERS PSStandard(VS_STANDARD_OUTPUT input)
+
+PS_OUTPUT_FOR_GBUFFERS PSStandardForGBuffers(VS_STANDARD_OUTPUT input)
 {
-    VS_INSTANCING_OUTPUT_FOR_GBUFFERS output;
-     
-    
-    // 스페큘러 파워 정규화
+    PS_OUTPUT_FOR_GBUFFERS output;
       
 	// 임시로 사용할 컬러 색깔
     float4 TESTColor = gtxtTexture.Sample(gWrapSamplerState, input.uv); 
@@ -61,8 +53,10 @@ VS_INSTANCING_OUTPUT_FOR_GBUFFERS PSStandard(VS_STANDARD_OUTPUT input)
     float4 ContrastColor = lerp(TESTColor, cIllumination, 0.5f); // 명암처리된 픽셀 색깔
 
     // gbuffer 구조체에 패킹
-    float SpecPowerNorm = 1; // 스페큘러 파워 정규화
+    float SpecPowerNorm = NormalizeSpecPower(1); // 스페큘러 파워 정규화
     float SpecIntensity = 1;
+    float depth = input.position.w * 256;
+    output.Depth = float4(depth, depth, depth, depth);
     output.ColorSpecInt = float4(ContrastColor.rgb, SpecIntensity);
     output.Normal = float4(input.normalW.xyz * 0.5 + 0.5, 0.0);
     output.SpecPow = float4(SpecPowerNorm, 0, 0, 0);
@@ -70,48 +64,49 @@ VS_INSTANCING_OUTPUT_FOR_GBUFFERS PSStandard(VS_STANDARD_OUTPUT input)
     return (output);
 }
 
-//float4 PSStandard(VS_STANDARD_OUTPUT input) : SV_TARGET
-//{ 
-//	// 임시로 사용할 컬러 색깔
-//    float4 TESTColor = gtxtTexture.Sample(gWrapSamplerState, input.uv); 
+float4 PSStandard(VS_STANDARD_OUTPUT input) : SV_TARGET
+{
+	// 임시로 사용할 컬러 색깔
+    float4 TESTColor = gtxtTexture.Sample(gWrapSamplerState, input.uv);
    
-//    if (TESTColor.a < 0.1 && TESTColor.r < 0.1 && TESTColor.g < 0.1 && TESTColor.b < 0.1)
-//        TESTColor = float4(1.f, 1.f, 1.f, 1.f);
-//    else if (TESTColor.a < 0.5) discard;
+    if (TESTColor.a < 0.1 && TESTColor.r < 0.1 && TESTColor.g < 0.1 && TESTColor.b < 0.1)
+        TESTColor = float4(1.f, 1.f, 1.f, 1.f);
+    else if (TESTColor.a < 0.5)
+        discard;
     
-//	//float4 cAlbedoColor = float4(0.0f, 0.0f, 0.0f, 1.0f);
-//	//if (gnTexturesMask & MATERIAL_ALBEDO_MAP) cAlbedoColor = gtxtAlbedoTexture.Sample(gssWrap, input.uv);
-//	//float4 cSpecularColor = float4(0.0f, 0.0f, 0.0f, 1.0f);
-//	//if (gnTexturesMask & MATERIAL_SPECULAR_MAP) cSpecularColor = gtxtSpecularTexture.Sample(gssWrap, input.uv);
-//	//float4 cNormalColor = float4(0.0f, 0.0f, 0.0f, 1.0f);
-//	//if (gnTexturesMask & MATERIAL_NORMAL_MAP) cNormalColor = gtxtNormalTexture.Sample(gssWrap, input.uv);
-//	//float4 cMetallicColor = float4(0.0f, 0.0f, 0.0f, 1.0f);
-//	//if (gnTexturesMask & MATERIAL_METALLIC_MAP) cMetallicColor = gtxtMetallicTexture.Sample(gssWrap, input.uv);
-//	//float4 cEmissionColor = float4(0.0f, 0.0f, 0.0f, 1.0f);
-//	//if (gnTexturesMask & MATERIAL_EMISSION_MAP) cEmissionColor = gtxtEmissionTexture.Sample(gssWrap, input.uv);
+	//float4 cAlbedoColor = float4(0.0f, 0.0f, 0.0f, 1.0f);
+	//if (gnTexturesMask & MATERIAL_ALBEDO_MAP) cAlbedoColor = gtxtAlbedoTexture.Sample(gssWrap, input.uv);
+	//float4 cSpecularColor = float4(0.0f, 0.0f, 0.0f, 1.0f);
+	//if (gnTexturesMask & MATERIAL_SPECULAR_MAP) cSpecularColor = gtxtSpecularTexture.Sample(gssWrap, input.uv);
+	//float4 cNormalColor = float4(0.0f, 0.0f, 0.0f, 1.0f);
+	//if (gnTexturesMask & MATERIAL_NORMAL_MAP) cNormalColor = gtxtNormalTexture.Sample(gssWrap, input.uv);
+	//float4 cMetallicColor = float4(0.0f, 0.0f, 0.0f, 1.0f);
+	//if (gnTexturesMask & MATERIAL_METALLIC_MAP) cMetallicColor = gtxtMetallicTexture.Sample(gssWrap, input.uv);
+	//float4 cEmissionColor = float4(0.0f, 0.0f, 0.0f, 1.0f);
+	//if (gnTexturesMask & MATERIAL_EMISSION_MAP) cEmissionColor = gtxtEmissionTexture.Sample(gssWrap, input.uv);
 
-//	float3 normalW;
-//	//float4 cColor = cAlbedoColor + cSpecularColor + cMetallicColor + cEmissionColor;
-//	//if (gnTexturesMask & MATERIAL_NORMAL_MAP)
-//	//{
-//	//	float3x3 TBN = float3x3(normalize(input.tangentW), normalize(input.bitangentW), normalize(input.normalW));
-//	//	float3 vNormal = normalize(cNormalColor.rgb * 2.0f - 1.0f); //[0, 1] → [-1, 1]
-//	//	normalW = normalize(mul(vNormal, TBN));
-//	//}
-//	//else
-//	//{
-//		normalW = normalize(input.normalW);
-//	//}
+    float3 normalW;
+	//float4 cColor = cAlbedoColor + cSpecularColor + cMetallicColor + cEmissionColor;
+	//if (gnTexturesMask & MATERIAL_NORMAL_MAP)
+	//{
+	//	float3x3 TBN = float3x3(normalize(input.tangentW), normalize(input.bitangentW), normalize(input.normalW));
+	//	float3 vNormal = normalize(cNormalColor.rgb * 2.0f - 1.0f); //[0, 1] → [-1, 1]
+	//	normalW = normalize(mul(vNormal, TBN));
+	//}
+	//else
+	//{
+    normalW = normalize(input.normalW);
+	//}
 
-//	float4 cIllumination = Lighting(input.positionW, normalW);
-//    float4 ContrastColor = lerp(TESTColor, cIllumination, 0.5f); // 명암처리된 픽셀 색깔
+    float4 cIllumination = Lighting(input.positionW, normalW);
+    float4 ContrastColor = lerp(TESTColor, cIllumination, 0.5f); // 명암처리된 픽셀 색깔
 
-//    float4 fogColor = float4(0.0 / 255.0, 34.0 / 255.0, 102.0 / 255.0, 1.0f);
+    float4 fogColor = float4(0.0 / 255.0, 34.0 / 255.0, 102.0 / 255.0, 1.0f);
     
-//    float4 finalColor = input.fogFactor * ContrastColor + (1.0 - input.fogFactor) * fogColor;
+    float4 finalColor = input.fogFactor * ContrastColor + (1.0 - input.fogFactor) * fogColor;
 
-//    return finalColor;
-//}
+    return finalColor;
+}
  
 
 // Instancing ////////////////////////////////////////////////////////////

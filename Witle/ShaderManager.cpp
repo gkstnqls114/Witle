@@ -74,7 +74,7 @@ void ShaderManager::BuildShaders(ID3D12Device * pd3dDevice, ID3D12RootSignature 
 
 	Shader* pTerrainShader = new TerrainShader();
 	pTerrainShader->CreateShader(pd3dDevice, pd3dGraphicsRootSignature);
-	InsertShader("Terrain", pTerrainShader);
+	InsertShader(SHADER_TERRAIN, pTerrainShader);
 
 	Shader* pStandardShader = new StandardShader();
 	pStandardShader->CreateShader(pd3dDevice, pd3dGraphicsRootSignature);

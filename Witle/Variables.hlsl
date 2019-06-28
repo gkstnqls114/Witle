@@ -75,3 +75,17 @@ struct INSTANCING_TRANSFORM
 };
 
 StructuredBuffer<INSTANCING_TRANSFORM> gmtxInstancingWorld : register(t14);
+
+float NormalizeSpecPower(float specpower)
+{
+    float2 specpowerRange = float2(1, 2);
+    return (specpower - specpowerRange.x) / specpowerRange.y;
+}
+
+struct PS_OUTPUT_FOR_GBUFFERS
+{
+    float4 Depth : SV_TARGET0;
+    float4 ColorSpecInt : SV_TARGET1;
+    float4 Normal : SV_TARGET2; // w컴포넌트는 상관없음
+    float4 SpecPow : SV_TARGET3;
+};
