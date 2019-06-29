@@ -127,17 +127,63 @@ bool RoomScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM w
 void RoomScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList)
 {
 	BuildLightsAndMaterials(pd3dDevice, pd3dCommandList);
-	 
+
 	// 카메라 설정
 	m_d3dViewport = D3D12_VIEWPORT{ 0.0f, 0.0f, static_cast<FLOAT>(GameScreen::GetWidth()) , static_cast<FLOAT>(GameScreen::GetHeight()), 0.0f, 1.0f };
 	m_d3dScissorRect = D3D12_RECT{ 0, 0, static_cast<LONG>(GameScreen::GetWidth()) ,static_cast<LONG>(GameScreen::GetHeight()) };
 
 	m_TESTGameObject = new EmptyGameObject("Test");
-	m_SampleUIImage = new UI2DImage(
+
+
+	///////////////////////////////////////////// 캐릭터 선택화면
+	// // 캐릭터 1
+	// m_SampleUIImage1 = new UI2DImage(
+	// 	m_TESTGameObject, pd3dDevice, pd3dCommandList,
+	// 	POINT{ int(GameScreen::GetWidth()) / 2 - 200, int(GameScreen::GetHeight()) / 2 - 50 }, 200, 300, L"Image/CharacterAppearance1_OFF.dds"
+	// );
+	// 
+	// // 캐릭터 2
+	// m_SampleUIImage2 = new UI2DImage(
+	// 	m_TESTGameObject, pd3dDevice, pd3dCommandList,
+	// 	POINT{ int(GameScreen::GetWidth()) / 2 + 200, int(GameScreen::GetHeight()) / 2 - 50 }, 200, 300, nullptr
+	// );
+	// 
+	// // 선택버튼
+	// m_SampleUIImage3 = new UI2DImage(
+	// 	m_TESTGameObject, pd3dDevice, pd3dCommandList,
+	// 	POINT{ int(GameScreen::GetWidth()) / 2, int(GameScreen::GetHeight()) / 2 + 250 }, 200, 50, nullptr
+	// );
+	///////////////////////////////////////////// 캐릭터 선택화면
+
+	// 미니맵
+	m_SampleUIMap = new UI2DImage(
 		m_TESTGameObject, pd3dDevice, pd3dCommandList,
-		POINT{ 60 , 120 }, 100, 200, L"Image/CharacterAppearance1_OFF.dds"
+		POINT{ int(GameScreen::GetWidth()) / 2 + 500, int(GameScreen::GetHeight()) / 2 - 220 }, 200, 200, L"Image/CharacterAppearance1_OFF.dds"
 	);
 
+	// 스킬 1
+	m_SampleUISkill1 = new UI2DImage(
+		m_TESTGameObject, pd3dDevice, pd3dCommandList,
+		POINT{ int(GameScreen::GetWidth()) / 2 - 300, int(GameScreen::GetHeight()) / 2 + 270 }, 100, 100, nullptr
+	);
+
+	// 스킬 2
+	m_SampleUISkill2 = new UI2DImage(
+		m_TESTGameObject, pd3dDevice, pd3dCommandList,
+		POINT{ int(GameScreen::GetWidth()) / 2 - 100, int(GameScreen::GetHeight()) / 2 + 270 }, 100, 100, nullptr
+	);
+
+	// 스킬 3
+	m_SampleUISkill3 = new UI2DImage(
+		m_TESTGameObject, pd3dDevice, pd3dCommandList,
+		POINT{ int(GameScreen::GetWidth()) / 2 + 100, int(GameScreen::GetHeight()) / 2 + 270 }, 100, 100, nullptr
+	);
+
+	// 스킬 4
+	m_SampleUISkill4 = new UI2DImage(
+		m_TESTGameObject, pd3dDevice, pd3dCommandList,
+		POINT{ int(GameScreen::GetWidth()) / 2 + 300, int(GameScreen::GetHeight()) / 2 + 270 }, 100, 100, nullptr
+	);
 }
 
 void RoomScene::ReleaseObjects()
@@ -146,7 +192,7 @@ void RoomScene::ReleaseObjects()
 }
 
 bool RoomScene::ProcessInput(HWND hWnd, float ElapsedTime)
-{  
+{
 	return true;
 }
 
@@ -156,7 +202,7 @@ void RoomScene::UpdatePhysics(float ElapsedTime)
 
 // ProcessInput에 의한 right, up, look, pos 를 월드변환 행렬에 갱신한다.
 void RoomScene::Update(float fElapsedTime)
-{ 
+{
 }
 
 void RoomScene::LastUpdate(float fElapsedTime)
@@ -175,10 +221,18 @@ void RoomScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	// 클라 화면 설정
 	pd3dCommandList->RSSetViewports(1, &m_d3dViewport);
 	pd3dCommandList->RSSetScissorRects(1, &m_d3dScissorRect);
-	 
+
 	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_UISCREEN);
 
-	m_SampleUIImage->Render(pd3dCommandList);
+	// m_SampleUIImage1->Render(pd3dCommandList);
+	// m_SampleUIImage2->Render(pd3dCommandList);
+	// m_SampleUIImage3->Render(pd3dCommandList);
+
+	m_SampleUIMap->Render(pd3dCommandList);
+	m_SampleUISkill1->Render(pd3dCommandList);
+	m_SampleUISkill2->Render(pd3dCommandList);
+	m_SampleUISkill3->Render(pd3dCommandList);
+	m_SampleUISkill4->Render(pd3dCommandList);
 }
 
 void RoomScene::ReleaseUploadBuffers()

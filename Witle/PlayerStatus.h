@@ -13,7 +13,9 @@ private:
 
 private:
 	Shader* m_pHPBarShader{ nullptr };
+	Shader* m_pMPBarShader{ nullptr };
 	MyRectangle* m_HpBar{ nullptr };
+	MyRectangle* m_MpBar{ nullptr };
 	 
 public:
 	virtual void ReleaseObjects() override;

@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "d3dUtil.h"
- 
+
 //// Skill header //////////////////////////
 #include "WideareaMagic.h"
 #include "Sniping.h" 
@@ -27,7 +27,7 @@
 
 #include "GameScreen.h"
 #include "GameTimer.h"
- 
+
 #include "CreepyMonster.h"
 #include "PlayerStatus.h"
 #include "MonsterStatus.h"
@@ -50,6 +50,8 @@
 #include "QuadTreeTerrain.h"
 #include "BasicCam.h" 
 #include "SpaceCat.h"
+
+#include "UI2DImage.h"
 #include "GameScene.h"
 
 ID3D12DescriptorHeap*		GameScene::m_pd3dCbvSrvDescriptorHeap;
@@ -63,8 +65,8 @@ D3D12_CPU_DESCRIPTOR_HANDLE	GameScene::m_d3dCbvCPUDescriptorNextHandle;
 D3D12_GPU_DESCRIPTOR_HANDLE	GameScene::m_d3dCbvGPUDescriptorNextHandle;
 D3D12_CPU_DESCRIPTOR_HANDLE	GameScene::m_d3dSrvCPUDescriptorNextHandle;
 D3D12_GPU_DESCRIPTOR_HANDLE	GameScene::m_d3dSrvGPUDescriptorNextHandle;
- 
-GameScene::GameScene() 
+
+GameScene::GameScene()
 {
 
 }
@@ -153,16 +155,16 @@ bool GameScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM w
 		}
 		break;
 	case WM_KEYDOWN:
-		switch (wParam) { 
+		switch (wParam) {
 		case VK_F2:
 			MyBOBox::CHANGEMODE();
 			Monster::CHANGEMODE();
 			break;
 
-		case 'L': 
+		case 'L':
 			break;
 
-		case 'Z': 
+		case 'Z':
 			m_pPlayer->SubstractHP(100);
 			break;
 
@@ -197,10 +199,10 @@ bool GameScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM w
 
 		case 'W':
 			break;
-		case 'w':  
+		case 'w':
 			break;
 		case 'S':
-		case 's':  
+		case 's':
 			break;
 		default:
 			break;
@@ -214,13 +216,13 @@ bool GameScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM w
 void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList)
 {
 	BuildLightsAndMaterials(pd3dDevice, pd3dCommandList);
-	 
+
 	// 디스크립터 힙 설정
 	GameScene::CreateCbvSrvDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 3);
 
 	m_AimPoint = new AimPoint("AimPoint", pd3dDevice, pd3dCommandList, POINT{ int(GameScreen::GetWidth()) / 2, int(GameScreen::GetHeight()) / 2 }, 100.f, 100.f, L"Image/AimPoint.dds");
 	// m_WideareaMagic = new WideareaMagic(pd3dDevice, pd3dCommandList);
-	
+
 	//// 스카이 박스 생성
 	m_SkyBox = new SkyBox(pd3dDevice, pd3dCommandList, 3000.F, 3000.F, 3000.F);
 
@@ -229,17 +231,17 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	// XMFLOAT3 xmf3Scale(1.f, 1.0f, 1.f);
 	XMFLOAT4 xmf4Color(0.0f, 0.5f, 0.0f, 0.0f);
 	m_Terrain = new Terrain("Terrain", pd3dDevice, pd3dCommandList, L"Image/HeightMap.raw", 257, 257, 257, 257, xmf3Scale, xmf4Color);
-	
+
 	// 플레이어
 	m_pPlayer = new Player("Player", pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
 	m_SkyBox->SetpPlayerTransform(&m_pPlayer->GetTransform());
 	PlayerManager::SetMainPlayer(m_pPlayer);
 	// 테스트용 
 
-	 std::random_device rd;
-	  std::mt19937 mersenne(rd());
-	  std::uniform_int_distribution<> die(2000, 15000);
-	  std::uniform_int_distribution<> monstertype(0, 1);
+	std::random_device rd;
+	std::mt19937 mersenne(rd());
+	std::uniform_int_distribution<> die(2000, 15000);
+	std::uniform_int_distribution<> monstertype(0, 1);
 
 	// 몬스터
 	m_TestMonster = new Monster*[m_TestMonsterCount];
@@ -248,7 +250,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 		XMFLOAT3(1500, 0, 1000),
 		pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
 
-	for (int i = 1; i < m_TestMonsterCount; ++i) 
+	for (int i = 1; i < m_TestMonsterCount; ++i)
 	{
 		int value = monstertype(mersenne);
 
@@ -259,7 +261,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 				pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
 		}
 		else
-		{ 
+		{
 			m_TestMonster[i] = new CreepyMonster("CreepyMonster",
 				XMFLOAT3(die(mersenne), 0, die(mersenne)),
 				pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
@@ -270,12 +272,12 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	m_pQuadtreeTerrain = new QuadtreeTerrain(pd3dDevice, pd3dCommandList, 257, 257, xmf3Scale, xmf4Color, m_Terrain->GetHeightMapImage());
 
 	// 카메라
-	m_pMainCamera = new CameraObject("Camera");  
+	m_pMainCamera = new CameraObject("Camera");
 	m_Sniping = new Sniping(m_pMainCamera, m_pPlayer, pd3dDevice, pd3dCommandList);
 	m_pPlayer->SetSniping(m_Sniping);
 	m_pMainCamera->ChangeCamera(m_Sniping->GetBaseCamera());
 	MainCameraMgr::SetMainPlayer(m_pMainCamera);
-	 
+
 	m_pSkyCameraObj = new CameraObject("SkyCamera");
 	m_pSkyCamera = new BasicCam(m_pSkyCameraObj);
 	m_pSkyCamera->CreateShaderVariables(pd3dDevice, pd3dCommandList);
@@ -298,17 +300,49 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	m_lookAboveCamera->GetCamera()->SetViewport(GBuffer_Viewport);
 	m_lookAboveCamera->GetCamera()->GenerateProjectionMatrix(0.01f, CAMERA_FAR, float(GameScreen::GetWidth()) / float(GameScreen::GetHeight()), 60.0f);
 	//m_lookAboveCamera->GetCamera()->SetAt(XMFLOAT3(xmf3Scale.x * 257 / 2, 0.f, xmf3Scale.y * 257 / 2)); 
-	m_lookAboveCamera->GetCamera()->SetAt(XMFLOAT3(xmf3Scale.x * 257 / 2, 2000.f, xmf3Scale.z * 257 / 2)); 
+	m_lookAboveCamera->GetCamera()->SetAt(XMFLOAT3(xmf3Scale.x * 257 / 2, 2000.f, xmf3Scale.z * 257 / 2));
 	m_lookAboveCamera->GetCamera()->SetOffset(XMFLOAT3(0.0f, 0.f, 10.f));
 	m_lookAboveCamera->GetCamera()->Rotate(90.f, 0.f, 0.f);
 #endif 
 
 	// 리소스 뷰 설정
-	GameScene::CreateShaderResourceViews(pd3dDevice, m_Terrain->GetTexture(), ROOTPARAMETER_TEXTUREBASE, true);  
+	GameScene::CreateShaderResourceViews(pd3dDevice, m_Terrain->GetTexture(), ROOTPARAMETER_TEXTUREBASE, true);
+
+	// m_TESTGameObject = new EmptyGameObject("Test");
+	// 
+	// // 미니맵
+	// m_SampleUIMap = new UI2DImage(
+	// 	m_TESTGameObject, pd3dDevice, pd3dCommandList,
+	// 	POINT{ int(GameScreen::GetWidth()) / 2, int(GameScreen::GetHeight()) / 2 - 50 }, 200, 300, L"Image/CharacterAppearance1_OFF.dds"
+	// );
+	// 
+	// // 스킬 1
+	// m_SampleUISkill1 = new UI2DImage(
+	// 	m_TESTGameObject, pd3dDevice, pd3dCommandList,
+	// 	POINT{ int(GameScreen::GetWidth()) / 2, int(GameScreen::GetHeight()) / 2 - 50 }, 200, 300, nullptr
+	// );
+	// 
+	// // 스킬 2
+	// m_SampleUISkill2 = new UI2DImage(
+	// 	m_TESTGameObject, pd3dDevice, pd3dCommandList,
+	// 	POINT{ int(GameScreen::GetWidth()) / 2, int(GameScreen::GetHeight()) / 2 + 250 }, 200, 50, nullptr
+	// );
+	// 
+	// // 스킬 3
+	// m_SampleUISkill3 = new UI2DImage(
+	// 	m_TESTGameObject, pd3dDevice, pd3dCommandList,
+	// 	POINT{ int(GameScreen::GetWidth()) / 2, int(GameScreen::GetHeight()) / 2 + 250 }, 200, 50, nullptr
+	// );
+	// 
+	// // 스킬 4
+	// m_SampleUISkill4 = new UI2DImage(
+	// 	m_TESTGameObject, pd3dDevice, pd3dCommandList,
+	// 	POINT{ int(GameScreen::GetWidth()) / 2, int(GameScreen::GetHeight()) / 2 + 250 }, 200, 50, nullptr
+	// );
 }
 
 void GameScene::ReleaseObjects()
-{  
+{
 	if (m_pd3dCbvSrvDescriptorHeap)
 	{
 		m_pd3dCbvSrvDescriptorHeap->Release();
@@ -356,10 +390,10 @@ void GameScene::ReleaseObjects()
 	{
 		delete[] m_PlayerTerrainIndex;
 		m_PlayerTerrainIndex = nullptr;
-	} 
+	}
 	if (m_Sniping)
-	{ 
-		m_Sniping->ReleaseObjects(); 
+	{
+		m_Sniping->ReleaseObjects();
 		delete m_Sniping;
 		m_Sniping = nullptr;
 	}
@@ -370,11 +404,11 @@ void GameScene::ReleaseObjects()
 		m_WideareaMagic = nullptr;
 	}
 	if (m_AimPoint)
-	{ 
+	{
 		m_AimPoint->ReleaseObjects();
 		delete m_AimPoint;
 		m_AimPoint = nullptr;
-	} 
+	}
 	if (m_pPlayer)
 	{
 		m_pPlayer->ReleaseObjects();
@@ -390,19 +424,19 @@ void GameScene::ReleaseObjects()
 	}
 #endif
 	if (m_pMainCamera)
-	{ 
+	{
 		m_pMainCamera->ReleaseObjects();
 		delete m_pMainCamera;
 		m_pMainCamera = nullptr;
 	}
 	if (m_Terrain)
-	{ 
-		m_Terrain->ReleaseObjects(); 
+	{
+		m_Terrain->ReleaseObjects();
 		delete m_Terrain;
 		m_Terrain = nullptr;
-	} 
+	}
 	if (m_pQuadtreeTerrain)
-	{  
+	{
 		m_pQuadtreeTerrain->ReleaseObjects();
 		delete m_pQuadtreeTerrain;
 		m_pQuadtreeTerrain = nullptr;
@@ -423,22 +457,22 @@ void GameScene::ReleaseObjects()
 }
 
 bool GameScene::ProcessInput(HWND hWnd, float fElapsedTime)
-{ 
+{
 	// 플레이어 이동에 대한 처리 (정확히는 이동이 아니라 가속도)
-	m_pPlayer->ProcessInput(fElapsedTime); 
-	
+	m_pPlayer->ProcessInput(fElapsedTime);
+
 	// 플레이어 회전에 대한 처리
 	if ((GameInput::GetDeltaX() != 0.0f) || (GameInput::GetDeltaY() != 0.0f))
 	{
 		if (GameInput::GetDeltaX() || GameInput::GetDeltaY())
-		{ 
+		{
 			// 플레이어와 카메라 똑같이 rotate...
 			// 순서 의존적이므로 변경 금지
 			m_pMainCamera->GetCamera()->Rotate(GameInput::GetDeltaY(), GameInput::GetDeltaX(), 0.0f);
-			m_pPlayer->Rotate(0.0f, GameInput::GetDeltaX(), 0.0f); 
-		} 
+			m_pPlayer->Rotate(0.0f, GameInput::GetDeltaX(), 0.0f);
+		}
 	}
-	
+
 	return true;
 }
 
@@ -450,15 +484,15 @@ void GameScene::UpdatePhysics(float fElapsedTime)
 
 	// 반드시 마지막에 충돌 처리를 해야함.
 	// 그래야 충돌된 것에 따라 가속도 처리를 할 수 있음.
-	UpdateCollision(fElapsedTime); 
+	UpdateCollision(fElapsedTime);
 }
 
 // ProcessInput에 의한 right, up, look, pos 를 월드변환 행렬에 갱신한다.
 void GameScene::Update(float fElapsedTime)
-{ 
+{
 	// 플레이어 공격
 	if (GameInput::GetDragMode()) // 만약 드래그로 회전한다면...
-	{  
+	{
 		if (GameInput::IsKeydownE() && !m_pPlayer->IsAttacking() && !m_pPlayer->GetpBroom()->GetisUsing())
 		{
 			for (int i = 0; i < m_TestMonsterCount; ++i) {
@@ -478,10 +512,10 @@ void GameScene::Update(float fElapsedTime)
 	}
 
 	//// 순서 변경 X //// 
-	if(m_pPlayer) m_pPlayer->Update(fElapsedTime); //Velocity를 통해 pos 이동
-	 
-	if(m_SkyBox) m_SkyBox->Update(fElapsedTime); 
-	if(m_WideareaMagic) m_WideareaMagic->Update(fElapsedTime);
+	if (m_pPlayer) m_pPlayer->Update(fElapsedTime); //Velocity를 통해 pos 이동
+
+	if (m_SkyBox) m_SkyBox->Update(fElapsedTime);
+	if (m_WideareaMagic) m_WideareaMagic->Update(fElapsedTime);
 
 	for (int i = 0; i < m_TestMonsterCount; ++i)
 	{
@@ -490,7 +524,7 @@ void GameScene::Update(float fElapsedTime)
 	//// 순서 변경 X ////
 
 	// light update
-	if(m_pcbMappedLights) ::memcpy(m_pcbMappedLights, LightManager::m_pLights, sizeof(LIGHTS));
+	if (m_pcbMappedLights) ::memcpy(m_pcbMappedLights, LightManager::m_pLights, sizeof(LIGHTS));
 	// material update
 	::memcpy(m_pcbMappedMaterials, m_pMaterials, sizeof(MATERIAL));
 }
@@ -503,7 +537,7 @@ void GameScene::LastUpdate(float fElapsedTime)
 		m_lookAboveCamera->LastUpdate(fElapsedTime);
 	}
 #endif // CHECK_SUBVIEWS
-	 
+
 	// player update 이후에 camera update
 	// 순서변경X
 	if (m_pMainCamera) m_pMainCamera->LastUpdate(fElapsedTime);
@@ -537,7 +571,7 @@ void GameScene::TESTSetRootDescriptor(ID3D12GraphicsCommandList * pd3dCommandLis
 }
 
 void GameScene::AnimateObjects(float fTimeElapsed)
-{  
+{
 	if (m_pPlayer) m_pPlayer->Animate(fTimeElapsed);
 	for (int i = 0; i < m_TestMonsterCount; ++i)
 	{
@@ -546,7 +580,7 @@ void GameScene::AnimateObjects(float fTimeElapsed)
 }
 
 void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
-{ 
+{
 	RenderShadowMap(pd3dCommandList);
 
 	// 렌더링
@@ -566,10 +600,10 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 		m_pMainCamera->SetViewportsAndScissorRects(pd3dCommandList);
 		m_pMainCamera->GetCamera()->UpdateShaderVariables(pd3dCommandList, ROOTPARAMETER_CAMERA);
 	}
-	 
+
 	// 스카이박스 렌더
-	if(m_SkyBox) m_SkyBox->Render(pd3dCommandList);
-	 
+	if (m_SkyBox) m_SkyBox->Render(pd3dCommandList);
+
 	//  조명
 	D3D12_GPU_VIRTUAL_ADDRESS d3dcbLightsGpuVirtualAddress = m_pd3dcbLights->GetGPUVirtualAddress();
 	pd3dCommandList->SetGraphicsRootConstantBufferView(ROOTPARAMETER_LIGHTS, d3dcbLightsGpuVirtualAddress); //Lights
@@ -578,14 +612,14 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	pd3dCommandList->SetGraphicsRootConstantBufferView(ROOTPARAMETER_MATERIALS, d3dcbMaterialsGpuVirtualAddress);
 
 	pd3dCommandList->SetDescriptorHeaps(1, &m_pd3dCbvSrvDescriptorHeap);
-	 
+
 	if (m_pPlayer) m_pPlayer->Render(pd3dCommandList);
-	 
-	if(m_WideareaMagic) m_WideareaMagic->Render(pd3dCommandList);
+
+	if (m_WideareaMagic) m_WideareaMagic->Render(pd3dCommandList);
 
 
 #ifdef CHECK_SUBVIEWS
-	m_lookAboveCamera->SetViewportsAndScissorRects(pd3dCommandList); 
+	m_lookAboveCamera->SetViewportsAndScissorRects(pd3dCommandList);
 	m_lookAboveCamera->GetCamera()->UpdateShaderVariables(pd3dCommandList, ROOTPARAMETER_CAMERA);
 
 	m_pQuadtreeTerrain->Render(m_pQuadtreeTerrain->GetRootNode(), pd3dCommandList);
@@ -593,15 +627,17 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 
 	////////////////////////////// Model Render
 	// PSO 설정
-	 
+
 
 	//// Aim point Render 
 	if (!m_isSkyMode)
 	{
-		if (m_pPlayer) m_pPlayer->RenderHpStatus(pd3dCommandList);
+		if (m_pPlayer) m_pPlayer->RenderHpStatus(pd3dCommandList); // 체력
+		if (m_pPlayer) m_pPlayer->RenderMpStatus(pd3dCommandList); // 마나
+
 		if (!m_pPlayer->GetBroom()->GetisPrepare() && !m_pPlayer->GetBroom()->GetisUsing())
 		{
-			if(m_AimPoint) m_AimPoint->Render(pd3dCommandList);
+			if (m_AimPoint) m_AimPoint->Render(pd3dCommandList);
 		}
 	}
 
@@ -617,16 +653,22 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 		Mesh* terrainMesh = m_Terrain->GetComponent<Mesh>("TerrainMesh");
 		m_pQuadtreeTerrain->Render(pd3dCommandList, m_Terrain, m_pd3dCbvSrvDescriptorHeap);
 	}
+
+	// m_SampleUIMap->Render(pd3dCommandList);
+	// m_SampleUISkill1->Render(pd3dCommandList);
+	// m_SampleUISkill2->Render(pd3dCommandList);
+	// m_SampleUISkill3->Render(pd3dCommandList);
+	// m_SampleUISkill4->Render(pd3dCommandList);
 }
 
 void GameScene::ReleaseUploadBuffers()
-{   
+{
 	if (m_SkyBox) m_SkyBox->ReleaseUploadBuffers();
 	if (m_AimPoint)m_AimPoint->ReleaseUploadBuffers();
 	if (m_Sniping) m_Sniping->ReleaseUploadBuffers();
 	if (m_WideareaMagic) m_WideareaMagic->ReleaseUploadBuffers();
 	if (m_SkyBox) m_SkyBox->ReleaseUploadBuffers();
-	 if (m_pPlayer) m_pPlayer->ReleaseUploadBuffers();
+	if (m_pPlayer) m_pPlayer->ReleaseUploadBuffers();
 	if (m_Terrain) m_Terrain->ReleaseUploadBuffers();
 	if (m_pQuadtreeTerrain) m_pQuadtreeTerrain->ReleaseUploadBuffers();
 	for (int i = 0; i < m_TestMonsterCount; ++i)
@@ -635,7 +677,7 @@ void GameScene::ReleaseUploadBuffers()
 	}
 }
 
- 
+
 void GameScene::UpdateCollision(const BoundingOrientedBox & AlreadyPlayerBBox, float fElapsedTime)
 {
 }
@@ -645,9 +687,9 @@ void GameScene::UpdateCollision(float fElapsedTime)
 	// 플레이어 충돌체크 ///////////////////////// 
 	BoundingOrientedBox AlreadyPlayerBBox = m_pPlayer->CalculateAlreadyBoundingBox(fElapsedTime);
 	XMFLOAT3 AlreadyPositon{ AlreadyPlayerBBox.Center.x, AlreadyPlayerBBox.Center.y, AlreadyPlayerBBox.Center.z };
-	
+
 	// 외곽처리
-	MyBOBox outside_box[4]{ 
+	MyBOBox outside_box[4]{
 		{XMFLOAT3(-100, 0, 15000), XMFLOAT3(100, 3000, 20000)},
 		{XMFLOAT3(15000, 0, 30100), XMFLOAT3(20000, 3000, 100)},
 		{XMFLOAT3(30100, 0, 15000), XMFLOAT3(100, 3000, 20000)},
@@ -661,16 +703,16 @@ void GameScene::UpdateCollision(float fElapsedTime)
 
 		// 이동한 박스를 통해 충돌한다.
 		bool isSlide = Collision::ProcessCollision(
-			AlreadyPlayerBBox, 
-			outside_box[i], 
+			AlreadyPlayerBBox,
+			outside_box[i],
 			m_pPlayer->GetTransform().GetPosition(),
-			m_pPlayer->GetVelocity(), 
+			m_pPlayer->GetVelocity(),
 			fElapsedTime,
 			false,
 			slideVector);
 
 		if (isSlide)
-		{ 
+		{
 			m_pPlayer->SetVelocity(slideVector);
 		}
 	}
@@ -681,7 +723,7 @@ void GameScene::UpdateCollision(float fElapsedTime)
 	// 오브젝트들 충돌체크
 	// Ti: Terrain Index
 	for (int Ti = 0; Ti < TerrainCount; ++Ti)
-	{ 
+	{
 		int TerrainIndex = Ti;
 		//if (Ti == 0) TerrainIndex = IDs.x;
 		//else if (Ti == 1) TerrainIndex = IDs.y;
@@ -721,7 +763,7 @@ void GameScene::UpdateCollision(float fElapsedTime)
 				{
 					m_pPlayer->SetVelocity(slideVector);
 				}
-				 
+
 			}
 		}
 	}
@@ -755,7 +797,7 @@ void GameScene::BuildLightsAndMaterials(ID3D12Device *pd3dDevice, ID3D12Graphics
 	LightManager::m_pLights->m_pLights[0].Position = XMFLOAT3(0.0f, 0.0f, 0.0f);
 	LightManager::m_pLights->m_pLights[0].Direction = XMFLOAT3(0.0f, 0.0f, 0.0f);
 	LightManager::m_pLights->m_pLights[0].Attenuation = XMFLOAT3(1.0f, 0.001f, 0.0001f);
-	
+
 	LightManager::m_pLights->m_pLights[1].bEnable = false;
 	LightManager::m_pLights->m_pLights[1].nType = LIGHT_TYPE::SPOT_LIGHT;
 	LightManager::m_pLights->m_pLights[1].fRange = 50.0f;
@@ -775,7 +817,7 @@ void GameScene::BuildLightsAndMaterials(ID3D12Device *pd3dDevice, ID3D12Graphics
 	LightManager::m_pLights->m_pLights[2].Diffuse = XMFLOAT4(1.0f, 0.4f, 0.4f, 1.0f);
 	LightManager::m_pLights->m_pLights[2].Specular = XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f);
 	LightManager::m_pLights->m_pLights[2].Direction = XMFLOAT3(0.0f, 0.0f, 1.0f);
-	
+
 	LightManager::m_pLights->m_pLights[3].bEnable = false;
 	LightManager::m_pLights->m_pLights[3].nType = LIGHT_TYPE::SPOT_LIGHT;
 	LightManager::m_pLights->m_pLights[3].fRange = 60.0f;
@@ -789,7 +831,7 @@ void GameScene::BuildLightsAndMaterials(ID3D12Device *pd3dDevice, ID3D12Graphics
 	LightManager::m_pLights->m_pLights[3].fPhi = (float)cos(XMConvertToRadians(90.0f));
 	LightManager::m_pLights->m_pLights[3].fTheta = (float)cos(XMConvertToRadians(30.0f));
 
-	 
+
 	UINT ncbElementBytes = ((sizeof(LIGHTS) + 255) & ~255); //256의 배수
 	m_pd3dcbLights = d3dUtil::CreateBufferResource(pd3dDevice, pd3dCommandList, NULL, ncbElementBytes, D3D12_HEAP_TYPE_UPLOAD, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, NULL);
 
@@ -801,7 +843,7 @@ void GameScene::BuildLightsAndMaterials(ID3D12Device *pd3dDevice, ID3D12Graphics
 	::ZeroMemory(m_pMaterials, sizeof(MATERIAL));
 
 	*m_pMaterials = { XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 5.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f) };
-	
+
 	CreateConstantBuffer(pd3dDevice, pd3dCommandList, m_pd3dcbMaterials, sizeof(MATERIAL), (void **)&m_pcbMappedMaterials);
 
 	UINT ncbMaterialBytes = ((sizeof(MATERIAL) + 255) & ~255); //256의 배수
@@ -814,4 +856,4 @@ void GameScene::BuildLightsAndMaterials(ID3D12Device *pd3dDevice, ID3D12Graphics
 void GameScene::RenderShadowMap(ID3D12GraphicsCommandList * pd3dCommandList)
 {
 }
- 
+

@@ -1,20 +1,20 @@
 #pragma once
 #include "Scene.h"
- 
+
 //// Skill ////////////////
 class Sniping;
 class WideareaMagic;
 //// Skill ////////////////
 
 //// Objects ///////////////
-class Player; 
+class Player;
 class Widget;
 
 //// Objects ///////////////
 
 class Monster;
 class SkyBox;
-class Shader; 
+class Shader;
 class CLoadedModelInfo;
 
 class CameraObject;
@@ -32,6 +32,8 @@ struct MATERIALS;
 class AimPoint;
 class CylinderMesh;
 class LineSphere;
+
+class UI2DImage;
 
 class GameScene
 	: public Scene
@@ -65,12 +67,12 @@ protected:
 	D3D12_CPU_DESCRIPTOR_HANDLE GetCPUSrvDescriptorNextHandle() { return(m_d3dSrvCPUDescriptorNextHandle); }
 	D3D12_GPU_DESCRIPTOR_HANDLE GetGPUSrvDescriptorNextHandle() { return(m_d3dSrvGPUDescriptorNextHandle); }
 
-protected: 
+protected:
 	void UpdateCollision(const BoundingOrientedBox& AlreadyPlayerBBox, float fElapsedTime);
-	void UpdateCollision(float fElapsedTime); 
+	void UpdateCollision(float fElapsedTime);
 	void BuildLightsAndMaterials(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList);
 	void RenderShadowMap(ID3D12GraphicsCommandList *pd3dCommandList);
-	 
+
 public:
 	GameScene();
 	virtual ~GameScene();
@@ -81,8 +83,8 @@ public:
 	virtual void BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList) override;
 	virtual void ReleaseObjects() override;
 
-	virtual bool ProcessInput(HWND hWnd, float ElapsedTime) override; 
-	 
+	virtual bool ProcessInput(HWND hWnd, float ElapsedTime) override;
+
 	virtual void AnimateObjects(float fTimeElapsed) override;
 	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList) override;
 
@@ -93,7 +95,7 @@ public:
 	virtual void LastUpdate(float ElapsedTime) override;
 
 	void TESTSetRootDescriptor(ID3D12GraphicsCommandList *pd3dCommandList);
-	
+
 protected:
 	bool					m_isSkyMode{ false };
 
@@ -103,23 +105,23 @@ protected:
 	Sniping*				m_Sniping{ nullptr };
 	WideareaMagic*          m_WideareaMagic{ nullptr };
 	Player*                 m_pPlayer{ nullptr };
-	 
-	Terrain*                m_Terrain{ nullptr }; 
+
+	Terrain*                m_Terrain{ nullptr };
 	CameraObject*           m_pMainCamera{ nullptr }; // 실제로 화면에 그려지는 카메라
-	
+
 	CameraObject*           m_pSkyCameraObj{ nullptr };
 	Camera*					m_pSkyCamera{ nullptr };
 	//
 	SkyBox*					m_SkyBox{ nullptr };
-	 
+
 	int						m_TestMonsterCount{ 25 };
 	Monster**				m_TestMonster{ nullptr };
 
 #ifdef CHECK_SUBVIEWS
 	CameraObject*			m_lookAboveCamera{ nullptr };
 #endif
-	 //
-	//////////////////////////////////////  조명
+	//
+   //////////////////////////////////////  조명
 	ID3D12Resource				*m_pd3dcbLights{ nullptr };
 	LIGHTS						*m_pcbMappedLights{ nullptr };
 
@@ -128,7 +130,16 @@ protected:
 	ID3D12Resource				*m_pd3dcbMaterials{ nullptr };
 	MATERIAL					*m_pcbMappedMaterials{ nullptr };
 	//////////////////////////////////////  조명
-	
+
 	// 충돌체크할 테스트 오브젝트  
 	QuadtreeTerrain			    *m_pQuadtreeTerrain{ nullptr };
+
+private:
+	GameObject* m_TESTGameObject{ nullptr };
+
+	UI2DImage* m_SampleUIMap{ nullptr }; //맵
+	UI2DImage* m_SampleUISkill1{ nullptr }; // 스킬 1
+	UI2DImage* m_SampleUISkill2{ nullptr }; // 스킬 2
+	UI2DImage* m_SampleUISkill3{ nullptr }; // 스킬 3
+	UI2DImage* m_SampleUISkill4{ nullptr }; // 스킬 4
 };

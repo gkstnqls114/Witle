@@ -87,7 +87,8 @@ public:
 	void SubstractHP(int sub);
 	void Animate(float fElapsedTime);
 	void Render(ID3D12GraphicsCommandList *pd3dCommandList);
-	void RenderHpStatus(ID3D12GraphicsCommandList *pd3dCommandList);
+	void RenderHpStatus(ID3D12GraphicsCommandList *pd3dCommandList); // 체력
+	void RenderMpStatus(ID3D12GraphicsCommandList *pd3dCommandList); // 마나
   
 	void Move(ULONG nDirection, float fDistance, bool bVelocity = false);
 	void Move(const XMFLOAT3& xmf3Shift);
