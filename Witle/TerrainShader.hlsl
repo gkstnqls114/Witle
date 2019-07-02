@@ -64,11 +64,14 @@ PS_OUTPUT_FOR_GBUFFERS PSTerrainForGBuffers(VS_TERRAIN_OUTPUT input)
     float4 cColor = input.color * saturate((cBaseTexColor * 0.5f) + (cDetailTexColor * 0.5f));
 
     // gbuffer 구조체에 패킹
+    float depth = input.position.z / input.position.w;
+    if (depth > 0.01f)
+        depth = 1.f;
     float SpecPowerNorm = NormalizeSpecPower(1); // 스페큘러 파워 정규화
     float SpecIntensity = 1; 
     output.ColorSpecInt = float4(cColor.rgb, SpecIntensity);
     output.Normal = float4(float3(0.f, 1.f, 0.f) * 0.5 + 0.5, 0.0);
-    output.SpecPow = float4(SpecPowerNorm, 0, 0, 0);
+    output.SpecPow = float4(depth, depth, depth, 0);
 
     return (output);
 } 

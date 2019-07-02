@@ -145,7 +145,7 @@ void CGameFramework::RenderGBuffers()
 	// 장면을 렌더합니다.
 	for (int i = 0; i < m_GBuffersCount; ++i)
 	{
-		D3D12_VIEWPORT	GBuffer_Viewport{ anotherWidth *  i, height - anotherHeight, anotherWidth , anotherHeight, 0.0f, 1.0f };
+		D3D12_VIEWPORT	GBuffer_Viewport{ anotherWidth *  i, height - anotherHeight, anotherWidth , anotherHeight, 1.0f, 0.0f };
 		D3D12_RECT		ScissorRect{ anotherWidth * i, height - anotherHeight, anotherWidth * (3 + i) , height + anotherHeight };
 
 		m_CommandList->RSSetViewports(1, &GBuffer_Viewport);
@@ -536,9 +536,9 @@ void CGameFramework::BuildObjects()
 	// 루트 시그니처 먼저 생성
 	GraphicsRootSignatureMgr::BuildObject(m_d3dDevice.Get());
 
-	m_pScene = new GameScene;
+	// m_pScene = new GameScene;
 	// m_pScene = new LoadingScene;
-	// m_pScene = new RoomScene;
+	m_pScene = new RoomScene;
 	
 	// 루트 시그니처를 통해 모든 오브젝트 갖고온다.
 	TextureStorage::GetInstance()->CreateTextures(m_d3dDevice.Get(), m_CommandList.Get());

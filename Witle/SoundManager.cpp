@@ -3,13 +3,6 @@
 
 SoundManager* SoundManager::m_Instance;
 
-enum ENUM_SOUND
-{
-	INTRO,
-	LOGO2
-};
- 
-
 SoundManager::SoundManager()
 {
 	FMOD::System_Create(&pSystem);
@@ -21,20 +14,20 @@ SoundManager::SoundManager()
 
 	for (auto& p : pSound) p = nullptr;
 
-	// t사운드 추가
-	//pSystem->createSound(
-	//	"Sound/VIOLA_SKILL2.mp3"
-	//	, FMOD_DEFAULT | FMOD_LOOP_OFF
-	//	, nullptr
-	//	, &pSound[(int)ENUM_SOUND::LOGO2]
-	//);
+	// 사운드 추가
+	pSystem->createSound(
+		"Sound/Effect/select.mp3"
+		, FMOD_DEFAULT | FMOD_LOOP_OFF
+		, nullptr
+		, &pSound[(int)ENUM_SOUND::EFFECT]
+	);
 
-	//pSystem->createStream( // 배경음악
-	//	"Sound/Fez - Adventure.mp3"
-	//	, FMOD_LOOP_NORMAL | FMOD_2D
-	//	, nullptr
-	//	, &pSound[(int)ENUM_SOUND::INTRO]
-	//);
+	pSystem->createStream( // 배경음악
+		"Sound/BGM/title.mp3"
+		, FMOD_LOOP_NORMAL | FMOD_2D
+		, nullptr
+		, &pSound[(int)ENUM_SOUND::TITLE]
+	);
 }
 
 
@@ -53,10 +46,10 @@ void SoundManager::Play(int type)
 {
 	pSystem->update();
 	pSystem->playSound(pSound[(int)type]
-		, nullptr, false, nullptr);
+		, nullptr, false, &pChannel[(int)type]);
 }
 
 void SoundManager::Stop(int type)
-{
+{ 
 	pChannel[(int)type]->stop();
 }

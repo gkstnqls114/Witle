@@ -69,13 +69,14 @@ VS_STANDARD_OUTPUT VSSkinnedAnimationStandard(VS_SKINNED_STANDARD_INPUT input)
 		//		mtxVertexToBoneWorld += input.weights[i] * gpmtxBoneTransforms[input.indices[i]];
         mtxVertexToBoneWorld += input.weights[i] * mul(gpmtxBoneOffsets[input.indices[i]], gpmtxBoneTransforms[input.indices[i]]);
     }
-    output.positionW = mul(float4(input.position, 1.0f), mtxVertexToBoneWorld).xyz;
+    float4 posW = mul(float4(input.position, 1.0f), mtxVertexToBoneWorld);
+    output.positionW = posW.xyz;
     output.normalW = mul(input.normal, (float3x3) mtxVertexToBoneWorld).xyz;
     output.tangentW = mul(input.tangent, (float3x3) mtxVertexToBoneWorld).xyz;
     output.bitangentW = mul(input.bitangent, (float3x3) mtxVertexToBoneWorld).xyz;
 
 	//	output.positionW = mul(float4(input.position, 1.0f), gmtxGameObject).xyz; 
-    output.position = mul(mul(float4(output.positionW, 1.0f), gmtxView), gmtxProjection);
+    output.position = mul(mul(posW, gmtxView), gmtxProjection);
     output.uv = input.uv;
 
 	return(output);
@@ -105,12 +106,13 @@ PS_OUTPUT_FOR_GBUFFERS PSStandardForGBuffers(VS_STANDARD_OUTPUT input)
 	// 임시로 사용할 컬러 색깔
     float4 cColor = gtxtTexture.Sample(gWrapSamplerState, input.uv); 
 
+    float depth = input.position.z / input.position.w;
     // gbuffer 구조체에 패킹
     float SpecPowerNorm = NormalizeSpecPower(1); // 스페큘러 파워 정규화
     float SpecIntensity = 1; 
     output.ColorSpecInt = float4(cColor.rgb, SpecIntensity);
     output.Normal = float4(input.normalW.xyz * 0.5 + 0.5, 0.0);
-    output.SpecPow = float4(SpecPowerNorm, 0, 0, 0);
+    output.SpecPow = float4(depth, depth, depth, 0);
 
     return (output);
 }

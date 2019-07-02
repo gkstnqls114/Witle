@@ -7,6 +7,13 @@
 
 
 //// Enum Type ////////////////////////////////////
+enum ENUM_SOUND
+{
+	TITLE,
+	EFFECT
+};
+
+
 enum COLLIDER_TYPE
 {
 	BOUNDING_BOX,

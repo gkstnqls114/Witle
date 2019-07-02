@@ -2,6 +2,7 @@
 #include "d3dUtil.h"  
 #include "GameInput.h"
 #include "GameScreen.h"
+#include "SoundManager.h"
 #include "UI2DImage.h"
 #include "GraphicsRootSignatureMgr.h"
 #include "ShaderManager.h" 
@@ -91,6 +92,9 @@ bool RoomScene::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM wPar
 	return false;
 }
 
+static bool bTitle = false;
+static bool bEffect = false;
+
 bool RoomScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam, float ElapsedTime)
 {
 	switch (nMessageID)
@@ -107,10 +111,23 @@ bool RoomScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM w
 		break;
 	case WM_KEYDOWN:
 		switch (wParam) {
-		case 'A':
+		case '0':
+			if(!bTitle)
+			{ 
+				bTitle = true;
+				SoundManager::GetInstance()->Play(ENUM_SOUND::EFFECT);
+			}
+			else
+			{ 
+				bTitle = false;
+				SoundManager::GetInstance()->Stop(ENUM_SOUND::EFFECT);
+			}
 			break;
-		case 'W':
-		case 'w':
+		case '1': 
+			break;
+		case '2':
+			break;
+		case '3':
 			break;
 		case 'S':
 		case 's':
@@ -156,7 +173,7 @@ void RoomScene::UpdatePhysics(float ElapsedTime)
 
 // ProcessInput에 의한 right, up, look, pos 를 월드변환 행렬에 갱신한다.
 void RoomScene::Update(float fElapsedTime)
-{ 
+{
 }
 
 void RoomScene::LastUpdate(float fElapsedTime)
