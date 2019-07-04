@@ -340,6 +340,11 @@ void Player::RenderHpStatus(ID3D12GraphicsCommandList * pd3dCommandList, bool is
 {
 	m_pPlayerStatus->Render(pd3dCommandList);
 }
+
+void Player::RenderMpStatus(ID3D12GraphicsCommandList * pd3dCommandList)
+{
+	m_pPlayerStatus->Render(pd3dCommandList);
+}
  
 void Player::SetTrackAnimationSet()
 { 

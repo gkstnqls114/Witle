@@ -18,6 +18,7 @@
 //// Scene ////////////////////////// 
 #include "GameScene.h"
 #include "RoomScene.h"
+#include "LobbyScene.h"
 #include "LoadingScene.h"
 //// Scene ////////////////////////// 
  

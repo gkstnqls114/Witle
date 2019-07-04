@@ -73,5 +73,14 @@ private:
 	//Button* m_pCharacterAppearanceButton_2{ nullptr };
 
 	GameObject* m_TESTGameObject{ nullptr };
-	UI2DImage* m_SampleUIImage{ nullptr };
+
+	UI2DImage* m_SampleUIImage1{ nullptr }; // 캐릭터 1
+	UI2DImage* m_SampleUIImage2{ nullptr }; // 캐릭터 2
+	UI2DImage* m_SampleUIImage3{ nullptr }; // 선택 버튼
+
+	UI2DImage* m_SampleUIMap{ nullptr }; //맵
+	UI2DImage* m_SampleUISkill1{ nullptr }; // 스킬 1
+	UI2DImage* m_SampleUISkill2{ nullptr }; // 스킬 2
+	UI2DImage* m_SampleUISkill3{ nullptr }; // 스킬 3
+	UI2DImage* m_SampleUISkill4{ nullptr }; // 스킬 4
 };

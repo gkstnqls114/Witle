@@ -14,6 +14,7 @@ private:
 
 public:
 	int m_HP{ 1000 };
+	int m_MP{ 1000 };
 
 public:
 	virtual void ReleaseObjects() override {};
