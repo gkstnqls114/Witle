@@ -10,17 +10,17 @@
  
 #include "QuadTreeTerrain.h" 
 #include "Object.h" 
-#include "StaticObjectStorage.h"
+#include "MonsterTransformStorage.h"
 
 using namespace FileRead;
 
-StaticObjectStorage* StaticObjectStorage::m_Instance{ nullptr };
+MonsterTransformStorage* MonsterTransformStorage::m_Instance{ nullptr };
 
-void StaticObjectStorage::UpdateShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList, int count, XMFLOAT4X4 * transforms)
+void MonsterTransformStorage::UpdateShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList, int count, XMFLOAT4X4 * transforms)
 { 
 }
  
-bool StaticObjectStorage::LoadTransform(char * name, const char * comp_name, const XMINT4 & IDs, const XMFLOAT4X4 & tr)
+bool MonsterTransformStorage::LoadTransform(char * name, const char * comp_name, const XMINT4 & IDs, const XMFLOAT4X4 & tr)
 { 
 	bool result = false;
 
@@ -36,9 +36,9 @@ bool StaticObjectStorage::LoadTransform(char * name, const char * comp_name, con
 
 			for (int x = 0; x < TerrainPieceCount; ++x)
 			{
-				m_StaticObjectStorage[comp_name][x].TerrainObjectCount += 1;
+				m_MonsterTransformStorage[comp_name][x].TerrainObjectCount += 1;
 
-				m_StaticObjectStorage[comp_name][x].TransformList.emplace_back(TestObject->m_pChild->m_xmf4x4World);
+				m_MonsterTransformStorage[comp_name][x].TransformList.emplace_back(TestObject->m_pChild->m_xmf4x4World);
 			}
 
 			delete TestObject;
@@ -57,13 +57,13 @@ bool StaticObjectStorage::LoadTransform(char * name, const char * comp_name, con
 
 			if (terrainIDs == -1) continue;
 
-			m_StaticObjectStorage[comp_name][terrainIDs].TerrainObjectCount += 1;
+			m_MonsterTransformStorage[comp_name][terrainIDs].TerrainObjectCount += 1;
 
 			LoadObject* TestObject = ModelStorage::GetInstance()->GetRootObject(comp_name);
 			TestObject->SetTransform(tr);
 			TestObject->UpdateTransform(NULL);
 
-			m_StaticObjectStorage[comp_name][terrainIDs].TransformList.emplace_back(TestObject->m_pChild->m_xmf4x4World);
+			m_MonsterTransformStorage[comp_name][terrainIDs].TransformList.emplace_back(TestObject->m_pChild->m_xmf4x4World);
 
 			delete TestObject;
 			TestObject = nullptr;
@@ -74,7 +74,7 @@ bool StaticObjectStorage::LoadTransform(char * name, const char * comp_name, con
 	return result;
 }
 
-void StaticObjectStorage::LoadTerrainObjectFromFile(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, const char * pstrFileName, const QuadtreeTerrain const * pTerrain)
+void MonsterTransformStorage::LoadTerrainObjectFromFile(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, const char * pstrFileName, const QuadtreeTerrain const * pTerrain)
 {
 	FILE *pInFile = NULL;
 	::fopen_s(&pInFile, pstrFileName, "rb");
@@ -88,7 +88,7 @@ void StaticObjectStorage::LoadTerrainObjectFromFile(ID3D12Device * pd3dDevice, I
 	 
 	for (const auto& name : ModelStorage::GetInstance()->m_NameList)
 	{
-		m_StaticObjectStorage[name ] = new TerrainObjectInfo[TerrainPieceCount];
+		m_MonsterTransformStorage[name ] = new TerrainObjectInfo[TerrainPieceCount];
 	}
 
 	for (; ; )
@@ -138,8 +138,69 @@ void StaticObjectStorage::LoadTerrainObjectFromFile(ID3D12Device * pd3dDevice, I
 
 	::fclose(pInFile);
 }
- 
-void StaticObjectStorage::LoadNameAndPositionFromFile(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, FILE * pInFile, const QuadtreeTerrain const * pTerrain)
+
+void MonsterTransformStorage::LoadMonsterTransform(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, const char * pstrFileName)
+{
+	FILE *pInFile = NULL;
+	::fopen_s(&pInFile, pstrFileName, "rb");
+	::rewind(pInFile);
+
+	char pstrToken[64] = { '\0' };
+
+	for (const auto& name : ModelStorage::GetInstance()->m_NameList)
+	{
+		m_MonsterStorage[name] = new MonsterInfo[TerrainPieceCount];
+	}
+
+	for (; ; )
+	{
+		if (::ReadStringFromFile(pInFile, pstrToken))
+		{
+			if (!strcmp(pstrToken, "<Hierarchy>:"))
+			{
+				int nRootChild = ::ReadIntegerFromFile(pInFile); // 모든 오브젝트 개수
+
+				::ReadStringFromFile(pInFile, pstrToken); //<ObjectCount>: 
+				int nObjects = ::ReadIntegerFromFile(pInFile);
+				for (int i = 0; i < nObjects; ++i)
+				{
+					::ReadStringFromFile(pInFile, pstrToken); // Object Name
+					::ReadIntegerFromFile(pInFile); // Object Count
+				}
+
+				for (int i = 0; i < nRootChild; ++i)
+				{
+					::ReadStringFromFile(pInFile, pstrToken);
+					if (!strcmp(pstrToken, "<Frame>:"))
+					{
+						LoadNameAndPositionFromFile(pd3dDevice, pd3dCommandList, pInFile, nullptr);
+					}
+
+				}
+			}
+			else if (!strcmp(pstrToken, "</Hierarchy>"))
+			{
+				break;
+			}
+		}
+		else
+		{
+			break;
+		}
+	}
+
+#ifdef _WITH_DEBUG_FRAME_HIERARCHY
+	TCHAR pstrDebug[256] = { 0 };
+	_stprintf_s(pstrDebug, 256, _T("Frame Hierarchy\n"));
+	OutputDebugString(pstrDebug);
+
+	LoadObject::PrintFrameInfo(pLoadedModel->m_pModelRootObject, NULL);
+#endif
+
+	::fclose(pInFile);
+}
+
+void MonsterTransformStorage::LoadNameAndPositionFromFile(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, FILE * pInFile, const QuadtreeTerrain const * pTerrain)
 {
 	char pstrToken[64] = { '\0' };
 	UINT nReads = 0;
@@ -217,66 +278,32 @@ void StaticObjectStorage::LoadNameAndPositionFromFile(ID3D12Device * pd3dDevice,
 	}
 }
 
-void StaticObjectStorage::CreateShaderVariables(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList)
+void MonsterTransformStorage::CreateShaderVariables(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList)
 {
-	//인스턴스 정보를 저장할 정점 버퍼를 업로드 힙 유형으로 생성한다. 
-	for (auto& info : m_StaticObjectStorage)
-	{ 
-		m_StaticObjectModelsStorage[info.first].pLoadObject = ModelStorage::GetInstance()->GetRootObject(info.first);
-		m_StaticObjectModelsStorage[info.first].pTexture = TextureStorage::GetInstance()->GetTexture(info.first);
-		
-		for (int iTerrainPiece = 0; iTerrainPiece < TerrainPieceCount; ++iTerrainPiece)
-		{
-			if (info.second[iTerrainPiece].TerrainObjectCount == 0) continue;
-			
-			// 쉐이더 변수 생성
-			info.second[iTerrainPiece].m_pd3dcbGameObjects =
-				d3dUtil::CreateBufferResource(pd3dDevice, pd3dCommandList, NULL,
-					sizeof(VS_SRV_INSTANCEINFO) * info.second[iTerrainPiece].TerrainObjectCount, D3D12_HEAP_TYPE_UPLOAD,
-					D3D12_RESOURCE_STATE_GENERIC_READ, NULL);
-		
-			info.second[iTerrainPiece].m_pd3dcbGameObjects->Map(0, NULL, (void **)&info.second[iTerrainPiece].m_pcbMappedGameObjects);
-		}
-	} 
-
-	// 정보 저장 
-	for (auto& info : m_StaticObjectStorage)
-	{
-		for (int iTerrainPiece = 0; iTerrainPiece < TerrainPieceCount; ++iTerrainPiece)
-		{
-			if (info.second[iTerrainPiece].TerrainObjectCount == 0) continue;
-			for (int i = 0; i < info.second[iTerrainPiece].TerrainObjectCount; ++i)
-			{
-				XMStoreFloat4x4(
-					&info.second[iTerrainPiece].m_pcbMappedGameObjects[i].m_xmf4x4Transform,
-					XMMatrixTranspose(XMLoadFloat4x4(&info.second[iTerrainPiece].TransformList[i]
-					)));
-			} 
-		}
-	}
+	 
 }
 
-StaticObjectStorage * StaticObjectStorage::GetInstance(const QuadtreeTerrain const * pTerrain)
+MonsterTransformStorage * MonsterTransformStorage::GetInstance(const QuadtreeTerrain const * pTerrain)
 {
 	if (!m_Instance)
 	{
-		m_Instance = new StaticObjectStorage();
+		m_Instance = new MonsterTransformStorage();
 	}
 
 	return m_Instance;
 }
 
-StaticObjectStorage * StaticObjectStorage::GetInstance()
+MonsterTransformStorage * MonsterTransformStorage::GetInstance()
 { 
 	if (!m_Instance)
 	{
-		m_Instance = new StaticObjectStorage();
+		m_Instance = new MonsterTransformStorage();
 	}
 
 	return m_Instance;
 }
 
-void StaticObjectStorage::ReleaseInstance()
+void MonsterTransformStorage::ReleaseInstance()
 {
 	if (m_Instance)
 	{ 
@@ -285,7 +312,7 @@ void StaticObjectStorage::ReleaseInstance()
 	}
 }
 
-void StaticObjectStorage::ReleaseObjects()
+void MonsterTransformStorage::ReleaseObjects()
 {
 	for (auto& model : m_StaticObjectModelsStorage)
 	{
@@ -294,21 +321,9 @@ void StaticObjectStorage::ReleaseObjects()
 	}
 	m_StaticObjectModelsStorage.clear();
 	 
-	for (auto& loadobj : m_StaticObjectStorage)
+	for (auto& loadobj : m_MonsterTransformStorage)
 	{ 
 		// loadobj.first는 이름입니다.
-
-		if (loadobj.second->m_pd3dcbGameObjects)
-		{
-			loadobj.second->m_pd3dcbGameObjects->Unmap(0, NULL);
-			loadobj.second->m_pd3dcbGameObjects = nullptr;
-		}
-
-		//if (loadobj.second->m_pcbMappedGameObjects)
-		//{
-		//	delete[] loadobj.second->m_pcbMappedGameObjects;
-		//	loadobj.second->m_pcbMappedGameObjects = nullptr; 
-		//}
 
 		loadobj.second->TransformList.clear();
 
@@ -318,19 +333,19 @@ void StaticObjectStorage::ReleaseObjects()
 			loadobj.second = nullptr;
 		}
 	}
-	m_StaticObjectStorage.clear();
+	m_MonsterTransformStorage.clear();
 }
 
-int StaticObjectStorage::GetObjectCount(int index, const std::string & name)
+int MonsterTransformStorage::GetObjectCount(int index, const std::string & name)
 {
-	return m_StaticObjectStorage[name][index].TerrainObjectCount;
+	return m_MonsterTransformStorage[name][index].TerrainObjectCount;
 }
 
-int StaticObjectStorage::GetObjectAllCount(int index)
+int MonsterTransformStorage::GetObjectAllCount(int index)
 {
 	int result = 0;
 
-	for (auto& info : m_StaticObjectStorage)
+	for (auto& info : m_MonsterTransformStorage)
 	{
 		result += info.second[index].TerrainObjectCount;
 	} 
@@ -338,61 +353,22 @@ int StaticObjectStorage::GetObjectAllCount(int index)
 	return result;
 }
 
-XMFLOAT4X4* StaticObjectStorage::GetWorldMatrix(int index, const std::string & name)
+XMFLOAT4X4* MonsterTransformStorage::GetWorldMatrix(int index, const std::string & name)
 { 
-	return m_StaticObjectStorage[name][index].TransformList.begin()._Ptr; 
+	return m_MonsterTransformStorage[name][index].TransformList.begin()._Ptr; 
 }
 
-void StaticObjectStorage::CreateInfo(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, const QuadtreeTerrain const * pTerrain)
+void MonsterTransformStorage::CreateInfo(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, const QuadtreeTerrain const * pTerrain)
 {
 	if (m_isCreate) return;
 
 	// 위치 정보를 읽어온다.
 	LoadTerrainObjectFromFile(pd3dDevice, pd3dCommandList, "Information/Terrain.bin", pTerrain);
-	
+	LoadMonsterTransform(pd3dDevice, pd3dCommandList, "Information/TerrainForMonster.bin");
+
 	// 읽어온 위치 정보의 개수대로 쉐이더 변수를 생성한다.
 	CreateShaderVariables(pd3dDevice, pd3dCommandList);
 	 
 	m_isCreate = true;
 }
  
-void StaticObjectStorage::RenderAll(ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffers)
-{
-	for (int i = 0; i < TerrainPieceCount; ++i)
-	{
-		Render(pd3dCommandList, i, isGBuffers);
-	}
-}
-
-void StaticObjectStorage::Render(ID3D12GraphicsCommandList * pd3dCommandList, int index, bool isGBuffers)
-{  
-	// info.first = 모델 이름
-	// info.second = TerrainObjectInfo라는 모델 정보
-	 
-	for (auto& info : m_StaticObjectStorage)
-	{ 
-		if (info.second[index].TerrainObjectCount == 0) continue;
-
-		pd3dCommandList->SetGraphicsRootShaderResourceView(ROOTPARAMETER_INSTANCING, info.second[index].m_pd3dcbGameObjects->GetGPUVirtualAddress()); // 인스턴싱 쉐이더 리소스 뷰
-		  
-		m_StaticObjectModelsStorage[info.first].pTexture->UpdateShaderVariables(pd3dCommandList);
-		
-		m_StaticObjectModelsStorage[info.first].pLoadObject->RenderInstancing(pd3dCommandList, info.second[index].TerrainObjectCount, isGBuffers);
-	}  
-}
-
-void StaticObjectStorage::RenderBOBox(ID3D12GraphicsCommandList * pd3dCommandList, int index)
-{
-	// info.first = 모델 이름
-	// info.second = TerrainObjectInfo라는 모델 정보
-
-	for (auto& info : m_StaticObjectStorage)
-	{
-		if (info.second[index].TerrainObjectCount == 0) continue;
-
-		pd3dCommandList->SetGraphicsRootShaderResourceView(ROOTPARAMETER_INSTANCING, info.second[index].m_pd3dcbGameObjects->GetGPUVirtualAddress()); // 인스턴싱 쉐이더 리소스 뷰
-		 
-		ModelStorage::GetInstance()->RenderBOBoxInstancing(pd3dCommandList, info.first, info.second[index].TerrainObjectCount);
-	}
-}
-

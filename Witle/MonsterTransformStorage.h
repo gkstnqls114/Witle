@@ -19,8 +19,6 @@ private:
 	  
 	struct TerrainObjectInfo
 	{ 
-		ID3D12Resource* m_pd3dcbGameObjects{ nullptr };         // 인스턴싱을 위해 사용되는 정보
-		VS_SRV_INSTANCEINFO* m_pcbMappedGameObjects{ nullptr }; // 인스턴싱을 위해 사용되는 정보
 		int         TerrainObjectCount{ 0 };					// 터레인 조각 위에 배치되는 오브젝트의 개수
 		std::vector<XMFLOAT4X4> TransformList;                  // 터레인 조각 위에 배치되는 오브젝트의 월드 행렬
 	};
@@ -30,10 +28,17 @@ private:
 		LoadObject* pLoadObject{ nullptr };
 		Texture* pTexture{ nullptr };
 	};
+
+	struct MonsterInfo // 몬스터 초기 시작 위치 정보
+	{
+		int MonsterCount{ 0 };
+		std::vector<XMFLOAT4X4> TransformList; 
+	};
 	 
 	bool m_isCreate = false;  
 	std::map<std::string, RenderInfo> m_StaticObjectModelsStorage; // 모델 이름은 반드시 클래스에 맞춘다.
-	std::map<std::string, TerrainObjectInfo*> m_StaticObjectStorage; // 모델 이름은 반드시 클래스에 맞춘다.
+	std::map<std::string, TerrainObjectInfo*> m_MonsterTransformStorage; // 모델 이름은 반드시 클래스에 맞춘다.
+	std::map<std::string, MonsterInfo*> m_MonsterStorage; // 모델 이름은 반드시 클래스에 맞춘다.
 	void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList, int count, XMFLOAT4X4* transforms);
 
 private: 
@@ -42,7 +47,13 @@ private:
 	void LoadNameAndPositionFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, FILE *pInFile, const QuadtreeTerrain const * pTerrain);
 	bool LoadTransform(char* name, const char* comp_name, const XMINT4&, const XMFLOAT4X4& tr);
 	// 터레인 초기 위치 정보 로드
-	 
+
+	
+	// 몬스터 초기 위치 정보 로드
+
+	void LoadMonsterTransform(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, const char *pstrFileName);
+	// 터레인 정보
+
 	void CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList);
 
 public:
@@ -61,8 +72,4 @@ public:
 
 	void CreateInfo(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, const QuadtreeTerrain const * pTerrain);
 	
-	// 인스턴싱을 통해 렌더합니다.
-	void RenderAll(ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffers);
-	void Render(ID3D12GraphicsCommandList * pd3dCommandList, int index, bool isGBuffers);
-	void RenderBOBox(ID3D12GraphicsCommandList * pd3dCommandList, int index);
 };
