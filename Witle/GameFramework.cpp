@@ -537,9 +537,9 @@ void CGameFramework::BuildObjects()
 	// 루트 시그니처 먼저 생성
 	GraphicsRootSignatureMgr::BuildObject(m_d3dDevice.Get());
 
-	// m_pScene = new GameScene;
+	m_pScene = new GameScene;
 	// m_pScene = new LoadingScene;
-	m_pScene = new RoomScene;
+	// m_pScene = new RoomScene;
 	
 	// 루트 시그니처를 통해 모든 오브젝트 갖고온다.
 	TextureStorage::GetInstance()->CreateTextures(m_d3dDevice.Get(), m_CommandList.Get());

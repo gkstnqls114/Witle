@@ -214,7 +214,7 @@ void RoomScene::AnimateObjects(float fTimeElapsed)
 {
 }
 
-void RoomScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
+void RoomScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers)
 {
 	pd3dCommandList->SetGraphicsRootSignature(GraphicsRootSignatureMgr::GetGraphicsRootSignature());
 
@@ -222,7 +222,7 @@ void RoomScene::Render(ID3D12GraphicsCommandList *pd3dCommandList)
 	pd3dCommandList->RSSetViewports(1, &m_d3dViewport);
 	pd3dCommandList->RSSetScissorRects(1, &m_d3dScissorRect);
 
-	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_UISCREEN);
+	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_UISCREEN, false);
 
 	// m_SampleUIImage1->Render(pd3dCommandList);
 	// m_SampleUIImage2->Render(pd3dCommandList);

@@ -633,7 +633,7 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 	//// Aim point Render 
 	if (!m_isSkyMode)
 	{
-		if (m_pPlayer) m_pPlayer->RenderHpStatus(pd3dCommandList); // 체력
+		if (m_pPlayer) m_pPlayer->RenderHpStatus(pd3dCommandList, isGBuffers); // 체력
 		if (m_pPlayer) m_pPlayer->RenderMpStatus(pd3dCommandList); // 마나
 
 		if (!m_pPlayer->GetBroom()->GetisPrepare() && !m_pPlayer->GetBroom()->GetisUsing())
