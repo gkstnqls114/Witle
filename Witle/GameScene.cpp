@@ -16,6 +16,7 @@
 
 //// Manager header //////////////////////////
 #include "GraphicsRootSignatureMgr.h"
+#include "MonsterTransformStorage.h"
 #include "ModelStorage.h"
 #include "LightManager.h"
 #include "MeshRenderer.h"
@@ -242,7 +243,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	std::random_device rd;
 	std::mt19937 mersenne(rd());
 	std::uniform_int_distribution<> die(2000, 15000);
-	std::uniform_int_distribution<> monstertype(0, 1);
+	std::uniform_int_distribution<> monstertype(0,3);
 
 	// ¸ó½ºÅÍ
 	m_TestMonster = new Monster*[m_TestMonsterCount];
@@ -251,21 +252,48 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 		XMFLOAT3(1500, 0, 1000),
 		pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
 
+	int spacecatblue_count = 0;
+	int spacecatgreen_count = 0;
+	int spacecatpink_count = 0;
+	int creepymonster_count = 0;
+	MonsterTransformStorage* instance = MonsterTransformStorage::GetInstance();
+	instance->CreateInfo(pd3dDevice, pd3dCommandList);
+
 	for (int i = 1; i < m_TestMonsterCount; ++i)
 	{
 		int value = monstertype(mersenne);
 
-		if (value == 0)
+		if (value == ENUM_MONSTER::MONSTER_CREEPYMONSTER)
+		{ 
+			m_TestMonster[i] = new CreepyMonster("CreepyMonster",
+				instance->GetPosition(creepymonster_count, CREEPYMONSTER),
+				pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
+			creepymonster_count += 1;
+		}
+		else if (value == ENUM_MONSTER::MONSTER_SPACECATBLUE)
 		{
 			m_TestMonster[i] = new SpaceCat("SpaceCat",
-				XMFLOAT3(die(mersenne), 0, die(mersenne)),
+				instance->GetPosition(spacecatblue_count, SPACECAT_BLUE),
 				pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
+			spacecatblue_count += 1;
+		}
+		else if (value == ENUM_MONSTER::MONSTER_SPACECATPINK)
+		{
+			m_TestMonster[i] = new SpaceCat("SpaceCat",
+				instance->GetPosition(spacecatpink_count, SPACECAT_PINK),
+				pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
+			spacecatpink_count += 1;
+		}
+		else if (value == ENUM_MONSTER::MONSTER_SPACECATGREEN)
+		{
+			m_TestMonster[i] = new SpaceCat("SpaceCat",
+				instance->GetPosition(spacecatgreen_count, SPACECAT_GREEN),
+				pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
+			spacecatgreen_count += 1;
 		}
 		else
 		{
-			m_TestMonster[i] = new CreepyMonster("CreepyMonster",
-				XMFLOAT3(die(mersenne), 0, die(mersenne)),
-				pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
+			assert(false);
 		}
 	}
 

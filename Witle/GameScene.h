@@ -114,7 +114,7 @@ protected:
 	//
 	SkyBox*					m_SkyBox{ nullptr };
 
-	int						m_TestMonsterCount{ 25 };
+	int						m_TestMonsterCount{ 100 };
 	Monster**				m_TestMonster{ nullptr };
 
 #ifdef CHECK_SUBVIEWS

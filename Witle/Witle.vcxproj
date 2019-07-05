@@ -165,6 +165,7 @@
     <ClInclude Include="GeneralMonsterActionMgr.h" />
     <ClInclude Include="BossMonsterActionMgr.h" />
     <ClInclude Include="MonsterActionMgr.h" />
+    <ClInclude Include="MonsterTransformStorage.h" />
     <ClInclude Include="Movement.h" />
     <ClInclude Include="MyAnimationInfos.h" />
     <ClInclude Include="Status.h" />
@@ -342,6 +343,7 @@
     <ClCompile Include="MonsterActionMgr.cpp" />
     <ClCompile Include="MonsterMovement.cpp" />
     <ClCompile Include="MonsterStatus.cpp" />
+    <ClCompile Include="MonsterTransformStorage.cpp" />
     <ClCompile Include="MoveAction.cpp" />
     <ClCompile Include="MyBOBox.cpp" />
     <ClCompile Include="MyBSphere.cpp" />

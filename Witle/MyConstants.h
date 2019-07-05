@@ -7,12 +7,19 @@
 
 
 //// Enum Type ////////////////////////////////////
+enum ENUM_MONSTER
+{
+	MONSTER_CREEPYMONSTER,
+	MONSTER_SPACECATPINK,
+	MONSTER_SPACECATGREEN,
+	MONSTER_SPACECATBLUE
+};
+
 enum ENUM_SOUND
 {
 	TITLE,
 	EFFECT
 };
-
 
 enum COLLIDER_TYPE
 {

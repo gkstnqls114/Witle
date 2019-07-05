@@ -30,6 +30,10 @@
 // ∏ÛΩ∫≈Õ
 
 #define SPACECAT "SpaceCat"
+#define SPACECAT_BLUE "SpaceCat_Blue"
+#define SPACECAT_GREEN "SpaceCat_Green"
+#define SPACECAT_PINK "SpaceCat_Pink"
+#define CREEPYMONSTER "CreepyMonster"
 
 
 

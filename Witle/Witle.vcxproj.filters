@@ -367,6 +367,9 @@
     <Filter Include="05.Shader\ShowTextureShader">
       <UniqueIdentifier>{fbd787c7-444a-4e68-98f3-306d0a71a446}</UniqueIdentifier>
     </Filter>
+    <Filter Include="13.Storage/Manager\10.MonsterTransformStorage">
+      <UniqueIdentifier>{a87f6d33-f8a8-4182-aa6c-6d902932608f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -762,6 +765,9 @@
     <ClInclude Include="ShowTextureShader.h">
       <Filter>05.Shader\ShowTextureShader</Filter>
     </ClInclude>
+    <ClInclude Include="MonsterTransformStorage.h">
+      <Filter>13.Storage/Manager\10.MonsterTransformStorage</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1135,6 +1141,9 @@
     </ClCompile>
     <ClCompile Include="ShowTextureShader.cpp">
       <Filter>05.Shader\ShowTextureShader</Filter>
+    </ClCompile>
+    <ClCompile Include="MonsterTransformStorage.cpp">
+      <Filter>13.Storage/Manager\10.MonsterTransformStorage</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

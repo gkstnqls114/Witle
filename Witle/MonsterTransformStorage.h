@@ -11,7 +11,7 @@ struct VS_SRV_INSTANCEINFO;
 ["이름"]["터레인 아이디"]를 통해 갖고있는 월드행렬정보를 보여줄 수 있다.
 
 */
-class StaticObjectStorage
+class MonsterTransformStorage
 {  
 private: 
 	int TerrainPieceCount = 0; // 터레인 제일 작은 조각이 몇개 있는가?
@@ -28,48 +28,35 @@ private:
 		LoadObject* pLoadObject{ nullptr };
 		Texture* pTexture{ nullptr };
 	};
-
-	struct MonsterInfo // 몬스터 초기 시작 위치 정보
-	{
-		int MonsterCount{ 0 };
-		std::vector<XMFLOAT4X4> TransformList; 
-	};
 	 
 	bool m_isCreate = false;  
-	std::map<std::string, RenderInfo> m_StaticObjectModelsStorage; // 모델 이름은 반드시 클래스에 맞춘다.
-	std::map<std::string, TerrainObjectInfo*> m_MonsterTransformStorage; // 모델 이름은 반드시 클래스에 맞춘다.
-	std::map<std::string, MonsterInfo*> m_MonsterStorage; // 모델 이름은 반드시 클래스에 맞춘다.
+	std::map<std::string, TerrainObjectInfo> m_MonsterTransformStorage; // 모델 이름은 반드시 클래스에 맞춘다.
 	void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList, int count, XMFLOAT4X4* transforms);
 
 private: 
-	// 터레인 초기 위치 정보
-	void LoadTerrainObjectFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, const char *pstrFileName, const QuadtreeTerrain const * pTerrain);
-	void LoadNameAndPositionFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, FILE *pInFile, const QuadtreeTerrain const * pTerrain);
-	bool LoadTransform(char* name, const char* comp_name, const XMINT4&, const XMFLOAT4X4& tr);
-	// 터레인 초기 위치 정보 로드
-
-	
+	// 몬스터 초기 위치 정보
+	void LoadMonsterFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, const char *pstrFileName);
+	void LoadNameAndPositionFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, FILE *pInFile);
+	bool LoadTransform(char* name, const char* comp_name, const XMFLOAT4X4& tr);
 	// 몬스터 초기 위치 정보 로드
-
-	void LoadMonsterTransform(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, const char *pstrFileName);
-	// 터레인 정보
 
 	void CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList);
 
 public:
-	static StaticObjectStorage* m_Instance;
+	static MonsterTransformStorage* m_Instance;
 
 public:
-	static StaticObjectStorage* GetInstance(const QuadtreeTerrain const * pTerrain);
-	static StaticObjectStorage* GetInstance( );
+	static MonsterTransformStorage* GetInstance(const QuadtreeTerrain const * pTerrain);
+	static MonsterTransformStorage* GetInstance( );
 	static void ReleaseInstance();
 
 	void ReleaseObjects();
 	int GetObjectCount(int index, const std::string& name);
 	int GetObjectAllCount(int index);
 
-	XMFLOAT4X4* GetWorldMatrix(int index, const std::string& name);
+	XMFLOAT4X4 GetWorldMatrix(int index, const std::string& name);
+	XMFLOAT3 GetPosition(int index, const std::string& name);
 
-	void CreateInfo(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, const QuadtreeTerrain const * pTerrain);
+	void CreateInfo(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList);
 	
 };
