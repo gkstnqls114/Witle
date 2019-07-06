@@ -379,11 +379,11 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	 
 	 // ui map 포지션으로 변경하기 위해 크기 축소
 	 pos.x = pos.x * (float(m_UIMapSize.x) / 30000.f);
-	 pos.z = pos.z * (float(m_UIMapSize.y) / 30000.f); // 스크린 좌표계로 이동하기 위해
+	 pos.z = -pos.z * (float(m_UIMapSize.y) / 30000.f); // 스크린 좌표계로 이동하기 위해
 
 	 // 스크린 좌표계 위치 이동
 	 pos.x += m_SampleUIMap->getRect().left;
-	 pos.z += m_SampleUIMap->getRect().top;
+	 pos.z += m_SampleUIMap->getRect().bottom;
 
 	 m_UIAltar_1 = new UI2DImage(
 		 m_TESTGameObject, pd3dDevice, pd3dCommandList,
@@ -396,9 +396,9 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	 pos = XMFLOAT3{ tr._41, tr._42 , tr._43 };
 
 	 pos.x = pos.x * (float(m_UIMapSize.x) / 30000.f);
-	 pos.z = pos.z * (float(m_UIMapSize.y) / 30000.f); 
+	 pos.z = -pos.z * (float(m_UIMapSize.y) / 30000.f); 
 	 pos.x += m_SampleUIMap->getRect().left;
-	 pos.z += m_SampleUIMap->getRect().top;
+	 pos.z += m_SampleUIMap->getRect().bottom;
 	 m_UIAltar_2 = new UI2DImage(
 		 m_TESTGameObject, pd3dDevice, pd3dCommandList,
 		 POINT{ int(pos.x), int(pos.z) },
@@ -411,11 +411,11 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 
 	// ui map 포지션으로 변경하기 위해 크기 축소
 	 pos.x = pos.x * (float(m_UIMapSize.x) / 30000.f);
-	 pos.z = pos.z * (float(m_UIMapSize.y) / 30000.f); // 스크린 좌표계로 이동하기 위해
+	 pos.z = -pos.z * (float(m_UIMapSize.y) / 30000.f); // 스크린 좌표계로 이동하기 위해
 
 	 // 스크린 좌표계 위치 이동
 	 pos.x += m_SampleUIMap->getRect().left;
-	 pos.z += m_SampleUIMap->getRect().top;
+	 pos.z += m_SampleUIMap->getRect().bottom;
 	 m_UIAltar_3= new UI2DImage(
 	 m_TESTGameObject, pd3dDevice, pd3dCommandList,
 		 POINT{ int(pos.x), int(pos.z) },
@@ -429,11 +429,11 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 
 	// ui map 포지션으로 변경하기 위해 크기 축소
 	 pos.x = pos.x * (float(m_UIMapSize.x) / 30000.f);
-	 pos.z = pos.z * (float(m_UIMapSize.y) / 30000.f); // 스크린 좌표계로 이동하기 위해
+	 pos.z = -pos.z * (float(m_UIMapSize.y) / 30000.f); // 스크린 좌표계로 이동하기 위해
 
 	 // 스크린 좌표계 위치 이동
 	 pos.x += m_SampleUIMap->getRect().left;
-	 pos.z += m_SampleUIMap->getRect().top;
+	 pos.z += m_SampleUIMap->getRect().bottom;
 	 m_UIAltar_4= new UI2DImage(
 		 m_TESTGameObject, pd3dDevice, pd3dCommandList,
 		 POINT{ int(pos.x), int(pos.z) },
@@ -446,11 +446,11 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 
 	// ui map 포지션으로 변경하기 위해 크기 축소
 	 pos.x = pos.x * (float(m_UIMapSize.x) / 30000.f);
-	 pos.z = pos.z * (float(m_UIMapSize.y) / 30000.f); // 스크린 좌표계로 이동하기 위해
+	 pos.z = -pos.z * (float(m_UIMapSize.y) / 30000.f); // 스크린 좌표계로 이동하기 위해
 
 	 // 스크린 좌표계 위치 이동
 	 pos.x += m_SampleUIMap->getRect().left;
-	 pos.z += m_SampleUIMap->getRect().top;
+	 pos.z += m_SampleUIMap->getRect().bottom;
 	 m_UIAltar_5 = new UI2DImage(
 	 m_TESTGameObject, pd3dDevice, pd3dCommandList,
 		 POINT{ int(pos.x), int(pos.z) },
@@ -786,11 +786,11 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 
 	// ui map 포지션으로 변경하기 위해 크기 축소
 	playerpos.x = playerpos.x * (float(m_UIMapSize.x) / 30000.f);
-	playerpos.y = playerpos.y * (float(m_UIMapSize.y) / 30000.f); // 스크린 좌표계로 이동하기 위해
+	playerpos.y = -playerpos.y * (float(m_UIMapSize.y) / 30000.f); // 스크린 좌표계로 이동하기 위해
 
 	// 스크린 좌표계 위치 이동
 	playerpos.x += m_SampleUIMap->getRect().left;
-	playerpos.y += m_SampleUIMap->getRect().top;
+	playerpos.y += m_SampleUIMap->getRect().bottom;
 
 	pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_PICKINGPOINT, 2, &playerpos, 0);
 	m_UIPlayer->Render(pd3dCommandList);
