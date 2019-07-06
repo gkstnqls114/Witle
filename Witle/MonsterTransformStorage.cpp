@@ -273,4 +273,9 @@ void MonsterTransformStorage::CreateInfo(ID3D12Device * pd3dDevice, ID3D12Graphi
 	 
 	m_isCreate = true;
 }
+
+int MonsterTransformStorage::Count(const std::string & name) 
+{ 
+	return m_MonsterTransformStorage[name].TransformList.size();
+}
  

@@ -259,12 +259,13 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	MonsterTransformStorage* instance = MonsterTransformStorage::GetInstance();
 	instance->CreateInfo(pd3dDevice, pd3dCommandList);
 
-	for (int i = 1; i < m_TestMonsterCount; ++i)
+	for (int i = 1; i < m_TestMonsterCount; )
 	{
 		int value = monstertype(mersenne);
 
 		if (value == ENUM_MONSTER::MONSTER_CREEPYMONSTER)
 		{ 
+			if (instance->Count(CREEPYMONSTER) <= creepymonster_count)continue;
 			m_TestMonster[i] = new CreepyMonster("CreepyMonster",
 				instance->GetPosition(creepymonster_count, CREEPYMONSTER),
 				pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
@@ -272,6 +273,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 		}
 		else if (value == ENUM_MONSTER::MONSTER_SPACECATBLUE)
 		{
+			if (instance->Count(SPACECAT_BLUE) <= spacecatblue_count)continue;
 			m_TestMonster[i] = new SpaceCat("SpaceCat",
 				instance->GetPosition(spacecatblue_count, SPACECAT_BLUE),
 				pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
@@ -279,6 +281,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 		}
 		else if (value == ENUM_MONSTER::MONSTER_SPACECATPINK)
 		{
+			if (instance->Count(SPACECAT_PINK) <= spacecatpink_count)continue;
 			m_TestMonster[i] = new SpaceCat("SpaceCat",
 				instance->GetPosition(spacecatpink_count, SPACECAT_PINK),
 				pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
@@ -286,6 +289,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 		}
 		else if (value == ENUM_MONSTER::MONSTER_SPACECATGREEN)
 		{
+			if (instance->Count(SPACECAT_GREEN) <= spacecatgreen_count)continue;
 			m_TestMonster[i] = new SpaceCat("SpaceCat",
 				instance->GetPosition(spacecatgreen_count, SPACECAT_GREEN),
 				pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
@@ -295,6 +299,8 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 		{
 			assert(false);
 		}
+
+		i += 1;
 	}
 
 	//// 테스트 쿼드트리 터레인 생성 
@@ -461,7 +467,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	 m_UIPlayer = new UI2DImage(
 		 m_TESTGameObject, pd3dDevice, pd3dCommandList,
 		 POINT{ 0, 0 },
-		 5, 5,
+		 10, 10,
 		 L"Image/Red.dds"
 	 ); 
 

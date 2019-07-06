@@ -36,7 +36,7 @@ void CGameFramework::Render()
 	hResult = m_CommandList->Reset(m_CommandAllocator.Get(), NULL);
 
 	//// GBuffer에 Render ////////////////////////// 
-	RenderOnGbuffer(); 
+	// RenderOnGbuffer(); 
 	//// GBuffer에 Render //////////////////////////
 
 	//// ComputeShader ////////////////////////// 
@@ -718,7 +718,7 @@ void CGameFramework::RenderOnSwapchain()
 	RenderSwapChain();
 
 	// 하단에 테스트용으로 보일 리소스들을 렌더한다.
-	RenderGBuffers();
+	// RenderGBuffers();
 
 	d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_RenderTargetBuffers[m_SwapChainBufferIndex], D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
 }

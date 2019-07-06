@@ -58,5 +58,5 @@ public:
 	XMFLOAT3 GetPosition(int index, const std::string& name);
 
 	void CreateInfo(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList);
-	
+	int Count(const std::string & name) ;
 };
