@@ -40,6 +40,7 @@ protected:
 	LoadObject*		   m_pLoadObject{ nullptr };
 
 	bool m_isActive{ false };
+	bool m_isFinishFlow{ false };
 	
 
 private:
@@ -64,6 +65,7 @@ public:
 	 
 	virtual void Animate(float fElapsedTime);
 
+	void Update(float);
 	void Move(ULONG nDirection, float fDistance, bool bVelocity = false);
 	void Move(const XMFLOAT3& xmf3Shift);
 	void MoveVelocity(const XMFLOAT3& xmf3Shift);

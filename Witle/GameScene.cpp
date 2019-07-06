@@ -670,6 +670,11 @@ void GameScene::Update(float fElapsedTime)
 	}
 	//// 순서 변경 X ////
 
+	for (int x = 0; x < 5; ++x)
+	{
+		m_AltarSphere[x]->Update(fElapsedTime);
+	}
+
 	// light update
 	if (m_pcbMappedLights) ::memcpy(m_pcbMappedLights, LightManager::m_pLights, sizeof(LIGHTS));
 	// material update

@@ -138,6 +138,18 @@ void AltarSphere::Animate(float fElapsedTime)
 
 	m_pLoadObject->Animate(fElapsedTime);
 }
+
+void AltarSphere::Update(float fElapsedTime)
+{
+	if (!m_isActive) return;
+	if (m_isFinishFlow) return;
+
+	if (m_pLoadObject->IsTrackAnimationSetFinish(0, ALTARSPHERE_FLOW.ID))
+	{
+		m_isFinishFlow = true;
+		SetAnimationState(ALTARSPHERE_IDLE.ID);
+	}
+}
  
 void AltarSphere::SetTrackAnimationSet()
 {
