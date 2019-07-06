@@ -64,6 +64,10 @@ bool StaticObjectStorage::LoadTransform(char * name, const char * comp_name, con
 			TestObject->UpdateTransform(NULL);
 
 			m_StaticObjectStorage[comp_name][terrainIDs].TransformList.emplace_back(TestObject->m_pChild->m_xmf4x4World);
+			if (!strcmp(comp_name, ALTAR_IN))
+			{
+				m_AltarTransformStorage = m_StaticObjectStorage[comp_name][terrainIDs].TransformList;
+			}
 
 			delete TestObject;
 			TestObject = nullptr;
@@ -170,7 +174,7 @@ void StaticObjectStorage::LoadNameAndPositionFromFile(ID3D12Device * pd3dDevice,
 			// XMFLOAT4X4 transform = Matrix4x4::Identity();
 			transform._41 =  -(temp._41);
 			transform._42 = 0;
-			if (!strcmp(name, Flower)) transform._42 = temp._42;
+			if (!strcmp(name, Flower)) transform._42 = temp._42; 
 			transform._43 =  -(temp._43);
 			 
 			assert(!(temp._41 >= 40000));
@@ -341,6 +345,11 @@ int StaticObjectStorage::GetObjectAllCount(int index)
 XMFLOAT4X4* StaticObjectStorage::GetWorldMatrix(int index, const std::string & name)
 { 
 	return m_StaticObjectStorage[name][index].TransformList.begin()._Ptr; 
+}
+
+XMFLOAT4X4 StaticObjectStorage::GetAltarTransform(int index, const std::string & name)
+{
+	return m_AltarTransformStorage[index];
 }
 
 void StaticObjectStorage::CreateInfo(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, const QuadtreeTerrain const * pTerrain)

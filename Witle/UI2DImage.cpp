@@ -91,6 +91,7 @@ UI2DImage::UI2DImage(GameObject * pOwner, ID3D12Device * pd3dDevice, ID3D12Graph
 	m_d3dPrimitiveTopology = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 
 	RECT rect{ center.x - width / 2.f, center.y - height / 2.f, center.x + width / 2.f, center.y + height / 2.f };
+	m_rect = rect;
 
 	XMFLOAT3 pxmf3Positions[RECTANGLE_VERTEX_COUNT];
 	// »ó´Ü »ï°¢Çü

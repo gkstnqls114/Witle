@@ -337,37 +337,127 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	// 리소스 뷰 설정
 	GameScene::CreateShaderResourceViews(pd3dDevice, m_Terrain->GetTexture(), ROOTPARAMETER_TEXTUREBASE, true);
 
-	// m_TESTGameObject = new EmptyGameObject("Test");
-	// 
-	// // 미니맵
-	// m_SampleUIMap = new UI2DImage(
-	// 	m_TESTGameObject, pd3dDevice, pd3dCommandList,
-	// 	POINT{ int(GameScreen::GetWidth()) / 2, int(GameScreen::GetHeight()) / 2 - 50 }, 200, 300, L"Image/CharacterAppearance1_OFF.dds"
-	// );
-	// 
-	// // 스킬 1
-	// m_SampleUISkill1 = new UI2DImage(
-	// 	m_TESTGameObject, pd3dDevice, pd3dCommandList,
-	// 	POINT{ int(GameScreen::GetWidth()) / 2, int(GameScreen::GetHeight()) / 2 - 50 }, 200, 300, nullptr
-	// );
-	// 
-	// // 스킬 2
-	// m_SampleUISkill2 = new UI2DImage(
-	// 	m_TESTGameObject, pd3dDevice, pd3dCommandList,
-	// 	POINT{ int(GameScreen::GetWidth()) / 2, int(GameScreen::GetHeight()) / 2 + 250 }, 200, 50, nullptr
-	// );
-	// 
-	// // 스킬 3
-	// m_SampleUISkill3 = new UI2DImage(
-	// 	m_TESTGameObject, pd3dDevice, pd3dCommandList,
-	// 	POINT{ int(GameScreen::GetWidth()) / 2, int(GameScreen::GetHeight()) / 2 + 250 }, 200, 50, nullptr
-	// );
-	// 
-	// // 스킬 4
-	// m_SampleUISkill4 = new UI2DImage(
-	// 	m_TESTGameObject, pd3dDevice, pd3dCommandList,
-	// 	POINT{ int(GameScreen::GetWidth()) / 2, int(GameScreen::GetHeight()) / 2 + 250 }, 200, 50, nullptr
-	// );
+	// UI 이미지 추가
+	 m_TESTGameObject = new EmptyGameObject("Test");
+	 
+	 // 미니맵
+	 m_SampleUIMap = new UI2DImage(
+		 m_TESTGameObject, pd3dDevice, pd3dCommandList,
+		 POINT{ int(GameScreen::GetWidth()) / 2 + 500, int(GameScreen::GetHeight()) / 2 - 220 },
+		 m_UIMapSize.x,
+		 m_UIMapSize.y, 
+		 L"Image/CharacterAppearance1_OFF.dds"
+	 );
+
+	 // 스킬 1
+	 m_SampleUISkill1 = new UI2DImage(
+		 m_TESTGameObject, pd3dDevice, pd3dCommandList,
+		 POINT{ int(GameScreen::GetWidth()) / 2 - 300, int(GameScreen::GetHeight()) / 2 + 270 }, 100, 100, nullptr
+	 );
+
+	 // 스킬 2
+	 m_SampleUISkill2 = new UI2DImage(
+		 m_TESTGameObject, pd3dDevice, pd3dCommandList,
+		 POINT{ int(GameScreen::GetWidth()) / 2 - 100, int(GameScreen::GetHeight()) / 2 + 270 }, 100, 100, nullptr
+	 );
+
+	 // 스킬 3
+	 m_SampleUISkill3 = new UI2DImage(
+		 m_TESTGameObject, pd3dDevice, pd3dCommandList,
+		 POINT{ int(GameScreen::GetWidth()) / 2 + 100, int(GameScreen::GetHeight()) / 2 + 270 }, 100, 100, nullptr
+	 );
+
+	 // 스킬 4
+	 m_SampleUISkill4 = new UI2DImage(
+		 m_TESTGameObject, pd3dDevice, pd3dCommandList,
+		 POINT{ int(GameScreen::GetWidth()) / 2 + 300, int(GameScreen::GetHeight()) / 2 + 270 }, 100, 100, nullptr
+	 );
+	 
+	 XMFLOAT4X4 tr;
+	 tr = StaticObjectStorage::GetInstance()->GetAltarTransform(0, ALTAR_IN);
+	 XMFLOAT3 pos{ tr._41, tr._42 , tr._43 }; // 월드 포지션
+	 
+	 // ui map 포지션으로 변경하기 위해 크기 축소
+	 pos.x = pos.x * (float(m_UIMapSize.x) / 30000.f);
+	 pos.z = pos.z * (float(m_UIMapSize.y) / 30000.f); // 스크린 좌표계로 이동하기 위해
+
+	 // 스크린 좌표계 위치 이동
+	 pos.x += m_SampleUIMap->getRect().left;
+	 pos.z += m_SampleUIMap->getRect().top;
+
+	 m_UIAltar_1 = new UI2DImage(
+		 m_TESTGameObject, pd3dDevice, pd3dCommandList,
+		 POINT{ int(pos.x), int(pos.z) },
+		 20, 20, 
+		 L"Image/Red.dds"
+	 );
+	  
+	 tr = StaticObjectStorage::GetInstance()->GetAltarTransform(1, ALTAR_IN);
+	 pos = XMFLOAT3{ tr._41, tr._42 , tr._43 };
+
+	 pos.x = pos.x * (float(m_UIMapSize.x) / 30000.f);
+	 pos.z = pos.z * (float(m_UIMapSize.y) / 30000.f); 
+	 pos.x += m_SampleUIMap->getRect().left;
+	 pos.z += m_SampleUIMap->getRect().top;
+	 m_UIAltar_2 = new UI2DImage(
+		 m_TESTGameObject, pd3dDevice, pd3dCommandList,
+		 POINT{ int(pos.x), int(pos.z) },
+		 20, 20,
+		 L"Image/Red.dds"
+	 );
+
+	 tr = StaticObjectStorage::GetInstance()->GetAltarTransform(2, ALTAR_IN);
+	 pos = XMFLOAT3{ tr._41, tr._42 , tr._43 };
+
+	// ui map 포지션으로 변경하기 위해 크기 축소
+	 pos.x = pos.x * (float(m_UIMapSize.x) / 30000.f);
+	 pos.z = pos.z * (float(m_UIMapSize.y) / 30000.f); // 스크린 좌표계로 이동하기 위해
+
+	 // 스크린 좌표계 위치 이동
+	 pos.x += m_SampleUIMap->getRect().left;
+	 pos.z += m_SampleUIMap->getRect().top;
+	 m_UIAltar_3= new UI2DImage(
+	 m_TESTGameObject, pd3dDevice, pd3dCommandList,
+		 POINT{ int(pos.x), int(pos.z) },
+		 20, 20,
+		 L"Image/Red.dds"
+		 );
+
+	 tr = StaticObjectStorage::GetInstance()->GetAltarTransform(3, ALTAR_IN);
+	 pos = XMFLOAT3{ tr._41, tr._42 , tr._43 };
+
+
+	// ui map 포지션으로 변경하기 위해 크기 축소
+	 pos.x = pos.x * (float(m_UIMapSize.x) / 30000.f);
+	 pos.z = pos.z * (float(m_UIMapSize.y) / 30000.f); // 스크린 좌표계로 이동하기 위해
+
+	 // 스크린 좌표계 위치 이동
+	 pos.x += m_SampleUIMap->getRect().left;
+	 pos.z += m_SampleUIMap->getRect().top;
+	 m_UIAltar_4= new UI2DImage(
+		 m_TESTGameObject, pd3dDevice, pd3dCommandList,
+		 POINT{ int(pos.x), int(pos.z) },
+		 20, 20,
+		 L"Image/Red.dds"
+	 );
+
+	 tr = StaticObjectStorage::GetInstance()->GetAltarTransform(4, ALTAR_IN);
+	 pos = XMFLOAT3{ tr._41, tr._42 , tr._43 };
+
+	// ui map 포지션으로 변경하기 위해 크기 축소
+	 pos.x = pos.x * (float(m_UIMapSize.x) / 30000.f);
+	 pos.z = pos.z * (float(m_UIMapSize.y) / 30000.f); // 스크린 좌표계로 이동하기 위해
+
+	 // 스크린 좌표계 위치 이동
+	 pos.x += m_SampleUIMap->getRect().left;
+	 pos.z += m_SampleUIMap->getRect().top;
+	 m_UIAltar_5 = new UI2DImage(
+	 m_TESTGameObject, pd3dDevice, pd3dCommandList,
+		 POINT{ int(pos.x), int(pos.z) },
+		 20, 20,
+		 L"Image/Red.dds"
+		 );
+
 }
 
 void GameScene::ReleaseObjects()
@@ -631,7 +721,7 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 	}
 
 	// 스카이박스 렌더
-	// if(m_SkyBox) m_SkyBox->Render(pd3dCommandList, isGBuffers);
+	if(m_SkyBox) m_SkyBox->Render(pd3dCommandList, isGBuffers);
 	 
 	//  조명
 	D3D12_GPU_VIRTUAL_ADDRESS d3dcbLightsGpuVirtualAddress = m_pd3dcbLights->GetGPUVirtualAddress();
@@ -641,7 +731,8 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 	pd3dCommandList->SetGraphicsRootConstantBufferView(ROOTPARAMETER_MATERIALS, d3dcbMaterialsGpuVirtualAddress);
 
 	pd3dCommandList->SetDescriptorHeaps(1, &m_pd3dCbvSrvDescriptorHeap);
-	 
+
+
 	if (m_pPlayer) m_pPlayer->Render(pd3dCommandList, isGBuffers);
 	 
 	if(m_WideareaMagic) m_WideareaMagic->Render(pd3dCommandList, isGBuffers);
@@ -683,11 +774,20 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 		m_pQuadtreeTerrain->Render(pd3dCommandList, m_Terrain, m_pd3dCbvSrvDescriptorHeap, isGBuffers);
 	}
 
-	// m_SampleUIMap->Render(pd3dCommandList);
-	// m_SampleUISkill1->Render(pd3dCommandList);
-	// m_SampleUISkill2->Render(pd3dCommandList);
-	// m_SampleUISkill3->Render(pd3dCommandList);
-	// m_SampleUISkill4->Render(pd3dCommandList);
+	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_UISCREEN, isGBuffers);
+
+	m_UIAltar_1->Render(pd3dCommandList);
+	m_UIAltar_2->Render(pd3dCommandList);
+	m_UIAltar_3->Render(pd3dCommandList);
+	m_UIAltar_4->Render(pd3dCommandList);
+	m_UIAltar_5->Render(pd3dCommandList);
+	if (m_UIPlayer) m_UIPlayer->Render(pd3dCommandList);
+
+	m_SampleUIMap->Render(pd3dCommandList);
+	m_SampleUISkill1->Render(pd3dCommandList);
+	m_SampleUISkill2->Render(pd3dCommandList);
+	m_SampleUISkill3->Render(pd3dCommandList);
+	m_SampleUISkill4->Render(pd3dCommandList);
 }
 
 void GameScene::ReleaseUploadBuffers()

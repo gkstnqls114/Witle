@@ -24,6 +24,8 @@ private:
 	// 텍스쳐관련 정보
 	MyDescriptorHeap* m_pHeap{ nullptr };
 	Texture* m_pTexture{ nullptr };
+	
+	RECT m_rect;
 
 private:
 	virtual void ReleaseObjects() override;
@@ -38,4 +40,6 @@ public:
 	 
 	// Render이전에 쉐이더와 쉐이더변수 설정을 해야함
 	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList) override;
+
+	RECT getRect() const { return m_rect; }
 };

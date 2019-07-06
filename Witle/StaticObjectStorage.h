@@ -34,6 +34,7 @@ private:
 	bool m_isCreate = false;  
 	std::map<std::string, RenderInfo> m_StaticObjectModelsStorage; // 모델 이름은 반드시 클래스에 맞춘다.
 	std::map<std::string, TerrainObjectInfo*> m_StaticObjectStorage; // 모델 이름은 반드시 클래스에 맞춘다.
+	std::vector<XMFLOAT4X4> m_AltarTransformStorage; // Altar transform 위치 저장하는 곳
 	void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList, int count, XMFLOAT4X4* transforms);
 
 private: 
@@ -58,6 +59,7 @@ public:
 	int GetObjectAllCount(int index);
 
 	XMFLOAT4X4* GetWorldMatrix(int index, const std::string& name);
+	XMFLOAT4X4 GetAltarTransform(int index, const std::string& name);
 
 	void CreateInfo(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, const QuadtreeTerrain const * pTerrain);
 	
