@@ -33,6 +33,7 @@ class AimPoint;
 class CylinderMesh;
 class LineSphere;
 
+class AltarSphere;
 class UI2DImage;
 
 class GameScene
@@ -117,6 +118,8 @@ protected:
 	int						m_TestMonsterCount{ 100 };
 	Monster**				m_TestMonster{ nullptr };
 
+	AltarSphere*			m_AltarSphere[5];
+
 #ifdef CHECK_SUBVIEWS
 	CameraObject*			m_lookAboveCamera{ nullptr };
 #endif
@@ -131,7 +134,6 @@ protected:
 	MATERIAL					*m_pcbMappedMaterials{ nullptr };
 	//////////////////////////////////////  조명
 
-	// 충돌체크할 테스트 오브젝트  
 	QuadtreeTerrain			    *m_pQuadtreeTerrain{ nullptr };
 
 private:

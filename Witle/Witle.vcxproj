@@ -154,6 +154,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AltarSphere.h" />
     <ClInclude Include="Avoidance.h" />
     <ClInclude Include="BasicCam.h" />
     <ClInclude Include="Broom.h" />
@@ -290,6 +291,7 @@
     <ClInclude Include="ModelStorage.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AltarSphere.cpp" />
     <ClCompile Include="Avoidance.cpp" />
     <ClCompile Include="BasicCam.cpp" />
     <ClCompile Include="Broom.cpp" />

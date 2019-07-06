@@ -370,11 +370,14 @@
     <Filter Include="13.Storage/Manager\10.MonsterTransformStorage">
       <UniqueIdentifier>{a87f6d33-f8a8-4182-aa6c-6d902932608f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="05.Shader\UIMapForPlayerShader">
+      <UniqueIdentifier>{0054413c-f22c-43dd-b8f1-aafcee2bc36f}</UniqueIdentifier>
+    </Filter>
     <Filter Include="03.GameObject\03.UI">
       <UniqueIdentifier>{c35f0fa6-2fbf-4976-a622-d46db3b4832a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="05.Shader\UIMapForPlayerShader">
-      <UniqueIdentifier>{0054413c-f22c-43dd-b8f1-aafcee2bc36f}</UniqueIdentifier>
+    <Filter Include="03.GameObject\04.AltarSphere">
+      <UniqueIdentifier>{fd56c41d-2d83-4b30-94ca-bf0c73064041}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -780,6 +783,9 @@
     <ClInclude Include="UIMapForPlayerShader.h">
       <Filter>05.Shader\UIMapForPlayerShader</Filter>
     </ClInclude>
+    <ClInclude Include="AltarSphere.h">
+      <Filter>03.GameObject\04.AltarSphere</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1162,6 +1168,9 @@
     </ClCompile>
     <ClCompile Include="UIMapForPlayerShader.cpp">
       <Filter>05.Shader\UIMapForPlayerShader</Filter>
+    </ClCompile>
+    <ClCompile Include="AltarSphere.cpp">
+      <Filter>03.GameObject\04.AltarSphere</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
