@@ -370,6 +370,12 @@
     <Filter Include="13.Storage/Manager\10.MonsterTransformStorage">
       <UniqueIdentifier>{a87f6d33-f8a8-4182-aa6c-6d902932608f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.GameObject\03.UI">
+      <UniqueIdentifier>{c35f0fa6-2fbf-4976-a622-d46db3b4832a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Shader\UIMapForPlayerShader">
+      <UniqueIdentifier>{0054413c-f22c-43dd-b8f1-aafcee2bc36f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -768,6 +774,12 @@
     <ClInclude Include="MonsterTransformStorage.h">
       <Filter>13.Storage/Manager\10.MonsterTransformStorage</Filter>
     </ClInclude>
+    <ClInclude Include="UIMap.h">
+      <Filter>03.GameObject\03.UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UIMapForPlayerShader.h">
+      <Filter>05.Shader\UIMapForPlayerShader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1145,6 +1157,12 @@
     <ClCompile Include="MonsterTransformStorage.cpp">
       <Filter>13.Storage/Manager\10.MonsterTransformStorage</Filter>
     </ClCompile>
+    <ClCompile Include="UIMap.cpp">
+      <Filter>03.GameObject\03.UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UIMapForPlayerShader.cpp">
+      <Filter>05.Shader\UIMapForPlayerShader</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Witle.rc">
@@ -1203,6 +1221,9 @@
       <Filter>HLSL</Filter>
     </FxCompile>
     <FxCompile Include="UIWorldShader.hlsl">
+      <Filter>HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="UIMapForPlayerShader.hlsl">
       <Filter>HLSL</Filter>
     </FxCompile>
   </ItemGroup>

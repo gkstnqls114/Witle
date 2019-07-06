@@ -276,6 +276,8 @@
     <ClInclude Include="ShowTextureShader.h" />
     <ClInclude Include="TextureStorage.h" />
     <ClInclude Include="Transform.h" />
+    <ClInclude Include="UIMap.h" />
+    <ClInclude Include="UIMapForPlayerShader.h" />
     <ClInclude Include="UIWorldShader.h" />
     <ClInclude Include="UIScreenShader.h" />
     <ClInclude Include="VerticalBlurShader.h" />
@@ -407,6 +409,8 @@
     <ClCompile Include="UI3D.cpp" />
     <ClCompile Include="UI2DImage.cpp" />
     <ClCompile Include="UI2D.cpp" />
+    <ClCompile Include="UIMap.cpp" />
+    <ClCompile Include="UIMapForPlayerShader.cpp" />
     <ClCompile Include="UIWorldShader.cpp" />
     <ClCompile Include="UIScreenShader.cpp" />
     <ClCompile Include="VerticalBlurShader.cpp" />
@@ -572,6 +576,17 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="UIMapForPlayerShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="UIScreenShader.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>

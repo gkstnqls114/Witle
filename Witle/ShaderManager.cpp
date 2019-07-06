@@ -14,6 +14,7 @@
 #include "InstancingLineShader.h"
 #include "PickingPointShader.h"
 #include "LineShader.h" 
+#include "UIMapForPlayerShader.h"
 #include "UIScreenShader.h"
 #include "UIWorldShader.h"
 //// Shader ////////////////////////// 
@@ -119,6 +120,11 @@ void ShaderManager::BuildShaders(ID3D12Device * pd3dDevice, ID3D12RootSignature 
 	Shader* pShowTextureShader = new ShowTextureShader();
 	pShowTextureShader->CreateShader(pd3dDevice, pd3dGraphicsRootSignature);
 	InsertShader(SHADER_SHOWTEXTURE, pShowTextureShader);
+
+	Shader* pUIMapForPlayerShader = new UIMapForPlayerShader();
+	pUIMapForPlayerShader->CreateShader(pd3dDevice, pd3dGraphicsRootSignature);
+	InsertShader(SHADER_UIMAPFORPLAYER, pUIMapForPlayerShader);
+	
 }
 
 bool ShaderManager::InsertShader(const std::string& s, Shader * pso)
