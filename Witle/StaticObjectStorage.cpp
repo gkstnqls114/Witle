@@ -66,7 +66,7 @@ bool StaticObjectStorage::LoadTransform(char * name, const char * comp_name, con
 			m_StaticObjectStorage[comp_name][terrainIDs].TransformList.emplace_back(TestObject->m_pChild->m_xmf4x4World);
 			if (!strcmp(comp_name, ALTAR_IN))
 			{
-				m_AltarTransformStorage = m_StaticObjectStorage[comp_name][terrainIDs].TransformList;
+				m_AltarTransformStorage.emplace_back(tr);
 			}
 
 			delete TestObject;

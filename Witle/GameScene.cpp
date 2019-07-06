@@ -12,6 +12,9 @@
 //// GameObject header //////////////////////////
 #include "SkyBox.h"
 #include "Widget.h"
+#include "AltarSphere.h"
+#include "SpaceCat.h"
+#include "CreepyMonster.h"
 //// GameObject header //////////////////////////
 
 //// Manager header //////////////////////////
@@ -29,7 +32,6 @@
 #include "GameScreen.h"
 #include "GameTimer.h"
 
-#include "CreepyMonster.h"
 #include "PlayerStatus.h"
 #include "MonsterStatus.h"
 #include "MyBOBox.h"
@@ -50,7 +52,6 @@
 #include "CameraObject.h"
 #include "QuadTreeTerrain.h"
 #include "BasicCam.h" 
-#include "SpaceCat.h"
 
 #include "UI2DImage.h"
 #include "GameScene.h"
@@ -381,8 +382,9 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	 
 	 XMFLOAT4X4 tr;
 	 tr = StaticObjectStorage::GetInstance()->GetAltarTransform(0, ALTAR_IN);
-	 XMFLOAT3 pos{ tr._41, tr._42 , tr._43 }; // 월드 포지션
-	 
+	 XMFLOAT3 pos{ tr._41, 0 , tr._43 }; // 월드 포지션
+	 m_AltarSphere[0] = new AltarSphere("AltarSphere0", pos, pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
+
 	 // ui map 포지션으로 변경하기 위해 크기 축소
 	 pos.x = pos.x * (float(m_UIMapSize.x) / 30000.f);
 	 pos.z = -pos.z * (float(m_UIMapSize.y) / 30000.f); // 스크린 좌표계로 이동하기 위해
@@ -399,7 +401,8 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	 );
 	  
 	 tr = StaticObjectStorage::GetInstance()->GetAltarTransform(1, ALTAR_IN);
-	 pos = XMFLOAT3{ tr._41, tr._42 , tr._43 };
+	 pos = XMFLOAT3{ tr._41, 0 , tr._43 };
+	 m_AltarSphere[1] = new AltarSphere("AltarSphere0", pos, pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
 
 	 pos.x = pos.x * (float(m_UIMapSize.x) / 30000.f);
 	 pos.z = -pos.z * (float(m_UIMapSize.y) / 30000.f); 
@@ -413,7 +416,8 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	 );
 
 	 tr = StaticObjectStorage::GetInstance()->GetAltarTransform(2, ALTAR_IN);
-	 pos = XMFLOAT3{ tr._41, tr._42 , tr._43 };
+	 pos = XMFLOAT3{ tr._41,0 , tr._43 };
+	 m_AltarSphere[2] = new AltarSphere("AltarSphere0", pos, pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
 
 	// ui map 포지션으로 변경하기 위해 크기 축소
 	 pos.x = pos.x * (float(m_UIMapSize.x) / 30000.f);
@@ -430,8 +434,8 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 		 );
 
 	 tr = StaticObjectStorage::GetInstance()->GetAltarTransform(3, ALTAR_IN);
-	 pos = XMFLOAT3{ tr._41, tr._42 , tr._43 };
-
+	 pos = XMFLOAT3{ tr._41, 0 , tr._43 };
+	 m_AltarSphere[3] = new AltarSphere("AltarSphere0", pos, pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
 
 	// ui map 포지션으로 변경하기 위해 크기 축소
 	 pos.x = pos.x * (float(m_UIMapSize.x) / 30000.f);
@@ -448,7 +452,8 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	 );
 
 	 tr = StaticObjectStorage::GetInstance()->GetAltarTransform(4, ALTAR_IN);
-	 pos = XMFLOAT3{ tr._41, tr._42 , tr._43 };
+	 pos = XMFLOAT3{ tr._41, 0 , tr._43 };
+	 m_AltarSphere[4] = new AltarSphere("AltarSphere0", pos, pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
 
 	// ui map 포지션으로 변경하기 위해 크기 축소
 	 pos.x = pos.x * (float(m_UIMapSize.x) / 30000.f);
@@ -622,7 +627,7 @@ void GameScene::UpdatePhysics(float fElapsedTime)
 // ProcessInput에 의한 right, up, look, pos 를 월드변환 행렬에 갱신한다.
 void GameScene::Update(float fElapsedTime)
 {
-	// 플레이어 공격
+	// 플레이어 공격 , 즉 플레이어와 몬스터 충돌 체크
 	if (GameInput::GetDragMode()) // 만약 드래그로 회전한다면...
 	{
 		if (GameInput::IsKeydownE() && !m_pPlayer->IsAttacking() && !m_pPlayer->GetpBroom()->GetisUsing())
@@ -705,6 +710,13 @@ void GameScene::TESTSetRootDescriptor(ID3D12GraphicsCommandList * pd3dCommandLis
 void GameScene::AnimateObjects(float fTimeElapsed)
 {
 	if (m_pPlayer) m_pPlayer->Animate(fTimeElapsed);
+	for (int x = 0; x < 5; ++x)
+	{
+		if (m_AltarSphere[x])
+		{
+			if(m_AltarSphere[x]->GetisActive()) m_AltarSphere[x]->Animate(fTimeElapsed);
+		}
+	}
 	for (int i = 0; i < m_TestMonsterCount; ++i)
 	{
 		if (m_TestMonster[i]) m_TestMonster[i]->Animate(fTimeElapsed);
@@ -780,6 +792,11 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 		if (m_TestMonster[i]) m_TestMonster[i]->Render(pd3dCommandList, isGBuffers);
 	}
 
+	for (int x = 0; x < 5; ++x)
+	{
+		if (m_AltarSphere[x])m_AltarSphere[x]->Render(pd3dCommandList, isGBuffers);
+	}
+
 	// 터레인
 	if (m_Terrain)
 	{
@@ -846,39 +863,39 @@ void GameScene::UpdateCollision(float fElapsedTime)
 	BoundingOrientedBox AlreadyPlayerBBox = m_pPlayer->CalculateAlreadyBoundingBox(fElapsedTime);
 	XMFLOAT3 AlreadyPositon{ AlreadyPlayerBBox.Center.x, AlreadyPlayerBBox.Center.y, AlreadyPlayerBBox.Center.z };
 	
-	//// 외곽처리
-	//MyBOBox outside_box[4]{ 
-	//	{XMFLOAT3(-100, 0, 15000), XMFLOAT3(100, 3000, 20000)},
-	//	{XMFLOAT3(15000, 0, 30100), XMFLOAT3(20000, 3000, 100)},
-	//	{XMFLOAT3(30100, 0, 15000), XMFLOAT3(100, 3000, 20000)},
-	//	{XMFLOAT3(15000, 0, -100), XMFLOAT3(30000, 3000, 100)},
-	//};
+	// 외곽처리
+	MyBOBox outside_box[4]{ 
+		{XMFLOAT3(-100, 0, 15000), XMFLOAT3(100, 3000, 20000)},
+		{XMFLOAT3(15000, 0, 30100), XMFLOAT3(20000, 3000, 100)},
+		{XMFLOAT3(30100, 0, 15000), XMFLOAT3(100, 3000, 20000)},
+		{XMFLOAT3(15000, 0, -100), XMFLOAT3(30000, 3000, 100)},
+	};
 
-	//// 외곽부분 나가지 못하도록 충돌체크
-	//for (int i = 0; i < 4; ++i)
-	//{
-	//	XMFLOAT3 slideVector{ 0.f, 0.f, 0.f };
+	// 외곽부분 나가지 못하도록 충돌체크
+	for (int i = 0; i < 4; ++i)
+	{
+		XMFLOAT3 slideVector{ 0.f, 0.f, 0.f };
 
-	//	// 이동한 박스를 통해 충돌한다.
-	//	bool isSlide = Collision::ProcessCollision(
-	//		AlreadyPlayerBBox, 
-	//		outside_box[i], 
-	//		m_pPlayer->GetTransform().GetPosition(),
-	//		m_pPlayer->GetVelocity(), 
-	//		fElapsedTime,
-	//		false,
-	//		slideVector);
+		// 이동한 박스를 통해 충돌한다.
+		bool isSlide = Collision::ProcessCollision(
+			AlreadyPlayerBBox, 
+			outside_box[i], 
+			m_pPlayer->GetTransform().GetPosition(),
+			m_pPlayer->GetVelocity(), 
+			fElapsedTime,
+			false,
+			slideVector);
 
-	//	if (isSlide)
-	//	{ 
-	//		m_pPlayer->SetVelocity(slideVector);
-	//	}
-	//}
+		if (isSlide)
+		{ 
+			m_pPlayer->SetVelocity(slideVector);
+		}
+	}
 
+	// 플레이어와 지형지물 충돌체크 ///////////////////////// 
 	XMINT4 IDs = m_pQuadtreeTerrain->GetIDs(AlreadyPositon);
 	int TerrainCount = m_pQuadtreeTerrain->GetTerrainPieceCount();
 
-	// 오브젝트들 충돌체크
 	// Ti: Terrain Index
 	for (int Ti = 0; Ti < TerrainCount; ++Ti)
 	{
@@ -925,7 +942,7 @@ void GameScene::UpdateCollision(float fElapsedTime)
 			}
 		}
 	}
-	// 플레이어 충돌체크 ///////////////////////// 
+	// 플레이어와 지형지물 충돌체크 ///////////////////////// 
 
 
 

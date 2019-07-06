@@ -59,11 +59,12 @@ AltarSphere::AltarSphere(const std::string & entityID, const XMFLOAT3& SpawnPoin
 	m_pLoadObject = m_AltarSphereModel->m_pModelRootObject;
 	m_pLoadObject->m_pSkinnedAnimationController = new CAnimationController(pd3dDevice, pd3dCommandList, 1, m_AltarSphereModel);
 	m_pLoadObject->m_pSkinnedAnimationController->SetTrackAnimationSet(0, 0);
-
-	m_Transform.SetPosition(SpawnPoint);
-
+	 
 	XMFLOAT3 extents{ 50.f, 50.f, 50.f };
 	m_pMyBOBox = new MyBOBox(this, pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 75.F, 0.F }, extents);
+
+	Move(SpawnPoint); 
+	Animate(0.f); 
 }
 
 AltarSphere::~AltarSphere()
@@ -126,7 +127,7 @@ void AltarSphere::ReleaseMemberUploadBuffers()
 }
  
 void AltarSphere::Animate(float fElapsedTime)
-{
+{ 
 	// animate 이전에 현재 설정된 애니메이션 수행하도록 설정
 	SetTrackAnimationSet();
 
@@ -150,6 +151,7 @@ void AltarSphere::SetTrackAnimationSet()
 void AltarSphere::Move(const XMFLOAT3 & xmf3Shift)
 {
 	m_Transform.Move(xmf3Shift);
+	m_pMyBOBox->Move(xmf3Shift.x, xmf3Shift.y, xmf3Shift.z);
 }
 
 void AltarSphere::Rotate(float x, float y, float z)

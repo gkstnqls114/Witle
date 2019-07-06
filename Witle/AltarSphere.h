@@ -29,10 +29,6 @@ public:
 private:
 	static bool RENDER_DEBUG;
 
-public:
-	virtual void Update(float fElapsedTime) = 0;
-	virtual void UpdateState(float fElapsedTime) = 0;
-
 protected: 
 	RecognitionRange*   m_RecognitionRange{ nullptr }; 
 	MyBOBox*		   m_pMyBOBox{ nullptr };
@@ -43,8 +39,8 @@ protected:
 	CLoadedModelInfo*  m_AltarSphereModel{ nullptr };
 	LoadObject*		   m_pLoadObject{ nullptr };
 
-	bool m_isAttacking{ false };
-	 
+	bool m_isActive{ false };
+	
 
 private:
 	int m_CurrAnimation{ 0 }; // 현재 사용하는 애니메이션
@@ -53,7 +49,7 @@ private:
 protected:
 	virtual void ReleaseMembers() override;
 	virtual void ReleaseMemberUploadBuffers() override;
-
+	 
 private:
 	void SetTrackAnimationSet();
 
@@ -79,12 +75,12 @@ public:
 	AXIS GetCoorAxis() const { return m_Transform.GetCoorAxis(); }
 	MyBOBox* GetBOBox() const { return m_pMyBOBox; } 
 	LoadObject* GetpLoadObject() const { return m_pLoadObject; }
-	bool GetisAttacking() const { return m_isAttacking; }
+	bool GetisActive() const { return m_isActive; }
 	//// Get /////////////////// 
 
 	//// Set /////////////////// 
 	void SetAnimationState(int state);
-	void SetisAttacking(bool b) { m_isAttacking = b; }
+	void SetisActive(bool b) { m_isActive = b; }
 	//// Set /////////////////// 
 
 };
