@@ -64,7 +64,7 @@ void MyBOBox::ReleaseUploadBuffers()
 
 void MyBOBox::Render(ID3D12GraphicsCommandList * pd3dCommandList)
 { 
-	if (!RENDER_BBOX) return;
+	// if (!RENDER_BBOX) return;
 	if (m_pLineCube)
 	{
 		pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Line")->GetPSO());

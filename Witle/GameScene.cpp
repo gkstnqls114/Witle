@@ -190,6 +190,16 @@ bool GameScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM w
 			// m_WideareaMagic->SetPosition(m_pPlayer->GetTransform().GetPosition());
 			break;
 
+		case MYVK_Q:
+			for (int x = 0; x < 5; ++x)
+			{
+				if (Collision::isCollide(m_pPlayer->GetBOBox()->GetBOBox(), m_AltarSphere[x]->GetBOBox()->GetBOBox()))
+				{
+					m_AltarSphere[x]->SetisActive(true);
+				}
+			}
+			break;
+
 		case '4':
 			break;
 

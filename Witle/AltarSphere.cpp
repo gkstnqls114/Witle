@@ -60,8 +60,8 @@ AltarSphere::AltarSphere(const std::string & entityID, const XMFLOAT3& SpawnPoin
 	m_pLoadObject->m_pSkinnedAnimationController = new CAnimationController(pd3dDevice, pd3dCommandList, 1, m_AltarSphereModel);
 	m_pLoadObject->m_pSkinnedAnimationController->SetTrackAnimationSet(0, 0);
 	 
-	XMFLOAT3 extents{ 50.f, 50.f, 50.f };
-	m_pMyBOBox = new MyBOBox(this, pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 75.F, 0.F }, extents);
+	XMFLOAT3 extents{ 550.f, 500.f, 550.f };
+	m_pMyBOBox = new MyBOBox(this, pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 0.F, 0.F }, extents);
 
 	Move(SpawnPoint); 
 	Animate(0.f); 
