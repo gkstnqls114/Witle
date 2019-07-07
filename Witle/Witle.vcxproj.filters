@@ -379,6 +379,9 @@
     <Filter Include="03.GameObject\04.AltarSphere">
       <UniqueIdentifier>{fd56c41d-2d83-4b30-94ca-bf0c73064041}</UniqueIdentifier>
     </Filter>
+    <Filter Include="05.Shader\DefferedShader">
+      <UniqueIdentifier>{647bda97-5e84-4d69-8874-de1dbc15b351}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -786,6 +789,9 @@
     <ClInclude Include="AltarSphere.h">
       <Filter>03.GameObject\04.AltarSphere</Filter>
     </ClInclude>
+    <ClInclude Include="DefferedShader.h">
+      <Filter>05.Shader\DefferedShader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1172,6 +1178,9 @@
     <ClCompile Include="AltarSphere.cpp">
       <Filter>03.GameObject\04.AltarSphere</Filter>
     </ClCompile>
+    <ClCompile Include="DefferedShader.cpp">
+      <Filter>05.Shader\DefferedShader</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Witle.rc">
@@ -1233,6 +1242,9 @@
       <Filter>HLSL</Filter>
     </FxCompile>
     <FxCompile Include="UIMapForPlayerShader.hlsl">
+      <Filter>HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="DefferedShader.hlsl">
       <Filter>HLSL</Filter>
     </FxCompile>
   </ItemGroup>

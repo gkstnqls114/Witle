@@ -29,21 +29,27 @@
  
 #include "GameFramework.h"
 
+static const bool DefferedRendering = true;
 
 void CGameFramework::Render()
 {
 	HRESULT hResult = m_CommandAllocator->Reset();
 	hResult = m_CommandList->Reset(m_CommandAllocator.Get(), NULL);
 
-	//// GBuffer에 Render ////////////////////////// 
-	// RenderOnGbuffer(); 
-	//// GBuffer에 Render //////////////////////////
+	if (DefferedRendering)
+	{
+		//// GBuffer에 Render //////////////////////////
+		RenderOnGbuffer();
+		//// ComputeShader ////////////////////////// 
+		//// ComputeShader ////////////////////////// 
+		DefferedRenderOnSwapchain();
+	}
+	else
+	{
+		//// SwapChain에 Render //////////////////////////
+		RenderOnSwapchain();
+	}
 
-	//// ComputeShader ////////////////////////// 
-	//// ComputeShader ////////////////////////// 
-	
-	//// SwapChain에 Render //////////////////////////
-	RenderOnSwapchain();
 	//// SwapChain에 Render //////////////////////////
 
 
@@ -523,7 +529,7 @@ void CGameFramework::CreateGBufferView()
 		for (int i = 0; i < m_GBuffersCountForRenderTarget; ++i)
 		{
 			m_GBufferHeap->CreateShaderResourceViews(m_d3dDevice.Get(), m_CommandList.Get(), m_GBuffersCountForRenderTarget, m_GBuffersForRenderTarget[i], RESOURCE_TEXTURE2D, i);
-		}
+		} 
 	}
 }
 
@@ -716,11 +722,25 @@ void CGameFramework::RenderOnSwapchain()
 	
 	// 기본 게임 장면을 렌더한다.
 	RenderSwapChain();
+	 
+	d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_RenderTargetBuffers[m_SwapChainBufferIndex], D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
+}
+
+void CGameFramework::DefferedRenderOnSwapchain()
+{
+	d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_RenderTargetBuffers[m_SwapChainBufferIndex], D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
+
+	m_CommandList->ClearRenderTargetView(m_SwapChainCPUHandle[m_SwapChainBufferIndex], /*pfClearColor*/Colors::Gray, 0, NULL);
+	m_CommandList->ClearDepthStencilView(m_DepthStencilCPUHandle, D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, NULL);
+
+	// 기본 게임 장면을 렌더한다.
+	DefferedRenderSwapChain();
 
 	// 하단에 테스트용으로 보일 리소스들을 렌더한다.
-	// RenderGBuffers();
+	RenderGBuffers();
 
 	d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_RenderTargetBuffers[m_SwapChainBufferIndex], D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
+	
 }
 
 void CGameFramework::BuildShaders()
@@ -864,4 +884,32 @@ void CGameFramework::RenderSwapChain()
 		m_pScene->Render(m_CommandList.Get(), false);
 	}
 
+}
+
+void CGameFramework::DefferedRenderSwapChain()
+{
+	m_CommandList->OMSetRenderTargets(1, &m_SwapChainCPUHandle[m_SwapChainBufferIndex], TRUE, &m_DepthStencilCPUHandle);
+
+	//////그래픽 루트 시그너쳐를 설정한다.
+	m_CommandList->SetGraphicsRootSignature(GraphicsRootSignatureMgr::GetGraphicsRootSignature());
+
+	//////파이프라인 상태를 설정한다.
+	ShaderManager::GetInstance()->SetPSO(m_CommandList.Get(), SHADER_DEFFREDRENDER, false);
+	 
+	m_GBufferHeap->UpdateShaderVariable(m_CommandList.Get());
+
+	//// 리소스만 바꾼다.. 
+	D3D12_GPU_DESCRIPTOR_HANDLE handle = m_GBufferHeap->GetGPUSrvDescriptorStartHandle();
+
+	D3D12_VIEWPORT	Viewport{ 0.f, 0.f, GameScreen::GetWidth() , GameScreen::GetHeight(), 1.0f, 0.0f };
+	D3D12_RECT		ScissorRect{ 0, 0, GameScreen::GetWidth() , GameScreen::GetHeight() };
+
+	m_CommandList->RSSetViewports(1, &Viewport);
+	m_CommandList->RSSetScissorRects(1, &ScissorRect);
+
+	m_CommandList->SetGraphicsRootDescriptorTable(ROOTPARAMETER_TEXTUREBASE, handle);
+	
+	m_CommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	m_CommandList->DrawInstanced(6, 1, 0, 0);
+	 
 }

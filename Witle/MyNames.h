@@ -48,3 +48,4 @@
 #define SHADER_UIMAPFORPLAYER "UIMapForPlayer"
 #define SHADER_UIWORLD "UIWorld" 
 #define SHADER_SHOWTEXTURE "ShowTexture" 
+#define SHADER_DEFFREDRENDER "DefferedRender" 

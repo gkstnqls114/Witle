@@ -17,6 +17,7 @@
 #include "UIMapForPlayerShader.h"
 #include "UIScreenShader.h"
 #include "UIWorldShader.h"
+#include "DefferedShader.h"
 //// Shader ////////////////////////// 
 
 #include "ShaderManager.h"
@@ -124,6 +125,10 @@ void ShaderManager::BuildShaders(ID3D12Device * pd3dDevice, ID3D12RootSignature 
 	Shader* pUIMapForPlayerShader = new UIMapForPlayerShader();
 	pUIMapForPlayerShader->CreateShader(pd3dDevice, pd3dGraphicsRootSignature);
 	InsertShader(SHADER_UIMAPFORPLAYER, pUIMapForPlayerShader);
+
+	Shader* pDefferedShader = new DefferedShader();
+	pDefferedShader->CreateShader(pd3dDevice, pd3dGraphicsRootSignature);
+	InsertShader(SHADER_DEFFREDRENDER, pDefferedShader);
 	
 }
 

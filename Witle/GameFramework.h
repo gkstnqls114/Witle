@@ -122,6 +122,7 @@ private:
 	void RenderGBuffers(); // GBuffer에 Render
 	void Blur(); // 계산쉐이더를 통해 블러링한다.
 	void RenderSwapChain(); // SwapChain에 Render
+	void DefferedRenderSwapChain(); // SwapChain에 Render
 
 	// 키보드와 마우스 메시지를 처리하는 부분이다.
 	void OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam);
@@ -131,6 +132,7 @@ private:
 	void RenderOnGbuffer();
 	void RenderOnCompute();
 	void RenderOnSwapchain();
+	void DefferedRenderOnSwapchain();
 
 	void BuildShaders();
 	void BuildTESTObjects();
@@ -161,5 +163,6 @@ private:
 	ComputeShader* m_verticalShader{ nullptr };
 
 	MyDescriptorHeap* m_GBufferHeap{ nullptr };
+	MyDescriptorHeap* m_DefferedRenderHeap{ nullptr };
 };
 
