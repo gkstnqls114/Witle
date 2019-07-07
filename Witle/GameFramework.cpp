@@ -5,6 +5,7 @@
 #include "GameTimer.h"
 #include "GameInput.h"
 #include "GameScreen.h" 
+#include "MainCameraMgr.h"
 //// GameBase ////////////////////////// 
 
 //// Manager ////////////////////////// 
@@ -22,6 +23,8 @@
 #include "LoadingScene.h"
 //// Scene ////////////////////////// 
  
+#include "CameraObject.h"
+#include "Camera.h"
 #include "Shader.h"
 #include "Object.h"
 #include "Texture.h"
@@ -895,8 +898,11 @@ void CGameFramework::DefferedRenderSwapChain()
 
 	//////파이프라인 상태를 설정한다.
 	ShaderManager::GetInstance()->SetPSO(m_CommandList.Get(), SHADER_DEFFREDRENDER, false);
-	 
+	
 	m_GBufferHeap->UpdateShaderVariable(m_CommandList.Get());
+
+	MainCameraMgr::GetMainCamera()->GetCamera()->SetViewportsAndScissorRects(m_CommandList.Get());
+	MainCameraMgr::GetMainCamera()->GetCamera()->UpdateShaderVariables(m_CommandList.Get(), ROOTPARAMETER_CAMERA);
 
 	//// 리소스만 바꾼다.. 
 	D3D12_GPU_DESCRIPTOR_HANDLE handle = m_GBufferHeap->GetGPUSrvDescriptorStartHandle();
@@ -907,7 +913,11 @@ void CGameFramework::DefferedRenderSwapChain()
 	m_CommandList->RSSetViewports(1, &Viewport);
 	m_CommandList->RSSetScissorRects(1, &ScissorRect);
 
-	m_CommandList->SetGraphicsRootDescriptorTable(ROOTPARAMETER_TEXTUREBASE, handle);
+	for (int i = 0; i < 4; ++i)
+	{
+		m_CommandList->SetGraphicsRootDescriptorTable(ROOTPARAMETER_ALBEDO + i, handle);
+		handle.ptr += d3dUtil::gnCbvSrvDescriptorIncrementSize;
+	}
 	
 	m_CommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	m_CommandList->DrawInstanced(6, 1, 0, 0);
