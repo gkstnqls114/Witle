@@ -202,20 +202,19 @@ bool GameScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM w
 
 		case '4':
 			break;
-
-		case '5':
-			break;
-
+			 
 		case '6':
 			break;
 
-		case 'W':
-			break;
-		case 'w':
-			break;
-		case 'S':
-		case 's':
-			break;
+
+		case '5':
+			for (int x = 0; x < 5; ++x)
+			{ 
+					m_AltarSphere[x]->SetisActive(true);
+			 
+			}
+			break; 
+
 		default:
 			break;
 		}
@@ -257,6 +256,10 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	std::uniform_int_distribution<> monstertype(0,3);
 
 	// ¸ó½ºÅÍ
+	m_AltarMonster = new SpaceCat("SpaceCat",
+		XMFLOAT3(15000, 0, 15000),
+		pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
+
 	m_TestMonster = new Monster*[m_TestMonsterCount];
 
 	m_TestMonster[0] = new SpaceCat("SpaceCat",
@@ -724,6 +727,7 @@ void GameScene::TESTSetRootDescriptor(ID3D12GraphicsCommandList * pd3dCommandLis
 
 void GameScene::AnimateObjects(float fTimeElapsed)
 {
+	m_AltarMonster->Animate(fTimeElapsed);
 	if (m_pPlayer) m_pPlayer->Animate(fTimeElapsed);
 	for (int x = 0; x < 5; ++x)
 	{
@@ -806,6 +810,14 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 	{
 		if (m_TestMonster[i]) m_TestMonster[i]->Render(pd3dCommandList, isGBuffers);
 	}
+
+	bool isAllAtive = false;
+	for (int i = 0; i < 5; ++i)
+	{
+		if (m_AltarSphere[i]->GetisActive())
+			isAllAtive = true;
+	}
+	if (isAllAtive) m_AltarMonster->Render(pd3dCommandList, isGBuffers);
 
 	for (int x = 0; x < 5; ++x)
 	{
