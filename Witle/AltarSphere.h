@@ -28,7 +28,7 @@ public:
 
 private:
 	static bool RENDER_DEBUG;
-
+    const float add_guage{ 10.f };
 protected: 
 	RecognitionRange*   m_RecognitionRange{ nullptr }; 
 	MyBOBox*		   m_pMyBOBox{ nullptr };
@@ -40,8 +40,10 @@ protected:
 	LoadObject*		   m_pLoadObject{ nullptr };
 
 	bool m_isActive{ false };
+	bool m_isEnguaged{ false };
 	bool m_isFinishFlow{ false };
 	
+	float m_guage{0.f};
 
 private:
 	int m_CurrAnimation{ 0 }; // 현재 사용하는 애니메이션
@@ -72,6 +74,8 @@ public:
 	void Move(float fxOffset = 0.0f, float fyOffset = 0.0f, float fzOffset = 0.0f);
 	void Rotate(float x, float y, float z);
 
+	void AddGuage(float );
+
 	//// Get ///////////////////  
 	RecognitionRange* GetRecognitionRange() const { return m_RecognitionRange; };
 	AXIS GetCoorAxis() const { return m_Transform.GetCoorAxis(); }
@@ -83,6 +87,7 @@ public:
 	//// Set /////////////////// 
 	void SetAnimationState(int state);
 	void SetisActive(bool b) { m_isActive = b; }
+	void SetisEnguaged(bool b) { m_isEnguaged = b; }
 	//// Set /////////////////// 
 
 };

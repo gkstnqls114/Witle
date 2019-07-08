@@ -191,13 +191,7 @@ bool GameScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM w
 			break;
 
 		case VK_SPACE:
-			for (int x = 0; x < 5; ++x)
-			{
-				if (Collision::isCollide(m_pPlayer->GetBOBox()->GetBOBox(), m_AltarSphere[x]->GetBOBox()->GetBOBox()))
-				{
-					m_AltarSphere[x]->SetisActive(true);
-				}
-			}
+			
 			break;
 
 		case '4':
@@ -657,6 +651,29 @@ void GameScene::Update(float fElapsedTime)
 	else // 드래그로 회전하지 않는다면...
 	{
 
+	}
+
+	if (GameInput::IsKeydownSpace())
+	{
+		for (int x = 0; x < 5; ++x)
+		{
+			if (Collision::isCollide(m_pPlayer->GetBOBox()->GetBOBox(), m_AltarSphere[x]->GetBOBox()->GetBOBox()))
+			{
+				m_AltarSphere[x]->SetisEnguaged(true);
+			}
+		}
+	}
+	else
+	{
+		for (int x = 0; x < 5; ++x)
+		{ 
+			m_AltarSphere[x]->SetisEnguaged(false); 
+		}
+	}
+
+	for (int x = 0; x < 5; ++x)
+	{
+		m_AltarSphere[x]->Update(fElapsedTime);
 	}
 
 	//// 순서 변경 X //// 

@@ -141,6 +141,11 @@ void AltarSphere::Animate(float fElapsedTime)
 
 void AltarSphere::Update(float fElapsedTime)
 {
+	if (m_isEnguaged)
+	{
+		AddGuage(fElapsedTime);
+	}
+
 	if (!m_isActive) return;
 	if (m_isFinishFlow) return;
 
@@ -170,6 +175,20 @@ void AltarSphere::Rotate(float x, float y, float z)
 {
 	m_Transform.Rotate(x, y, z);
 	m_pMyBOBox->Rotate(x, y, z);
+}
+
+void AltarSphere::AddGuage(float time)
+{
+	if (m_guage >= 100)
+	{
+		m_guage = 100;
+		SetisActive(true);
+	}
+
+	if (m_isActive) return;
+
+	m_guage = m_guage + add_guage * time;
+	std::cout << m_guage << std::endl;
 }
 
 void AltarSphere::SetAnimationState(int state)

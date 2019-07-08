@@ -104,7 +104,7 @@ public:
 	static bool IsKeydownA() { return (m_pKeyBuffer[MYVK_A] & 0xF0); };
 	static bool IsKeydownD() { return (m_pKeyBuffer[MYVK_D] & 0xF0); };
 	static bool IsKeydownE() { return (m_pKeyBuffer[MYVK_E] & 0xF0); };
-	 
+	static bool IsKeydownSpace() { return (m_pKeyBuffer[VK_SPACE] & 0xF0); };
 	//// Keyboard ฐüทร ///////////////////////////////////////////
 
 
