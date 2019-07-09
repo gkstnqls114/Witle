@@ -13,7 +13,6 @@ class MonsterAction;
 class MonsterMovement;
 class Player;
 
-// MonsterMovement를 인자로 받아 가속도를 처리해주는 클래스.
 class MonsterActionMgr
 	: public ComponentBase
 {

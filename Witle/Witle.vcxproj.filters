@@ -346,20 +346,11 @@
     <Filter Include="02.Component\ForMonster\GeneralMonsterAction\05.DeadAction">
       <UniqueIdentifier>{f34ded6a-1a2a-4110-a759-a0c457ba548d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.Component\ForMonster\GeneralMonsterAction\MonsterActionMgr">
-      <UniqueIdentifier>{087791ad-0703-44b8-a9f4-5b49840722d4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.Component\ForMonster\GeneralMonsterAction\06.HitAction">
       <UniqueIdentifier>{0c76bd52-ef44-43bd-a692-c57b5c707524}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.Component\ForMonster\GeneralMonsterAction\07.AttackAction">
       <UniqueIdentifier>{8a32609d-af34-4af2-9db9-7a448ff56fc9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.Component\ForMonster\GeneralMonsterAction\MonsterActionMgr\GeneralMonsterActionMgr">
-      <UniqueIdentifier>{a77c9baf-aee2-4841-a2c1-dcb4a62970aa}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.Component\ForMonster\GeneralMonsterAction\MonsterActionMgr\BossMonsterActionMgr">
-      <UniqueIdentifier>{31ceca84-3670-4740-a04e-9919c7d8f659}</UniqueIdentifier>
     </Filter>
     <Filter Include="05.Shader\ShowTextureShader">
       <UniqueIdentifier>{fbd787c7-444a-4e68-98f3-306d0a71a446}</UniqueIdentifier>
@@ -378,6 +369,24 @@
     </Filter>
     <Filter Include="05.Shader\DefferedShader">
       <UniqueIdentifier>{647bda97-5e84-4d69-8874-de1dbc15b351}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\ForMonster\BossMonsterAction">
+      <UniqueIdentifier>{06c78cfb-4cf2-43da-9b15-e83cf878fb82}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\ForMonster\BossMonsterAction\BossSampleAction_1">
+      <UniqueIdentifier>{471012f7-3ffd-4931-8dda-5f1279380a5f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\ForMonster\BossMonsterAction\BossSampleAction_2">
+      <UniqueIdentifier>{1637f871-bbe2-4ab9-aaa0-948fe623de19}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\ForMonster\MonsterActionMgr">
+      <UniqueIdentifier>{087791ad-0703-44b8-a9f4-5b49840722d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\ForMonster\MonsterActionMgr\GeneralMonsterActionMgr">
+      <UniqueIdentifier>{a77c9baf-aee2-4841-a2c1-dcb4a62970aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\ForMonster\MonsterActionMgr\BossMonsterActionMgr">
+      <UniqueIdentifier>{31ceca84-3670-4740-a04e-9919c7d8f659}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -687,9 +696,6 @@
     <ClInclude Include="RecognitionRange.h">
       <Filter>02.Component\ForMonster\RecognitionRange</Filter>
     </ClInclude>
-    <ClInclude Include="MonsterAction.h">
-      <Filter>02.Component\ForMonster\GeneralMonsterAction</Filter>
-    </ClInclude>
     <ClInclude Include="IdleAction.h">
       <Filter>02.Component\ForMonster\GeneralMonsterAction\01.IdleAction</Filter>
     </ClInclude>
@@ -754,7 +760,7 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="MonsterActionMgr.h">
-      <Filter>02.Component\ForMonster\GeneralMonsterAction\MonsterActionMgr</Filter>
+      <Filter>02.Component\ForMonster\MonsterActionMgr</Filter>
     </ClInclude>
     <ClInclude Include="HitAction.h">
       <Filter>02.Component\ForMonster\GeneralMonsterAction\06.HitAction</Filter>
@@ -766,10 +772,10 @@
       <Filter>03.GameObject\02.Monster\CreepyMonster</Filter>
     </ClInclude>
     <ClInclude Include="BossMonsterActionMgr.h">
-      <Filter>02.Component\ForMonster\GeneralMonsterAction\MonsterActionMgr\BossMonsterActionMgr</Filter>
+      <Filter>02.Component\ForMonster\MonsterActionMgr\BossMonsterActionMgr</Filter>
     </ClInclude>
     <ClInclude Include="GeneralMonsterActionMgr.h">
-      <Filter>02.Component\ForMonster\GeneralMonsterAction\MonsterActionMgr\GeneralMonsterActionMgr</Filter>
+      <Filter>02.Component\ForMonster\MonsterActionMgr\GeneralMonsterActionMgr</Filter>
     </ClInclude>
     <ClInclude Include="ShowTextureShader.h">
       <Filter>05.Shader\ShowTextureShader</Filter>
@@ -788,6 +794,15 @@
     </ClInclude>
     <ClInclude Include="DefferedShader.h">
       <Filter>05.Shader\DefferedShader</Filter>
+    </ClInclude>
+    <ClInclude Include="BossSampleAction_1.h">
+      <Filter>02.Component\ForMonster\BossMonsterAction\BossSampleAction_1</Filter>
+    </ClInclude>
+    <ClInclude Include="BossSampleAction_2.h">
+      <Filter>02.Component\ForMonster\BossMonsterAction\BossSampleAction_2</Filter>
+    </ClInclude>
+    <ClInclude Include="MonsterAction.h">
+      <Filter>02.Component\ForMonster</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1094,9 +1109,6 @@
     <ClCompile Include="DeadAction.cpp">
       <Filter>02.Component\ForMonster\GeneralMonsterAction\05.DeadAction</Filter>
     </ClCompile>
-    <ClCompile Include="MonsterAction.cpp">
-      <Filter>02.Component\ForMonster\GeneralMonsterAction</Filter>
-    </ClCompile>
     <ClCompile Include="PlayerManager.cpp">
       <Filter>13.Storage/Manager\05.PlayerManager</Filter>
     </ClCompile>
@@ -1143,7 +1155,7 @@
       <Filter>03.GameObject\02.Monster\SpaceCat</Filter>
     </ClCompile>
     <ClCompile Include="MonsterActionMgr.cpp">
-      <Filter>02.Component\ForMonster\GeneralMonsterAction\MonsterActionMgr</Filter>
+      <Filter>02.Component\ForMonster\MonsterActionMgr</Filter>
     </ClCompile>
     <ClCompile Include="HitAction.cpp">
       <Filter>02.Component\ForMonster\GeneralMonsterAction\06.HitAction</Filter>
@@ -1155,10 +1167,10 @@
       <Filter>03.GameObject\02.Monster\CreepyMonster</Filter>
     </ClCompile>
     <ClCompile Include="BossMonsterActionMgr.cpp">
-      <Filter>02.Component\ForMonster\GeneralMonsterAction\MonsterActionMgr\BossMonsterActionMgr</Filter>
+      <Filter>02.Component\ForMonster\MonsterActionMgr\BossMonsterActionMgr</Filter>
     </ClCompile>
     <ClCompile Include="GeneralMonsterActionMgr.cpp">
-      <Filter>02.Component\ForMonster\GeneralMonsterAction\MonsterActionMgr\GeneralMonsterActionMgr</Filter>
+      <Filter>02.Component\ForMonster\MonsterActionMgr\GeneralMonsterActionMgr</Filter>
     </ClCompile>
     <ClCompile Include="ShowTextureShader.cpp">
       <Filter>05.Shader\ShowTextureShader</Filter>
@@ -1177,6 +1189,15 @@
     </ClCompile>
     <ClCompile Include="DefferedShader.cpp">
       <Filter>05.Shader\DefferedShader</Filter>
+    </ClCompile>
+    <ClCompile Include="BossSampleAction_1.cpp">
+      <Filter>02.Component\ForMonster\BossMonsterAction\BossSampleAction_1</Filter>
+    </ClCompile>
+    <ClCompile Include="BossSampleAction_2.cpp">
+      <Filter>02.Component\ForMonster\BossMonsterAction\BossSampleAction_2</Filter>
+    </ClCompile>
+    <ClCompile Include="MonsterAction.cpp">
+      <Filter>02.Component\ForMonster</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
