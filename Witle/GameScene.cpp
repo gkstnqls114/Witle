@@ -13,9 +13,8 @@
 #include "SkyBox.h"
 #include "Widget.h"
 #include "AltarSphere.h"
-#include "SpaceCat.h"
-#include "CreepyMonster.h"
 //// GameObject header //////////////////////////
+
 
 //// Manager header //////////////////////////
 #include "GraphicsRootSignatureMgr.h"
@@ -28,6 +27,13 @@
 #include "PlayerManager.h"
 #include "MainCameraMgr.h"
 //// Manager header //////////////////////////
+
+
+//// Monster header //////////////////////////
+#include "SpaceCat.h"
+#include "Dragon.h"
+#include "CreepyMonster.h"
+//// Monster header //////////////////////////
 
 #include "GameScreen.h"
 #include "GameTimer.h"
@@ -246,12 +252,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	std::mt19937 mersenne(rd());
 	std::uniform_int_distribution<> die(2000, 15000);
 	std::uniform_int_distribution<> monstertype(0,3);
-
-	// 몬스터
-	m_AltarMonster = new SpaceCat("SpaceCat",
-		XMFLOAT3(15000, 0, 15000),
-		pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
-
+	 
 	m_TestMonster = new Monster*[m_TestMonsterCount];
 
 	m_TestMonster[0] = new SpaceCat("SpaceCat",
@@ -619,7 +620,7 @@ bool GameScene::ProcessInput(HWND hWnd, float fElapsedTime)
 }
 
 void GameScene::UpdatePhysics(float fElapsedTime)
-{
+{ 
 	for (int i = 0; i < m_TestMonsterCount; ++i) {
 		m_TestMonster[i]->UpdateState(fElapsedTime); // State와 업데이트 처리...
 	}
@@ -687,7 +688,7 @@ void GameScene::Update(float fElapsedTime)
 		m_TestMonster[i]->Update(fElapsedTime);
 	}
 	//// 순서 변경 X ////
-
+	 
 	for (int x = 0; x < 5; ++x)
 	{
 		m_AltarSphere[x]->Update(fElapsedTime);
@@ -741,8 +742,7 @@ void GameScene::TESTSetRootDescriptor(ID3D12GraphicsCommandList * pd3dCommandLis
 }
 
 void GameScene::AnimateObjects(float fTimeElapsed)
-{
-	m_AltarMonster->Animate(fTimeElapsed);
+{ 
 	if (m_pPlayer) m_pPlayer->Animate(fTimeElapsed);
 	for (int x = 0; x < 5; ++x)
 	{
@@ -832,7 +832,6 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 		if (m_AltarSphere[i]->GetisActive())
 			isAllAtive = true;
 	}
-	if (isAllAtive) m_AltarMonster->Render(pd3dCommandList, isGBuffers);
 
 	for (int x = 0; x < 5; ++x)
 	{

@@ -19,7 +19,7 @@ void BossSampleAction_1::UpdateState(float fElpasedTime, BossMonsterActionMgr * 
 
 	bool isNearPlayer = PlayerManager::IsNearPlayer(
 		m_pOwner->GetTransform().GetPosition(),
-		100
+		500
 	);
 
 	if (isNearPlayer)

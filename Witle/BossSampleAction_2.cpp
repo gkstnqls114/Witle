@@ -10,7 +10,10 @@
 void BossSampleAction_2::UpdateVelocity(float fElpasedTime, MonsterMovement * movement)
 {
 	XMFLOAT3 toPlayer = Vector3::Normalize(
-		Vector3::Subtract(PlayerManager::GetMainPlayer()->GetTransform().GetPosition(), m_pOwner->GetTransform().GetPosition())
+		Vector3::Subtract(
+			PlayerManager::GetMainPlayer()->GetTransform().GetPosition(), 
+			m_pOwner->GetTransform().GetPosition()
+		)
 	);
 
 	movement->m_xmf3Velocity = Vector3::ScalarProduct(toPlayer, movement->m_fDistance, false);
@@ -33,7 +36,7 @@ void BossSampleAction_2::UpdateState(float fElpasedTime, BossMonsterActionMgr * 
 
 	bool isNearPlayer = PlayerManager::IsNearPlayer(
 		m_pOwner->GetTransform().GetPosition(),
-		100
+		500
 	);
 
 	if (!isNearPlayer)

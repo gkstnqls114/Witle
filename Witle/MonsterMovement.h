@@ -17,10 +17,7 @@ class MonsterMovement
 	: public Movement
 {
 	MonsterActionMgr* m_MonsterActionMgr { nullptr };
-
-public:   
-	const float m_fNearDistance{ 0.f };
- 
+	 
 private: 
 	void UpdateVelocity(float);
 

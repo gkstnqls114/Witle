@@ -388,6 +388,9 @@
     <Filter Include="02.Component\ForMonster\MonsterActionMgr\BossMonsterActionMgr">
       <UniqueIdentifier>{31ceca84-3670-4740-a04e-9919c7d8f659}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.GameObject\02.Monster\Dragon">
+      <UniqueIdentifier>{6c980b48-edba-4766-9723-cb5900aa0986}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -804,6 +807,9 @@
     <ClInclude Include="MonsterAction.h">
       <Filter>02.Component\ForMonster</Filter>
     </ClInclude>
+    <ClInclude Include="Dragon.h">
+      <Filter>03.GameObject\02.Monster\Dragon</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1198,6 +1204,9 @@
     </ClCompile>
     <ClCompile Include="MonsterAction.cpp">
       <Filter>02.Component\ForMonster</Filter>
+    </ClCompile>
+    <ClCompile Include="Dragon.cpp">
+      <Filter>03.GameObject\02.Monster\Dragon</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

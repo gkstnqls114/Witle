@@ -27,8 +27,7 @@ public:
 class BossMonsterAction
 	: public MonsterAction
 { 
-public:
-	// Update 수행 이전 반드시 호출
+public: 
 	virtual void Init() override = 0;
 	virtual void UpdateVelocity(float fElpasedTime, MonsterMovement* movement) override = 0;
 	virtual void UpdateState(float fElpasedTime, BossMonsterActionMgr* actionMgr) = 0;
@@ -42,8 +41,7 @@ public:
 class GeneralMonsterAction
 	: public MonsterAction
 {
-public:
-	// Update 수행 이전 반드시 호출
+public: 
 	virtual void Init() override = 0;
 	virtual void UpdateVelocity(float fElpasedTime, MonsterMovement* movement) override  = 0;
 	virtual void UpdateState(float fElpasedTime, GeneralMonsterActionMgr* actionMgr) = 0;
