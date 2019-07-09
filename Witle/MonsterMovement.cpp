@@ -1,6 +1,7 @@
 #include "stdafx.h"
 
 #include "GeneralMonsterActionMgr.h"
+#include "BossMonsterActionMgr.h"
 
 #include "Monster.h"
 #include "RecognitionRange.h"
@@ -23,10 +24,17 @@ void MonsterMovement::MoveVelocity(const XMFLOAT3 & xmf3Shift)
 	m_xmf3Velocity = Vector3::Add(m_xmf3Velocity, xmf3Shift);
 }
 
-MonsterMovement::MonsterMovement(GameObject * pOwner, float idleTime, float moveTime)
+MonsterMovement::MonsterMovement(GameObject * pOwner, float idleTime, float moveTime, bool isBoss)
 	:Movement(pOwner)
 {
-	m_MonsterActionMgr = new GeneralMonsterActionMgr(pOwner, idleTime, moveTime);
+	if (!isBoss)
+	{
+		m_MonsterActionMgr = new GeneralMonsterActionMgr(pOwner, idleTime, moveTime);
+	}
+	else
+	{ 
+		m_MonsterActionMgr = new BossMonsterActionMgr(pOwner);
+	}
 }
 
 MonsterMovement::~MonsterMovement()

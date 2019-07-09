@@ -608,9 +608,7 @@ void CGameFramework::UpdateGamelogic(float fElapsedTime)
 		m_pScene->UpdatePhysics(fElapsedTime);
 		m_pScene->Update(fElapsedTime);
 		m_pScene->AnimateObjects(fElapsedTime);
-		m_pScene->LastUpdate(fElapsedTime);
-
-		// 현재 애니메이션 어디다가 쓰는지 모르겠다.
+		m_pScene->LastUpdate(fElapsedTime); 
 		GameInput::Reset();
 	}
 }
