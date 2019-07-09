@@ -8,7 +8,7 @@ class MyRectangle;
 class Status
 	: public ComponentBase
 { 
-private:
+protected:
 	virtual void SetAnimationStateToHit() = 0;
 	void SubstractHP(int damage);
 
@@ -23,5 +23,5 @@ public:
 public:
 	Status(GameObject* pOwner );
 	virtual ~Status(); 
-	void Damage(int damage, int state);
+	virtual void Damage(int damage, int state) = 0;
 };

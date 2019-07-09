@@ -190,9 +190,6 @@
     <Filter Include="02.Component\ForMonster">
       <UniqueIdentifier>{6f6f0da4-460e-4a1c-ad74-3a573093c8c3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.Component\ForMonster\MonsterMovement">
-      <UniqueIdentifier>{692a14ef-ebae-4df5-a360-50a94d6057b4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.Component\02.Camera">
       <UniqueIdentifier>{97a51fee-d2d6-4527-a559-c0e182ff3bb1}</UniqueIdentifier>
     </Filter>

@@ -80,11 +80,11 @@ CreepyMonster::CreepyMonster(const std::string & entityID, const XMFLOAT3& Spawn
 
 	if (rand() % 2)
 	{
-		m_MonsterMovement->GetMonsterActionMgr()->ChangeStateToMove();
+		static_cast<GeneralMonsterActionMgr*>(m_MonsterMovement->GetMonsterActionMgr())->ChangeStateToMove();
 	}
 	else
 	{
-		m_MonsterMovement->GetMonsterActionMgr()->ChangeStateToIdle();
+		static_cast<GeneralMonsterActionMgr*>(m_MonsterMovement->GetMonsterActionMgr())->ChangeStateToIdle();
 	}
 }
 

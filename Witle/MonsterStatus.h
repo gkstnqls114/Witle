@@ -26,5 +26,6 @@ public:
 	
 	// Update 수행 이전 반드시 호출 
 	void Render(ID3D12GraphicsCommandList *pd3dCommandList);
+	virtual void Damage(int damage, int state) override;
 
 };

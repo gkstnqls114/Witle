@@ -19,14 +19,5 @@ Status::Status(GameObject * pOwner )
 Status::~Status()
 {
 
-}
-
-void Status::Damage(int damage, int state)
-{ 
-	GeneralMonsterActionMgr* pMonsterActionMgr = static_cast<Monster*>(m_pOwner)->GetMovement()->GetMonsterActionMgr();
-	if (pMonsterActionMgr->isDead()) return; // 만약에 죽은 경우 리턴한다.
-
-	pMonsterActionMgr->ChangeStateToHit();
-	SubstractHP(damage);
-}
+} 
  
