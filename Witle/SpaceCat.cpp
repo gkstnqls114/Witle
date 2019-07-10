@@ -14,8 +14,7 @@
 #include "MyBOBox.h"
 #include "Texture.h"
 #include "SpaceCat.h"
- 
- 
+
 void SpaceCat::ReleaseMembers()
 {
 	Monster::ReleaseMembers();
@@ -42,7 +41,7 @@ void SpaceCat::ReleaseMemberUploadBuffers()
 SpaceCat::SpaceCat(const std::string & entityID, const XMFLOAT3& SpawnPoint,
 	ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature)
 	: Monster(entityID, 100.f, SpawnPoint, pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature)
-{  
+{
 	m_RecognitionRange = new RecognitionRange(this, 500.f, 2.f);
 	m_RecognitionRange->CreateDebugMesh(pd3dDevice, pd3dCommandList);
 
@@ -68,7 +67,7 @@ SpaceCat::SpaceCat(const std::string & entityID, const XMFLOAT3& SpawnPoint,
 	}
 
 	m_pHaep->CreateShaderResourceViews(pd3dDevice, pd3dCommandList, m_pTexture, ROOTPARAMETER_TEXTURE, false, 0);
-	
+
 
 	ANIMATION_INFO infos[SPACECAT_ANIMATIONE];
 	infos[0] = SPACECAT_IDLE;
@@ -76,23 +75,21 @@ SpaceCat::SpaceCat(const std::string & entityID, const XMFLOAT3& SpawnPoint,
 	infos[2] = SPACECAT_ATTACK;
 	infos[3] = SPACECAT_DEAD;
 	infos[4] = SPACECAT_HIT;
-	 
+
 	m_MonsterModel = LoadObject::LoadGeometryAndAnimationFromFile_forMonster(
 		pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/SpaceCat.bin", NULL,
 		SPACECAT_ANIMATIONE, infos);
-	 
+
 	// m_MonsterModel = ModelStorage::GetInstance()->GetModelInfo(SPACECAT);
-	
+
 	m_pLoadObject = m_MonsterModel->m_pModelRootObject;
 	m_pLoadObject->m_pSkinnedAnimationController = new CAnimationController(pd3dDevice, pd3dCommandList, 1, m_MonsterModel);
 	m_pLoadObject->m_pSkinnedAnimationController->SetTrackAnimationSet(0, 0);
 
-	m_Transform.SetPosition(SpawnPoint); 
-
+	m_Transform.SetPosition(SpawnPoint);
 
 	XMFLOAT3 extents{ 50.f, 50.f, 50.f };
 	m_pMyBOBox = new MyBOBox(this, pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 75.F, 0.F }, extents);
-
 
 	if (rand() % 2)
 	{
@@ -120,7 +117,7 @@ void SpaceCat::Update(float fElapsedTime)
 	Move(Vector3::ScalarProduct(m_MonsterMovement->m_xmf3Velocity, fElapsedTime, false));
 
 }
- 
+
 void SpaceCat::UpdateState(float fElapsedTime)
 {
 	m_MonsterMovement->UpdateState(fElapsedTime);
@@ -129,9 +126,9 @@ void SpaceCat::UpdateState(float fElapsedTime)
 void SpaceCat::Animate(float fElapsedTime)
 {
 	Monster::Animate(fElapsedTime);
-	  
+
 	LoadObject* p = m_pLoadObject->FindFrame("Bone001");
 	XMFLOAT3 pos = XMFLOAT3(p->m_xmf4x4World._41, p->m_xmf4x4World._42 + 50, p->m_xmf4x4World._43);
 
-	m_pMyBOBox->SetPosition( pos );
+	m_pMyBOBox->SetPosition(pos);
 }

@@ -33,6 +33,8 @@
 
 #include "Monster.h"
 
+#include "SoundManager.h"
+
 static float MonsterOffestX = 0.f;
 static float MonsterOffestY = 57.f;
 static float MonsterOffestZ = 50.f;
@@ -69,14 +71,14 @@ XMFLOAT3 Monster::CalculateAlreadyPosition(float fTimeElapsed)
 	XMFLOAT3 AlreadyPosition = Vector3::Add(m_Transform.GetPosition(), m_MonsterMovement->AlreadyUpdate(fTimeElapsed));
 	return AlreadyPosition;
 }
- 
+
 
 Monster::Monster(const std::string & entityID, float spawnRange, const XMFLOAT3& SpawnPoint, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature)
 	: m_SpawnRange(spawnRange), m_SpawnPoint(SpawnPoint), GameObject(entityID)
 {
 	m_MonsterStatus = new MonsterStatus(this, pd3dDevice, pd3dCommandList);
-	
-	m_MonsterHP = new UI3DImage(this, pd3dDevice, pd3dCommandList, POINT{0, 0},
+
+	m_MonsterHP = new UI3DImage(this, pd3dDevice, pd3dCommandList, POINT{ 0, 0 },
 		100.F,
 		30.f,
 		L"Image/Red.dds"
@@ -93,7 +95,7 @@ Monster::~Monster()
 {
 
 }
- 
+
 void Monster::Render(ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffers)
 {
 	if (RENDER_DEBUG)
@@ -130,7 +132,7 @@ void Monster::ReleaseMembers()
 		delete m_RecognitionRange;
 		m_RecognitionRange = nullptr;
 	}
-	if(m_pDebugObject)
+	if (m_pDebugObject)
 	{
 		m_pDebugObject->ReleaseObjects();
 		delete m_pDebugObject;
@@ -141,19 +143,19 @@ void Monster::ReleaseMembers()
 		m_pTexture->ReleaseObjects();
 		delete m_pTexture;
 		m_pTexture = nullptr;
-	} 
+	}
 	if (m_pLoadObject)
 	{
 		m_pLoadObject->ReleaseObjects();
 		m_pLoadObject = nullptr;
 	}
-	 
+
 	if (m_MonsterModel)
 	{
 		m_MonsterModel->ReleaseObjects();
 		delete m_MonsterModel;
 		m_MonsterModel = nullptr;
-	} 
+	}
 	if (m_pMyBOBox)
 	{
 		m_pMyBOBox->ReleaseObjects();
@@ -183,13 +185,13 @@ void Monster::ReleaseMemberUploadBuffers()
 	if (m_MonsterModel)m_MonsterModel->ReleaseUploadBuffers();
 	if (m_pMyBOBox)m_pMyBOBox->ReleaseUploadBuffers();
 }
- 
+
 
 void Monster::SubstractHP(int sub)
 {
 	m_CurrAnimation = ANIMATION_HIT.ID;
 	m_pLoadObject->SetTrackAnimationSet(0, m_CurrAnimation);
-	
+
 	m_MonsterStatus->m_HP -= sub;
 	std::cout << m_MonsterStatus->m_HP << std::endl;
 }
@@ -201,14 +203,14 @@ void Monster::Animate(float fElapsedTime)
 
 	// 반드시 트랜스폼 업데이트..! 
 	m_Transform.Update(fElapsedTime);
-	 
+
 	m_pLoadObject->m_xmf4x4ToParent = m_Transform.GetWorldMatrix();
-	
-	m_pLoadObject->Animate(fElapsedTime); 
+
+	m_pLoadObject->Animate(fElapsedTime);
 }
- 
+
 void Monster::RenderHpStatus(ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffers)
-{ 
+{
 	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_UIWORLD, isGBuffers);
 
 	// set look at.... 빌보드 처리...
@@ -241,6 +243,7 @@ void Monster::SetTrackAnimationSet()
 void Monster::Move(const XMFLOAT3 & xmf3Shift)
 {
 	m_Transform.Move(xmf3Shift);
+	// SoundManager::GetInstance()->Play(ENUM_SOUND::SPACE_MOVE);
 }
 
 void Monster::Rotate(float x, float y, float z)
@@ -252,6 +255,5 @@ void Monster::Rotate(float x, float y, float z)
 void Monster::SetAnimationState(int state)
 {
 	m_CurrAnimation = state;
-	m_pLoadObject->SetTrackAnimationSet(0, m_CurrAnimation); 
+	m_pLoadObject->SetTrackAnimationSet(0, m_CurrAnimation);
 }
- 

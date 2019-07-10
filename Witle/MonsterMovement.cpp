@@ -8,6 +8,8 @@
 #include "Player.h"
 #include "MonsterMovement.h"
 
+#include "SoundManager.h"
+
 
 void MonsterMovement::UpdateVelocity(float fTimeElapsed)
 { 
@@ -30,6 +32,7 @@ MonsterMovement::MonsterMovement(GameObject * pOwner, float idleTime, float move
 	if (!isBoss)
 	{
 		m_MonsterActionMgr = new GeneralMonsterActionMgr(pOwner, idleTime, moveTime);
+
 	}
 	else
 	{ 

@@ -14,6 +14,8 @@
 #include "MyBOBox.h"
 #include "Texture.h"
 #include "CreepyMonster.h"
+
+#include "SoundManager.h"
  
 void CreepyMonster::ReleaseMembers()
 {
