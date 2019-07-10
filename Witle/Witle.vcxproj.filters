@@ -1274,5 +1274,8 @@
     <FxCompile Include="DefferedShader.hlsl">
       <Filter>HLSL</Filter>
     </FxCompile>
+    <FxCompile Include="Shadow.hlsl">
+      <Filter>HLSL</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

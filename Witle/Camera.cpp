@@ -4,6 +4,7 @@
 #include "MyFrustum.h"
 #include "GameScreen.h"
 #include "GameObject.h"
+#include "Light.h"
 #include "Camera.h"
 
 void Camera::ReleaseObjects()
@@ -173,6 +174,21 @@ void Camera::GenerateViewMatrix(XMFLOAT3 xmf3Position, XMFLOAT3 xmf3LookAt, XMFL
 	m_pOwner->GetTransform().SetUp(xmf3Up) ;
 
 	GenerateViewMatrix();
+}
+ 
+// 빛이 위를 바라보지 않는 가정 하에 진행합니다.
+XMFLOAT4X4 Camera::GenerateLightViewMatrix(const LIGHT* light)
+{
+	XMFLOAT3 lookat = Vector3::Add(light->Position, light->Direction);
+	// lookat 방향과 평행하지 않은 정규벡터, 그냥 up벡터 (0, 1, 0)와 lookat normal의 외적으로 갑니다.
+	// 빛이 위를 바라보지 않는다는 가정...
+	XMFLOAT3 randomnormal = Vector3::CrossProduct(XMFLOAT3(0, 1, 0), Vector3::Normalize(lookat));
+
+	return Matrix4x4::LookAtLH(
+		light->Position,
+		lookat,
+		randomnormal
+	);
 }
 
 void Camera::SetViewportsAndScissorRects(ID3D12GraphicsCommandList *pd3dCommandList)

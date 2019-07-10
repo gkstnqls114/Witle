@@ -10,6 +10,7 @@ struct VS_CB_MYCAMERA_INFO
 
 class GameObject;
 class MyFrustum;
+struct LIGHT;
 
 // 가장 기본적인 카메라입니다.
 // 카메라 자신의 Position을 기준으로 이동하고 회전합니다.
@@ -130,4 +131,7 @@ public:
 	Camera& operator= (const Camera&);
 
 	void ShowData() const noexcept;
+	
+	// 조명변환뷰
+	XMFLOAT4X4 GenerateLightViewMatrix(const LIGHT* light);
 };
