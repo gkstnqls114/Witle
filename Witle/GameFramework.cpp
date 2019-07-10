@@ -34,6 +34,9 @@
 
 static const bool DefferedRendering = false;
 
+
+commit test;
+
 void CGameFramework::Render()
 {
 	HRESULT hResult = m_CommandAllocator->Reset();
