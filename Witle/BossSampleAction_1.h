@@ -3,14 +3,14 @@
 
 class MonsterMovement;
 
-// MonsterMovement를 인자로 받아 가속도를 처리해주는 클래스.
-// 움직이지 않게 처리를 한다.
+// 보스몬스터용 샘플 액션 1입니다.
+// 움직이지 않습니다.
+// 만약 UpdateState 시 , 플레이어와 거리가 500 안으로 들어오면 플레이어에게 따라갑니다.
 class BossSampleAction_1
 	: public BossMonsterAction
 {
 
 public:
-	// Update 수행 이전 반드시 호출
 	virtual void UpdateVelocity(float fElpasedTime, MonsterMovement* movement) override;
 	virtual void Init() override {};
 	virtual void UpdateState(float fElpasedTime, BossMonsterActionMgr* actionMgr) override;

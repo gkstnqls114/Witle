@@ -3,8 +3,9 @@
 
 class MonsterMovement;
 
-// MonsterMovement를 인자로 받아 가속도를 처리해주는 클래스.
-// 움직이지 않게 처리를 한다.
+// 보스몬스터용 샘플 액션 2입니다.
+// 플레이어를 따라갑니다.
+// 만약 UpdateState 시 , 플레이어와 거리가 500 밖으로 넘어가면 플레이어에게 따라갑니다.
 class BossSampleAction_2
 	: public BossMonsterAction
 {

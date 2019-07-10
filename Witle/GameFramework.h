@@ -43,7 +43,6 @@ private:
 	D3D12_CPU_DESCRIPTOR_HANDLE m_DepthStencilCPUHandle;
 	UINT m_DsvDescriptorSize;
 	 
-
 	ComPtr<ID3D12CommandQueue> m_CommandQueue;
 	ComPtr<ID3D12CommandAllocator> m_CommandAllocator;
 	ComPtr<ID3D12GraphicsCommandList> m_CommandList;
@@ -58,10 +57,11 @@ private:
 #endif
 	
 private:  
-	//// GBuffer 
+	//// GBuffer 客 溅档快甘 ////////////////////////////////////
 	static const UINT m_GBuffersCountForDepth{ 1 };
+	static const UINT m_ShadowmapCount{ 1 };
 	static const UINT m_GBuffersCountForRenderTarget{ 3 };
-	const UINT m_DsvDescriptorsCount{ 1 + m_GBuffersCountForDepth };
+	const UINT m_DsvDescriptorsCount{ 1 + m_GBuffersCountForDepth + m_ShadowmapCount };
 	static const UINT m_GBuffersCount{ m_GBuffersCountForDepth + m_GBuffersCountForRenderTarget };
 
 	ID3D12Resource*				m_GBuffersForRenderTarget[m_GBuffersCountForRenderTarget];
@@ -70,13 +70,12 @@ private:
 	ID3D12Resource*				m_GBuffersForDepth[m_GBuffersCountForDepth];
 	D3D12_CPU_DESCRIPTOR_HANDLE m_GBufferCPUHandleForDepth[m_GBuffersCountForDepth];
 
-	UINT m_GBufferDescriptorSize;
+	ID3D12Resource*				m_Shadowmap;
+	D3D12_CPU_DESCRIPTOR_HANDLE m_ShadowmapCPUHandle;
+	//// GBuffer 客 溅档快甘 ////////////////////////////////////
 
-	//CTriangleShader m_RedShader;
-	//CGreenShader m_GreenShader;
-	//CBlueShader m_BlueShader;
-	//CRenderComputeShader m_RenderComputeShader;
-	 
+	UINT m_GBufferDescriptorSize;
+	
 	float	m_GBufferClearValue[3][4]{
 		{ 0.f, 0.f, 0.f, 1.f },
 		{ 0.f, 1.f, 0.f, 1.f },
