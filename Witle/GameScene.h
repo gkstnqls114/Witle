@@ -115,7 +115,7 @@ protected:
 	//
 	SkyBox*					m_SkyBox{ nullptr };
 
-	int						m_TestMonsterCount{ 100 };
+	int						m_TestMonsterCount{ 1 };
 	Monster**				m_TestMonster{ nullptr };
 
 	AltarSphere*			m_AltarSphere[5];
