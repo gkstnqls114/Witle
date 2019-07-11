@@ -31,6 +31,7 @@ cbuffer cbTotalTime : register(b6)
     float totalTime : packoffset(c0);
 }
 
+
 SamplerState gWrapSamplerState : register(s0);
 SamplerState gssClamp          : register(s1);
 SamplerState gssPCFSampler     : register(s2);
