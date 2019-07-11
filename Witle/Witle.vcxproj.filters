@@ -58,9 +58,6 @@
     <Filter Include="02.Component\MyRigidbody">
       <UniqueIdentifier>{ea387169-77ab-4066-8583-c032c53a4038}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03.GameObject\Camera">
-      <UniqueIdentifier>{c697f733-6c27-408a-a499-af08ff3180ec}</UniqueIdentifier>
-    </Filter>
     <Filter Include="10.Renderer">
       <UniqueIdentifier>{3173eb9f-8d38-40a1-b848-5fcb8f1eeeef}</UniqueIdentifier>
     </Filter>
@@ -114,9 +111,6 @@
     </Filter>
     <Filter Include="12.Skill\SkillRestraint">
       <UniqueIdentifier>{dfc629d6-2b26-45c0-ac96-a6cd8663a74c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03.GameObject\Light">
-      <UniqueIdentifier>{cb650d53-fa9a-44ef-a203-2eb6dd49787e}</UniqueIdentifier>
     </Filter>
     <Filter Include="06.ComputeShader">
       <UniqueIdentifier>{7769c5e9-5d6f-49a5-ba85-21c9bd1660b4}</UniqueIdentifier>
@@ -391,6 +385,15 @@
     <Filter Include="03.GameObject\02.Monster\Dragon">
       <UniqueIdentifier>{6c980b48-edba-4766-9723-cb5900aa0986}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.GameObject\Light">
+      <UniqueIdentifier>{cb650d53-fa9a-44ef-a203-2eb6dd49787e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameObject\05.CameraObject">
+      <UniqueIdentifier>{c697f733-6c27-408a-a499-af08ff3180ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameObject\06.SkillEffect">
+      <UniqueIdentifier>{087a3256-cc6a-4a40-b287-d5d00636e6bb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -490,7 +493,7 @@
       <Filter>02.Component\MyRigidbody</Filter>
     </ClInclude>
     <ClInclude Include="CameraObject.h">
-      <Filter>03.GameObject\Camera</Filter>
+      <Filter>03.GameObject\05.CameraObject</Filter>
     </ClInclude>
     <ClInclude Include="BasicCam.h">
       <Filter>02.Component\02.Camera\BasicCam</Filter>
@@ -810,6 +813,9 @@
     <ClInclude Include="Dragon.h">
       <Filter>03.GameObject\02.Monster\Dragon</Filter>
     </ClInclude>
+    <ClInclude Include="SkillEffect.h">
+      <Filter>03.GameObject\06.SkillEffect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -900,7 +906,7 @@
       <Filter>02.Component\MyRigidbody</Filter>
     </ClCompile>
     <ClCompile Include="CameraObject.cpp">
-      <Filter>03.GameObject\Camera</Filter>
+      <Filter>03.GameObject\05.CameraObject</Filter>
     </ClCompile>
     <ClCompile Include="BasicCam.cpp">
       <Filter>02.Component\02.Camera\BasicCam</Filter>
@@ -1207,6 +1213,9 @@
     </ClCompile>
     <ClCompile Include="Dragon.cpp">
       <Filter>03.GameObject\02.Monster\Dragon</Filter>
+    </ClCompile>
+    <ClCompile Include="SkillEffect.cpp">
+      <Filter>03.GameObject\06.SkillEffect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -173,6 +173,7 @@
     <ClInclude Include="MonsterTransformStorage.h" />
     <ClInclude Include="Movement.h" />
     <ClInclude Include="MyAnimationInfos.h" />
+    <ClInclude Include="SkillEffect.h" />
     <ClInclude Include="Status.h" />
     <ClInclude Include="UI3DImage.h" />
     <ClInclude Include="UI3D.h" />
@@ -370,6 +371,7 @@
     <ClCompile Include="PlayerManager.cpp" />
     <ClCompile Include="Movement.cpp" />
     <ClCompile Include="PlayerMovement.cpp" />
+    <ClCompile Include="SkillEffect.cpp" />
     <ClCompile Include="Status.cpp" />
     <ClCompile Include="PlayerStatus.cpp" />
     <ClCompile Include="PointLight.cpp" />
