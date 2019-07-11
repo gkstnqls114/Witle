@@ -132,6 +132,9 @@ public:
 
 	void ShowData() const noexcept;
 	
-	// 조명변환뷰
-	XMFLOAT4X4 GenerateLightViewMatrix(const LIGHT* light);
+	// 조명 위치에 자리한 조명 변환 뷰을 위해 필요 //////////////////////////////
+	XMFLOAT4X4 GenerateLightViewMatrix(const LIGHT* light) const ;
+	void UpdateLightShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList, const LIGHT* light) const;
+	// 조명 위치에 자리한 조명 변환 뷰을 위해 필요 //////////////////////////////
+
 };

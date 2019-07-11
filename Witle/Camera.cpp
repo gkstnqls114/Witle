@@ -177,7 +177,7 @@ void Camera::GenerateViewMatrix(XMFLOAT3 xmf3Position, XMFLOAT3 xmf3LookAt, XMFL
 }
  
 // 빛이 위를 바라보지 않는 가정 하에 진행합니다.
-XMFLOAT4X4 Camera::GenerateLightViewMatrix(const LIGHT* light)
+XMFLOAT4X4 Camera::GenerateLightViewMatrix(const LIGHT* light) const
 {
 	XMFLOAT3 lookat = Vector3::Add(light->Position, light->Direction);
 	// lookat 방향과 평행하지 않은 정규벡터, 그냥 up벡터 (0, 1, 0)와 lookat normal의 외적으로 갑니다.
@@ -189,6 +189,23 @@ XMFLOAT4X4 Camera::GenerateLightViewMatrix(const LIGHT* light)
 		lookat,
 		randomnormal
 	);
+}
+
+void Camera::UpdateLightShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList, const LIGHT* light) const
+{
+	XMFLOAT4X4 xmf4x4LightView;
+	xmf4x4LightView = GenerateLightViewMatrix(light);
+	XMStoreFloat4x4(&xmf4x4LightView, XMMatrixTranspose(XMLoadFloat4x4(&m_xmf4x4View)));
+	::memcpy(&m_pcbMappedCamera->m_xmf4x4View, &xmf4x4LightView, sizeof(XMFLOAT4X4));
+
+	XMFLOAT4X4 xmf4x4Projection;
+	XMStoreFloat4x4(&xmf4x4Projection, XMMatrixTranspose(XMLoadFloat4x4(&m_xmf4x4Projection)));
+	::memcpy(&m_pcbMappedCamera->m_xmf4x4Projection, &xmf4x4Projection, sizeof(XMFLOAT4X4));
+
+	::memcpy(&m_pcbMappedCamera->m_xmf3Position, &light->Position, sizeof(XMFLOAT3));
+
+	D3D12_GPU_VIRTUAL_ADDRESS d3dGpuVirtualAddress = m_pd3dcbCamera->GetGPUVirtualAddress();
+	pd3dCommandList->SetGraphicsRootConstantBufferView(1, d3dGpuVirtualAddress);
 }
 
 void Camera::SetViewportsAndScissorRects(ID3D12GraphicsCommandList *pd3dCommandList)
