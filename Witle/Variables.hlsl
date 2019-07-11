@@ -33,6 +33,7 @@ cbuffer cbTotalTime : register(b6)
 
 SamplerState gWrapSamplerState : register(s0);
 SamplerState gssClamp          : register(s1);
+SamplerState gssPCFSampler     : register(s2);
 
 Texture2D gtxtTexture : register(t0);
 Texture2D gtxtTerrainBaseTexture : register(t1);
