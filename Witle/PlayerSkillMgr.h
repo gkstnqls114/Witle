@@ -11,6 +11,7 @@ class PlayerSkillMgr
 	{ 
 		SkillEffect* skillEffect{ nullptr };
 		bool isActive{ false };
+		bool isMoving{ false }; 
 	};
 
 	int m_count{ 5 }; // 스킬을 담는 개수
@@ -19,8 +20,16 @@ class PlayerSkillMgr
 public:
 	PlayerSkillMgr(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
 	virtual ~PlayerSkillMgr();
-	 
+	
+	// 가속도를 설정합니다.
+	void UpdatePhysics(float fElapsedTime);
+
+	// 활성화된 스킬을 가속도를 통해 이동시킵니다.
 	void Update(float fElapsedTime);
+
 	void Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers);
-	void Activate(int index);
+
+	// 스킬 이펙트를 활성화합니다.
+	// 가속도를 설정하는 부분은 UpdatePhysics에서 수행됩니다.
+	void Activate(); 
 };

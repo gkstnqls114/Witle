@@ -210,7 +210,7 @@ bool GameScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM w
 
 		case MYVK_E:
 			// 플레이어 스킬 매니저에서 파이어볼 스킬 활성화
-			m_PlayerSkillMgr->Activate(0);
+			m_PlayerSkillMgr->Activate();
 			break;
 
 		case '4':
@@ -242,8 +242,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 
 	// 디스크립터 힙 설정
 	GameScene::CreateCbvSrvDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 3);
-
-	// 
+	 
 	m_AimPoint = new AimPoint("AimPoint", pd3dDevice, pd3dCommandList, POINT{ int(GameScreen::GetWidth()) / 2, int(GameScreen::GetHeight()) / 2 }, 100.f, 100.f, L"Image/AimPoint.dds");
 	// m_WideareaMagic = new WideareaMagic(pd3dDevice, pd3dCommandList);
 
@@ -264,8 +263,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	PlayerManager::SetMainPlayer(m_pPlayer);
 	m_PlayerSkillMgr = new PlayerSkillMgr(pd3dDevice, pd3dCommandList);
 	// 플레이어 관련 ////////////////////////////////////////
-
-
+	 
 	// 테스트용 
 
 	std::random_device rd;
@@ -636,6 +634,9 @@ bool GameScene::ProcessInput(HWND hWnd, float fElapsedTime)
 
 void GameScene::UpdatePhysics(float fElapsedTime)
 { 
+	// 스킬 이펙트 가속도 처리
+	m_PlayerSkillMgr->UpdatePhysics(fElapsedTime);
+
 	for (int i = 0; i < m_TestMonsterCount; ++i) {
 		m_TestMonster[i]->UpdateState(fElapsedTime); // State와 업데이트 처리...
 	}
@@ -699,6 +700,9 @@ void GameScene::Update(float fElapsedTime)
 			m_AltarSphere[x]->SetisEnguaged(false); 
 		}
 	}
+
+	// 플레이어 스킬 이동 업데이트
+	m_PlayerSkillMgr->Update(fElapsedTime);
 
 	for (int x = 0; x < 5; ++x)
 	{
@@ -824,7 +828,7 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 	 
 	if(m_WideareaMagic) m_WideareaMagic->Render(pd3dCommandList, isGBuffers);
 
-
+	if(m_PlayerSkillMgr) m_PlayerSkillMgr->Render(pd3dCommandList, isGBuffers);
 #ifdef CHECK_SUBVIEWS
 	m_lookAboveCamera->SetViewportsAndScissorRects(pd3dCommandList);
 	m_lookAboveCamera->GetCamera()->UpdateShaderVariables(pd3dCommandList, ROOTPARAMETER_CAMERA);
@@ -900,9 +904,6 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 	m_SampleUISkill2->Render(pd3dCommandList);
 	m_SampleUISkill3->Render(pd3dCommandList);
 	m_SampleUISkill4->Render(pd3dCommandList);
-
-	pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_WORLD, 4, &Matrix4x4::Identity(), 0);
-	m_PlayerSkillMgr->Render(pd3dCommandList, isGBuffers);
 
 }
 
