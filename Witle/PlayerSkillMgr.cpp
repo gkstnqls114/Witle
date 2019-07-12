@@ -58,7 +58,10 @@ void PlayerSkillMgr::Render(ID3D12GraphicsCommandList * pd3dCommandList, bool is
 	for (int x = 0; x < m_count; ++x)
 	{
 		if (!m_skill[x].isActive) continue;
-		pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_WORLD, 4, &m_skill[x].skillEffect->GetTransform().GetWorldMatrix(), 0);
+
+		XMFLOAT4X4 xmf4x4World;
+		XMStoreFloat4x4(&xmf4x4World, XMMatrixTranspose(XMLoadFloat4x4(&m_skill[x].skillEffect->GetTransform().GetWorldMatrix()))); 
+		pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_WORLD, 16, &xmf4x4World, 0);
 		m_skill[x].skillEffect->Render(pd3dCommandList, isGBuffers);
 	}
 }

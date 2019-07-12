@@ -46,6 +46,7 @@ void SkillEffect::SetVelocity(const XMFLOAT3 & position, const XMFLOAT3 & direct
 {
 	m_Transform.SetIdentity();
 	m_Transform.SetPosition(position);
+	m_Transform.Update(0.f);
 	m_Movement->m_xmf3Velocity =
 		Vector3::ScalarProduct(Vector3::Normalize(direction), m_Movement->m_fDistance, false);
 }
