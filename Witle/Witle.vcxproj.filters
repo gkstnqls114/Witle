@@ -205,9 +205,6 @@
     <Filter Include="02.Component\03.Mesh\CylinderMesh">
       <UniqueIdentifier>{f7fc59e2-8d4d-4f17-8d4e-c1eb04a2d1e9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.Component\03.Mesh\SphereMesh">
-      <UniqueIdentifier>{14d1cc8f-b36d-4c8c-984a-d00fe9374022}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.Component\04.Shape">
       <UniqueIdentifier>{e049cf3c-d529-4adb-a560-648f593ee5bf}</UniqueIdentifier>
     </Filter>
@@ -393,6 +390,18 @@
     </Filter>
     <Filter Include="03.GameObject\06.SkillEffect">
       <UniqueIdentifier>{087a3256-cc6a-4a40-b287-d5d00636e6bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameObject\06.SkillEffect\02.IceBall">
+      <UniqueIdentifier>{137616ff-1770-4a1f-b265-5812f05fa7d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameObject\06.SkillEffect\01.FireBall">
+      <UniqueIdentifier>{5f802b24-9dfa-40b9-9c6c-204d6fceb781}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameObject\06.SkillEffect\03.ElectricBall">
+      <UniqueIdentifier>{ec88c597-e2fc-420e-9f61-ec2fc334d28c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\03.Mesh\02.SphereMesh">
+      <UniqueIdentifier>{14d1cc8f-b36d-4c8c-984a-d00fe9374022}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -685,7 +694,7 @@
       <Filter>02.Component\04.Shape\EffectRect</Filter>
     </ClInclude>
     <ClInclude Include="SphereMesh.h">
-      <Filter>02.Component\03.Mesh\SphereMesh</Filter>
+      <Filter>02.Component\03.Mesh\02.SphereMesh</Filter>
     </ClInclude>
     <ClInclude Include="Monster.h">
       <Filter>03.GameObject\02.Monster</Filter>
@@ -815,6 +824,15 @@
     </ClInclude>
     <ClInclude Include="SkillEffect.h">
       <Filter>03.GameObject\06.SkillEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="FireBall.h">
+      <Filter>03.GameObject\06.SkillEffect\01.FireBall</Filter>
+    </ClInclude>
+    <ClInclude Include="IceBall.h">
+      <Filter>03.GameObject\06.SkillEffect\02.IceBall</Filter>
+    </ClInclude>
+    <ClInclude Include="ElectricBall.h">
+      <Filter>03.GameObject\06.SkillEffect\03.ElectricBall</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1089,7 +1107,7 @@
       <Filter>02.Component\04.Shape\EffectRect</Filter>
     </ClCompile>
     <ClCompile Include="SphereMesh.cpp">
-      <Filter>02.Component\03.Mesh\SphereMesh</Filter>
+      <Filter>02.Component\03.Mesh\02.SphereMesh</Filter>
     </ClCompile>
     <ClCompile Include="Monster.cpp">
       <Filter>03.GameObject\02.Monster</Filter>
@@ -1216,6 +1234,15 @@
     </ClCompile>
     <ClCompile Include="SkillEffect.cpp">
       <Filter>03.GameObject\06.SkillEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="FireBall.cpp">
+      <Filter>03.GameObject\06.SkillEffect\01.FireBall</Filter>
+    </ClCompile>
+    <ClCompile Include="IceBall.cpp">
+      <Filter>03.GameObject\06.SkillEffect\02.IceBall</Filter>
+    </ClCompile>
+    <ClCompile Include="ElectricBall.cpp">
+      <Filter>03.GameObject\06.SkillEffect\03.ElectricBall</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

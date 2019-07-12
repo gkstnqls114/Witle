@@ -164,8 +164,11 @@
     <ClInclude Include="CreepyMonster.h" />
     <ClInclude Include="DefferedShader.h" />
     <ClInclude Include="Dragon.h" />
+    <ClInclude Include="ElectricBall.h" />
+    <ClInclude Include="FireBall.h" />
     <ClInclude Include="HitAction.h" />
     <ClInclude Include="GraphicsRootSignatureMgr.h" />
+    <ClInclude Include="IceBall.h" />
     <ClInclude Include="MainCameraMgr.h" />
     <ClInclude Include="GeneralMonsterActionMgr.h" />
     <ClInclude Include="BossMonsterActionMgr.h" />
@@ -318,6 +321,8 @@
     <ClCompile Include="AttackAction.cpp" />
     <ClCompile Include="DefferedShader.cpp" />
     <ClCompile Include="Dragon.cpp" />
+    <ClCompile Include="ElectricBall.cpp" />
+    <ClCompile Include="FireBall.cpp" />
     <ClCompile Include="HitAction.cpp" />
     <ClCompile Include="DeadAction.cpp" />
     <ClCompile Include="DirectionalLight.cpp" />
@@ -333,6 +338,7 @@
     <ClCompile Include="GameTimer.cpp" />
     <ClCompile Include="HeightMapImage.cpp" />
     <ClCompile Include="HorizonBlurShader.cpp" />
+    <ClCompile Include="IceBall.cpp" />
     <ClCompile Include="IdleAction.cpp" />
     <ClCompile Include="InstancingLineShader.cpp" />
     <ClCompile Include="InstancingStandardShader.cpp" />
