@@ -29,7 +29,8 @@ void FireBall::ReleaseMemberUploadBuffers()
 FireBall::FireBall(const std::string & entityID, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList)
 	:SkillEffect(entityID)
 {
-	m_FireBallMesh = new SphereMesh(this, pd3dDevice, pd3dCommandList, 100, 100, 50, 50);
+	m_FireBallMesh = new SphereMesh(this, pd3dDevice, pd3dCommandList, 50, 50, 10, 10);
+	m_FireBallMesh->CreateTexture(pd3dDevice, pd3dCommandList, L"Image/Red.dds");
 }
 
 FireBall::~FireBall()

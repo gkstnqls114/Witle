@@ -10,11 +10,19 @@ class PlayerSkillMgr
 	struct SKILL
 	{ 
 		SkillEffect* skillEffect{ nullptr };
+		XMFLOAT3 spawnPosition;
 		bool isActive{ false }; 
 	};
 
 	int m_count{ 5 }; // 스킬을 담는 개수
 	SKILL* m_skill{ nullptr };
+
+	float m_distance { 1000.f };
+
+private:
+	// 스킬 이펙트를 비활성화합니다.
+	// 날아갔던 위치에서부터 일정 거리 이상으로 멀어지면 비활성화합니다. 
+	void Deactivate();
 
 public:
 	PlayerSkillMgr(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
@@ -32,7 +40,4 @@ public:
 	// 가속도를 설정하는 부분은 UpdatePhysics에서 수행됩니다.
 	void Activate(); 
 
-	// 스킬 이펙트를 비활성화합니다.
-	// 가속도를 설정하는 부분은 UpdatePhysics에서 수행됩니다.
-	void Deactivate() {};
 };

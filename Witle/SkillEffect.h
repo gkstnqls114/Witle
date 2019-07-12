@@ -29,5 +29,5 @@ public:
 	void Move(const XMFLOAT3& xmf3Shift);
 
 	// 설정된 위치값과 노말 방향 값을 통해 가속도를 계산하여 설정합니다.
-	void SetVelocity(const XMFLOAT3& position, const XMFLOAT3& diretcion);
+	void SetVelocity(const XMFLOAT3& position, const float OffsetY, const XMFLOAT3& diretcion);
 };

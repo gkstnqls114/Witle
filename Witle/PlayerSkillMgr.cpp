@@ -32,6 +32,8 @@ void PlayerSkillMgr::UpdatePhysics(float fElapsedTime)
 
 void PlayerSkillMgr::Update(float fElapsedTime)
 {
+	Deactivate();
+
 	for (int x = 0; x < m_count; ++x)
 	{
 		if (m_skill[x].isActive)
@@ -62,12 +64,29 @@ void PlayerSkillMgr::Activate()
 		if (m_skill[x].isActive) continue;
 		m_skill[x].isActive = true;
 		 
+		m_skill[x].spawnPosition =
+			PlayerManager::GetMainPlayer()->GetTransform().GetPosition();
+
 		m_skill[x].skillEffect->SetVelocity(
-			PlayerManager::GetMainPlayer()->GetTransform().GetPosition(),
+			m_skill[x].spawnPosition,
+			75,
 			PlayerManager::GetMainPlayer()->GetTransform().GetLook()
 		);
 
 		break;
+	}
+}
+
+void PlayerSkillMgr::Deactivate()
+{
+	for (int x = 0; x < m_count; ++x)
+	{
+		if (!m_skill[x].isActive) continue;
+
+		if (Vector3::Length(m_skill[x].spawnPosition, m_skill[x].skillEffect->GetTransform().GetPosition()) > m_distance)
+		{
+			m_skill[x].isActive = false;
+		}
 	}
 }
  
