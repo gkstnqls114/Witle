@@ -403,6 +403,9 @@
     <Filter Include="02.Component\03.Mesh\02.SphereMesh">
       <UniqueIdentifier>{14d1cc8f-b36d-4c8c-984a-d00fe9374022}</UniqueIdentifier>
     </Filter>
+    <Filter Include="13.Storage/Manager\11.PlayerSkillMgr">
+      <UniqueIdentifier>{1ea6575d-d2bf-4cb7-ab0f-3968e8775d42}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -834,6 +837,9 @@
     <ClInclude Include="ElectricBall.h">
       <Filter>03.GameObject\06.SkillEffect\03.ElectricBall</Filter>
     </ClInclude>
+    <ClInclude Include="PlayerSkillMgr.h">
+      <Filter>13.Storage/Manager\11.PlayerSkillMgr</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1243,6 +1249,9 @@
     </ClCompile>
     <ClCompile Include="ElectricBall.cpp">
       <Filter>03.GameObject\06.SkillEffect\03.ElectricBall</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerSkillMgr.cpp">
+      <Filter>13.Storage/Manager\11.PlayerSkillMgr</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

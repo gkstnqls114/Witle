@@ -9,13 +9,15 @@ class SkillEffect :
 {
 public:
 	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers) override = 0;
-	  
+
+protected:
+	virtual void ReleaseMembers() override = 0;
+	virtual void ReleaseMemberUploadBuffers() override = 0;
+
 private: 
 	Movement* m_Movement { nullptr };
 
-protected:
-	virtual void ReleaseMembers() override {};
-	virtual void ReleaseMemberUploadBuffers() override {};
+protected: 
 	void UpdateMovement();
 	 
 public: 

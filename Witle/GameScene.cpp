@@ -1,6 +1,11 @@
 #include "stdafx.h"
 #include "d3dUtil.h"
 
+//// Game Base ////////////////////////////
+#include "GameScreen.h"
+#include "GameTimer.h"
+//// Game Base ////////////////////////////
+
 //// Skill header //////////////////////////
 #include "WideareaMagic.h"
 #include "Sniping.h" 
@@ -15,8 +20,7 @@
 #include "AltarSphere.h"
 //// GameObject header //////////////////////////
 
-
-//// Manager header //////////////////////////
+//// 매니저 관련 헤더 //////////////////////////
 #include "GraphicsRootSignatureMgr.h"
 #include "MonsterTransformStorage.h"
 #include "ModelStorage.h"
@@ -26,20 +30,22 @@
 #include "StaticObjectStorage.h" 
 #include "PlayerManager.h"
 #include "MainCameraMgr.h"
-//// Manager header //////////////////////////
+//// 매니저 관련 헤더 //////////////////////////
 
-
-//// Monster header //////////////////////////
+//// 몬스터 관련 헤더 //////////////////////////
 #include "SpaceCat.h"
 #include "Dragon.h"
 #include "CreepyMonster.h"
-//// Monster header //////////////////////////
-
-#include "GameScreen.h"
-#include "GameTimer.h"
-
-#include "PlayerStatus.h"
 #include "MonsterStatus.h"
+//// 몬스터 관련 헤더 //////////////////////////
+
+//// 플레이어 관련 헤더 //////////////////////////
+#include "Player.h"
+#include "PlayerStatus.h"
+#include "PlayerSkillMgr.h"
+//// 플레이어 관련 헤더 //////////////////////////
+
+
 #include "MyBOBox.h"
 #include "Collision.h"
 #include "Status.h"
@@ -54,7 +60,6 @@
 #include "MyFrustum.h"
 #include "GameInput.h"
 #include "GameScreen.h"
-#include "Player.h"
 #include "CameraObject.h"
 #include "QuadTreeTerrain.h"
 #include "BasicCam.h" 
@@ -173,14 +178,17 @@ bool GameScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM w
 			break;
 
 		case 'Z':
+			// 임시로 체력 100씩 닳게 설정
 			m_pPlayer->SubstractHP(100);
 			break;
 
-		case '1': // 스킬 빗자루  
+		case '1': 
+			// 빗자루 스킬
 			m_pPlayer->UseSkill_Broom();
 			break;
 
-		case '2': // 스킬 스나이핑
+		case '2': 
+			// 스나이핑 스킬
 			if (m_Sniping->GetisUsing())
 			{
 				m_Sniping->DoNotUse();
@@ -197,7 +205,12 @@ bool GameScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM w
 			break;
 
 		case VK_SPACE:
-			
+			// 
+			break;
+
+		case MYVK_E:
+			// 플레이어 스킬 매니저에서 파이어볼 스킬 활성화
+			m_PlayerSkillMgr->Activate(0);
 			break;
 
 		case '4':
@@ -207,6 +220,7 @@ bool GameScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM w
 			break;
 			 
 		case '5':
+			// 모든 제단 활성화 시키는 치트
 			for (int x = 0; x < 5; ++x)
 			{ 
 				m_AltarSphere[x]->SetisActive(true);
@@ -229,23 +243,29 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	// 디스크립터 힙 설정
 	GameScene::CreateCbvSrvDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 3);
 
+	// 
 	m_AimPoint = new AimPoint("AimPoint", pd3dDevice, pd3dCommandList, POINT{ int(GameScreen::GetWidth()) / 2, int(GameScreen::GetHeight()) / 2 }, 100.f, 100.f, L"Image/AimPoint.dds");
 	// m_WideareaMagic = new WideareaMagic(pd3dDevice, pd3dCommandList);
 
-	//// 스카이 박스 생성
+	// 스카이 박스 생성 ///////////////////////////////////
 	m_SkyBox = new SkyBox(pd3dDevice, pd3dCommandList, 3000.F, 3000.F, 3000.F);
+	// 스카이 박스 생성 ///////////////////////////////////
 
-	// 터레인 생성 
-	// XMFLOAT3 xmf3Scale(156.25f, 1.0f, 156.25f);
+	// 터레인 생성 ////////////////////////////////////////
 	XMFLOAT3 xmf3Scale(39.0625f * 3.f, 1.0f, 39.0625f * 3.f); 
 	// XMFLOAT3 xmf3Scale(1.f, 1.0f, 1.f);
 	XMFLOAT4 xmf4Color(0.0f, 0.5f, 0.0f, 0.0f);
 	m_Terrain = new Terrain("Terrain", pd3dDevice, pd3dCommandList, L"Image/HeightMap.raw", 257, 257, 257, 257, xmf3Scale, xmf4Color);
+	// 터레인 생성 ////////////////////////////////////////
 
-	// 플레이어
+	// 플레이어 관련 ////////////////////////////////////////
 	m_pPlayer = new Player("Player", pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
 	m_SkyBox->SetpPlayerTransform(&m_pPlayer->GetTransform());
 	PlayerManager::SetMainPlayer(m_pPlayer);
+	m_PlayerSkillMgr = new PlayerSkillMgr(pd3dDevice, pd3dCommandList);
+	// 플레이어 관련 ////////////////////////////////////////
+
+
 	// 테스트용 
 
 	std::random_device rd;
@@ -528,12 +548,7 @@ void GameScene::ReleaseObjects()
 		m_SkyBox->ReleaseObjects();
 		delete m_SkyBox;
 		m_SkyBox = nullptr;
-	}
-	if (m_PlayerTerrainIndex)
-	{
-		delete[] m_PlayerTerrainIndex;
-		m_PlayerTerrainIndex = nullptr;
-	}
+	} 
 	if (m_Sniping)
 	{
 		m_Sniping->ReleaseObjects();
@@ -638,7 +653,20 @@ void GameScene::Update(float fElapsedTime)
 	{
 		if (GameInput::IsKeydownE() && !m_pPlayer->IsAttacking() && !m_pPlayer->GetpBroom()->GetisUsing())
 		{
-			for (int i = 0; i < m_TestMonsterCount; ++i) {
+			// 플레이어 일반 원거리 공격시 몬스터와 충돌체크 ///////////////////////
+			//for (int i = 0; i < m_TestMonsterCount; ++i) 
+			//{
+			//	m_pPlayer->Attack(
+			//		static_cast<Status*>(
+			//			m_TestMonster[i]->GetStatus()),
+			//		m_TestMonster[i]->GetBOBox(),
+			//		m_AimPoint->GetPickingPoint(),
+			//		m_pMainCamera->GetCamera());
+			//}
+
+			// 플레이어 파이어볼 공격시 몬스터와 충돌체크 ///////////////////////
+			for (int i = 0; i < m_TestMonsterCount; ++i) 
+			{
 				m_pPlayer->Attack(
 					static_cast<Status*>(
 						m_TestMonster[i]->GetStatus()),
@@ -873,7 +901,8 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 	m_SampleUISkill3->Render(pd3dCommandList);
 	m_SampleUISkill4->Render(pd3dCommandList);
 
-
+	pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_WORLD, 4, &Matrix4x4::Identity(), 0);
+	m_PlayerSkillMgr->Render(pd3dCommandList, isGBuffers);
 
 }
 
