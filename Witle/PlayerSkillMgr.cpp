@@ -26,21 +26,7 @@ PlayerSkillMgr::~PlayerSkillMgr()
 }
 
 void PlayerSkillMgr::UpdatePhysics(float fElapsedTime)
-{ 
-	for (int x = 0; x < m_count; ++x)
-	{
-		if (!m_skill[x].isActive) continue;
-		
-		// 현재 활성화가 되어있고 움직이지 않는 상태
-		if (!m_skill[x].isMoving)
-		{
-			m_skill[x].isMoving = true;
-			m_skill[x].skillEffect->SetVelocity(
-				PlayerManager::GetMainPlayer()->GetTransform().GetPosition(),
-				PlayerManager::GetMainPlayer()->GetTransform().GetLook()
-			);
-		} 
-	}
+{  
 
 }
 
@@ -48,8 +34,11 @@ void PlayerSkillMgr::Update(float fElapsedTime)
 {
 	for (int x = 0; x < m_count; ++x)
 	{
-		if (!m_skill[x].isMoving) continue;
-		m_skill[x].skillEffect->Update(fElapsedTime);
+		if (m_skill[x].isActive)
+		{
+			m_skill[x].skillEffect->Update(fElapsedTime);
+
+		}
 	}
 }
 
@@ -72,6 +61,12 @@ void PlayerSkillMgr::Activate()
 	{
 		if (m_skill[x].isActive) continue;
 		m_skill[x].isActive = true;
+		 
+		m_skill[x].skillEffect->SetVelocity(
+			PlayerManager::GetMainPlayer()->GetTransform().GetPosition(),
+			PlayerManager::GetMainPlayer()->GetTransform().GetLook()
+		);
+
 		break;
 	}
 }

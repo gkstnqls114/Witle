@@ -40,6 +40,7 @@ void SkillEffect::Update(float fElapsedTime)
 void SkillEffect::Move(const XMFLOAT3 & xmf3Shift)
 {
 	m_Transform.Move(xmf3Shift);
+	m_Transform.Update(0.f);
 }
 
 void SkillEffect::SetVelocity(const XMFLOAT3 & position, const XMFLOAT3 & direction)

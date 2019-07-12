@@ -10,8 +10,7 @@ class PlayerSkillMgr
 	struct SKILL
 	{ 
 		SkillEffect* skillEffect{ nullptr };
-		bool isActive{ false };
-		bool isMoving{ false }; 
+		bool isActive{ false }; 
 	};
 
 	int m_count{ 5 }; // 스킬을 담는 개수
@@ -32,4 +31,8 @@ public:
 	// 스킬 이펙트를 활성화합니다.
 	// 가속도를 설정하는 부분은 UpdatePhysics에서 수행됩니다.
 	void Activate(); 
+
+	// 스킬 이펙트를 비활성화합니다.
+	// 가속도를 설정하는 부분은 UpdatePhysics에서 수행됩니다.
+	void Deactivate() {};
 };

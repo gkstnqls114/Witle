@@ -674,8 +674,7 @@ void GameScene::Update(float fElapsedTime)
 					m_AimPoint->GetPickingPoint(),
 					m_pMainCamera->GetCamera());
 			}
-		}
-
+		} 
 	}
 	else // 드래그로 회전하지 않는다면...
 	{
@@ -775,6 +774,7 @@ void GameScene::TESTSetRootDescriptor(ID3D12GraphicsCommandList * pd3dCommandLis
 void GameScene::AnimateObjects(float fTimeElapsed)
 { 
 	if (m_pPlayer) m_pPlayer->Animate(fTimeElapsed);
+
 	for (int x = 0; x < 5; ++x)
 	{
 		if (m_AltarSphere[x])
@@ -782,6 +782,7 @@ void GameScene::AnimateObjects(float fTimeElapsed)
 			if(m_AltarSphere[x]->GetisActive()) m_AltarSphere[x]->Animate(fTimeElapsed);
 		}
 	}
+
 	for (int i = 0; i < m_TestMonsterCount; ++i)
 	{
 		if (m_TestMonster[i]) m_TestMonster[i]->Animate(fTimeElapsed);
@@ -828,6 +829,7 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 	if(m_WideareaMagic) m_WideareaMagic->Render(pd3dCommandList, isGBuffers);
 
 	if(m_PlayerSkillMgr) m_PlayerSkillMgr->Render(pd3dCommandList, isGBuffers);
+
 #ifdef CHECK_SUBVIEWS
 	m_lookAboveCamera->SetViewportsAndScissorRects(pd3dCommandList);
 	m_lookAboveCamera->GetCamera()->UpdateShaderVariables(pd3dCommandList, ROOTPARAMETER_CAMERA);
