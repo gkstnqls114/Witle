@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "MyCollider.h"
 #include "MyBOBox.h"
+#include "MyBSphere.h"
 #include "Collision.h"
 
 bool Collision::isCollide(MyCollider* collider, const XMFLOAT3 & origin, const XMFLOAT3 & direction, float & dist)
@@ -12,6 +13,8 @@ bool Collision::isCollide(MyCollider* collider, const XMFLOAT3 & origin, const X
 		break;
 
 	default:
+		// 경우의 수가 없으므로 경고창을 뱉습니다.
+		assert(false);
 		return false;
 		break;
 	}
@@ -69,4 +72,39 @@ bool Collision::ProcessCollision(const BoundingOrientedBox & moveObject,
 		}
 	}
 	return false;
+}
+
+bool Collision::isCollide(MyCollider * a, MyCollider * b)
+{
+	COLLIDER_TYPE A_type = a->GetType();
+	COLLIDER_TYPE B_type = b->GetType();
+
+	if (A_type == COLLIDER_TYPE::BOUNDING_BOX && B_type == COLLIDER_TYPE::BOUNDING_BOX)
+	{
+		BoundingOrientedBox collider1 = static_cast<MyBOBox*>(a)->GetBOBox();
+		BoundingOrientedBox collider2 = static_cast<MyBOBox*>(b)->GetBOBox();
+		return collider1.Intersects(collider2);
+	}
+
+	if (A_type == COLLIDER_TYPE::BOUNDING_BOX && B_type == COLLIDER_TYPE::BOUNDING_SPHERE)
+	{  
+		BoundingOrientedBox collider1 = static_cast<MyBOBox*>(a)->GetBOBox();
+		BoundingSphere* collider2 = static_cast<MyBSphere*>(b)->GetBSphere();
+		return collider1.Intersects(*collider2);
+	}
+	if (A_type == COLLIDER_TYPE::BOUNDING_SPHERE && B_type == COLLIDER_TYPE::BOUNDING_BOX)
+	{
+		BoundingSphere* collider1 = static_cast<MyBSphere*>(a)->GetBSphere();
+		BoundingOrientedBox collider2 = static_cast<MyBOBox*>(b)->GetBOBox();
+		return collider1->Intersects(collider2);
+	}
+	if (A_type == COLLIDER_TYPE::BOUNDING_SPHERE && B_type == COLLIDER_TYPE::BOUNDING_SPHERE)
+	{ 
+		BoundingSphere* collider1 = static_cast<MyBSphere*>(a)->GetBSphere();
+		BoundingSphere* collider2 = static_cast<MyBSphere*>(b)->GetBSphere();
+		return collider1->Intersects(*collider2);
+	} 
+
+	// 해당 경우의 수가 없으므로 경고창을 뱉습니다.
+	assert(false);
 }

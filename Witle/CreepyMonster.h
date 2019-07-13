@@ -4,6 +4,8 @@
 class CreepyMonster
 	: public Monster
 {
+	virtual int GetAnimationHitID() { return CREEPYMONSTER_HIT.ID; };
+
 protected:
 	virtual void ReleaseMembers() override;
 	virtual void ReleaseMemberUploadBuffers() override;

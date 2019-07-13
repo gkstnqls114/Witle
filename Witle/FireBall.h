@@ -3,12 +3,14 @@
 
 class SphereMesh;
 class Movement;
+class MyBSphere;
 
 class FireBall :
 	public SkillEffect
 {
 public:
 	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers) override ;
+	virtual void UpdateCollider() override;
 
 protected:
 	virtual void ReleaseMembers() override;

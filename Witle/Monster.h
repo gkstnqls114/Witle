@@ -31,6 +31,7 @@ class Monster :
 {
 public:
 	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers) override;
+	virtual int GetAnimationHitID() = 0;
 
 private:
 	static bool RENDER_DEBUG;

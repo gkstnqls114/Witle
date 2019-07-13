@@ -35,6 +35,9 @@ public:
 	{
 		return a.Intersects(b);
 	}
+
+	static bool isCollide(MyCollider* a, MyCollider* b);
+
 	static bool isIn(const  BoundingOrientedBox& a, const XMFLOAT3& point)
 	{
 		return a.Contains(Vector3::XMFloat3ToVector(point)) == CONTAINS;

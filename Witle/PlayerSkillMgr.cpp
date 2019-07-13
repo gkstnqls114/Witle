@@ -77,6 +77,11 @@ void PlayerSkillMgr::Activate()
 	}
 }
 
+void PlayerSkillMgr::Deactive(int index)
+{ 
+	m_skill[index].isActive = false;
+}
+
 void PlayerSkillMgr::Deactivate()
 {
 	for (int x = 0; x < m_count; ++x)

@@ -104,15 +104,20 @@ public:
 
 protected:
 	// 플레이어 관련 ////////////////////////////
+	
 	Player*                 m_pPlayer        { nullptr };
 	WideareaMagic*          m_WideareaMagic  { nullptr };
 	Sniping*				m_Sniping        { nullptr };
 	PlayerSkillMgr*         m_PlayerSkillMgr { nullptr }; 
+	
 	// 플레이어 관련 ////////////////////////////c
 
+
 	// 몬스터 관련 ////////////////////////////
+
 	int						m_TestMonsterCount{ 1 };
 	Monster**				m_TestMonster{ nullptr };
+	
 	// 몬스터 관련 ////////////////////////////
 
 	bool					m_isSkyMode{ false };

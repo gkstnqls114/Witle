@@ -46,6 +46,7 @@
 //// 플레이어 관련 헤더 //////////////////////////
 
 #include "MyBOBox.h"
+#include "SkillEffect.h"
 #include "Collision.h"
 #include "Status.h"
 #include "Object.h" //교수님코드 
@@ -640,8 +641,8 @@ void GameScene::UpdatePhysics(float fElapsedTime)
 		m_TestMonster[i]->UpdateState(fElapsedTime); // State와 업데이트 처리...
 	}
 
-	// 반드시 마지막에 충돌 처리를 해야함.
-	// 그래야 충돌된 것에 따라 가속도 처리를 할 수 있음.
+	// 반드시 UpdatePhysics 마지막에 충돌 처리를 해야함.
+	// 그래야 충돌된 것에 따라 슬라이딩 벡터의 가속도 처리를 할 수 있음.
 	UpdateCollision(fElapsedTime);
 }
 
@@ -662,18 +663,7 @@ void GameScene::Update(float fElapsedTime)
 			//		m_TestMonster[i]->GetBOBox(),
 			//		m_AimPoint->GetPickingPoint(),
 			//		m_pMainCamera->GetCamera());
-			//}
-
-			// 플레이어 파이어볼 공격시 몬스터와 충돌체크 ///////////////////////
-			for (int i = 0; i < m_TestMonsterCount; ++i) 
-			{
-				m_pPlayer->Attack(
-					static_cast<Status*>(
-						m_TestMonster[i]->GetStatus()),
-					m_TestMonster[i]->GetBOBox(),
-					m_AimPoint->GetPickingPoint(),
-					m_pMainCamera->GetCamera());
-			}
+			//} 
 		} 
 	}
 	else // 드래그로 회전하지 않는다면...
@@ -744,17 +734,40 @@ void GameScene::LastUpdate(float fElapsedTime)
 	if (m_pMainCamera) m_pMainCamera->LastUpdate(fElapsedTime);
 	if (m_pSkyCameraObj) m_pSkyCameraObj->LastUpdate(fElapsedTime);
 
-	// Update한 위치로 몬스터/플레이어충돌체크 확인
-	for (int i = 0; i < m_TestMonsterCount; ++i)
+	// Update한 위치로 스킬 공격이 몬스터에게 접촉하는지 확인 ///////////////////////////
+	for (int index = 0; index < m_PlayerSkillMgr->GetCount(); ++index)
 	{
-		if (m_TestMonster[i]->GetisAttacking())
+		// 스킬 활성화가 되어있지 않다면 넘어간다.
+		if (!m_PlayerSkillMgr->GetSkillEffect(index)->isActive) continue;
+		 
+		MyCollider* skill_collider = m_PlayerSkillMgr->GetSkillEffect(index)->skillEffect->GetCollier();
+
+		// 모든 몬스터 끼리 충돌체크
+		for (int i = 0; i < m_TestMonsterCount; ++i)
 		{
-			if (Collision::isCollide(m_pPlayer->GetBOBox()->GetBOBox(), m_TestMonster[i]->GetBOBox()->GetBOBox()))
+			// 체력이 0보다 적으면 검사하지 않는다.
+			if (m_TestMonster[i]->GetStatus()->m_HP <= 0.f) continue;
+
+			if (Collision::isCollide(m_TestMonster[i]->GetBOBox(), skill_collider))
 			{
-				m_pPlayer->SubstractHP(5);
+				std::cout << "스킬에 부딪힘" << std::endl;
+				m_TestMonster[i]->SubstractHP(5);
+				m_PlayerSkillMgr->Deactive(index);
 			}
-		}
+		} 
 	}
+
+	// Update한 위치로 몬스터가 공격 시에 몬스터/플레이어충돌체크 확인 ///////////////////////////
+	//for (int i = 0; i < m_TestMonsterCount; ++i)
+	//{
+	//	if (m_TestMonster[i]->GetisAttacking())
+	//	{
+	//		if (Collision::isCollide(m_pPlayer->GetBOBox()->GetBOBox(), m_TestMonster[i]->GetBOBox()->GetBOBox()))
+	//		{
+	//			m_pPlayer->SubstractHP(5);
+	//		}
+	//	}
+	//}
 
 	// 카메라 프러스텀과 쿼드트리 지형 렌더링 체크
 	if (m_pMainCamera && m_pQuadtreeTerrain)

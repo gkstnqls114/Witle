@@ -23,6 +23,7 @@ SkillEffect::SkillEffect(const std::string & entityID, float distance)
 {
 	m_Movement = new Movement(this);
 	m_Movement->m_fDistance = distance;
+	m_Movement->m_fMaxVelocityXZ = distance;
 }
 
 SkillEffect::~SkillEffect()
@@ -31,10 +32,14 @@ SkillEffect::~SkillEffect()
 
 void SkillEffect::Update(float fElapsedTime)
 {
-	m_Movement->Update(fElapsedTime); // 이동량을 계산한다.
+	// 이동량을 계산한다.
+	m_Movement->Update(fElapsedTime); 
 
 	// 이동량만큼 움직인다. 
 	Move(Vector3::ScalarProduct(m_Movement->m_xmf3Velocity, fElapsedTime, false));
+
+	// 업데이트된 포지션에 맞추어 Collider 위치를 수정한다.
+	UpdateCollider();
 }
  
 void SkillEffect::Move(const XMFLOAT3 & xmf3Shift)

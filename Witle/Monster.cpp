@@ -187,7 +187,7 @@ void Monster::ReleaseMemberUploadBuffers()
 
 void Monster::SubstractHP(int sub)
 {
-	m_CurrAnimation = ANIMATION_HIT.ID;
+	m_CurrAnimation = GetAnimationHitID();
 	m_pLoadObject->SetTrackAnimationSet(0, m_CurrAnimation);
 	
 	m_MonsterStatus->m_HP -= sub;
