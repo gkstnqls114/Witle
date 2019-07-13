@@ -177,6 +177,7 @@
     <ClInclude Include="Movement.h" />
     <ClInclude Include="MyAnimationInfos.h" />
     <ClInclude Include="PlayerSkillMgr.h" />
+    <ClInclude Include="ShadowShader.h" />
     <ClInclude Include="SkillEffect.h" />
     <ClInclude Include="Status.h" />
     <ClInclude Include="UI3DImage.h" />
@@ -379,6 +380,7 @@
     <ClCompile Include="Movement.cpp" />
     <ClCompile Include="PlayerMovement.cpp" />
     <ClCompile Include="PlayerSkillMgr.cpp" />
+    <ClCompile Include="ShadowShader.cpp" />
     <ClCompile Include="SkillEffect.cpp" />
     <ClCompile Include="Status.cpp" />
     <ClCompile Include="PlayerStatus.cpp" />
@@ -552,6 +554,7 @@
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compute</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="ShowTextureShader.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compute</ShaderType>

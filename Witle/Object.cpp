@@ -178,6 +178,16 @@ void CMaterial::PrepareShaders(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandLi
 	m_pSkinnedAnimationWireFrameShader->CreateShader(pd3dDevice, pd3dGraphicsRootSignature); 
 }
 
+bool CMaterial::IsWireFrameShader( )
+{
+	return m_pShader == m_pWireFrameShader;
+}
+
+bool CMaterial::IsSkinnedAnimationWireFrameShader( )
+{
+	return m_pShader == m_pSkinnedAnimationWireFrameShader;
+}
+
 void CMaterial::SetWireFrameShader()
 { 
 	CMaterial::SetShader(m_pWireFrameShader);
@@ -186,6 +196,14 @@ void CMaterial::SetWireFrameShader()
 void CMaterial::SetSkinnedAnimationWireFrameShader()
 {
 	CMaterial::SetShader(m_pSkinnedAnimationWireFrameShader);
+}
+
+void CMaterial::SetWireFrameShader_ForShader()
+{
+}
+
+void CMaterial::SetSkinnedAnimationWireFrameShader_ForShader()
+{
 }
 
 void CMaterial::UpdateShaderVariable(ID3D12GraphicsCommandList *pd3dCommandList)
@@ -861,6 +879,53 @@ void LoadObject::Animate(float fTimeElapsed)
 
 	if (m_pSibling) m_pSibling->Animate(fTimeElapsed);
 	if (m_pChild) m_pChild->Animate(fTimeElapsed);
+}
+
+void LoadObject::RenderForShadow(ID3D12GraphicsCommandList * pd3dCommandList)
+{
+	if (m_pSkinnedAnimationController) m_pSkinnedAnimationController->UpdateShaderVariables(pd3dCommandList, m_xmf4x4World);
+
+	if (m_pMesh)
+	{
+		UpdateShaderVariable(pd3dCommandList, &m_xmf4x4World);
+
+		if (m_nMaterials > 0)
+		{
+			for (int i = 0; i < m_nMaterials; i++)
+			{
+				if (m_ppMaterials[i])
+				{
+					if (m_ppMaterials[i]->m_pShader)
+					{
+						// 흑흑 내가 이래야한다니.........
+						// 일단 쉐이더가 그림자용 아니면 전환되도록 if문 해놓은..
+						if (m_ppMaterials[i]->IsWireFrameShader())
+						{
+							m_ppMaterials[i]->SetWireFrameShader_ForShader();
+						}
+						else if (m_ppMaterials[i]->IsSkinnedAnimationWireFrameShader())
+						{
+							m_ppMaterials[i]->SetSkinnedAnimationWireFrameShader_ForShader();
+						}
+
+						m_ppMaterials[i]->m_pShader->OnPrepareRender(pd3dCommandList);
+					}
+					m_ppMaterials[i]->UpdateShaderVariable(pd3dCommandList);
+				}
+
+				m_pMesh->Render(pd3dCommandList, i);
+			}
+		}
+	}
+
+	if (m_pSibling)
+	{
+		m_pSibling->RenderForShadow(pd3dCommandList);
+	}
+	if (m_pChild)
+	{
+		m_pChild->RenderForShadow(pd3dCommandList);
+	}
 }
 
 void LoadObject::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers)

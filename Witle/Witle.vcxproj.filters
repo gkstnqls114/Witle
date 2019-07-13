@@ -406,6 +406,9 @@
     <Filter Include="13.Storage/Manager\11.PlayerSkillMgr">
       <UniqueIdentifier>{1ea6575d-d2bf-4cb7-ab0f-3968e8775d42}</UniqueIdentifier>
     </Filter>
+    <Filter Include="05.Shader\ShadowShader">
+      <UniqueIdentifier>{fc8aa984-8c03-4880-913d-daa254329c10}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -840,6 +843,9 @@
     <ClInclude Include="PlayerSkillMgr.h">
       <Filter>13.Storage/Manager\11.PlayerSkillMgr</Filter>
     </ClInclude>
+    <ClInclude Include="ShadowShader.h">
+      <Filter>05.Shader\ShadowShader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1252,6 +1258,9 @@
     </ClCompile>
     <ClCompile Include="PlayerSkillMgr.cpp">
       <Filter>13.Storage/Manager\11.PlayerSkillMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="ShadowShader.cpp">
+      <Filter>05.Shader\ShadowShader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

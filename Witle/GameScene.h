@@ -92,6 +92,7 @@ public:
 	virtual bool ProcessInput(HWND hWnd, float ElapsedTime) override;
 
 	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers) override;
+	virtual void RenderForShadow(ID3D12GraphicsCommandList *pd3dCommandList) override;
 
 	virtual void ReleaseUploadBuffers() override;
 

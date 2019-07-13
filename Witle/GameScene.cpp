@@ -921,6 +921,11 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 
 }
 
+void GameScene::RenderForShadow(ID3D12GraphicsCommandList * pd3dCommandList)
+{
+
+}
+
 void GameScene::ReleaseUploadBuffers()
 {
 	if (m_SkyBox) m_SkyBox->ReleaseUploadBuffers();

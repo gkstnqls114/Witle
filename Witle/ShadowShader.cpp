@@ -1,30 +1,30 @@
 #include "stdafx.h"
-#include "DefferedShader.h"
+#include "ShadowShader.h"
 
-D3D12_SHADER_BYTECODE DefferedShader::CreateGeometryShader(ID3DBlob ** ppd3dShaderBlob)
+D3D12_SHADER_BYTECODE ShadowShader::CreateGeometryShader(ID3DBlob ** ppd3dShaderBlob)
 {
 	return D3D12_SHADER_BYTECODE();
 }
 
-DefferedShader::DefferedShader()
+ShadowShader::ShadowShader()
 {
 }
 
-DefferedShader::~DefferedShader()
+ShadowShader::~ShadowShader()
 {
 }
 
-void DefferedShader::CreateShader(ID3D12Device * pd3dDevice, ID3D12RootSignature * const pd3dGraphicsRootSignature)
+void ShadowShader::CreateShader(ID3D12Device * pd3dDevice, ID3D12RootSignature * const pd3dGraphicsRootSignature)
 {
 	Shader::CreatePipelineState(pd3dDevice, pd3dGraphicsRootSignature);
 	Shader::CreatePipelineStateForGBuffers(pd3dDevice, pd3dGraphicsRootSignature);
 }
 
-void DefferedShader::Update(float ElapsedTime)
+void ShadowShader::Update(float ElapsedTime)
 {
 }
 
-D3D12_INPUT_LAYOUT_DESC DefferedShader::CreateInputLayout()
+D3D12_INPUT_LAYOUT_DESC ShadowShader::CreateInputLayout()
 {
 	D3D12_INPUT_LAYOUT_DESC d3dInputLayoutDesc;
 	d3dInputLayoutDesc.pInputElementDescs = NULL;
@@ -33,7 +33,7 @@ D3D12_INPUT_LAYOUT_DESC DefferedShader::CreateInputLayout()
 	return(d3dInputLayoutDesc);
 }
 
-D3D12_RASTERIZER_DESC DefferedShader::CreateRasterizerState()
+D3D12_RASTERIZER_DESC ShadowShader::CreateRasterizerState()
 {
 	//래스터라이저 상태를 설정한다.
 	D3D12_RASTERIZER_DESC d3dRasterizerDesc;
@@ -53,7 +53,7 @@ D3D12_RASTERIZER_DESC DefferedShader::CreateRasterizerState()
 	return(d3dRasterizerDesc);
 }
 
-D3D12_BLEND_DESC DefferedShader::CreateBlendState()
+D3D12_BLEND_DESC ShadowShader::CreateBlendState()
 {
 	D3D12_BLEND_DESC d3dBlendDesc;
 	::ZeroMemory(&d3dBlendDesc, sizeof(D3D12_BLEND_DESC));
@@ -73,7 +73,7 @@ D3D12_BLEND_DESC DefferedShader::CreateBlendState()
 	return d3dBlendDesc;
 }
 
-D3D12_DEPTH_STENCIL_DESC DefferedShader::CreateDepthStencilState()
+D3D12_DEPTH_STENCIL_DESC ShadowShader::CreateDepthStencilState()
 {
 	D3D12_DEPTH_STENCIL_DESC d3dDepthStencilDesc;
 	::ZeroMemory(&d3dDepthStencilDesc, sizeof(D3D12_DEPTH_STENCIL_DESC));
@@ -95,22 +95,22 @@ D3D12_DEPTH_STENCIL_DESC DefferedShader::CreateDepthStencilState()
 	return(d3dDepthStencilDesc);
 }
 
-D3D12_PRIMITIVE_TOPOLOGY_TYPE DefferedShader::CreatePrimitiveTopologyType()
+D3D12_PRIMITIVE_TOPOLOGY_TYPE ShadowShader::CreatePrimitiveTopologyType()
 {
 	return D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
 }
 
-D3D12_SHADER_BYTECODE DefferedShader::CreateVertexShader(ID3DBlob ** ppd3dShaderBlob)
+D3D12_SHADER_BYTECODE ShadowShader::CreateVertexShader(ID3DBlob ** ppd3dShaderBlob)
 {
-	return(Shader::CompileShaderFromFile(L"DefferedShader.hlsl", "VSMain", "vs_5_1", ppd3dShaderBlob));
+	return(Shader::CompileShaderFromFile(L"Shadow.hlsl", "VSMain", "vs_5_1", ppd3dShaderBlob));
 }
 
-D3D12_SHADER_BYTECODE DefferedShader::CreatePixelShader(ID3DBlob ** ppd3dShaderBlob)
+D3D12_SHADER_BYTECODE ShadowShader::CreatePixelShader(ID3DBlob ** ppd3dShaderBlob)
 {
-	return(Shader::CompileShaderFromFile(L"DefferedShader.hlsl", "PSMain", "ps_5_1", ppd3dShaderBlob));
+	return D3D12_SHADER_BYTECODE();
 }
 
-D3D12_SHADER_BYTECODE DefferedShader::CreatePixelShaderForGBuffers(ID3DBlob ** ppd3dShaderBlob)
+D3D12_SHADER_BYTECODE ShadowShader::CreatePixelShaderForGBuffers(ID3DBlob ** ppd3dShaderBlob)
 {
 	return D3D12_SHADER_BYTECODE();
 }
