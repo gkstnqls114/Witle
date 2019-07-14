@@ -211,7 +211,7 @@ bool GameScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM w
 
 		case MYVK_E:
 			// 플레이어 스킬 매니저에서 파이어볼 스킬 활성화
-			m_PlayerSkillMgr->Activate();
+			m_PlayerSkillMgr->Activate(m_pPlayer->GetMPStatus());
 			break;
 
 		case '4':
@@ -660,7 +660,7 @@ void GameScene::Update(float fElapsedTime)
 			//{
 			//	m_pPlayer->Attack(
 			//		static_cast<Status*>(
-			//			m_TestMonster[i]->GetStatus()),
+			//			m_TestMonster[i]->GetHPStatus()),
 			//		m_TestMonster[i]->GetBOBox(),
 			//		m_AimPoint->GetPickingPoint(),
 			//		m_pMainCamera->GetCamera());

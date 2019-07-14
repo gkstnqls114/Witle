@@ -2,6 +2,7 @@
 
 class Player;
 class SkillEffect;
+class PlayerStaus;
 
 struct SKILL
 {
@@ -40,7 +41,7 @@ public:
 
 	// 스킬 이펙트를 활성화합니다.
 	// 가속도를 설정하는 부분은 UpdatePhysics에서 수행됩니다.
-	void Activate();
+	void Activate(PlayerStatus* playerStaus);
 
 	// 해당 index에 해당하는 스킬 이펙트를 비활성화합니다.
 	void Deactive(int index);

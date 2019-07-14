@@ -8,6 +8,7 @@
 #include "PlayerManager.h"
 // Skill Effect 관련 ////////////////////////////
 
+#include "PlayerStatus.h"
 #include "Player.h"
 #include "PlayerSkillMgr.h"
 
@@ -57,11 +58,13 @@ void PlayerSkillMgr::Render(ID3D12GraphicsCommandList * pd3dCommandList, bool is
 	}
 }
 
-void PlayerSkillMgr::Activate()
+void PlayerSkillMgr::Activate(PlayerStatus* MPstaus)
 {
 	for (int x = 0; x < m_count; ++x)
 	{
 		if (m_skill[x].isActive) continue;
+		if ((MPstaus->m_Guage - 10/*사용하는 마나 게이지*/) < 0.f) continue;
+		MPstaus->m_Guage -= 10.f;
 		m_skill[x].isActive = true;
 		 
 		m_skill[x].spawnPosition =

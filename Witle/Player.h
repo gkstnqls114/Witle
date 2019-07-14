@@ -108,7 +108,8 @@ public:
 
 	/////////////////////// Get
 	const Broom* GetpBroom() { return m_Broom; }
-	PlayerStatus* GetStatus() { return m_pPlayerHPStatus; };
+	PlayerStatus* GetHPStatus() { return m_pPlayerHPStatus; };
+	PlayerStatus* GetMPStatus() { return m_pPlayerMPStatus; };
 	AXIS GetCoorAxis() { return m_Transform.GetCoorAxis(); }
 	XMFLOAT3 GetVelocity() const;
 	MyBOBox* GetBOBox() { return m_pMyBOBox; }
