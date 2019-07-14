@@ -56,6 +56,25 @@ const ANIMATION_INFO CREEPYMONSTER_DEAD{ 3, 89.f * SECOND_PER_FRAME, 110.f * SEC
 const ANIMATION_INFO CREEPYMONSTER_HIT{ 4, 111.f * SECOND_PER_FRAME, 125.f * SECOND_PER_FRAME , ANIMATION_TYPE_ONCE };
 // CreepyMonster ////////////////////////////////////
 
+// Boss ////////////////////////////////////
+#define BOSSMONSTER_ANIMATIONE 15
+
+const ANIMATION_INFO BOSS_IDLE{}; // 기본
+const ANIMATION_INFO BOSS_MOVE{}; // 이동
+const ANIMATION_INFO BOSS_CHASE{}; // 추격
+const ANIMATION_INFO BOSS_SKILL0{};
+const ANIMATION_INFO BOSS_SKILL1{};
+const ANIMATION_INFO BOSS_SKILL2{};
+const ANIMATION_INFO BOSS_SKILL3{};
+const ANIMATION_INFO BOSS_SKILL4{};
+const ANIMATION_INFO BOSS_SKILL5{};
+const ANIMATION_INFO BOSS_SKILL6{};
+const ANIMATION_INFO BOSS_SKILL7{};
+const ANIMATION_INFO BOSS_SKILL8{};
+const ANIMATION_INFO BOSS_SKILL9{};
+const ANIMATION_INFO BOSS_DEAD{}; // 죽음
+const ANIMATION_INFO BOSS_HIT{}; // 맞음
+// Boss ////////////////////////////////////
 
 // Altar ////////////////////////////////////
 #define ALTARSPHERE_ANIMATIONE 2
