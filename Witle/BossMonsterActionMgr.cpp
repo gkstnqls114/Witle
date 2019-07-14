@@ -28,4 +28,11 @@ void BossMonsterActionMgr::ChangeStateToSample_2()
 	m_CurrMonsterAction->Init();
 	static_cast<Monster*>(m_pOwner)->SetAnimationState(SPACECAT_MOVE.ID);
 }
+
+// void BossMonsterActionMgr::BossIdleAction()
+// {
+// 	ChangeAction(&m_BossSampleAction_2);
+// 	m_CurrMonsterAction->Init();
+// 	static_cast<Monster*>(m_pOwner)->SetAnimationState(SPACECAT_MOVE.ID);
+// }
  

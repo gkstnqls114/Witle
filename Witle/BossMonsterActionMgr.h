@@ -35,4 +35,19 @@ public:
 
 	void ChangeStateToSample_1();
 	void ChangeStateToSample_2();
+	void BossIdleAction(); // 기본
+	void BossMoveAction(); // 움직임
+	void BossChaseAction(); // 추격
+	void BossSearchAction(); // 필요할까?
+	void BossDeadAction(); // 죽음
+	void BossSkillAction0(); // 임시
+	void BossSkillAction1(); // 임시
+	void BossSkillAction2(); // 임시
+	void BossSkillAction3(); // 임시
+	void BossSkillAction4(); // 임시
+	void BossSkillAction5(); // 임시
+	void BossSkillAction6(); // 임시
+	void BossSkillAction7(); // 임시
+	void BossSkillAction8(); // 임시
+	void BossSkillAction9(); // 임시
 };
