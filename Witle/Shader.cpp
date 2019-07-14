@@ -168,8 +168,8 @@ void Shader::CreatePipelineState(ID3D12Device * pd3dDevice, ID3D12RootSignature 
 	d3dPipelineStateDesc.SampleMask = UINT_MAX;
 	d3dPipelineStateDesc.PrimitiveTopologyType = CreatePrimitiveTopologyType();
 
-	d3dPipelineStateDesc.NumRenderTargets = 4;
-	d3dPipelineStateDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM; // 32bit RGBA 
+	d3dPipelineStateDesc.NumRenderTargets = GetNumRenderTargets();
+	d3dPipelineStateDesc.RTVFormats[0] = GetRTVFormat(); // 32bit RGBA 
 	
 	d3dPipelineStateDesc.DSVFormat = GetDSVFormat();
 	d3dPipelineStateDesc.SampleDesc.Count = 1;
@@ -209,7 +209,7 @@ void Shader::CreatePipelineStateForGBuffers(ID3D12Device * pd3dDevice, ID3D12Roo
 	d3dPipelineStateDesc.SampleMask = UINT_MAX;
 	d3dPipelineStateDesc.PrimitiveTopologyType = CreatePrimitiveTopologyType();
 
-	d3dPipelineStateDesc.NumRenderTargets = GetNumRenderTargets(); 
+	d3dPipelineStateDesc.NumRenderTargets = 3; 
 	d3dPipelineStateDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM; // 32bit R11 G11 B10
 	d3dPipelineStateDesc.RTVFormats[1] = DXGI_FORMAT_R11G11B10_FLOAT; // 32bit RGBA
 	d3dPipelineStateDesc.RTVFormats[2] = DXGI_FORMAT_R8G8B8A8_UNORM; // 32bit RGBA

@@ -32,12 +32,17 @@ protected:
 
 	virtual int  GetNumRenderTargets()
 	{
-		return 3;
+		return 1;
 	}
 
 	virtual DXGI_FORMAT GetDSVFormat()
 	{
 		return DXGI_FORMAT_D24_UNORM_S8_UINT;
+	};
+
+	virtual DXGI_FORMAT GetRTVFormat()
+	{
+		return DXGI_FORMAT_R8G8B8A8_UNORM;
 	};
 
 public:  
