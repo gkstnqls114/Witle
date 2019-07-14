@@ -184,8 +184,7 @@ void CMaterial::PrepareShaders(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandLi
 
 	m_pWireFrameShader_ForShadow = new StandardShaderForShadow();
 	m_pWireFrameShader_ForShadow->CreateShader(pd3dDevice, pd3dGraphicsRootSignature);
-
-
+	 
 	m_pSkinnedShader_ForShadow = new SkinnedShaderForShadow();
 	m_pSkinnedShader_ForShadow->CreateShader(pd3dDevice, pd3dGraphicsRootSignature);
 }
@@ -918,6 +917,10 @@ void LoadObject::RenderForShadow(ID3D12GraphicsCommandList * pd3dCommandList)
 						else if (m_ppMaterials[i]->IsSkinnedAnimationWireFrameShader())
 						{
 							CMaterial::m_pSkinnedShader_ForShadow->OnPrepareRender(pd3dCommandList);
+						}
+						else
+						{
+							assert(false);
 						}
 
 					}

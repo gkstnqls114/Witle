@@ -24,11 +24,20 @@ private:
 		XMFLOAT4X4						m_xmf4x4Projection;
 		XMFLOAT3						m_xmf3Position;
 	};
+
+	struct VS_CB_LIGHT_INFO
+	{
+		XMFLOAT4X4						m_xmf4x4LightView;
+		XMFLOAT4X4						m_xmf4x4LightProjection;
+	};
+
 	MyFrustum*   m_pFrustum{ nullptr };
 
 	ID3D12Resource					*m_pd3dcbCamera{ nullptr };
 	VS_CB_CAMERA_INFO				*m_pcbMappedCamera{ nullptr };
 
+	ID3D12Resource					*m_pd3dcbLight{ nullptr };
+	VS_CB_LIGHT_INFO				*m_pcbMappedLight{ nullptr };
 private:
 	void ReleaseShaderVariables();
 

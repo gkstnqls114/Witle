@@ -59,9 +59,7 @@ private:
 
 
 	void RecursiveRenderTerrainObjects_BOBox(const QUAD_TREE_NODE* node, ID3D12GraphicsCommandList *pd3dCommandList);
-
-
-
+	 
 	void RenderTerrainObjects(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers);
 	void RecursiveRenderTerrainObjects(const QUAD_TREE_NODE* node, ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers);
 	void RecursiveRender(const QUAD_TREE_NODE* node, ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers);
@@ -92,6 +90,7 @@ public:
 	XMINT4 const GetIDs(const XMFLOAT3& position) const;
 	int * const GetIndex(const XMFLOAT3& position) const;
 	 
+	void RenderInstancingObjectsForShadow(ID3D12GraphicsCommandList *pd3dCommandList);
 	void Render(ID3D12GraphicsCommandList *pd3dCommandList, Terrain* pTerrain, ID3D12DescriptorHeap* pHeap, bool isGBuffers);
 	void Render(int index, ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers);
 	static int GetTerrainPieceCount() { return gTreePieceCount; }

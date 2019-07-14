@@ -415,6 +415,9 @@
     <Filter Include="05.Shader\ShadowShader\StandardShaderForShadow">
       <UniqueIdentifier>{08618dec-3b4a-4cc2-8ee9-791dc3d65dd4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="05.Shader\ShadowShader\InstancingStandardShaderForShadow">
+      <UniqueIdentifier>{bdfa8544-41a9-4407-a894-ec0d3687ad66}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -858,6 +861,9 @@
     <ClInclude Include="StandardShaderForShadow.h">
       <Filter>05.Shader\ShadowShader\StandardShaderForShadow</Filter>
     </ClInclude>
+    <ClInclude Include="InstancingStandardShaderForShadow.h">
+      <Filter>05.Shader\ShadowShader\InstancingStandardShaderForShadow</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1279,6 +1285,9 @@
     </ClCompile>
     <ClCompile Include="StandardShaderForShadow.cpp">
       <Filter>05.Shader\ShadowShader\StandardShaderForShadow</Filter>
+    </ClCompile>
+    <ClCompile Include="InstancingStandardShaderForShadow.cpp">
+      <Filter>05.Shader\ShadowShader\InstancingStandardShaderForShadow</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

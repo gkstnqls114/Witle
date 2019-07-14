@@ -72,6 +72,34 @@ float4 DirectionalLight(int nIndex, float3 vNormal, float3 vToCamera)
 	return((gLights[nIndex].m_cAmbient * gMaterials.m_cAmbient) + (gLights[nIndex].m_cDiffuse * fDiffuseFactor * gMaterials.m_cDiffuse) + (gLights[nIndex].m_cSpecular * fSpecularFactor * gMaterials.m_cSpecular));
 }
 
+float4 DirectionalLight(int nIndex, float3 vNormal, float3 vToCamera, float fShadowFactor)
+{
+    float3 vToLight = -gLights[nIndex].m_vDirection;
+    float fDiffuseFactor = dot(vToLight, vNormal);
+    float fSpecularFactor = 0.0f;
+    if (fDiffuseFactor > 0.0f)
+    {
+        if (gMaterials.m_cSpecular.a != 0.0f)
+        {
+#ifdef _WITH_REFLECT
+			float3 vReflect = reflect(-vToLight, vNormal);
+			fSpecularFactor = pow(max(dot(vReflect, vToCamera), 0.0f), gMaterials.m_cSpecular.a);
+#else
+#ifdef _WITH_LOCAL_VIEWER_HIGHLIGHTING
+            float3 vHalf = normalize(vToCamera + vToLight);
+#else
+			float3 vHalf = float3(0.0f, 1.0f, 0.0f);
+#endif
+            fSpecularFactor = pow(max(dot(vHalf, vNormal), 0.0f), gMaterials.m_cSpecular.a);
+#endif
+        }
+    }
+
+    return ((gLights[nIndex].m_cAmbient * gMaterials.m_cAmbient) +
+    (gLights[nIndex].m_cDiffuse * fDiffuseFactor * gMaterials.m_cDiffuse * fShadowFactor)
+    + (gLights[nIndex].m_cSpecular * fSpecularFactor * gMaterials.m_cSpecular * fShadowFactor));
+}
+
 float4 PointLight(int nIndex, float3 vPosition, float3 vNormal, float3 vToCamera)
 {
 	float3 vToLight = gLights[nIndex].m_vPosition - vPosition;
@@ -174,3 +202,33 @@ float4 Lighting(float3 vPosition, float3 vNormal)
 	return(cColor);
 }
 
+
+float4 Lighting(float3 vPosition, float3 vNormal, float fShadowFactor)
+{
+    float3 vCameraPosition = float3(gvCameraPosition.x, gvCameraPosition.y, gvCameraPosition.z);
+    float3 vToCamera = normalize(vCameraPosition - vPosition);
+
+    float4 cColor = float4(0.0f, 0.0f, 0.0f, 0.0f);
+    for (int i = 0; i < MAX_LIGHTS; i++)
+    {
+        if (gLights[i].m_bEnable)
+        {
+            if (gLights[i].m_nType == DIRECTIONAL_LIGHT)
+            {
+                cColor += DirectionalLight(i, vNormal, vToCamera, fShadowFactor);
+            }
+            else if (gLights[i].m_nType == POINT_LIGHT)
+            {
+                cColor += PointLight(i, vPosition, vNormal, vToCamera);
+            }
+            else if (gLights[i].m_nType == SPOT_LIGHT)
+            {
+                cColor += SpotLight(i, vPosition, vNormal, vToCamera);
+            }
+        }
+    }
+    cColor += (gcGlobalAmbientLight * gMaterials.m_cAmbient);
+    cColor.a = gMaterials.m_cDiffuse.a;
+
+    return (cColor);
+}

@@ -787,7 +787,7 @@ void CGameFramework::RenderOnSwapchain()
 
 	m_CommandList->ClearRenderTargetView(m_SwapChainCPUHandle[m_SwapChainBufferIndex], /*pfClearColor*/Colors::Gray, 0, NULL);
 	m_CommandList->ClearDepthStencilView(m_DepthStencilCPUHandle, D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, NULL);
-	
+
 	// 기본 게임 장면을 렌더한다.
 	RenderSwapChain();
 	 
@@ -939,12 +939,20 @@ void CGameFramework::RenderSwapChain()
 {
 	m_CommandList->OMSetRenderTargets(1, &m_SwapChainCPUHandle[m_SwapChainBufferIndex], TRUE, &m_DepthStencilCPUHandle);
 
+	// 그래픽 루트 시그니처 설정
+	m_CommandList->SetGraphicsRootSignature(GraphicsRootSignatureMgr::GetGraphicsRootSignature());
+
+	// 쉐도우 맵 연결/////////////////////////
+	m_ShadowmapHeap->UpdateShaderVariable(m_CommandList.Get());
+	D3D12_GPU_DESCRIPTOR_HANDLE handle = m_ShadowmapHeap->GetGPUSrvDescriptorStartHandle();
+	m_CommandList->SetGraphicsRootDescriptorTable(ROOTPARAMETER_SHADOWTEXTURE, handle);
+	// 쉐도우 맵 연결/////////////////////////
+
 	// 장면을 렌더합니다.
 	if (m_pScene) 
 	{ 
 		m_pScene->Render(m_CommandList.Get(), false);
 	}
-
 }
 
 void CGameFramework::DefferedRenderSwapChain()
@@ -984,8 +992,9 @@ void CGameFramework::DefferedRenderSwapChain()
 
 void CGameFramework::RenderForShadow()
 { 
+	// SHADOW 설정
 	m_CommandList->OMSetRenderTargets(0, NULL, FALSE, &m_ShadowmapCPUHandle);
-	 m_CommandList->ClearDepthStencilView(m_ShadowmapCPUHandle, D3D12_CLEAR_FLAG_DEPTH , 1.0f, 0, 0, NULL);
-	 
+	m_CommandList->ClearDepthStencilView(m_ShadowmapCPUHandle, D3D12_CLEAR_FLAG_DEPTH , 1.0f, 0, 0, NULL);
+	  
 	m_pScene->RenderForShadow(m_CommandList.Get());
 }

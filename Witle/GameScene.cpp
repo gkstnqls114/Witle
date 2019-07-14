@@ -807,8 +807,13 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 	// 렌더링
 	extern MeshRenderer gMeshRenderer;
 
-	// 그래픽 루트 시그니처 설정
-	pd3dCommandList->SetGraphicsRootSignature(GraphicsRootSignatureMgr::GetGraphicsRootSignature());
+	//  조명 설정
+	D3D12_GPU_VIRTUAL_ADDRESS d3dcbLightsGpuVirtualAddress = m_pd3dcbLights->GetGPUVirtualAddress();
+	pd3dCommandList->SetGraphicsRootConstantBufferView(ROOTPARAMETER_LIGHTS, d3dcbLightsGpuVirtualAddress); //Lights
+
+	D3D12_GPU_VIRTUAL_ADDRESS d3dcbMaterialsGpuVirtualAddress = m_pd3dcbMaterials->GetGPUVirtualAddress();
+	pd3dCommandList->SetGraphicsRootConstantBufferView(ROOTPARAMETER_MATERIALS, d3dcbMaterialsGpuVirtualAddress);
+	// 조명 설정
 
 	// 클라 화면 설정	
 	if (m_isSkyMode)
@@ -820,17 +825,14 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 	{
 		m_pMainCamera->SetViewportsAndScissorRects(pd3dCommandList);
 		m_pMainCamera->GetCamera()->UpdateShaderVariables(pd3dCommandList, ROOTPARAMETER_CAMERA);
+
+		// 쉐도우 맵 위해 조명 뷰 설정
+		m_pMainCamera->GetCamera()->UpdateLightShaderVariables(pd3dCommandList, &LightManager::m_pLights->m_pLights[2]);
 	}
 
 	// 스카이박스 렌더
 	if(m_SkyBox) m_SkyBox->Render(pd3dCommandList, isGBuffers);
 	 
-	//  조명
-	D3D12_GPU_VIRTUAL_ADDRESS d3dcbLightsGpuVirtualAddress = m_pd3dcbLights->GetGPUVirtualAddress();
-	pd3dCommandList->SetGraphicsRootConstantBufferView(ROOTPARAMETER_LIGHTS, d3dcbLightsGpuVirtualAddress); //Lights
-
-	D3D12_GPU_VIRTUAL_ADDRESS d3dcbMaterialsGpuVirtualAddress = m_pd3dcbMaterials->GetGPUVirtualAddress();
-	pd3dCommandList->SetGraphicsRootConstantBufferView(ROOTPARAMETER_MATERIALS, d3dcbMaterialsGpuVirtualAddress);
 
 	pd3dCommandList->SetDescriptorHeaps(1, &m_pd3dCbvSrvDescriptorHeap);
 
@@ -950,6 +952,14 @@ void GameScene::RenderForShadow(ID3D12GraphicsCommandList * pd3dCommandList)
 	}
 
 	m_pPlayer->RenderForShadow(pd3dCommandList);
+	
+
+	// 터레인
+	//if (m_Terrain)
+	//{
+	//	Mesh* terrainMesh = m_Terrain->GetComponent<Mesh>("TerrainMesh");
+	//	m_pQuadtreeTerrain->Render(pd3dCommandList, m_Terrain, m_pd3dCbvSrvDescriptorHeap, isGBuffers);
+	//}
 }
 
 void GameScene::ReleaseUploadBuffers()
@@ -1104,10 +1114,11 @@ void GameScene::BuildLightsAndMaterials(ID3D12Device *pd3dDevice, ID3D12Graphics
 
 	LightManager::m_pLights->m_pLights[2].bEnable = true;
 	LightManager::m_pLights->m_pLights[2].nType = LIGHT_TYPE::DIRECTIONAL_LIGHT;
+	LightManager::m_pLights->m_pLights[2].Position = XMFLOAT3(1000, 1000.0f, 0.0f);
 	LightManager::m_pLights->m_pLights[2].Ambient = XMFLOAT4(1.f, 0.8f, 0.8f, 1.0f);
 	LightManager::m_pLights->m_pLights[2].Diffuse = XMFLOAT4(1.0f, 0.4f, 0.4f, 1.0f);
 	LightManager::m_pLights->m_pLights[2].Specular = XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f);
-	LightManager::m_pLights->m_pLights[2].Direction = XMFLOAT3(0.0f, 1.0f, 1.0f);
+	LightManager::m_pLights->m_pLights[2].Direction = Vector3::Normalize(XMFLOAT3(0.0f, 1.0f, 1.0f));
 
 	LightManager::m_pLights->m_pLights[3].bEnable = false;
 	LightManager::m_pLights->m_pLights[3].nType = LIGHT_TYPE::SPOT_LIGHT;

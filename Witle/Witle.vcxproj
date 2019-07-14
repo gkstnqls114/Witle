@@ -177,6 +177,7 @@
     <ClInclude Include="Movement.h" />
     <ClInclude Include="MyAnimationInfos.h" />
     <ClInclude Include="PlayerSkillMgr.h" />
+    <ClInclude Include="InstancingStandardShaderForShadow.h" />
     <ClInclude Include="SkinnedShaderForShadow.h" />
     <ClInclude Include="StandardShaderForShadow.h" />
     <ClInclude Include="ShadowShader.h" />
@@ -382,6 +383,7 @@
     <ClCompile Include="Movement.cpp" />
     <ClCompile Include="PlayerMovement.cpp" />
     <ClCompile Include="PlayerSkillMgr.cpp" />
+    <ClCompile Include="InstancingStandardShaderForShadow.cpp" />
     <ClCompile Include="SkinnedShaderForShadow.cpp" />
     <ClCompile Include="StandardShaderForShadow.cpp" />
     <ClCompile Include="ShadowShader.cpp" />
@@ -616,7 +618,7 @@
     <FxCompile Include="TerrainShader.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Geometry</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Geometry</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Geometry</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0</ShaderModel>
@@ -625,6 +627,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">VSTerrain</EntryPointName>
     </FxCompile>
     <FxCompile Include="UIMapForPlayerShader.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compute</ShaderType>

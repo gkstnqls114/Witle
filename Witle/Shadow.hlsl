@@ -39,7 +39,7 @@ VS_STANDARD_OUTPUT VSStandard(VS_STANDARD_INPUT input)
 
     // 현재 여기에서 view 는 조명 위치에서의 matrix... 
     output.positionW = mul(float4(input.position, 1.0f), gmtxWorld).xyz;
-    output.position = mul(mul(float4(output.positionW, 1.0f), gmtxView), gmtxProjection);
+    output.position = mul(mul(float4(output.positionW, 1.0f), gmtxLightView), gmtxLightProjection);
      
     return (output);
 }
@@ -55,7 +55,7 @@ VS_STANDARD_OUTPUT VSSkinned(VS_SKINNED_STANDARD_INPUT input)
     }
     float4 posW = mul(float4(input.position, 1.0f), mtxVertexToBoneWorld);
     output.positionW = posW.xyz;
-    output.position = mul(mul(posW, gmtxView), gmtxProjection); 
+    output.position = mul(mul(posW, gmtxLightView), gmtxLightProjection);
 
     return (output);
 }
