@@ -162,6 +162,8 @@ void Camera::RegenerateViewMatrix()
 
 void Camera::GenerateProjectionMatrix(float fNearPlaneDistance, float fFarPlaneDistance, float fAspectRatio, float fFOVAngle)
 {
+	m_fNearPlaneDistance = fNearPlaneDistance;
+	m_fFarPlaneDistance = fFarPlaneDistance;
 	m_xmf4x4Projection = Matrix4x4::PerspectiveFovLH(XMConvertToRadians(fFOVAngle), fAspectRatio, fNearPlaneDistance, fFarPlaneDistance);
 }
 
@@ -199,15 +201,20 @@ XMFLOAT4X4 Camera::GenerateLightViewMatrix(const LIGHT* light) const
 	);
 }
 
-void Camera::UpdateLightShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList, const LIGHT* light) const
-{  
+XMFLOAT4X4 Camera::GenerateLightProjectionMatrix(const LIGHT * light) const
+{
+	return 	Matrix4x4::OrthographicLH(GameScreen::GetClientWidth(), GameScreen::GetClientHeight(), m_fNearPlaneDistance, m_fFarPlaneDistance);;
+}
 
+void Camera::UpdateLightShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList, const LIGHT* light) const
+{   
 	XMFLOAT4X4 xmf4x4LightView;
 	xmf4x4LightView = GenerateLightViewMatrix(light);
 	XMStoreFloat4x4(&xmf4x4LightView, XMMatrixTranspose(XMLoadFloat4x4(&m_xmf4x4View)));
 	::memcpy(&m_pcbMappedLight->m_xmf4x4LightView, &xmf4x4LightView, sizeof(XMFLOAT4X4));
 
 	XMFLOAT4X4 xmf4x4Projection;
+	xmf4x4Projection = GenerateLightProjectionMatrix(light);
 	XMStoreFloat4x4(&xmf4x4Projection, XMMatrixTranspose(XMLoadFloat4x4(&m_xmf4x4Projection)));
 	::memcpy(&m_pcbMappedLight->m_xmf4x4LightProjection, &xmf4x4Projection, sizeof(XMFLOAT4X4));
 	 

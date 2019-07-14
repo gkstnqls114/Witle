@@ -110,6 +110,13 @@ void Monster::Render(ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffer
 	RenderHpStatus(pd3dCommandList, isGBuffers);
 }
 
+void Monster::RenderForShadow(ID3D12GraphicsCommandList * pd3dCommandList)
+{
+	m_pHaep->UpdateShaderVariable(pd3dCommandList);
+	m_pTexture->UpdateShaderVariable(pd3dCommandList, 0);
+	m_pLoadObject->RenderForShadow(pd3dCommandList);
+}
+
 void Monster::ReleaseMembers()
 {
 	if (m_pDebugSpawnMesh)

@@ -41,6 +41,7 @@ void CGameFramework::Render()
 
 	if (DefferedRendering)
 	{
+		RenderForShadow();
 		//// GBuffer에 Render //////////////////////////
 		RenderOnGbuffer();
 		//// ComputeShader ////////////////////////// 
@@ -519,7 +520,7 @@ void CGameFramework::CreateDepthStencilView()
 
 	// Shadow map 깊이 리소스 자원 생성
 	m_d3dDevice->CreateCommittedResource(&HeapProperties, D3D12_HEAP_FLAG_NONE,
-		&ResourceDesc, D3D12_RESOURCE_STATE_DEPTH_WRITE, &ClearValueForShadow, IID_PPV_ARGS(&m_Shadowmap));
+		&ResourceDesc, D3D12_RESOURCE_STATE_DEPTH_READ, &ClearValueForShadow, IID_PPV_ARGS(&m_Shadowmap));
 
 	m_d3dDevice->CreateDepthStencilView(m_Shadowmap, &d3dDepthStencilViewDescForShadow, m_ShadowmapCPUHandle);
 
@@ -790,6 +791,8 @@ void CGameFramework::RenderOnSwapchain()
 
 	// 기본 게임 장면을 렌더한다.
 	RenderSwapChain();
+
+	RenderShadowMap();
 	 
 	d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_RenderTargetBuffers[m_SwapChainBufferIndex], D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
 }
@@ -809,6 +812,40 @@ void CGameFramework::DefferedRenderOnSwapchain()
 
 	d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_RenderTargetBuffers[m_SwapChainBufferIndex], D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
 	
+}
+
+void CGameFramework::RenderShadowMap()
+{
+	m_CommandList->OMSetRenderTargets(1, &m_SwapChainCPUHandle[m_SwapChainBufferIndex], TRUE, &m_DepthStencilCPUHandle);
+
+	////그래픽 루트 시그너쳐를 설정한다.
+	m_CommandList->SetGraphicsRootSignature(GraphicsRootSignatureMgr::GetGraphicsRootSignature());
+
+	////파이프라인 상태를 설정한다.
+	ShaderManager::GetInstance()->SetPSO(m_CommandList.Get(), SHADER_SHOWTEXTURE, false);
+
+	float anotherWidth = static_cast<float>(GameScreen::GetClientWidth()) / 4;
+	float anotherHeight = static_cast<float>(GameScreen::GetClientHeight()) / 4;
+
+	float width = static_cast<float>(GameScreen::GetClientWidth());
+	float height = static_cast<float>(GameScreen::GetClientHeight());
+
+	m_ShadowmapHeap->UpdateShaderVariable(m_CommandList.Get());
+
+	// 리소스만 바꾼다.. 
+	D3D12_GPU_DESCRIPTOR_HANDLE handle = m_ShadowmapHeap->GetGPUSrvDescriptorStartHandle();
+
+	// 장면을 렌더합니다. 
+	D3D12_VIEWPORT	GBuffer_Viewport{ 0, height - anotherHeight, anotherWidth , anotherHeight, 1.0f, 0.0f };
+	D3D12_RECT		ScissorRect{ 0, height - anotherHeight, anotherWidth * (3 ) , height + anotherHeight };
+
+	m_CommandList->RSSetViewports(1, &GBuffer_Viewport);
+	m_CommandList->RSSetScissorRects(1, &ScissorRect);
+
+	m_CommandList->SetGraphicsRootDescriptorTable(ROOTPARAMETER_TEXTUREBASE, handle);
+
+	m_CommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	m_CommandList->DrawInstanced(6, 1, 0, 0);
 }
 
 void CGameFramework::BuildShaders()
@@ -991,10 +1028,14 @@ void CGameFramework::DefferedRenderSwapChain()
 }
 
 void CGameFramework::RenderForShadow()
-{ 
+{  
+	d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_Shadowmap, D3D12_RESOURCE_STATE_DEPTH_READ, D3D12_RESOURCE_STATE_DEPTH_WRITE);
+	 
 	// SHADOW 설정
 	m_CommandList->OMSetRenderTargets(0, NULL, FALSE, &m_ShadowmapCPUHandle);
 	m_CommandList->ClearDepthStencilView(m_ShadowmapCPUHandle, D3D12_CLEAR_FLAG_DEPTH , 1.0f, 0, 0, NULL);
 	  
 	m_pScene->RenderForShadow(m_CommandList.Get());
+
+	d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_Shadowmap, D3D12_RESOURCE_STATE_DEPTH_WRITE, D3D12_RESOURCE_STATE_DEPTH_READ);
 }

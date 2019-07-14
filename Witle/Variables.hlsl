@@ -40,12 +40,12 @@ cbuffer cbTotalTime : register(b6)
 
 SamplerState gWrapSamplerState : register(s0);
 SamplerState gssClamp          : register(s1);
-SamplerState gssPCFSampler     : register(s2);
+SamplerComparisonState gssPCFSampler     : register(s2);
 
 Texture2D gtxtTexture : register(t0);
 Texture2D gtxtTerrainBaseTexture : register(t1);
 Texture2D gtxtTerrainDetailTexture : register(t2);
-Texture2D gtxtShadow : register(t3);
+Texture2D<float> gtxtShadow : register(t3);
 
 #define MATERIAL_ALBEDO_MAP			0x01
 #define MATERIAL_SPECULAR_MAP		0x02

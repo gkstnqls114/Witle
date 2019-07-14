@@ -33,6 +33,9 @@ private:
 
 	MyFrustum*   m_pFrustum{ nullptr };
 
+	float m_fNearPlaneDistance;
+	float m_fFarPlaneDistance;
+
 	ID3D12Resource					*m_pd3dcbCamera{ nullptr };
 	VS_CB_CAMERA_INFO				*m_pcbMappedCamera{ nullptr };
 
@@ -143,6 +146,7 @@ public:
 	
 	// 조명 위치에 자리한 조명 변환 뷰을 위해 필요 //////////////////////////////
 	XMFLOAT4X4 GenerateLightViewMatrix(const LIGHT* light) const ;
+	XMFLOAT4X4 GenerateLightProjectionMatrix(const LIGHT* light) const;
 	void UpdateLightShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList, const LIGHT* light) const;
 	// 조명 위치에 자리한 조명 변환 뷰을 위해 필요 //////////////////////////////
 

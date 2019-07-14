@@ -17,6 +17,10 @@ class ShadowShader :
 	virtual D3D12_SHADER_BYTECODE		CreateGeometryShader(ID3DBlob **ppd3dShaderBlob) override;
 	// PSO 를 생성할 때 필요한 인자들
 
+	virtual int  GetNumRenderTargets() override
+	{
+		return 0;
+	}
 	virtual DXGI_FORMAT GetDSVFormat() override
 	{
 		return DXGI_FORMAT_D16_UNORM;

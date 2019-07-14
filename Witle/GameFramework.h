@@ -175,6 +175,9 @@ private:
 	// 렌더했던 Gbuffer를 이용하여 렌더링합니다.
 	void DefferedRenderOnSwapchain();
 
+	// 쉐도우 맵을 그립니다.
+	void RenderShadowMap();
+
 	// 필요한 쉐이더를 빌드합니다.
 	void BuildShaders(); 
 	  
