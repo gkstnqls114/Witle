@@ -177,6 +177,8 @@
     <ClInclude Include="Movement.h" />
     <ClInclude Include="MyAnimationInfos.h" />
     <ClInclude Include="PlayerSkillMgr.h" />
+    <ClInclude Include="SkinnedShaderForShadow.h" />
+    <ClInclude Include="StandardShaderForShadow.h" />
     <ClInclude Include="ShadowShader.h" />
     <ClInclude Include="SkillEffect.h" />
     <ClInclude Include="Status.h" />
@@ -380,6 +382,8 @@
     <ClCompile Include="Movement.cpp" />
     <ClCompile Include="PlayerMovement.cpp" />
     <ClCompile Include="PlayerSkillMgr.cpp" />
+    <ClCompile Include="SkinnedShaderForShadow.cpp" />
+    <ClCompile Include="StandardShaderForShadow.cpp" />
     <ClCompile Include="ShadowShader.cpp" />
     <ClCompile Include="SkillEffect.cpp" />
     <ClCompile Include="Status.cpp" />

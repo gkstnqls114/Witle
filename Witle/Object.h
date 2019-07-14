@@ -96,8 +96,9 @@ private:
 	static Shader					*m_pWireFrameShader;
 	static Shader					*m_pSkinnedAnimationWireFrameShader;
 
-	static Shader					*m_pWireFrameShader_ForShader;
-	static Shader					*m_pSkinnedAnimationWireFrameShader_ForShader;
+public:
+	static Shader					*m_pWireFrameShader_ForShadow;
+	static Shader					*m_pSkinnedAnimationWireFrameShader_ForShadow;
 
 public:
 	void AddRef() { m_nReferences++; }

@@ -6,7 +6,7 @@
 #include "ShaderManager.h"
 #include "d3dUtil.h"
 #include "StandardShader.h"
-#include "SkinnedShader.h"
+#include "SkinnedShader.h" 
 #include "Object.h"
 #include "Scene.h"
 
@@ -151,6 +151,9 @@ void CMaterial::ReleaseUploadBuffers()
 
 Shader *CMaterial::m_pWireFrameShader = NULL;
 Shader *CMaterial::m_pSkinnedAnimationWireFrameShader = NULL;
+
+Shader					*CMaterial::m_pWireFrameShader_ForShadow{ NULL };
+Shader					*CMaterial::m_pSkinnedAnimationWireFrameShader_ForShadow{ NULL };
 
 void CMaterial::ReleaseShaders()
 {
@@ -901,14 +904,13 @@ void LoadObject::RenderForShadow(ID3D12GraphicsCommandList * pd3dCommandList)
 						// 일단 쉐이더가 그림자용 아니면 전환되도록 if문 해놓은..
 						if (m_ppMaterials[i]->IsWireFrameShader())
 						{
-							m_ppMaterials[i]->SetWireFrameShader_ForShader();
+							CMaterial::m_pWireFrameShader_ForShadow->OnPrepareRender(pd3dCommandList);
 						}
 						else if (m_ppMaterials[i]->IsSkinnedAnimationWireFrameShader())
 						{
-							m_ppMaterials[i]->SetSkinnedAnimationWireFrameShader_ForShader();
+							CMaterial::m_pSkinnedAnimationWireFrameShader_ForShadow->OnPrepareRender(pd3dCommandList);
 						}
 
-						m_ppMaterials[i]->m_pShader->OnPrepareRender(pd3dCommandList);
 					}
 					m_ppMaterials[i]->UpdateShaderVariable(pd3dCommandList);
 				}

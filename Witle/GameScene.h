@@ -77,8 +77,7 @@ protected:
 	void UpdateCollision(const BoundingOrientedBox& AlreadyPlayerBBox, float fElapsedTime);
 	void UpdateCollision(float fElapsedTime);
 	void BuildLightsAndMaterials(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList);
-	void RenderShadowMap(ID3D12GraphicsCommandList *pd3dCommandList);
-
+	
 public:
 	GameScene();
 	virtual ~GameScene();

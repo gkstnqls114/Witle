@@ -70,7 +70,7 @@ void Camera::UpdateShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList, 
 	::memcpy(&m_pcbMappedCamera->m_xmf3Position, &m_pOwner->GetTransform().GetPosition(), sizeof(XMFLOAT3));
 
 	D3D12_GPU_VIRTUAL_ADDRESS d3dGpuVirtualAddress = m_pd3dcbCamera->GetGPUVirtualAddress();
-	pd3dCommandList->SetGraphicsRootConstantBufferView(1, d3dGpuVirtualAddress);
+	pd3dCommandList->SetGraphicsRootConstantBufferView(ROOTPARAMETER_CAMERA, d3dGpuVirtualAddress);
 }
 
 void Camera::ReleaseShaderVariables()
@@ -205,7 +205,7 @@ void Camera::UpdateLightShaderVariables(ID3D12GraphicsCommandList * pd3dCommandL
 	::memcpy(&m_pcbMappedCamera->m_xmf3Position, &light->Position, sizeof(XMFLOAT3));
 
 	D3D12_GPU_VIRTUAL_ADDRESS d3dGpuVirtualAddress = m_pd3dcbCamera->GetGPUVirtualAddress();
-	pd3dCommandList->SetGraphicsRootConstantBufferView(1, d3dGpuVirtualAddress);
+	pd3dCommandList->SetGraphicsRootConstantBufferView(ROOTPARAMETER_CAMERA, d3dGpuVirtualAddress);
 }
 
 void Camera::SetViewportsAndScissorRects(ID3D12GraphicsCommandList *pd3dCommandList)

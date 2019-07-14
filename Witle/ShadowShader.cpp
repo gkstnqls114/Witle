@@ -99,12 +99,7 @@ D3D12_PRIMITIVE_TOPOLOGY_TYPE ShadowShader::CreatePrimitiveTopologyType()
 {
 	return D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
 }
-
-D3D12_SHADER_BYTECODE ShadowShader::CreateVertexShader(ID3DBlob ** ppd3dShaderBlob)
-{
-	return(Shader::CompileShaderFromFile(L"Shadow.hlsl", "VSMain", "vs_5_1", ppd3dShaderBlob));
-}
-
+ 
 D3D12_SHADER_BYTECODE ShadowShader::CreatePixelShader(ID3DBlob ** ppd3dShaderBlob)
 {
 	return D3D12_SHADER_BYTECODE();

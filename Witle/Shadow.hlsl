@@ -33,18 +33,18 @@ struct VS_SKINNED_STANDARD_INPUT
 // 현재 여기서 view는 조명 위치에서의 view입니다...
 //
 
-//VS_STANDARD_OUTPUT VSStandard(VS_STANDARD_INPUT input)
-//{
-//    VS_STANDARD_OUTPUT output;
+VS_STANDARD_OUTPUT VSStandard(VS_STANDARD_INPUT input)
+{
+    VS_STANDARD_OUTPUT output;
 
-//    // 현재 여기에서 view 는 조명 위치에서의 matrix... 
-//    output.positionW = mul(float4(input.position, 1.0f), gmtxWorld).xyz; 
-//    output.position = mul(mul(float4(output.positionW, 1.0f), gmtxView), gmtxProjection);
+    // 현재 여기에서 view 는 조명 위치에서의 matrix... 
+    output.positionW = mul(float4(input.position, 1.0f), gmtxWorld).xyz;
+    output.position = mul(mul(float4(output.positionW, 1.0f), gmtxView), gmtxProjection);
      
-//    return (output);
-//}
+    return (output);
+}
 
-VS_STANDARD_OUTPUT VSSkinnedAnimationStandard(VS_SKINNED_STANDARD_INPUT input)
+VS_STANDARD_OUTPUT VSSkinned(VS_SKINNED_STANDARD_INPUT input)
 { 
     VS_STANDARD_OUTPUT output;
      

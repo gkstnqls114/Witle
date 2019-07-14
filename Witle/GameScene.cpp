@@ -803,9 +803,7 @@ void GameScene::AnimateObjects(float fTimeElapsed)
 }
 
 void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers)
-{ 
-	RenderShadowMap(pd3dCommandList);
-
+{  
 	// 렌더링
 	extern MeshRenderer gMeshRenderer;
 
@@ -923,7 +921,34 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 
 void GameScene::RenderForShadow(ID3D12GraphicsCommandList * pd3dCommandList)
 {
+	// 포워드 렌더링..
 
+	// 깊이버퍼에 쉐도우 맵을 사용...
+
+	// 렌더링
+	extern MeshRenderer gMeshRenderer;
+
+	// 그래픽 루트 시그니처 설정
+	pd3dCommandList->SetGraphicsRootSignature(GraphicsRootSignatureMgr::GetGraphicsRootSignature());
+
+	// 클라 화면 설정	
+	if (m_isSkyMode)
+	{
+
+	}
+	else
+	{
+
+		//LightManager::m_pLights->m_pLights[2].bEnable = true;
+		//LightManager::m_pLights->m_pLights[2].nType = LIGHT_TYPE::DIRECTIONAL_LIGHT;
+		//LightManager::m_pLights->m_pLights[2].Ambient = XMFLOAT4(1.f, 0.8f, 0.8f, 1.0f);
+		//LightManager::m_pLights->m_pLights[2].Diffuse = XMFLOAT4(1.0f, 0.4f, 0.4f, 1.0f);
+		//LightManager::m_pLights->m_pLights[2].Specular = XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f);
+		//LightManager::m_pLights->m_pLights[2].Direction = XMFLOAT3(0.0f, 0.0f, 1.0f);
+
+		m_pMainCamera->SetViewportsAndScissorRects(pd3dCommandList);
+		m_pMainCamera->GetCamera()->UpdateLightShaderVariables(pd3dCommandList, &LightManager::m_pLights->m_pLights[2]);
+	}
 }
 
 void GameScene::ReleaseUploadBuffers()
@@ -1117,8 +1142,3 @@ void GameScene::BuildLightsAndMaterials(ID3D12Device *pd3dDevice, ID3D12Graphics
 	m_pd3dcbMaterials->Map(0, NULL, (void **)&m_pcbMappedMaterials);
 	//////////////////////////// 재질
 }
-
-void GameScene::RenderShadowMap(ID3D12GraphicsCommandList * pd3dCommandList)
-{
-}
-

@@ -409,6 +409,12 @@
     <Filter Include="05.Shader\ShadowShader">
       <UniqueIdentifier>{fc8aa984-8c03-4880-913d-daa254329c10}</UniqueIdentifier>
     </Filter>
+    <Filter Include="05.Shader\ShadowShader\SkinnedShaderForShadow">
+      <UniqueIdentifier>{14637142-b17d-4ad1-8e2f-7035876bc05d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Shader\ShadowShader\StandardShaderForShadow">
+      <UniqueIdentifier>{08618dec-3b4a-4cc2-8ee9-791dc3d65dd4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -846,6 +852,12 @@
     <ClInclude Include="ShadowShader.h">
       <Filter>05.Shader\ShadowShader</Filter>
     </ClInclude>
+    <ClInclude Include="SkinnedShaderForShadow.h">
+      <Filter>05.Shader\ShadowShader\SkinnedShaderForShadow</Filter>
+    </ClInclude>
+    <ClInclude Include="StandardShaderForShadow.h">
+      <Filter>05.Shader\ShadowShader\StandardShaderForShadow</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1261,6 +1273,12 @@
     </ClCompile>
     <ClCompile Include="ShadowShader.cpp">
       <Filter>05.Shader\ShadowShader</Filter>
+    </ClCompile>
+    <ClCompile Include="SkinnedShaderForShadow.cpp">
+      <Filter>05.Shader\ShadowShader\SkinnedShaderForShadow</Filter>
+    </ClCompile>
+    <ClCompile Include="StandardShaderForShadow.cpp">
+      <Filter>05.Shader\ShadowShader\StandardShaderForShadow</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
