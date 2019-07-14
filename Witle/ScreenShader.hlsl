@@ -32,7 +32,7 @@ VS_SCREEN_OUTPUT VSScreen(VS_SCREEN_INPUT input, uint nVertexID : SV_VertexID)
 
 float4 PSScreen(VS_SCREEN_OUTPUT input) : SV_TARGET
 { 
-    float4 color = float4(1.f, 0, 0, 1); 
+    float4 color = gtxtTexture.Sample(gssClamp, input.uv);
     if (color.a < 0.5) discard;
 
     if (input.uv.x > HPpercentage)
