@@ -155,6 +155,9 @@ private:
 	// SwapChain에 디퍼드 쉐이더를 통해 현재 장면을 렌더링합니다.
 	void DefferedRenderSwapChain();
 
+	// Shadow 맵만 렌더링합니다.
+	void RenderForShadow();
+
 	// 키보드와 마우스 메시지를 처리하는 부분이다.
 	void OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam);
 	void OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam);

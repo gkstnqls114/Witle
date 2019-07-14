@@ -49,6 +49,7 @@ void CGameFramework::Render()
 	}
 	else
 	{
+		RenderForShadow();
 		//// SwapChain¿¡ Render //////////////////////////
 		RenderOnSwapchain();
 	}
@@ -502,15 +503,23 @@ void CGameFramework::CreateDepthStencilView()
 	d3dDepthStencilViewDescForShadow.Format = DXGI_FORMAT_D16_UNORM; // R16ÀÌ ¾Æ´Ï¶ó D16!
 	d3dDepthStencilViewDescForShadow.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
 	d3dDepthStencilViewDescForShadow.Texture2D.MipSlice = 0;
-	d3dDepthStencilViewDescForShadow.Flags = D3D12_DSV_FLAG_NONE;
+	d3dDepthStencilViewDescForShadow.Flags = D3D12_DSV_FLAG_READ_ONLY_DEPTH;
 
 	ResourceDesc.Format = DXGI_FORMAT_R16_TYPELESS; 
 
-	m_ShadowmapCPUHandle.ptr = m_GBufferCPUHandleForDepth[0].ptr + m_DsvDescriptorSize; // 3¹øÂ° ±íÀÌ ½ºÅÙ½Ç ºä.
+
+	D3D12_CLEAR_VALUE ClearValueForShadow;
+	ClearValueForShadow.Format = DXGI_FORMAT_D16_UNORM;
+	ClearValueForShadow.DepthStencil.Depth = 1.0f;
+	ClearValueForShadow.DepthStencil.Stencil = 0;
+
+	m_ShadowmapCPUHandle = m_DepthStencilCPUHandle;
+	m_ShadowmapCPUHandle.ptr += m_DsvDescriptorSize; // 3¹øÂ° ±íÀÌ ½ºÅÙ½Ç ºä.
+	m_ShadowmapCPUHandle.ptr += m_DsvDescriptorSize; // 3¹øÂ° ±íÀÌ ½ºÅÙ½Ç ºä.
 
 	// Shadow map ±íÀÌ ¸®¼Ò½º ÀÚ¿ø »ý¼º
 	m_d3dDevice->CreateCommittedResource(&HeapProperties, D3D12_HEAP_FLAG_NONE,
-		&ResourceDesc, D3D12_RESOURCE_STATE_DEPTH_WRITE, NULL, IID_PPV_ARGS(&m_Shadowmap));
+		&ResourceDesc, D3D12_RESOURCE_STATE_DEPTH_WRITE, &ClearValueForShadow, IID_PPV_ARGS(&m_Shadowmap));
 
 	m_d3dDevice->CreateDepthStencilView(m_Shadowmap, &d3dDepthStencilViewDescForShadow, m_ShadowmapCPUHandle);
 
@@ -971,4 +980,12 @@ void CGameFramework::DefferedRenderSwapChain()
 	m_CommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	m_CommandList->DrawInstanced(6, 1, 0, 0);
 	 
+}
+
+void CGameFramework::RenderForShadow()
+{ 
+	m_CommandList->OMSetRenderTargets(0, NULL, FALSE, &m_ShadowmapCPUHandle);
+	 m_CommandList->ClearDepthStencilView(m_ShadowmapCPUHandle, D3D12_CLEAR_FLAG_DEPTH , 1.0f, 0, 0, NULL);
+	 
+	m_pScene->RenderForShadow(m_CommandList.Get());
 }

@@ -10,12 +10,6 @@ struct VS_STANDARD_INPUT
     float3 bitangent : BITANGENT;
 };
 
-struct VS_STANDARD_OUTPUT
-{
-    float4 position : SV_POSITION;
-    float3 positionW : POSITION; 
-};
-
 
 struct VS_SKINNED_STANDARD_INPUT
 {
@@ -28,6 +22,12 @@ struct VS_SKINNED_STANDARD_INPUT
     float4 weights : BONEWEIGHT;
 };
 
+
+struct VS_STANDARD_OUTPUT
+{
+    float4 position : SV_POSITION;
+    float3 positionW : POSITION;
+};
 
 //  
 // 현재 여기서 view는 조명 위치에서의 view입니다...

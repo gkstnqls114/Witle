@@ -7,6 +7,8 @@
 #include "d3dUtil.h"
 #include "StandardShader.h"
 #include "SkinnedShader.h" 
+#include "SkinnedShaderForShadow.h"
+#include "StandardShaderForShadow.h" 
 #include "Object.h"
 #include "Scene.h"
 
@@ -153,7 +155,7 @@ Shader *CMaterial::m_pWireFrameShader = NULL;
 Shader *CMaterial::m_pSkinnedAnimationWireFrameShader = NULL;
 
 Shader					*CMaterial::m_pWireFrameShader_ForShadow{ NULL };
-Shader					*CMaterial::m_pSkinnedAnimationWireFrameShader_ForShadow{ NULL };
+Shader					*CMaterial::m_pSkinnedShader_ForShadow{ NULL };
 
 void CMaterial::ReleaseShaders()
 {
@@ -179,6 +181,13 @@ void CMaterial::PrepareShaders(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandLi
 
 	m_pSkinnedAnimationWireFrameShader = new SkinnedShader();
 	m_pSkinnedAnimationWireFrameShader->CreateShader(pd3dDevice, pd3dGraphicsRootSignature); 
+
+	m_pWireFrameShader_ForShadow = new StandardShaderForShadow();
+	m_pWireFrameShader_ForShadow->CreateShader(pd3dDevice, pd3dGraphicsRootSignature);
+
+
+	m_pSkinnedShader_ForShadow = new SkinnedShaderForShadow();
+	m_pSkinnedShader_ForShadow->CreateShader(pd3dDevice, pd3dGraphicsRootSignature);
 }
 
 bool CMaterial::IsWireFrameShader( )
@@ -908,7 +917,7 @@ void LoadObject::RenderForShadow(ID3D12GraphicsCommandList * pd3dCommandList)
 						}
 						else if (m_ppMaterials[i]->IsSkinnedAnimationWireFrameShader())
 						{
-							CMaterial::m_pSkinnedAnimationWireFrameShader_ForShadow->OnPrepareRender(pd3dCommandList);
+							CMaterial::m_pSkinnedShader_ForShadow->OnPrepareRender(pd3dCommandList);
 						}
 
 					}

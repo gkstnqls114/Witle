@@ -17,22 +17,12 @@ ShadowShader::~ShadowShader()
 void ShadowShader::CreateShader(ID3D12Device * pd3dDevice, ID3D12RootSignature * const pd3dGraphicsRootSignature)
 {
 	Shader::CreatePipelineState(pd3dDevice, pd3dGraphicsRootSignature);
-	Shader::CreatePipelineStateForGBuffers(pd3dDevice, pd3dGraphicsRootSignature);
 }
 
 void ShadowShader::Update(float ElapsedTime)
 {
 }
-
-D3D12_INPUT_LAYOUT_DESC ShadowShader::CreateInputLayout()
-{
-	D3D12_INPUT_LAYOUT_DESC d3dInputLayoutDesc;
-	d3dInputLayoutDesc.pInputElementDescs = NULL;
-	d3dInputLayoutDesc.NumElements = 0;
-
-	return(d3dInputLayoutDesc);
-}
-
+ 
 D3D12_RASTERIZER_DESC ShadowShader::CreateRasterizerState()
 {
 	//래스터라이저 상태를 설정한다.
