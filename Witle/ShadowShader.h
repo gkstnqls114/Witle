@@ -20,12 +20,7 @@ class ShadowShader :
 	virtual int  GetNumRenderTargets() override
 	{
 		return 0;
-	}
-	virtual DXGI_FORMAT GetDSVFormat() override
-	{
-		return DXGI_FORMAT_D16_UNORM;
-	};
-
+	} 
 public:
 	ShadowShader();
 	virtual ~ShadowShader();

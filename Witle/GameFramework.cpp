@@ -357,7 +357,7 @@ void CGameFramework::CreateRtvAndDsvDescriptorHeaps()
 
 void CGameFramework::CreateShadowmapView()
 {
-	DXGI_FORMAT textureType = DXGI_FORMAT_R16_TYPELESS;
+	DXGI_FORMAT textureType = DXGI_FORMAT_R24_UNORM_X8_TYPELESS;
 	D3D12_RESOURCE_FLAGS flag = D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;
 	 
 	// 해당 텍스쳐를 2디 텍스쳐로 만들어서 담는다.
@@ -380,7 +380,7 @@ void CGameFramework::CreateShadowmapView()
 		for (int i = 0; i < m_ShadowmapCount; ++i)
 		{
 			m_ShadowmapHeap->CreateShaderResourceViews(m_d3dDevice.Get(), m_CommandList.Get(), 
-				 m_Shadowmap, RESOURCE_TEXTURE2D, i, DXGI_FORMAT_R16_UNORM);
+				 m_Shadowmap, RESOURCE_TEXTURE2D, i, DXGI_FORMAT_R24_UNORM_X8_TYPELESS);
 		}
 	}
 }
@@ -501,16 +501,16 @@ void CGameFramework::CreateDepthStencilView()
 	// 마찬가지로 쉐도우 맵은 깊이 스텐실 뷰
 
 	D3D12_DEPTH_STENCIL_VIEW_DESC d3dDepthStencilViewDescForShadow;
-	d3dDepthStencilViewDescForShadow.Format = DXGI_FORMAT_D16_UNORM; // R16이 아니라 D16!
+	d3dDepthStencilViewDescForShadow.Format = DXGI_FORMAT_D24_UNORM_S8_UINT; // R16이 아니라 D16!
 	d3dDepthStencilViewDescForShadow.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
 	d3dDepthStencilViewDescForShadow.Texture2D.MipSlice = 0;
 	d3dDepthStencilViewDescForShadow.Flags = D3D12_DSV_FLAG_READ_ONLY_DEPTH;
 
-	ResourceDesc.Format = DXGI_FORMAT_R16_TYPELESS; 
+	ResourceDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
 
 
 	D3D12_CLEAR_VALUE ClearValueForShadow;
-	ClearValueForShadow.Format = DXGI_FORMAT_D16_UNORM;
+	ClearValueForShadow.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
 	ClearValueForShadow.DepthStencil.Depth = 1.0f;
 	ClearValueForShadow.DepthStencil.Stencil = 0;
 
@@ -525,7 +525,8 @@ void CGameFramework::CreateDepthStencilView()
 	m_d3dDevice->CreateDepthStencilView(m_Shadowmap, &d3dDepthStencilViewDescForShadow, m_ShadowmapCPUHandle);
 
 	// 힙에 추가
-	m_ShadowmapHeap->CreateShaderResourceViews(m_d3dDevice.Get(), m_CommandList.Get(), m_Shadowmap, RESOURCE_TEXTURE2D, 0, DXGI_FORMAT_R16_UNORM);
+	m_ShadowmapHeap->CreateShaderResourceViews(m_d3dDevice.Get(), m_CommandList.Get(), m_Shadowmap, RESOURCE_TEXTURE2D, 
+		0, DXGI_FORMAT_R24_UNORM_X8_TYPELESS);
 
 }
 
