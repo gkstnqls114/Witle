@@ -12,17 +12,16 @@ private:
 	virtual void SetAnimationStateToHit() override;
 
 private:
-	Shader* m_pHPBarShader{ nullptr };
-	Shader* m_pMPBarShader{ nullptr };
-	MyRectangle* m_HpBar{ nullptr };
-	MyRectangle* m_MpBar{ nullptr };
+	Shader* m_pGuageBarShader{ nullptr }; 
+	MyRectangle* m_GuageBar{ nullptr }; 
 	 
 public:
 	virtual void ReleaseObjects() override;
 	virtual void ReleaseUploadBuffers() override;
 
 public:
-	PlayerStatus(GameObject* pOwner, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
+	PlayerStatus(GameObject* pOwner, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList,
+		POINT point, float width, float height, const wchar_t * filepath);
 	virtual ~PlayerStatus();
 
 	virtual void Update(float) override;

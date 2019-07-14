@@ -33,7 +33,8 @@ private:
 	int m_PrevAnimation{ 0 }; // 현재 사용하는 애니메이션
 
 	PlayerMovement*    m_pPlayerMovement{ nullptr };
-	PlayerStatus*	   m_pPlayerStatus{ nullptr };
+	PlayerStatus*	   m_pPlayerHPStatus{ nullptr };
+	PlayerStatus*	   m_pPlayerMPStatus{ nullptr };
 	MyBOBox*		   m_pMyBOBox{ nullptr };
 
 	Texture*			m_pTexture_Cloth{ nullptr };
@@ -88,9 +89,8 @@ public:
 	void Animate(float fElapsedTime);
 	void Render(ID3D12GraphicsCommandList *pd3dCommandList, bool);
 	void RenderForShadow(ID3D12GraphicsCommandList *pd3dCommandList);
-	void RenderHpStatus(ID3D12GraphicsCommandList *pd3dCommandList, bool); // 체력
-	void RenderMpStatus(ID3D12GraphicsCommandList *pd3dCommandList); // 마나
-  
+	void RenderStatus(ID3D12GraphicsCommandList *pd3dCommandList, bool); // 체력
+	
 	void Move(ULONG nDirection, float fDistance, bool bVelocity = false);
 	void Move(const XMFLOAT3& xmf3Shift);
 	void MoveVelocity(const XMFLOAT3& xmf3Shift);
@@ -108,7 +108,7 @@ public:
 
 	/////////////////////// Get
 	const Broom* GetpBroom() { return m_Broom; }
-	PlayerStatus* GetStatus() { return m_pPlayerStatus; };
+	PlayerStatus* GetStatus() { return m_pPlayerHPStatus; };
 	AXIS GetCoorAxis() { return m_Transform.GetCoorAxis(); }
 	XMFLOAT3 GetVelocity() const;
 	MyBOBox* GetBOBox() { return m_pMyBOBox; }

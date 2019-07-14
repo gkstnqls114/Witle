@@ -74,7 +74,7 @@ XMFLOAT3 Monster::CalculateAlreadyPosition(float fTimeElapsed)
 Monster::Monster(const std::string & entityID, float spawnRange, const XMFLOAT3& SpawnPoint, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature)
 	: m_SpawnRange(spawnRange), m_SpawnPoint(SpawnPoint), GameObject(entityID)
 {
-	m_MonsterStatus = new MonsterStatus(this, pd3dDevice, pd3dCommandList);
+	m_MonsterHPStatus = new MonsterStatus(this, pd3dDevice, pd3dCommandList);
 	
 	m_MonsterHP = new UI3DImage(this, pd3dDevice, pd3dCommandList, POINT{0, 0},
 		100.F,
@@ -167,11 +167,11 @@ void Monster::ReleaseMembers()
 		delete m_pMyBOBox;
 		m_pMyBOBox = nullptr;
 	}
-	if (m_MonsterStatus)
+	if (m_MonsterHPStatus)
 	{
-		m_MonsterStatus->ReleaseObjects();
-		delete m_MonsterStatus;
-		m_MonsterStatus = nullptr;
+		m_MonsterHPStatus->ReleaseObjects();
+		delete m_MonsterHPStatus;
+		m_MonsterHPStatus = nullptr;
 	}
 	if (m_MonsterMovement)
 	{
@@ -197,8 +197,8 @@ void Monster::SubstractHP(int sub)
 	m_CurrAnimation = GetAnimationHitID();
 	m_pLoadObject->SetTrackAnimationSet(0, m_CurrAnimation);
 	
-	m_MonsterStatus->m_HP -= sub;
-	std::cout << m_MonsterStatus->m_HP << std::endl;
+	m_MonsterHPStatus->m_Guage -= sub;
+	std::cout << m_MonsterHPStatus->m_Guage << std::endl;
 }
 
 void Monster::Animate(float fElapsedTime)
@@ -230,7 +230,7 @@ void Monster::RenderHpStatus(ID3D12GraphicsCommandList * pd3dCommandList, bool i
 	uiWorld._31 = mtxLookAt._13; uiWorld._32 = mtxLookAt._23; uiWorld._33 = mtxLookAt._33;
 	// set look at....
 
-	float percentage = float(m_MonsterStatus->m_HP) / 1000.f * 100.f;
+	float percentage = float(m_MonsterHPStatus->m_Guage) / float(m_MonsterHPStatus->m_MAXGuage) * 100.f;
 	pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_HPPERCENTAGE, 1, &percentage, 0);
 
 	m_MonsterHP->Render(pd3dCommandList, uiWorld);

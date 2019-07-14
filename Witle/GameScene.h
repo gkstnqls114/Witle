@@ -134,7 +134,7 @@ protected:
 
 
 	AltarSphere*			m_AltarSphere[5];
-	// MyRectangle*            m_HpBar[5]; 
+	// MyRectangle*            m_GuageBar[5]; 
 
 #ifdef CHECK_SUBVIEWS
 	CameraObject*			m_lookAboveCamera{ nullptr };

@@ -45,7 +45,7 @@ protected:
 	UI3DImage*			m_MonsterHP{ nullptr };
 	RecognitionRange*   m_RecognitionRange{ nullptr };
 	MonsterMovement*    m_MonsterMovement{ nullptr };
-	MonsterStatus*	   m_MonsterStatus{ nullptr };
+	MonsterStatus*	   m_MonsterHPStatus{ nullptr };
 	MyBOBox*		   m_pMyBOBox{ nullptr };
 	 
 	Texture*			m_pTexture{ nullptr };
@@ -99,7 +99,7 @@ public:
 	  
 	//// Get /////////////////// 
 	MonsterMovement* GetMovement() { return m_MonsterMovement; }
-	MonsterStatus* GetStatus() { return m_MonsterStatus; }
+	MonsterStatus* GetStatus() { return m_MonsterHPStatus; }
 	RecognitionRange* GetRecognitionRange() const { return m_RecognitionRange;};
 	AXIS GetCoorAxis() const { return m_Transform.GetCoorAxis(); } 
 	MyBOBox* GetBOBox() const { return m_pMyBOBox; }

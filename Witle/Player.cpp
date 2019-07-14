@@ -128,7 +128,12 @@ Player::Player(const std::string & entityID, ID3D12Device * pd3dDevice, ID3D12Gr
 	XMFLOAT3 extents{ 25.f, 75.f, 25.f };
 	m_pMyBOBox = new MyBOBox(this, pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 75.F, 0.F }, extents);
 	
-	m_pPlayerStatus = new PlayerStatus(this, pd3dDevice, pd3dCommandList);
+	m_pPlayerHPStatus = new PlayerStatus(this, pd3dDevice, pd3dCommandList, 
+		POINT{ int(GameScreen::GetWidth()) - 1100, int(GameScreen::GetHeight()) - 670 }, 300.f, 30.f, L"Image/Red.dds");
+
+	m_pPlayerMPStatus = new PlayerStatus(this, pd3dDevice, pd3dCommandList, 
+		POINT{ int(GameScreen::GetWidth()) - 1100, int(GameScreen::GetHeight()) - 620 }, 300.f, 30.f, L"Image/Blue.dds");
+
 	m_pPlayerMovement = new PlayerMovement(this);
 	 
 	m_Broom = new Broom(m_pPlayerMovement);
@@ -252,11 +257,18 @@ void Player::ReleaseMembers()
 		delete m_pMyBOBox;
 		m_pMyBOBox = nullptr;
 	}
-	if (m_pPlayerStatus)
+	if (m_pPlayerHPStatus)
 	{
-		m_pPlayerStatus->ReleaseObjects();
-		delete m_pPlayerStatus;
-		m_pPlayerStatus = nullptr;
+		m_pPlayerHPStatus->ReleaseObjects();
+		delete m_pPlayerHPStatus;
+		m_pPlayerHPStatus = nullptr;
+	}
+
+	if (m_pPlayerMPStatus)
+	{
+		m_pPlayerMPStatus->ReleaseObjects();
+		delete m_pPlayerMPStatus;
+		m_pPlayerMPStatus = nullptr;
 	}
 	if (m_pPlayerMovement)
 	{
@@ -318,7 +330,7 @@ void Player::Update(float fElapsedTime)
 
 void Player::SubstractHP(int sub)
 { 
-	m_pPlayerStatus->m_HP -= sub;  
+	m_pPlayerHPStatus->m_Guage -= sub;  
 
 	if (m_CurrAnimation == ANIMATION_BROOMIDLE.ID) return;
 	if (m_CurrAnimation == ANIMATION_BROOMFORWARD.ID) return;
@@ -348,14 +360,10 @@ void Player::Animate(float fElapsedTime)
 	m_pLoadObject_Body->Animate(fElapsedTime);
 }
 
-void Player::RenderHpStatus(ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffers)
+void Player::RenderStatus(ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffers)
 {
-	m_pPlayerStatus->Render(pd3dCommandList);
-}
-
-void Player::RenderMpStatus(ID3D12GraphicsCommandList * pd3dCommandList)
-{
-	m_pPlayerStatus->Render(pd3dCommandList);
+	m_pPlayerHPStatus->Render(pd3dCommandList);
+	m_pPlayerMPStatus->Render(pd3dCommandList);
 }
  
 void Player::SetTrackAnimationSet()
@@ -392,18 +400,18 @@ void Player::ProcessInput(float fTimeElapsed)
 
 	//if (isDead)
 	//{
-	//	m_pPlayerStatus->m_HP += 10.f; 
-	//	if (m_pPlayerStatus->m_HP > 1000.F)
+	//	m_pPlayerHPStatus->m_Guage += 10.f; 
+	//	if (m_pPlayerHPStatus->m_Guage > 1000.F)
 	//	{ 
 	//		m_CurrAnimation = ANIMATION_IDLE.ID;
 	//		m_Broom->DoNotUse();
-	//		m_pPlayerStatus->m_HP = 1000.F;
+	//		m_pPlayerHPStatus->m_Guage = 1000.F;
 	//		isDead = false;
 	//	}
 	//	return;
 	//}
 
-	//if (m_pPlayerStatus->m_HP <= 0 && isDead == false)
+	//if (m_pPlayerHPStatus->m_Guage <= 0 && isDead == false)
 	//{
 	//	isDead = true;
 	//	m_CurrAnimation = ANIMATION_DEAD.ID;

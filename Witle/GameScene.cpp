@@ -88,6 +88,7 @@ GameScene::~GameScene()
 {
 
 }
+
 void GameScene::CreateCbvSrvDescriptorHeaps(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, int nConstantBufferViews, int nShaderResourceViews)
 {
 	D3D12_DESCRIPTOR_HEAP_DESC d3dDescriptorHeapDesc;
@@ -746,7 +747,7 @@ void GameScene::LastUpdate(float fElapsedTime)
 		for (int i = 0; i < m_TestMonsterCount; ++i)
 		{
 			// 체력이 0보다 적으면 검사하지 않는다.
-			if (m_TestMonster[i]->GetStatus()->m_HP <= 0.f) continue;
+			if (m_TestMonster[i]->GetStatus()->m_Guage <= 0.f) continue;
 
 			if (Collision::isCollide(m_TestMonster[i]->GetBOBox(), skill_collider))
 			{
@@ -857,9 +858,8 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 	//// Aim point Render 
 	if (!m_isSkyMode)
 	{
-		if (m_pPlayer) m_pPlayer->RenderHpStatus(pd3dCommandList, isGBuffers); // 체력
-		if (m_pPlayer) m_pPlayer->RenderMpStatus(pd3dCommandList); // 마나
-
+		if (m_pPlayer) m_pPlayer->RenderStatus(pd3dCommandList, isGBuffers);
+		
 		if (!m_pPlayer->GetBroom()->GetisPrepare() && !m_pPlayer->GetBroom()->GetisUsing())
 		{
 			if(m_AimPoint) m_AimPoint->Render(pd3dCommandList, isGBuffers);

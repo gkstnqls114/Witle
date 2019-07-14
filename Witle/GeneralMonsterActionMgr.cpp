@@ -16,7 +16,7 @@ void GeneralMonsterActionMgr::UpdateState(float fElpasedTime)
 	m_TotalTime += fElpasedTime;
 	 
 	// Dead 상태만 제외하고 공통적으로 들어가야함
-	if (m_CurrMonsterAction != &m_DeadAction && static_cast<Monster*>(m_pOwner)->GetStatus()->m_HP <= 0)
+	if (m_CurrMonsterAction != &m_DeadAction && static_cast<Monster*>(m_pOwner)->GetStatus()->m_Guage <= 0)
 	{
 		ChangeStateToDead();
 	}

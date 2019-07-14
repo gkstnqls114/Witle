@@ -7,7 +7,7 @@
   
 void Status::SubstractHP(int damage)
 { 
-	m_HP -= damage;
+	m_Guage -= damage;
 }
 
 Status::Status(GameObject * pOwner )
