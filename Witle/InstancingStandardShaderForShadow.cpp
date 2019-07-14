@@ -29,6 +29,6 @@ D3D12_INPUT_LAYOUT_DESC InstancingStandardShaderForShadow::CreateInputLayout()
 
 D3D12_SHADER_BYTECODE InstancingStandardShaderForShadow::CreateVertexShader(ID3DBlob ** ppd3dShaderBlob)
 {
-	return(Shader::CompileShaderFromFile(L"Shadow.hlsl", "VSSkinned", "vs_5_1", ppd3dShaderBlob));
+	return(Shader::CompileShaderFromFile(L"Shadow.hlsl", "VSStandardInstancing", "vs_5_1", ppd3dShaderBlob));
 }
  

@@ -89,7 +89,8 @@ public:
 	// 해당 포지션에 속하는 리프노드의 아이디들을 리턴한다. 쿼드트리이므로 최대 4개가 존재한다.
 	XMINT4 const GetIDs(const XMFLOAT3& position) const;
 	int * const GetIndex(const XMFLOAT3& position) const;
-	 
+	
+	void RenderTerrainForShadow(ID3D12GraphicsCommandList *pd3dCommandList);
 	void RenderInstancingObjectsForShadow(ID3D12GraphicsCommandList *pd3dCommandList);
 	void Render(ID3D12GraphicsCommandList *pd3dCommandList, Terrain* pTerrain, ID3D12DescriptorHeap* pHeap, bool isGBuffers);
 	void Render(int index, ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers);

@@ -929,10 +929,7 @@ void GameScene::RenderForShadow(ID3D12GraphicsCommandList * pd3dCommandList)
 
 	// 렌더링
 	extern MeshRenderer gMeshRenderer;
-
-	// 그래픽 루트 시그니처 설정
-	pd3dCommandList->SetGraphicsRootSignature(GraphicsRootSignatureMgr::GetGraphicsRootSignature());
-
+	 
 	// 클라 화면 설정	
 	if (m_isSkyMode)
 	{
@@ -960,11 +957,10 @@ void GameScene::RenderForShadow(ID3D12GraphicsCommandList * pd3dCommandList)
 	}
 
 	// 터레인
-	//if (m_Terrain)
-	//{
-	//	Mesh* terrainMesh = m_Terrain->GetComponent<Mesh>("TerrainMesh");
-	//	m_pQuadtreeTerrain->Render(pd3dCommandList, m_Terrain, m_pd3dCbvSrvDescriptorHeap, isGBuffers);
-	//}
+	if (m_Terrain)
+	{
+		m_pQuadtreeTerrain->RenderInstancingObjectsForShadow(pd3dCommandList);
+	}
 }
 
 void GameScene::ReleaseUploadBuffers()

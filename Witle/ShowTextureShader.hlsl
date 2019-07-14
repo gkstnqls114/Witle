@@ -48,7 +48,8 @@ else if (nVertexID == 5)
 //«»ºø ºŒ¿Ã¥ı∏¶ ¡§¿««—¥Ÿ.
 float4 PSMain(PS_INPUT input) : SV_TARGET
 { 
-    float4 cColor = gtxtTerrainBaseTexture.Sample(gssClamp, input.uv);
+    //float4 cColor = gtxtTerrainBaseTexture.Sample(gssClamp, input.uv);
+    float4 cColor = float4(gtxtTerrainBaseTexture.Sample(gssClamp, input.uv).rrr, 1.f);
 	return(cColor);
 }
  
