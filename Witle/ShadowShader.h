@@ -1,0 +1,36 @@
+#pragma once
+#include "Shader.h"
+class ShadowShader :
+	public Shader
+{
+	// PSO 를 생성할 때 필요한 인자들
+	virtual D3D12_INPUT_LAYOUT_DESC		CreateInputLayout() override = 0;
+	virtual D3D12_RASTERIZER_DESC		CreateRasterizerState() override;
+	virtual D3D12_BLEND_DESC			CreateBlendState() override;
+	virtual D3D12_DEPTH_STENCIL_DESC	CreateDepthStencilState() override;
+
+	virtual D3D12_PRIMITIVE_TOPOLOGY_TYPE	CreatePrimitiveTopologyType() override;
+
+	virtual D3D12_SHADER_BYTECODE		CreateVertexShader(ID3DBlob **ppd3dShaderBlob) override = 0; 
+	virtual D3D12_SHADER_BYTECODE		CreatePixelShaderForGBuffers(ID3DBlob **ppd3dShaderBlob) override;
+	virtual D3D12_SHADER_BYTECODE		CreateGeometryShader(ID3DBlob **ppd3dShaderBlob) override;
+	// PSO 를 생성할 때 필요한 인자들
+
+	virtual int  GetNumRenderTargets() override
+	{
+		return 0;
+	}  
+
+	virtual DXGI_FORMAT GetRTVFormat() override
+	{
+		return DXGI_FORMAT_UNKNOWN;
+	};
+public:
+	ShadowShader();
+	virtual ~ShadowShader();
+
+	virtual void						CreateShader(ID3D12Device *pd3dDevice, ID3D12RootSignature*const pd3dGraphicsRootSignature) override;
+	virtual void						Update(float ElapsedTime) override;
+
+};
+

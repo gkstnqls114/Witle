@@ -33,8 +33,7 @@ private:
 protected:
 	Transform m_Transform; //월드변환을 위한 좌표계
 	ComponentBase* GetComponent(const std::string& id) const;
-
-
+	 
 private:
 	void ReleaseComponents();
 	void ReleaseComponentUploadBuffers();

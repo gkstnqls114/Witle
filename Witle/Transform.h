@@ -34,6 +34,8 @@ public:
 
 	void Rotate(float x, float y, float z);
 	void SetRotate(float x, float y, float z);
+
+	void SetIdentity();
 	
 	//////////////////////////////////////////////// Get
 	void SetPosition(const XMFLOAT3& pos) { m_Position = pos; }

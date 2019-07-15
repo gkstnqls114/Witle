@@ -20,16 +20,19 @@ ID3D12RootSignature * GraphicsRootSignatureMgr::CreateGraphicsRootSignature(ID3D
 	pRootParameters[ROOTPARAMETER_PICKINGPOINT] = d3dUtil::CreateRootParameterConstants(2, 4);  // b4: Color
 	pRootParameters[ROOTPARAMETER_HPPERCENTAGE] = d3dUtil::CreateRootParameterConstants(1, 5);  // b5: HP percentage
 	pRootParameters[ROOTPARAMETER_TIME] = d3dUtil::CreateRootParameterConstants(1, 6);  // b6: Elapsed Time
+	pRootParameters[ROOTPARAMETER_LIGHTFORSHADOW] = d3dUtil::CreateRootParameterCBV(9);          // b9: Light Info For Shadow
 
-	D3D12_DESCRIPTOR_RANGE pTextureDescriptorRanges[3];
+	D3D12_DESCRIPTOR_RANGE pTextureDescriptorRanges[4];
 	pTextureDescriptorRanges[0] = d3dUtil::CreateDescriptorRangeSRV(1, 0); //t0: gtxtTexture
 	pTextureDescriptorRanges[1] = d3dUtil::CreateDescriptorRangeSRV(1, 1); //t1: gtxtTerrainBaseTexture
 	pTextureDescriptorRanges[2] = d3dUtil::CreateDescriptorRangeSRV(1, 2); //t2: gtxtTerrainDetailTexture	
+	pTextureDescriptorRanges[3] = d3dUtil::CreateDescriptorRangeSRV(1, 3); //t3: gtxtShadow	
 
 	// 다시 루프 패러미터 
 	pRootParameters[ROOTPARAMETER_TEXTURE] = d3dUtil::CreateRootParameterTable(1, &pTextureDescriptorRanges[0], D3D12_SHADER_VISIBILITY_PIXEL);
 	pRootParameters[ROOTPARAMETER_TEXTUREBASE] = d3dUtil::CreateRootParameterTable(1, &pTextureDescriptorRanges[1], D3D12_SHADER_VISIBILITY_PIXEL);
 	pRootParameters[ROOTPARAMETER_TEXTUREDETAIL] = d3dUtil::CreateRootParameterTable(1, &pTextureDescriptorRanges[2], D3D12_SHADER_VISIBILITY_PIXEL);
+	pRootParameters[ROOTPARAMETER_SHADOWTEXTURE] = d3dUtil::CreateRootParameterTable(1, &pTextureDescriptorRanges[3], D3D12_SHADER_VISIBILITY_PIXEL);
 
 	D3D12_DESCRIPTOR_RANGE pd3dDescriptorRanges[8];
 	pd3dDescriptorRanges[0] = d3dUtil::CreateDescriptorRangeSRV(1, 6);  //t6: gtxtAlbedoTexture
@@ -59,9 +62,9 @@ ID3D12RootSignature * GraphicsRootSignatureMgr::CreateGraphicsRootSignature(ID3D
 
 
 	//// 샘플러 ///////////////////////////////////////////////////////////////////// 
-	D3D12_STATIC_SAMPLER_DESC d3dSamplerDesc[2];
+	D3D12_STATIC_SAMPLER_DESC d3dSamplerDesc[3];
 	::ZeroMemory(&d3dSamplerDesc, sizeof(D3D12_STATIC_SAMPLER_DESC));
-	d3dSamplerDesc[0].Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR;
+	d3dSamplerDesc[0].Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR; // warp shader
 	d3dSamplerDesc[0].AddressU = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
 	d3dSamplerDesc[0].AddressV = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
 	d3dSamplerDesc[0].AddressW = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
@@ -74,7 +77,7 @@ ID3D12RootSignature * GraphicsRootSignatureMgr::CreateGraphicsRootSignature(ID3D
 	d3dSamplerDesc[0].RegisterSpace = 0;
 	d3dSamplerDesc[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
 
-	d3dSamplerDesc[1].Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR;
+	d3dSamplerDesc[1].Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR; // clamp shader
 	d3dSamplerDesc[1].AddressU = D3D12_TEXTURE_ADDRESS_MODE_CLAMP;
 	d3dSamplerDesc[1].AddressV = D3D12_TEXTURE_ADDRESS_MODE_CLAMP;
 	d3dSamplerDesc[1].AddressW = D3D12_TEXTURE_ADDRESS_MODE_CLAMP;
@@ -86,6 +89,20 @@ ID3D12RootSignature * GraphicsRootSignatureMgr::CreateGraphicsRootSignature(ID3D
 	d3dSamplerDesc[1].ShaderRegister = 1;
 	d3dSamplerDesc[1].RegisterSpace = 0;
 	d3dSamplerDesc[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+	 
+	d3dSamplerDesc[2].Filter = D3D12_FILTER_COMPARISON_MIN_MAG_LINEAR_MIP_POINT; // clamp shader
+	d3dSamplerDesc[2].AddressU = D3D12_TEXTURE_ADDRESS_MODE_BORDER;
+	d3dSamplerDesc[2].AddressV = D3D12_TEXTURE_ADDRESS_MODE_BORDER;
+	d3dSamplerDesc[2].AddressW = D3D12_TEXTURE_ADDRESS_MODE_BORDER;
+	d3dSamplerDesc[2].MipLODBias = 0;
+	d3dSamplerDesc[2].MaxAnisotropy = 1;
+	d3dSamplerDesc[2].ComparisonFunc = D3D12_COMPARISON_FUNC_LESS;
+	d3dSamplerDesc[2].MinLOD = 0;
+	d3dSamplerDesc[2].MaxLOD = D3D12_FLOAT32_MAX;
+	d3dSamplerDesc[2].ShaderRegister = 2;
+	d3dSamplerDesc[2].RegisterSpace = 0;
+	d3dSamplerDesc[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+	d3dSamplerDesc[2].BorderColor = D3D12_STATIC_BORDER_COLOR::D3D12_STATIC_BORDER_COLOR_OPAQUE_WHITE;
 	//// 샘플러 ///////////////////////////////////////////////////////////////////// 
 
 	D3D12_ROOT_SIGNATURE_FLAGS d3dRootSignatureFlags =

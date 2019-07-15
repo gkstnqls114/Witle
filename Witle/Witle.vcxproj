@@ -157,12 +157,18 @@
     <ClInclude Include="AltarSphere.h" />
     <ClInclude Include="Avoidance.h" />
     <ClInclude Include="BasicCam.h" />
+    <ClInclude Include="BossSampleAction_1.h" />
+    <ClInclude Include="BossSampleAction_2.h" />
     <ClInclude Include="Broom.h" />
     <ClInclude Include="AttackAction.h" />
     <ClInclude Include="CreepyMonster.h" />
     <ClInclude Include="DefferedShader.h" />
+    <ClInclude Include="Dragon.h" />
+    <ClInclude Include="ElectricBall.h" />
+    <ClInclude Include="FireBall.h" />
     <ClInclude Include="HitAction.h" />
     <ClInclude Include="GraphicsRootSignatureMgr.h" />
+    <ClInclude Include="IceBall.h" />
     <ClInclude Include="MainCameraMgr.h" />
     <ClInclude Include="GeneralMonsterActionMgr.h" />
     <ClInclude Include="BossMonsterActionMgr.h" />
@@ -170,6 +176,12 @@
     <ClInclude Include="MonsterTransformStorage.h" />
     <ClInclude Include="Movement.h" />
     <ClInclude Include="MyAnimationInfos.h" />
+    <ClInclude Include="PlayerSkillMgr.h" />
+    <ClInclude Include="InstancingStandardShaderForShadow.h" />
+    <ClInclude Include="SkinnedShaderForShadow.h" />
+    <ClInclude Include="StandardShaderForShadow.h" />
+    <ClInclude Include="ShadowShader.h" />
+    <ClInclude Include="SkillEffect.h" />
     <ClInclude Include="Status.h" />
     <ClInclude Include="UI3DImage.h" />
     <ClInclude Include="UI3D.h" />
@@ -295,6 +307,8 @@
     <ClCompile Include="AltarSphere.cpp" />
     <ClCompile Include="Avoidance.cpp" />
     <ClCompile Include="BasicCam.cpp" />
+    <ClCompile Include="BossSampleAction_1.cpp" />
+    <ClCompile Include="BossSampleAction_2.cpp" />
     <ClCompile Include="Broom.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="CameraObject.cpp" />
@@ -311,6 +325,9 @@
     <ClCompile Include="DDSTextureLoader12.cpp" />
     <ClCompile Include="AttackAction.cpp" />
     <ClCompile Include="DefferedShader.cpp" />
+    <ClCompile Include="Dragon.cpp" />
+    <ClCompile Include="ElectricBall.cpp" />
+    <ClCompile Include="FireBall.cpp" />
     <ClCompile Include="HitAction.cpp" />
     <ClCompile Include="DeadAction.cpp" />
     <ClCompile Include="DirectionalLight.cpp" />
@@ -326,6 +343,7 @@
     <ClCompile Include="GameTimer.cpp" />
     <ClCompile Include="HeightMapImage.cpp" />
     <ClCompile Include="HorizonBlurShader.cpp" />
+    <ClCompile Include="IceBall.cpp" />
     <ClCompile Include="IdleAction.cpp" />
     <ClCompile Include="InstancingLineShader.cpp" />
     <ClCompile Include="InstancingStandardShader.cpp" />
@@ -364,6 +382,12 @@
     <ClCompile Include="PlayerManager.cpp" />
     <ClCompile Include="Movement.cpp" />
     <ClCompile Include="PlayerMovement.cpp" />
+    <ClCompile Include="PlayerSkillMgr.cpp" />
+    <ClCompile Include="InstancingStandardShaderForShadow.cpp" />
+    <ClCompile Include="SkinnedShaderForShadow.cpp" />
+    <ClCompile Include="StandardShaderForShadow.cpp" />
+    <ClCompile Include="ShadowShader.cpp" />
+    <ClCompile Include="SkillEffect.cpp" />
     <ClCompile Include="Status.cpp" />
     <ClCompile Include="PlayerStatus.cpp" />
     <ClCompile Include="PointLight.cpp" />
@@ -527,6 +551,17 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </FxCompile>
+    <FxCompile Include="Shadow.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </FxCompile>
     <FxCompile Include="ShowTextureShader.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compute</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
@@ -538,6 +573,17 @@
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="SkillIconShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="SkinnedAnimationShader.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
@@ -583,7 +629,7 @@
     <FxCompile Include="TerrainShader.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Geometry</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Geometry</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Geometry</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0</ShaderModel>
@@ -592,6 +638,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">VSTerrain</EntryPointName>
     </FxCompile>
     <FxCompile Include="UIMapForPlayerShader.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compute</ShaderType>

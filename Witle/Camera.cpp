@@ -4,6 +4,7 @@
 #include "MyFrustum.h"
 #include "GameScreen.h"
 #include "GameObject.h"
+#include "Light.h"
 #include "Camera.h"
 
 void Camera::ReleaseObjects()
@@ -54,6 +55,11 @@ void Camera::CreateShaderVariables(ID3D12Device * pd3dDevice, ID3D12GraphicsComm
 	m_pd3dcbCamera = d3dUtil::CreateBufferResource(pd3dDevice, pd3dCommandList, NULL, ncbElementBytes, D3D12_HEAP_TYPE_UPLOAD, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, NULL);
 
 	m_pd3dcbCamera->Map(0, NULL, (void **)&m_pcbMappedCamera);
+
+	ncbElementBytes = ((sizeof(VS_CB_LIGHT_INFO) + 255) & ~255); //256의 배수
+	m_pd3dcbLight = d3dUtil::CreateBufferResource(pd3dDevice, pd3dCommandList, NULL, ncbElementBytes, D3D12_HEAP_TYPE_UPLOAD, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, NULL);
+
+	m_pd3dcbLight->Map(0, NULL, (void **)&m_pcbMappedLight);
 }
 
 void Camera::UpdateShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList, int parameterIndex)
@@ -69,7 +75,7 @@ void Camera::UpdateShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList, 
 	::memcpy(&m_pcbMappedCamera->m_xmf3Position, &m_pOwner->GetTransform().GetPosition(), sizeof(XMFLOAT3));
 
 	D3D12_GPU_VIRTUAL_ADDRESS d3dGpuVirtualAddress = m_pd3dcbCamera->GetGPUVirtualAddress();
-	pd3dCommandList->SetGraphicsRootConstantBufferView(1, d3dGpuVirtualAddress);
+	pd3dCommandList->SetGraphicsRootConstantBufferView(ROOTPARAMETER_CAMERA, d3dGpuVirtualAddress);
 }
 
 void Camera::ReleaseShaderVariables()
@@ -156,6 +162,8 @@ void Camera::RegenerateViewMatrix()
 
 void Camera::GenerateProjectionMatrix(float fNearPlaneDistance, float fFarPlaneDistance, float fAspectRatio, float fFOVAngle)
 {
+	m_fNearPlaneDistance = fNearPlaneDistance;
+	m_fFarPlaneDistance = fFarPlaneDistance;
 	m_xmf4x4Projection = Matrix4x4::PerspectiveFovLH(XMConvertToRadians(fFOVAngle), fAspectRatio, fNearPlaneDistance, fFarPlaneDistance);
 }
 
@@ -173,6 +181,45 @@ void Camera::GenerateViewMatrix(XMFLOAT3 xmf3Position, XMFLOAT3 xmf3LookAt, XMFL
 	m_pOwner->GetTransform().SetUp(xmf3Up) ;
 
 	GenerateViewMatrix();
+}
+ 
+// 빛이 위를 바라보지 않는 가정 하에 진행합니다.
+XMFLOAT4X4 Camera::GenerateLightViewMatrix(const LIGHT* light) const
+{
+	XMFLOAT3 lookat = Vector3::Add(light->Position, light->Direction);
+	// lookat 방향과 평행하지 않은 정규벡터, 그냥 up벡터 (0, 1, 0)와 lookat normal의 외적으로 갑니다.
+	// 빛이 위를 바라보지 않는다는 가정...
+	XMFLOAT3 rand_right = Vector3::CrossProduct(XMFLOAT3(0, 1, 0), Vector3::Normalize(lookat));
+	
+	// 다시 up벡터 구함...
+	XMFLOAT3 up = Vector3::CrossProduct(lookat, rand_right);
+
+	return Matrix4x4::LookAtLH(
+		light->Position,
+		lookat,
+		up
+	);
+}
+
+XMFLOAT4X4 Camera::GenerateLightProjectionMatrix(const LIGHT * light) const
+{
+	return 	Matrix4x4::OrthographicLH(GameScreen::GetClientWidth(), GameScreen::GetClientHeight(), m_fNearPlaneDistance, m_fFarPlaneDistance);;
+}
+
+void Camera::UpdateLightShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList, const LIGHT* light) const
+{   
+	XMFLOAT4X4 xmf4x4LightView;
+	xmf4x4LightView = GenerateLightViewMatrix(light);
+	XMStoreFloat4x4(&xmf4x4LightView, XMMatrixTranspose(XMLoadFloat4x4(&m_xmf4x4View)));
+	::memcpy(&m_pcbMappedLight->m_xmf4x4LightView, &xmf4x4LightView, sizeof(XMFLOAT4X4));
+
+	XMFLOAT4X4 xmf4x4Projection;
+	xmf4x4Projection = GenerateLightProjectionMatrix(light);
+	XMStoreFloat4x4(&xmf4x4Projection, XMMatrixTranspose(XMLoadFloat4x4(&m_xmf4x4Projection)));
+	::memcpy(&m_pcbMappedLight->m_xmf4x4LightProjection, &xmf4x4Projection, sizeof(XMFLOAT4X4));
+	 
+	D3D12_GPU_VIRTUAL_ADDRESS d3dGpuVirtualAddress = m_pd3dcbLight->GetGPUVirtualAddress();
+	pd3dCommandList->SetGraphicsRootConstantBufferView(ROOTPARAMETER_LIGHTFORSHADOW, d3dGpuVirtualAddress);
 }
 
 void Camera::SetViewportsAndScissorRects(ID3D12GraphicsCommandList *pd3dCommandList)

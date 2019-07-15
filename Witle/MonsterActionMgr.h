@@ -13,25 +13,29 @@ class MonsterAction;
 class MonsterMovement;
 class Player;
 
-// MonsterMovement를 인자로 받아 가속도를 처리해주는 클래스.
 class MonsterActionMgr
 	: public ComponentBase
 {
 protected:
+	// 현재 사용하고 있는 액션
 	MonsterAction*  m_CurrMonsterAction{ nullptr };
+
+	// 이전에 사용했던 액션
 	MonsterAction*  m_BeforeMonsterAction{ nullptr };
 	 
 public:
 	virtual void UpdateState(float fElpasedTime) = 0;
 
 protected:
+	// 액션을 변경합니다.
+	// 만약 이전 액션과 현재 액션이 동일하다면 변경하지 않습니다.
 	void ChangeAction(MonsterAction* );
 
 public:
 	MonsterActionMgr(GameObject* pOwner) : ComponentBase(pOwner) { };
 	virtual ~MonsterActionMgr() {};
 
-	// Update 수행 이전 반드시 호출
+	// Scene의 Update 수행 이전 반드시 호출해야합니다.
+	// movement에게서 가속도를 가져와 설정합니다.
 	void UpdateVelocity(float fElpasedTime, MonsterMovement* movement);
-
 };

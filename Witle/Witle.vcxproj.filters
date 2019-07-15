@@ -58,9 +58,6 @@
     <Filter Include="02.Component\MyRigidbody">
       <UniqueIdentifier>{ea387169-77ab-4066-8583-c032c53a4038}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03.GameObject\Camera">
-      <UniqueIdentifier>{c697f733-6c27-408a-a499-af08ff3180ec}</UniqueIdentifier>
-    </Filter>
     <Filter Include="10.Renderer">
       <UniqueIdentifier>{3173eb9f-8d38-40a1-b848-5fcb8f1eeeef}</UniqueIdentifier>
     </Filter>
@@ -114,9 +111,6 @@
     </Filter>
     <Filter Include="12.Skill\SkillRestraint">
       <UniqueIdentifier>{dfc629d6-2b26-45c0-ac96-a6cd8663a74c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03.GameObject\Light">
-      <UniqueIdentifier>{cb650d53-fa9a-44ef-a203-2eb6dd49787e}</UniqueIdentifier>
     </Filter>
     <Filter Include="06.ComputeShader">
       <UniqueIdentifier>{7769c5e9-5d6f-49a5-ba85-21c9bd1660b4}</UniqueIdentifier>
@@ -210,9 +204,6 @@
     </Filter>
     <Filter Include="02.Component\03.Mesh\CylinderMesh">
       <UniqueIdentifier>{f7fc59e2-8d4d-4f17-8d4e-c1eb04a2d1e9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.Component\03.Mesh\SphereMesh">
-      <UniqueIdentifier>{14d1cc8f-b36d-4c8c-984a-d00fe9374022}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.Component\04.Shape">
       <UniqueIdentifier>{e049cf3c-d529-4adb-a560-648f593ee5bf}</UniqueIdentifier>
@@ -346,20 +337,11 @@
     <Filter Include="02.Component\ForMonster\GeneralMonsterAction\05.DeadAction">
       <UniqueIdentifier>{f34ded6a-1a2a-4110-a759-a0c457ba548d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.Component\ForMonster\GeneralMonsterAction\MonsterActionMgr">
-      <UniqueIdentifier>{087791ad-0703-44b8-a9f4-5b49840722d4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.Component\ForMonster\GeneralMonsterAction\06.HitAction">
       <UniqueIdentifier>{0c76bd52-ef44-43bd-a692-c57b5c707524}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.Component\ForMonster\GeneralMonsterAction\07.AttackAction">
       <UniqueIdentifier>{8a32609d-af34-4af2-9db9-7a448ff56fc9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.Component\ForMonster\GeneralMonsterAction\MonsterActionMgr\GeneralMonsterActionMgr">
-      <UniqueIdentifier>{a77c9baf-aee2-4841-a2c1-dcb4a62970aa}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.Component\ForMonster\GeneralMonsterAction\MonsterActionMgr\BossMonsterActionMgr">
-      <UniqueIdentifier>{31ceca84-3670-4740-a04e-9919c7d8f659}</UniqueIdentifier>
     </Filter>
     <Filter Include="05.Shader\ShowTextureShader">
       <UniqueIdentifier>{fbd787c7-444a-4e68-98f3-306d0a71a446}</UniqueIdentifier>
@@ -378,6 +360,66 @@
     </Filter>
     <Filter Include="05.Shader\DefferedShader">
       <UniqueIdentifier>{647bda97-5e84-4d69-8874-de1dbc15b351}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\ForMonster\BossMonsterAction">
+      <UniqueIdentifier>{06c78cfb-4cf2-43da-9b15-e83cf878fb82}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\ForMonster\BossMonsterAction\BossSampleAction_1">
+      <UniqueIdentifier>{471012f7-3ffd-4931-8dda-5f1279380a5f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\ForMonster\BossMonsterAction\BossSampleAction_2">
+      <UniqueIdentifier>{1637f871-bbe2-4ab9-aaa0-948fe623de19}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\ForMonster\MonsterActionMgr">
+      <UniqueIdentifier>{087791ad-0703-44b8-a9f4-5b49840722d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\ForMonster\MonsterActionMgr\GeneralMonsterActionMgr">
+      <UniqueIdentifier>{a77c9baf-aee2-4841-a2c1-dcb4a62970aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\ForMonster\MonsterActionMgr\BossMonsterActionMgr">
+      <UniqueIdentifier>{31ceca84-3670-4740-a04e-9919c7d8f659}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameObject\02.Monster\Dragon">
+      <UniqueIdentifier>{6c980b48-edba-4766-9723-cb5900aa0986}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameObject\Light">
+      <UniqueIdentifier>{cb650d53-fa9a-44ef-a203-2eb6dd49787e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameObject\05.CameraObject">
+      <UniqueIdentifier>{c697f733-6c27-408a-a499-af08ff3180ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameObject\06.SkillEffect">
+      <UniqueIdentifier>{087a3256-cc6a-4a40-b287-d5d00636e6bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameObject\06.SkillEffect\02.IceBall">
+      <UniqueIdentifier>{137616ff-1770-4a1f-b265-5812f05fa7d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameObject\06.SkillEffect\01.FireBall">
+      <UniqueIdentifier>{5f802b24-9dfa-40b9-9c6c-204d6fceb781}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameObject\06.SkillEffect\03.ElectricBall">
+      <UniqueIdentifier>{ec88c597-e2fc-420e-9f61-ec2fc334d28c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\03.Mesh\02.SphereMesh">
+      <UniqueIdentifier>{14d1cc8f-b36d-4c8c-984a-d00fe9374022}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="13.Storage/Manager\11.PlayerSkillMgr">
+      <UniqueIdentifier>{1ea6575d-d2bf-4cb7-ab0f-3968e8775d42}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Shader\ShadowShader">
+      <UniqueIdentifier>{fc8aa984-8c03-4880-913d-daa254329c10}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Shader\ShadowShader\SkinnedShaderForShadow">
+      <UniqueIdentifier>{14637142-b17d-4ad1-8e2f-7035876bc05d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Shader\ShadowShader\StandardShaderForShadow">
+      <UniqueIdentifier>{08618dec-3b4a-4cc2-8ee9-791dc3d65dd4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Shader\ShadowShader\InstancingStandardShaderForShadow">
+      <UniqueIdentifier>{bdfa8544-41a9-4407-a894-ec0d3687ad66}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Shader\SkillIconShader">
+      <UniqueIdentifier>{12924a3b-8b25-455d-a90e-e3b307c7e86f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -478,7 +520,7 @@
       <Filter>02.Component\MyRigidbody</Filter>
     </ClInclude>
     <ClInclude Include="CameraObject.h">
-      <Filter>03.GameObject\Camera</Filter>
+      <Filter>03.GameObject\05.CameraObject</Filter>
     </ClInclude>
     <ClInclude Include="BasicCam.h">
       <Filter>02.Component\02.Camera\BasicCam</Filter>
@@ -670,7 +712,7 @@
       <Filter>02.Component\04.Shape\EffectRect</Filter>
     </ClInclude>
     <ClInclude Include="SphereMesh.h">
-      <Filter>02.Component\03.Mesh\SphereMesh</Filter>
+      <Filter>02.Component\03.Mesh\02.SphereMesh</Filter>
     </ClInclude>
     <ClInclude Include="Monster.h">
       <Filter>03.GameObject\02.Monster</Filter>
@@ -686,9 +728,6 @@
     </ClInclude>
     <ClInclude Include="RecognitionRange.h">
       <Filter>02.Component\ForMonster\RecognitionRange</Filter>
-    </ClInclude>
-    <ClInclude Include="MonsterAction.h">
-      <Filter>02.Component\ForMonster\GeneralMonsterAction</Filter>
     </ClInclude>
     <ClInclude Include="IdleAction.h">
       <Filter>02.Component\ForMonster\GeneralMonsterAction\01.IdleAction</Filter>
@@ -754,7 +793,7 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="MonsterActionMgr.h">
-      <Filter>02.Component\ForMonster\GeneralMonsterAction\MonsterActionMgr</Filter>
+      <Filter>02.Component\ForMonster\MonsterActionMgr</Filter>
     </ClInclude>
     <ClInclude Include="HitAction.h">
       <Filter>02.Component\ForMonster\GeneralMonsterAction\06.HitAction</Filter>
@@ -766,10 +805,10 @@
       <Filter>03.GameObject\02.Monster\CreepyMonster</Filter>
     </ClInclude>
     <ClInclude Include="BossMonsterActionMgr.h">
-      <Filter>02.Component\ForMonster\GeneralMonsterAction\MonsterActionMgr\BossMonsterActionMgr</Filter>
+      <Filter>02.Component\ForMonster\MonsterActionMgr\BossMonsterActionMgr</Filter>
     </ClInclude>
     <ClInclude Include="GeneralMonsterActionMgr.h">
-      <Filter>02.Component\ForMonster\GeneralMonsterAction\MonsterActionMgr\GeneralMonsterActionMgr</Filter>
+      <Filter>02.Component\ForMonster\MonsterActionMgr\GeneralMonsterActionMgr</Filter>
     </ClInclude>
     <ClInclude Include="ShowTextureShader.h">
       <Filter>05.Shader\ShowTextureShader</Filter>
@@ -788,6 +827,45 @@
     </ClInclude>
     <ClInclude Include="DefferedShader.h">
       <Filter>05.Shader\DefferedShader</Filter>
+    </ClInclude>
+    <ClInclude Include="BossSampleAction_1.h">
+      <Filter>02.Component\ForMonster\BossMonsterAction\BossSampleAction_1</Filter>
+    </ClInclude>
+    <ClInclude Include="BossSampleAction_2.h">
+      <Filter>02.Component\ForMonster\BossMonsterAction\BossSampleAction_2</Filter>
+    </ClInclude>
+    <ClInclude Include="MonsterAction.h">
+      <Filter>02.Component\ForMonster</Filter>
+    </ClInclude>
+    <ClInclude Include="Dragon.h">
+      <Filter>03.GameObject\02.Monster\Dragon</Filter>
+    </ClInclude>
+    <ClInclude Include="SkillEffect.h">
+      <Filter>03.GameObject\06.SkillEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="FireBall.h">
+      <Filter>03.GameObject\06.SkillEffect\01.FireBall</Filter>
+    </ClInclude>
+    <ClInclude Include="IceBall.h">
+      <Filter>03.GameObject\06.SkillEffect\02.IceBall</Filter>
+    </ClInclude>
+    <ClInclude Include="ElectricBall.h">
+      <Filter>03.GameObject\06.SkillEffect\03.ElectricBall</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerSkillMgr.h">
+      <Filter>13.Storage/Manager\11.PlayerSkillMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="ShadowShader.h">
+      <Filter>05.Shader\ShadowShader</Filter>
+    </ClInclude>
+    <ClInclude Include="SkinnedShaderForShadow.h">
+      <Filter>05.Shader\ShadowShader\SkinnedShaderForShadow</Filter>
+    </ClInclude>
+    <ClInclude Include="StandardShaderForShadow.h">
+      <Filter>05.Shader\ShadowShader\StandardShaderForShadow</Filter>
+    </ClInclude>
+    <ClInclude Include="InstancingStandardShaderForShadow.h">
+      <Filter>05.Shader\ShadowShader\InstancingStandardShaderForShadow</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -879,7 +957,7 @@
       <Filter>02.Component\MyRigidbody</Filter>
     </ClCompile>
     <ClCompile Include="CameraObject.cpp">
-      <Filter>03.GameObject\Camera</Filter>
+      <Filter>03.GameObject\05.CameraObject</Filter>
     </ClCompile>
     <ClCompile Include="BasicCam.cpp">
       <Filter>02.Component\02.Camera\BasicCam</Filter>
@@ -1062,7 +1140,7 @@
       <Filter>02.Component\04.Shape\EffectRect</Filter>
     </ClCompile>
     <ClCompile Include="SphereMesh.cpp">
-      <Filter>02.Component\03.Mesh\SphereMesh</Filter>
+      <Filter>02.Component\03.Mesh\02.SphereMesh</Filter>
     </ClCompile>
     <ClCompile Include="Monster.cpp">
       <Filter>03.GameObject\02.Monster</Filter>
@@ -1093,9 +1171,6 @@
     </ClCompile>
     <ClCompile Include="DeadAction.cpp">
       <Filter>02.Component\ForMonster\GeneralMonsterAction\05.DeadAction</Filter>
-    </ClCompile>
-    <ClCompile Include="MonsterAction.cpp">
-      <Filter>02.Component\ForMonster\GeneralMonsterAction</Filter>
     </ClCompile>
     <ClCompile Include="PlayerManager.cpp">
       <Filter>13.Storage/Manager\05.PlayerManager</Filter>
@@ -1143,7 +1218,7 @@
       <Filter>03.GameObject\02.Monster\SpaceCat</Filter>
     </ClCompile>
     <ClCompile Include="MonsterActionMgr.cpp">
-      <Filter>02.Component\ForMonster\GeneralMonsterAction\MonsterActionMgr</Filter>
+      <Filter>02.Component\ForMonster\MonsterActionMgr</Filter>
     </ClCompile>
     <ClCompile Include="HitAction.cpp">
       <Filter>02.Component\ForMonster\GeneralMonsterAction\06.HitAction</Filter>
@@ -1155,10 +1230,10 @@
       <Filter>03.GameObject\02.Monster\CreepyMonster</Filter>
     </ClCompile>
     <ClCompile Include="BossMonsterActionMgr.cpp">
-      <Filter>02.Component\ForMonster\GeneralMonsterAction\MonsterActionMgr\BossMonsterActionMgr</Filter>
+      <Filter>02.Component\ForMonster\MonsterActionMgr\BossMonsterActionMgr</Filter>
     </ClCompile>
     <ClCompile Include="GeneralMonsterActionMgr.cpp">
-      <Filter>02.Component\ForMonster\GeneralMonsterAction\MonsterActionMgr\GeneralMonsterActionMgr</Filter>
+      <Filter>02.Component\ForMonster\MonsterActionMgr\GeneralMonsterActionMgr</Filter>
     </ClCompile>
     <ClCompile Include="ShowTextureShader.cpp">
       <Filter>05.Shader\ShowTextureShader</Filter>
@@ -1177,6 +1252,45 @@
     </ClCompile>
     <ClCompile Include="DefferedShader.cpp">
       <Filter>05.Shader\DefferedShader</Filter>
+    </ClCompile>
+    <ClCompile Include="BossSampleAction_1.cpp">
+      <Filter>02.Component\ForMonster\BossMonsterAction\BossSampleAction_1</Filter>
+    </ClCompile>
+    <ClCompile Include="BossSampleAction_2.cpp">
+      <Filter>02.Component\ForMonster\BossMonsterAction\BossSampleAction_2</Filter>
+    </ClCompile>
+    <ClCompile Include="MonsterAction.cpp">
+      <Filter>02.Component\ForMonster</Filter>
+    </ClCompile>
+    <ClCompile Include="Dragon.cpp">
+      <Filter>03.GameObject\02.Monster\Dragon</Filter>
+    </ClCompile>
+    <ClCompile Include="SkillEffect.cpp">
+      <Filter>03.GameObject\06.SkillEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="FireBall.cpp">
+      <Filter>03.GameObject\06.SkillEffect\01.FireBall</Filter>
+    </ClCompile>
+    <ClCompile Include="IceBall.cpp">
+      <Filter>03.GameObject\06.SkillEffect\02.IceBall</Filter>
+    </ClCompile>
+    <ClCompile Include="ElectricBall.cpp">
+      <Filter>03.GameObject\06.SkillEffect\03.ElectricBall</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerSkillMgr.cpp">
+      <Filter>13.Storage/Manager\11.PlayerSkillMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="ShadowShader.cpp">
+      <Filter>05.Shader\ShadowShader</Filter>
+    </ClCompile>
+    <ClCompile Include="SkinnedShaderForShadow.cpp">
+      <Filter>05.Shader\ShadowShader\SkinnedShaderForShadow</Filter>
+    </ClCompile>
+    <ClCompile Include="StandardShaderForShadow.cpp">
+      <Filter>05.Shader\ShadowShader\StandardShaderForShadow</Filter>
+    </ClCompile>
+    <ClCompile Include="InstancingStandardShaderForShadow.cpp">
+      <Filter>05.Shader\ShadowShader\InstancingStandardShaderForShadow</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1242,6 +1356,12 @@
       <Filter>HLSL</Filter>
     </FxCompile>
     <FxCompile Include="DefferedShader.hlsl">
+      <Filter>HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="Shadow.hlsl">
+      <Filter>HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="SkillIconShader.hlsl">
       <Filter>HLSL</Filter>
     </FxCompile>
   </ItemGroup>

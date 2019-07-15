@@ -97,6 +97,10 @@ private:
 	static Shader					*m_pSkinnedAnimationWireFrameShader;
 
 public:
+	static Shader					*m_pWireFrameShader_ForShadow;
+	static Shader					*m_pSkinnedShader_ForShadow;
+
+public:
 	void AddRef() { m_nReferences++; }
 	void Release() 
 	{ 
@@ -145,8 +149,14 @@ public:
 	static void ReleaseShaders();
 	static void PrepareShaders(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature);
 	 
+	bool IsWireFrameShader();
+	bool IsSkinnedAnimationWireFrameShader();
+
 	void SetWireFrameShader();
 	void SetSkinnedAnimationWireFrameShader();
+	void SetWireFrameShader_ForShader();
+	void SetSkinnedAnimationWireFrameShader_ForShader();
+
 };
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -417,6 +427,7 @@ public:
 
 	virtual void OnPrepareRender() { }
 	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers);
+	void RenderForShadow(ID3D12GraphicsCommandList *pd3dCommandList);
 	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, CAnimationController* pSkinnedAnimationController, bool isGBuffers);
 	virtual void RenderInstancing(ID3D12GraphicsCommandList *pd3dCommandList, int InstanceCount, bool isGBuffers);
 

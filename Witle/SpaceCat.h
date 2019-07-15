@@ -4,6 +4,8 @@
 class SpaceCat
 	: public Monster
 {
+	virtual int GetAnimationHitID() { return SPACECAT_HIT.ID; };
+
 protected:
 	virtual void ReleaseMembers() override;
 	virtual void ReleaseMemberUploadBuffers() override;

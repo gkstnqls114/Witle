@@ -10,7 +10,7 @@ WideareaMagic::WideareaMagic(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList
 	m_CylinderMesh = new CylinderMesh(this, pd3dDevice, pd3dCommandList, 100, 100, 300, 10, 10);
 	m_CylinderMesh->CreateTexture(pd3dDevice, pd3dCommandList, L"Image/CharacterAppearance1_OFF.dds");
 	 
-	m_MyBSphere = new MyBSphere(this, pd3dDevice, pd3dCommandList, XMFLOAT3{ 0, 0, 0 }, 100);
+	m_MyBSphere = new MyBSphere(this, pd3dDevice, pd3dCommandList, 100);
 }
 
 BoundingSphere* WideareaMagic::GetBSphere()

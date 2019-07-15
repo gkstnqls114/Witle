@@ -161,8 +161,11 @@ void MyRectangle::Render(ID3D12GraphicsCommandList * pd3dCommandList, const Shad
 {
 	pd3dCommandList->SetPipelineState(shader->GetPSO());
 	 
-	if(m_pHeap) m_pHeap->UpdateShaderVariable(pd3dCommandList);
-	if(m_pTexture) m_pTexture->UpdateShaderVariables(pd3dCommandList);
+	if (m_pHeap)
+	{
+		m_pHeap->UpdateShaderVariable(pd3dCommandList);
+		m_pTexture->UpdateShaderVariables(pd3dCommandList);
+	}
 
 	pd3dCommandList->IASetPrimitiveTopology(m_d3dPrimitiveTopology);
 

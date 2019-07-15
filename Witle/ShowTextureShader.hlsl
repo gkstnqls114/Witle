@@ -1,10 +1,5 @@
-
-SamplerState gWrapSamplerState : register(s0);
-
-Texture2D gtxtTexture : register(t0);
-Texture2D gtxtTerrainBaseTexture : register(t1);
-Texture2D gtxtTerrainDetailTexture : register(t2);
-
+ #include "Variables.hlsl"
+ 
 struct PS_INPUT
 {
 	float4 pos : SV_POSITION;
@@ -53,7 +48,8 @@ else if (nVertexID == 5)
 //«»ºø ºŒ¿Ã¥ı∏¶ ¡§¿««—¥Ÿ.
 float4 PSMain(PS_INPUT input) : SV_TARGET
 { 
-	float4 cColor = gtxtTerrainBaseTexture.Sample(gWrapSamplerState, input.uv);
+    //float4 cColor = gtxtTerrainBaseTexture.Sample(gssClamp, input.uv);
+    float4 cColor = float4(gtxtTerrainBaseTexture.Sample(gssClamp, input.uv).rrr, 1.f);
 	return(cColor);
 }
  

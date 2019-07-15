@@ -13,9 +13,9 @@ protected:
 	void SubstractHP(int damage);
 
 public:
-	int m_HP{ 1000 };
-	int m_MP{ 1000 };
-
+	int m_Guage{ 100 };
+	int m_MAXGuage{ 100 };
+	
 public:
 	virtual void ReleaseObjects() override {};
 	virtual void ReleaseUploadBuffers() override {};

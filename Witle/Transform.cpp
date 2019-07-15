@@ -89,6 +89,16 @@ void Transform::SetRotate(float x, float y, float z)
 	SetTransform(m_Right, m_Up, m_Look, m_Position);
 }
 
+void Transform::SetIdentity()
+{
+	m_Right = XMFLOAT3{ 1 , 0, 0 };
+	m_Up = XMFLOAT3{ 0, 1, 0 };
+	m_Look = XMFLOAT3{ 0, 0, 1 };
+	m_Position = XMFLOAT3{ 0, 0, 0 };
+
+    m_transformWorld = Matrix4x4::Identity();
+}
+
 void Transform::Move(const XMFLOAT3 & vMove)
 {
 	m_Position = Vector3::Add(m_Position, vMove); 

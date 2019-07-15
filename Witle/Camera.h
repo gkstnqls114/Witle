@@ -10,6 +10,7 @@ struct VS_CB_MYCAMERA_INFO
 
 class GameObject;
 class MyFrustum;
+struct LIGHT;
 
 // 가장 기본적인 카메라입니다.
 // 카메라 자신의 Position을 기준으로 이동하고 회전합니다.
@@ -23,11 +24,23 @@ private:
 		XMFLOAT4X4						m_xmf4x4Projection;
 		XMFLOAT3						m_xmf3Position;
 	};
+
+	struct VS_CB_LIGHT_INFO
+	{
+		XMFLOAT4X4						m_xmf4x4LightView;
+		XMFLOAT4X4						m_xmf4x4LightProjection;
+	};
+
 	MyFrustum*   m_pFrustum{ nullptr };
+
+	float m_fNearPlaneDistance;
+	float m_fFarPlaneDistance;
 
 	ID3D12Resource					*m_pd3dcbCamera{ nullptr };
 	VS_CB_CAMERA_INFO				*m_pcbMappedCamera{ nullptr };
 
+	ID3D12Resource					*m_pd3dcbLight{ nullptr };
+	VS_CB_LIGHT_INFO				*m_pcbMappedLight{ nullptr };
 private:
 	void ReleaseShaderVariables();
 
@@ -130,4 +143,11 @@ public:
 	Camera& operator= (const Camera&);
 
 	void ShowData() const noexcept;
+	
+	// 조명 위치에 자리한 조명 변환 뷰을 위해 필요 //////////////////////////////
+	XMFLOAT4X4 GenerateLightViewMatrix(const LIGHT* light) const ;
+	XMFLOAT4X4 GenerateLightProjectionMatrix(const LIGHT* light) const;
+	void UpdateLightShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList, const LIGHT* light) const;
+	// 조명 위치에 자리한 조명 변환 뷰을 위해 필요 //////////////////////////////
+
 };

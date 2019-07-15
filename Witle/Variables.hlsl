@@ -13,6 +13,12 @@ cbuffer cbGameObjectInfo : register(b1)
     float3 gvCameraPosition : packoffset(c8);
 }
 
+cbuffer cbLightInfoForShadow : register(b9)
+{
+    matrix gmtxLightView : packoffset(c0);
+    matrix gmtxLightProjection : packoffset(c4); 
+}
+
 // 루트 상수
 cbuffer cbPickingPoint : register(b4)
 {
@@ -31,12 +37,15 @@ cbuffer cbTotalTime : register(b6)
     float totalTime : packoffset(c0);
 }
 
+
 SamplerState gWrapSamplerState : register(s0);
 SamplerState gssClamp          : register(s1);
+SamplerComparisonState gssPCFSampler     : register(s2);
 
 Texture2D gtxtTexture : register(t0);
 Texture2D gtxtTerrainBaseTexture : register(t1);
 Texture2D gtxtTerrainDetailTexture : register(t2);
+Texture2D<float> gtxtShadow : register(t3);
 
 #define MATERIAL_ALBEDO_MAP			0x01
 #define MATERIAL_SPECULAR_MAP		0x02

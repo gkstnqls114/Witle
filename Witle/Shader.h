@@ -30,6 +30,21 @@ protected:
 	virtual D3D12_SHADER_BYTECODE		CreatePixelShaderForGBuffers(ID3DBlob **ppd3dShaderBlob) = 0;
 	virtual D3D12_SHADER_BYTECODE		CreateGeometryShader(ID3DBlob **ppd3dShaderBlob) ; 
 
+	virtual int  GetNumRenderTargets()
+	{
+		return 1;
+	}
+
+	virtual DXGI_FORMAT GetDSVFormat()
+	{
+		return DXGI_FORMAT_D24_UNORM_S8_UINT;
+	};
+
+	virtual DXGI_FORMAT GetRTVFormat()
+	{
+		return DXGI_FORMAT_R8G8B8A8_UNORM;
+	};
+
 public:  
 	virtual void						CreateShader(ID3D12Device *pd3dDevice, ID3D12RootSignature* const pd3dGraphicsRootSignature) = 0;
  

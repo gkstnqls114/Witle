@@ -2,6 +2,7 @@
 #include "Scene.h"
 
 //// Skill ////////////////
+class PlayerSkillMgr;
 class Sniping;
 class WideareaMagic;
 //// Skill ////////////////
@@ -9,32 +10,36 @@ class WideareaMagic;
 //// Objects ///////////////
 class Player;
 class Widget;
-
-//// Objects ///////////////
-
 class Monster;
 class SkyBox;
-class Shader;
-class CLoadedModelInfo;
-
 class CameraObject;
 class Terrain;
+class QuadtreeTerrain;
+class AltarSphere;
+//// Objects ///////////////
+
+//// Componenet ///////////////
+class CylinderMesh;
+class LineSphere;
+//// Componenet ///////////////
+
+//// UI ///////////////
+class UI2DImage;
+class AimPoint;
+//// UI ///////////////
+
+//// ETC... ///////////////
+class Shader;
+class CLoadedModelInfo;
 class GameObject;
 class LoadObject;
 class SkinnedShader;
 
-class QuadtreeTerrain;
-
 struct LIGHTS;
 struct MATERIAL;
 struct MATERIALS;
+//// ETC... ///////////////
 
-class AimPoint;
-class CylinderMesh;
-class LineSphere;
-
-class AltarSphere;
-class UI2DImage;
 
 class GameScene
 	: public Scene
@@ -72,8 +77,7 @@ protected:
 	void UpdateCollision(const BoundingOrientedBox& AlreadyPlayerBBox, float fElapsedTime);
 	void UpdateCollision(float fElapsedTime);
 	void BuildLightsAndMaterials(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList);
-	void RenderShadowMap(ID3D12GraphicsCommandList *pd3dCommandList);
-
+	
 public:
 	GameScene();
 	virtual ~GameScene();
@@ -86,42 +90,53 @@ public:
 
 	virtual bool ProcessInput(HWND hWnd, float ElapsedTime) override;
 
-	virtual void AnimateObjects(float fTimeElapsed) override;
 	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers) override;
+	virtual void RenderForShadow(ID3D12GraphicsCommandList *pd3dCommandList) override;
 
 	virtual void ReleaseUploadBuffers() override;
 
-	virtual void UpdatePhysics(float ElapsedTime) override; // 정확히는 가속도 변경을 실행한다.
+	virtual void UpdatePhysics(float ElapsedTime) override;
 	virtual void Update(float ElapsedTime) override;
+	virtual void AnimateObjects(float fTimeElapsed) override;
 	virtual void LastUpdate(float ElapsedTime) override;
 
 	void TESTSetRootDescriptor(ID3D12GraphicsCommandList *pd3dCommandList);
 
 protected:
+	// 플레이어 관련 ////////////////////////////
+	
+	Player*                 m_pPlayer        { nullptr };
+	WideareaMagic*          m_WideareaMagic  { nullptr };
+	Sniping*				m_Sniping        { nullptr };
+	PlayerSkillMgr*         m_PlayerSkillMgr { nullptr }; 
+	
+	// 플레이어 관련 ////////////////////////////c
+
+
+	// 몬스터 관련 ////////////////////////////
+
+	int						m_TestMonsterCount{ 1 };
+	Monster**				m_TestMonster{ nullptr };
+	
+	// 몬스터 관련 ////////////////////////////
+
 	bool					m_isSkyMode{ false };
 
 	AimPoint*				m_AimPoint{ nullptr };
-
-	int*					m_PlayerTerrainIndex{ nullptr };
-	Sniping*				m_Sniping{ nullptr };
-	WideareaMagic*          m_WideareaMagic{ nullptr };
-	Player*                 m_pPlayer{ nullptr };
-	
-	Monster* 				m_AltarMonster{ nullptr };
 	 
 	Terrain*                m_Terrain{ nullptr };
 	CameraObject*           m_pMainCamera{ nullptr }; // 실제로 화면에 그려지는 카메라
 
 	CameraObject*           m_pSkyCameraObj{ nullptr };
 	Camera*					m_pSkyCamera{ nullptr };
-	//
+	
 	SkyBox*					m_SkyBox{ nullptr };
 
-	int						m_TestMonsterCount{ 1 };
+	int						m_TestMonsterCount{ 100 };
 	Monster**				m_TestMonster{ nullptr };
 
 	AltarSphere*			m_AltarSphere[5];
-	// MyRectangle*            m_HpBar[5]; 
+	// MyRectangle*            m_GuageBar[5]; 
 
 #ifdef CHECK_SUBVIEWS
 	CameraObject*			m_lookAboveCamera{ nullptr };
@@ -149,7 +164,7 @@ private:
 	UI2DImage* m_UIAltar_3{ nullptr }; // uimap 에서 제단 위치
 	UI2DImage* m_UIAltar_4{ nullptr }; // uimap 에서 제단 위치
 	UI2DImage* m_UIAltar_5{ nullptr }; // uimap 에서 제단 위치
-	UI2DImage* m_UIPlayer{ nullptr }; // uimap 에서 플레이어 위치
+	UI2DImage* m_UIPlayer{ nullptr };  // uimap 에서 플레이어 위치
 
 	UI2DImage* m_SampleUISkill1{ nullptr }; // 스킬 1
 	UI2DImage* m_SampleUISkill2{ nullptr }; // 스킬 2

@@ -49,3 +49,4 @@
 #define SHADER_UIWORLD "UIWorld" 
 #define SHADER_SHOWTEXTURE "ShowTexture" 
 #define SHADER_DEFFREDRENDER "DefferedRender" 
+#define SHADER_INSTACINGSTANDARDFORSHADOW "InstancingStandardShaderForShadow" 
