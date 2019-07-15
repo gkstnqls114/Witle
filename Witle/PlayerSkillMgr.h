@@ -4,6 +4,14 @@ class Player;
 class SkillEffect;
 class PlayerStaus;
 
+enum ENUM_SKILL
+{
+	SKILL_FIREBALL,
+	SKILL_ICEBALL,
+	SKILL_ELECTRICBALL,
+	SKILL_DEBUFF
+}; 
+
 struct SKILL
 {
 	SkillEffect* skillEffect{ nullptr };
@@ -17,8 +25,7 @@ class PlayerSkillMgr
 {
 	// 스킬 이펙트와 스킬 이펙트가 사용되는 유무를 나타내는 구조체입니다.
 	
-
-	int m_count{ 5 }; // 스킬을 담는 개수
+	int m_count{ 4 }; // 스킬을 담는 개수
 	SKILL* m_skill{ nullptr };
 
 	float m_distance { 1000.f };
@@ -41,8 +48,9 @@ public:
 	void Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers);
 
 	// 스킬 이펙트를 활성화합니다.
+	// playerStaus: 마나 . skilltype: 활성화 시킬 스킬 타입
 	// 가속도를 설정하는 부분은 UpdatePhysics에서 수행됩니다.
-	void Activate(PlayerStatus* playerStaus);
+	void Activate(PlayerStatus* MPStaus, ENUM_SKILL skilltype);
 
 	// 해당 index에 해당하는 스킬 이펙트를 비활성화합니다.
 	void Deactive(int index);

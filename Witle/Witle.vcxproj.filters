@@ -418,6 +418,9 @@
     <Filter Include="05.Shader\ShadowShader\InstancingStandardShaderForShadow">
       <UniqueIdentifier>{bdfa8544-41a9-4407-a894-ec0d3687ad66}</UniqueIdentifier>
     </Filter>
+    <Filter Include="05.Shader\SkillIconShader">
+      <UniqueIdentifier>{12924a3b-8b25-455d-a90e-e3b307c7e86f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -1356,6 +1359,9 @@
       <Filter>HLSL</Filter>
     </FxCompile>
     <FxCompile Include="Shadow.hlsl">
+      <Filter>HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="SkillIconShader.hlsl">
       <Filter>HLSL</Filter>
     </FxCompile>
   </ItemGroup>

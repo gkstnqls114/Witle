@@ -70,28 +70,23 @@ void PlayerSkillMgr::Render(ID3D12GraphicsCommandList * pd3dCommandList, bool is
 	}
 }
 
-void PlayerSkillMgr::Activate(PlayerStatus* MPstaus)
-{
-	for (int x = 0; x < m_count; ++x)
-	{
-		if (m_skill[x].isActive) continue;
-		if (m_skill[x].RemainCoolTime > 0.f) continue;
-		if ((MPstaus->m_Guage - 10/*사용하는 마나 게이지*/) < 0.f) continue;
+void PlayerSkillMgr::Activate(PlayerStatus* MPstaus, ENUM_SKILL skilltype)
+{ 
+	if (m_skill[skilltype].isActive) return;
+	if (m_skill[skilltype].RemainCoolTime > 0.f) return;
+	if ((MPstaus->m_Guage - 10/*사용하는 마나 게이지*/) < 0.f) return;
 
-		MPstaus->m_Guage -= 10.f;
-		m_skill[x].isActive = true;
-		m_skill[x].RemainCoolTime = m_skill[x].skillEffect->m_CoolTime;
-		m_skill[x].spawnPosition =
-			PlayerManager::GetMainPlayer()->GetTransform().GetPosition();
+	MPstaus->m_Guage -= 10.f;
+	m_skill[skilltype].isActive = true;
+	m_skill[skilltype].RemainCoolTime = m_skill[skilltype].skillEffect->m_CoolTime;
+	m_skill[skilltype].spawnPosition =
+		PlayerManager::GetMainPlayer()->GetTransform().GetPosition();
 
-		m_skill[x].skillEffect->SetVelocity(
-			m_skill[x].spawnPosition,
-			75,
-			PlayerManager::GetMainPlayer()->GetTransform().GetLook()
-		);
-
-		break;
-	}
+	m_skill[skilltype].skillEffect->SetVelocity(
+		m_skill[skilltype].spawnPosition,
+		75,
+		PlayerManager::GetMainPlayer()->GetTransform().GetLook()
+	); 
 }
 
 void PlayerSkillMgr::Deactive(int index)
