@@ -25,12 +25,15 @@ private:
 protected:
 	MyCollider* m_MyCollider{ nullptr };
 
+public:
+	const float m_CoolTime{ 0.f }; // 스킬을 재시작 하는 쿨타임
+
 protected: 
 	void UpdateMovement();
 	 
 public: 
 	// distance: 1초당 움직이는 거리 ... ex: 2000 = 20m
-	SkillEffect(const std::string& entityID, float distance = 5000);
+	SkillEffect(const std::string& entityID, float cooltime, float distance = 5000);
 	virtual ~SkillEffect();
 
 	void Update(float); 

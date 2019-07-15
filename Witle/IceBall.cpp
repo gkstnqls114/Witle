@@ -5,7 +5,7 @@
 #include "IceBall.h"
  
 IceBall::IceBall(const std::string & entityID)
-	:SkillEffect(entityID)
+	:SkillEffect(entityID, 5.f)
 { 
 }
 

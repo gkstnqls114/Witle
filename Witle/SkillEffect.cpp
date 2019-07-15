@@ -18,8 +18,8 @@ void SkillEffect::UpdateMovement()
 {
 }
  
-SkillEffect::SkillEffect(const std::string & entityID, float distance)
-	:GameObject(entityID)
+SkillEffect::SkillEffect(const std::string & entityID, float cooltime, float distance)
+	:GameObject(entityID) , m_CoolTime(cooltime)
 {
 	m_Movement = new Movement(this);
 	m_Movement->m_fDistance = distance;
@@ -30,6 +30,7 @@ SkillEffect::~SkillEffect()
 {
 }
 
+// 위치를 업데이트합니다.
 void SkillEffect::Update(float fElapsedTime)
 {
 	// 이동량을 계산한다.

@@ -7,8 +7,9 @@ class PlayerStaus;
 struct SKILL
 {
 	SkillEffect* skillEffect{ nullptr };
-	XMFLOAT3 spawnPosition;
-	bool isActive{ false };
+	XMFLOAT3 spawnPosition; // 스킬 시작 지점
+	bool isActive{ false }; // 활성화 여부
+	float RemainCoolTime; // 남은 쿨타임
 };
 
 // 플레이어가 사용하는 스킬들의 이펙트를 관리하는 클래스입니다.

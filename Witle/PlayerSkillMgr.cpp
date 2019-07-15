@@ -33,6 +33,18 @@ void PlayerSkillMgr::UpdatePhysics(float fElapsedTime)
 
 void PlayerSkillMgr::Update(float fElapsedTime)
 {
+	for (int x = 0; x < m_count; ++x)
+	{
+		if (m_skill[x].RemainCoolTime <= 0.f)
+		{
+			m_skill[x].RemainCoolTime = 0.f;
+		}
+		else
+		{
+			m_skill[x].RemainCoolTime -= fElapsedTime;
+		}
+	}
+
 	Deactivate();
 
 	for (int x = 0; x < m_count; ++x)
@@ -63,10 +75,12 @@ void PlayerSkillMgr::Activate(PlayerStatus* MPstaus)
 	for (int x = 0; x < m_count; ++x)
 	{
 		if (m_skill[x].isActive) continue;
+		if (m_skill[x].RemainCoolTime > 0.f) continue;
 		if ((MPstaus->m_Guage - 10/*사용하는 마나 게이지*/) < 0.f) continue;
+
 		MPstaus->m_Guage -= 10.f;
 		m_skill[x].isActive = true;
-		 
+		m_skill[x].RemainCoolTime = m_skill[x].skillEffect->m_CoolTime;
 		m_skill[x].spawnPosition =
 			PlayerManager::GetMainPlayer()->GetTransform().GetPosition();
 

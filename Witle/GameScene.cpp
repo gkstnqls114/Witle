@@ -384,7 +384,8 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	 // 스킬 1
 	 m_SampleUISkill1 = new UI2DImage(
 		 m_TESTGameObject, pd3dDevice, pd3dCommandList,
-		 POINT{ int(GameScreen::GetWidth()) / 2 - 300, int(GameScreen::GetHeight()) / 2 + 270 }, 100, 100, nullptr
+		 POINT{ int(GameScreen::GetWidth()) / 2 - 300, int(GameScreen::GetHeight()) / 2 + 270 }, 100, 100, 
+		 L"Image/FireballIcon.dds"
 	 );
 
 	 // 스킬 2

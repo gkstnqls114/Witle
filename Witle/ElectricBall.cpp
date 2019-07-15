@@ -5,7 +5,7 @@
 #include "ElectricBall.h"
  
 ElectricBall::ElectricBall(const std::string & entityID)
-	:SkillEffect(entityID)
+	:SkillEffect(entityID, 5.f)
 { 
 }
 
