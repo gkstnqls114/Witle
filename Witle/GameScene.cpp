@@ -695,6 +695,8 @@ void GameScene::Update(float fElapsedTime)
 			//		m_AimPoint->GetPickingPoint(),
 			//		m_pMainCamera->GetCamera());
 			//} 
+			// SoundManager::GetInstance()->Play(ENUM_SOUND::MAGIC_MISIL);
+			//
 		} 
 	}
 	else // 드래그로 회전하지 않는다면...
@@ -834,9 +836,7 @@ void GameScene::AnimateObjects(float fTimeElapsed)
 }
 
 void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers)
-{
-	RenderShadowMap(pd3dCommandList);
-
+{ 
 	// 렌더링
 	extern MeshRenderer gMeshRenderer;
 

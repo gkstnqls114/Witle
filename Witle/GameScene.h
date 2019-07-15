@@ -115,8 +115,9 @@ protected:
 
 	// 몬스터 관련 ////////////////////////////
 
-	int						m_TestMonsterCount{ 1 };
+	int						m_TestMonsterCount{ 10 };
 	Monster**				m_TestMonster{ nullptr };
+	Monster*				m_AltarMonster{ nullptr };
 	
 	// 몬스터 관련 ////////////////////////////
 
@@ -131,10 +132,7 @@ protected:
 	Camera*					m_pSkyCamera{ nullptr };
 	
 	SkyBox*					m_SkyBox{ nullptr };
-
-	int						m_TestMonsterCount{ 100 };
-	Monster**				m_TestMonster{ nullptr };
-
+	 
 	AltarSphere*			m_AltarSphere[5];
 	// MyRectangle*            m_GuageBar[5]; 
 
