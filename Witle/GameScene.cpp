@@ -970,6 +970,9 @@ void GameScene::RenderForShadow(ID3D12GraphicsCommandList * pd3dCommandList)
 	{
 		m_pQuadtreeTerrain->RenderInstancingObjectsForShadow(pd3dCommandList);
 	}
+	
+	if (m_pPlayer) m_pPlayer->RenderStatus(pd3dCommandList, false);
+
 }
 
 void GameScene::ReleaseUploadBuffers()

@@ -17,7 +17,8 @@ cbuffer cbLightInfoForShadow : register(b9)
 {
     matrix gmtxLightView : packoffset(c0);
     matrix gmtxLightProjection : packoffset(c4); 
-}
+    float4x4 gShadowTransform : packoffset(c8);
+} 
 
 // 루트 상수
 cbuffer cbPickingPoint : register(b4)

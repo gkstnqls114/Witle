@@ -924,6 +924,10 @@ void CGameFramework::BuildShaders()
 	CMaterial::PrepareShaders(m_d3dDevice.Get(), m_CommandList.Get(), GraphicsRootSignatureMgr::GetGraphicsRootSignature());
 	ShaderManager::GetInstance()->BuildShaders(m_d3dDevice.Get(), GraphicsRootSignatureMgr::GetGraphicsRootSignature());
 }
+
+void CGameFramework::UpdateShaderTransform()
+{
+}
  
 void CGameFramework::RenderOnGbuffer()
 {
@@ -1095,17 +1099,17 @@ void CGameFramework::DefferedRenderSwapChain()
 
 void CGameFramework::RenderForShadow()
 {  
-	m_CommandList->SetGraphicsRootSignature(GraphicsRootSignatureMgr::GetGraphicsRootSignature());
-
 	d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_Shadowmap, D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_DEPTH_WRITE);
 	 
+	m_CommandList->SetGraphicsRootSignature(GraphicsRootSignatureMgr::GetGraphicsRootSignature());
 	// SHADOW 설정
 	m_CommandList->OMSetRenderTargets(0, NULL, TRUE, &m_ShadowmapCPUHandle);
 	m_CommandList->ClearDepthStencilView(m_ShadowmapCPUHandle, D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, NULL);
 
 	////그래픽 루트 시그너쳐를 설정한다.
 
-	 m_pScene->RenderForShadow(m_CommandList.Get());
+	m_pScene->RenderForShadow(m_CommandList.Get());
+	// m_pScene->Render(m_CommandList.Get(), false);
 
 	d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_Shadowmap, D3D12_RESOURCE_STATE_DEPTH_WRITE, D3D12_RESOURCE_STATE_GENERIC_READ);
 }

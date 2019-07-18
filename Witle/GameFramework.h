@@ -185,6 +185,9 @@ private:
 
 	// 필요한 쉐이더를 빌드합니다.
 	void BuildShaders(); 
+
+	// Shadow Transform 을 업데이트합니다.
+	void UpdateShaderTransform();
 	  
 public:
 	CGameFramework();
