@@ -96,7 +96,7 @@ ID3D12RootSignature * GraphicsRootSignatureMgr::CreateGraphicsRootSignature(ID3D
 	d3dSamplerDesc[2].AddressW = D3D12_TEXTURE_ADDRESS_MODE_BORDER;
 	d3dSamplerDesc[2].MipLODBias = 0;
 	d3dSamplerDesc[2].MaxAnisotropy = 1;
-	d3dSamplerDesc[2].ComparisonFunc = D3D12_COMPARISON_FUNC_LESS;
+	d3dSamplerDesc[2].ComparisonFunc = D3D12_COMPARISON_FUNC_LESS_EQUAL;
 	d3dSamplerDesc[2].MinLOD = 0;
 	d3dSamplerDesc[2].MaxLOD = D3D12_FLOAT32_MAX;
 	d3dSamplerDesc[2].ShaderRegister = 2;

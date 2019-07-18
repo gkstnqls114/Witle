@@ -404,13 +404,20 @@ void QuadtreeTerrain::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool is
 	RecursiveRender(m_pRootNode, pd3dCommandList, isGBuffers); // ÁöÇü ·»´õ	 
 }
 
-void QuadtreeTerrain::RenderTerrainForShadow(ID3D12GraphicsCommandList * pd3dCommandList)
-{
+void QuadtreeTerrain::RenderTerrainForShadow(ID3D12GraphicsCommandList * pd3dCommandList, Terrain * pTerrain, ID3D12DescriptorHeap* pHeap)
+{ 
+	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_TERRAIN_FORSHADOW, false);
+
+	pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_WORLD, 16, &Matrix4x4::Identity(), 0);
+	pd3dCommandList->SetDescriptorHeaps(1, &pHeap);
+	pTerrain->UpdateShaderVariables(pd3dCommandList);
+
+	RecursiveRender(m_pRootNode, pd3dCommandList, false); // ÁöÇü ·»´õ	 
 }
 
 void QuadtreeTerrain::RenderInstancingObjectsForShadow(ID3D12GraphicsCommandList * pd3dCommandList)
 {
-	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, "InstancingStandardShaderForShadow", false);
+	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_INSTACINGSTANDARDFORSHADOW, false);
 
 	// ¼³¸íÀÚ Èü ¼³Á¤
 	TextureStorage::GetInstance()->SetHeap(pd3dCommandList);

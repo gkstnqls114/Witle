@@ -169,6 +169,7 @@
     <ClInclude Include="HitAction.h" />
     <ClInclude Include="GraphicsRootSignatureMgr.h" />
     <ClInclude Include="IceBall.h" />
+    <ClInclude Include="TerrainForShadow.h" />
     <ClInclude Include="MainCameraMgr.h" />
     <ClInclude Include="GeneralMonsterActionMgr.h" />
     <ClInclude Include="BossMonsterActionMgr.h" />
@@ -347,6 +348,7 @@
     <ClCompile Include="IdleAction.cpp" />
     <ClCompile Include="InstancingLineShader.cpp" />
     <ClCompile Include="InstancingStandardShader.cpp" />
+    <ClCompile Include="TerrainForShadow.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="LightManager.cpp" />
     <ClCompile Include="LightObject.cpp" />

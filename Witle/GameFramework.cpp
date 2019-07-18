@@ -924,10 +924,6 @@ void CGameFramework::BuildShaders()
 	CMaterial::PrepareShaders(m_d3dDevice.Get(), m_CommandList.Get(), GraphicsRootSignatureMgr::GetGraphicsRootSignature());
 	ShaderManager::GetInstance()->BuildShaders(m_d3dDevice.Get(), GraphicsRootSignatureMgr::GetGraphicsRootSignature());
 }
-
-void CGameFramework::UpdateShaderTransform()
-{
-}
  
 void CGameFramework::RenderOnGbuffer()
 {

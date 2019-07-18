@@ -421,6 +421,9 @@
     <Filter Include="05.Shader\SkillIconShader">
       <UniqueIdentifier>{12924a3b-8b25-455d-a90e-e3b307c7e86f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="05.Shader\ShadowShader\TerrainForShadow">
+      <UniqueIdentifier>{f2c2f453-5572-42be-93fb-41bd876a60b2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -867,6 +870,9 @@
     <ClInclude Include="InstancingStandardShaderForShadow.h">
       <Filter>05.Shader\ShadowShader\InstancingStandardShaderForShadow</Filter>
     </ClInclude>
+    <ClInclude Include="TerrainForShadow.h">
+      <Filter>05.Shader\ShadowShader\TerrainForShadow</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1291,6 +1297,9 @@
     </ClCompile>
     <ClCompile Include="InstancingStandardShaderForShadow.cpp">
       <Filter>05.Shader\ShadowShader\InstancingStandardShaderForShadow</Filter>
+    </ClCompile>
+    <ClCompile Include="TerrainForShadow.cpp">
+      <Filter>05.Shader\ShadowShader\TerrainForShadow</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
