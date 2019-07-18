@@ -1,4 +1,5 @@
 #pragma once
+#include "d3dx12.h"
 #include "MeshRenderer.h"
 
 class Scene;
@@ -79,6 +80,10 @@ private:
 
 	MyDescriptorHeap* m_GBufferHeap{ nullptr };
 	MyDescriptorHeap* m_ShadowmapHeap{ nullptr };
+
+	CD3DX12_CPU_DESCRIPTOR_HANDLE m_hCpuSrvForShadow;
+	CD3DX12_GPU_DESCRIPTOR_HANDLE m_hGpuSrvForShadow;
+	CD3DX12_CPU_DESCRIPTOR_HANDLE m_hCpuDsvForShadow;
 
 	//// GBuffer 와 쉐도우맵을 위해 필요한 변수들 ////////////////////////////////////
 

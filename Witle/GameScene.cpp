@@ -906,34 +906,34 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 
 
 
-	/// ui map과 스킬 관련 렌더링..
-	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_UIMAPFORPLAYER, isGBuffers);
-	XMFLOAT2 playerpos{ m_pPlayer->GetTransform().GetPosition().x,  m_pPlayer->GetTransform().GetPosition().z };
+	///// ui map과 스킬 관련 렌더링..
+	//ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_UIMAPFORPLAYER, isGBuffers);
+	//XMFLOAT2 playerpos{ m_pPlayer->GetTransform().GetPosition().x,  m_pPlayer->GetTransform().GetPosition().z };
 
-	// ui map 포지션으로 변경하기 위해 크기 축소
-	playerpos.x = playerpos.x * (float(m_UIMapSize.x) / 30000.f);
-	playerpos.y = -playerpos.y * (float(m_UIMapSize.y) / 30000.f); // 스크린 좌표계로 이동하기 위해
+	//// ui map 포지션으로 변경하기 위해 크기 축소
+	//playerpos.x = playerpos.x * (float(m_UIMapSize.x) / 30000.f);
+	//playerpos.y = -playerpos.y * (float(m_UIMapSize.y) / 30000.f); // 스크린 좌표계로 이동하기 위해
 
-	// 스크린 좌표계 위치 이동
-	playerpos.x += m_SampleUIMap->getRect().left;
-	playerpos.y += m_SampleUIMap->getRect().bottom;
+	//// 스크린 좌표계 위치 이동
+	//playerpos.x += m_SampleUIMap->getRect().left;
+	//playerpos.y += m_SampleUIMap->getRect().bottom;
 
-	pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_PICKINGPOINT, 2, &playerpos, 0);
-	m_UIPlayer->Render(pd3dCommandList);
+	//pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_PICKINGPOINT, 2, &playerpos, 0);
+	//m_UIPlayer->Render(pd3dCommandList);
 
-	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_UISCREEN, isGBuffers);
+	//ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_UISCREEN, isGBuffers);
 
-	m_UIAltar_1->Render(pd3dCommandList);
-	m_UIAltar_2->Render(pd3dCommandList);
-	m_UIAltar_3->Render(pd3dCommandList);
-	m_UIAltar_4->Render(pd3dCommandList);
-	m_UIAltar_5->Render(pd3dCommandList);
+	//m_UIAltar_1->Render(pd3dCommandList);
+	//m_UIAltar_2->Render(pd3dCommandList);
+	//m_UIAltar_3->Render(pd3dCommandList);
+	//m_UIAltar_4->Render(pd3dCommandList);
+	//m_UIAltar_5->Render(pd3dCommandList);
 
-	m_SampleUIMap->Render(pd3dCommandList);
-	m_SampleUISkill1->Render(pd3dCommandList);
-	m_SampleUISkill2->Render(pd3dCommandList);
-	m_SampleUISkill3->Render(pd3dCommandList);
-	m_SampleUISkill4->Render(pd3dCommandList);
+	//m_SampleUIMap->Render(pd3dCommandList);
+	//m_SampleUISkill1->Render(pd3dCommandList);
+	//m_SampleUISkill2->Render(pd3dCommandList);
+	//m_SampleUISkill3->Render(pd3dCommandList);
+	//m_SampleUISkill4->Render(pd3dCommandList);
 
 }
 
@@ -952,14 +952,7 @@ void GameScene::RenderForShadow(ID3D12GraphicsCommandList * pd3dCommandList)
 
 	}
 	else
-	{ 
-		//LightManager::m_pLights->m_pLights[2].bEnable = true;
-		//LightManager::m_pLights->m_pLights[2].nType = LIGHT_TYPE::DIRECTIONAL_LIGHT;
-		//LightManager::m_pLights->m_pLights[2].Ambient = XMFLOAT4(1.f, 0.8f, 0.8f, 1.0f);
-		//LightManager::m_pLights->m_pLights[2].Diffuse = XMFLOAT4(1.0f, 0.4f, 0.4f, 1.0f);
-		//LightManager::m_pLights->m_pLights[2].Specular = XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f);
-		//LightManager::m_pLights->m_pLights[2].Direction = XMFLOAT3(0.0f, 0.0f, 1.0f);
-
+	{  
 		m_pMainCamera->SetViewportsAndScissorRects(pd3dCommandList);
 		m_pMainCamera->GetCamera()->UpdateShaderVariables(pd3dCommandList, 1);
 		m_pMainCamera->GetCamera()->UpdateLightShaderVariables(pd3dCommandList, &LightManager::m_pLights->m_pLights[2]);
