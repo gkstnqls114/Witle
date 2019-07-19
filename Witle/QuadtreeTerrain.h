@@ -9,6 +9,7 @@ class HeightMapImage;
 class MyFrustum;
 class Mesh;
 class Terrain;
+class MyDescriptorHeap;
 
 struct INFO
 {
@@ -54,6 +55,11 @@ private:
 
 	int m_ReafNodeCount = 0;
 	QUAD_TREE_NODE** m_pReafNodes{ nullptr };
+
+public:
+	MyDescriptorHeap* m_AllDescriptorHeap{ nullptr }; // 그림자는 물론이고, 텍스쳐도 포함.
+
+	MyDescriptorHeap* m_pShadowHeap{ nullptr };
  
 private: 
 

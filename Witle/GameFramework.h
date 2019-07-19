@@ -111,6 +111,7 @@ private:
 	void ReleaseSwapChainBuffer();
 	void ReleaseGBuffers();
 	void ReleaseDepthStencilBuffer();
+	void ReleaseShadowmap();
 
 	void CreateSwapChain();
 	void CreateDirect3DDevice();

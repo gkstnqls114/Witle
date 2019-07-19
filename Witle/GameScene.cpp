@@ -968,7 +968,7 @@ void GameScene::RenderForShadow(ID3D12GraphicsCommandList * pd3dCommandList)
 	// ÅÍ·¹ÀÎ
 	if (m_Terrain)
 	{
-		// m_pQuadtreeTerrain->RenderTerrainForShadow(pd3dCommandList, m_Terrain, m_pd3dCbvSrvDescriptorHeap);
+		m_pQuadtreeTerrain->RenderTerrainForShadow(pd3dCommandList, m_Terrain, m_pd3dCbvSrvDescriptorHeap);
 		m_pQuadtreeTerrain->RenderInstancingObjectsForShadow(pd3dCommandList);
 	}
 	
@@ -1130,7 +1130,7 @@ void GameScene::BuildLightsAndMaterials(ID3D12Device *pd3dDevice, ID3D12Graphics
 	LightManager::m_pLights->m_pLights[2].Ambient = XMFLOAT4(1.f, 0.8f, 0.8f, 1.0f);
 	LightManager::m_pLights->m_pLights[2].Diffuse = XMFLOAT4(1.0f, 0.4f, 0.4f, 1.0f);
 	LightManager::m_pLights->m_pLights[2].Specular = XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f);
-	LightManager::m_pLights->m_pLights[2].Direction = Vector3::Normalize(XMFLOAT3(0.0f, -1.0f, 0.f));
+	LightManager::m_pLights->m_pLights[2].Direction = Vector3::Normalize(XMFLOAT3(0.0f, -1.0f, 1.f));
 
 	LightManager::m_pLights->m_pLights[3].bEnable = false;
 	LightManager::m_pLights->m_pLights[3].nType = LIGHT_TYPE::SPOT_LIGHT;

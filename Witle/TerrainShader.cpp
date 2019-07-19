@@ -49,9 +49,9 @@ D3D12_RASTERIZER_DESC TerrainShader::CreateRasterizerState()
 	// d3dRasterizerDesc.FillMode = D3D12_FILL_MODE_WIREFRAME;
 	d3dRasterizerDesc.CullMode = D3D12_CULL_MODE_BACK;
 	d3dRasterizerDesc.FrontCounterClockwise = FALSE;
-	d3dRasterizerDesc.DepthBias = 0;
-	d3dRasterizerDesc.DepthBiasClamp = 0.0f;
-	d3dRasterizerDesc.SlopeScaledDepthBias = 0.0f;
+	d3dRasterizerDesc.DepthBias = 0.5;
+	d3dRasterizerDesc.DepthBiasClamp = 0.f;
+	d3dRasterizerDesc.SlopeScaledDepthBias = 0.f;
 	d3dRasterizerDesc.DepthClipEnable = TRUE;
 	d3dRasterizerDesc.MultisampleEnable = FALSE;
 	d3dRasterizerDesc.AntialiasedLineEnable = FALSE;

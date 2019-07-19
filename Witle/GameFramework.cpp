@@ -24,6 +24,7 @@
 #include "LoadingScene.h"
 //// Scene ////////////////////////// 
  
+#include "QuadtreeTerrain.h"
 #include "CameraObject.h"
 #include "Camera.h"
 #include "Shader.h"
@@ -90,7 +91,8 @@ bool CGameFramework::OnCreate(HINSTANCE hInstance, HWND hMainWnd)
 	CreateRtvAndDsvDescriptorHeaps();
 	CreateSwapChain();
 	// CreateRWResourceViews();
-	 
+	CreateShadowmapView();
+
 	BuildObjects();
 	 
 	GameScreen::SetSwapChain(m_SwapChain.Get());
@@ -220,6 +222,18 @@ void CGameFramework::ReleaseDepthStencilBuffer()
 	if (m_DepthStencilBuffer) {
 		m_DepthStencilBuffer->Release();
 	}
+}
+
+void CGameFramework::ReleaseShadowmap()
+{
+	if (m_GBufferHeap)
+	{
+		m_GBufferHeap->ReleaseObjects();
+		delete m_GBufferHeap;
+		m_GBufferHeap = nullptr;
+	}
+
+	m_Shadowmap->Release();
 }
 
 void CGameFramework::CreateSwapChain()
@@ -418,13 +432,7 @@ void CGameFramework::CreateShadowmapView()
 
 	m_ShadowmapCPUHandle = m_hCpuDsvForShadow;
 	// 디스크립터 생성 /////////////////////////////////////////////
-
-
-
-
-
-
-
+	  
 	
 	//DXGI_FORMAT textureType = DXGI_FORMAT_R24_UNORM_X8_TYPELESS;
 	//D3D12_RESOURCE_FLAGS flag = D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;
@@ -688,7 +696,7 @@ void CGameFramework::BuildObjects()
 	m_pScene = new GameScene;
 	// m_pScene = new LoadingScene;
 	// m_pScene = new RoomScene;
-	
+
 	// 루트 시그니처를 통해 모든 오브젝트 갖고온다.
 	TextureStorage::GetInstance()->CreateTextures(m_d3dDevice.Get(), m_CommandList.Get());
 	ModelStorage::GetInstance()->CreateModels(m_d3dDevice.Get(), m_CommandList.Get(), GraphicsRootSignatureMgr::GetGraphicsRootSignature());
@@ -696,6 +704,9 @@ void CGameFramework::BuildObjects()
 	BuildShaders();
 	 
 	m_pScene->BuildObjects(m_d3dDevice.Get(), m_CommandList.Get());
+
+	static_cast<GameScene*>(m_pScene)->GetQuadtreeTerrain()->m_pShadowHeap = m_ShadowmapHeap;
+
 	///////////////////////////////////////////////////////////////////////////// 리소스 생성
 
 	hResult = m_CommandList->Close();
@@ -1005,7 +1016,7 @@ void CGameFramework::OnResizeBackBuffers()
 	// 순서변경X ////////////
 	ReleaseSwapChainBuffer();
 	ReleaseGBuffers();
-	ReleaseDepthStencilBuffer();
+	ReleaseDepthStencilBuffer(); 
 	// 순서변경X ////////////
 
 
@@ -1025,8 +1036,7 @@ void CGameFramework::OnResizeBackBuffers()
 	// 순서변경X ////////////
 	CreateRenderTargetView();
 	CreateGBufferView();
-	CreateDepthStencilView(); 
-	CreateShadowmapView();
+	CreateDepthStencilView();  
 	// 순서변경X ////////////
 	
 
@@ -1044,13 +1054,7 @@ void CGameFramework::Blur()
 }
 
 void CGameFramework::RenderSwapChain()
-{ 
-	// 쉐도우 맵 연결/////////////////////////
-	m_ShadowmapHeap->UpdateShaderVariable(m_CommandList.Get());
-	D3D12_GPU_DESCRIPTOR_HANDLE handle = m_ShadowmapHeap->GetGPUSrvDescriptorStartHandle();
-	m_CommandList->SetGraphicsRootDescriptorTable(ROOTPARAMETER_SHADOWTEXTURE, handle);
-	// 쉐도우 맵 연결/////////////////////////
-
+{  
 	// 장면을 렌더합니다.
 	if (m_pScene) 
 	{ 

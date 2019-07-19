@@ -11,6 +11,7 @@
 #include "MyFrustum.h"
 #include "Collision.h"
 #include "Terrain.h"
+#include "MyDescriptorHeap.h"
 #include "QuadTreeTerrain.h"
 
 // 처음 아이디는 0으로 시작한다.
@@ -352,6 +353,11 @@ QuadtreeTerrain::QuadtreeTerrain(ID3D12Device * pd3dDevice, ID3D12GraphicsComman
 
 	// 재귀함수로 모든 터레인 조각 로드 완료후...
 	StaticObjectStorage::GetInstance(this)->CreateInfo(pd3dDevice, pd3dCommandList, this);
+
+	// 그림자 맵과 텍스쳐 설정을 위한 디스크립터 힙 설정
+	m_AllDescriptorHeap = new MyDescriptorHeap();
+	m_AllDescriptorHeap->CreateCbvSrvUavDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 4, 0);
+	// m_AllDescriptorHeap->CreateShaderResourceViews(pd3dDevice, pd3dCommandList, ,)
 }
 
 QuadtreeTerrain::~QuadtreeTerrain()
@@ -429,8 +435,10 @@ void QuadtreeTerrain::Render(ID3D12GraphicsCommandList * pd3dCommandList, Terrai
 	// 지형 렌더
 	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_TERRAIN, isGBuffers);
 	pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_WORLD, 16, &Matrix4x4::Identity(), 0);
-	pd3dCommandList->SetDescriptorHeaps(1, &pHeap);
-	pTerrain->UpdateShaderVariables(pd3dCommandList);
+	ID3D12DescriptorHeap* heaps[] { m_pShadowHeap->GetpDescriptorHeap(), pHeap };
+	pd3dCommandList->SetDescriptorHeaps(1, heaps);
+	// pTerrain->UpdateShaderVariables(pd3dCommandList); 
+	pd3dCommandList->SetGraphicsRootDescriptorTable(ROOTPARAMETER_SHADOWTEXTURE, m_pShadowHeap->GetGPUSrvDescriptorStartHandle());
 
 	RecursiveRender(m_pRootNode, pd3dCommandList, isGBuffers); // 지형 렌더	 
 

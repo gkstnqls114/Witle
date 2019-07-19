@@ -47,5 +47,6 @@ public:
 	D3D12_CPU_DESCRIPTOR_HANDLE GetCPUUAVDescriptorStartHandle() const { return(m_d3dUAVCPUDescriptorStartHandle); }
 	D3D12_GPU_DESCRIPTOR_HANDLE GetGPUUAVDescriptorStartHandle() const { return(m_d3dUAVGPUDescriptorStartHandle); }
 
+	ID3D12DescriptorHeap* GetpDescriptorHeap() const { return m_pd3dCbvSrvUavDescriptorHeap; };
 };
 

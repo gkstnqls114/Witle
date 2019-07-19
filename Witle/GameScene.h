@@ -102,6 +102,8 @@ public:
 
 	void TESTSetRootDescriptor(ID3D12GraphicsCommandList *pd3dCommandList);
 
+	QuadtreeTerrain* GetQuadtreeTerrain() const { return m_pQuadtreeTerrain; }
+
 protected:
 	// 플레이어 관련 ////////////////////////////
 	
