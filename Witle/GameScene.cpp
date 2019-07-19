@@ -968,7 +968,7 @@ void GameScene::RenderForShadow(ID3D12GraphicsCommandList * pd3dCommandList)
 	// ÅÍ·¹ÀÎ
 	if (m_Terrain)
 	{
-		m_pQuadtreeTerrain->RenderTerrainForShadow(pd3dCommandList, m_Terrain, m_pd3dCbvSrvDescriptorHeap);
+		// m_pQuadtreeTerrain->RenderTerrainForShadow(pd3dCommandList, m_Terrain, m_pd3dCbvSrvDescriptorHeap);
 		m_pQuadtreeTerrain->RenderInstancingObjectsForShadow(pd3dCommandList);
 	}
 	

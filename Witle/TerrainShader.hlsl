@@ -61,19 +61,19 @@ float4 PSTerrain(VS_TERRAIN_OUTPUT input) : SV_TARGET
     float4 fogColor = float4(0.0 / 255.0, 34.0 / 255.0, 102.0 / 255.0, 1.0f);
     float4 finalColor = input.fogFactor * cColor + (1.0 - input.fogFactor) * fogColor;
       
-    ////// 그림자 계산 1 ...
-    //shadowPosition = shadowPosition / shadowPosition.w;
+    //// 그림자 계산 1 ...
+    shadowPosition = shadowPosition / shadowPosition.w;
      
-    //float fShadowFactor = 0.0;
-    //float fBias = 0.3f;
-    //float fsDepth = gtxtShadow.SampleCmpLevelZero(gssPCFSampler, shadowPosition.xy, shadowPosition.z).r;
-    //// float fsDepth = gtxtShadow.Sample(gssClamp, input.shadowPosition.xy).r;
+    float fShadowFactor = 0.0;
+    float fBias = 0.0006f;
+    float fsDepth = gtxtShadow.SampleCmpLevelZero(gssPCFSampler, shadowPosition.xy, shadowPosition.z).r;
+    // float fsDepth = gtxtShadow.Sample(gssClamp, input.shadowPosition.xy).r;
 
-    //if (shadowPosition.z <= (fsDepth + fBias))
-    //    fShadowFactor = 1.f; // 그림자가 아님
-    ////// 그림자 계산 1 ...
+    if (shadowPosition.z <= (fsDepth + fBias))
+        fShadowFactor = 1.f; // 그림자가 아님
+    //// 그림자 계산 1 ...
       
-    float fShadowFactor = CalcShadowFactor(shadowPosition);
+    // float fShadowFactor = CalcShadowFactor(shadowPosition);
     
     // 현재 바닥이 그냥 위를 바라보고 있으므로...
     float3 normalW = float3(0.0, 1.0, 0.0);
