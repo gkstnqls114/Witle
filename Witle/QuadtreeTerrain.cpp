@@ -91,6 +91,26 @@ void QuadtreeTerrain::RecursiveRenderTerrainObjects(const QUAD_TREE_NODE * node,
  	} 
 }
 
+
+void QuadtreeTerrain::RecursiveRenderTerrainObjectsForShadow(const QUAD_TREE_NODE * node, ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffers)
+{
+	if (node->isRendering)
+	{
+		if (node->terrainMesh)
+		{
+			StaticObjectStorage::GetInstance(this)->RenderForShadow(pd3dCommandList, node->id, isGBuffers);
+
+		}
+		else
+		{ 
+			if (node->children[0]->isRendering) RecursiveRenderTerrainObjects(node->children[0], pd3dCommandList, isGBuffers);
+			if (node->children[1]->isRendering) RecursiveRenderTerrainObjects(node->children[1], pd3dCommandList, isGBuffers);
+			if (node->children[2]->isRendering) RecursiveRenderTerrainObjects(node->children[2], pd3dCommandList, isGBuffers);
+			if (node->children[3]->isRendering) RecursiveRenderTerrainObjects(node->children[3], pd3dCommandList, isGBuffers);
+		}
+	}
+}
+
 static std::unordered_set<int> set;
 
 void QuadtreeTerrain::RecursiveRender(const QUAD_TREE_NODE * node, ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffers)
@@ -425,9 +445,8 @@ void QuadtreeTerrain::RenderInstancingObjectsForShadow(ID3D12GraphicsCommandList
 {
 	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_INSTACINGSTANDARDFORSHADOW, false);
 
-	// 설명자 힙 설정
-	TextureStorage::GetInstance()->SetHeap(pd3dCommandList);
-	RecursiveRenderTerrainObjects(m_pRootNode, pd3dCommandList, false);
+	// 설명자 힙 설정 
+	RecursiveRenderTerrainObjectsForShadow(m_pRootNode, pd3dCommandList, false);
 }
 
 void QuadtreeTerrain::Render(ID3D12GraphicsCommandList * pd3dCommandList, Terrain * pTerrain, ID3D12DescriptorHeap* pHeap, bool isGBuffers)

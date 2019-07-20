@@ -5,6 +5,8 @@
 #include "GameScreen.h"
 #include "GameObject.h"
 #include "Light.h"
+#include "Player.h"
+#include "PlayerManager.h"
 #include "Camera.h"
 
 void Camera::ReleaseObjects()
@@ -207,10 +209,13 @@ XMFLOAT4X4 Camera::GenerateLightProjectionMatrix(const LIGHT * light) const
 }
 
 void Camera::UpdateLightShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList, const LIGHT* light)
-{    
-	mSceneBounds = BoundingSphere { XMFLOAT3(15000.f, 0.f, 15000.f), 17000.f };
+{     
+	//auto playerpos = PlayerManager::GetMainPlayer()->GetTransform().GetPosition();
+	//auto playerlook = PlayerManager::GetMainPlayer()->GetTransform().GetLook();
+	//auto boundcenter = Vector3::Add(playerpos, Vector3::ScalarProduct(playerlook, m_fFarPlaneDistance / 2.f, false));
+	auto boundcenter = XMFLOAT3(15000, 0, 15000);
+	mSceneBounds = BoundingSphere { boundcenter, 17000 };
 	
-
 	// Only the first "main" light casts a shadow.
 	XMVECTOR lightDir = XMLoadFloat3(&light->Direction);
 	XMVECTOR lightPos = -2.0f* mSceneBounds.Radius*lightDir;

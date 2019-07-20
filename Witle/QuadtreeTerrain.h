@@ -68,6 +68,7 @@ private:
 	 
 	void RenderTerrainObjects(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers);
 	void RecursiveRenderTerrainObjects(const QUAD_TREE_NODE* node, ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers);
+	void RecursiveRenderTerrainObjectsForShadow(const QUAD_TREE_NODE* node, ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers);
 	void RecursiveRender(const QUAD_TREE_NODE* node, ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers);
 	void RecursiveInitReafNodes(QUAD_TREE_NODE* node);
 	void RecursiveReleaseUploadBuffers(QUAD_TREE_NODE* node);

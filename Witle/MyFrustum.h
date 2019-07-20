@@ -35,4 +35,5 @@ public:
 	void CheckRendering(QUAD_TREE_NODE* node);
 	void CheckRenderingAllTRUE(QUAD_TREE_NODE* node);
 	void CheckRenderingAllFALSE(QUAD_TREE_NODE* node);
+	BoundingFrustum GetBoundingFrustum() const { return m_frustum; }
 };
