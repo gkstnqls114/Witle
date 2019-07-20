@@ -53,31 +53,51 @@ Dragon::Dragon(const std::string & entityID, const XMFLOAT3& SpawnPoint,
 	m_pHaep->CreateCbvSrvUavDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 1, 0);
 	m_pTexture = new Texture(1, RESOURCE_TEXTURE2D);
 	 
-	m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/SpaceCat_Green.dds", 0); 
+	m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/Dragon.dds", 0); 
 
 	m_pHaep->CreateShaderResourceViews(pd3dDevice, pd3dCommandList, m_pTexture, ROOTPARAMETER_TEXTURE, false, 0);
 	 
-	ANIMATION_INFO infos[SPACECAT_ANIMATIONE];
-	infos[0] = SPACECAT_IDLE;
-	infos[1] = SPACECAT_MOVE;
-	infos[2] = SPACECAT_ATTACK;
-	infos[3] = SPACECAT_DEAD;
-	infos[4] = SPACECAT_HIT;
+	ANIMATION_INFO infos[BOSSMONSTER_ANIMATIONE];
+	infos[0] = BOSS_IDLE;
+	infos[1] = BOSS_MOVE;
+	infos[2] = BOSS_CHASE;
+	infos[3] = BOSS_SKILL0;
+	infos[4] = BOSS_SKILL1;
+	infos[5] = BOSS_SKILL2;
+	infos[6] = BOSS_SKILL3;
+	infos[7] = BOSS_SKILL4;
+	infos[8] = BOSS_SKILL5;
+	infos[9] = BOSS_SKILL6;
+	infos[10] = BOSS_SKILL7;
+	infos[11] = BOSS_SKILL8;
+	infos[12] = BOSS_SKILL9;
+	infos[13] = BOSS_DEAD;
+	infos[14] = BOSS_HIT;
 
 	m_MonsterModel = LoadObject::LoadGeometryAndAnimationFromFile_forMonster(
-		pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/SpaceCat.bin", NULL,
-		SPACECAT_ANIMATIONE, infos);
+		pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/Dragon.bin", NULL,
+		BOSSMONSTER_ANIMATIONE, infos);
+	// printf("º¸½º", "%d");
 	 
 	m_pLoadObject = m_MonsterModel->m_pModelRootObject;
 	m_pLoadObject->m_pSkinnedAnimationController = new CAnimationController(pd3dDevice, pd3dCommandList, 1, m_MonsterModel);
 	m_pLoadObject->m_pSkinnedAnimationController->SetTrackAnimationSet(0, 0);
 
-	m_Transform.SetPosition(SpawnPoint);
+	m_Transform.SetPosition(15000.f, 0.f, 15000.f);
 	 
 	XMFLOAT3 extents{ 50.f, 50.f, 50.f };
 	m_pMyBOBox = new MyBOBox(this, pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 75.F, 0.F }, extents);
 	 
-	static_cast<BossMonsterActionMgr*>(m_MonsterMovement->GetMonsterActionMgr())->ChangeStateToSample_1();
+	// static_cast<BossMonsterActionMgr*>(m_MonsterMovement->GetMonsterActionMgr())->ChangeStateToSample_1();
+
+	if (rand() % 2)
+	{
+		static_cast<BossMonsterActionMgr*>(m_MonsterMovement->GetMonsterActionMgr())->BossMoveAction();
+	}
+	else
+	{
+		static_cast<BossMonsterActionMgr*>(m_MonsterMovement->GetMonsterActionMgr())->BossIdleAction();
+	}
 }
 
 Dragon::~Dragon()

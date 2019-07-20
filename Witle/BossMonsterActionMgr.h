@@ -1,6 +1,8 @@
 #pragma once 
 #include "BossSampleAction_1.h"
 #include "BossSampleAction_2.h"
+#include "BossIdleAction.h"
+#include "BossMoveAction.h"
 #include "MonsterActionMgr.h"
 
 class MonsterAction;
@@ -15,6 +17,8 @@ class BossMonsterActionMgr
 	// 현재 사용하는 액션(상태)들
 	BossSampleAction_1 m_BossSampleAction_1;
 	BossSampleAction_2 m_BossSampleAction_2;
+	BossIdleAction m_BossIdleAction;
+	BossMoveAction m_BossMoveAction;
 	// 현재 사용하는 액션(상태)들
 
 public:
@@ -28,7 +32,9 @@ public:
 	BossMonsterActionMgr(GameObject* pOwner) : 
 		MonsterActionMgr(pOwner),
 		m_BossSampleAction_1(pOwner),
-		m_BossSampleAction_2(pOwner)
+		m_BossSampleAction_2(pOwner),
+		m_BossIdleAction(pOwner),
+		m_BossMoveAction(pOwner)
 	{
 	};
 	virtual ~BossMonsterActionMgr() {};

@@ -157,6 +157,8 @@
     <ClInclude Include="AltarSphere.h" />
     <ClInclude Include="Avoidance.h" />
     <ClInclude Include="BasicCam.h" />
+    <ClInclude Include="BossIdleAction.h" />
+    <ClInclude Include="BossMoveAction.h" />
     <ClInclude Include="BossSampleAction_1.h" />
     <ClInclude Include="BossSampleAction_2.h" />
     <ClInclude Include="Broom.h" />
@@ -298,6 +300,8 @@
     <ClCompile Include="AltarSphere.cpp" />
     <ClCompile Include="Avoidance.cpp" />
     <ClCompile Include="BasicCam.cpp" />
+    <ClCompile Include="BossIdleAction.cpp" />
+    <ClCompile Include="BossMoveAction.cpp" />
     <ClCompile Include="BossSampleAction_1.cpp" />
     <ClCompile Include="BossSampleAction_2.cpp" />
     <ClCompile Include="Broom.cpp" />

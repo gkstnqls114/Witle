@@ -227,7 +227,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	BuildLightsAndMaterials(pd3dDevice, pd3dCommandList);
 
 	// 디스크립터 힙 설정
-	GameScene::CreateCbvSrvDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 3);
+	GameScene::CreateCbvSrvDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 4);
 
 	m_AimPoint = new AimPoint("AimPoint", pd3dDevice, pd3dCommandList, POINT{ int(GameScreen::GetWidth()) / 2, int(GameScreen::GetHeight()) / 2 }, 100.f, 100.f, L"Image/AimPoint.dds");
 	// m_WideareaMagic = new WideareaMagic(pd3dDevice, pd3dCommandList);
@@ -251,7 +251,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	std::random_device rd;
 	std::mt19937 mersenne(rd());
 	std::uniform_int_distribution<> die(2000, 15000);
-	std::uniform_int_distribution<> monstertype(0,3);
+	std::uniform_int_distribution<> monstertype(0,4);
 	 
 	m_TestMonster = new Monster*[m_TestMonsterCount];
 
@@ -263,12 +263,13 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	int spacecatgreen_count = 0;
 	int spacecatpink_count = 0;
 	int creepymonster_count = 0;
+	int boss_count = 0;
 	MonsterTransformStorage* instance = MonsterTransformStorage::GetInstance();
 	instance->CreateInfo(pd3dDevice, pd3dCommandList);
 
 	for (int i = 1; i < m_TestMonsterCount; )
 	{
-		int value = monstertype(mersenne);
+		int value = 0;
 
 		if (value == ENUM_MONSTER::MONSTER_CREEPYMONSTER)
 		{ 
@@ -302,6 +303,19 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 				pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
 			spacecatgreen_count += 1;
 		}
+		//int value = 4;
+		//if (value == ENUM_MONSTER::MONSTER_BOSSMONSTER)
+		//{
+		//	//if (instance->Count(DRAGON) <= boss_count)continue;
+		//	m_TestMonster[i] = new Dragon("Dragon",
+		//		instance->GetPosition(boss_count, DRAGON),
+		//		pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
+		//	boss_count += 1;
+		//	if (boss_count == 1)
+		//	{
+		//		continue;
+		//	}
+		//}
 		else
 		{
 			assert(false);
@@ -825,8 +839,8 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 	{
 		if (m_TestMonster[i]) m_TestMonster[i]->Render(pd3dCommandList, isGBuffers);
 	}
-
-	bool isAllAtive = false;
+	/*BossMonster Dragon Render*/
+bool isAllAtive = false;
 	for (int i = 0; i < 5; ++i)
 	{
 		if (m_AltarSphere[i]->GetisActive())

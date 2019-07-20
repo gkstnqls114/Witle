@@ -391,6 +391,12 @@
     <Filter Include="03.GameObject\02.Monster\Dragon">
       <UniqueIdentifier>{6c980b48-edba-4766-9723-cb5900aa0986}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.Component\ForMonster\BossMonsterAction\BossIdleAction">
+      <UniqueIdentifier>{a90053a0-522f-4be7-b32e-01fa81133963}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\ForMonster\BossMonsterAction\BossMoveAction">
+      <UniqueIdentifier>{686066ca-ff4f-4e03-8dc3-652a5e794e74}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -810,6 +816,12 @@
     <ClInclude Include="Dragon.h">
       <Filter>03.GameObject\02.Monster\Dragon</Filter>
     </ClInclude>
+    <ClInclude Include="BossIdleAction.h">
+      <Filter>02.Component\ForMonster\BossMonsterAction\BossIdleAction</Filter>
+    </ClInclude>
+    <ClInclude Include="BossMoveAction.h">
+      <Filter>02.Component\ForMonster\BossMonsterAction\BossMoveAction</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1207,6 +1219,12 @@
     </ClCompile>
     <ClCompile Include="Dragon.cpp">
       <Filter>03.GameObject\02.Monster\Dragon</Filter>
+    </ClCompile>
+    <ClCompile Include="BossIdleAction.cpp">
+      <Filter>02.Component\ForMonster\BossMonsterAction\BossIdleAction</Filter>
+    </ClCompile>
+    <ClCompile Include="BossMoveAction.cpp">
+      <Filter>02.Component\ForMonster\BossMonsterAction\BossMoveAction</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

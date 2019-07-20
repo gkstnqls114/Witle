@@ -32,7 +32,7 @@ void BossMonsterActionMgr::ChangeStateToSample_2()
 // 기본
 void BossMonsterActionMgr::BossIdleAction()
 {
-	ChangeAction(&BossIdleAction);
+	ChangeAction(&m_BossIdleAction);
 	m_CurrMonsterAction->Init();
 	static_cast<Monster*>(m_pOwner)->SetAnimationState(BOSS_IDLE.ID);
 }
@@ -40,7 +40,7 @@ void BossMonsterActionMgr::BossIdleAction()
 // 이동
 void BossMonsterActionMgr::BossMoveAction()
 {
-	ChangeAction(&BossMoveAction);
+	ChangeAction(&m_BossMoveAction);
 	m_CurrMonsterAction->Init();
 	static_cast<Monster*>(m_pOwner)->SetAnimationState(BOSS_MOVE.ID);
 }
@@ -48,7 +48,7 @@ void BossMonsterActionMgr::BossMoveAction()
 // 추격
 void BossMonsterActionMgr::BossChaseAction()
 {
-	ChangeAction(&BossChaseAction);
+	ChangeAction(&m_BossIdleAction);
 	m_CurrMonsterAction->Init();
 	static_cast<Monster*>(m_pOwner)->SetAnimationState(BOSS_CHASE.ID);
 }
@@ -56,7 +56,7 @@ void BossMonsterActionMgr::BossChaseAction()
 // 죽음
 void BossMonsterActionMgr::BossDeadAction()
 {
-	ChangeAction(&BossDeadAction);
+	ChangeAction(&m_BossIdleAction);
 	m_CurrMonsterAction->Init();
 	static_cast<Monster*>(m_pOwner)->SetAnimationState(BOSS_DEAD.ID);
 }
@@ -64,7 +64,7 @@ void BossMonsterActionMgr::BossDeadAction()
 // 스킬 0
 void BossMonsterActionMgr::BossSkillAction0()
 {
-	ChangeAction(&BossSkillAction0);
+	ChangeAction(&m_BossIdleAction);
 	m_CurrMonsterAction->Init();
 	static_cast<Monster*>(m_pOwner)->SetAnimationState(BOSS_SKILL0.ID);
 }
@@ -72,7 +72,7 @@ void BossMonsterActionMgr::BossSkillAction0()
 // 스킬 1
 void BossMonsterActionMgr::BossSkillAction1()
 {
-	ChangeAction(&BossSkillAction1);
+	ChangeAction(&m_BossIdleAction);
 	m_CurrMonsterAction->Init();
 	static_cast<Monster*>(m_pOwner)->SetAnimationState(BOSS_SKILL1.ID);
 }
@@ -80,7 +80,7 @@ void BossMonsterActionMgr::BossSkillAction1()
 // 스킬 2
 void BossMonsterActionMgr::BossSkillAction2()
 {
-	ChangeAction(&BossSkillAction2);
+	ChangeAction(&m_BossIdleAction);
 	m_CurrMonsterAction->Init();
 	static_cast<Monster*>(m_pOwner)->SetAnimationState(BOSS_SKILL2.ID);
 }
@@ -88,7 +88,7 @@ void BossMonsterActionMgr::BossSkillAction2()
 // 스킬 3
 void BossMonsterActionMgr::BossSkillAction3()
 {
-	ChangeAction(&BossSkillAction3);
+	ChangeAction(&m_BossIdleAction);
 	m_CurrMonsterAction->Init();
 	static_cast<Monster*>(m_pOwner)->SetAnimationState(BOSS_SKILL3.ID);
 }
@@ -96,7 +96,7 @@ void BossMonsterActionMgr::BossSkillAction3()
 // 스킬 4
 void BossMonsterActionMgr::BossSkillAction4()
 {
-	ChangeAction(&BossSkillAction4);
+	ChangeAction(&m_BossIdleAction);
 	m_CurrMonsterAction->Init();
 	static_cast<Monster*>(m_pOwner)->SetAnimationState(BOSS_SKILL4.ID);
 }
@@ -104,7 +104,7 @@ void BossMonsterActionMgr::BossSkillAction4()
 // 스킬 5
 void BossMonsterActionMgr::BossSkillAction5()
 {
-	ChangeAction(&BossSkillAction5);
+	ChangeAction(&m_BossIdleAction);
 	m_CurrMonsterAction->Init();
 	static_cast<Monster*>(m_pOwner)->SetAnimationState(BOSS_SKILL5.ID);
 }
@@ -112,7 +112,7 @@ void BossMonsterActionMgr::BossSkillAction5()
 // 스킬 6
 void BossMonsterActionMgr::BossSkillAction6()
 {
-	ChangeAction(&BossSkillAction6);
+	ChangeAction(&m_BossIdleAction);
 	m_CurrMonsterAction->Init();
 	static_cast<Monster*>(m_pOwner)->SetAnimationState(BOSS_SKILL6.ID);
 }
@@ -120,7 +120,7 @@ void BossMonsterActionMgr::BossSkillAction6()
 // 스킬 7
 void BossMonsterActionMgr::BossSkillAction7()
 {
-	ChangeAction(&BossSkillAction7);
+	ChangeAction(&m_BossIdleAction);
 	m_CurrMonsterAction->Init();
 	static_cast<Monster*>(m_pOwner)->SetAnimationState(BOSS_SKILL7.ID);
 }
@@ -128,7 +128,7 @@ void BossMonsterActionMgr::BossSkillAction7()
 // 스킬 8
 void BossMonsterActionMgr::BossSkillAction8()
 {
-	ChangeAction(&BossSkillAction8);
+	ChangeAction(&m_BossIdleAction);
 	m_CurrMonsterAction->Init();
 	static_cast<Monster*>(m_pOwner)->SetAnimationState(BOSS_SKILL8.ID);
 }
@@ -136,7 +136,7 @@ void BossMonsterActionMgr::BossSkillAction8()
 // 스킬 9
 void BossMonsterActionMgr::BossSkillAction9()
 {
-	ChangeAction(&BossSkillAction9);
+	ChangeAction(&m_BossIdleAction);
 	m_CurrMonsterAction->Init();
 	static_cast<Monster*>(m_pOwner)->SetAnimationState(BOSS_SKILL9.ID);
 }
