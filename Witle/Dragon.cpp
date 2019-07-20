@@ -52,11 +52,11 @@ Dragon::Dragon(const std::string & entityID, const XMFLOAT3& SpawnPoint,
 	m_pHaep = new MyDescriptorHeap();
 	m_pHaep->CreateCbvSrvUavDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 1, 0);
 	m_pTexture = new Texture(1, RESOURCE_TEXTURE2D);
-	 
-	m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/Dragon.dds", 0); 
+
+	m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/Dragon.dds", 0);
 
 	m_pHaep->CreateShaderResourceViews(pd3dDevice, pd3dCommandList, m_pTexture, ROOTPARAMETER_TEXTURE, false, 0);
-	 
+
 	ANIMATION_INFO infos[BOSSMONSTER_ANIMATIONE];
 	infos[0] = BOSS_IDLE;
 	infos[1] = BOSS_MOVE;
@@ -78,16 +78,16 @@ Dragon::Dragon(const std::string & entityID, const XMFLOAT3& SpawnPoint,
 		pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/Dragon.bin", NULL,
 		BOSSMONSTER_ANIMATIONE, infos);
 	// printf("º¸½º", "%d");
-	 
+
 	m_pLoadObject = m_MonsterModel->m_pModelRootObject;
 	m_pLoadObject->m_pSkinnedAnimationController = new CAnimationController(pd3dDevice, pd3dCommandList, 1, m_MonsterModel);
 	m_pLoadObject->m_pSkinnedAnimationController->SetTrackAnimationSet(0, 0);
 
 	m_Transform.SetPosition(15000.f, 0.f, 15000.f);
-	 
+
 	XMFLOAT3 extents{ 50.f, 50.f, 50.f };
 	m_pMyBOBox = new MyBOBox(this, pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 75.F, 0.F }, extents);
-	 
+
 	// static_cast<BossMonsterActionMgr*>(m_MonsterMovement->GetMonsterActionMgr())->ChangeStateToSample_1();
 
 	if (rand() % 2)

@@ -197,21 +197,21 @@ bool GameScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM w
 			break;
 
 		case VK_SPACE:
-			
+
 			break;
 
 		case '4':
 			break;
-			 
+
 		case '6':
 			break;
-			 
+
 		case '5':
 			for (int x = 0; x < 5; ++x)
-			{ 
+			{
 				m_AltarSphere[x]->SetisActive(true);
 			}
-			break; 
+			break;
 
 		default:
 			break;
@@ -227,7 +227,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	BuildLightsAndMaterials(pd3dDevice, pd3dCommandList);
 
 	// 디스크립터 힙 설정
-	GameScene::CreateCbvSrvDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 4);
+	GameScene::CreateCbvSrvDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 3);
 
 	m_AimPoint = new AimPoint("AimPoint", pd3dDevice, pd3dCommandList, POINT{ int(GameScreen::GetWidth()) / 2, int(GameScreen::GetHeight()) / 2 }, 100.f, 100.f, L"Image/AimPoint.dds");
 	// m_WideareaMagic = new WideareaMagic(pd3dDevice, pd3dCommandList);
@@ -237,7 +237,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 
 	// 터레인 생성 
 	// XMFLOAT3 xmf3Scale(156.25f, 1.0f, 156.25f);
-	XMFLOAT3 xmf3Scale(39.0625f * 3.f, 1.0f, 39.0625f * 3.f); 
+	XMFLOAT3 xmf3Scale(39.0625f * 3.f, 1.0f, 39.0625f * 3.f);
 	// XMFLOAT3 xmf3Scale(1.f, 1.0f, 1.f);
 	XMFLOAT4 xmf4Color(0.0f, 0.5f, 0.0f, 0.0f);
 	m_Terrain = new Terrain("Terrain", pd3dDevice, pd3dCommandList, L"Image/HeightMap.raw", 257, 257, 257, 257, xmf3Scale, xmf4Color);
@@ -251,8 +251,8 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	std::random_device rd;
 	std::mt19937 mersenne(rd());
 	std::uniform_int_distribution<> die(2000, 15000);
-	std::uniform_int_distribution<> monstertype(0,4);
-	 
+	std::uniform_int_distribution<> monstertype(0, 3);
+
 	m_TestMonster = new Monster*[m_TestMonsterCount];
 
 	m_TestMonster[0] = new SpaceCat("SpaceCat",
@@ -269,10 +269,10 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 
 	for (int i = 1; i < m_TestMonsterCount; )
 	{
-		int value = 0;
+		int value = monstertype(mersenne);
 
 		if (value == ENUM_MONSTER::MONSTER_CREEPYMONSTER)
-		{ 
+		{
 			if (instance->Count(CREEPYMONSTER) <= creepymonster_count)continue;
 			m_TestMonster[i] = new CreepyMonster("CreepyMonster",
 				instance->GetPosition(creepymonster_count, CREEPYMONSTER),
@@ -303,19 +303,18 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 				pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
 			spacecatgreen_count += 1;
 		}
-		//int value = 4;
-		//if (value == ENUM_MONSTER::MONSTER_BOSSMONSTER)
-		//{
-		//	//if (instance->Count(DRAGON) <= boss_count)continue;
-		//	m_TestMonster[i] = new Dragon("Dragon",
-		//		instance->GetPosition(boss_count, DRAGON),
-		//		pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
-		//	boss_count += 1;
-		//	if (boss_count == 1)
-		//	{
-		//		continue;
-		//	}
-		//}
+		else if (value == ENUM_MONSTER::MONSTER_BOSSMONSTER)
+		{
+			if (instance->Count(DRAGON) <= boss_count)continue;
+			m_TestMonster[i] = new Dragon("Dragon",
+				instance->GetPosition(boss_count, DRAGON),
+				pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
+			boss_count += 1;
+			if (boss_count == 1)
+			{
+				continue;
+			}
+		}
 		else
 		{
 			assert(false);
@@ -365,136 +364,136 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	GameScene::CreateShaderResourceViews(pd3dDevice, m_Terrain->GetTexture(), ROOTPARAMETER_TEXTUREBASE, true);
 
 	// UI 이미지 추가
-	 m_TESTGameObject = new EmptyGameObject("Test");
-	 
-	 // 미니맵
-	 m_SampleUIMap = new UI2DImage(
-		 m_TESTGameObject, pd3dDevice, pd3dCommandList,
-		 POINT{ int(GameScreen::GetWidth()) / 2 + 500, int(GameScreen::GetHeight()) / 2 - 220 },
-		 m_UIMapSize.x,
-		 m_UIMapSize.y, 
-		 L"Image/CharacterAppearance1_OFF.dds"
-	 );
+	m_TESTGameObject = new EmptyGameObject("Test");
 
-	 // 스킬 1
-	 m_SampleUISkill1 = new UI2DImage(
-		 m_TESTGameObject, pd3dDevice, pd3dCommandList,
-		 POINT{ int(GameScreen::GetWidth()) / 2 - 300, int(GameScreen::GetHeight()) / 2 + 270 }, 100, 100, nullptr
-	 );
+	// 미니맵
+	m_SampleUIMap = new UI2DImage(
+		m_TESTGameObject, pd3dDevice, pd3dCommandList,
+		POINT{ int(GameScreen::GetWidth()) / 2 + 500, int(GameScreen::GetHeight()) / 2 - 220 },
+		m_UIMapSize.x,
+		m_UIMapSize.y,
+		L"Image/CharacterAppearance1_OFF.dds"
+	);
 
-	 // 스킬 2
-	 m_SampleUISkill2 = new UI2DImage(
-		 m_TESTGameObject, pd3dDevice, pd3dCommandList,
-		 POINT{ int(GameScreen::GetWidth()) / 2 - 100, int(GameScreen::GetHeight()) / 2 + 270 }, 100, 100, nullptr
-	 );
+	// 스킬 1
+	m_SampleUISkill1 = new UI2DImage(
+		m_TESTGameObject, pd3dDevice, pd3dCommandList,
+		POINT{ int(GameScreen::GetWidth()) / 2 - 300, int(GameScreen::GetHeight()) / 2 + 270 }, 100, 100, nullptr
+	);
 
-	 // 스킬 3
-	 m_SampleUISkill3 = new UI2DImage(
-		 m_TESTGameObject, pd3dDevice, pd3dCommandList,
-		 POINT{ int(GameScreen::GetWidth()) / 2 + 100, int(GameScreen::GetHeight()) / 2 + 270 }, 100, 100, nullptr
-	 );
+	// 스킬 2
+	m_SampleUISkill2 = new UI2DImage(
+		m_TESTGameObject, pd3dDevice, pd3dCommandList,
+		POINT{ int(GameScreen::GetWidth()) / 2 - 100, int(GameScreen::GetHeight()) / 2 + 270 }, 100, 100, nullptr
+	);
 
-	 // 스킬 4
-	 m_SampleUISkill4 = new UI2DImage(
-		 m_TESTGameObject, pd3dDevice, pd3dCommandList,
-		 POINT{ int(GameScreen::GetWidth()) / 2 + 300, int(GameScreen::GetHeight()) / 2 + 270 }, 100, 100, nullptr
-	 );
-	 
-	 XMFLOAT4X4 tr;
-	 tr = StaticObjectStorage::GetInstance()->GetAltarTransform(0, ALTAR_IN);
-	 XMFLOAT3 pos{ tr._41, 0 , tr._43 }; // 월드 포지션
-	 m_AltarSphere[0] = new AltarSphere("AltarSphere0", pos, pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
+	// 스킬 3
+	m_SampleUISkill3 = new UI2DImage(
+		m_TESTGameObject, pd3dDevice, pd3dCommandList,
+		POINT{ int(GameScreen::GetWidth()) / 2 + 100, int(GameScreen::GetHeight()) / 2 + 270 }, 100, 100, nullptr
+	);
 
-	 // ui map 포지션으로 변경하기 위해 크기 축소
-	 pos.x = pos.x * (float(m_UIMapSize.x) / 30000.f);
-	 pos.z = -pos.z * (float(m_UIMapSize.y) / 30000.f); // 스크린 좌표계로 이동하기 위해
+	// 스킬 4
+	m_SampleUISkill4 = new UI2DImage(
+		m_TESTGameObject, pd3dDevice, pd3dCommandList,
+		POINT{ int(GameScreen::GetWidth()) / 2 + 300, int(GameScreen::GetHeight()) / 2 + 270 }, 100, 100, nullptr
+	);
 
-	 // 스크린 좌표계 위치 이동
-	 pos.x += m_SampleUIMap->getRect().left;
-	 pos.z += m_SampleUIMap->getRect().bottom;
-
-	 m_UIAltar_1 = new UI2DImage(
-		 m_TESTGameObject, pd3dDevice, pd3dCommandList,
-		 POINT{ int(pos.x), int(pos.z) },
-		 20, 20, 
-		 L"Image/Red.dds"
-	 );
-	  
-	 tr = StaticObjectStorage::GetInstance()->GetAltarTransform(1, ALTAR_IN);
-	 pos = XMFLOAT3{ tr._41, 0 , tr._43 };
-	 m_AltarSphere[1] = new AltarSphere("AltarSphere0", pos, pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
-
-	 pos.x = pos.x * (float(m_UIMapSize.x) / 30000.f);
-	 pos.z = -pos.z * (float(m_UIMapSize.y) / 30000.f); 
-	 pos.x += m_SampleUIMap->getRect().left;
-	 pos.z += m_SampleUIMap->getRect().bottom;
-	 m_UIAltar_2 = new UI2DImage(
-		 m_TESTGameObject, pd3dDevice, pd3dCommandList,
-		 POINT{ int(pos.x), int(pos.z) },
-		 20, 20,
-		 L"Image/Red.dds"
-	 );
-
-	 tr = StaticObjectStorage::GetInstance()->GetAltarTransform(2, ALTAR_IN);
-	 pos = XMFLOAT3{ tr._41,0 , tr._43 };
-	 m_AltarSphere[2] = new AltarSphere("AltarSphere0", pos, pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
+	XMFLOAT4X4 tr;
+	tr = StaticObjectStorage::GetInstance()->GetAltarTransform(0, ALTAR_IN);
+	XMFLOAT3 pos{ tr._41, 0 , tr._43 }; // 월드 포지션
+	m_AltarSphere[0] = new AltarSphere("AltarSphere0", pos, pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
 
 	// ui map 포지션으로 변경하기 위해 크기 축소
-	 pos.x = pos.x * (float(m_UIMapSize.x) / 30000.f);
-	 pos.z = -pos.z * (float(m_UIMapSize.y) / 30000.f); // 스크린 좌표계로 이동하기 위해
+	pos.x = pos.x * (float(m_UIMapSize.x) / 30000.f);
+	pos.z = -pos.z * (float(m_UIMapSize.y) / 30000.f); // 스크린 좌표계로 이동하기 위해
 
-	 // 스크린 좌표계 위치 이동
-	 pos.x += m_SampleUIMap->getRect().left;
-	 pos.z += m_SampleUIMap->getRect().bottom;
-	 m_UIAltar_3= new UI2DImage(
-	 m_TESTGameObject, pd3dDevice, pd3dCommandList,
-		 POINT{ int(pos.x), int(pos.z) },
-		 20, 20,
-		 L"Image/Red.dds"
-		 );
+	// 스크린 좌표계 위치 이동
+	pos.x += m_SampleUIMap->getRect().left;
+	pos.z += m_SampleUIMap->getRect().bottom;
 
-	 tr = StaticObjectStorage::GetInstance()->GetAltarTransform(3, ALTAR_IN);
-	 pos = XMFLOAT3{ tr._41, 0 , tr._43 };
-	 m_AltarSphere[3] = new AltarSphere("AltarSphere0", pos, pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
+	m_UIAltar_1 = new UI2DImage(
+		m_TESTGameObject, pd3dDevice, pd3dCommandList,
+		POINT{ int(pos.x), int(pos.z) },
+		20, 20,
+		L"Image/Red.dds"
+	);
 
-	// ui map 포지션으로 변경하기 위해 크기 축소
-	 pos.x = pos.x * (float(m_UIMapSize.x) / 30000.f);
-	 pos.z = -pos.z * (float(m_UIMapSize.y) / 30000.f); // 스크린 좌표계로 이동하기 위해
+	tr = StaticObjectStorage::GetInstance()->GetAltarTransform(1, ALTAR_IN);
+	pos = XMFLOAT3{ tr._41, 0 , tr._43 };
+	m_AltarSphere[1] = new AltarSphere("AltarSphere0", pos, pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
 
-	 // 스크린 좌표계 위치 이동
-	 pos.x += m_SampleUIMap->getRect().left;
-	 pos.z += m_SampleUIMap->getRect().bottom;
-	 m_UIAltar_4= new UI2DImage(
-		 m_TESTGameObject, pd3dDevice, pd3dCommandList,
-		 POINT{ int(pos.x), int(pos.z) },
-		 20, 20,
-		 L"Image/Red.dds"
-	 );
+	pos.x = pos.x * (float(m_UIMapSize.x) / 30000.f);
+	pos.z = -pos.z * (float(m_UIMapSize.y) / 30000.f);
+	pos.x += m_SampleUIMap->getRect().left;
+	pos.z += m_SampleUIMap->getRect().bottom;
+	m_UIAltar_2 = new UI2DImage(
+		m_TESTGameObject, pd3dDevice, pd3dCommandList,
+		POINT{ int(pos.x), int(pos.z) },
+		20, 20,
+		L"Image/Red.dds"
+	);
 
-	 tr = StaticObjectStorage::GetInstance()->GetAltarTransform(4, ALTAR_IN);
-	 pos = XMFLOAT3{ tr._41, 0 , tr._43 };
-	 m_AltarSphere[4] = new AltarSphere("AltarSphere0", pos, pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
+	tr = StaticObjectStorage::GetInstance()->GetAltarTransform(2, ALTAR_IN);
+	pos = XMFLOAT3{ tr._41,0 , tr._43 };
+	m_AltarSphere[2] = new AltarSphere("AltarSphere0", pos, pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
 
 	// ui map 포지션으로 변경하기 위해 크기 축소
-	 pos.x = pos.x * (float(m_UIMapSize.x) / 30000.f);
-	 pos.z = -pos.z * (float(m_UIMapSize.y) / 30000.f); // 스크린 좌표계로 이동하기 위해
+	pos.x = pos.x * (float(m_UIMapSize.x) / 30000.f);
+	pos.z = -pos.z * (float(m_UIMapSize.y) / 30000.f); // 스크린 좌표계로 이동하기 위해
 
-	 // 스크린 좌표계 위치 이동
-	 pos.x += m_SampleUIMap->getRect().left;
-	 pos.z += m_SampleUIMap->getRect().bottom;
-	 m_UIAltar_5 = new UI2DImage(
-	 m_TESTGameObject, pd3dDevice, pd3dCommandList,
-		 POINT{ int(pos.x), int(pos.z) },
-		 20, 20,
-		 L"Image/Red.dds"
-		 );
+	// 스크린 좌표계 위치 이동
+	pos.x += m_SampleUIMap->getRect().left;
+	pos.z += m_SampleUIMap->getRect().bottom;
+	m_UIAltar_3 = new UI2DImage(
+		m_TESTGameObject, pd3dDevice, pd3dCommandList,
+		POINT{ int(pos.x), int(pos.z) },
+		20, 20,
+		L"Image/Red.dds"
+	);
 
-	 m_UIPlayer = new UI2DImage(
-		 m_TESTGameObject, pd3dDevice, pd3dCommandList,
-		 POINT{ 0, 0 },
-		 10, 10,
-		 L"Image/Red.dds"
-	 ); 
+	tr = StaticObjectStorage::GetInstance()->GetAltarTransform(3, ALTAR_IN);
+	pos = XMFLOAT3{ tr._41, 0 , tr._43 };
+	m_AltarSphere[3] = new AltarSphere("AltarSphere0", pos, pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
+
+	// ui map 포지션으로 변경하기 위해 크기 축소
+	pos.x = pos.x * (float(m_UIMapSize.x) / 30000.f);
+	pos.z = -pos.z * (float(m_UIMapSize.y) / 30000.f); // 스크린 좌표계로 이동하기 위해
+
+	// 스크린 좌표계 위치 이동
+	pos.x += m_SampleUIMap->getRect().left;
+	pos.z += m_SampleUIMap->getRect().bottom;
+	m_UIAltar_4 = new UI2DImage(
+		m_TESTGameObject, pd3dDevice, pd3dCommandList,
+		POINT{ int(pos.x), int(pos.z) },
+		20, 20,
+		L"Image/Red.dds"
+	);
+
+	tr = StaticObjectStorage::GetInstance()->GetAltarTransform(4, ALTAR_IN);
+	pos = XMFLOAT3{ tr._41, 0 , tr._43 };
+	m_AltarSphere[4] = new AltarSphere("AltarSphere0", pos, pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
+
+	// ui map 포지션으로 변경하기 위해 크기 축소
+	pos.x = pos.x * (float(m_UIMapSize.x) / 30000.f);
+	pos.z = -pos.z * (float(m_UIMapSize.y) / 30000.f); // 스크린 좌표계로 이동하기 위해
+
+	// 스크린 좌표계 위치 이동
+	pos.x += m_SampleUIMap->getRect().left;
+	pos.z += m_SampleUIMap->getRect().bottom;
+	m_UIAltar_5 = new UI2DImage(
+		m_TESTGameObject, pd3dDevice, pd3dCommandList,
+		POINT{ int(pos.x), int(pos.z) },
+		20, 20,
+		L"Image/Red.dds"
+	);
+
+	m_UIPlayer = new UI2DImage(
+		m_TESTGameObject, pd3dDevice, pd3dCommandList,
+		POINT{ 0, 0 },
+		10, 10,
+		L"Image/Red.dds"
+	);
 
 }
 
@@ -634,7 +633,7 @@ bool GameScene::ProcessInput(HWND hWnd, float fElapsedTime)
 }
 
 void GameScene::UpdatePhysics(float fElapsedTime)
-{ 
+{
 	for (int i = 0; i < m_TestMonsterCount; ++i) {
 		m_TestMonster[i]->UpdateState(fElapsedTime); // State와 업데이트 처리...
 	}
@@ -681,8 +680,8 @@ void GameScene::Update(float fElapsedTime)
 	else
 	{
 		for (int x = 0; x < 5; ++x)
-		{ 
-			m_AltarSphere[x]->SetisEnguaged(false); 
+		{
+			m_AltarSphere[x]->SetisEnguaged(false);
 		}
 	}
 
@@ -702,7 +701,7 @@ void GameScene::Update(float fElapsedTime)
 		m_TestMonster[i]->Update(fElapsedTime);
 	}
 	//// 순서 변경 X ////
-	 
+
 	for (int x = 0; x < 5; ++x)
 	{
 		m_AltarSphere[x]->Update(fElapsedTime);
@@ -756,13 +755,13 @@ void GameScene::TESTSetRootDescriptor(ID3D12GraphicsCommandList * pd3dCommandLis
 }
 
 void GameScene::AnimateObjects(float fTimeElapsed)
-{ 
+{
 	if (m_pPlayer) m_pPlayer->Animate(fTimeElapsed);
 	for (int x = 0; x < 5; ++x)
 	{
 		if (m_AltarSphere[x])
 		{
-			if(m_AltarSphere[x]->GetisActive()) m_AltarSphere[x]->Animate(fTimeElapsed);
+			if (m_AltarSphere[x]->GetisActive()) m_AltarSphere[x]->Animate(fTimeElapsed);
 		}
 	}
 	for (int i = 0; i < m_TestMonsterCount; ++i)
@@ -772,7 +771,7 @@ void GameScene::AnimateObjects(float fTimeElapsed)
 }
 
 void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers)
-{ 
+{
 	RenderShadowMap(pd3dCommandList);
 
 	// 렌더링
@@ -794,8 +793,8 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 	}
 
 	// 스카이박스 렌더
-	if(m_SkyBox) m_SkyBox->Render(pd3dCommandList, isGBuffers);
-	 
+	if (m_SkyBox) m_SkyBox->Render(pd3dCommandList, isGBuffers);
+
 	//  조명
 	D3D12_GPU_VIRTUAL_ADDRESS d3dcbLightsGpuVirtualAddress = m_pd3dcbLights->GetGPUVirtualAddress();
 	pd3dCommandList->SetGraphicsRootConstantBufferView(ROOTPARAMETER_LIGHTS, d3dcbLightsGpuVirtualAddress); //Lights
@@ -807,8 +806,8 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 
 
 	if (m_pPlayer) m_pPlayer->Render(pd3dCommandList, isGBuffers);
-	 
-	if(m_WideareaMagic) m_WideareaMagic->Render(pd3dCommandList, isGBuffers);
+
+	if (m_WideareaMagic) m_WideareaMagic->Render(pd3dCommandList, isGBuffers);
 
 
 #ifdef CHECK_SUBVIEWS
@@ -830,7 +829,7 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 
 		if (!m_pPlayer->GetBroom()->GetisPrepare() && !m_pPlayer->GetBroom()->GetisUsing())
 		{
-			if(m_AimPoint) m_AimPoint->Render(pd3dCommandList, isGBuffers);
+			if (m_AimPoint) m_AimPoint->Render(pd3dCommandList, isGBuffers);
 		}
 	}
 
@@ -839,8 +838,8 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 	{
 		if (m_TestMonster[i]) m_TestMonster[i]->Render(pd3dCommandList, isGBuffers);
 	}
-	/*BossMonster Dragon Render*/
-bool isAllAtive = false;
+
+	bool isAllAtive = false;
 	for (int i = 0; i < 5; ++i)
 	{
 		if (m_AltarSphere[i]->GetisActive())
@@ -917,9 +916,9 @@ void GameScene::UpdateCollision(float fElapsedTime)
 	// 플레이어 충돌체크 ///////////////////////// 
 	BoundingOrientedBox AlreadyPlayerBBox = m_pPlayer->CalculateAlreadyBoundingBox(fElapsedTime);
 	XMFLOAT3 AlreadyPositon{ AlreadyPlayerBBox.Center.x, AlreadyPlayerBBox.Center.y, AlreadyPlayerBBox.Center.z };
-	
+
 	// 외곽처리
-	MyBOBox outside_box[4]{ 
+	MyBOBox outside_box[4]{
 		{XMFLOAT3(-100, 0, 15000), XMFLOAT3(100, 3000, 20000)},
 		{XMFLOAT3(15000, 0, 30100), XMFLOAT3(20000, 3000, 100)},
 		{XMFLOAT3(30100, 0, 15000), XMFLOAT3(100, 3000, 20000)},
@@ -933,16 +932,16 @@ void GameScene::UpdateCollision(float fElapsedTime)
 
 		// 이동한 박스를 통해 충돌한다.
 		bool isSlide = Collision::ProcessCollision(
-			AlreadyPlayerBBox, 
-			outside_box[i], 
+			AlreadyPlayerBBox,
+			outside_box[i],
 			m_pPlayer->GetTransform().GetPosition(),
-			m_pPlayer->GetVelocity(), 
+			m_pPlayer->GetVelocity(),
 			fElapsedTime,
 			false,
 			slideVector);
 
 		if (isSlide)
-		{ 
+		{
 			m_pPlayer->SetVelocity(slideVector);
 		}
 	}
