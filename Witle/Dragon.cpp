@@ -124,7 +124,20 @@ void Dragon::UpdateState(float fElapsedTime)
 
 void Dragon::Animate(float fElapsedTime)
 {
-	Monster::Animate(fElapsedTime);
+	// Monster::Animate(fElapsedTime);
+	// 대신 아래의 함수들...
+
+	// animate 이전에 현재 설정된 애니메이션 수행하도록 설정
+	SetTrackAnimationSet();
+
+	// 반드시 트랜스폼 업데이트..! 
+	m_Transform.Update(fElapsedTime);
+
+	// m_pLoadObject->m_xmf4x4ToParent = m_Transform.GetWorldMatrix();
+	m_pLoadObject->m_xmf4x4ToParent = Matrix4x4::Multiply(XMMatrixRotationX(80.0f), m_Transform.GetWorldMatrix());
+	m_pLoadObject->m_xmf4x4ToParent._42 = 250.f; // y축 일부러 고정시킴... ㅠㅠ
+
+	m_pLoadObject->Animate(fElapsedTime);
 
 	LoadObject* p = m_pLoadObject->FindFrame("Bone001");
 	XMFLOAT3 pos = XMFLOAT3(p->m_xmf4x4World._41, p->m_xmf4x4World._42 + 50, p->m_xmf4x4World._43);

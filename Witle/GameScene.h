@@ -118,6 +118,8 @@ protected:
 	int						m_TestMonsterCount{ 100 };
 	Monster**				m_TestMonster{ nullptr };
 
+	Monster*				m_Dragon{ nullptr };
+
 	AltarSphere*			m_AltarSphere[5];
 	// MyRectangle*            m_HpBar[5]; 
 

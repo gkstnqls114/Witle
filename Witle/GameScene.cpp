@@ -252,13 +252,20 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	std::mt19937 mersenne(rd());
 	std::uniform_int_distribution<> die(2000, 15000);
 	std::uniform_int_distribution<> monstertype(0, 3);
+	
 
+	
+	m_Dragon = new Dragon("Dragon",
+			XMFLOAT3(15000, 0, 15000),
+			pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
+	
 	m_TestMonster = new Monster*[m_TestMonsterCount];
 
-	m_TestMonster[0] = new SpaceCat("SpaceCat",
-		XMFLOAT3(1500, 0, 1000),
+/*
+	m_TestMonster[0] = new Dragon("SpaceCat",
+		XMFLOAT3(15000, 0, 15000),
 		pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
-
+*/
 	int spacecatblue_count = 0;
 	int spacecatgreen_count = 0;
 	int spacecatpink_count = 0;
@@ -267,7 +274,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	MonsterTransformStorage* instance = MonsterTransformStorage::GetInstance();
 	instance->CreateInfo(pd3dDevice, pd3dCommandList);
 
-	for (int i = 1; i < m_TestMonsterCount; )
+	for (int i = 0; i < m_TestMonsterCount; )
 	{
 		int value = monstertype(mersenne);
 
@@ -634,6 +641,8 @@ bool GameScene::ProcessInput(HWND hWnd, float fElapsedTime)
 
 void GameScene::UpdatePhysics(float fElapsedTime)
 {
+	m_Dragon->UpdateState(fElapsedTime);
+
 	for (int i = 0; i < m_TestMonsterCount; ++i) {
 		m_TestMonster[i]->UpdateState(fElapsedTime); // State客 诀单捞飘 贸府...
 	}
@@ -696,6 +705,7 @@ void GameScene::Update(float fElapsedTime)
 	if (m_SkyBox) m_SkyBox->Update(fElapsedTime);
 	if (m_WideareaMagic) m_WideareaMagic->Update(fElapsedTime);
 
+	m_Dragon->Update(fElapsedTime);
 	for (int i = 0; i < m_TestMonsterCount; ++i)
 	{
 		m_TestMonster[i]->Update(fElapsedTime);
@@ -764,6 +774,7 @@ void GameScene::AnimateObjects(float fTimeElapsed)
 			if (m_AltarSphere[x]->GetisActive()) m_AltarSphere[x]->Animate(fTimeElapsed);
 		}
 	}
+	m_Dragon->Animate(fTimeElapsed);
 	for (int i = 0; i < m_TestMonsterCount; ++i)
 	{
 		if (m_TestMonster[i]) m_TestMonster[i]->Animate(fTimeElapsed);
@@ -833,7 +844,7 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 		}
 	}
 
-
+	m_Dragon->Render(pd3dCommandList, isGBuffers);
 	for (int i = 0; i < m_TestMonsterCount; ++i)
 	{
 		if (m_TestMonster[i]) m_TestMonster[i]->Render(pd3dCommandList, isGBuffers);
