@@ -28,16 +28,18 @@ void Button::ReleaseMemberUploadBuffers()
 Button::Button(const std::string& entityID, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, RECT rect, const wchar_t * ON_filepath, const wchar_t * OFF_filepath)
 	:GameObject(entityID)
 { 
-	m_pButtonShader = ShaderManager::GetInstance()->GetShader(SHADER_SCREEN);
-
+	m_pButtonShader = ShaderManager::GetInstance()->GetShader(SHADER_UISCREEN);
+	m_isClick = false;
 	m_rect = rect;
-	m_pButtonON = new MyRectangle(this, pd3dDevice, pd3dCommandList, rect, ON_filepath);
-	m_pButtonOFF = new MyRectangle(this, pd3dDevice, pd3dCommandList, rect, OFF_filepath);
+	if(ON_filepath != NULL)
+		m_pButtonON = new MyRectangle(this, pd3dDevice, pd3dCommandList, rect, ON_filepath);
+	if(OFF_filepath != NULL) 
+		m_pButtonOFF = new MyRectangle(this, pd3dDevice, pd3dCommandList, rect, OFF_filepath);
 }
 Button::Button(const std::string& entityID, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, POINT center, float width, float height, const wchar_t * ON_filepath, const wchar_t * OFF_filepath)
 	:GameObject(entityID)
 { 
-	m_pButtonShader = ShaderManager::GetInstance()->GetShader(SHADER_SCREEN);
+	m_pButtonShader = ShaderManager::GetInstance()->GetShader(SHADER_UISCREEN);
 
 	m_rect.left = static_cast<float>(center.x) - width / 2.f;
 	m_rect.right = static_cast<float>(center.x) + width / 2.f;

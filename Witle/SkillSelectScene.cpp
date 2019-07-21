@@ -151,6 +151,10 @@ bool SkillSelectScene::ProcessInput(HWND hWnd, float ElapsedTime)
 	return true;
 }
 
+void SkillSelectScene::UpdatePhysics(float ElapsedTime)
+{
+}
+
 // ProcessInput에 의한 right, up, look, pos 를 월드변환 행렬에 갱신한다.
 void SkillSelectScene::Update(float fElapsedTime)
 {
@@ -176,6 +180,10 @@ void SkillSelectScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool i
 
 	// pd3dCommandList->SetDescriptorHeaps(1, &m_pd3dCbvSrvDescriptorHeap);
 	m_pBackGround->Render(pd3dCommandList, isGBuffers);
+}
+
+void SkillSelectScene::RenderForShadow(ID3D12GraphicsCommandList * pd3dCommandList)
+{
 }
 
 void SkillSelectScene::ReleaseUploadBuffers()

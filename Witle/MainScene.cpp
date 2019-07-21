@@ -2,8 +2,12 @@
 #include "GameInput.h"
 #include "d3dUtil.h" 
 #include "Button.h"
+#include "GameObject.h"
 #include "GameScreen.H"
+#include "ShaderManager.h"
 #include "Texture.h"
+#include "UI2DImage.h"
+#include "MyRectangle.h"
 #include "GraphicsRootSignatureMgr.h"
 #include "MainScene.h"
 
@@ -130,14 +134,21 @@ void MainScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	m_d3dScissorRect = D3D12_RECT{ 0, 0, static_cast<LONG>(GameScreen::GetWidth()) ,static_cast<LONG>(GameScreen::GetHeight()) };
 
 	// 디스크립터 힙 설정
-	MainScene::CreateCbvSrvDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 3);
+	// MainScene::CreateCbvSrvDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 3);
+
+	m_gameobject = new EmptyGameObject("back");
+	m_Background = new UI2DImage(m_gameobject, pd3dDevice, pd3dCommandList, RECT{
+		0, 0,
+		static_cast<LONG>(GameScreen::GetWidth()), static_cast<LONG>(GameScreen::GetHeight()) },
+		L"Image/Wittle_1280x720.dds"
+		);
 
 	m_pBackGround = new Button("Background", pd3dDevice, pd3dCommandList, RECT{ 
 		0, 0,
 		static_cast<LONG>(GameScreen::GetWidth()), static_cast<LONG>(GameScreen::GetHeight())},
 		nullptr, L"Image/Wittle_1280x720.dds");
 
-	// MainScene::CreateShaderResourceViews(pd3dDevice, m_pBackGround->GetTexture(), ROOTPARAMETER_TEXTURE, true);
+	// MainScene::CreateShaderResourceViews(pd3dDevice, m_pBackGround->GetTexture(false), ROOTPARAMETER_TEXTURE, true);
 }
 
 void MainScene::ReleaseObjects()
@@ -178,8 +189,11 @@ void MainScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 	pd3dCommandList->RSSetViewports(1, &m_d3dViewport);
 	pd3dCommandList->RSSetScissorRects(1, &m_d3dScissorRect);
 
-	// pd3dCommandList->SetDescriptorHeaps(1, &m_pd3dCbvSrvDescriptorHeap);
-	m_pBackGround->Render(pd3dCommandList, isGBuffers);
+	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_UISCREEN, false);
+
+	//pd3dCommandList->SetDescriptorHeaps(1, &m_pd3dCbvSrvDescriptorHeap);
+	m_Background->Render(pd3dCommandList);
+	// m_pBackGround->Render(pd3dCommandList, isGBuffers);
 }
 
 void MainScene::RenderForShadow(ID3D12GraphicsCommandList * pd3dCommandList)

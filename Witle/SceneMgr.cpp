@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "GameScene.h"
 #include "MainScene.h"
+#include "SkillSelectScene.h"
 #include "SceneMgr.h"
 
 static SceneMgr* m_Instace{ nullptr };
@@ -9,7 +10,8 @@ SceneMgr::SceneMgr()
 {
 	m_GameScene = new GameScene;
 	m_MainScene = new MainScene;
-	ChangeSceneToGame();
+	m_SkillSelectScene = new SkillSelectScene;
+	ChangeSceneToMain();
 }
 
 SceneMgr::~SceneMgr()
@@ -58,4 +60,19 @@ void SceneMgr::ChangeSceneToMain()
 
 void SceneMgr::ChangeSceneToSkillSelect()
 {
+}
+
+bool SceneMgr::IsGameScene() const
+{
+	return m_pCurrScene == m_GameScene;
+}
+
+bool SceneMgr::IsMainScene() const
+{
+	return m_pCurrScene == m_MainScene;
+}
+
+bool SceneMgr::IsSkillSelectScene() const
+{
+	return m_pCurrScene == m_SkillSelectScene;
 }
