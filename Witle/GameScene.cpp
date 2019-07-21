@@ -62,12 +62,13 @@
 #include "GameScreen.h"
 #include "CameraObject.h"
 #include "QuadTreeTerrain.h"
+#include"MyDescriptorHeap.h"
 #include "BasicCam.h" 
 
 #include "UI2DImage.h"
 #include "GameScene.h"
 
-ID3D12DescriptorHeap*		GameScene::m_pd3dCbvSrvDescriptorHeap;
+MyDescriptorHeap*		GameScene::m_pd3dCbvSrvDescriptorHeap;
 
 D3D12_CPU_DESCRIPTOR_HANDLE	GameScene::m_d3dCbvCPUDescriptorStartHandle;
 D3D12_GPU_DESCRIPTOR_HANDLE	GameScene::m_d3dCbvGPUDescriptorStartHandle;
@@ -91,13 +92,9 @@ GameScene::~GameScene()
 
 void GameScene::CreateCbvSrvDescriptorHeaps(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, int nConstantBufferViews, int nShaderResourceViews)
 {
-	D3D12_DESCRIPTOR_HEAP_DESC d3dDescriptorHeapDesc;
-	d3dDescriptorHeapDesc.NumDescriptors = nConstantBufferViews + nShaderResourceViews; //CBVs + SRVs 
-	d3dDescriptorHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
-	d3dDescriptorHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
-	d3dDescriptorHeapDesc.NodeMask = 0;
-	pd3dDevice->CreateDescriptorHeap(&d3dDescriptorHeapDesc, __uuidof(ID3D12DescriptorHeap), (void **)&m_pd3dCbvSrvDescriptorHeap);
-
+	m_pd3dCbvSrvDescriptorHeap = new MyDescriptorHeap();
+	m_pd3dCbvSrvDescriptorHeap->CreateCbvSrvUavDescriptorHeaps(pd3dDevice, pd3dCommandList, nConstantBufferViews, nShaderResourceViews, 0);
+	 
 	m_d3dCbvCPUDescriptorNextHandle = m_d3dCbvCPUDescriptorStartHandle = m_pd3dCbvSrvDescriptorHeap->GetCPUDescriptorHandleForHeapStart();
 	m_d3dCbvGPUDescriptorNextHandle = m_d3dCbvGPUDescriptorStartHandle = m_pd3dCbvSrvDescriptorHeap->GetGPUDescriptorHandleForHeapStart();
 	m_d3dSrvCPUDescriptorNextHandle.ptr = m_d3dSrvCPUDescriptorStartHandle.ptr = m_d3dCbvCPUDescriptorStartHandle.ptr + (d3dUtil::gnCbvSrvDescriptorIncrementSize * nConstantBufferViews);
@@ -141,6 +138,30 @@ D3D12_GPU_DESCRIPTOR_HANDLE GameScene::CreateShaderResourceViews(ID3D12Device * 
 			m_d3dSrvGPUDescriptorNextHandle.ptr += d3dUtil::gnCbvSrvDescriptorIncrementSize;
 		}
 	}
+	return(d3dSrvGPUDescriptorHandle);
+}
+
+D3D12_GPU_DESCRIPTOR_HANDLE GameScene::CreateShaderResourceViews(ID3D12Device * pd3dDevice, ID3D12Resource * pResource, UINT nRootParameter, bool bAutoIncrement, int index)
+{
+	assert(!(pResource == nullptr));
+
+	D3D12_GPU_DESCRIPTOR_HANDLE d3dSrvGPUDescriptorHandle = m_d3dSrvGPUDescriptorNextHandle;
+
+	int nTextureType = RESOURCE_TEXTURE2D;
+
+	ID3D12Resource *pShaderResource = pResource;
+	D3D12_RESOURCE_DESC d3dResourceDesc = pShaderResource->GetDesc();
+	D3D12_SHADER_RESOURCE_VIEW_DESC d3dShaderResourceViewDesc = d3dUtil::GetShaderResourceViewDesc(d3dResourceDesc, nTextureType);
+	
+	// 몇번째인지
+	D3D12_CPU_DESCRIPTOR_HANDLE hCPU = m_pd3dCbvSrvDescriptorHeap->GetCPUDescriptorHandleForHeapStart();
+	for (int i = 0; i < index; ++i)
+	{
+		hCPU.ptr += d3dUtil::gnCbvSrvDescriptorIncrementSize; 
+	}
+	
+	pd3dDevice->CreateShaderResourceView(pShaderResource, &d3dShaderResourceViewDesc, hCPU);
+
 	return(d3dSrvGPUDescriptorHandle);
 }
 
@@ -256,7 +277,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	BuildLightsAndMaterials(pd3dDevice, pd3dCommandList);
 
 	// 디스크립터 힙 설정
-	GameScene::CreateCbvSrvDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 3);
+	GameScene::CreateCbvSrvDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 4);
 	 
 	m_AimPoint = new AimPoint("AimPoint", pd3dDevice, pd3dCommandList, POINT{ int(GameScreen::GetWidth()) / 2, int(GameScreen::GetHeight()) / 2 }, 100.f, 100.f, L"Image/AimPoint.dds");
 	// m_WideareaMagic = new WideareaMagic(pd3dDevice, pd3dCommandList);
@@ -522,7 +543,8 @@ void GameScene::ReleaseObjects()
 {
 	if (m_pd3dCbvSrvDescriptorHeap)
 	{
-		m_pd3dCbvSrvDescriptorHeap->Release();
+		m_pd3dCbvSrvDescriptorHeap->ReleaseObjects();
+		delete m_pd3dCbvSrvDescriptorHeap;
 		m_pd3dCbvSrvDescriptorHeap = nullptr;
 	}
 
@@ -793,13 +815,7 @@ void GameScene::LastUpdate(float fElapsedTime)
 	if (m_pQuadtreeTerrain) m_pQuadtreeTerrain->LastUpdate(fElapsedTime);
 	// 순서변경X  
 }
-
-void GameScene::TESTSetRootDescriptor(ID3D12GraphicsCommandList * pd3dCommandList)
-{
-	pd3dCommandList->SetDescriptorHeaps(1, &m_pd3dCbvSrvDescriptorHeap);
-	m_Terrain->UpdateShaderVariables(pd3dCommandList);
-}
-
+ 
 void GameScene::AnimateObjects(float fTimeElapsed)
 { 
 	if (m_pPlayer) m_pPlayer->Animate(fTimeElapsed);
@@ -901,7 +917,7 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 	if (m_Terrain)
 	{
 		Mesh* terrainMesh = m_Terrain->GetComponent<Mesh>("TerrainMesh");
-		m_pQuadtreeTerrain->Render(pd3dCommandList, m_Terrain, m_pd3dCbvSrvDescriptorHeap, isGBuffers);
+		m_pQuadtreeTerrain->Render(pd3dCommandList, m_Terrain, m_pd3dCbvSrvDescriptorHeap->GetpDescriptorHeap(), isGBuffers);
 	}
 
 

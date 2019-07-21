@@ -457,7 +457,7 @@ void QuadtreeTerrain::Render(ID3D12GraphicsCommandList * pd3dCommandList, Terrai
 	ID3D12DescriptorHeap* heaps[] { m_pShadowHeap->GetpDescriptorHeap(), pHeap };
 	pd3dCommandList->SetDescriptorHeaps(1, heaps);
 	// pTerrain->UpdateShaderVariables(pd3dCommandList); 
-	pd3dCommandList->SetGraphicsRootDescriptorTable(ROOTPARAMETER_SHADOWTEXTURE, m_pShadowHeap->GetGPUSrvDescriptorStartHandle());
+	pd3dCommandList->SetGraphicsRootDescriptorTable(ROOTPARAMETER_SHADOWTEXTURE, m_pShadowHeap->GetGPUDescriptorHandleForHeapStart());
 
 	RecursiveRender(m_pRootNode, pd3dCommandList, isGBuffers); // ÁöÇü ·»´õ	 
 

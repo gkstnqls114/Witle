@@ -155,7 +155,7 @@ void CGameFramework::RenderGBuffers()
 	m_GBufferHeap->UpdateShaderVariable(m_CommandList.Get());
 
 	// 리소스만 바꾼다.. 
-	D3D12_GPU_DESCRIPTOR_HANDLE handle = m_GBufferHeap->GetGPUSrvDescriptorStartHandle();
+	D3D12_GPU_DESCRIPTOR_HANDLE handle = m_GBufferHeap->GetGPUDescriptorHandleForHeapStart();
 	
 	// 장면을 렌더합니다.
 	for (int i = 0; i < m_GBuffersCount; ++i)
@@ -405,7 +405,7 @@ void CGameFramework::CreateShadowmapView()
 	// 디스크립터 생성 /////////////////////////////////////////////
 	m_ShadowmapHeap = new MyDescriptorHeap();
 	m_ShadowmapHeap->CreateCbvSrvUavDescriptorHeaps(m_d3dDevice.Get(), m_CommandList.Get(), 0, 1, 0);
-	m_hCpuSrvForShadow = m_ShadowmapHeap->GetCPUSrvDescriptorStartHandle(); // 쉐이더 리소스 뷰
+	m_hCpuSrvForShadow = m_ShadowmapHeap->GetCPUDescriptorHandleForHeapStart(); // 쉐이더 리소스 뷰
 
 	 // Create SRV to resource so we can sample the shadow map in a shader program.
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
@@ -674,7 +674,7 @@ void CGameFramework::CreateGBufferView()
 
 	if (!m_GBufferHeap)
 	{
-		m_GBufferHeap = new MyDescriptorHeap;
+		m_GBufferHeap = new MyDescriptorHeap();
 		m_GBufferHeap->CreateCbvSrvUavDescriptorHeaps(m_d3dDevice.Get(), m_CommandList.Get(), 0, m_GBuffersCount, 0);
 		for (int i = 0; i < m_GBuffersCountForRenderTarget; ++i)
 		{
@@ -697,6 +697,7 @@ void CGameFramework::BuildObjects()
 	// m_pScene = new LoadingScene;
 	// m_pScene = new RoomScene;
 
+	// 순서 변경 X /////////////
 	// 루트 시그니처를 통해 모든 오브젝트 갖고온다.
 	TextureStorage::GetInstance()->CreateTextures(m_d3dDevice.Get(), m_CommandList.Get());
 	ModelStorage::GetInstance()->CreateModels(m_d3dDevice.Get(), m_CommandList.Get(), GraphicsRootSignatureMgr::GetGraphicsRootSignature());
@@ -705,7 +706,11 @@ void CGameFramework::BuildObjects()
 	 
 	m_pScene->BuildObjects(m_d3dDevice.Get(), m_CommandList.Get());
 
+	// 터레인을 위한 쉐도우 맵과 텍스쳐 연결하는 디스크립터 힙 생성...
+	// GameScene::CreateShaderResourceViews(m_d3dDevice.Get(), m_Shadowmap, ROOTPARAMETER_SHADOWTEXTURE, false, 3);
 	static_cast<GameScene*>(m_pScene)->GetQuadtreeTerrain()->m_pShadowHeap = m_ShadowmapHeap;
+	// 순서 변경 X /////////////
+
 
 	///////////////////////////////////////////////////////////////////////////// 리소스 생성
 
@@ -924,7 +929,7 @@ void CGameFramework::RenderShadowMap()
 	m_CommandList->RSSetViewports(1, &GBuffer_Viewport);
 	m_CommandList->RSSetScissorRects(1, &ScissorRect);
 
-	m_CommandList->SetGraphicsRootDescriptorTable(ROOTPARAMETER_TEXTUREBASE, m_ShadowmapHeap->GetGPUSrvDescriptorStartHandle());
+	m_CommandList->SetGraphicsRootDescriptorTable(ROOTPARAMETER_TEXTUREBASE, m_ShadowmapHeap->GetGPUDescriptorHandleForHeapStart());
 
 	m_CommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	m_CommandList->DrawInstanced(6, 1, 0, 0);
@@ -1078,7 +1083,7 @@ void CGameFramework::DefferedRenderSwapChain()
 	MainCameraMgr::GetMainCamera()->GetCamera()->UpdateShaderVariables(m_CommandList.Get(), ROOTPARAMETER_CAMERA);
 
 	//// 리소스만 바꾼다.. 
-	D3D12_GPU_DESCRIPTOR_HANDLE handle = m_GBufferHeap->GetGPUSrvDescriptorStartHandle();
+	D3D12_GPU_DESCRIPTOR_HANDLE handle = m_GBufferHeap->GetGPUDescriptorHandleForHeapStart();
 
 	D3D12_VIEWPORT	Viewport{ 0.f, 0.f, GameScreen::GetWidth() , GameScreen::GetHeight(), 1.0f, 0.0f };
 	D3D12_RECT		ScissorRect{ 0, 0, GameScreen::GetWidth() , GameScreen::GetHeight() };
