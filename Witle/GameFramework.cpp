@@ -707,8 +707,7 @@ void CGameFramework::BuildObjects()
 	m_pScene->BuildObjects(m_d3dDevice.Get(), m_CommandList.Get());
 
 	// 터레인을 위한 쉐도우 맵과 텍스쳐 연결하는 디스크립터 힙 생성...
-	// GameScene::CreateShaderResourceViews(m_d3dDevice.Get(), m_Shadowmap, ROOTPARAMETER_SHADOWTEXTURE, false, 3);
-	static_cast<GameScene*>(m_pScene)->GetQuadtreeTerrain()->m_pShadowHeap = m_ShadowmapHeap;
+	GameScene::CreateShaderResourceViewsForShadow(m_d3dDevice.Get(), m_Shadowmap, ROOTPARAMETER_SHADOWTEXTURE, false, 3); 
 	// 순서 변경 X /////////////
 
 

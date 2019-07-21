@@ -60,7 +60,7 @@ private:
 	static D3D12_GPU_DESCRIPTOR_HANDLE	m_d3dSrvGPUDescriptorNextHandle;
 
 public:
-	static D3D12_GPU_DESCRIPTOR_HANDLE CreateShaderResourceViews(ID3D12Device *pd3dDevice, ID3D12Resource *pResource, UINT nRootParameter, bool bAutoIncrement, int index);
+	static D3D12_GPU_DESCRIPTOR_HANDLE CreateShaderResourceViewsForShadow(ID3D12Device *pd3dDevice, ID3D12Resource *pResource, UINT nRootParameter, bool bAutoIncrement, int index);
 
 protected:
 	static void CreateCbvSrvDescriptorHeaps(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, int nConstantBufferViews, int nShaderResourceViews);

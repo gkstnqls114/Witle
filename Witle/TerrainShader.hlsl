@@ -82,8 +82,7 @@ float4 PSTerrain(VS_TERRAIN_OUTPUT input) : SV_TARGET
      
     finalColor = lerp(finalColor, cllumination, 0.5f);
     
-    return float4(fShadowFactor, fShadowFactor, fShadowFactor, 1.0);
-    // return (finalColor);
+    return (finalColor);
 }
 
 PS_OUTPUT_FOR_GBUFFERS PSTerrainForGBuffers(VS_TERRAIN_OUTPUT input)

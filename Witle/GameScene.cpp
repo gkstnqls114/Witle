@@ -141,7 +141,7 @@ D3D12_GPU_DESCRIPTOR_HANDLE GameScene::CreateShaderResourceViews(ID3D12Device * 
 	return(d3dSrvGPUDescriptorHandle);
 }
 
-D3D12_GPU_DESCRIPTOR_HANDLE GameScene::CreateShaderResourceViews(ID3D12Device * pd3dDevice, ID3D12Resource * pResource, UINT nRootParameter, bool bAutoIncrement, int index)
+D3D12_GPU_DESCRIPTOR_HANDLE GameScene::CreateShaderResourceViewsForShadow(ID3D12Device * pd3dDevice, ID3D12Resource * pResource, UINT nRootParameter, bool bAutoIncrement, int index)
 {
 	assert(!(pResource == nullptr));
 
@@ -151,6 +151,7 @@ D3D12_GPU_DESCRIPTOR_HANDLE GameScene::CreateShaderResourceViews(ID3D12Device * 
 
 	ID3D12Resource *pShaderResource = pResource;
 	D3D12_RESOURCE_DESC d3dResourceDesc = pShaderResource->GetDesc();
+	d3dResourceDesc.Format = DXGI_FORMAT_R24_UNORM_X8_TYPELESS;
 	D3D12_SHADER_RESOURCE_VIEW_DESC d3dShaderResourceViewDesc = d3dUtil::GetShaderResourceViewDesc(d3dResourceDesc, nTextureType);
 	
 	// 몇번째인지
