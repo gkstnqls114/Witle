@@ -1,9 +1,9 @@
 #pragma once
 #include "Scene.h"
- 
+
 class Button;
 
-class LoadingScene
+class SkillSelectScene
 	: public Scene
 {
 private:
@@ -35,14 +35,14 @@ protected:
 	D3D12_CPU_DESCRIPTOR_HANDLE GetCPUSrvDescriptorNextHandle() { return(m_d3dSrvCPUDescriptorNextHandle); }
 	D3D12_GPU_DESCRIPTOR_HANDLE GetGPUSrvDescriptorNextHandle() { return(m_d3dSrvGPUDescriptorNextHandle); }
 
-protected: 
+protected:
 	void BuildLightsAndMaterials(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList);
 	void RenderShadowMap(ID3D12GraphicsCommandList *pd3dCommandList);
 
 
 public:
-	LoadingScene();
-	virtual ~LoadingScene();
+	SkillSelectScene();
+	virtual ~SkillSelectScene();
 
 	virtual bool OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam) override;
 	virtual bool OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam, float ElapsedTime) override;
@@ -59,8 +59,8 @@ public:
 
 	virtual void Update(float ElapsedTime) override;
 	virtual void LastUpdate(float ElapsedTime) override;
-	 
-protected:  
+
+protected:
 
 private:
 	D3D12_VIEWPORT	m_d3dViewport;

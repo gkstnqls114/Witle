@@ -15,13 +15,11 @@
 #include "ModelStorage.h"
 #include "TextureStorage.h"
 #include "StaticObjectStorage.h"
+#include "SceneMgr.h"
 //// Manager ////////////////////////// 
 
-//// Scene ////////////////////////// 
+//// Scene //////////////////////////  
 #include "GameScene.h"
-#include "RoomScene.h"
-#include "LobbyScene.h"
-#include "LoadingScene.h"
 //// Scene ////////////////////////// 
  
 #include "QuadtreeTerrain.h"
@@ -693,9 +691,7 @@ void CGameFramework::BuildObjects()
 	// 루트 시그니처 먼저 생성
 	GraphicsRootSignatureMgr::BuildObject(m_d3dDevice.Get());
 
-	m_pScene = new GameScene;
-	// m_pScene = new LoadingScene;
-	// m_pScene = new RoomScene;
+	m_SceneMgr = new SceneMgr; 
 
 	// 순서 변경 X /////////////
 	// 루트 시그니처를 통해 모든 오브젝트 갖고온다.
@@ -704,7 +700,7 @@ void CGameFramework::BuildObjects()
 	   
 	BuildShaders();
 	 
-	m_pScene->BuildObjects(m_d3dDevice.Get(), m_CommandList.Get());
+	m_SceneMgr->BuildObjects(m_d3dDevice.Get(), m_CommandList.Get());
 
 	// 터레인을 위한 쉐도우 맵과 텍스쳐 연결하는 디스크립터 힙 생성...
 	GameScene::CreateShaderResourceViewsForShadow(m_d3dDevice.Get(), m_Shadowmap, ROOTPARAMETER_SHADOWTEXTURE, false, 3); 
@@ -721,7 +717,7 @@ void CGameFramework::BuildObjects()
 	WaitForGpuComplete();
 
 	///////////////////////////////////////////////////////////////////////////// 업로드 힙 릴리즈
-	if (m_pScene) m_pScene->ReleaseUploadBuffers(); 
+	if (m_SceneMgr) m_SceneMgr->ReleaseUploadBuffers();
 	 
 	TextureStorage::GetInstance()->ReleaseUploadBuffers();
 	ModelStorage::GetInstance()->ReleaseUploadBuffers();
@@ -732,11 +728,11 @@ void CGameFramework::BuildObjects()
 
 void CGameFramework::ReleaseObjects()
 { 
-	if (m_pScene)
+	if (m_SceneMgr)
 	{ 
-		m_pScene->ReleaseObjects();
-		delete m_pScene;
-		m_pScene = nullptr;
+		m_SceneMgr->ReleaseObjects();
+		delete m_SceneMgr;
+		m_SceneMgr = nullptr;
 	}
 	 
 
@@ -755,14 +751,14 @@ void CGameFramework::ReleaseObjects()
 
 void CGameFramework::UpdateGamelogic(float fElapsedTime)
 {
-	if (m_pScene) 
+	if (m_SceneMgr)
 	{
 		GameInput::Update(m_hWnd);
-		m_pScene->ProcessInput(m_hWnd, fElapsedTime);
-		m_pScene->UpdatePhysics(fElapsedTime);
-		m_pScene->Update(fElapsedTime);
-		m_pScene->AnimateObjects(fElapsedTime);
-		m_pScene->LastUpdate(fElapsedTime); 
+		m_SceneMgr->GetCurrScene()->ProcessInput(m_hWnd, fElapsedTime);
+		m_SceneMgr->GetCurrScene()->UpdatePhysics(fElapsedTime);
+		m_SceneMgr->GetCurrScene()->Update(fElapsedTime);
+		m_SceneMgr->GetCurrScene()->AnimateObjects(fElapsedTime);
+		m_SceneMgr->GetCurrScene()->LastUpdate(fElapsedTime); 
 		GameInput::Reset();
 	}
 }
@@ -795,9 +791,9 @@ void CGameFramework::MoveToNextFrame()
 
 void CGameFramework::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam)
 {
-	if (m_pScene) 
+	if (m_SceneMgr) 
 	{
-		m_pScene->OnProcessingMouseMessage(hWnd, nMessageID, wParam, lParam);
+		m_SceneMgr->GetCurrScene()->OnProcessingMouseMessage(hWnd, nMessageID, wParam, lParam);
 	}
 
 	switch (nMessageID)
@@ -830,8 +826,8 @@ void CGameFramework::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM
 static BOOL is_fullscreen = FALSE;
 void CGameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam)
 {
-	if (m_pScene) {
-		m_pScene->OnProcessingKeyboardMessage(hWnd, nMessageID, wParam, lParam, 0.f);
+	if (m_SceneMgr) {
+		m_SceneMgr->GetCurrScene()->OnProcessingKeyboardMessage(hWnd, nMessageID, wParam, lParam, 0.f);
 	}
 
 	switch (nMessageID)
@@ -951,9 +947,9 @@ void CGameFramework::RenderOnGbuffer()
 	m_CommandList->ClearDepthStencilView(m_GBufferCPUHandleForDepth[0], D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, NULL);
 	m_CommandList->OMSetRenderTargets(m_GBuffersCountForRenderTarget, m_GBufferCPUHandleForRenderTarget, TRUE, &m_GBufferCPUHandleForDepth[0]);
 	
-	if (m_pScene) 
+	if (m_SceneMgr)
 	{
-		m_pScene->Render(m_CommandList.Get(), true);
+		m_SceneMgr->GetCurrScene()->Render(m_CommandList.Get(), true);
 	}
 
 	for (int x = 0; x < m_GBuffersCountForRenderTarget; ++x)
@@ -1060,9 +1056,9 @@ void CGameFramework::Blur()
 void CGameFramework::RenderSwapChain()
 {  
 	// 장면을 렌더합니다.
-	if (m_pScene) 
+	if (m_SceneMgr->GetCurrScene())
 	{ 
-		m_pScene->Render(m_CommandList.Get(), false);
+		m_SceneMgr->GetCurrScene()->Render(m_CommandList.Get(), false);
 	}
 }
 
@@ -1112,7 +1108,7 @@ void CGameFramework::RenderForShadow()
 
 	////그래픽 루트 시그너쳐를 설정한다.
 
-	m_pScene->RenderForShadow(m_CommandList.Get());
+	m_SceneMgr->GetCurrScene()->RenderForShadow(m_CommandList.Get());
 	// m_pScene->Render(m_CommandList.Get(), false);
 
 	d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_Shadowmap, D3D12_RESOURCE_STATE_DEPTH_WRITE, D3D12_RESOURCE_STATE_GENERIC_READ);

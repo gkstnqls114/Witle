@@ -1,8 +1,8 @@
 #pragma once
 #include "d3dx12.h"
 #include "MeshRenderer.h"
-
-class Scene;
+ 
+class SceneMgr;
 class Texture;
 class ComputeShader;
 class MyDescriptorHeap;
@@ -210,8 +210,8 @@ public:
 	LRESULT CALLBACK OnProcessingWindowMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam);
 	
 private: 
-	// 현재 사용하는 장면입니다.
-	Scene *m_pScene{ nullptr };
+	// 현재 사용하는 장면을 관리하는 매니저입니다
+	SceneMgr *m_SceneMgr{ nullptr };
 	 
 };
 

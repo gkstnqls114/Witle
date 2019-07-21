@@ -19,6 +19,7 @@ class AltarSphere;
 //// Objects ///////////////
 
 //// Componenet ///////////////
+class Camera;
 class CylinderMesh;
 class LineSphere;
 //// Componenet ///////////////
@@ -35,6 +36,7 @@ class GameObject;
 class LoadObject;
 class SkinnedShader;
 class MyDescriptorHeap;
+class Texture;
 
 struct LIGHTS;
 struct MATERIAL;

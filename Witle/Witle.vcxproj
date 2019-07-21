@@ -169,6 +169,8 @@
     <ClInclude Include="HitAction.h" />
     <ClInclude Include="GraphicsRootSignatureMgr.h" />
     <ClInclude Include="IceBall.h" />
+    <ClInclude Include="SceneMgr.h" />
+    <ClInclude Include="SkillSelectScene.h" />
     <ClInclude Include="TerrainForShadow.h" />
     <ClInclude Include="MainCameraMgr.h" />
     <ClInclude Include="GeneralMonsterActionMgr.h" />
@@ -211,7 +213,7 @@
     <ClInclude Include="LineCube.h" />
     <ClInclude Include="LineShader.h" />
     <ClInclude Include="LineSphere.h" />
-    <ClInclude Include="LoadingScene.h" />
+    <ClInclude Include="MainScene.h" />
     <ClInclude Include="LobbyScene.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Monster.h" />
@@ -261,7 +263,6 @@
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Scene.h" />
-    <ClInclude Include="SceneManager.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Shape.h" />
     <ClInclude Include="Shield.h" />
@@ -348,6 +349,8 @@
     <ClCompile Include="IdleAction.cpp" />
     <ClCompile Include="InstancingLineShader.cpp" />
     <ClCompile Include="InstancingStandardShader.cpp" />
+    <ClCompile Include="SceneMgr.cpp" />
+    <ClCompile Include="SkillSelectScene.cpp" />
     <ClCompile Include="TerrainForShadow.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="LightManager.cpp" />
@@ -355,7 +358,7 @@
     <ClCompile Include="LineCube.cpp" />
     <ClCompile Include="LineShader.cpp" />
     <ClCompile Include="LineSphere.cpp" />
-    <ClCompile Include="LoadingScene.cpp" />
+    <ClCompile Include="MainScene.cpp" />
     <ClCompile Include="LobbyScene.cpp" />
     <ClCompile Include="MainCameraMgr.cpp" />
     <ClCompile Include="Material.cpp" />
@@ -402,7 +405,6 @@
     <ClCompile Include="ShaderManager.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Scene.cpp" />
-    <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Shape.cpp" />
     <ClCompile Include="Shield.cpp" />
