@@ -16,6 +16,8 @@ public:
 	Sound * pSound[SOUND_TYPE];     // 사운드 하나하나를 의미
 	Channel * pChannel[SOUND_TYPE]; // 채널은 사운드를 출력하는 스피커
 
+	float volume = 0.9f;
+
 public:
 	SoundManager();
 	~SoundManager();

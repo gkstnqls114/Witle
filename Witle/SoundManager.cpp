@@ -12,6 +12,9 @@ SoundManager::SoundManager()
 		, nullptr
 	);
 
+	FMOD::Channel *pChannel = 0;
+	pChannel->setVolume(volume);
+
 	for (auto& p : pSound) p = nullptr;
 
 	// 사운드 추가
@@ -66,27 +69,28 @@ SoundManager::SoundManager()
 	// 크리피
 	pSystem->createSound( // Move
 		"Sound/Effect/Monster/creepy_move.mp3"
-		, FMOD_DEFAULT | FMOD_LOOP_OFF
+		, FMOD_DEFAULT | FMOD_3D
 		, nullptr
 		, &pSound[(int)ENUM_SOUND::CREEEPY_MOVE]
 	);
-
+	
 	// 머시룸
 	pSystem->createSound( // Move
 		"Sound/Effect/Monster/mushroom_move.mp3"
-		, FMOD_DEFAULT | FMOD_LOOP_OFF
+		, FMOD_DEFAULT | FMOD_3D
 		, nullptr
 		, &pSound[(int)ENUM_SOUND::MUSHROOM_MOVE]
 	);
-
+	pChannel->set3DMinMaxDistance(50, 10000);
+	
 	// 스페이스
-	pSystem->createSound( // Move
+	 pSystem->createSound( // Move
 		"Sound/Effect/Monster/space_move.mp3"
-		, FMOD_DEFAULT | FMOD_LOOP_OFF
+		, FMOD_DEFAULT | FMOD_3D
 		, nullptr
 		, &pSound[(int)ENUM_SOUND::SPACE_MOVE]
 	);
-	///////////////////////////////////////////////// 몬스터 효과음
+	/////////////////////////////////////////////// 몬스터 효과음
 }
 
 
