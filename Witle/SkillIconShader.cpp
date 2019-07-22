@@ -1,38 +1,36 @@
 #include "stdafx.h"
-#include "TerrainShader.h"
+#include "SkillIconShader.h"
 
-D3D12_SHADER_BYTECODE TerrainShader::CreateGeometryShader(ID3DBlob ** ppd3dShaderBlob)
+D3D12_SHADER_BYTECODE SkillIconShader::CreateGeometryShader(ID3DBlob ** ppd3dShaderBlob)
 {
 	return D3D12_SHADER_BYTECODE();
 }
 
-TerrainShader::TerrainShader()
+SkillIconShader::SkillIconShader()
 {
 }
 
-TerrainShader::~TerrainShader()
+SkillIconShader::~SkillIconShader()
 {
 }
 
-void TerrainShader::CreateShader(ID3D12Device * pd3dDevice, ID3D12RootSignature * const pd3dGraphicsRootSignature)
+void SkillIconShader::CreateShader(ID3D12Device * pd3dDevice, ID3D12RootSignature * const pd3dGraphicsRootSignature)
 {
 	Shader::CreatePipelineState(pd3dDevice, pd3dGraphicsRootSignature);
 	Shader::CreatePipelineStateForGBuffers(pd3dDevice, pd3dGraphicsRootSignature);
 }
 
-void TerrainShader::Update(float ElapsedTime)
+void SkillIconShader::Update(float ElapsedTime)
 {
 }
 
-D3D12_INPUT_LAYOUT_DESC TerrainShader::CreateInputLayout()
+D3D12_INPUT_LAYOUT_DESC SkillIconShader::CreateInputLayout()
 {
-	UINT nInputElementDescs = 4;
+	UINT nInputElementDescs = 2;
 	D3D12_INPUT_ELEMENT_DESC *pd3dInputElementDescs = new D3D12_INPUT_ELEMENT_DESC[nInputElementDescs];
 
 	pd3dInputElementDescs[0] = { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 };
-	pd3dInputElementDescs[1] = { "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 };
-	pd3dInputElementDescs[2] = { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 28, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 };
-	pd3dInputElementDescs[3] = { "TEXCOORD", 1, DXGI_FORMAT_R32G32_FLOAT, 0, 36, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 };
+	pd3dInputElementDescs[1] = { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 };
 
 	D3D12_INPUT_LAYOUT_DESC d3dInputLayoutDesc;
 	d3dInputLayoutDesc.pInputElementDescs = pd3dInputElementDescs;
@@ -41,17 +39,17 @@ D3D12_INPUT_LAYOUT_DESC TerrainShader::CreateInputLayout()
 	return(d3dInputLayoutDesc);
 }
 
-D3D12_RASTERIZER_DESC TerrainShader::CreateRasterizerState()
+D3D12_RASTERIZER_DESC SkillIconShader::CreateRasterizerState()
 {
+	//래스터라이저 상태를 설정한다.
 	D3D12_RASTERIZER_DESC d3dRasterizerDesc;
 	::ZeroMemory(&d3dRasterizerDesc, sizeof(D3D12_RASTERIZER_DESC));
 	d3dRasterizerDesc.FillMode = D3D12_FILL_MODE_SOLID;
-	// d3dRasterizerDesc.FillMode = D3D12_FILL_MODE_WIREFRAME;
 	d3dRasterizerDesc.CullMode = D3D12_CULL_MODE_BACK;
 	d3dRasterizerDesc.FrontCounterClockwise = FALSE;
-	d3dRasterizerDesc.DepthBias = 0.5;
-	d3dRasterizerDesc.DepthBiasClamp = 0.f;
-	d3dRasterizerDesc.SlopeScaledDepthBias = 0.f;
+	d3dRasterizerDesc.DepthBias = 0;
+	d3dRasterizerDesc.DepthBiasClamp = 0.0f;
+	d3dRasterizerDesc.SlopeScaledDepthBias = 0.0f;
 	d3dRasterizerDesc.DepthClipEnable = TRUE;
 	d3dRasterizerDesc.MultisampleEnable = FALSE;
 	d3dRasterizerDesc.AntialiasedLineEnable = FALSE;
@@ -61,13 +59,13 @@ D3D12_RASTERIZER_DESC TerrainShader::CreateRasterizerState()
 	return(d3dRasterizerDesc);
 }
 
-D3D12_BLEND_DESC TerrainShader::CreateBlendState()
+D3D12_BLEND_DESC SkillIconShader::CreateBlendState()
 {
 	D3D12_BLEND_DESC d3dBlendDesc;
 	::ZeroMemory(&d3dBlendDesc, sizeof(D3D12_BLEND_DESC));
 	d3dBlendDesc.AlphaToCoverageEnable = FALSE;
 	d3dBlendDesc.IndependentBlendEnable = FALSE;
-	d3dBlendDesc.RenderTarget[0].BlendEnable = FALSE;
+	d3dBlendDesc.RenderTarget[0].BlendEnable = TRUE;
 	d3dBlendDesc.RenderTarget[0].LogicOpEnable = FALSE;
 	d3dBlendDesc.RenderTarget[0].SrcBlend = D3D12_BLEND_ONE;
 	d3dBlendDesc.RenderTarget[0].DestBlend = D3D12_BLEND_ZERO;
@@ -81,7 +79,7 @@ D3D12_BLEND_DESC TerrainShader::CreateBlendState()
 	return d3dBlendDesc;
 }
 
-D3D12_DEPTH_STENCIL_DESC TerrainShader::CreateDepthStencilState()
+D3D12_DEPTH_STENCIL_DESC SkillIconShader::CreateDepthStencilState()
 {
 	D3D12_DEPTH_STENCIL_DESC d3dDepthStencilDesc;
 	::ZeroMemory(&d3dDepthStencilDesc, sizeof(D3D12_DEPTH_STENCIL_DESC));
@@ -103,22 +101,22 @@ D3D12_DEPTH_STENCIL_DESC TerrainShader::CreateDepthStencilState()
 	return(d3dDepthStencilDesc);
 }
 
-D3D12_PRIMITIVE_TOPOLOGY_TYPE TerrainShader::CreatePrimitiveTopologyType()
+D3D12_PRIMITIVE_TOPOLOGY_TYPE SkillIconShader::CreatePrimitiveTopologyType()
 {
 	return D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
 }
 
-D3D12_SHADER_BYTECODE TerrainShader::CreateVertexShader(ID3DBlob ** ppd3dShaderBlob)
+D3D12_SHADER_BYTECODE SkillIconShader::CreateVertexShader(ID3DBlob ** ppd3dShaderBlob)
 {
-	return(Shader::CompileShaderFromFile(L"TerrainShader.hlsl", "VSTerrain", "vs_5_1", ppd3dShaderBlob));
+	return(Shader::CompileShaderFromFile(L"SkillIconShader.hlsl", "VSSkillIcon", "vs_5_1", ppd3dShaderBlob));
 }
 
-D3D12_SHADER_BYTECODE TerrainShader::CreatePixelShader(ID3DBlob ** ppd3dShaderBlob)
+D3D12_SHADER_BYTECODE SkillIconShader::CreatePixelShader(ID3DBlob ** ppd3dShaderBlob)
 {
-	return(Shader::CompileShaderFromFile(L"TerrainShader.hlsl", "PSTerrain", "ps_5_1", ppd3dShaderBlob));
+	return(Shader::CompileShaderFromFile(L"SkillIconShader.hlsl", "PSSkillIcon", "ps_5_1", ppd3dShaderBlob));
 }
 
-D3D12_SHADER_BYTECODE TerrainShader::CreatePixelShaderForGBuffers(ID3DBlob ** ppd3dShaderBlob)
+D3D12_SHADER_BYTECODE SkillIconShader::CreatePixelShaderForGBuffers(ID3DBlob ** ppd3dShaderBlob)
 {
-	return(Shader::CompileShaderFromFile(L"TerrainShader.hlsl", "PSTerrainForGBuffers", "ps_5_1", ppd3dShaderBlob));
+	return D3D12_SHADER_BYTECODE();
 }

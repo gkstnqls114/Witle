@@ -17,9 +17,6 @@
     <Filter Include="04.Scene">
       <UniqueIdentifier>{9f95aa9a-57da-4bd1-911f-75c7dc20268e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="04.Scene\Manager">
-      <UniqueIdentifier>{97760a9f-082f-4c47-aa91-1c58fac4ba94}</UniqueIdentifier>
-    </Filter>
     <Filter Include="05.Shader">
       <UniqueIdentifier>{c71c2a0d-b962-4d5c-ac07-4c3b249dbebf}</UniqueIdentifier>
     </Filter>
@@ -141,9 +138,6 @@
     </Filter>
     <Filter Include="99.etc\ID\TerrainObjectID">
       <UniqueIdentifier>{dd631a4a-4f0b-4012-957b-e1b304c15f34}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="04.Scene\LoadingScene">
-      <UniqueIdentifier>{812fe0ce-fb65-4796-a546-9adef1eba558}</UniqueIdentifier>
     </Filter>
     <Filter Include="04.Scene\LobbyScene">
       <UniqueIdentifier>{033ba113-a22a-419b-8d84-91a47f23756e}</UniqueIdentifier>
@@ -421,6 +415,18 @@
     <Filter Include="05.Shader\SkillIconShader">
       <UniqueIdentifier>{12924a3b-8b25-455d-a90e-e3b307c7e86f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="05.Shader\ShadowShader\TerrainForShadow">
+      <UniqueIdentifier>{f2c2f453-5572-42be-93fb-41bd876a60b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="13.Storage/Manager\12.SceneMgr">
+      <UniqueIdentifier>{9a3c5201-612a-4044-b834-78230bad14ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.Scene\MainScene">
+      <UniqueIdentifier>{812fe0ce-fb65-4796-a546-9adef1eba558}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.Scene\SkillSelectScene">
+      <UniqueIdentifier>{1d5afc8a-7dbd-4c15-af85-892cdf1338ec}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -458,9 +464,6 @@
     </ClInclude>
     <ClInclude Include="Scene.h">
       <Filter>04.Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="SceneManager.h">
-      <Filter>04.Scene\Manager</Filter>
     </ClInclude>
     <ClInclude Include="Shader.h">
       <Filter>05.Shader</Filter>
@@ -647,9 +650,6 @@
     </ClInclude>
     <ClInclude Include="TerrainObjectID.h">
       <Filter>99.etc\ID\TerrainObjectID</Filter>
-    </ClInclude>
-    <ClInclude Include="LoadingScene.h">
-      <Filter>04.Scene\LoadingScene</Filter>
     </ClInclude>
     <ClInclude Include="LobbyScene.h">
       <Filter>04.Scene\LobbyScene</Filter>
@@ -867,6 +867,21 @@
     <ClInclude Include="InstancingStandardShaderForShadow.h">
       <Filter>05.Shader\ShadowShader\InstancingStandardShaderForShadow</Filter>
     </ClInclude>
+    <ClInclude Include="TerrainForShadow.h">
+      <Filter>05.Shader\ShadowShader\TerrainForShadow</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneMgr.h">
+      <Filter>13.Storage/Manager\12.SceneMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="MainScene.h">
+      <Filter>04.Scene\MainScene</Filter>
+    </ClInclude>
+    <ClInclude Include="SkillSelectScene.h">
+      <Filter>04.Scene\SkillSelectScene</Filter>
+    </ClInclude>
+    <ClInclude Include="SkillIconShader.h">
+      <Filter>05.Shader\SkillIconShader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -883,9 +898,6 @@
     </ClCompile>
     <ClCompile Include="Scene.cpp">
       <Filter>04.Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="SceneManager.cpp">
-      <Filter>04.Scene\Manager</Filter>
     </ClCompile>
     <ClCompile Include="ComponentBase.cpp">
       <Filter>02.Component</Filter>
@@ -1078,9 +1090,6 @@
     </ClCompile>
     <ClCompile Include="TerrainObjectID.cpp">
       <Filter>99.etc\ID\TerrainObjectID</Filter>
-    </ClCompile>
-    <ClCompile Include="LoadingScene.cpp">
-      <Filter>04.Scene\LoadingScene</Filter>
     </ClCompile>
     <ClCompile Include="LobbyScene.cpp">
       <Filter>04.Scene\LobbyScene</Filter>
@@ -1291,6 +1300,21 @@
     </ClCompile>
     <ClCompile Include="InstancingStandardShaderForShadow.cpp">
       <Filter>05.Shader\ShadowShader\InstancingStandardShaderForShadow</Filter>
+    </ClCompile>
+    <ClCompile Include="TerrainForShadow.cpp">
+      <Filter>05.Shader\ShadowShader\TerrainForShadow</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneMgr.cpp">
+      <Filter>13.Storage/Manager\12.SceneMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="MainScene.cpp">
+      <Filter>04.Scene\MainScene</Filter>
+    </ClCompile>
+    <ClCompile Include="SkillSelectScene.cpp">
+      <Filter>04.Scene\SkillSelectScene</Filter>
+    </ClCompile>
+    <ClCompile Include="SkillIconShader.cpp">
+      <Filter>05.Shader\SkillIconShader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

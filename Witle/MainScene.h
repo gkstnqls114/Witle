@@ -2,8 +2,12 @@
 #include "Scene.h"
  
 class Button;
+class Texture;
+class MyRectangle;
+class GameObject;
+class UI2DImage;
 
-class LoadingScene
+class MainScene
 	: public Scene
 {
 private:
@@ -41,8 +45,8 @@ protected:
 
 
 public:
-	LoadingScene();
-	virtual ~LoadingScene();
+	MainScene();
+	virtual ~MainScene();
 
 	virtual bool OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam) override;
 	virtual bool OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam, float ElapsedTime) override;
@@ -51,9 +55,11 @@ public:
 	virtual void ReleaseObjects() override;
 
 	virtual bool ProcessInput(HWND hWnd, float ElapsedTime) override;
+	virtual void UpdatePhysics(float ElapsedTime) override;
 
 	virtual void AnimateObjects(float fTimeElapsed) override;
 	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers) override;
+	virtual void RenderForShadow(ID3D12GraphicsCommandList *pd3dCommandList) override;
 
 	virtual void ReleaseUploadBuffers() override;
 
@@ -66,5 +72,7 @@ private:
 	D3D12_VIEWPORT	m_d3dViewport;
 	D3D12_RECT		m_d3dScissorRect;
 
+	GameObject* m_gameobject{ nullptr };
+	UI2DImage* m_Background{ nullptr };
 	Button* m_pBackGround{ nullptr };
 };

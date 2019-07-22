@@ -391,6 +391,22 @@ void StaticObjectStorage::Render(ID3D12GraphicsCommandList * pd3dCommandList, in
 	}  
 }
 
+void StaticObjectStorage::RenderForShadow(ID3D12GraphicsCommandList * pd3dCommandList, int index, bool isGBuffers)
+{
+	// info.first = ¸ðµ¨ ÀÌ¸§
+	// info.second = TerrainObjectInfo¶ó´Â ¸ðµ¨ Á¤º¸
+
+	for (auto& info : m_StaticObjectStorage)
+	{
+		if (info.second[index].TerrainObjectCount == 0) continue;
+		if (!strcmp(info.first.c_str(), Flower)) continue;
+
+		pd3dCommandList->SetGraphicsRootShaderResourceView(ROOTPARAMETER_INSTANCING, info.second[index].m_pd3dcbGameObjects->GetGPUVirtualAddress()); // ÀÎ½ºÅÏ½Ì ½¦ÀÌ´õ ¸®¼Ò½º ºä
+
+		m_StaticObjectModelsStorage[info.first].pLoadObject->RenderInstancing(pd3dCommandList, info.second[index].TerrainObjectCount, isGBuffers);
+	}
+}
+
 void StaticObjectStorage::RenderBOBox(ID3D12GraphicsCommandList * pd3dCommandList, int index)
 {
 	// info.first = ¸ðµ¨ ÀÌ¸§

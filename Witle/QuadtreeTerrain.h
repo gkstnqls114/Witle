@@ -9,6 +9,7 @@ class HeightMapImage;
 class MyFrustum;
 class Mesh;
 class Terrain;
+class MyDescriptorHeap;
 
 struct INFO
 {
@@ -54,6 +55,7 @@ private:
 
 	int m_ReafNodeCount = 0;
 	QUAD_TREE_NODE** m_pReafNodes{ nullptr };
+	 
  
 private: 
 
@@ -62,6 +64,7 @@ private:
 	 
 	void RenderTerrainObjects(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers);
 	void RecursiveRenderTerrainObjects(const QUAD_TREE_NODE* node, ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers);
+	void RecursiveRenderTerrainObjectsForShadow(const QUAD_TREE_NODE* node, ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers);
 	void RecursiveRender(const QUAD_TREE_NODE* node, ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers);
 	void RecursiveInitReafNodes(QUAD_TREE_NODE* node);
 	void RecursiveReleaseUploadBuffers(QUAD_TREE_NODE* node);
@@ -90,7 +93,7 @@ public:
 	XMINT4 const GetIDs(const XMFLOAT3& position) const;
 	int * const GetIndex(const XMFLOAT3& position) const;
 	
-	void RenderTerrainForShadow(ID3D12GraphicsCommandList *pd3dCommandList);
+	void RenderTerrainForShadow(ID3D12GraphicsCommandList *pd3dCommandList, Terrain * pTerrain, ID3D12DescriptorHeap* pHeap);
 	void RenderInstancingObjectsForShadow(ID3D12GraphicsCommandList *pd3dCommandList);
 	void Render(ID3D12GraphicsCommandList *pd3dCommandList, Terrain* pTerrain, ID3D12DescriptorHeap* pHeap, bool isGBuffers);
 	void Render(int index, ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers);

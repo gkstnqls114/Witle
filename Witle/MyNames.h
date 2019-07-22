@@ -50,3 +50,5 @@
 #define SHADER_SHOWTEXTURE "ShowTexture" 
 #define SHADER_DEFFREDRENDER "DefferedRender" 
 #define SHADER_INSTACINGSTANDARDFORSHADOW "InstancingStandardShaderForShadow" 
+#define SHADER_TERRAIN_FORSHADOW "TerrainForShadow" 
+#define SHADER_SKILLICON "SkillIcon" 

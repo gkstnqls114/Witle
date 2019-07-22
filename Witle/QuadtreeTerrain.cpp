@@ -11,6 +11,7 @@
 #include "MyFrustum.h"
 #include "Collision.h"
 #include "Terrain.h"
+#include "MyDescriptorHeap.h"
 #include "QuadTreeTerrain.h"
 
 // 처음 아이디는 0으로 시작한다.
@@ -88,6 +89,26 @@ void QuadtreeTerrain::RecursiveRenderTerrainObjects(const QUAD_TREE_NODE * node,
 
 		} 
  	} 
+}
+
+
+void QuadtreeTerrain::RecursiveRenderTerrainObjectsForShadow(const QUAD_TREE_NODE * node, ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffers)
+{
+	if (node->isRendering)
+	{
+		if (node->terrainMesh)
+		{
+			StaticObjectStorage::GetInstance(this)->RenderForShadow(pd3dCommandList, node->id, isGBuffers);
+
+		}
+		else
+		{ 
+			if (node->children[0]->isRendering) RecursiveRenderTerrainObjects(node->children[0], pd3dCommandList, isGBuffers);
+			if (node->children[1]->isRendering) RecursiveRenderTerrainObjects(node->children[1], pd3dCommandList, isGBuffers);
+			if (node->children[2]->isRendering) RecursiveRenderTerrainObjects(node->children[2], pd3dCommandList, isGBuffers);
+			if (node->children[3]->isRendering) RecursiveRenderTerrainObjects(node->children[3], pd3dCommandList, isGBuffers);
+		}
+	}
 }
 
 static std::unordered_set<int> set;
@@ -352,6 +373,7 @@ QuadtreeTerrain::QuadtreeTerrain(ID3D12Device * pd3dDevice, ID3D12GraphicsComman
 
 	// 재귀함수로 모든 터레인 조각 로드 완료후...
 	StaticObjectStorage::GetInstance(this)->CreateInfo(pd3dDevice, pd3dCommandList, this);
+	 
 }
 
 QuadtreeTerrain::~QuadtreeTerrain()
@@ -404,26 +426,41 @@ void QuadtreeTerrain::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool is
 	RecursiveRender(m_pRootNode, pd3dCommandList, isGBuffers); // 지형 렌더	 
 }
 
-void QuadtreeTerrain::RenderTerrainForShadow(ID3D12GraphicsCommandList * pd3dCommandList)
-{
+void QuadtreeTerrain::RenderTerrainForShadow(ID3D12GraphicsCommandList * pd3dCommandList, Terrain * pTerrain, ID3D12DescriptorHeap* pHeap)
+{ 
+	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_TERRAIN_FORSHADOW, false);
+
+	pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_WORLD, 16, &Matrix4x4::Identity(), 0);
+	pd3dCommandList->SetDescriptorHeaps(1, &pHeap);
+	pTerrain->UpdateShaderVariables(pd3dCommandList);
+
+	RecursiveRender(m_pRootNode, pd3dCommandList, false); // 지형 렌더	 
 }
 
 void QuadtreeTerrain::RenderInstancingObjectsForShadow(ID3D12GraphicsCommandList * pd3dCommandList)
 {
-	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, "InstancingStandardShaderForShadow", false);
+	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_INSTACINGSTANDARDFORSHADOW, false);
 
-	// 설명자 힙 설정
-	TextureStorage::GetInstance()->SetHeap(pd3dCommandList);
-	RecursiveRenderTerrainObjects(m_pRootNode, pd3dCommandList, false);
+	// 설명자 힙 설정 
+	RecursiveRenderTerrainObjectsForShadow(m_pRootNode, pd3dCommandList, false);
 }
 
 void QuadtreeTerrain::Render(ID3D12GraphicsCommandList * pd3dCommandList, Terrain * pTerrain, ID3D12DescriptorHeap* pHeap, bool isGBuffers)
 {
 	// 지형 렌더
 	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_TERRAIN, isGBuffers);
-	pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_WORLD, 16, &Matrix4x4::Identity(), 0);
-	pd3dCommandList->SetDescriptorHeaps(1, &pHeap);
+	pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_WORLD, 16, &Matrix4x4::Identity(), 0); 
+	pd3dCommandList->SetDescriptorHeaps(1, &pHeap); 
+
 	pTerrain->UpdateShaderVariables(pd3dCommandList);
+	auto hGPU = pHeap->GetGPUDescriptorHandleForHeapStart();
+	//pd3dCommandList->SetGraphicsRootDescriptorTable(ROOTPARAMETER_TEXTURE, hGPU);
+	hGPU.ptr += d3dUtil::gnCbvSrvDescriptorIncrementSize;
+	//pd3dCommandList->SetGraphicsRootDescriptorTable(ROOTPARAMETER_TEXTUREBASE, hGPU);
+	hGPU.ptr += d3dUtil::gnCbvSrvDescriptorIncrementSize;
+	//pd3dCommandList->SetGraphicsRootDescriptorTable(ROOTPARAMETER_TEXTUREDETAIL, hGPU);
+	hGPU.ptr += d3dUtil::gnCbvSrvDescriptorIncrementSize;
+	pd3dCommandList->SetGraphicsRootDescriptorTable(ROOTPARAMETER_SHADOWTEXTURE, hGPU);
 
 	RecursiveRender(m_pRootNode, pd3dCommandList, isGBuffers); // 지형 렌더	 
 

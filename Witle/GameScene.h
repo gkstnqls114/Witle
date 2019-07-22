@@ -19,6 +19,7 @@ class AltarSphere;
 //// Objects ///////////////
 
 //// Componenet ///////////////
+class Camera;
 class CylinderMesh;
 class LineSphere;
 //// Componenet ///////////////
@@ -34,6 +35,8 @@ class CLoadedModelInfo;
 class GameObject;
 class LoadObject;
 class SkinnedShader;
+class MyDescriptorHeap;
+class Texture;
 
 struct LIGHTS;
 struct MATERIAL;
@@ -44,9 +47,10 @@ struct MATERIALS;
 class GameScene
 	: public Scene
 {
-private:
-	static ID3D12DescriptorHeap			*m_pd3dCbvSrvDescriptorHeap;
+public:
+	static MyDescriptorHeap			*m_pd3dCbvSrvDescriptorHeap;
 
+private:
 	static D3D12_CPU_DESCRIPTOR_HANDLE	m_d3dCbvCPUDescriptorStartHandle;
 	static D3D12_GPU_DESCRIPTOR_HANDLE	m_d3dCbvGPUDescriptorStartHandle;
 	static D3D12_CPU_DESCRIPTOR_HANDLE	m_d3dSrvCPUDescriptorStartHandle;
@@ -56,6 +60,9 @@ private:
 	static D3D12_GPU_DESCRIPTOR_HANDLE	m_d3dCbvGPUDescriptorNextHandle;
 	static D3D12_CPU_DESCRIPTOR_HANDLE	m_d3dSrvCPUDescriptorNextHandle;
 	static D3D12_GPU_DESCRIPTOR_HANDLE	m_d3dSrvGPUDescriptorNextHandle;
+
+public:
+	static D3D12_GPU_DESCRIPTOR_HANDLE CreateShaderResourceViewsForShadow(ID3D12Device *pd3dDevice, ID3D12Resource *pResource, UINT nRootParameter, bool bAutoIncrement, int index);
 
 protected:
 	static void CreateCbvSrvDescriptorHeaps(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, int nConstantBufferViews, int nShaderResourceViews);
@@ -100,7 +107,7 @@ public:
 	virtual void AnimateObjects(float fTimeElapsed) override;
 	virtual void LastUpdate(float ElapsedTime) override;
 
-	void TESTSetRootDescriptor(ID3D12GraphicsCommandList *pd3dCommandList);
+	QuadtreeTerrain* GetQuadtreeTerrain() const { return m_pQuadtreeTerrain; }
 
 protected:
 	// 플레이어 관련 ////////////////////////////

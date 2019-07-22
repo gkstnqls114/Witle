@@ -1,7 +1,8 @@
 #pragma once
+#include "d3dx12.h"
 #include "MeshRenderer.h"
-
-class Scene;
+ 
+class SceneMgr;
 class Texture;
 class ComputeShader;
 class MyDescriptorHeap;
@@ -80,6 +81,10 @@ private:
 	MyDescriptorHeap* m_GBufferHeap{ nullptr };
 	MyDescriptorHeap* m_ShadowmapHeap{ nullptr };
 
+	CD3DX12_CPU_DESCRIPTOR_HANDLE m_hCpuSrvForShadow;
+	CD3DX12_GPU_DESCRIPTOR_HANDLE m_hGpuSrvForShadow;
+	CD3DX12_CPU_DESCRIPTOR_HANDLE m_hCpuDsvForShadow;
+
 	//// GBuffer 와 쉐도우맵을 위해 필요한 변수들 ////////////////////////////////////
 
 
@@ -106,6 +111,7 @@ private:
 	void ReleaseSwapChainBuffer();
 	void ReleaseGBuffers();
 	void ReleaseDepthStencilBuffer();
+	void ReleaseShadowmap();
 
 	void CreateSwapChain();
 	void CreateDirect3DDevice();
@@ -180,6 +186,9 @@ private:
 
 	// 필요한 쉐이더를 빌드합니다.
 	void BuildShaders(); 
+
+	// Shadow Transform 을 업데이트합니다.
+	void UpdateShaderTransform();
 	  
 public:
 	CGameFramework();
@@ -201,8 +210,8 @@ public:
 	LRESULT CALLBACK OnProcessingWindowMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam);
 	
 private: 
-	// 현재 사용하는 장면입니다.
-	Scene *m_pScene{ nullptr };
+	// 현재 사용하는 장면을 관리하는 매니저입니다
+	SceneMgr *m_SceneMgr{ nullptr };
 	 
 };
 

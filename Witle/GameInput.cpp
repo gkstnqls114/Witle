@@ -36,6 +36,13 @@ GameInput::~GameInput()
 {
 }
 
+POINT GameInput::GetClickcursor()
+{
+	POINT temp;
+	::GetCursorPos(&temp);
+	return temp;
+}
+
 bool GameInput::GenerateRayforPicking(const XMFLOAT3& cameraPos, const XMFLOAT4X4 & view, const XMFLOAT4X4 & projection, RAY& ray)
 {
 	if (m_downClickCursor.x < 0 || m_downClickCursor.y < 0 || m_downClickCursor.x > GameScreen::GetWidth() || m_downClickCursor.y > GameScreen::GetHeight())

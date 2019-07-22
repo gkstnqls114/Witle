@@ -70,6 +70,7 @@ public:
 	static UINT CalcConstantBufferByteSize(UINT byteSize);
 
 	static UINT gnCbvSrvDescriptorIncrementSize;
+	static UINT gnDsvDescriptorIncrementSize;
 
 	static int ReadStringFromFile(FILE *pInFile, char *pstrToken)
 	{

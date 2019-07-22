@@ -5,6 +5,8 @@
 #include "GameScreen.h"
 #include "GameObject.h"
 #include "Light.h"
+#include "Player.h"
+#include "PlayerManager.h"
 #include "Camera.h"
 
 void Camera::ReleaseObjects()
@@ -206,18 +208,61 @@ XMFLOAT4X4 Camera::GenerateLightProjectionMatrix(const LIGHT * light) const
 	return 	Matrix4x4::OrthographicLH(GameScreen::GetClientWidth(), GameScreen::GetClientHeight(), m_fNearPlaneDistance, m_fFarPlaneDistance);;
 }
 
-void Camera::UpdateLightShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList, const LIGHT* light) const
-{   
+void Camera::UpdateLightShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList, const LIGHT* light)
+{     
+	//auto playerpos = PlayerManager::GetMainPlayer()->GetTransform().GetPosition();
+	//auto playerlook = PlayerManager::GetMainPlayer()->GetTransform().GetLook();
+	//auto boundcenter = Vector3::Add(playerpos, Vector3::ScalarProduct(playerlook, m_fFarPlaneDistance / 2.f, false));
+	auto boundcenter = XMFLOAT3(15000, 0, 15000);
+	mSceneBounds = BoundingSphere { boundcenter, 17000 };
+	
+	// Only the first "main" light casts a shadow.
+	XMVECTOR lightDir = XMLoadFloat3(&light->Direction);
+	XMVECTOR lightPos = -2.0f* mSceneBounds.Radius*lightDir;
+	XMVECTOR targetPos = XMLoadFloat3(&mSceneBounds.Center);
+	XMVECTOR lightUp = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+	XMMATRIX lightView = XMMatrixLookAtLH(lightPos, targetPos, lightUp);
+
+	// Transform bounding sphere to light space.
+	XMFLOAT3 sphereCenterLS;
+	XMStoreFloat3(&sphereCenterLS, XMVector3TransformCoord(targetPos, lightView));
+
+	// Ortho frustum in light space encloses scene.
+	float l = sphereCenterLS.x - mSceneBounds.Radius;
+	float b = sphereCenterLS.y - mSceneBounds.Radius;
+	float n = sphereCenterLS.z - mSceneBounds.Radius;
+	float r = sphereCenterLS.x + mSceneBounds.Radius;
+	float t = sphereCenterLS.y + mSceneBounds.Radius;
+	float f = sphereCenterLS.z + mSceneBounds.Radius;
+/*
+	mLightNearZ = 0.1;
+	mLightFarZ = 30000;*/
+	XMMATRIX lightProj = XMMatrixOrthographicOffCenterLH(l, r, b, t, n, f);
+
+	// Transform NDC space [-1,+1]^2 to texture space [0,1]^2
+	XMMATRIX T(
+		0.5f, 0.0f, 0.0f, 0.0f,
+		0.0f, -0.5f, 0.0f, 0.0f,
+		0.0f, 0.0f, 1.0f, 0.0f,
+		0.5f, 0.5f, 0.0f, 1.0f);
+
+	XMMATRIX S = lightView * lightProj*T;
+
 	XMFLOAT4X4 xmf4x4LightView;
 	xmf4x4LightView = GenerateLightViewMatrix(light);
-	XMStoreFloat4x4(&xmf4x4LightView, XMMatrixTranspose(XMLoadFloat4x4(&m_xmf4x4View)));
+	XMStoreFloat4x4(&xmf4x4LightView, XMMatrixTranspose(lightView));
 	::memcpy(&m_pcbMappedLight->m_xmf4x4LightView, &xmf4x4LightView, sizeof(XMFLOAT4X4));
 
 	XMFLOAT4X4 xmf4x4Projection;
 	xmf4x4Projection = GenerateLightProjectionMatrix(light);
-	XMStoreFloat4x4(&xmf4x4Projection, XMMatrixTranspose(XMLoadFloat4x4(&m_xmf4x4Projection)));
+	XMStoreFloat4x4(&xmf4x4Projection, XMMatrixTranspose(lightProj));
 	::memcpy(&m_pcbMappedLight->m_xmf4x4LightProjection, &xmf4x4Projection, sizeof(XMFLOAT4X4));
-	 
+	
+	XMFLOAT4X4 xmf4x4LightTransform; 
+	XMStoreFloat4x4(&xmf4x4LightTransform, XMMatrixTranspose(S));
+	::memcpy(&m_pcbMappedLight->m_xmf4x4LightTransform, &xmf4x4LightTransform, sizeof(XMFLOAT4X4));
+
+
 	D3D12_GPU_VIRTUAL_ADDRESS d3dGpuVirtualAddress = m_pd3dcbLight->GetGPUVirtualAddress();
 	pd3dCommandList->SetGraphicsRootConstantBufferView(ROOTPARAMETER_LIGHTFORSHADOW, d3dGpuVirtualAddress);
 }

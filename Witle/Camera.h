@@ -29,9 +29,11 @@ private:
 	{
 		XMFLOAT4X4						m_xmf4x4LightView;
 		XMFLOAT4X4						m_xmf4x4LightProjection;
+		XMFLOAT4X4						m_xmf4x4LightTransform;
 	};
 
 	MyFrustum*   m_pFrustum{ nullptr };
+	BoundingSphere mSceneBounds;
 
 	float m_fNearPlaneDistance;
 	float m_fFarPlaneDistance;
@@ -147,7 +149,7 @@ public:
 	// 조명 위치에 자리한 조명 변환 뷰을 위해 필요 //////////////////////////////
 	XMFLOAT4X4 GenerateLightViewMatrix(const LIGHT* light) const ;
 	XMFLOAT4X4 GenerateLightProjectionMatrix(const LIGHT* light) const;
-	void UpdateLightShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList, const LIGHT* light) const;
+	void UpdateLightShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList, const LIGHT* light);
 	// 조명 위치에 자리한 조명 변환 뷰을 위해 필요 //////////////////////////////
 
 };

@@ -10,8 +10,7 @@
 #include "ShaderManager.h"
 // Manager / Stroage ////////////////////////
 
-#include "Texture.h"
-#include "LoadingScene.h"
+#include "Texture.h" 
 #include "MyDescriptorHeap.h"
 #include "Shader.h"
 

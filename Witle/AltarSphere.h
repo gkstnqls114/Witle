@@ -39,6 +39,8 @@ protected:
 	CLoadedModelInfo*  m_AltarSphereModel{ nullptr };
 	LoadObject*		   m_pLoadObject{ nullptr };
 
+	PlayerStatus* m_ActiveGuageBar{ nullptr }; // 임시로 Player Status 사용
+
 	bool m_isActive{ false };
 	bool m_isEnguaged{ false };
 	bool m_isFinishFlow{ false };
