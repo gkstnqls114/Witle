@@ -417,7 +417,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 		 POINT{ int(GameScreen::GetWidth()) / 2 + 500, int(GameScreen::GetHeight()) / 2 - 220 },
 		 m_UIMapSize.x,
 		 m_UIMapSize.y, 
-		 L"Image/CharacterAppearance1_OFF.dds"
+		 nullptr
 	 );
 
 	 // 스킬 1
@@ -952,9 +952,11 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 	m_UIAltar_4->Render(pd3dCommandList);
 	m_UIAltar_5->Render(pd3dCommandList);
 
-	m_SampleUIMap->Render(pd3dCommandList);
 
 	SkillSelectScene::m_pHeap->UpdateShaderVariable(pd3dCommandList);
+
+	SkillSelectScene::m_pTexture->UpdateShaderVariable(pd3dCommandList, 8); // 임시로 검은색으로 렌더링
+	m_SampleUIMap->Render(pd3dCommandList);
 
 	SkillSelectScene::m_pTexture->UpdateShaderVariable(pd3dCommandList, SkillSelectScene::m_SelectedIndex[0]);
 	m_SampleUISkill1->Render(pd3dCommandList);
