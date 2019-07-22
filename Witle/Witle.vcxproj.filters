@@ -879,6 +879,9 @@
     <ClInclude Include="SkillSelectScene.h">
       <Filter>04.Scene\SkillSelectScene</Filter>
     </ClInclude>
+    <ClInclude Include="SkillIconShader.h">
+      <Filter>05.Shader\SkillIconShader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1309,6 +1312,9 @@
     </ClCompile>
     <ClCompile Include="SkillSelectScene.cpp">
       <Filter>04.Scene\SkillSelectScene</Filter>
+    </ClCompile>
+    <ClCompile Include="SkillIconShader.cpp">
+      <Filter>05.Shader\SkillIconShader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

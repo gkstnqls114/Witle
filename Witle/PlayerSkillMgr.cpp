@@ -42,6 +42,7 @@ void PlayerSkillMgr::Update(float fElapsedTime)
 		else
 		{
 			m_skill[x].RemainCoolTime -= fElapsedTime;
+			m_skill[x].RemainCoolTimePrecentage = m_skill[x].RemainCoolTime / m_skill[x].skillEffect->m_CoolTime;
 		}
 	}
 

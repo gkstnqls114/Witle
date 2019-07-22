@@ -18,6 +18,7 @@ struct SKILL
 	XMFLOAT3 spawnPosition; // 스킬 시작 지점
 	bool isActive{ false }; // 활성화 여부
 	float RemainCoolTime; // 남은 쿨타임
+	float RemainCoolTimePrecentage; // 남은 쿨타임 .. 0이면 스킬 사용가능 1이면 막 스킬 사용함
 };
 
 // 플레이어가 사용하는 스킬들의 이펙트를 관리하는 클래스입니다.

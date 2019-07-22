@@ -170,6 +170,7 @@
     <ClInclude Include="GraphicsRootSignatureMgr.h" />
     <ClInclude Include="IceBall.h" />
     <ClInclude Include="SceneMgr.h" />
+    <ClInclude Include="SkillIconShader.h" />
     <ClInclude Include="SkillSelectScene.h" />
     <ClInclude Include="TerrainForShadow.h" />
     <ClInclude Include="MainCameraMgr.h" />
@@ -350,6 +351,7 @@
     <ClCompile Include="InstancingLineShader.cpp" />
     <ClCompile Include="InstancingStandardShader.cpp" />
     <ClCompile Include="SceneMgr.cpp" />
+    <ClCompile Include="SkillIconShader.cpp" />
     <ClCompile Include="SkillSelectScene.cpp" />
     <ClCompile Include="TerrainForShadow.cpp" />
     <ClCompile Include="Light.cpp" />

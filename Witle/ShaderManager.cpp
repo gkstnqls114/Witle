@@ -20,6 +20,7 @@
 #include "DefferedShader.h"
 #include "InstancingStandardShaderForShadow.h"
 #include "TerrainForShadow.h"
+#include "SkillIconShader.h"
 //// Shader ////////////////////////// 
 
 #include "ShaderManager.h"
@@ -139,7 +140,11 @@ void ShaderManager::BuildShaders(ID3D12Device * pd3dDevice, ID3D12RootSignature 
 	TerrainForShadow* pTerrainForShadow = new TerrainForShadow();
 	pTerrainForShadow->CreateShader(pd3dDevice, pd3dGraphicsRootSignature);
 	InsertShader(SHADER_TERRAIN_FORSHADOW, pTerrainForShadow);
-	 
+
+
+	SkillIconShader* pSkillIconShader = new SkillIconShader();
+	pSkillIconShader->CreateShader(pd3dDevice, pd3dGraphicsRootSignature);
+	InsertShader(SHADER_SKILLICON, pSkillIconShader);
 }
 
 bool ShaderManager::InsertShader(const std::string& s, Shader * pso)
