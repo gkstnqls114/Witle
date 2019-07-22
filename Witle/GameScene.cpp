@@ -30,6 +30,7 @@
 #include "StaticObjectStorage.h" 
 #include "PlayerManager.h"
 #include "MainCameraMgr.h"
+#include "SoundManager.h"
 //// 매니저 관련 헤더 //////////////////////////
 
 //// 몬스터 관련 헤더 //////////////////////////
