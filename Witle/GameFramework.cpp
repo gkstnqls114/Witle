@@ -20,6 +20,7 @@
 
 //// Scene //////////////////////////  
 #include "GameScene.h"
+#include "SkillSelectScene.h"
 //// Scene ////////////////////////// 
  
 #include "QuadtreeTerrain.h"
@@ -872,7 +873,8 @@ void CGameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPA
 	}
 	else if (m_SceneMgr->IsSkillSelectScene())
 	{
-
+		static_cast<SkillSelectScene *>(m_SceneMgr->GetCurrScene())->FinishSkillSelect();
+		m_SceneMgr->ChangeSceneToGame();
 	}
 }
 

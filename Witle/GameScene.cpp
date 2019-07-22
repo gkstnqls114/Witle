@@ -45,6 +45,9 @@
 #include "PlayerSkillMgr.h"
 //// 플레이어 관련 헤더 //////////////////////////
 
+// 나중에 코드 수정 
+#include "SkillSelectScene.h"
+
 #include "MyBOBox.h"
 #include "SkillEffect.h"
 #include "Collision.h"
@@ -421,25 +424,28 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	 m_SampleUISkill1 = new UI2DImage(
 		 m_TESTGameObject, pd3dDevice, pd3dCommandList,
 		 POINT{ int(GameScreen::GetWidth()) / 2 - 300, int(GameScreen::GetHeight()) / 2 + 270 }, 100, 100, 
-		 L"Image/FireballIcon.dds"
+		 nullptr
 	 );
 
 	 // 스킬 2
 	 m_SampleUISkill2 = new UI2DImage(
 		 m_TESTGameObject, pd3dDevice, pd3dCommandList,
-		 POINT{ int(GameScreen::GetWidth()) / 2 - 100, int(GameScreen::GetHeight()) / 2 + 270 }, 100, 100, nullptr
+		 POINT{ int(GameScreen::GetWidth()) / 2 - 100, int(GameScreen::GetHeight()) / 2 + 270 }, 100, 100, 
+		 nullptr
 	 );
 
 	 // 스킬 3
 	 m_SampleUISkill3 = new UI2DImage(
 		 m_TESTGameObject, pd3dDevice, pd3dCommandList,
-		 POINT{ int(GameScreen::GetWidth()) / 2 + 100, int(GameScreen::GetHeight()) / 2 + 270 }, 100, 100, nullptr
+		 POINT{ int(GameScreen::GetWidth()) / 2 + 100, int(GameScreen::GetHeight()) / 2 + 270 }, 100, 100,
+		 nullptr
 	 );
 
 	 // 스킬 4
 	 m_SampleUISkill4 = new UI2DImage(
 		 m_TESTGameObject, pd3dDevice, pd3dCommandList,
-		 POINT{ int(GameScreen::GetWidth()) / 2 + 300, int(GameScreen::GetHeight()) / 2 + 270 }, 100, 100, nullptr
+		 POINT{ int(GameScreen::GetWidth()) / 2 + 300, int(GameScreen::GetHeight()) / 2 + 270 }, 100, 100, 
+		 nullptr
 	 );
 	 
 	 XMFLOAT4X4 tr;
@@ -923,34 +929,44 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 
 
 
-	///// ui map과 스킬 관련 렌더링..
-	//ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_UIMAPFORPLAYER, isGBuffers);
-	//XMFLOAT2 playerpos{ m_pPlayer->GetTransform().GetPosition().x,  m_pPlayer->GetTransform().GetPosition().z };
+	/// ui map과 스킬 관련 렌더링..
+	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_UIMAPFORPLAYER, isGBuffers);
+	XMFLOAT2 playerpos{ m_pPlayer->GetTransform().GetPosition().x,  m_pPlayer->GetTransform().GetPosition().z };
 
-	//// ui map 포지션으로 변경하기 위해 크기 축소
-	//playerpos.x = playerpos.x * (float(m_UIMapSize.x) / 30000.f);
-	//playerpos.y = -playerpos.y * (float(m_UIMapSize.y) / 30000.f); // 스크린 좌표계로 이동하기 위해
+	// ui map 포지션으로 변경하기 위해 크기 축소
+	playerpos.x = playerpos.x * (float(m_UIMapSize.x) / 30000.f);
+	playerpos.y = -playerpos.y * (float(m_UIMapSize.y) / 30000.f); // 스크린 좌표계로 이동하기 위해
 
-	//// 스크린 좌표계 위치 이동
-	//playerpos.x += m_SampleUIMap->getRect().left;
-	//playerpos.y += m_SampleUIMap->getRect().bottom;
+	// 스크린 좌표계 위치 이동
+	playerpos.x += m_SampleUIMap->getRect().left;
+	playerpos.y += m_SampleUIMap->getRect().bottom;
 
-	//pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_PICKINGPOINT, 2, &playerpos, 0);
-	//m_UIPlayer->Render(pd3dCommandList);
+	pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_PICKINGPOINT, 2, &playerpos, 0);
+	m_UIPlayer->Render(pd3dCommandList);
 
-	//ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_UISCREEN, isGBuffers);
+	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_UISCREEN, isGBuffers);
 
-	//m_UIAltar_1->Render(pd3dCommandList);
-	//m_UIAltar_2->Render(pd3dCommandList);
-	//m_UIAltar_3->Render(pd3dCommandList);
-	//m_UIAltar_4->Render(pd3dCommandList);
-	//m_UIAltar_5->Render(pd3dCommandList);
+	m_UIAltar_1->Render(pd3dCommandList);
+	m_UIAltar_2->Render(pd3dCommandList);
+	m_UIAltar_3->Render(pd3dCommandList);
+	m_UIAltar_4->Render(pd3dCommandList);
+	m_UIAltar_5->Render(pd3dCommandList);
 
-	//m_SampleUIMap->Render(pd3dCommandList);
-	//m_SampleUISkill1->Render(pd3dCommandList);
-	//m_SampleUISkill2->Render(pd3dCommandList);
-	//m_SampleUISkill3->Render(pd3dCommandList);
-	//m_SampleUISkill4->Render(pd3dCommandList);
+	m_SampleUIMap->Render(pd3dCommandList);
+
+	SkillSelectScene::m_pHeap->UpdateShaderVariable(pd3dCommandList);
+
+	SkillSelectScene::m_pTexture->UpdateShaderVariable(pd3dCommandList, SkillSelectScene::m_SelectedIndex[0]);
+	m_SampleUISkill1->Render(pd3dCommandList);
+
+	SkillSelectScene::m_pTexture->UpdateShaderVariable(pd3dCommandList, SkillSelectScene::m_SelectedIndex[1]);
+	m_SampleUISkill2->Render(pd3dCommandList);
+
+	SkillSelectScene::m_pTexture->UpdateShaderVariable(pd3dCommandList, SkillSelectScene::m_SelectedIndex[2]);
+	m_SampleUISkill3->Render(pd3dCommandList);
+
+	SkillSelectScene::m_pTexture->UpdateShaderVariable(pd3dCommandList, SkillSelectScene::m_SelectedIndex[3]);
+	m_SampleUISkill4->Render(pd3dCommandList);
 
 }
 
