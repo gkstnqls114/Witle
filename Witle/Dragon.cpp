@@ -52,32 +52,52 @@ Dragon::Dragon(const std::string & entityID, const XMFLOAT3& SpawnPoint,
 	m_pHaep = new MyDescriptorHeap();
 	m_pHaep->CreateCbvSrvUavDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 1, 0);
 	m_pTexture = new Texture(1, RESOURCE_TEXTURE2D);
-	 
-	m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/SpaceCat_Green.dds", 0); 
+
+	m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/Dragon.dds", 0);
 
 	m_pHaep->CreateShaderResourceViews(pd3dDevice, pd3dCommandList, m_pTexture, ROOTPARAMETER_TEXTURE, false, 0);
-	 
-	ANIMATION_INFO infos[SPACECAT_ANIMATIONE];
-	infos[0] = SPACECAT_IDLE;
-	infos[1] = SPACECAT_MOVE;
-	infos[2] = SPACECAT_ATTACK;
-	infos[3] = SPACECAT_DEAD;
-	infos[4] = SPACECAT_HIT;
+
+	ANIMATION_INFO infos[BOSSMONSTER_ANIMATIONE];
+	infos[0] = BOSS_IDLE;
+	infos[1] = BOSS_MOVE;
+	infos[2] = BOSS_CHASE;
+	infos[3] = BOSS_SKILL0;
+	infos[4] = BOSS_SKILL1;
+	infos[5] = BOSS_SKILL2;
+	infos[6] = BOSS_SKILL3;
+	infos[7] = BOSS_SKILL4;
+	infos[8] = BOSS_SKILL5;
+	infos[9] = BOSS_SKILL6;
+	infos[10] = BOSS_SKILL7;
+	infos[11] = BOSS_SKILL8;
+	infos[12] = BOSS_SKILL9;
+	infos[13] = BOSS_DEAD;
+	infos[14] = BOSS_HIT;
 
 	m_MonsterModel = LoadObject::LoadGeometryAndAnimationFromFile_forMonster(
-		pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/SpaceCat.bin", NULL,
-		SPACECAT_ANIMATIONE, infos);
-	 
+		pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/Dragon.bin", NULL,
+		BOSSMONSTER_ANIMATIONE, infos);
+	// printf("보스", "%d");
+
 	m_pLoadObject = m_MonsterModel->m_pModelRootObject;
 	m_pLoadObject->m_pSkinnedAnimationController = new CAnimationController(pd3dDevice, pd3dCommandList, 1, m_MonsterModel);
 	m_pLoadObject->m_pSkinnedAnimationController->SetTrackAnimationSet(0, 0);
 
 	m_Transform.SetPosition(SpawnPoint);
-	 
+
 	XMFLOAT3 extents{ 50.f, 50.f, 50.f };
 	m_pMyBOBox = new MyBOBox(this, pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 75.F, 0.F }, extents);
-	 
-	static_cast<BossMonsterActionMgr*>(m_MonsterMovement->GetMonsterActionMgr())->ChangeStateToSample_1();
+
+	// static_cast<BossMonsterActionMgr*>(m_MonsterMovement->GetMonsterActionMgr())->ChangeStateToSample_1();
+
+	if (rand() % 2)
+	{
+		static_cast<BossMonsterActionMgr*>(m_MonsterMovement->GetMonsterActionMgr())->BossMoveAction();
+	}
+	else
+	{
+		static_cast<BossMonsterActionMgr*>(m_MonsterMovement->GetMonsterActionMgr())->BossIdleAction();
+	}
 }
 
 Dragon::~Dragon()
@@ -104,7 +124,20 @@ void Dragon::UpdateState(float fElapsedTime)
 
 void Dragon::Animate(float fElapsedTime)
 {
-	Monster::Animate(fElapsedTime);
+	// Monster::Animate(fElapsedTime);
+	// 대신 아래의 함수들...
+
+	// animate 이전에 현재 설정된 애니메이션 수행하도록 설정
+	SetTrackAnimationSet();
+
+	// 반드시 트랜스폼 업데이트..! 
+	m_Transform.Update(fElapsedTime);
+
+	// m_pLoadObject->m_xmf4x4ToParent = m_Transform.GetWorldMatrix();
+	m_pLoadObject->m_xmf4x4ToParent = Matrix4x4::Multiply(XMMatrixRotationX(80.0f), m_Transform.GetWorldMatrix());
+	m_pLoadObject->m_xmf4x4ToParent._42 = 250.f; // y축 일부러 고정시킴... ㅠㅠ
+
+	m_pLoadObject->Animate(fElapsedTime);
 
 	LoadObject* p = m_pLoadObject->FindFrame("Bone001");
 	XMFLOAT3 pos = XMFLOAT3(p->m_xmf4x4World._41, p->m_xmf4x4World._42 + 50, p->m_xmf4x4World._43);

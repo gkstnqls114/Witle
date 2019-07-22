@@ -157,6 +157,8 @@
     <ClInclude Include="AltarSphere.h" />
     <ClInclude Include="Avoidance.h" />
     <ClInclude Include="BasicCam.h" />
+    <ClInclude Include="BossIdleAction.h" />
+    <ClInclude Include="BossMoveAction.h" />
     <ClInclude Include="BossSampleAction_1.h" />
     <ClInclude Include="BossSampleAction_2.h" />
     <ClInclude Include="Broom.h" />
@@ -310,6 +312,8 @@
     <ClCompile Include="AltarSphere.cpp" />
     <ClCompile Include="Avoidance.cpp" />
     <ClCompile Include="BasicCam.cpp" />
+    <ClCompile Include="BossIdleAction.cpp" />
+    <ClCompile Include="BossMoveAction.cpp" />
     <ClCompile Include="BossSampleAction_1.cpp" />
     <ClCompile Include="BossSampleAction_2.cpp" />
     <ClCompile Include="Broom.cpp" />
@@ -331,6 +335,7 @@
     <ClCompile Include="Dragon.cpp" />
     <ClCompile Include="ElectricBall.cpp" />
     <ClCompile Include="FireBall.cpp" />
+    <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="HitAction.cpp" />
     <ClCompile Include="DeadAction.cpp" />
     <ClCompile Include="DirectionalLight.cpp" />
@@ -431,7 +436,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="Terrain.cpp" />
     <ClCompile Include="TerrainMesh.cpp" />
     <ClCompile Include="SkinnedMeshRenderer.cpp" />

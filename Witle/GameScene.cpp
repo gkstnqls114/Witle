@@ -313,32 +313,32 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	m_PlayerSkillMgr = new PlayerSkillMgr(pd3dDevice, pd3dCommandList);
 	// 플레이어 관련 ////////////////////////////////////////
 	 
-	// 테스트용 
-
+	// 테스트용  
 	std::random_device rd;
 	std::mt19937 mersenne(rd());
 	std::uniform_int_distribution<> die(2000, 15000);
 	std::uniform_int_distribution<> monstertype(0, 3);
-
-	// 몬스터
-	m_AltarMonster = new SpaceCat("SpaceCat",
-		XMFLOAT3(15000, 0, 15000),
-		pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
-
+	 
+	m_Dragon = new Dragon("Dragon",
+			XMFLOAT3(15000, 0, 15000),
+			pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
+	
 	m_TestMonster = new Monster*[m_TestMonsterCount];
 
-	m_TestMonster[0] = new SpaceCat("SpaceCat",
-		XMFLOAT3(1500, 0, 1000),
+/*
+	m_TestMonster[0] = new Dragon("SpaceCat",
+		XMFLOAT3(15000, 0, 15000),
 		pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
-
+*/
 	int spacecatblue_count = 0;
 	int spacecatgreen_count = 0;
 	int spacecatpink_count = 0;
 	int creepymonster_count = 0;
+	int boss_count = 0;
 	MonsterTransformStorage* instance = MonsterTransformStorage::GetInstance();
 	instance->CreateInfo(pd3dDevice, pd3dCommandList);
 
-	for (int i = 1; i < m_TestMonsterCount; )
+	for (int i = 0; i < m_TestMonsterCount; )
 	{
 		int value = monstertype(mersenne);
 
@@ -373,6 +373,18 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 				instance->GetPosition(spacecatgreen_count, SPACECAT_GREEN),
 				pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
 			spacecatgreen_count += 1;
+		}
+		else if (value == ENUM_MONSTER::MONSTER_BOSSMONSTER)
+		{
+			if (instance->Count(DRAGON) <= boss_count)continue;
+			m_TestMonster[i] = new Dragon("Dragon",
+				instance->GetPosition(boss_count, DRAGON),
+				pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
+			boss_count += 1;
+			if (boss_count == 1)
+			{
+				continue;
+			}
 		}
 		else
 		{
@@ -692,7 +704,8 @@ bool GameScene::ProcessInput(HWND hWnd, float fElapsedTime)
 }
 
 void GameScene::UpdatePhysics(float fElapsedTime)
-{ 
+{
+	m_Dragon->UpdateState(fElapsedTime); 
 	// 스킬 이펙트 가속도 처리
 	m_PlayerSkillMgr->UpdatePhysics(fElapsedTime);
 
@@ -725,7 +738,7 @@ void GameScene::Update(float fElapsedTime)
 			//} 
 			// SoundManager::GetInstance()->Play(ENUM_SOUND::MAGIC_MISIL);
 			//
-		} 
+		}
 	}
 	else // 드래그로 회전하지 않는다면...
 	{
@@ -764,12 +777,13 @@ void GameScene::Update(float fElapsedTime)
 	if (m_SkyBox) m_SkyBox->Update(fElapsedTime);
 	if (m_WideareaMagic) m_WideareaMagic->Update(fElapsedTime);
 
+	m_Dragon->Update(fElapsedTime);
 	for (int i = 0; i < m_TestMonsterCount; ++i)
 	{
 		m_TestMonster[i]->Update(fElapsedTime);
 	}
 	//// 순서 변경 X ////
-	 
+
 	for (int x = 0; x < 5; ++x)
 	{
 		m_AltarSphere[x]->Update(fElapsedTime);
@@ -840,7 +854,7 @@ void GameScene::LastUpdate(float fElapsedTime)
 }
  
 void GameScene::AnimateObjects(float fTimeElapsed)
-{ 
+{
 	if (m_pPlayer) m_pPlayer->Animate(fTimeElapsed);
 
 	for (int x = 0; x < 5; ++x)
@@ -850,7 +864,7 @@ void GameScene::AnimateObjects(float fTimeElapsed)
 			if (m_AltarSphere[x]->GetisActive()) m_AltarSphere[x]->Animate(fTimeElapsed);
 		}
 	}
-
+	m_Dragon->Animate(fTimeElapsed);
 	for (int i = 0; i < m_TestMonsterCount; ++i)
 	{
 		if (m_TestMonster[i]) m_TestMonster[i]->Animate(fTimeElapsed);
@@ -918,7 +932,7 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 		}
 	}
 
-
+	m_Dragon->Render(pd3dCommandList, isGBuffers);
 	for (int i = 0; i < m_TestMonsterCount; ++i)
 	{
 		if (m_TestMonster[i]) m_TestMonster[i]->Render(pd3dCommandList, isGBuffers);

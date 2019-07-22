@@ -34,6 +34,7 @@
 #define SPACECAT_GREEN "SpaceCat_Green"
 #define SPACECAT_PINK "SpaceCat_Pink"
 #define CREEPYMONSTER "CreepyMonster"
+#define DRAGON "Dragon"
 
 
 

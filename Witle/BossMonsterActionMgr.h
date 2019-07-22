@@ -1,6 +1,8 @@
 #pragma once 
 #include "BossSampleAction_1.h"
 #include "BossSampleAction_2.h"
+#include "BossIdleAction.h"
+#include "BossMoveAction.h"
 #include "MonsterActionMgr.h"
 
 class MonsterAction;
@@ -15,6 +17,8 @@ class BossMonsterActionMgr
 	// 현재 사용하는 액션(상태)들
 	BossSampleAction_1 m_BossSampleAction_1;
 	BossSampleAction_2 m_BossSampleAction_2;
+	BossIdleAction m_BossIdleAction;
+	BossMoveAction m_BossMoveAction;
 	// 현재 사용하는 액션(상태)들
 
 public:
@@ -28,11 +32,28 @@ public:
 	BossMonsterActionMgr(GameObject* pOwner) : 
 		MonsterActionMgr(pOwner),
 		m_BossSampleAction_1(pOwner),
-		m_BossSampleAction_2(pOwner)
+		m_BossSampleAction_2(pOwner),
+		m_BossIdleAction(pOwner),
+		m_BossMoveAction(pOwner)
 	{
 	};
 	virtual ~BossMonsterActionMgr() {};
 
 	void ChangeStateToSample_1();
 	void ChangeStateToSample_2();
+	void BossIdleAction(); // 기본
+	void BossMoveAction(); // 움직임
+	void BossChaseAction(); // 추격
+	void BossSearchAction(); // 필요할까?
+	void BossDeadAction(); // 죽음
+	void BossSkillAction0(); // 임시
+	void BossSkillAction1(); // 임시
+	void BossSkillAction2(); // 임시
+	void BossSkillAction3(); // 임시
+	void BossSkillAction4(); // 임시
+	void BossSkillAction5(); // 임시
+	void BossSkillAction6(); // 임시
+	void BossSkillAction7(); // 임시
+	void BossSkillAction8(); // 임시
+	void BossSkillAction9(); // 임시
 };

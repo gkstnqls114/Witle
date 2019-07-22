@@ -139,7 +139,9 @@ protected:
 	Camera*					m_pSkyCamera{ nullptr };
 	
 	SkyBox*					m_SkyBox{ nullptr };
-	 
+	  
+	Monster*				m_Dragon{ nullptr };
+
 	AltarSphere*			m_AltarSphere[5];
 	// MyRectangle*            m_GuageBar[5]; 
 

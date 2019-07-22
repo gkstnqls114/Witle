@@ -427,6 +427,12 @@
     <Filter Include="04.Scene\SkillSelectScene">
       <UniqueIdentifier>{1d5afc8a-7dbd-4c15-af85-892cdf1338ec}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.Component\ForMonster\BossMonsterAction\BossIdleAction">
+      <UniqueIdentifier>{a90053a0-522f-4be7-b32e-01fa81133963}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\ForMonster\BossMonsterAction\BossMoveAction">
+      <UniqueIdentifier>{686066ca-ff4f-4e03-8dc3-652a5e794e74}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -882,6 +888,12 @@
     <ClInclude Include="SkillIconShader.h">
       <Filter>05.Shader\SkillIconShader</Filter>
     </ClInclude>
+    <ClInclude Include="BossIdleAction.h">
+      <Filter>02.Component\ForMonster\BossMonsterAction\BossIdleAction</Filter>
+    </ClInclude>
+    <ClInclude Include="BossMoveAction.h">
+      <Filter>02.Component\ForMonster\BossMonsterAction\BossMoveAction</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -913,9 +925,6 @@
     </ClCompile>
     <ClCompile Include="Mesh.cpp">
       <Filter>02.Component\03.Mesh</Filter>
-    </ClCompile>
-    <ClCompile Include="GameScene.cpp">
-      <Filter>04.Scene\GameScene</Filter>
     </ClCompile>
     <ClCompile Include="GameFramework.cpp">
       <Filter>01.GameBase</Filter>
@@ -1274,6 +1283,12 @@
     <ClCompile Include="Dragon.cpp">
       <Filter>03.GameObject\02.Monster\Dragon</Filter>
     </ClCompile>
+    <ClCompile Include="BossIdleAction.cpp">
+      <Filter>02.Component\ForMonster\BossMonsterAction\BossIdleAction</Filter>
+    </ClCompile>
+    <ClCompile Include="BossMoveAction.cpp">
+      <Filter>02.Component\ForMonster\BossMonsterAction\BossMoveAction</Filter>
+    </ClCompile>
     <ClCompile Include="SkillEffect.cpp">
       <Filter>03.GameObject\06.SkillEffect</Filter>
     </ClCompile>
@@ -1315,6 +1330,9 @@
     </ClCompile>
     <ClCompile Include="SkillIconShader.cpp">
       <Filter>05.Shader\SkillIconShader</Filter>
+    </ClCompile>
+    <ClCompile Include="GameScene.cpp">
+      <Filter>04.Scene\GameScene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

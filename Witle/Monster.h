@@ -68,9 +68,7 @@ private:
 
 protected:
 	virtual void ReleaseMembers() override;
-	virtual void ReleaseMemberUploadBuffers() override;
-	 
-private: 
+	virtual void ReleaseMemberUploadBuffers() override; 
 	void SetTrackAnimationSet();
 
 public:
