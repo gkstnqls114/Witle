@@ -4,7 +4,7 @@
 class Shader;
 class MyRectangle;
 
-// HP 관련 정보
+// 플레이어의 hp나 mp와 같은 게이지 관련 정보를 관리하고 렌더링하는 클래스입니다.
 class PlayerStatus
 	: public Status
 {

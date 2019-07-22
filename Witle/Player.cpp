@@ -172,7 +172,7 @@ void Player::Render(ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffers
 	bool isMoving = GameInput::IsKeydownW() || GameInput::IsKeydownA() || GameInput::IsKeydownS() || GameInput::IsKeydownD();
 	if (m_Broom->GetisUsing() && isMoving)
 	{
-		//m_BroomLineEffectRect->Render(pd3dCommandList, XMFLOAT2(0.f, 0.f), CGameTimer::GetInstance()->GetTotalTime());
+		m_BroomLineEffectRect->Render(pd3dCommandList, XMFLOAT2(0.f, 0.f), CGameTimer::GetInstance()->GetTotalTime());
 	}
 }
 

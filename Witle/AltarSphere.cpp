@@ -16,6 +16,7 @@
 #include "LineSphere.h"
 // DebugMesh /////////////////////
 
+#include "PlayerStatus.h"
 #include "CameraObject.h"
 #include "MainCameraMgr.h"
 #include "Texture.h"
@@ -65,6 +66,12 @@ AltarSphere::AltarSphere(const std::string & entityID, const XMFLOAT3& SpawnPoin
 
 	Move(SpawnPoint); 
 	Animate(0.f); 
+
+	m_ActiveGuageBar = new PlayerStatus(this, pd3dDevice, pd3dCommandList,
+		POINT{ LONG(GameScreen::GetClientWidth() / 2), 100 },
+		400, 30, L"Image/Red.dds"
+	);
+	m_ActiveGuageBar->m_Guage = 0.f;
 }
 
 AltarSphere::~AltarSphere()
@@ -82,6 +89,11 @@ void AltarSphere::Render(ID3D12GraphicsCommandList * pd3dCommandList, bool isGBu
 	m_pHaep->UpdateShaderVariable(pd3dCommandList);
 	m_pTexture->UpdateShaderVariable(pd3dCommandList, 0);
 	m_pLoadObject->Render(pd3dCommandList, isGBuffers); 
+
+	if (m_isEnguaged)
+	{
+		m_ActiveGuageBar->Render(pd3dCommandList);
+	}
 }
 
 void AltarSphere::ReleaseMembers()
@@ -188,7 +200,7 @@ void AltarSphere::AddGuage(float time)
 	if (m_isActive) return;
 
 	m_guage = m_guage + add_guage * time;
-	std::cout << m_guage << std::endl;
+	m_ActiveGuageBar->m_Guage = m_guage;
 }
 
 void AltarSphere::SetAnimationState(int state)
