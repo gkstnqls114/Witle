@@ -6,7 +6,9 @@
 #include "ShaderManager.h"
 #include "Texture.h"
 #include "UI2DImage.h"
+#include "Texture.h"
 #include "GraphicsRootSignatureMgr.h"
+#include "MyDescriptorHeap.h"
 #include "SkillSelectScene.h"
 
 ID3D12DescriptorHeap*		SkillSelectScene::m_pd3dCbvSrvDescriptorHeap;
@@ -147,6 +149,21 @@ void SkillSelectScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCom
 		L"Image/SkillIconTEST7.dds",
 		L"Image/SkillIconTEST8.dds"
 	};
+
+	m_pHeap = new MyDescriptorHeap();
+	m_pHeap->CreateCbvSrvUavDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, SKILL_TO_CHOOSE, 0);
+
+	m_pTexture = new Texture(SKILL_TO_CHOOSE, RESOURCE_TEXTURE2D);
+	for (int x = 0; x < SKILL_TO_CHOOSE; ++x)
+	{
+		m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, filepaths[x], x);
+	}
+	m_pHeap->CreateShaderResourceViews(pd3dDevice, pd3dCommandList, m_pTexture, ROOTPARAMETER_TEXTURE, false);
+	 
+
+	// 임시로 선택할 스킬 이미지 로드 ///////////////////////
+
+
 	POINT choosePoint[SKILL_TO_CHOOSE] = {
 		 POINT{ int(GameScreen::GetWidth()) / 2 - 300, int(GameScreen::GetHeight()) / 2 - 250 },
 		 POINT{ int(GameScreen::GetWidth()) / 2 - 100, int(GameScreen::GetHeight()) / 2 - 250 },
@@ -162,7 +179,7 @@ void SkillSelectScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCom
 	for (int x = 0; x < SKILL_TO_CHOOSE; ++x)
 	{
 		m_UISkillToChoose[x] = new UI2DImage(m_TESTGameObject, pd3dDevice, pd3dCommandList, choosePoint[x], 150, 150,
-			filepaths[x]);
+			nullptr);
 	}
 	// 임시로 선택할 스킬 이미지 로드 ///////////////////////
 
@@ -177,7 +194,7 @@ void SkillSelectScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCom
 	for (int x = 0; x < SKILL_SELECTED; ++x)
 	{
 		m_UISkillSelected[x] = new UI2DImage(m_TESTGameObject, pd3dDevice, pd3dCommandList, selectedPoint[x], 100, 100,
-			filepaths[x]);
+			nullptr);
 	} 
 	// 임시로 선택된 스킬 이미지 로드 ///////////////////////
 
@@ -222,14 +239,17 @@ void SkillSelectScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool i
 	pd3dCommandList->RSSetScissorRects(1, &m_d3dScissorRect);
 
 	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_UISCREEN, false);
+	m_pHeap->UpdateShaderVariable(pd3dCommandList);
 
 	for (int x = 0; x < SKILL_TO_CHOOSE; ++x)
 	{
+		m_pTexture->UpdateShaderVariable(pd3dCommandList, x);
 		m_UISkillToChoose[x]->Render(pd3dCommandList);
 	}
 
 	for (int x = 0; x < SKILL_SELECTED; ++x)
 	{
+		m_pTexture->UpdateShaderVariable(pd3dCommandList, m_SelectedIndex[x]);
 		m_UISkillSelected[x]->Render(pd3dCommandList);
 	}
 }

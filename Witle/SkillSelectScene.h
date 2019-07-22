@@ -5,6 +5,8 @@
 #define SKILL_SELECTED 4
 
 class UI2DImage;
+class Texture;
+class MyDescriptorHeap;
 
 class SkillSelectScene
 	: public Scene
@@ -94,4 +96,10 @@ private:
 	UI2DImage* m_UISkillToChoose[SKILL_TO_CHOOSE]; // 고를 수 있는 스킬 ui 들
 
 	UI2DImage* m_UISkillSelected[SKILL_SELECTED]; // 고른 스킬들
+
+
+	MyDescriptorHeap* m_pHeap{ nullptr };
+	Texture* m_pTexture{ nullptr };
+
+	UINT m_SelectedIndex[SKILL_SELECTED]{ 0, 0, 0, 0 };
 };
