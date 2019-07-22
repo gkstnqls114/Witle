@@ -11,7 +11,7 @@ SceneMgr::SceneMgr()
 	m_GameScene = new GameScene;
 	m_MainScene = new MainScene;
 	m_SkillSelectScene = new SkillSelectScene;
-	ChangeSceneToMain();
+	ChangeSceneToSkillSelect();
 }
 
 SceneMgr::~SceneMgr()
@@ -33,19 +33,27 @@ void SceneMgr::ReleaseObjects()
 		delete m_MainScene;
 		m_MainScene = nullptr;
 	}
+
+	if (m_SkillSelectScene)
+	{
+		m_SkillSelectScene->ReleaseObjects();
+		delete m_SkillSelectScene;
+		m_SkillSelectScene = nullptr;
+	}
 }
 
 void SceneMgr::ReleaseUploadBuffers()
 {
-	if (m_GameScene) m_GameScene->ReleaseUploadBuffers();  
-
+	if (m_GameScene) m_GameScene->ReleaseUploadBuffers();   
 	if (m_MainScene) m_MainScene->ReleaseUploadBuffers();  
+	if (m_SkillSelectScene) m_SkillSelectScene->ReleaseUploadBuffers();
 }
 
 void SceneMgr::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList)
 {
 	m_GameScene->BuildObjects(pd3dDevice, pd3dCommandList);
 	m_MainScene->BuildObjects(pd3dDevice, pd3dCommandList);
+	m_SkillSelectScene->BuildObjects(pd3dDevice, pd3dCommandList);
 }
 
 void SceneMgr::ChangeSceneToGame()
@@ -60,6 +68,7 @@ void SceneMgr::ChangeSceneToMain()
 
 void SceneMgr::ChangeSceneToSkillSelect()
 {
+	m_pCurrScene = m_SkillSelectScene;
 }
 
 bool SceneMgr::IsGameScene() const

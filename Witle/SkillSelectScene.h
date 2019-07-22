@@ -1,7 +1,10 @@
 #pragma once
 #include "Scene.h"
 
-class Button;
+#define SKILL_TO_CHOOSE 8
+#define SKILL_SELECTED 4
+
+class UI2DImage;
 
 class SkillSelectScene
 	: public Scene
@@ -86,5 +89,9 @@ private:
 	D3D12_VIEWPORT	m_d3dViewport;
 	D3D12_RECT		m_d3dScissorRect;
 
-	Button* m_pBackGround{ nullptr };
+	GameObject* m_TESTGameObject{ nullptr };
+	  
+	UI2DImage* m_UISkillToChoose[SKILL_TO_CHOOSE]; // 고를 수 있는 스킬 ui 들
+
+	UI2DImage* m_UISkillSelected[SKILL_SELECTED]; // 고른 스킬들
 };

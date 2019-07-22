@@ -826,7 +826,8 @@ void CGameFramework::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM
 static BOOL is_fullscreen = FALSE;
 void CGameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam)
 {
-	if (m_SceneMgr) {
+	if (m_SceneMgr) 
+	{
 		m_SceneMgr->GetCurrScene()->OnProcessingKeyboardMessage(hWnd, nMessageID, wParam, lParam, 0.f);
 	}
 
@@ -863,6 +864,16 @@ void CGameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPA
 	default:
 		break;
 	}
+
+	// 만약 아무키나 누르면 장면 전환 ///////////////////
+	if (m_SceneMgr->IsMainScene())
+	{
+		m_SceneMgr->ChangeSceneToSkillSelect();
+	}
+	else if (m_SceneMgr->IsSkillSelectScene())
+	{
+
+	}
 }
 
 void CGameFramework::RenderOnSwapchain()
@@ -881,7 +892,7 @@ void CGameFramework::RenderOnSwapchain()
 	RenderSwapChain();
 
 	// 하단에 그림자 맵을 렌더링한다.
-	RenderShadowMap();
+	// RenderShadowMap();
 
 	d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_RenderTargetBuffers[m_SwapChainBufferIndex], D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
 }

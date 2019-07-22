@@ -3,7 +3,9 @@
 #include "d3dUtil.h" 
 #include "Button.h"
 #include "GameScreen.H"
+#include "ShaderManager.h"
 #include "Texture.h"
+#include "UI2DImage.h"
 #include "GraphicsRootSignatureMgr.h"
 #include "SkillSelectScene.h"
 
@@ -131,13 +133,54 @@ void SkillSelectScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCom
 
 	// 디스크립터 힙 설정
 	SkillSelectScene::CreateCbvSrvDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 3);
+	 
+	m_TESTGameObject = new EmptyGameObject("ui");
+	
+	// 임시로 선택할 스킬 이미지 로드 ///////////////////////
+	wchar_t* filepaths[SKILL_TO_CHOOSE] = {
+		L"Image/SkillIconTEST1.dds",
+		L"Image/SkillIconTEST2.dds",
+		L"Image/SkillIconTEST3.dds",
+		L"Image/SkillIconTEST4.dds",
+		L"Image/SkillIconTEST5.dds",
+		L"Image/SkillIconTEST6.dds",
+		L"Image/SkillIconTEST7.dds",
+		L"Image/SkillIconTEST8.dds"
+	};
+	POINT choosePoint[SKILL_TO_CHOOSE] = {
+		 POINT{ int(GameScreen::GetWidth()) / 2 - 300, int(GameScreen::GetHeight()) / 2 - 250 },
+		 POINT{ int(GameScreen::GetWidth()) / 2 - 100, int(GameScreen::GetHeight()) / 2 - 250 },
+		 POINT{ int(GameScreen::GetWidth()) / 2 + 100, int(GameScreen::GetHeight()) / 2 - 250 },
+		 POINT{ int(GameScreen::GetWidth()) / 2 + 300, int(GameScreen::GetHeight()) / 2 - 250 },
 
-	m_pBackGround = new Button("Background", pd3dDevice, pd3dCommandList, RECT{
-		0, 0,
-		static_cast<LONG>(GameScreen::GetWidth()), static_cast<LONG>(GameScreen::GetHeight()) },
-		nullptr, L"Image/Wittle_1280x720.dds");
+		 POINT{ int(GameScreen::GetWidth()) / 2 - 300, int(GameScreen::GetHeight()) / 2 - 50 },
+		 POINT{ int(GameScreen::GetWidth()) / 2 - 100, int(GameScreen::GetHeight()) / 2 - 50 },
+		 POINT{ int(GameScreen::GetWidth()) / 2 + 100, int(GameScreen::GetHeight()) / 2 - 50 },
+		 POINT{ int(GameScreen::GetWidth()) / 2 + 300, int(GameScreen::GetHeight()) / 2 - 50 }
+	};
 
-	// SkillSelectScene::CreateShaderResourceViews(pd3dDevice, m_pBackGround->GetTexture(), ROOTPARAMETER_TEXTURE, true);
+	for (int x = 0; x < SKILL_TO_CHOOSE; ++x)
+	{
+		m_UISkillToChoose[x] = new UI2DImage(m_TESTGameObject, pd3dDevice, pd3dCommandList, choosePoint[x], 150, 150,
+			filepaths[x]);
+	}
+	// 임시로 선택할 스킬 이미지 로드 ///////////////////////
+
+
+	// 임시로 선택된 스킬 이미지 로드 ///////////////////////
+	POINT selectedPoint[SKILL_SELECTED] = {
+		 POINT{ int(GameScreen::GetWidth()) / 2 - 300, int(GameScreen::GetHeight()) / 2 + 270 },
+		 POINT{ int(GameScreen::GetWidth()) / 2 - 100, int(GameScreen::GetHeight()) / 2 + 270 },
+		 POINT{ int(GameScreen::GetWidth()) / 2 + 100, int(GameScreen::GetHeight()) / 2 + 270 },
+		 POINT{ int(GameScreen::GetWidth()) / 2 + 300, int(GameScreen::GetHeight()) / 2 + 270 }
+	};
+	for (int x = 0; x < SKILL_SELECTED; ++x)
+	{
+		m_UISkillSelected[x] = new UI2DImage(m_TESTGameObject, pd3dDevice, pd3dCommandList, selectedPoint[x], 100, 100,
+			filepaths[x]);
+	} 
+	// 임시로 선택된 스킬 이미지 로드 ///////////////////////
+
 }
 
 void SkillSelectScene::ReleaseObjects()
@@ -178,8 +221,17 @@ void SkillSelectScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool i
 	pd3dCommandList->RSSetViewports(1, &m_d3dViewport);
 	pd3dCommandList->RSSetScissorRects(1, &m_d3dScissorRect);
 
-	// pd3dCommandList->SetDescriptorHeaps(1, &m_pd3dCbvSrvDescriptorHeap);
-	m_pBackGround->Render(pd3dCommandList, isGBuffers);
+	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_UISCREEN, false);
+
+	for (int x = 0; x < SKILL_TO_CHOOSE; ++x)
+	{
+		m_UISkillToChoose[x]->Render(pd3dCommandList);
+	}
+
+	for (int x = 0; x < SKILL_SELECTED; ++x)
+	{
+		m_UISkillSelected[x]->Render(pd3dCommandList);
+	}
 }
 
 void SkillSelectScene::RenderForShadow(ID3D12GraphicsCommandList * pd3dCommandList)
