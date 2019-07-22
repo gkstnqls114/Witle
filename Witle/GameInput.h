@@ -124,7 +124,10 @@ public:
 	}
 	static bool GetDragMode() { return m_DragMode; }
 
+	// 왜 설정했는지 모르겠다.
 	static POINT GetdownClickcursor() { return m_downClickCursor; }
+	static POINT GetClickcursor();
+
 	static bool GenerateRayforPicking(const XMFLOAT3& cameraPos, const XMFLOAT4X4 & view, const XMFLOAT4X4 & projection, RAY& ray);
 
 	//// Mouse 관련 ///////////////////////////////////////////

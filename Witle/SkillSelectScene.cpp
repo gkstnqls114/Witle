@@ -89,7 +89,31 @@ D3D12_GPU_DESCRIPTOR_HANDLE SkillSelectScene::CreateShaderResourceViews(ID3D12De
 
 bool SkillSelectScene::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam)
 {
-	return false;
+	switch (nMessageID)
+	{
+	case WM_MOUSEWHEEL:
+	case WM_MOUSEHWHEEL:
+
+		break;
+	case WM_LBUTTONDOWN:
+		ClickSkillIcon(POINT{ LOWORD(lParam), HIWORD(lParam) });
+		break;
+	case WM_RBUTTONDOWN:
+		break;
+	case WM_LBUTTONUP:
+
+		break;
+	case WM_RBUTTONUP:
+		break;
+	case WM_MOUSEMOVE:
+
+		break;
+
+	default:
+		break;
+	}
+
+	return true;
 }
 
 bool SkillSelectScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam, float ElapsedTime)
@@ -133,38 +157,18 @@ void SkillSelectScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCom
 	m_d3dViewport = D3D12_VIEWPORT{ 0.0f, 0.0f, static_cast<FLOAT>(GameScreen::GetWidth()) , static_cast<FLOAT>(GameScreen::GetHeight()), 0.0f, 1.0f };
 	m_d3dScissorRect = D3D12_RECT{ 0, 0, static_cast<LONG>(GameScreen::GetWidth()) ,static_cast<LONG>(GameScreen::GetHeight()) };
 
-	// 디스크립터 힙 설정
-	SkillSelectScene::CreateCbvSrvDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 3);
-	 
-	m_TESTGameObject = new EmptyGameObject("ui");
-	
-	// 임시로 선택할 스킬 이미지 로드 ///////////////////////
-	wchar_t* filepaths[SKILL_TO_CHOOSE] = {
-		L"Image/SkillIconTEST1.dds",
-		L"Image/SkillIconTEST2.dds",
-		L"Image/SkillIconTEST3.dds",
-		L"Image/SkillIconTEST4.dds",
-		L"Image/SkillIconTEST5.dds",
-		L"Image/SkillIconTEST6.dds",
-		L"Image/SkillIconTEST7.dds",
-		L"Image/SkillIconTEST8.dds"
+	POINT tempselectedPoint[SKILL_SELECTED] = {
+		 POINT{ int(GameScreen::GetWidth()) / 2 - 300, int(GameScreen::GetHeight()) / 2 + 270 },
+		 POINT{ int(GameScreen::GetWidth()) / 2 - 100, int(GameScreen::GetHeight()) / 2 + 270 },
+		 POINT{ int(GameScreen::GetWidth()) / 2 + 100, int(GameScreen::GetHeight()) / 2 + 270 },
+		 POINT{ int(GameScreen::GetWidth()) / 2 + 300, int(GameScreen::GetHeight()) / 2 + 270 }
 	};
-
-	m_pHeap = new MyDescriptorHeap();
-	m_pHeap->CreateCbvSrvUavDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, SKILL_TO_CHOOSE, 0);
-
-	m_pTexture = new Texture(SKILL_TO_CHOOSE, RESOURCE_TEXTURE2D);
-	for (int x = 0; x < SKILL_TO_CHOOSE; ++x)
+	for (int x = 0; x < SKILL_SELECTED; ++x)
 	{
-		m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, filepaths[x], x);
+		selectedPoint[x] = tempselectedPoint[x];
 	}
-	m_pHeap->CreateShaderResourceViews(pd3dDevice, pd3dCommandList, m_pTexture, ROOTPARAMETER_TEXTURE, false);
-	 
 
-	// 임시로 선택할 스킬 이미지 로드 ///////////////////////
-
-
-	POINT choosePoint[SKILL_TO_CHOOSE] = {
+	POINT tempchoosePoint[SKILL_TO_CHOOSE] = {
 		 POINT{ int(GameScreen::GetWidth()) / 2 - 300, int(GameScreen::GetHeight()) / 2 - 250 },
 		 POINT{ int(GameScreen::GetWidth()) / 2 - 100, int(GameScreen::GetHeight()) / 2 - 250 },
 		 POINT{ int(GameScreen::GetWidth()) / 2 + 100, int(GameScreen::GetHeight()) / 2 - 250 },
@@ -175,6 +179,39 @@ void SkillSelectScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCom
 		 POINT{ int(GameScreen::GetWidth()) / 2 + 100, int(GameScreen::GetHeight()) / 2 - 50 },
 		 POINT{ int(GameScreen::GetWidth()) / 2 + 300, int(GameScreen::GetHeight()) / 2 - 50 }
 	};
+	for (int x = 0; x < SKILL_TO_CHOOSE; ++x)
+	{
+		choosePoint[x] = tempchoosePoint[x];
+	}
+
+	m_TESTGameObject = new EmptyGameObject("ui");
+	
+	// 임시로 선택할 스킬 이미지 로드 ///////////////////////
+	wchar_t* filepaths[SKILL_TO_CHOOSE + 1] = {
+		L"Image/SkillIconTEST1.dds",
+		L"Image/SkillIconTEST2.dds",
+		L"Image/SkillIconTEST3.dds",
+		L"Image/SkillIconTEST4.dds",
+		L"Image/SkillIconTEST5.dds",
+		L"Image/SkillIconTEST6.dds",
+		L"Image/SkillIconTEST7.dds",
+		L"Image/SkillIconTEST8.dds",
+		L"Image/SkillIconTEST9.dds"
+	};
+
+	m_pHeap = new MyDescriptorHeap();
+	m_pHeap->CreateCbvSrvUavDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, SKILL_TO_CHOOSE + 1, 0);
+
+	// 선택하지 않은 스킬도 설정하기위해 ...
+	m_pTexture = new Texture(SKILL_TO_CHOOSE + 1, RESOURCE_TEXTURE2D);
+	for (int x = 0; x < SKILL_TO_CHOOSE + 1; ++x)
+	{
+		m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, filepaths[x], x);
+	}
+	m_pHeap->CreateShaderResourceViews(pd3dDevice, pd3dCommandList, m_pTexture, ROOTPARAMETER_TEXTURE, false);
+	 
+
+	// 임시로 선택할 스킬 이미지 로드 ///////////////////////
 
 	for (int x = 0; x < SKILL_TO_CHOOSE; ++x)
 	{
@@ -185,12 +222,6 @@ void SkillSelectScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCom
 
 
 	// 임시로 선택된 스킬 이미지 로드 ///////////////////////
-	POINT selectedPoint[SKILL_SELECTED] = {
-		 POINT{ int(GameScreen::GetWidth()) / 2 - 300, int(GameScreen::GetHeight()) / 2 + 270 },
-		 POINT{ int(GameScreen::GetWidth()) / 2 - 100, int(GameScreen::GetHeight()) / 2 + 270 },
-		 POINT{ int(GameScreen::GetWidth()) / 2 + 100, int(GameScreen::GetHeight()) / 2 + 270 },
-		 POINT{ int(GameScreen::GetWidth()) / 2 + 300, int(GameScreen::GetHeight()) / 2 + 270 }
-	};
 	for (int x = 0; x < SKILL_SELECTED; ++x)
 	{
 		m_UISkillSelected[x] = new UI2DImage(m_TESTGameObject, pd3dDevice, pd3dCommandList, selectedPoint[x], 100, 100,
@@ -269,5 +300,33 @@ void SkillSelectScene::BuildLightsAndMaterials(ID3D12Device *pd3dDevice, ID3D12G
 
 void SkillSelectScene::RenderShadowMap(ID3D12GraphicsCommandList * pd3dCommandList)
 {
+}
+
+void SkillSelectScene::ClickSkillIcon(POINT cursor)
+{ 
+	for (int x = 0; x < SKILL_TO_CHOOSE ; ++x)
+	{
+		if (((choosePoint[x].x - 75) < cursor.x && cursor.x < (choosePoint[x].x + 75)) &&
+			((choosePoint[x].y - 75) < cursor.y && cursor.y < (choosePoint[x].y + 75)))
+		{
+			for (int y = 0; y < SKILL_SELECTED; ++y)
+			{
+				if (m_SelectedIndex[y] == 8)
+				{
+					m_SelectedIndex[y] = x;
+					break;
+				}
+			}
+		}
+	}
+
+	for (int x = 0; x < SKILL_SELECTED; ++x)
+	{
+		if ((selectedPoint[x].x - 50) < cursor.x && cursor.x < (selectedPoint[x].x + 50) &&
+			(selectedPoint[x].y - 50) < cursor.y && cursor.y < (selectedPoint[x].y + 50))
+		{
+			m_SelectedIndex[x] = 8; // 8: 아무것도 선택하지 않음으로 변경
+		}
+	}
 }
 

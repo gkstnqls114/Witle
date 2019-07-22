@@ -44,6 +44,8 @@ protected:
 	void BuildLightsAndMaterials(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList);
 	void RenderShadowMap(ID3D12GraphicsCommandList *pd3dCommandList);
 
+private:
+	void ClickSkillIcon(POINT cursor);
 
 public:
 	SkillSelectScene();
@@ -96,10 +98,13 @@ private:
 	UI2DImage* m_UISkillToChoose[SKILL_TO_CHOOSE]; // 고를 수 있는 스킬 ui 들
 
 	UI2DImage* m_UISkillSelected[SKILL_SELECTED]; // 고른 스킬들
+	 
+	POINT choosePoint[SKILL_TO_CHOOSE] ;
+	POINT selectedPoint[SKILL_SELECTED];
 
-
+	// 텍스쳐 관련 변수들
 	MyDescriptorHeap* m_pHeap{ nullptr };
 	Texture* m_pTexture{ nullptr };
-
-	UINT m_SelectedIndex[SKILL_SELECTED]{ 0, 0, 0, 0 };
+	int m_SelectedIndex[SKILL_SELECTED]{ 8, 8, 8, 8 }; // 선택된 네 개의 인덱스들
+	// 텍스쳐 관련 변수들
 };
