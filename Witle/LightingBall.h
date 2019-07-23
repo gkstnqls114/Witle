@@ -1,11 +1,8 @@
 #pragma once
-#include "SkillEffect.h"
-
-class SphereMesh;
-class Movement;
-
-class ElectricBall :
-	public SkillEffect
+#include "BallEffect.h"
+ 
+class LightingBall :
+	public BallEffect
 {
 public:
 	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers) override = 0;
@@ -17,6 +14,6 @@ protected:
 	virtual void ReleaseMemberUploadBuffers() override {}; 
 	 
 public: 
-	ElectricBall(const std::string& entityID);
-	virtual ~ElectricBall(); 
+	LightingBall(const std::string& entityID, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList);
+	virtual ~LightingBall(); 
 };

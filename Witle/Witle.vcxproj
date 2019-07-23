@@ -156,6 +156,7 @@
   <ItemGroup>
     <ClInclude Include="AltarSphere.h" />
     <ClInclude Include="Avoidance.h" />
+    <ClInclude Include="BallEffect.h" />
     <ClInclude Include="BasicCam.h" />
     <ClInclude Include="BossIdleAction.h" />
     <ClInclude Include="BossMoveAction.h" />
@@ -166,7 +167,7 @@
     <ClInclude Include="CreepyMonster.h" />
     <ClInclude Include="DefferedShader.h" />
     <ClInclude Include="Dragon.h" />
-    <ClInclude Include="ElectricBall.h" />
+    <ClInclude Include="LightingBall.h" />
     <ClInclude Include="FireBall.h" />
     <ClInclude Include="HitAction.h" />
     <ClInclude Include="GraphicsRootSignatureMgr.h" />
@@ -311,6 +312,7 @@
   <ItemGroup>
     <ClCompile Include="AltarSphere.cpp" />
     <ClCompile Include="Avoidance.cpp" />
+    <ClCompile Include="BallEffect.cpp" />
     <ClCompile Include="BasicCam.cpp" />
     <ClCompile Include="BossIdleAction.cpp" />
     <ClCompile Include="BossMoveAction.cpp" />
@@ -333,7 +335,7 @@
     <ClCompile Include="AttackAction.cpp" />
     <ClCompile Include="DefferedShader.cpp" />
     <ClCompile Include="Dragon.cpp" />
-    <ClCompile Include="ElectricBall.cpp" />
+    <ClCompile Include="LightingBall.cpp" />
     <ClCompile Include="FireBall.cpp" />
     <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="HitAction.cpp" />

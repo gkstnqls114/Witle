@@ -385,15 +385,6 @@
     <Filter Include="03.GameObject\06.SkillEffect">
       <UniqueIdentifier>{087a3256-cc6a-4a40-b287-d5d00636e6bb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03.GameObject\06.SkillEffect\02.IceBall">
-      <UniqueIdentifier>{137616ff-1770-4a1f-b265-5812f05fa7d9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03.GameObject\06.SkillEffect\01.FireBall">
-      <UniqueIdentifier>{5f802b24-9dfa-40b9-9c6c-204d6fceb781}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03.GameObject\06.SkillEffect\03.ElectricBall">
-      <UniqueIdentifier>{ec88c597-e2fc-420e-9f61-ec2fc334d28c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.Component\03.Mesh\02.SphereMesh">
       <UniqueIdentifier>{14d1cc8f-b36d-4c8c-984a-d00fe9374022}</UniqueIdentifier>
     </Filter>
@@ -432,6 +423,18 @@
     </Filter>
     <Filter Include="02.Component\ForMonster\BossMonsterAction\BossMoveAction">
       <UniqueIdentifier>{686066ca-ff4f-4e03-8dc3-652a5e794e74}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameObject\06.SkillEffect\BallEffect">
+      <UniqueIdentifier>{3aed64bc-49ae-4db7-a73a-2f6ad948697e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameObject\06.SkillEffect\BallEffect\01.FireBall">
+      <UniqueIdentifier>{5f802b24-9dfa-40b9-9c6c-204d6fceb781}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameObject\06.SkillEffect\BallEffect\02.IceBall">
+      <UniqueIdentifier>{137616ff-1770-4a1f-b265-5812f05fa7d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameObject\06.SkillEffect\BallEffect\03.LightingBall">
+      <UniqueIdentifier>{ec88c597-e2fc-420e-9f61-ec2fc334d28c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -850,13 +853,10 @@
       <Filter>03.GameObject\06.SkillEffect</Filter>
     </ClInclude>
     <ClInclude Include="FireBall.h">
-      <Filter>03.GameObject\06.SkillEffect\01.FireBall</Filter>
+      <Filter>03.GameObject\06.SkillEffect\BallEffect\01.FireBall</Filter>
     </ClInclude>
     <ClInclude Include="IceBall.h">
-      <Filter>03.GameObject\06.SkillEffect\02.IceBall</Filter>
-    </ClInclude>
-    <ClInclude Include="ElectricBall.h">
-      <Filter>03.GameObject\06.SkillEffect\03.ElectricBall</Filter>
+      <Filter>03.GameObject\06.SkillEffect\BallEffect\02.IceBall</Filter>
     </ClInclude>
     <ClInclude Include="PlayerSkillMgr.h">
       <Filter>13.Storage/Manager\11.PlayerSkillMgr</Filter>
@@ -893,6 +893,12 @@
     </ClInclude>
     <ClInclude Include="BossMoveAction.h">
       <Filter>02.Component\ForMonster\BossMonsterAction\BossMoveAction</Filter>
+    </ClInclude>
+    <ClInclude Include="LightingBall.h">
+      <Filter>03.GameObject\06.SkillEffect\BallEffect\03.LightingBall</Filter>
+    </ClInclude>
+    <ClInclude Include="BallEffect.h">
+      <Filter>03.GameObject\06.SkillEffect\BallEffect</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1293,13 +1299,10 @@
       <Filter>03.GameObject\06.SkillEffect</Filter>
     </ClCompile>
     <ClCompile Include="FireBall.cpp">
-      <Filter>03.GameObject\06.SkillEffect\01.FireBall</Filter>
+      <Filter>03.GameObject\06.SkillEffect\BallEffect\01.FireBall</Filter>
     </ClCompile>
     <ClCompile Include="IceBall.cpp">
-      <Filter>03.GameObject\06.SkillEffect\02.IceBall</Filter>
-    </ClCompile>
-    <ClCompile Include="ElectricBall.cpp">
-      <Filter>03.GameObject\06.SkillEffect\03.ElectricBall</Filter>
+      <Filter>03.GameObject\06.SkillEffect\BallEffect\02.IceBall</Filter>
     </ClCompile>
     <ClCompile Include="PlayerSkillMgr.cpp">
       <Filter>13.Storage/Manager\11.PlayerSkillMgr</Filter>
@@ -1333,6 +1336,12 @@
     </ClCompile>
     <ClCompile Include="GameScene.cpp">
       <Filter>04.Scene\GameScene</Filter>
+    </ClCompile>
+    <ClCompile Include="LightingBall.cpp">
+      <Filter>03.GameObject\06.SkillEffect\BallEffect\03.LightingBall</Filter>
+    </ClCompile>
+    <ClCompile Include="BallEffect.cpp">
+      <Filter>03.GameObject\06.SkillEffect\BallEffect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

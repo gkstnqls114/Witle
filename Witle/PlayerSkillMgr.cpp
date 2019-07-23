@@ -4,7 +4,7 @@
 #include "SkillEffect.h"
 #include "FireBall.h"
 #include "IceBall.h"
-#include "ElectricBall.h"
+#include "LightingBall.h"
 #include "PlayerManager.h"
 // Skill Effect ฐüทร ////////////////////////////
 
