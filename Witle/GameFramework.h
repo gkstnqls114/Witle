@@ -78,8 +78,8 @@ private:
 	ID3D12Resource*				m_Shadowmap;
 	D3D12_CPU_DESCRIPTOR_HANDLE m_ShadowmapCPUHandle;
 
-	MyDescriptorHeap* m_GBufferHeap{ nullptr };
-	MyDescriptorHeap* m_ShadowmapHeap{ nullptr };
+	MyDescriptorHeap* m_GBufferHeap{ nullptr }; // GBuffer 뿐만 아니라 Shadow도 담습니다.
+	MyDescriptorHeap* m_ShadowmapHeap{ nullptr }; 
 
 	CD3DX12_CPU_DESCRIPTOR_HANDLE m_hCpuSrvForShadow;
 	CD3DX12_GPU_DESCRIPTOR_HANDLE m_hGpuSrvForShadow;

@@ -209,10 +209,7 @@ XMFLOAT4X4 Camera::GenerateLightProjectionMatrix(const LIGHT * light) const
 }
 
 void Camera::UpdateLightShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList, const LIGHT* light)
-{     
-	//auto playerpos = PlayerManager::GetMainPlayer()->GetTransform().GetPosition();
-	//auto playerlook = PlayerManager::GetMainPlayer()->GetTransform().GetLook();
-	//auto boundcenter = Vector3::Add(playerpos, Vector3::ScalarProduct(playerlook, m_fFarPlaneDistance / 2.f, false));
+{      
 	auto boundcenter = XMFLOAT3(15000, 0, 15000);
 	mSceneBounds = BoundingSphere { boundcenter, 17000 };
 	

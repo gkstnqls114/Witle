@@ -141,28 +141,11 @@ float4 PSMain(VertexOut input) : SV_TARGET
     diffuseColor.w = 1.0f; 
      
     float3 posW = CalcWorldPos(input.uv, gdb.LinearDepth);
-    posW.z = 0.f;
+    
+    float4 shadowPosition = mul(float4(posW, 1.f), gShadowTransform);
+    float fShadowFactor = CalcShadowFactor(shadowPosition);
      
-    //input.shadowPosition.xyz /= input.shadowPosition.w; // 원근 투영. 픽셀의 깊이값
-    //input.shadowPosition.xy = 0.5 + input.shadowPosition.xy + 0.5;
-    //input.shadowPosition.y = 1.0 - input.shadowPosition.y;
-    
-    //float fShadowFactor = 0.0;
-    //float fBias = 0.006f;
-    //float fsDepth = gtxtShadow.SampleCmpLevelZero(gssPCFSampler, input.shadowPosition.xy, input.shadowPosition.z).r;
-
-    //if (input.shadowPosition.z <= (fsDepth + fBias))
-    //    fShadowFactor = 1.f; // 그림자가 아님
-    
-    //// 현재 바닥이 그냥 위를 바라보고 있으므로...
-    //float3 normalW = float3(0, 1, 0);
-
-    //float4 cllumination = Lighting(input.positionW, normalW, fShadowFactor);
-
-    //float4 factor = float4(fsDepth, fsDepth, fsDepth, fsDepth);
-    //finalColor = lerp(finalColor, cllumination, 0.5f);
-
-    float4 cIllumination = Lighting(posW, normalW);
+    float4 cIllumination = Lighting(posW, normalW, fShadowFactor);
     
     float fogEnd = 30000;
     float fogStart = 50; 

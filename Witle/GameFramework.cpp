@@ -16,6 +16,7 @@
 #include "TextureStorage.h"
 #include "StaticObjectStorage.h"
 #include "SceneMgr.h"
+#include "LightManager.h"
 //// Manager ////////////////////////// 
 
 //// Scene //////////////////////////  
@@ -44,7 +45,7 @@ void CGameFramework::Render()
 
 	if (DefferedRendering)
 	{
-		// RenderForShadow();
+		RenderForShadow();
 		//// GBuffer에 Render //////////////////////////
 		RenderOnGbuffer();
 		//// ComputeShader ////////////////////////// 
@@ -87,12 +88,14 @@ bool CGameFramework::OnCreate(HINSTANCE hInstance, HWND hMainWnd)
 	m_hWnd = hMainWnd;
 	GameInput::SetHWND(hMainWnd);
 
+	// 절대 순서 변경 금지 ////////////
 	CreateDirect3DDevice();
 	CreateCommandQueueAndList();
 	CreateRtvAndDsvDescriptorHeaps();
 	CreateSwapChain();
 	// CreateRWResourceViews();
 	CreateShadowmapView();
+	// 절대 순서 변경 금지 ////////////
 
 	BuildObjects();
 	 
@@ -168,11 +171,11 @@ void CGameFramework::RenderGBuffers()
 		m_CommandList->RSSetScissorRects(1, &ScissorRect);
 
 		m_CommandList->SetGraphicsRootDescriptorTable(ROOTPARAMETER_TEXTUREBASE, handle);
+		handle.ptr += d3dUtil::gnCbvSrvDescriptorIncrementSize;
 
 		m_CommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 		m_CommandList->DrawInstanced(6, 1, 0, 0);
 
-		handle.ptr += d3dUtil::gnCbvSrvDescriptorIncrementSize;
 	}
 }
 
@@ -605,8 +608,7 @@ void CGameFramework::CreateDepthStencilView()
 	m_d3dDevice->CreateDepthStencilView(m_GBuffersForDepth[0], &d3dDepthStencilViewDesc, m_GBufferCPUHandleForDepth[0]);
 	
 	// 힙에 추가
-	m_GBufferHeap->CreateShaderResourceViews(m_d3dDevice.Get(), m_CommandList.Get(), m_GBuffersForDepth[0], RESOURCE_TEXTURE2D, m_GBuffersCount - 1/*맨 마지막에 배치*/, DXGI_FORMAT_R24_UNORM_X8_TYPELESS);
-
+	m_GBufferHeap->CreateShaderResourceViews(m_d3dDevice.Get(), m_CommandList.Get(), m_GBuffersForDepth[0], RESOURCE_TEXTURE2D, m_GBuffersCount + m_ShadowmapCount - 2/*마지막에서 두번째에 배치*/, DXGI_FORMAT_R24_UNORM_X8_TYPELESS);
 
 }
 
@@ -676,11 +678,14 @@ void CGameFramework::CreateGBufferView()
 	if (!m_GBufferHeap)
 	{
 		m_GBufferHeap = new MyDescriptorHeap();
-		m_GBufferHeap->CreateCbvSrvUavDescriptorHeaps(m_d3dDevice.Get(), m_CommandList.Get(), 0, m_GBuffersCount, 0);
+		m_GBufferHeap->CreateCbvSrvUavDescriptorHeaps(m_d3dDevice.Get(), m_CommandList.Get(), 0, m_GBuffersCount + m_ShadowmapCount /*쉐도우 맵도 추가하기 위해...*/, 0);
 		for (int i = 0; i < m_GBuffersCountForRenderTarget; ++i)
 		{
 			m_GBufferHeap->CreateShaderResourceViews(m_d3dDevice.Get(), m_CommandList.Get(), m_GBuffersCountForRenderTarget, m_GBuffersForRenderTarget[i], RESOURCE_TEXTURE2D, i);
 		} 
+
+		// 쉐도우 맵도 힙에 추가한다...!!!
+		m_GBufferHeap->CreateShaderResourceViews(m_d3dDevice.Get(), m_CommandList.Get(), m_Shadowmap, RESOURCE_TEXTURE2D, m_GBuffersCount + m_ShadowmapCount - 1/*맨 마지막에 배치*/, DXGI_FORMAT_R24_UNORM_X8_TYPELESS);
 	} 
 }
 
@@ -925,8 +930,7 @@ void CGameFramework::RenderShadowMap()
 
 	float width = static_cast<float>(GameScreen::GetClientWidth());
 	float height = static_cast<float>(GameScreen::GetClientHeight());
-
-
+	 
 	m_ShadowmapHeap->UpdateShaderVariable(m_CommandList.Get());
 
 	// 장면을 렌더합니다. 
@@ -1085,6 +1089,7 @@ void CGameFramework::DefferedRenderSwapChain()
 	 
 	MainCameraMgr::GetMainCamera()->GetCamera()->SetViewportsAndScissorRects(m_CommandList.Get());
 	MainCameraMgr::GetMainCamera()->GetCamera()->UpdateShaderVariables(m_CommandList.Get(), ROOTPARAMETER_CAMERA);
+	MainCameraMgr::GetMainCamera()->GetCamera()->UpdateLightShaderVariables(m_CommandList.Get(), &LightManager::m_pLights->m_pLights[2]);
 
 	//// 리소스만 바꾼다.. 
 	D3D12_GPU_DESCRIPTOR_HANDLE handle = m_GBufferHeap->GetGPUDescriptorHandleForHeapStart();
@@ -1099,7 +1104,8 @@ void CGameFramework::DefferedRenderSwapChain()
 	{
 		m_CommandList->SetGraphicsRootDescriptorTable(ROOTPARAMETER_ALBEDO + i, handle);
 		handle.ptr += d3dUtil::gnCbvSrvDescriptorIncrementSize;
-	}
+	} 
+	m_CommandList->SetGraphicsRootDescriptorTable(ROOTPARAMETER_SHADOWTEXTURE, handle); // 마지막은 쉐도우맵
 	
 	m_CommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	m_CommandList->DrawInstanced(6, 1, 0, 0);
@@ -1113,11 +1119,8 @@ void CGameFramework::RenderForShadow()
 	// SHADOW 설정
 	m_CommandList->OMSetRenderTargets(0, NULL, TRUE, &m_ShadowmapCPUHandle);
 	m_CommandList->ClearDepthStencilView(m_ShadowmapCPUHandle, D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, NULL);
-
-	////그래픽 루트 시그너쳐를 설정한다.
-
-	m_SceneMgr->GetCurrScene()->RenderForShadow(m_CommandList.Get());
-	// m_pScene->Render(m_CommandList.Get(), false);
+	 
+	m_SceneMgr->GetCurrScene()->RenderForShadow(m_CommandList.Get()); 
 
 	d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_Shadowmap, D3D12_RESOURCE_STATE_DEPTH_WRITE, D3D12_RESOURCE_STATE_GENERIC_READ);
 }
