@@ -105,9 +105,7 @@ private:
 
 private:  
 	//// OnCreate() 내부에서 사용되는 필수적으로 호출해야하는 함수들 ///////////
-	
-	void CreateRWResourceViews() ;
-	
+	 
 	void ReleaseSwapChainBuffer();
 	void ReleaseGBuffers();
 	void ReleaseDepthStencilBuffer();
@@ -117,7 +115,8 @@ private:
 	void CreateDirect3DDevice();
 	void CreateRtvAndDsvDescriptorHeaps();
 	void CreateRenderTargetView();
-	void CreateDepthStencilView();
+	void CreateDepthStencilView(); 
+	void CreateRWResourceViews();
 
 	// 스왑 체인을 위한 깊이스텐실뷰와 렌더타겟뷰와는 다르게 사용될
 	// GBuffer 리소스와 그를 위한 뷰를 생성합니다.
@@ -163,6 +162,9 @@ private:
 
 	// Shadow 맵만 렌더링합니다.
 	void RenderForShadow();
+
+	// Compute 쉐이더를 통해 hdr을 위한 텍스쳐를 계산합니다.
+	void ComputeHDR();
 
 	// 키보드와 마우스 메시지를 처리하는 부분이다.
 	void OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam);

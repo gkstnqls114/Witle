@@ -25,6 +25,7 @@
 //// Scene ////////////////////////// 
  
 #include "QuadtreeTerrain.h"
+#include "ComputeShader.h"
 #include "CameraObject.h"
 #include "Camera.h"
 #include "Shader.h"
@@ -43,19 +44,22 @@ void CGameFramework::Render()
 
 	m_CommandList->SetGraphicsRootSignature(GraphicsRootSignatureMgr::GetGraphicsRootSignature());
 
+	m_CommandList->SetComputeRootSignature(GraphicsRootSignatureMgr::GetGraphicsRootSignature());
+
 	if (DefferedRendering)
 	{
 		RenderForShadow();
-		//// GBuffer에 Render //////////////////////////
-		RenderOnGbuffer();
-		//// ComputeShader ////////////////////////// 
-		//// ComputeShader ////////////////////////// 
-		DefferedRenderOnSwapchain();
+
+		RenderOnGbuffer(); // G Buffer 에 렌더링합니다.
+
+		ComputeHDR();
+
+		DefferedRenderOnSwapchain(); 
 	}
 	else
 	{
 		RenderForShadow();
-		//// SwapChain에 Render //////////////////////////
+
 		RenderOnSwapchain();
 	}
 
@@ -93,8 +97,8 @@ bool CGameFramework::OnCreate(HINSTANCE hInstance, HWND hMainWnd)
 	CreateCommandQueueAndList();
 	CreateRtvAndDsvDescriptorHeaps();
 	CreateSwapChain();
-	// CreateRWResourceViews();
 	CreateShadowmapView();
+	CreateRWResourceViews();
 	// 절대 순서 변경 금지 ////////////
 
 	BuildObjects();
@@ -910,6 +914,9 @@ void CGameFramework::DefferedRenderOnSwapchain()
 	m_CommandList->ClearRenderTargetView(m_SwapChainCPUHandle[m_SwapChainBufferIndex], /*pfClearColor*/Colors::Gray, 0, NULL);
 	m_CommandList->ClearDepthStencilView(m_DepthStencilCPUHandle, D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, NULL);
 
+	// 하단에 그림자 맵을 렌더링한다.
+	// RenderShadowMap();
+	
 	// 기본 게임 장면을 렌더한다.
 	DefferedRenderSwapChain();
 
@@ -1123,4 +1130,31 @@ void CGameFramework::RenderForShadow()
 	m_SceneMgr->GetCurrScene()->RenderForShadow(m_CommandList.Get()); 
 
 	d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_Shadowmap, D3D12_RESOURCE_STATE_DEPTH_WRITE, D3D12_RESOURCE_STATE_GENERIC_READ);
+}
+
+void CGameFramework::ComputeHDR()
+{
+	return;
+
+	//d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_ComputeRWResource, D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
+
+	//m_CommandList->SetPipelineState(m_horizenShader.GetPSO());
+
+	//m_pGBufferTexture->ComputeUpdateShaderVariables(m_CommandList.Get());
+	//m_CommandList->SetComputeRootDescriptorTable(1, m_UAVGPUDescriptorHandle);
+
+	//UINT groupX = (UINT)ceilf(GameScreen::GetWidth() / 256.F);
+	//m_CommandList->Dispatch(groupX, GameScreen::GetHeight(), 1);
+
+	//m_CommandList->SetPipelineState(m_verticalShader.GetPSO()); 
+
+	//m_RedShader.SetDescriptorHeaps(m_CommandList.Get());
+
+	//m_pGBufferTexture->ComputeUpdateShaderVariables(m_CommandList.Get());
+	//m_CommandList->SetComputeRootDescriptorTable(1, m_UAVGPUDescriptorHandle);
+
+	//UINT groupY = (UINT)ceilf(GameScreen::GetHeight() / 256.F);
+	//m_CommandList->Dispatch(GameScreen::GetWidth(), groupY, 1);
+
+	//d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_ComputeRWResource, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_COMMON);
 }

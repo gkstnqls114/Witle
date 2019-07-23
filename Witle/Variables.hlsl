@@ -78,6 +78,9 @@ Texture2D gtxtDetailAlbedoTexture : register(t11);
 Texture2D gtxtDetailNormalTexture : register(t12);
 TextureCube gtxtSkyCubeTexture : register(t13);
  
+// 출력
+RWTexture2D<float4> gtxtRWOutput : register(u0);
+
 //인스턴싱 데이터를 위한 구조체
 struct INSTANCING_TRANSFORM
 {
