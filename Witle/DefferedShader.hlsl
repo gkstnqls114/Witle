@@ -134,13 +134,14 @@ float4 PSMain(VertexOut input) : SV_TARGET
     SURFACE_DATA gdb = UnpackGBuffers(input.position.xy); 
 
     // 데이터 변환
-    float normalW = gdb.Noraml;
+    float3 normalW = gdb.Noraml;
 
     float4 diffuseColor;
     diffuseColor.xyz = gdb.Color;
     diffuseColor.w = 1.0f; 
      
     float3 posW = CalcWorldPos(input.uv, gdb.LinearDepth);
+    posW.z = 0.f;
      
     //input.shadowPosition.xyz /= input.shadowPosition.w; // 원근 투영. 픽셀의 깊이값
     //input.shadowPosition.xy = 0.5 + input.shadowPosition.xy + 0.5;
@@ -170,7 +171,7 @@ float4 PSMain(VertexOut input) : SV_TARGET
     float fogFactor = (saturate((fogEnd - distance) / (fogEnd - fogStart))); 
     
     float4 fogColor = float4(0.0 / 255.0, 34.0 / 255.0, 102.0 / 255.0, 1.0f);
-
+      
     return ((fogFactor) * lerp(diffuseColor, cIllumination, 0.5f) + (1.0 - fogFactor) * fogColor);
 }
  
