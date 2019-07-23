@@ -16,10 +16,10 @@ PlayerSkillMgr::PlayerSkillMgr(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandLi
 {
 	m_skill = new SKILL[m_count];
 
-	for (int x = 0; x < m_count; ++x)
-	{
-		m_skill[x].skillEffect = new FireBall("FireBall", pd3dDevice, pd3dCommandList);
-	}
+	m_skill[0].skillEffect = new FireBall("FireBall", pd3dDevice, pd3dCommandList);
+	m_skill[1].skillEffect = new IceBall("FireBall", pd3dDevice, pd3dCommandList);
+	m_skill[2].skillEffect = new LightingBall("FireBall", pd3dDevice, pd3dCommandList);
+	m_skill[3].skillEffect = new FireBall("FireBall", pd3dDevice, pd3dCommandList); 
 }
 
 PlayerSkillMgr::~PlayerSkillMgr()

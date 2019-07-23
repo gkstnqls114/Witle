@@ -32,11 +32,25 @@ void BallEffect::ReleaseMemberUploadBuffers()
 	if (m_BallEffectMesh) m_BallEffectMesh->ReleaseUploadBuffers();
 }
 
-BallEffect::BallEffect(const std::string & entityID, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList)
+BallEffect::BallEffect(const std::string & entityID, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ENUM_BALLEFFECT type)
 	:SkillEffect(entityID, 5.f)
 {
 	m_BallEffectMesh = new SphereMesh(this, pd3dDevice, pd3dCommandList, 50, 50, 10, 10);
-	m_BallEffectMesh->CreateTexture(pd3dDevice, pd3dCommandList, L"Image/Red.dds");
+
+	switch (type)
+	{
+	case BALLEFFECT_FIRE:
+		m_BallEffectMesh->CreateTexture(pd3dDevice, pd3dCommandList, L"Image/Red.dds");
+		break;
+	case BALLEFFECT_ICE:
+		m_BallEffectMesh->CreateTexture(pd3dDevice, pd3dCommandList, L"Image/Blue.dds");
+		break;
+	case BALLEFFECT_LIGHTING:
+		m_BallEffectMesh->CreateTexture(pd3dDevice, pd3dCommandList, L"Image/Yellow.dds");
+		break;
+	default:
+		break;
+	}
 
 	m_MyCollider = new MyBSphere(this, pd3dDevice, pd3dCommandList, 50);
 }

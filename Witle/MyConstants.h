@@ -7,6 +7,13 @@
 
 
 //// Enum Type ////////////////////////////////////
+enum ENUM_BALLEFFECT
+{
+	BALLEFFECT_FIRE,
+	BALLEFFECT_ICE,
+	BALLEFFECT_LIGHTING
+};
+
 enum ENUM_MONSTER
 {
 	MONSTER_CREEPYMONSTER,
