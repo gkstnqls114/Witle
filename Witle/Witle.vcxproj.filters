@@ -436,6 +436,9 @@
     <Filter Include="03.GameObject\06.SkillEffect\BallEffect\03.LightingBall">
       <UniqueIdentifier>{ec88c597-e2fc-420e-9f61-ec2fc334d28c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="13.Storage/Manager\13.SkillStg">
+      <UniqueIdentifier>{c278c982-94d0-4cc8-98e6-3b95d709c75e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -900,6 +903,9 @@
     <ClInclude Include="BallEffect.h">
       <Filter>03.GameObject\06.SkillEffect\BallEffect</Filter>
     </ClInclude>
+    <ClInclude Include="SkillStg.h">
+      <Filter>13.Storage/Manager\13.SkillStg</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1342,6 +1348,9 @@
     </ClCompile>
     <ClCompile Include="BallEffect.cpp">
       <Filter>03.GameObject\06.SkillEffect\BallEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="SkillStg.cpp">
+      <Filter>13.Storage/Manager\13.SkillStg</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

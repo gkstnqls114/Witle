@@ -2,11 +2,11 @@
 #include "d3dx12.h"
 #include "MeshRenderer.h"
  
-class SceneMgr;
+class SceneMgr; 
+
 class Texture;
 class ComputeShader;
 class MyDescriptorHeap;
-
 class CLoadedModelInfo;
 
 class CGameFramework
@@ -213,7 +213,6 @@ public:
 	
 private: 
 	// 현재 사용하는 장면을 관리하는 매니저입니다
-	SceneMgr *m_SceneMgr{ nullptr };
-	 
+	SceneMgr *m_SceneMgr{ nullptr }; 
 };
 

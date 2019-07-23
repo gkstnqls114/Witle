@@ -17,6 +17,7 @@
 #include "StaticObjectStorage.h"
 #include "SceneMgr.h"
 #include "LightManager.h"
+#include "SkillStg.h"
 //// Manager ////////////////////////// 
 
 //// Scene //////////////////////////  
@@ -700,8 +701,8 @@ void CGameFramework::BuildObjects()
 	m_CommandList->Reset(m_CommandAllocator.Get(), NULL);
 	
 	///////////////////////////////////////////////////////////////////////////// 리소스 생성
-	// 루트 시그니처 먼저 생성
-	GraphicsRootSignatureMgr::BuildObject(m_d3dDevice.Get());
+	GraphicsRootSignatureMgr::BuildObject(m_d3dDevice.Get()); // 루트 시그니처 먼저 생성
+	SkillStg::GetInstance()->BuildObjects(m_d3dDevice.Get(), m_CommandList.Get()); // 스킬 이펙트 생성
 
 	m_SceneMgr = new SceneMgr; 
 
@@ -728,12 +729,14 @@ void CGameFramework::BuildObjects()
 	
 	WaitForGpuComplete();
 
-	///////////////////////////////////////////////////////////////////////////// 업로드 힙 릴리즈
+	//// 업로드 힙 릴리즈 ///////////////////////////////////////////////////////////////////////// 
 	if (m_SceneMgr) m_SceneMgr->ReleaseUploadBuffers();
-	 
+
+	SkillStg::GetInstance()->ReleaseUploadBuffers();
 	TextureStorage::GetInstance()->ReleaseUploadBuffers();
 	ModelStorage::GetInstance()->ReleaseUploadBuffers();
-	///////////////////////////////////////////////////////////////////////////// 업로드 힙 릴리즈
+	//// 업로드 힙 릴리즈 ///////////////////////////////////////////////////////////////////////// 
+
 
 	CGameTimer::GetInstance()->Reset();
 }
@@ -746,7 +749,8 @@ void CGameFramework::ReleaseObjects()
 		delete m_SceneMgr;
 		m_SceneMgr = nullptr;
 	}
-	 
+	
+	SkillStg::GetInstance()->ReleaseObjects();
 
 	CMaterial::ReleaseShaders(); 
 	StaticObjectStorage::GetInstance()->ReleaseObjects();

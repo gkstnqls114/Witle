@@ -172,6 +172,7 @@
     <ClInclude Include="HitAction.h" />
     <ClInclude Include="GraphicsRootSignatureMgr.h" />
     <ClInclude Include="IceBall.h" />
+    <ClInclude Include="SkillStg.h" />
     <ClInclude Include="SceneMgr.h" />
     <ClInclude Include="SkillIconShader.h" />
     <ClInclude Include="SkillSelectScene.h" />
@@ -360,6 +361,7 @@
     <ClCompile Include="SceneMgr.cpp" />
     <ClCompile Include="SkillIconShader.cpp" />
     <ClCompile Include="SkillSelectScene.cpp" />
+    <ClCompile Include="SkillStg.cpp" />
     <ClCompile Include="TerrainForShadow.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="LightManager.cpp" />
