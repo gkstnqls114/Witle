@@ -167,7 +167,7 @@
     <ClInclude Include="CreepyMonster.h" />
     <ClInclude Include="DefferedShader.h" />
     <ClInclude Include="Dragon.h" />
-    <ClInclude Include="LightingBall.h" />
+    <ClInclude Include="LightningBall.h" />
     <ClInclude Include="FireBall.h" />
     <ClInclude Include="HitAction.h" />
     <ClInclude Include="GraphicsRootSignatureMgr.h" />
@@ -336,7 +336,7 @@
     <ClCompile Include="AttackAction.cpp" />
     <ClCompile Include="DefferedShader.cpp" />
     <ClCompile Include="Dragon.cpp" />
-    <ClCompile Include="LightingBall.cpp" />
+    <ClCompile Include="LightningBall.cpp" />
     <ClCompile Include="FireBall.cpp" />
     <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="HitAction.cpp" />

@@ -248,12 +248,12 @@ bool GameScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM w
 
 		case MYVK_T:
 			// 플레이어 스킬 매니저에서 파이어볼 스킬 활성화
-			m_PlayerSkillMgr->Activate(m_pPlayer->GetMPStatus(), ENUM_SKILL::SKILL_ELECTRICBALL);
+			m_PlayerSkillMgr->Activate(m_pPlayer->GetMPStatus(), ENUM_SKILL::SKILL_LIGHTNINGBALL);
 			break;
 
 		case MYVK_Y:
 			// 플레이어 스킬 매니저에서 파이어볼 스킬 활성화
-			m_PlayerSkillMgr->Activate(m_pPlayer->GetMPStatus(), ENUM_SKILL::SKILL_DEBUFF);
+			m_PlayerSkillMgr->Activate(m_pPlayer->GetMPStatus(), ENUM_SKILL::SKILL_BLESSING);
 			break;
 		case '4':
 			break;

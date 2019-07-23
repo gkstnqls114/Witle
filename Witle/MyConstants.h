@@ -7,11 +7,27 @@
 
 
 //// Enum Type ////////////////////////////////////
+enum ENUM_SKILL
+{
+	SKILL_FIREBALL,
+	SKILL_ICEBALL,
+	SKILL_LIGHTNINGBALL, 
+	SKILL_SHIELD,
+	SKILL_BLESSING,
+	SKILL_HEALING,
+	SKILL_METEOR,
+	SKILL_ICESPEAR
+
+	// 최대 8개까지... 더이상 증가 X
+	//SKILL_LIGHTNING,
+	//SKILL_LIGHTARROW
+}; 
+
 enum ENUM_BALLEFFECT
 {
 	BALLEFFECT_FIRE,
 	BALLEFFECT_ICE,
-	BALLEFFECT_LIGHTING
+	BALLEFFECT_LIGHTNING
 };
 
 enum ENUM_MONSTER
@@ -64,6 +80,10 @@ enum LIGHT_TYPE
 	SPOT_LIGHT,
 	DIRECTIONAL_LIGHT
 };
+
+
+#define SKILL_TO_CHOOSE 8 // 고를수 있는 스킬 가짓수
+#define SKILL_SELECTED 4 // 선택 가능한 스킬 가짓수
 //// Enum Type ////////////////////////////////////
 
 #define PI				    3.141592

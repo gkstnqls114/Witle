@@ -4,7 +4,7 @@
 #include "SkillEffect.h"
 #include "FireBall.h"
 #include "IceBall.h"
-#include "LightingBall.h"
+#include "LightningBall.h"
 #include "PlayerManager.h"
 // Skill Effect ฐüทร ////////////////////////////
 
@@ -18,7 +18,7 @@ PlayerSkillMgr::PlayerSkillMgr(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandLi
 
 	m_skill[0].skillEffect = new FireBall("FireBall", pd3dDevice, pd3dCommandList);
 	m_skill[1].skillEffect = new IceBall("FireBall", pd3dDevice, pd3dCommandList);
-	m_skill[2].skillEffect = new LightingBall("FireBall", pd3dDevice, pd3dCommandList);
+	m_skill[2].skillEffect = new LightningBall("FireBall", pd3dDevice, pd3dCommandList);
 	m_skill[3].skillEffect = new FireBall("FireBall", pd3dDevice, pd3dCommandList); 
 }
 

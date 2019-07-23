@@ -433,11 +433,11 @@
     <Filter Include="03.GameObject\06.SkillEffect\BallEffect\02.IceBall">
       <UniqueIdentifier>{137616ff-1770-4a1f-b265-5812f05fa7d9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03.GameObject\06.SkillEffect\BallEffect\03.LightingBall">
-      <UniqueIdentifier>{ec88c597-e2fc-420e-9f61-ec2fc334d28c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="13.Storage/Manager\13.SkillStg">
       <UniqueIdentifier>{c278c982-94d0-4cc8-98e6-3b95d709c75e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameObject\06.SkillEffect\BallEffect\03.LightningBall">
+      <UniqueIdentifier>{ec88c597-e2fc-420e-9f61-ec2fc334d28c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -897,14 +897,14 @@
     <ClInclude Include="BossMoveAction.h">
       <Filter>02.Component\ForMonster\BossMonsterAction\BossMoveAction</Filter>
     </ClInclude>
-    <ClInclude Include="LightingBall.h">
-      <Filter>03.GameObject\06.SkillEffect\BallEffect\03.LightingBall</Filter>
-    </ClInclude>
     <ClInclude Include="BallEffect.h">
       <Filter>03.GameObject\06.SkillEffect\BallEffect</Filter>
     </ClInclude>
     <ClInclude Include="SkillStg.h">
       <Filter>13.Storage/Manager\13.SkillStg</Filter>
+    </ClInclude>
+    <ClInclude Include="LightningBall.h">
+      <Filter>03.GameObject\06.SkillEffect\BallEffect\03.LightningBall</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1343,14 +1343,14 @@
     <ClCompile Include="GameScene.cpp">
       <Filter>04.Scene\GameScene</Filter>
     </ClCompile>
-    <ClCompile Include="LightingBall.cpp">
-      <Filter>03.GameObject\06.SkillEffect\BallEffect\03.LightingBall</Filter>
-    </ClCompile>
     <ClCompile Include="BallEffect.cpp">
       <Filter>03.GameObject\06.SkillEffect\BallEffect</Filter>
     </ClCompile>
     <ClCompile Include="SkillStg.cpp">
       <Filter>13.Storage/Manager\13.SkillStg</Filter>
+    </ClCompile>
+    <ClCompile Include="LightningBall.cpp">
+      <Filter>03.GameObject\06.SkillEffect\BallEffect\03.LightningBall</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

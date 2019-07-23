@@ -3,15 +3,7 @@
 class Player;
 class SkillEffect;
 class PlayerStaus;
-
-enum ENUM_SKILL
-{
-	SKILL_FIREBALL,
-	SKILL_ICEBALL,
-	SKILL_ELECTRICBALL,
-	SKILL_DEBUFF
-}; 
-
+ 
 struct SKILL
 {
 	SkillEffect* skillEffect{ nullptr };

@@ -1,8 +1,6 @@
 #pragma once
 #include "Scene.h"
 
-#define SKILL_TO_CHOOSE 8
-#define SKILL_SELECTED 4
 
 class UI2DImage;
 class Texture;

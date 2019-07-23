@@ -45,7 +45,7 @@ BallEffect::BallEffect(const std::string & entityID, ID3D12Device * pd3dDevice, 
 	case BALLEFFECT_ICE:
 		m_BallEffectMesh->CreateTexture(pd3dDevice, pd3dCommandList, L"Image/Blue.dds");
 		break;
-	case BALLEFFECT_LIGHTING:
+	case BALLEFFECT_LIGHTNING:
 		m_BallEffectMesh->CreateTexture(pd3dDevice, pd3dCommandList, L"Image/Yellow.dds");
 		break;
 	default:

@@ -36,7 +36,7 @@
  
 #include "GameFramework.h"
 
-static const bool DefferedRendering = false;
+static const bool DefferedRendering = true;
 
 void CGameFramework::Render()
 {
