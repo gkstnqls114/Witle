@@ -6,10 +6,10 @@
 #include "GameTimer.h"
 #include "GameInput.h"
 #include "GameScreen.h" 
-#include "MainCameraMgr.h"
 //// GameBase ////////////////////////// 
 
 //// Manager ////////////////////////// 
+#include "MainCameraMgr.h"
 #include "GraphicsRootSignatureMgr.h"
 #include "ShaderManager.h"
 #include "ModelStorage.h"
@@ -25,6 +25,9 @@
 #include "SkillSelectScene.h"
 //// Scene ////////////////////////// 
  
+//// ETC ////////////////////////////
+#include "HorizonBlurShader.h"
+#include "VerticalBlurShader.h"
 #include "QuadtreeTerrain.h"
 #include "ComputeShader.h"
 #include "CameraObject.h"
@@ -33,6 +36,7 @@
 #include "Object.h"
 #include "Texture.h"
 #include "MyDescriptorHeap.h"
+//// ETC ////////////////////////////
  
 #include "GameFramework.h"
 
@@ -749,7 +753,15 @@ void CGameFramework::ReleaseObjects()
 		delete m_SceneMgr;
 		m_SceneMgr = nullptr;
 	}
-	
+
+	m_verticalShader->ReleaseObjects();
+	delete m_verticalShader;
+	m_verticalShader = nullptr;
+
+	m_horizenShader->ReleaseObjects();
+	delete m_horizenShader;
+	m_horizenShader = nullptr;
+
 	SkillStg::GetInstance()->ReleaseObjects();
 
 	CMaterial::ReleaseShaders(); 
@@ -959,6 +971,13 @@ void CGameFramework::RenderShadowMap()
 
 void CGameFramework::BuildShaders()
 {
+	// compute shader ////////////////
+	m_verticalShader = new VerticalBlurShader();
+	m_verticalShader->CreateShader(m_d3dDevice.Get(), GraphicsRootSignatureMgr::GetGraphicsRootSignature());
+	m_horizenShader = new HorizonBlurShader();
+	m_horizenShader->CreateShader(m_d3dDevice.Get(), GraphicsRootSignatureMgr::GetGraphicsRootSignature()); 
+	// compute shader ///////////////
+
 	CMaterial::PrepareShaders(m_d3dDevice.Get(), m_CommandList.Get(), GraphicsRootSignatureMgr::GetGraphicsRootSignature());
 	ShaderManager::GetInstance()->BuildShaders(m_d3dDevice.Get(), GraphicsRootSignatureMgr::GetGraphicsRootSignature());
 }

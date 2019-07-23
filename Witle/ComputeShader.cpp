@@ -14,14 +14,13 @@ ComputeShader::~ComputeShader()
 }
 
 D3D12_SHADER_BYTECODE ComputeShader::CompileShaderFromFile(const WCHAR * pszFileName, LPCSTR pszShaderName, ID3DBlob ** ppd3dShaderBlob)
-{
-
+{ 
 	UINT nCompileFlags = 0;
 #if defined(_DEBUG)
 	nCompileFlags = D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION;
 #endif
 
-	::D3DCompileFromFile(pszFileName, NULL, NULL, pszShaderName, "cs_5_1", nCompileFlags, 0, ppd3dShaderBlob, NULL);
+	::D3DCompileFromFile(pszFileName, NULL, D3D_COMPILE_STANDARD_FILE_INCLUDE, pszShaderName, "cs_5_1", nCompileFlags, 0, ppd3dShaderBlob, NULL);
 
 	D3D12_SHADER_BYTECODE d3dShaderByteCode;
 	d3dShaderByteCode.BytecodeLength = (*ppd3dShaderBlob)->GetBufferSize();
@@ -48,11 +47,24 @@ void ComputeShader::CreatePipelineState(ID3D12Device * pd3dDevice, ID3D12RootSig
 }
 
 D3D12_SHADER_BYTECODE ComputeShader::CreateComputeShader(ID3DBlob ** ppd3dShaderBlob)
-{
-	return D3D12_SHADER_BYTECODE();
+{ 
+	D3D12_SHADER_BYTECODE bytecode;
+	bytecode.BytecodeLength = 0;
+	bytecode.pShaderBytecode = nullptr;
+
+	return bytecode;
 }
 
-void ComputeShader::OnPrepareRender(ID3D12GraphicsCommandList * pd3dCommandList)
+void ComputeShader::SetPSO(ID3D12GraphicsCommandList * pd3dCommandList)
 {
 	pd3dCommandList->SetPipelineState(m_PipelineState);
+}
+
+void ComputeShader::ReleaseObjects()
+{
+	if (m_PipelineState)
+	{
+		m_PipelineState->Release();
+		m_PipelineState = nullptr;
+	}
 }

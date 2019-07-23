@@ -17,7 +17,9 @@ public:
 	
 	const ID3D12RootSignature*			GetGraphicsRootSignature() const { return m_pd3dGraphicsRootSignature; }
 
-	virtual void						OnPrepareRender(ID3D12GraphicsCommandList *pd3dCommandList);
+	virtual void						SetPSO(ID3D12GraphicsCommandList *pd3dCommandList);
+
+	void                                ReleaseObjects();
 
 	ID3D12PipelineState*  GetPSO() const { return m_PipelineState; }
 

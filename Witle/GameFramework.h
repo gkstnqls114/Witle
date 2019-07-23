@@ -6,6 +6,8 @@ class SceneMgr;
 
 class Texture;
 class ComputeShader;
+class HorizonBlurShader;
+class VerticalBlurShader;
 class MyDescriptorHeap;
 class CLoadedModelInfo;
 
@@ -98,8 +100,8 @@ private:
 	D3D12_GPU_DESCRIPTOR_HANDLE m_UAVGPUDescriptorHandle;
 
 	// 블러를 위한 컴퓨트
-	ComputeShader* m_horizenShader{ nullptr };
-	ComputeShader* m_verticalShader{ nullptr };
+	HorizonBlurShader* m_horizenShader{ nullptr };
+	VerticalBlurShader* m_verticalShader{ nullptr };
 
 	//// 컴퓨트 쉐이더를 위한 변수 ///////////////////////////////////////////
 
@@ -116,7 +118,7 @@ private:
 	void CreateRtvAndDsvDescriptorHeaps();
 	void CreateRenderTargetView();
 	void CreateDepthStencilView(); 
-	void CreateRWResourceViews();
+	void CreateRWResourceViews(); 
 
 	// 스왑 체인을 위한 깊이스텐실뷰와 렌더타겟뷰와는 다르게 사용될
 	// GBuffer 리소스와 그를 위한 뷰를 생성합니다.
@@ -188,10 +190,7 @@ private:
 
 	// 필요한 쉐이더를 빌드합니다.
 	void BuildShaders(); 
-
-	// Shadow Transform 을 업데이트합니다.
-	void UpdateShaderTransform();
-	  
+	 
 public:
 	CGameFramework();
 	~CGameFramework();
