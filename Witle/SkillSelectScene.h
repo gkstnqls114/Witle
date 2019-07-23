@@ -60,7 +60,7 @@ public:
 	virtual void LastUpdate(float ElapsedTime) override;
 	//// UpdateGamelogic ///////////////////////////////////
 
-	// 스킬 매니저에 해당 텍스쳐 넣는다.
+	// SkillStg에서 스킬을 꺼내 PlayerSkillMgr에서 사용할 스킬을 설정합니다.
 	void FinishSkillSelect();
 
 protected:

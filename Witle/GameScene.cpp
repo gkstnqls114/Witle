@@ -238,22 +238,22 @@ bool GameScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM w
 
 		case MYVK_E:
 			// 플레이어 스킬 매니저에서 파이어볼 스킬 활성화
-			m_PlayerSkillMgr->Activate(m_pPlayer->GetMPStatus(), ENUM_SKILL::SKILL_FIREBALL);
+			PlayerSkillMgr::GetInstance()->Activate(m_pPlayer->GetMPStatus(), 0);
 			break;
 
 		case MYVK_R:
 			// 플레이어 스킬 매니저에서 파이어볼 스킬 활성화
-			m_PlayerSkillMgr->Activate(m_pPlayer->GetMPStatus(), ENUM_SKILL::SKILL_ICEBALL);
+			PlayerSkillMgr::GetInstance()->Activate(m_pPlayer->GetMPStatus(), 1);
 			break;
 
 		case MYVK_T:
 			// 플레이어 스킬 매니저에서 파이어볼 스킬 활성화
-			m_PlayerSkillMgr->Activate(m_pPlayer->GetMPStatus(), ENUM_SKILL::SKILL_LIGHTNINGBALL);
+			PlayerSkillMgr::GetInstance()->Activate(m_pPlayer->GetMPStatus(), 2);
 			break;
 
 		case MYVK_Y:
 			// 플레이어 스킬 매니저에서 파이어볼 스킬 활성화
-			m_PlayerSkillMgr->Activate(m_pPlayer->GetMPStatus(), ENUM_SKILL::SKILL_BLESSING);
+			PlayerSkillMgr::GetInstance()->Activate(m_pPlayer->GetMPStatus(), 3);
 			break;
 		case '4':
 			break;
@@ -310,7 +310,6 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	m_pPlayer = new Player("Player", pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
 	m_SkyBox->SetpPlayerTransform(&m_pPlayer->GetTransform());
 	PlayerManager::SetMainPlayer(m_pPlayer);
-	m_PlayerSkillMgr = new PlayerSkillMgr(pd3dDevice, pd3dCommandList);
 	// 플레이어 관련 ////////////////////////////////////////
 	 
 	// 테스트용  
@@ -707,7 +706,7 @@ void GameScene::UpdatePhysics(float fElapsedTime)
 {
 	m_Dragon->UpdateState(fElapsedTime); 
 	// 스킬 이펙트 가속도 처리
-	m_PlayerSkillMgr->UpdatePhysics(fElapsedTime);
+	PlayerSkillMgr::GetInstance()->UpdatePhysics(fElapsedTime);
 
 	for (int i = 0; i < m_TestMonsterCount; ++i) {
 		m_TestMonster[i]->UpdateState(fElapsedTime); // State와 업데이트 처리...
@@ -764,7 +763,7 @@ void GameScene::Update(float fElapsedTime)
 	}
 
 	// 플레이어 스킬 이동 업데이트
-	m_PlayerSkillMgr->Update(fElapsedTime);
+	PlayerSkillMgr::GetInstance()->Update(fElapsedTime);
 
 	for (int x = 0; x < 5; ++x)
 	{
@@ -810,12 +809,12 @@ void GameScene::LastUpdate(float fElapsedTime)
 	if (m_pSkyCameraObj) m_pSkyCameraObj->LastUpdate(fElapsedTime);
 
 	// Update한 위치로 스킬 공격이 몬스터에게 접촉하는지 확인 ///////////////////////////
-	for (int index = 0; index < m_PlayerSkillMgr->GetCount(); ++index)
+	for (int index = 0; index < SKILL_SELECTED; ++index)
 	{
 		// 스킬 활성화가 되어있지 않다면 넘어간다.
-		if (!m_PlayerSkillMgr->GetSkillEffect(index)->isActive) continue;
+		if (!PlayerSkillMgr::GetInstance()->GetSkillEffect(index)->isActive) continue;
 		 
-		MyCollider* skill_collider = m_PlayerSkillMgr->GetSkillEffect(index)->skillEffect->GetCollier();
+		MyCollider* skill_collider = PlayerSkillMgr::GetInstance()->GetSkillEffect(index)->skillEffect->GetCollier();
 
 		// 모든 몬스터 끼리 충돌체크
 		for (int i = 0; i < m_TestMonsterCount; ++i)
@@ -827,7 +826,7 @@ void GameScene::LastUpdate(float fElapsedTime)
 			{
 				std::cout << "스킬에 부딪힘" << std::endl;
 				m_TestMonster[i]->SubstractHP(5);
-				m_PlayerSkillMgr->Deactive(index);
+				PlayerSkillMgr::GetInstance()->Deactive(index);
 			}
 		} 
 	}
@@ -908,7 +907,7 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 
 	if (m_WideareaMagic) m_WideareaMagic->Render(pd3dCommandList, isGBuffers);
 
-	if(m_PlayerSkillMgr) m_PlayerSkillMgr->Render(pd3dCommandList, isGBuffers);
+	PlayerSkillMgr::GetInstance()->Render(pd3dCommandList, isGBuffers);
 
 #ifdef CHECK_SUBVIEWS
 	m_lookAboveCamera->SetViewportsAndScissorRects(pd3dCommandList);
@@ -989,23 +988,23 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 
 
 	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_SKILLICON, isGBuffers); 
-	float cooltime = m_PlayerSkillMgr->GetSkillEffect(0)->RemainCoolTimePrecentage; 
+	float cooltime = PlayerSkillMgr::GetInstance()->GetSkillEffect(0)->RemainCoolTimePrecentage;
 	pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_HPPERCENTAGE, 1, &cooltime, 0);
 	SkillSelectScene::m_pTexture->UpdateShaderVariable(pd3dCommandList, SkillSelectScene::m_SelectedIndex[0]);
 	m_SampleUISkill1->Render(pd3dCommandList);
 
 	SkillSelectScene::m_pTexture->UpdateShaderVariable(pd3dCommandList, SkillSelectScene::m_SelectedIndex[1]);  
-	cooltime = m_PlayerSkillMgr->GetSkillEffect(1)->RemainCoolTimePrecentage; 
+	cooltime = PlayerSkillMgr::GetInstance()->GetSkillEffect(1)->RemainCoolTimePrecentage;
 	pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_HPPERCENTAGE, 1, &cooltime, 0);
 	m_SampleUISkill2->Render(pd3dCommandList);
 
 	SkillSelectScene::m_pTexture->UpdateShaderVariable(pd3dCommandList, SkillSelectScene::m_SelectedIndex[2]);  
-	cooltime = m_PlayerSkillMgr->GetSkillEffect(2)->RemainCoolTimePrecentage; 
+	cooltime = PlayerSkillMgr::GetInstance()->GetSkillEffect(2)->RemainCoolTimePrecentage;
 	pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_HPPERCENTAGE, 1, &cooltime, 0);
 	m_SampleUISkill3->Render(pd3dCommandList);
 
 	SkillSelectScene::m_pTexture->UpdateShaderVariable(pd3dCommandList, SkillSelectScene::m_SelectedIndex[3]); 
-	cooltime = m_PlayerSkillMgr->GetSkillEffect(3)->RemainCoolTimePrecentage; 
+	cooltime = PlayerSkillMgr::GetInstance()->GetSkillEffect(3)->RemainCoolTimePrecentage;
 	pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_HPPERCENTAGE, 1, &cooltime, 0);
 	m_SampleUISkill4->Render(pd3dCommandList);
 

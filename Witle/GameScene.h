@@ -114,8 +114,7 @@ protected:
 	
 	Player*                 m_pPlayer        { nullptr };
 	WideareaMagic*          m_WideareaMagic  { nullptr };
-	Sniping*				m_Sniping        { nullptr };
-	PlayerSkillMgr*         m_PlayerSkillMgr { nullptr }; 
+	Sniping*				m_Sniping        { nullptr }; 
 	
 	// 플레이어 관련 ////////////////////////////c
 

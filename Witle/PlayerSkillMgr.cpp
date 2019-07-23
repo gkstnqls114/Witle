@@ -12,14 +12,11 @@
 #include "Player.h"
 #include "PlayerSkillMgr.h"
 
-PlayerSkillMgr::PlayerSkillMgr(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList)
-{
-	m_skill = new SKILL[m_count];
+PlayerSkillMgr* PlayerSkillMgr::m_Instance{ nullptr };
 
-	m_skill[0].skillEffect = new FireBall("FireBall", pd3dDevice, pd3dCommandList);
-	m_skill[1].skillEffect = new IceBall("FireBall", pd3dDevice, pd3dCommandList);
-	m_skill[2].skillEffect = new LightningBall("FireBall", pd3dDevice, pd3dCommandList);
-	m_skill[3].skillEffect = new FireBall("FireBall", pd3dDevice, pd3dCommandList); 
+PlayerSkillMgr::PlayerSkillMgr()
+{
+	m_skill = new SKILL[SKILL_SELECTED]; 
 }
 
 PlayerSkillMgr::~PlayerSkillMgr()
@@ -33,7 +30,7 @@ void PlayerSkillMgr::UpdatePhysics(float fElapsedTime)
 
 void PlayerSkillMgr::Update(float fElapsedTime)
 {
-	for (int x = 0; x < m_count; ++x)
+	for (int x = 0; x < SKILL_SELECTED; ++x)
 	{
 		if (m_skill[x].RemainCoolTime <= 0.f)
 		{
@@ -48,7 +45,7 @@ void PlayerSkillMgr::Update(float fElapsedTime)
 
 	Deactivate();
 
-	for (int x = 0; x < m_count; ++x)
+	for (int x = 0; x < SKILL_SELECTED; ++x)
 	{
 		if (m_skill[x].isActive)
 		{
@@ -60,7 +57,7 @@ void PlayerSkillMgr::Update(float fElapsedTime)
 
 void PlayerSkillMgr::Render(ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffers)
 {
-	for (int x = 0; x < m_count; ++x)
+	for (int x = 0; x < SKILL_SELECTED; ++x)
 	{
 		if (!m_skill[x].isActive) continue;
 
@@ -71,20 +68,20 @@ void PlayerSkillMgr::Render(ID3D12GraphicsCommandList * pd3dCommandList, bool is
 	}
 }
 
-void PlayerSkillMgr::Activate(PlayerStatus* MPstaus, ENUM_SKILL skilltype)
+void PlayerSkillMgr::Activate(PlayerStatus* MPstaus, int index)
 { 
-	if (m_skill[skilltype].isActive) return;
-	if (m_skill[skilltype].RemainCoolTime > 0.f) return;
+	if (m_skill[index].isActive) return;
+	if (m_skill[index].RemainCoolTime > 0.f) return;
 	if ((MPstaus->m_Guage - 10/*사용하는 마나 게이지*/) < 0.f) return;
 
 	MPstaus->m_Guage -= 10.f;
-	m_skill[skilltype].isActive = true;
-	m_skill[skilltype].RemainCoolTime = m_skill[skilltype].skillEffect->m_CoolTime;
-	m_skill[skilltype].spawnPosition =
+	m_skill[index].isActive = true;
+	m_skill[index].RemainCoolTime = m_skill[index].skillEffect->m_CoolTime;
+	m_skill[index].spawnPosition =
 		PlayerManager::GetMainPlayer()->GetTransform().GetPosition();
 
-	m_skill[skilltype].skillEffect->SetVelocity(
-		m_skill[skilltype].spawnPosition,
+	m_skill[index].skillEffect->SetVelocity(
+		m_skill[index].spawnPosition,
 		75,
 		PlayerManager::GetMainPlayer()->GetTransform().GetLook()
 	); 
@@ -97,7 +94,7 @@ void PlayerSkillMgr::Deactive(int index)
 
 void PlayerSkillMgr::Deactivate()
 {
-	for (int x = 0; x < m_count; ++x)
+	for (int x = 0; x < SKILL_SELECTED; ++x)
 	{
 		if (!m_skill[x].isActive) continue;
 
