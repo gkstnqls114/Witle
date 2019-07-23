@@ -33,16 +33,18 @@
  
 #include "GameFramework.h"
 
-static const bool DefferedRendering = false;
+static const bool DefferedRendering = true;
 
 void CGameFramework::Render()
 {
 	HRESULT hResult = m_CommandAllocator->Reset();
 	hResult = m_CommandList->Reset(m_CommandAllocator.Get(), NULL);
 
+	m_CommandList->SetGraphicsRootSignature(GraphicsRootSignatureMgr::GetGraphicsRootSignature());
+
 	if (DefferedRendering)
 	{
-		RenderForShadow();
+		// RenderForShadow();
 		//// GBuffer에 Render //////////////////////////
 		RenderOnGbuffer();
 		//// ComputeShader ////////////////////////// 
@@ -886,10 +888,7 @@ void CGameFramework::RenderOnSwapchain()
 	m_CommandList->ClearDepthStencilView(m_DepthStencilCPUHandle, D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, NULL);
 
 	m_CommandList->OMSetRenderTargets(1, &m_SwapChainCPUHandle[m_SwapChainBufferIndex], TRUE, &m_DepthStencilCPUHandle);
-
-	////그래픽 루트 시그너쳐를 설정한다.
-	m_CommandList->SetGraphicsRootSignature(GraphicsRootSignatureMgr::GetGraphicsRootSignature());
-	
+	 
 	// 기본 게임 장면을 렌더한다.
 	RenderSwapChain();
 
@@ -1078,15 +1077,12 @@ void CGameFramework::RenderSwapChain()
 void CGameFramework::DefferedRenderSwapChain()
 {
 	m_CommandList->OMSetRenderTargets(1, &m_SwapChainCPUHandle[m_SwapChainBufferIndex], TRUE, &m_DepthStencilCPUHandle);
-
-	//////그래픽 루트 시그너쳐를 설정한다.
-	m_CommandList->SetGraphicsRootSignature(GraphicsRootSignatureMgr::GetGraphicsRootSignature());
-
+	 
 	//////파이프라인 상태를 설정한다.
 	ShaderManager::GetInstance()->SetPSO(m_CommandList.Get(), SHADER_DEFFREDRENDER, false);
 	
 	m_GBufferHeap->UpdateShaderVariable(m_CommandList.Get());
-
+	 
 	MainCameraMgr::GetMainCamera()->GetCamera()->SetViewportsAndScissorRects(m_CommandList.Get());
 	MainCameraMgr::GetMainCamera()->GetCamera()->UpdateShaderVariables(m_CommandList.Get(), ROOTPARAMETER_CAMERA);
 
@@ -1113,8 +1109,7 @@ void CGameFramework::DefferedRenderSwapChain()
 void CGameFramework::RenderForShadow()
 {  
 	d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_Shadowmap, D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_DEPTH_WRITE);
-	 
-	m_CommandList->SetGraphicsRootSignature(GraphicsRootSignatureMgr::GetGraphicsRootSignature());
+	
 	// SHADOW 설정
 	m_CommandList->OMSetRenderTargets(0, NULL, TRUE, &m_ShadowmapCPUHandle);
 	m_CommandList->ClearDepthStencilView(m_ShadowmapCPUHandle, D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, NULL);
