@@ -982,6 +982,39 @@ void CGameFramework::BuildShaders()
 	ShaderManager::GetInstance()->BuildShaders(m_d3dDevice.Get(), GraphicsRootSignatureMgr::GetGraphicsRootSignature());
 }
  
+void CGameFramework::RenderOnRT(renderFuncPtr renderPtr, ID3D12Resource* pRendertargetResource, D3D12_CPU_DESCRIPTOR_HANDLE hCPUrenderTarget, D3D12_CPU_DESCRIPTOR_HANDLE hCPUdepthStencil)
+{
+	d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), pRendertargetResource, D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
+
+	m_CommandList->ClearRenderTargetView(hCPUrenderTarget, Colors::Gray, 0, NULL);
+	m_CommandList->ClearDepthStencilView(hCPUdepthStencil, D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, NULL);
+
+	m_CommandList->OMSetRenderTargets(1, &hCPUrenderTarget, TRUE, &hCPUdepthStencil);
+	
+	renderPtr(); 
+	 
+	d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), pRendertargetResource, D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
+}
+
+void CGameFramework::RenderOnRTs(renderFuncPtr renderPtr, UINT RenderTargetCount, ID3D12Resource * pRendertargetResources, D3D12_CPU_DESCRIPTOR_HANDLE * hCPUrenderTargets, D3D12_CPU_DESCRIPTOR_HANDLE hCPUdepthStencils)
+{
+	for (int i = 0; i < RenderTargetCount; i++)
+	{
+		d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), &pRendertargetResources[i], D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_RENDER_TARGET);
+		m_CommandList->ClearRenderTargetView(hCPUrenderTargets[i], Colors::Gray, 0, NULL);
+	}
+
+	m_CommandList->ClearDepthStencilView(hCPUdepthStencils, D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, NULL);
+	m_CommandList->OMSetRenderTargets(RenderTargetCount, hCPUrenderTargets, TRUE, &hCPUdepthStencils);
+
+	renderPtr();
+
+	for (int x = 0; x < RenderTargetCount; ++x)
+	{
+		d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), &pRendertargetResources[x], D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_GENERIC_READ);
+	}
+}
+
 void CGameFramework::RenderOnGbuffer()
 {
 	for (int i = 0; i < m_GBuffersCountForRenderTarget; i++)

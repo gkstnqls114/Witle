@@ -11,6 +11,8 @@ class VerticalBlurShader;
 class MyDescriptorHeap;
 class CLoadedModelInfo;
 
+typedef void(*renderFuncPtr)(); // 렌더링 용 포인터
+
 class CGameFramework
 {
 
@@ -173,6 +175,12 @@ private:
 	void OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam);
 
 private:
+	// 깊이 버퍼와 그릴 렌더타겟을 하나 골라 장면을 렌더링합니다.
+	void RenderOnRT(renderFuncPtr renderPtr,ID3D12Resource* pRendertargetResource, D3D12_CPU_DESCRIPTOR_HANDLE renderTarget, D3D12_CPU_DESCRIPTOR_HANDLE depthStencil);
+	
+	// 깊이 버퍼와 그릴 렌더타겟을 여러 개 골라 장면을 렌더링합니다.
+	void RenderOnRTs(renderFuncPtr renderPtr, UINT RenderTargetCount,ID3D12Resource* resource, D3D12_CPU_DESCRIPTOR_HANDLE* renderTarget, D3D12_CPU_DESCRIPTOR_HANDLE depthStencil);
+
 	// GBuffer에 장면을 렌더링합니다.
 	void RenderOnGbuffer();
 
