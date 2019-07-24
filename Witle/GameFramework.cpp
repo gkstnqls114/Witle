@@ -53,9 +53,14 @@ void CGameFramework::Render()
 
 	if (DefferedRendering)
 	{
-		RenderForShadow();
-
-		RenderOnGbuffer(); // G Buffer 에 렌더링합니다.
+		// 쉐도우 맵을 그립니다.
+		d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_Shadowmap, D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_DEPTH_WRITE);
+		RenderOnRTs(&CGameFramework::RenderForShadow, 0, NULL, NULL, m_ShadowmapCPUHandle);
+		d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_Shadowmap, D3D12_RESOURCE_STATE_DEPTH_WRITE, D3D12_RESOURCE_STATE_GENERIC_READ);
+		// 쉐도우 맵을 그립니다.
+		 
+		// RenderOnGbuffer(); // G Buffer 에 렌더링합니다.
+		RenderOnRTs(&CGameFramework::RenderOnGbuffer, m_GBuffersCountForRenderTarget, m_GBuffersForRenderTarget, m_GBufferCPUHandleForRenderTarget, m_GBufferCPUHandleForDepth[0]);
 
 		ComputeHDR();
 
@@ -63,7 +68,11 @@ void CGameFramework::Render()
 	}
 	else
 	{
-		RenderForShadow();
+		// 쉐도우 맵을 그립니다.
+		d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_Shadowmap, D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_DEPTH_WRITE);
+		RenderOnRTs(&CGameFramework::RenderForShadow, 0, NULL, NULL, m_ShadowmapCPUHandle);
+		d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_Shadowmap, D3D12_RESOURCE_STATE_DEPTH_WRITE, D3D12_RESOURCE_STATE_GENERIC_READ);
+		// 쉐도우 맵을 그립니다.
 
 		RenderOnSwapchain();
 	}
@@ -639,8 +648,8 @@ void CGameFramework::CreateGBufferView()
 			 
 		}
 		D3D12_CLEAR_VALUE d3dClearValue = { textureType,
-		{m_GBufferClearValue[i][0], m_GBufferClearValue[i][1], m_GBufferClearValue[i][2], m_GBufferClearValue[i][3] } };
-
+		{m_clearValueColor[0], m_clearValueColor[1], m_clearValueColor[2], m_clearValueColor[3] } };
+		
 		// 해당 텍스쳐를 2디 텍스쳐로 만들어서 담는다.
 		m_GBuffersForRenderTarget[i] =
 			d3dUtil::CreateTexture2DResource(
@@ -906,41 +915,13 @@ void CGameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPA
 }
 
 void CGameFramework::RenderOnSwapchain()
-{
-	d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_RenderTargetBuffers[m_SwapChainBufferIndex], D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
-
-	m_CommandList->ClearRenderTargetView(m_SwapChainCPUHandle[m_SwapChainBufferIndex], /*pfClearColor*/Colors::Gray, 0, NULL);
-	m_CommandList->ClearDepthStencilView(m_DepthStencilCPUHandle, D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, NULL);
-
-	m_CommandList->OMSetRenderTargets(1, &m_SwapChainCPUHandle[m_SwapChainBufferIndex], TRUE, &m_DepthStencilCPUHandle);
-	 
-	// 기본 게임 장면을 렌더한다.
-	RenderSwapChain();
-
-	// 하단에 그림자 맵을 렌더링한다.
-	// RenderShadowMap();
-
-	d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_RenderTargetBuffers[m_SwapChainBufferIndex], D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
+{  
+	RenderOnRT(&CGameFramework::RenderSwapChain, m_RenderTargetBuffers[m_SwapChainBufferIndex], m_SwapChainCPUHandle[m_SwapChainBufferIndex], m_DepthStencilCPUHandle);
 }
 
 void CGameFramework::DefferedRenderOnSwapchain()
 {
-	d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_RenderTargetBuffers[m_SwapChainBufferIndex], D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
-
-	m_CommandList->ClearRenderTargetView(m_SwapChainCPUHandle[m_SwapChainBufferIndex], /*pfClearColor*/Colors::Gray, 0, NULL);
-	m_CommandList->ClearDepthStencilView(m_DepthStencilCPUHandle, D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, NULL);
-
-	// 하단에 그림자 맵을 렌더링한다.
-	// RenderShadowMap();
-	
-	// 기본 게임 장면을 렌더한다.
-	DefferedRenderSwapChain();
-
-	// 하단에 테스트용으로 보일 리소스들을 렌더한다.
-	RenderGBuffers();
-
-	d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_RenderTargetBuffers[m_SwapChainBufferIndex], D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
-	
+	RenderOnRT(&CGameFramework::DefferedRenderSwapChain, m_RenderTargetBuffers[m_SwapChainBufferIndex], m_SwapChainCPUHandle[m_SwapChainBufferIndex], m_DepthStencilCPUHandle);
 }
 
 void CGameFramework::RenderShadowMap()
@@ -986,55 +967,56 @@ void CGameFramework::RenderOnRT(renderFuncPtr renderPtr, ID3D12Resource* pRender
 {
 	d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), pRendertargetResource, D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
 
-	m_CommandList->ClearRenderTargetView(hCPUrenderTarget, Colors::Gray, 0, NULL);
+	m_CommandList->ClearRenderTargetView(hCPUrenderTarget, m_clearValueColor, 0, NULL);
 	m_CommandList->ClearDepthStencilView(hCPUdepthStencil, D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, NULL);
 
 	m_CommandList->OMSetRenderTargets(1, &hCPUrenderTarget, TRUE, &hCPUdepthStencil);
 	
-	renderPtr(); 
+	(this->*renderPtr)(); 
 	 
 	d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), pRendertargetResource, D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
 }
 
-void CGameFramework::RenderOnRTs(renderFuncPtr renderPtr, UINT RenderTargetCount, ID3D12Resource * pRendertargetResources, D3D12_CPU_DESCRIPTOR_HANDLE * hCPUrenderTargets, D3D12_CPU_DESCRIPTOR_HANDLE hCPUdepthStencils)
+void CGameFramework::RenderOnRTs(renderFuncPtr renderPtr, UINT RenderTargetCount, ID3D12Resource ** pRendertargetResources, D3D12_CPU_DESCRIPTOR_HANDLE * hCPUrenderTargets, D3D12_CPU_DESCRIPTOR_HANDLE hCPUdepthStencils)
 {
 	for (int i = 0; i < RenderTargetCount; i++)
 	{
-		d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), &pRendertargetResources[i], D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_RENDER_TARGET);
-		m_CommandList->ClearRenderTargetView(hCPUrenderTargets[i], Colors::Gray, 0, NULL);
+		d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), pRendertargetResources[i], D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_RENDER_TARGET);
+		m_CommandList->ClearRenderTargetView(hCPUrenderTargets[i], m_clearValueColor, 0, NULL);
 	}
 
 	m_CommandList->ClearDepthStencilView(hCPUdepthStencils, D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, NULL);
 	m_CommandList->OMSetRenderTargets(RenderTargetCount, hCPUrenderTargets, TRUE, &hCPUdepthStencils);
 
-	renderPtr();
+	(this->*renderPtr)();
 
 	for (int x = 0; x < RenderTargetCount; ++x)
 	{
-		d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), &pRendertargetResources[x], D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_GENERIC_READ);
+		d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), pRendertargetResources[x], D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_GENERIC_READ);
 	}
 }
 
 void CGameFramework::RenderOnGbuffer()
-{
-	for (int i = 0; i < m_GBuffersCountForRenderTarget; i++)
-	{ 
-		d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_GBuffersForRenderTarget[i], D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_RENDER_TARGET);
-		m_CommandList->ClearRenderTargetView(m_GBufferCPUHandleForRenderTarget[i], m_GBufferClearValue[i], 0, NULL);
-	}  
-
-	m_CommandList->ClearDepthStencilView(m_GBufferCPUHandleForDepth[0], D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, NULL);
-	m_CommandList->OMSetRenderTargets(m_GBuffersCountForRenderTarget, m_GBufferCPUHandleForRenderTarget, TRUE, &m_GBufferCPUHandleForDepth[0]);
+{ 
 	
+	//for (int i = 0; i < m_GBuffersCountForRenderTarget; i++)
+	//{ 
+	//	d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_GBuffersForRenderTarget[i], D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_RENDER_TARGET);
+	//	m_CommandList->ClearRenderTargetView(m_GBufferCPUHandleForRenderTarget[i], m_clearValueColor[i], 0, NULL);
+	//}  
+
+	//m_CommandList->ClearDepthStencilView(m_GBufferCPUHandleForDepth[0], D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, NULL);
+	//m_CommandList->OMSetRenderTargets(m_GBuffersCountForRenderTarget, m_GBufferCPUHandleForRenderTarget, TRUE, &m_GBufferCPUHandleForDepth[0]);
+	//
 	if (m_SceneMgr)
 	{
 		m_SceneMgr->GetCurrScene()->Render(m_CommandList.Get(), true);
 	}
 
-	for (int x = 0; x < m_GBuffersCountForRenderTarget; ++x)
-	{
-		d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_GBuffersForRenderTarget[x], D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_GENERIC_READ);
-	}
+	//for (int x = 0; x < m_GBuffersCountForRenderTarget; ++x)
+	//{
+	//	d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_GBuffersForRenderTarget[x], D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_GENERIC_READ);
+	//}
 }
 
 void CGameFramework::RenderOnCompute()
@@ -1142,9 +1124,7 @@ void CGameFramework::RenderSwapChain()
 }
 
 void CGameFramework::DefferedRenderSwapChain()
-{
-	m_CommandList->OMSetRenderTargets(1, &m_SwapChainCPUHandle[m_SwapChainBufferIndex], TRUE, &m_DepthStencilCPUHandle);
-	 
+{ 
 	//////파이프라인 상태를 설정한다.
 	ShaderManager::GetInstance()->SetPSO(m_CommandList.Get(), SHADER_DEFFREDRENDER, false);
 	
@@ -1177,15 +1157,10 @@ void CGameFramework::DefferedRenderSwapChain()
 
 void CGameFramework::RenderForShadow()
 {  
-	d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_Shadowmap, D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_DEPTH_WRITE);
-	
-	// SHADOW 설정
-	m_CommandList->OMSetRenderTargets(0, NULL, TRUE, &m_ShadowmapCPUHandle);
-	m_CommandList->ClearDepthStencilView(m_ShadowmapCPUHandle, D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, NULL);
-	 
-	m_SceneMgr->GetCurrScene()->RenderForShadow(m_CommandList.Get()); 
-
-	d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_Shadowmap, D3D12_RESOURCE_STATE_DEPTH_WRITE, D3D12_RESOURCE_STATE_GENERIC_READ);
+	if (m_SceneMgr->GetCurrScene())
+	{
+		m_SceneMgr->GetCurrScene()->RenderForShadow(m_CommandList.Get()); 
+	} 
 }
 
 void CGameFramework::ComputeHDR()
