@@ -40,7 +40,7 @@
  
 #include "GameFramework.h"
 
-static const bool DefferedRendering = true;
+static const bool DefferedRendering = false;
 
 void CGameFramework::Render()
 {
@@ -74,7 +74,12 @@ void CGameFramework::Render()
 		d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_Shadowmap, D3D12_RESOURCE_STATE_DEPTH_WRITE, D3D12_RESOURCE_STATE_GENERIC_READ);
 		// 쉐도우 맵을 그립니다.
 
-		RenderOnSwapchain();
+		// 조명처리된 화면을 그립니다.
+		// RenderOnRT(&CGameFramework::RenderSwapChain, m_RenderTargetBuffers[m_SwapChainBufferIndex], m_SwapChainCPUHandle[m_SwapChainBufferIndex], m_DepthStencilCPUHandle);
+		RenderOnRTs(&CGameFramework::RenderSwapChain, 1, &m_GBuffersForRenderTarget[0], &m_GBufferCPUHandleForRenderTarget[0], m_GBufferCPUHandleForDepth[0]);
+
+		// 텍스쳐를 그립니다.
+		RenderOnRT(&CGameFramework::RenderToTexture, m_RenderTargetBuffers[m_SwapChainBufferIndex], m_SwapChainCPUHandle[m_SwapChainBufferIndex], m_DepthStencilCPUHandle);
 	}
 
 	//// SwapChain에 Render //////////////////////////
@@ -913,12 +918,7 @@ void CGameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPA
 		m_SceneMgr->ChangeSceneToGame();
 	}
 }
-
-void CGameFramework::RenderOnSwapchain()
-{  
-	RenderOnRT(&CGameFramework::RenderSwapChain, m_RenderTargetBuffers[m_SwapChainBufferIndex], m_SwapChainCPUHandle[m_SwapChainBufferIndex], m_DepthStencilCPUHandle);
-}
-
+ 
 void CGameFramework::DefferedRenderOnSwapchain()
 {
 	RenderOnRT(&CGameFramework::DefferedRenderSwapChain, m_RenderTargetBuffers[m_SwapChainBufferIndex], m_SwapChainCPUHandle[m_SwapChainBufferIndex], m_DepthStencilCPUHandle);
@@ -979,7 +979,7 @@ void CGameFramework::RenderOnRT(renderFuncPtr renderPtr, ID3D12Resource* pRender
 
 void CGameFramework::RenderOnRTs(renderFuncPtr renderPtr, UINT RenderTargetCount, ID3D12Resource ** pRendertargetResources, D3D12_CPU_DESCRIPTOR_HANDLE * hCPUrenderTargets, D3D12_CPU_DESCRIPTOR_HANDLE hCPUdepthStencils)
 {
-	for (int i = 0; i < RenderTargetCount; i++)
+	for (int i = 0; i < RenderTargetCount; ++i)
 	{
 		d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), pRendertargetResources[i], D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_RENDER_TARGET);
 		m_CommandList->ClearRenderTargetView(hCPUrenderTargets[i], m_clearValueColor, 0, NULL);
@@ -990,9 +990,9 @@ void CGameFramework::RenderOnRTs(renderFuncPtr renderPtr, UINT RenderTargetCount
 
 	(this->*renderPtr)();
 
-	for (int x = 0; x < RenderTargetCount; ++x)
+	for (int i = 0; i < RenderTargetCount; ++i)
 	{
-		d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), pRendertargetResources[x], D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_GENERIC_READ);
+		d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), pRendertargetResources[i], D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_GENERIC_READ);
 	}
 }
 
@@ -1153,6 +1153,32 @@ void CGameFramework::DefferedRenderSwapChain()
 	m_CommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	m_CommandList->DrawInstanced(6, 1, 0, 0);
 	 
+}
+
+void CGameFramework::RenderToTexture()
+{
+	//////파이프라인 상태를 설정한다.
+	ShaderManager::GetInstance()->SetPSO(m_CommandList.Get(), SHADER_SHOWTEXTURE, false);
+
+	m_GBufferHeap->UpdateShaderVariable(m_CommandList.Get());
+
+	MainCameraMgr::GetMainCamera()->GetCamera()->SetViewportsAndScissorRects(m_CommandList.Get());
+	MainCameraMgr::GetMainCamera()->GetCamera()->UpdateShaderVariables(m_CommandList.Get(), ROOTPARAMETER_CAMERA);
+	MainCameraMgr::GetMainCamera()->GetCamera()->UpdateLightShaderVariables(m_CommandList.Get(), &LightManager::m_pLights->m_pLights[2]);
+
+	//// 리소스만 바꾼다.. 
+	D3D12_GPU_DESCRIPTOR_HANDLE handle = m_GBufferHeap->GetGPUDescriptorHandleForHeapStart(); // 0번째 리소스
+
+	D3D12_VIEWPORT	Viewport{ 0.f, 0.f, GameScreen::GetWidth() , GameScreen::GetHeight(), 1.0f, 0.0f };
+	D3D12_RECT		ScissorRect{ 0, 0, GameScreen::GetWidth() , GameScreen::GetHeight() };
+
+	m_CommandList->RSSetViewports(1, &Viewport);
+	m_CommandList->RSSetScissorRects(1, &ScissorRect);
+	 
+	m_CommandList->SetGraphicsRootDescriptorTable(ROOTPARAMETER_TEXTUREBASE, handle); 
+	
+	m_CommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	m_CommandList->DrawInstanced(6, 1, 0, 0);
 }
 
 void CGameFramework::RenderForShadow()

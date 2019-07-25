@@ -161,6 +161,8 @@ private:
 	// SwapChain에 디퍼드 쉐이더를 통해 현재 장면을 렌더링합니다.
 	void DefferedRenderSwapChain();
 
+	void RenderToTexture();
+
 	// Shadow 맵만 렌더링합니다.
 	void RenderForShadow();
 
@@ -183,10 +185,7 @@ private:
 
 	// 컴퓨터 쉐이더에 장면을 렌더링합니다.
 	void RenderOnCompute();
-
-	// 스왑체인에 장면을 렌더링합니다.
-	void RenderOnSwapchain();
-
+	 
 	// 렌더했던 Gbuffer를 이용하여 렌더링합니다.
 	void DefferedRenderOnSwapchain();
 
