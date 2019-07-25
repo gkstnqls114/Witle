@@ -41,6 +41,7 @@
 #include "GameFramework.h"
 
 static const bool DefferedRendering = false;
+static const bool blurTEST = false;
 
 void CGameFramework::Render()
 {
@@ -68,24 +69,38 @@ void CGameFramework::Render()
 	}
 	else
 	{
-		// 쉐도우 맵을 그립니다.
-		d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_Shadowmap, D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_DEPTH_WRITE);
-		RenderOnRTs(&CGameFramework::RenderForShadow, 0, NULL, NULL, m_ShadowmapCPUHandle);
-		d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_Shadowmap, D3D12_RESOURCE_STATE_DEPTH_WRITE, D3D12_RESOURCE_STATE_GENERIC_READ);
-		// 쉐도우 맵을 그립니다.
+		if (blurTEST)
+		{
+			// 쉐도우 맵을 그립니다.
+			d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_Shadowmap, D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_DEPTH_WRITE);
+			RenderOnRTs(&CGameFramework::RenderForShadow, 0, NULL, NULL, m_ShadowmapCPUHandle);
+			d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_Shadowmap, D3D12_RESOURCE_STATE_DEPTH_WRITE, D3D12_RESOURCE_STATE_GENERIC_READ);
+			// 쉐도우 맵을 그립니다.
 
-		// 조명처리된 화면을 그립니다.
-		// RenderOnRT(&CGameFramework::RenderSwapChain, m_RenderTargetBuffers[m_SwapChainBufferIndex], m_SwapChainCPUHandle[m_SwapChainBufferIndex], m_DepthStencilCPUHandle);
-		RenderOnRTs(&CGameFramework::RenderSwapChain, 1, &m_GBuffersForRenderTarget[0], &m_GBufferCPUHandleForRenderTarget[0], m_GBufferCPUHandleForDepth[0]);
+			// 조명처리된 화면을 그립니다.
+			// RenderOnRT(&CGameFramework::RenderSwapChain, m_RenderTargetBuffers[m_SwapChainBufferIndex], m_SwapChainCPUHandle[m_SwapChainBufferIndex], m_DepthStencilCPUHandle);
+			RenderOnRTs(&CGameFramework::RenderSwapChain, 1, &m_GBuffersForRenderTarget[0], &m_GBufferCPUHandleForRenderTarget[0], m_GBufferCPUHandleForDepth[0]);
 
-		Blur();
+			Blur();
 
-		// 텍스쳐를 그립니다.
-		// 블러링된 텍스쳐를 전환
-		d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_ComputeRWResource, D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_GENERIC_READ);
-		RenderOnRT(&CGameFramework::RenderToTexture, m_RenderTargetBuffers[m_SwapChainBufferIndex], m_SwapChainCPUHandle[m_SwapChainBufferIndex], m_DepthStencilCPUHandle);
-		d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_ComputeRWResource, D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_COMMON);
+			// 텍스쳐를 그립니다.
+			// 블러링된 텍스쳐를 전환
+			d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_ComputeRWResource, D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_GENERIC_READ);
+			RenderOnRT(&CGameFramework::RenderToTexture, m_RenderTargetBuffers[m_SwapChainBufferIndex], m_SwapChainCPUHandle[m_SwapChainBufferIndex], m_DepthStencilCPUHandle);
+			d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_ComputeRWResource, D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_COMMON);
+			 
+		}
+		else
+		{
+			// 쉐도우 맵을 그립니다.
+			d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_Shadowmap, D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_DEPTH_WRITE);
+			RenderOnRTs(&CGameFramework::RenderForShadow, 0, NULL, NULL, m_ShadowmapCPUHandle);
+			d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_Shadowmap, D3D12_RESOURCE_STATE_DEPTH_WRITE, D3D12_RESOURCE_STATE_GENERIC_READ);
+			// 쉐도우 맵을 그립니다.
 
+			// 조명처리된 화면을 그립니다.
+			RenderOnRT(&CGameFramework::RenderSwapChain, m_RenderTargetBuffers[m_SwapChainBufferIndex], m_SwapChainCPUHandle[m_SwapChainBufferIndex], m_DepthStencilCPUHandle);
+		}
 	}
 
 	//// SwapChain에 Render //////////////////////////
@@ -1144,6 +1159,8 @@ void CGameFramework::RenderSwapChain()
 	{ 
 		m_SceneMgr->GetCurrScene()->Render(m_CommandList.Get(), false);
 	}
+
+	RenderShadowMap();
 }
 
 void CGameFramework::DefferedRenderSwapChain()
