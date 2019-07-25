@@ -40,6 +40,7 @@ public:
 	// 화면에 그림을 그리는 함수.
 	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers) override;
 	virtual void RenderForShadow(ID3D12GraphicsCommandList *pd3dCommandList) override;
+	virtual void RenderForPlayerShadow(ID3D12GraphicsCommandList *pd3dCommandList) override {};
 
 	//// UpdateGamelogic ///////////////////////////////////
 

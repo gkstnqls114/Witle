@@ -65,7 +65,7 @@ private:
 	};
 
 	static const UINT m_GBuffersCountForDepth{ 1 };
-	static const UINT m_ShadowmapCount{ 1 };
+	static const UINT m_ShadowmapCount{ 2 };
 	static const UINT m_GBuffersCountForRenderTarget{ 3 };
 	const UINT m_DsvDescriptorsCount{ 1 + m_GBuffersCountForDepth + m_ShadowmapCount };
 	static const UINT m_GBuffersCount{ m_GBuffersCountForDepth + m_GBuffersCountForRenderTarget };
@@ -77,19 +77,17 @@ private:
 	D3D12_CPU_DESCRIPTOR_HANDLE m_GBufferCPUHandleForDepth[m_GBuffersCountForDepth];
 
 	ID3D12Resource*				m_Shadowmap;
+	ID3D12Resource*				m_PlayerShadowmap; // 플레이어 위치에서 그려질 쉐도우맵
 	D3D12_CPU_DESCRIPTOR_HANDLE m_ShadowmapCPUHandle;
+	D3D12_CPU_DESCRIPTOR_HANDLE m_PlayerShadowmapCPUHandle;
 
 	UINT m_GBufferHeapCount{ m_GBuffersCount + m_ShadowmapCount + 1 /*uav*/};
-	UINT m_GBufferForDepthIndex = m_GBufferHeapCount - 3;
-	UINT m_GBufferForUAV = m_GBufferHeapCount - 2;
-	UINT m_GBufferForShadowIndex = m_GBufferHeapCount - 1;
+	UINT m_GBufferForDepthIndex = m_GBufferHeapCount - 4;
+	UINT m_GBufferForUAV = m_GBufferHeapCount - 3;
+	UINT m_GBufferForShadowIndex = m_GBufferHeapCount - 2;
+	UINT m_GBufferForPlayerShadowIndex = m_GBufferHeapCount - 1;
 	MyDescriptorHeap* m_GBufferHeap{ nullptr }; // GBuffer 뿐만 아니라 Shadow도 담습니다.
-	MyDescriptorHeap* m_ShadowmapHeap{ nullptr }; 
-
-	CD3DX12_CPU_DESCRIPTOR_HANDLE m_hCpuSrvForShadow;
-	CD3DX12_GPU_DESCRIPTOR_HANDLE m_hGpuSrvForShadow;
-	CD3DX12_CPU_DESCRIPTOR_HANDLE m_hCpuDsvForShadow;
-
+	MyDescriptorHeap* m_ShadowmapHeap{ nullptr };  
 	//// GBuffer 와 쉐도우맵을 위해 필요한 변수들 ////////////////////////////////////
 
 
@@ -165,6 +163,9 @@ private:
 
 	// Shadow 맵만 렌더링합니다.
 	void RenderForShadow();
+
+	// 플레이어 Shadow 맵만 렌더링합니다.
+	void RenderForPlayerShadow();
 
 	// Compute 쉐이더를 통해 hdr을 위한 텍스쳐를 계산합니다.
 	void ComputeHDR();

@@ -43,9 +43,10 @@ private:
 
 	ID3D12Resource					*m_pd3dcbLight{ nullptr };
 	VS_CB_LIGHT_INFO				*m_pcbMappedLight{ nullptr };
+
 private:
 	void ReleaseShaderVariables();
-
+	
 public:
 	virtual void ReleaseObjects() override;
 	virtual void ReleaseUploadBuffers() override;
@@ -150,6 +151,7 @@ public:
 	XMFLOAT4X4 GenerateLightViewMatrix(const LIGHT* light) const ;
 	XMFLOAT4X4 GenerateLightProjectionMatrix(const LIGHT* light) const;
 	void UpdateLightShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList, const LIGHT* light);
+	void UpdateLightShaderVariablesForPlayer(ID3D12GraphicsCommandList * pd3dCommandList, const LIGHT* light);
 	// 조명 위치에 자리한 조명 변환 뷰을 위해 필요 //////////////////////////////
 
 };

@@ -1011,40 +1011,62 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 }
 
 void GameScene::RenderForShadow(ID3D12GraphicsCommandList * pd3dCommandList)
-{
-	// 포워드 렌더링..
-
-	// 깊이버퍼에 쉐도우 맵을 사용...
-
-	// 렌더링
-	extern MeshRenderer gMeshRenderer;
-	 
+{ 
 	// 클라 화면 설정	
 	if (m_isSkyMode)
 	{
 
 	}
 	else
-	{  
+	{
 		m_pMainCamera->SetViewportsAndScissorRects(pd3dCommandList);
 		m_pMainCamera->GetCamera()->UpdateShaderVariables(pd3dCommandList, 1);
 		m_pMainCamera->GetCamera()->UpdateLightShaderVariables(pd3dCommandList, &LightManager::m_pLights->m_pLights[2]);
 	}
 
 	m_pPlayer->RenderForShadow(pd3dCommandList);
+	//// 렌더링
+	//extern MeshRenderer gMeshRenderer;
+	// 
+	//// 클라 화면 설정	
+	//if (m_isSkyMode)
+	//{
 
-	for (int i = 0; i < m_TestMonsterCount; ++i)
-	{
-		if (m_TestMonster[i]) m_TestMonster[i]->RenderForShadow(pd3dCommandList);
-	}
+	//}
+	//else
+	//{  
+	//	m_pMainCamera->SetViewportsAndScissorRects(pd3dCommandList);
+	//	m_pMainCamera->GetCamera()->UpdateShaderVariables(pd3dCommandList, 1);
+	//	m_pMainCamera->GetCamera()->UpdateLightShaderVariables(pd3dCommandList, &LightManager::m_pLights->m_pLights[2]);
+	//} 
+
+	//for (int i = 0; i < m_TestMonsterCount; ++i)
+	//{
+	//	if (m_TestMonster[i]) m_TestMonster[i]->RenderForShadow(pd3dCommandList);
+	//}
 
 	// 터레인
 	if (m_Terrain)
 	{
-		// m_pQuadtreeTerrain->RenderTerrainForShadow(pd3dCommandList, m_Terrain, m_pd3dCbvSrvDescriptorHeap);
 		m_pQuadtreeTerrain->RenderInstancingObjectsForShadow(pd3dCommandList);
-	}
-	
+	} 
+}
+
+void GameScene::RenderForPlayerShadow(ID3D12GraphicsCommandList * pd3dCommandList)
+{
+	//// 클라 화면 설정	
+	//if (m_isSkyMode)
+	//{
+
+	//}
+	//else
+	//{
+	//	m_pMainCamera->SetViewportsAndScissorRects(pd3dCommandList);
+	//	m_pMainCamera->GetCamera()->UpdateShaderVariables(pd3dCommandList, 1);
+	//	m_pMainCamera->GetCamera()->UpdateLightShaderVariablesForPlayer(pd3dCommandList, &LightManager::m_pLights->m_pLights[2]);
+	//}
+
+	//m_pPlayer->RenderForShadow(pd3dCommandList);
 }
 
 void GameScene::ReleaseUploadBuffers()

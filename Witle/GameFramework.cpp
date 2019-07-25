@@ -98,6 +98,12 @@ void CGameFramework::Render()
 			d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_Shadowmap, D3D12_RESOURCE_STATE_DEPTH_WRITE, D3D12_RESOURCE_STATE_GENERIC_READ);
 			// 쉐도우 맵을 그립니다.
 
+			// 플레이어 쉐도우 맵을 그립니다.
+			d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_PlayerShadowmap, D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_DEPTH_WRITE);
+			RenderOnRTs(&CGameFramework::RenderForPlayerShadow, 0, NULL, NULL, m_PlayerShadowmapCPUHandle);
+			d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_PlayerShadowmap, D3D12_RESOURCE_STATE_DEPTH_WRITE, D3D12_RESOURCE_STATE_GENERIC_READ);
+			// 쉐도우 맵을 그립니다.
+
 			// 조명처리된 화면을 그립니다.
 			RenderOnRT(&CGameFramework::RenderSwapChain, m_RenderTargetBuffers[m_SwapChainBufferIndex], m_SwapChainCPUHandle[m_SwapChainBufferIndex], m_DepthStencilCPUHandle);
 		}
@@ -447,12 +453,20 @@ void CGameFramework::CreateShadowmapView()
 		D3D12_RESOURCE_STATE_GENERIC_READ,
 		&optClear,
 		IID_PPV_ARGS(&m_Shadowmap)));
+
+	ThrowIfFailed(m_d3dDevice->CreateCommittedResource(
+		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
+		D3D12_HEAP_FLAG_NONE,
+		&texDesc,
+		D3D12_RESOURCE_STATE_GENERIC_READ,
+		&optClear,
+		IID_PPV_ARGS(&m_PlayerShadowmap)));
+	
 	//// 리소스 생성 /////////////////////////////////////////////////
 
 	// 디스크립터 생성 /////////////////////////////////////////////
 	m_ShadowmapHeap = new MyDescriptorHeap();
-	m_ShadowmapHeap->CreateCbvSrvUavDescriptorHeaps(m_d3dDevice.Get(), m_CommandList.Get(), 0, 1, 0);
-	m_hCpuSrvForShadow = m_ShadowmapHeap->GetCPUDescriptorHandleForHeapStart(); // 쉐이더 리소스 뷰
+	m_ShadowmapHeap->CreateCbvSrvUavDescriptorHeaps(m_d3dDevice.Get(), m_CommandList.Get(), 0, m_ShadowmapCount, 0);
 
 	 // Create SRV to resource so we can sample the shadow map in a shader program.
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
@@ -463,11 +477,17 @@ void CGameFramework::CreateShadowmapView()
 	srvDesc.Texture2D.MipLevels = 1;
 	srvDesc.Texture2D.ResourceMinLODClamp = 0.0f;
 	srvDesc.Texture2D.PlaneSlice = 0;
-	m_d3dDevice->CreateShaderResourceView(m_Shadowmap, &srvDesc, m_hCpuSrvForShadow);
 
-	m_hCpuDsvForShadow = m_DsvHeap->GetCPUDescriptorHandleForHeapStart();
-	m_hCpuDsvForShadow.ptr += d3dUtil::gnDsvDescriptorIncrementSize;
-	m_hCpuDsvForShadow.ptr += d3dUtil::gnDsvDescriptorIncrementSize;
+	auto hCpuSrvForShadow = m_ShadowmapHeap->GetCPUDescriptorHandleForHeapStart(); // 쉐이더 리소스 뷰
+	m_d3dDevice->CreateShaderResourceView(m_Shadowmap, &srvDesc, hCpuSrvForShadow);
+
+	hCpuSrvForShadow.ptr += d3dUtil::gnDsvDescriptorIncrementSize;
+	m_d3dDevice->CreateShaderResourceView(m_PlayerShadowmap, &srvDesc, hCpuSrvForShadow);
+	 
+	auto hCpuDsvForShadow = m_DsvHeap->GetCPUDescriptorHandleForHeapStart();
+	hCpuDsvForShadow.ptr += d3dUtil::gnDsvDescriptorIncrementSize;
+	hCpuDsvForShadow.ptr += d3dUtil::gnDsvDescriptorIncrementSize;
+	m_ShadowmapCPUHandle = hCpuDsvForShadow;
 
 	// Create DSV to resource so we can render to the shadow map.
 	D3D12_DEPTH_STENCIL_VIEW_DESC dsvDesc;
@@ -475,71 +495,14 @@ void CGameFramework::CreateShadowmapView()
 	dsvDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
 	dsvDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
 	dsvDesc.Texture2D.MipSlice = 0;
-	m_d3dDevice->CreateDepthStencilView(m_Shadowmap, &dsvDesc, m_hCpuDsvForShadow);
+	m_d3dDevice->CreateDepthStencilView(m_Shadowmap, &dsvDesc, m_ShadowmapCPUHandle);
 
-	m_ShadowmapCPUHandle = m_hCpuDsvForShadow;
-	// 디스크립터 생성 /////////////////////////////////////////////
-	  
+	hCpuDsvForShadow.ptr += d3dUtil::gnDsvDescriptorIncrementSize;
+	m_PlayerShadowmapCPUHandle = hCpuDsvForShadow;
+	m_d3dDevice->CreateDepthStencilView(m_PlayerShadowmap, &dsvDesc, m_PlayerShadowmapCPUHandle);
 	
-	//DXGI_FORMAT textureType = DXGI_FORMAT_R24_UNORM_X8_TYPELESS;
-	//D3D12_RESOURCE_FLAGS flag = D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;
-	// 
-	//// 해당 텍스쳐를 2디 텍스쳐로 만들어서 담는다.
-	//m_Shadowmap =
-	//	d3dUtil::CreateTexture2DResource(
-	//		m_d3dDevice.Get(), m_CommandList.Get(),
-	//		GameScreen::GetClientWidth(), GameScreen::GetClientHeight(),
-	//		textureType, 
-	//		flag,
-	//		D3D12_RESOURCE_STATE_DEPTH_WRITE, NULL
-	//);
-	//  
-	//// 렌더 타겟 뷰는 생성하지 않음
-
-	//// 쉐이더 리소스 뷰 생성
-	//if (!m_ShadowmapHeap)
-	//{
-	//	m_ShadowmapHeap = new MyDescriptorHeap;
-	//	m_ShadowmapHeap->CreateCbvSrvUavDescriptorHeaps(m_d3dDevice.Get(), m_CommandList.Get(), 0, m_ShadowmapCount, 0);
-	//	for (int i = 0; i < m_ShadowmapCount; ++i)
-	//	{
-	//		m_ShadowmapHeap->CreateShaderResourceViews(m_d3dDevice.Get(), m_CommandList.Get(), 
-	//			 m_Shadowmap, RESOURCE_TEXTURE2D, i, DXGI_FORMAT_R24_UNORM_X8_TYPELESS);
-	//	}
-	//}
-
-
-	//// Shadow Map ///////////////////////////////////////////////
-	//// 마찬가지로 쉐도우 맵은 깊이 스텐실 뷰
-
-	//D3D12_DEPTH_STENCIL_VIEW_DESC d3dDepthStencilViewDescForShadow;
-	//d3dDepthStencilViewDescForShadow.Format = DXGI_FORMAT_D24_UNORM_S8_UINT; // R16이 아니라 D16!
-	//d3dDepthStencilViewDescForShadow.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
-	//d3dDepthStencilViewDescForShadow.Texture2D.MipSlice = 0;
-	//d3dDepthStencilViewDescForShadow.Flags = D3D12_DSV_FLAG_READ_ONLY_DEPTH;
-
-	//ResourceDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
-
-
-	//D3D12_CLEAR_VALUE ClearValueForShadow;
-	//ClearValueForShadow.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
-	//ClearValueForShadow.DepthStencil.Depth = 1.0f;
-	//ClearValueForShadow.DepthStencil.Stencil = 0;
-
-	//m_ShadowmapCPUHandle = m_DepthStencilCPUHandle;
-	//m_ShadowmapCPUHandle.ptr += m_DsvDescriptorSize; // 3번째 깊이 스텐실 뷰.
-	//m_ShadowmapCPUHandle.ptr += m_DsvDescriptorSize; // 3번째 깊이 스텐실 뷰.
-
-	//// Shadow map 깊이 리소스 자원 생성
-	//m_d3dDevice->CreateCommittedResource(&HeapProperties, D3D12_HEAP_FLAG_NONE,
-	//	&ResourceDesc, D3D12_RESOURCE_STATE_DEPTH_READ, &ClearValueForShadow, IID_PPV_ARGS(&m_Shadowmap));
-
-	//m_d3dDevice->CreateDepthStencilView(m_Shadowmap, &d3dDepthStencilViewDescForShadow, m_ShadowmapCPUHandle);
-
-	//// 힙에 추가
-	//m_ShadowmapHeap->CreateShaderResourceViews(m_d3dDevice.Get(), m_CommandList.Get(), m_Shadowmap, RESOURCE_TEXTURE2D,
-	//	0, DXGI_FORMAT_R24_UNORM_X8_TYPELESS);
-
+	// 디스크립터 생성 /////////////////////////////////////////////
+	   
 }
 
 void CGameFramework::CreateCommandQueueAndList()
@@ -966,16 +929,26 @@ void CGameFramework::RenderShadowMap()
 	m_ShadowmapHeap->UpdateShaderVariable(m_CommandList.Get());
 
 	// 장면을 렌더합니다. 
-	D3D12_VIEWPORT	GBuffer_Viewport{ 0, height - anotherHeight, anotherWidth , anotherHeight, 1.0f, 0.0f };
-	D3D12_RECT		ScissorRect{ 0, height - anotherHeight, anotherWidth * (3 ) , height + anotherHeight };
+	auto handle = m_ShadowmapHeap->GetGPUDescriptorHandleForHeapStart();
 
-	m_CommandList->RSSetViewports(1, &GBuffer_Viewport);
-	m_CommandList->RSSetScissorRects(1, &ScissorRect);
+	// 장면을 렌더합니다.
+	for (int i = 0; i < m_ShadowmapCount; ++i)
+	{
+		D3D12_VIEWPORT	GBuffer_Viewport{ anotherWidth *  i, height - anotherHeight, anotherWidth , anotherHeight, 1.0f, 0.0f };
+		D3D12_RECT		ScissorRect{ anotherWidth * i, height - anotherHeight, anotherWidth * (3 + i) , height + anotherHeight };
 
-	m_CommandList->SetGraphicsRootDescriptorTable(ROOTPARAMETER_TEXTUREBASE, m_ShadowmapHeap->GetGPUDescriptorHandleForHeapStart());
+		m_CommandList->RSSetViewports(1, &GBuffer_Viewport);
+		m_CommandList->RSSetScissorRects(1, &ScissorRect);
 
-	m_CommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	m_CommandList->DrawInstanced(6, 1, 0, 0);
+		m_CommandList->SetGraphicsRootDescriptorTable(ROOTPARAMETER_TEXTUREBASE, handle);
+		handle.ptr += d3dUtil::gnCbvSrvDescriptorIncrementSize;
+
+		m_CommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+		m_CommandList->DrawInstanced(6, 1, 0, 0);
+
+	}
+	 
+	 
 }
 
 void CGameFramework::BuildShaders()
@@ -1228,6 +1201,14 @@ void CGameFramework::RenderForShadow()
 	{
 		m_SceneMgr->GetCurrScene()->RenderForShadow(m_CommandList.Get()); 
 	} 
+}
+
+void CGameFramework::RenderForPlayerShadow()
+{
+	if (m_SceneMgr->GetCurrScene())
+	{
+		m_SceneMgr->GetCurrScene()->RenderForPlayerShadow(m_CommandList.Get());
+	}
 }
 
 void CGameFramework::ComputeHDR()

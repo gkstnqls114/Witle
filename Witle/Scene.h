@@ -16,9 +16,16 @@ public:
 	virtual void ReleaseObjects() = 0;
 
 	// 화면에 그림을 그리는 함수.
-	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers) = 0;
-	virtual void RenderForShadow(ID3D12GraphicsCommandList *pd3dCommandList) = 0;
 	
+	// 포워드/디퍼드 렌더링을 isGBuffer를 통해 구분합니다.
+	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers) = 0;
+
+	// 그림자를 렌더링하기 위한 함수입니다.
+	virtual void RenderForShadow(ID3D12GraphicsCommandList *pd3dCommandList) = 0;
+
+	// 플레이어 그림자를 렌더링하기 위한 함수입니다.
+	virtual void RenderForPlayerShadow(ID3D12GraphicsCommandList *pd3dCommandList) = 0;
+
 	//// UpdateGamelogic ///////////////////////////////////
 
 	// GameFramework의 UpdateGamelogic 함수 내부에서 UpdatePhysics, AnimateObjects, LastUpdate 순으로 호출되는 함수. 
