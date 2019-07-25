@@ -91,11 +91,9 @@ private:
 
 
 	//// 컴퓨트 쉐이더를 위한 변수 ///////////////////////////////////////////
-
-	float	m_RWClearValue[4] = { 1.f, 0.f, 1.f, 0.f };
+	  
 	ID3D12Resource* m_ComputeRWResource; // 작성함 
-
-	const UINT m_UAVParameterIndex = 0;
+	 
 	D3D12_GPU_DESCRIPTOR_HANDLE m_UAVGPUDescriptorHandle;
 
 	// 블러를 위한 컴퓨트
@@ -182,9 +180,6 @@ private:
 
 	// GBuffer에 장면을 렌더링합니다.
 	void RenderOnGbuffer();
-
-	// 컴퓨터 쉐이더에 장면을 렌더링합니다.
-	void RenderOnCompute();
 	 
 	// 렌더했던 Gbuffer를 이용하여 렌더링합니다.
 	void DefferedRenderOnSwapchain();
