@@ -209,8 +209,8 @@ XMFLOAT4X4 Camera::GenerateLightProjectionMatrix(const LIGHT * light) const
 }
 
 void Camera::UpdateLightShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList, const LIGHT* light)
-{      
-	auto boundcenter = XMFLOAT3(15000, 0, 15000);
+{
+	XMFLOAT3 boundcenter = PlayerManager::GetMainPlayer()->GetTransform().GetPosition();
 	mSceneBounds = BoundingSphere { boundcenter, 17000 };
 	
 	// Only the first "main" light casts a shadow.
