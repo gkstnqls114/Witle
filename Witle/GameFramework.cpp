@@ -81,7 +81,11 @@ void CGameFramework::Render()
 		Blur();
 
 		// 텍스쳐를 그립니다.
+		// 블러링된 텍스쳐를 전환
+		d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_ComputeRWResource, D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_GENERIC_READ);
 		RenderOnRT(&CGameFramework::RenderToTexture, m_RenderTargetBuffers[m_SwapChainBufferIndex], m_SwapChainCPUHandle[m_SwapChainBufferIndex], m_DepthStencilCPUHandle);
+		d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_ComputeRWResource, D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_COMMON);
+
 	}
 
 	//// SwapChain에 Render //////////////////////////
@@ -632,7 +636,7 @@ void CGameFramework::CreateDepthStencilView()
 	m_d3dDevice->CreateDepthStencilView(m_GBuffersForDepth[0], &d3dDepthStencilViewDesc, m_GBufferCPUHandleForDepth[0]);
 	
 	// 힙에 추가
-	m_GBufferHeap->CreateShaderResourceViews(m_d3dDevice.Get(), m_CommandList.Get(), m_GBuffersForDepth[0], RESOURCE_TEXTURE2D, m_GBuffersCount + m_ShadowmapCount - 2/*마지막에서 두번째에 배치*/, DXGI_FORMAT_R24_UNORM_X8_TYPELESS);
+	m_GBufferHeap->CreateShaderResourceViews(m_d3dDevice.Get(), m_CommandList.Get(), m_GBuffersForDepth[0], RESOURCE_TEXTURE2D, m_GBufferForDepthIndex, DXGI_FORMAT_R24_UNORM_X8_TYPELESS);
 
 }
 
@@ -702,17 +706,21 @@ void CGameFramework::CreateGBufferView()
 	if (!m_GBufferHeap)
 	{
 		m_GBufferHeap = new MyDescriptorHeap();
-		m_GBufferHeap->CreateCbvSrvUavDescriptorHeaps(m_d3dDevice.Get(), m_CommandList.Get(), 0, m_GBuffersCount + m_ShadowmapCount /*쉐도우 맵도 추가하기 위해...*/, 1 /*blur 위해...*/);
+		m_GBufferHeap->CreateCbvSrvUavDescriptorHeaps(m_d3dDevice.Get(), m_CommandList.Get(), 0, m_GBufferHeapCount, 1 /*blur 위해...*/);
 		for (int i = 0; i < m_GBuffersCountForRenderTarget; ++i)
 		{
 			m_GBufferHeap->CreateShaderResourceViews(m_d3dDevice.Get(), m_CommandList.Get(), m_GBuffersCountForRenderTarget, m_GBuffersForRenderTarget[i], RESOURCE_TEXTURE2D, i);
 		} 
 
 		// 쉐도우 맵도 힙에 추가한다...!!!
-		m_GBufferHeap->CreateShaderResourceViews(m_d3dDevice.Get(), m_CommandList.Get(), m_Shadowmap, RESOURCE_TEXTURE2D, m_GBuffersCount + m_ShadowmapCount - 1/*맨 마지막에 배치*/, DXGI_FORMAT_R24_UNORM_X8_TYPELESS);
+		m_GBufferHeap->CreateShaderResourceViews(m_d3dDevice.Get(), m_CommandList.Get(), m_Shadowmap, RESOURCE_TEXTURE2D, m_GBufferForShadowIndex, DXGI_FORMAT_R24_UNORM_X8_TYPELESS);
+
+		auto resourceDesc = m_ComputeRWResource->GetDesc();
+
+		// 블러할 uav 를 srv로 힙에 추가
+		m_GBufferHeap->CreateShaderResourceViews(m_d3dDevice.Get(), m_CommandList.Get(), m_ComputeRWResource, RESOURCE_TEXTURE2D, m_GBufferForUAV, resourceDesc.Format);
 
 		// 블러를 할 uav도 힙에 추가한다...
-		auto resourceDesc = m_ComputeRWResource->GetDesc();
 		m_GBufferHeap->CreateUnorderedAccessViews(m_d3dDevice.Get(), m_CommandList.Get(), m_ComputeRWResource, RESOURCE_TEXTURE2D, 1, resourceDesc.Format);
 	} 
 }
@@ -1183,6 +1191,7 @@ void CGameFramework::RenderToTexture()
 
 	//// 리소스만 바꾼다.. 
 	D3D12_GPU_DESCRIPTOR_HANDLE handle = m_GBufferHeap->GetGPUDescriptorHandleForHeapStart(); // 0번째 리소스
+	handle.ptr = handle.ptr + d3dUtil::gnCbvSrvDescriptorIncrementSize * (m_GBufferForUAV);
 
 	D3D12_VIEWPORT	Viewport{ 0.f, 0.f, GameScreen::GetWidth() , GameScreen::GetHeight(), 1.0f, 0.0f };
 	D3D12_RECT		ScissorRect{ 0, 0, GameScreen::GetWidth() , GameScreen::GetHeight() };

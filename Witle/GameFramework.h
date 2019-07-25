@@ -79,6 +79,10 @@ private:
 	ID3D12Resource*				m_Shadowmap;
 	D3D12_CPU_DESCRIPTOR_HANDLE m_ShadowmapCPUHandle;
 
+	UINT m_GBufferHeapCount{ m_GBuffersCount + m_ShadowmapCount + 1 /*uav*/};
+	UINT m_GBufferForDepthIndex = m_GBufferHeapCount - 3;
+	UINT m_GBufferForUAV = m_GBufferHeapCount - 2;
+	UINT m_GBufferForShadowIndex = m_GBufferHeapCount - 1;
 	MyDescriptorHeap* m_GBufferHeap{ nullptr }; // GBuffer 뿐만 아니라 Shadow도 담습니다.
 	MyDescriptorHeap* m_ShadowmapHeap{ nullptr }; 
 
@@ -93,9 +97,7 @@ private:
 	//// 컴퓨트 쉐이더를 위한 변수 ///////////////////////////////////////////
 	  
 	ID3D12Resource* m_ComputeRWResource; // 작성함 
-	 
-	D3D12_GPU_DESCRIPTOR_HANDLE m_UAVGPUDescriptorHandle;
-
+	  
 	// 블러를 위한 컴퓨트
 	HorizonBlurShader* m_horizenShader{ nullptr };
 	VerticalBlurShader* m_verticalShader{ nullptr };
