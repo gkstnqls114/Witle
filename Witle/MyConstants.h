@@ -108,7 +108,7 @@ enum LIGHT_TYPE
 
 
 //// Root Parameter Index /////////////////////////////////////////// 
-#define ROOTPATAMETER_COUNT 24
+#define ROOTPATAMETER_COUNT 25
 
 const UINT ROOTPARAMETER_WORLD = 0;
 const UINT ROOTPARAMETER_CAMERA = 1;
@@ -134,6 +134,7 @@ const UINT ROOTPARAMETER_TIME = 20;
 const UINT ROOTPARAMETER_SHADOWTEXTURE = 21;
 const UINT ROOTPARAMETER_LIGHTFORSHADOW = 22;
 const UINT ROOTPARAMETER_READWRITE = 23;
+const UINT ROOTPARAMETER_PLAYERSHADOWTEXTURE = 24;
 
 
 //// Root Parameter Index /////////////////////////////////////////// 

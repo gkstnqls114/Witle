@@ -21,6 +21,7 @@
 //// GameObject header //////////////////////////
 
 //// 매니저 관련 헤더 //////////////////////////
+#include "MainCameraMgr.h"
 #include "GraphicsRootSignatureMgr.h"
 #include "MonsterTransformStorage.h"
 #include "ModelStorage.h"
@@ -282,9 +283,8 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 {
 	BuildLightsAndMaterials(pd3dDevice, pd3dCommandList);
 
-
 	// 디스크립터 힙 설정
-	GameScene::CreateCbvSrvDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 4);
+	GameScene::CreateCbvSrvDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 5);
 	 
 	m_AimPoint = new AimPoint("AimPoint", pd3dDevice, pd3dCommandList, POINT{ int(GameScreen::GetWidth()) / 2, int(GameScreen::GetHeight()) / 2 }, 100.f, 100.f, L"Image/AimPoint.dds");
 	// m_WideareaMagic = new WideareaMagic(pd3dDevice, pd3dCommandList);
@@ -1021,10 +1021,9 @@ void GameScene::RenderForShadow(ID3D12GraphicsCommandList * pd3dCommandList)
 	{
 		m_pMainCamera->SetViewportsAndScissorRects(pd3dCommandList);
 		m_pMainCamera->GetCamera()->UpdateShaderVariables(pd3dCommandList, 1);
-		m_pMainCamera->GetCamera()->UpdateLightShaderVariables(pd3dCommandList, &LightManager::m_pLights->m_pLights[2]);
+		m_pMainCamera->GetCamera()->UpdateLightShaderVariablesForPlayer(pd3dCommandList, &LightManager::m_pLights->m_pLights[2]);
 	}
 
-	m_pPlayer->RenderForShadow(pd3dCommandList);
 	//// 렌더링
 	//extern MeshRenderer gMeshRenderer;
 	// 
@@ -1054,19 +1053,23 @@ void GameScene::RenderForShadow(ID3D12GraphicsCommandList * pd3dCommandList)
 
 void GameScene::RenderForPlayerShadow(ID3D12GraphicsCommandList * pd3dCommandList)
 {
-	//// 클라 화면 설정	
-	//if (m_isSkyMode)
-	//{
+	// 클라 화면 설정	
+	if (m_isSkyMode)
+	{
 
-	//}
-	//else
-	//{
-	//	m_pMainCamera->SetViewportsAndScissorRects(pd3dCommandList);
-	//	m_pMainCamera->GetCamera()->UpdateShaderVariables(pd3dCommandList, 1);
-	//	m_pMainCamera->GetCamera()->UpdateLightShaderVariablesForPlayer(pd3dCommandList, &LightManager::m_pLights->m_pLights[2]);
-	//}
+	}
+	else
+	{
+		MainCameraMgr::GetMainCamera()->GetCamera()->SetViewportsAndScissorRects(pd3dCommandList);
+		MainCameraMgr::GetMainCamera()->GetCamera()->UpdateShaderVariables(pd3dCommandList, 1);
+		MainCameraMgr::GetMainCamera()->GetCamera()->UpdateLightShaderVariablesForPlayer(pd3dCommandList, &LightManager::m_pLights->m_pLights[2]);
+	}
 
-	//m_pPlayer->RenderForShadow(pd3dCommandList);
+	m_pPlayer->RenderForShadow(pd3dCommandList);
+	if (m_Terrain)
+	{
+		m_pQuadtreeTerrain->RenderInstancingObjectsForShadow(pd3dCommandList);
+	}
 }
 
 void GameScene::ReleaseUploadBuffers()

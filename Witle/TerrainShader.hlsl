@@ -73,12 +73,13 @@ float4 PSTerrain(VS_TERRAIN_OUTPUT input) : SV_TARGET
     //    fShadowFactor = 1.f; // 그림자가 아님
     ////// 그림자 계산 1 ...
       
-    float fShadowFactor = CalcShadowFactor(shadowPosition);
+    float fShadowFactor = CalcShadowFactor(shadowPosition); 
+    float fPlayerShadowFactor = CalcPlayerShadowFactor(shadowPosition);
     
     // 현재 바닥이 그냥 위를 바라보고 있으므로...
     float3 normalW = float3(0.0, 1.0, 0.0);
 
-    float4 cllumination = Lighting(input.positionW.xyz, normalW, fShadowFactor);
+    float4 cllumination = Lighting(input.positionW.xyz, normalW, fPlayerShadowFactor);
      
     finalColor = lerp(finalColor, cllumination, 0.5f);
     

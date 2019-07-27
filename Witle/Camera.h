@@ -33,7 +33,7 @@ private:
 	};
 
 	MyFrustum*   m_pFrustum{ nullptr };
-	BoundingSphere mSceneBounds;
+	// BoundingSphere mSceneBounds;
 
 	float m_fNearPlaneDistance;
 	float m_fFarPlaneDistance;

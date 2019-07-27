@@ -22,17 +22,19 @@ ID3D12RootSignature * GraphicsRootSignatureMgr::CreateGraphicsRootSignature(ID3D
 	pRootParameters[ROOTPARAMETER_TIME] = d3dUtil::CreateRootParameterConstants(1, 6);  // b6: Elapsed Time
 	pRootParameters[ROOTPARAMETER_LIGHTFORSHADOW] = d3dUtil::CreateRootParameterCBV(9);          // b9: Light Info For Shadow
 
-	D3D12_DESCRIPTOR_RANGE pTextureDescriptorRanges[4];
+	D3D12_DESCRIPTOR_RANGE pTextureDescriptorRanges[5];
 	pTextureDescriptorRanges[0] = d3dUtil::CreateDescriptorRangeSRV(1, 0); //t0: gtxtTexture
 	pTextureDescriptorRanges[1] = d3dUtil::CreateDescriptorRangeSRV(1, 1); //t1: gtxtTerrainBaseTexture
 	pTextureDescriptorRanges[2] = d3dUtil::CreateDescriptorRangeSRV(1, 2); //t2: gtxtTerrainDetailTexture	
 	pTextureDescriptorRanges[3] = d3dUtil::CreateDescriptorRangeSRV(1, 3); //t3: gtxtShadow	
+	pTextureDescriptorRanges[4] = d3dUtil::CreateDescriptorRangeSRV(1, 4); //t4: gtxtShadow	
 	 
 	// 다시 루프 패러미터 
 	pRootParameters[ROOTPARAMETER_TEXTURE] = d3dUtil::CreateRootParameterTable(1, &pTextureDescriptorRanges[0], D3D12_SHADER_VISIBILITY_ALL);
 	pRootParameters[ROOTPARAMETER_TEXTUREBASE] = d3dUtil::CreateRootParameterTable(1, &pTextureDescriptorRanges[1], D3D12_SHADER_VISIBILITY_ALL);
 	pRootParameters[ROOTPARAMETER_TEXTUREDETAIL] = d3dUtil::CreateRootParameterTable(1, &pTextureDescriptorRanges[2], D3D12_SHADER_VISIBILITY_ALL);
 	pRootParameters[ROOTPARAMETER_SHADOWTEXTURE] = d3dUtil::CreateRootParameterTable(1, &pTextureDescriptorRanges[3], D3D12_SHADER_VISIBILITY_PIXEL);
+	pRootParameters[ROOTPARAMETER_PLAYERSHADOWTEXTURE] = d3dUtil::CreateRootParameterTable(1, &pTextureDescriptorRanges[4], D3D12_SHADER_VISIBILITY_PIXEL);
 
 	D3D12_DESCRIPTOR_RANGE pd3dDescriptorRanges[8];
 	pd3dDescriptorRanges[0] = d3dUtil::CreateDescriptorRangeSRV(1, 6);  //t6: gtxtAlbedoTexture

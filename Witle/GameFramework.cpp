@@ -98,11 +98,11 @@ void CGameFramework::Render()
 			d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_Shadowmap, D3D12_RESOURCE_STATE_DEPTH_WRITE, D3D12_RESOURCE_STATE_GENERIC_READ);
 			// 쉐도우 맵을 그립니다.
 
-			// 플레이어 쉐도우 맵을 그립니다.
-			d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_PlayerShadowmap, D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_DEPTH_WRITE);
-			RenderOnRTs(&CGameFramework::RenderForPlayerShadow, 0, NULL, NULL, m_PlayerShadowmapCPUHandle);
-			d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_PlayerShadowmap, D3D12_RESOURCE_STATE_DEPTH_WRITE, D3D12_RESOURCE_STATE_GENERIC_READ);
-			// 쉐도우 맵을 그립니다.
+			//// 플레이어 쉐도우 맵을 그립니다.
+			//d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_PlayerShadowmap, D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_DEPTH_WRITE);
+			//RenderOnRTs(&CGameFramework::RenderForPlayerShadow, 0, NULL, NULL, m_PlayerShadowmapCPUHandle);
+			//d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_PlayerShadowmap, D3D12_RESOURCE_STATE_DEPTH_WRITE, D3D12_RESOURCE_STATE_GENERIC_READ);
+			//// 쉐도우 맵을 그립니다.
 
 			// 조명처리된 화면을 그립니다.
 			RenderOnRT(&CGameFramework::RenderSwapChain, m_RenderTargetBuffers[m_SwapChainBufferIndex], m_SwapChainCPUHandle[m_SwapChainBufferIndex], m_DepthStencilCPUHandle);
@@ -478,16 +478,18 @@ void CGameFramework::CreateShadowmapView()
 	srvDesc.Texture2D.ResourceMinLODClamp = 0.0f;
 	srvDesc.Texture2D.PlaneSlice = 0;
 
-	auto hCpuSrvForShadow = m_ShadowmapHeap->GetCPUDescriptorHandleForHeapStart(); // 쉐이더 리소스 뷰
+	auto hCpuSrvForShadow = m_ShadowmapHeap->GetCPUDescriptorHandleForHeapStart(); // 쉐이더 리소스 뷰 
 	m_d3dDevice->CreateShaderResourceView(m_Shadowmap, &srvDesc, hCpuSrvForShadow);
 
 	hCpuSrvForShadow.ptr += d3dUtil::gnDsvDescriptorIncrementSize;
-	m_d3dDevice->CreateShaderResourceView(m_PlayerShadowmap, &srvDesc, hCpuSrvForShadow);
+	m_d3dDevice->CreateShaderResourceView(m_PlayerShadowmap, &srvDesc, hCpuSrvForShadow); 
 	 
-	auto hCpuDsvForShadow = m_DsvHeap->GetCPUDescriptorHandleForHeapStart();
-	hCpuDsvForShadow.ptr += d3dUtil::gnDsvDescriptorIncrementSize;
-	hCpuDsvForShadow.ptr += d3dUtil::gnDsvDescriptorIncrementSize;
+	auto hCpuDsvForShadow = m_DsvHeap->GetCPUDescriptorHandleForHeapStart(); // 0: 기본 depth stencil
+	hCpuDsvForShadow.ptr += d3dUtil::gnDsvDescriptorIncrementSize; // 1: gbuffer detph
+	hCpuDsvForShadow.ptr += d3dUtil::gnDsvDescriptorIncrementSize; // 2: Shadow
 	m_ShadowmapCPUHandle = hCpuDsvForShadow;
+	hCpuDsvForShadow.ptr += d3dUtil::gnDsvDescriptorIncrementSize; // 3:Player Shaodw
+	m_PlayerShadowmapCPUHandle = hCpuDsvForShadow;
 
 	// Create DSV to resource so we can render to the shadow map.
 	D3D12_DEPTH_STENCIL_VIEW_DESC dsvDesc;
@@ -497,8 +499,6 @@ void CGameFramework::CreateShadowmapView()
 	dsvDesc.Texture2D.MipSlice = 0;
 	m_d3dDevice->CreateDepthStencilView(m_Shadowmap, &dsvDesc, m_ShadowmapCPUHandle);
 
-	hCpuDsvForShadow.ptr += d3dUtil::gnDsvDescriptorIncrementSize;
-	m_PlayerShadowmapCPUHandle = hCpuDsvForShadow;
 	m_d3dDevice->CreateDepthStencilView(m_PlayerShadowmap, &dsvDesc, m_PlayerShadowmapCPUHandle);
 	
 	// 디스크립터 생성 /////////////////////////////////////////////
@@ -693,6 +693,9 @@ void CGameFramework::CreateGBufferView()
 		// 쉐도우 맵도 힙에 추가한다...!!!
 		m_GBufferHeap->CreateShaderResourceViews(m_d3dDevice.Get(), m_CommandList.Get(), m_Shadowmap, RESOURCE_TEXTURE2D, m_GBufferForShadowIndex, DXGI_FORMAT_R24_UNORM_X8_TYPELESS);
 
+		// 쉐도우 맵도 힙에 추가한다...!!!
+		m_GBufferHeap->CreateShaderResourceViews(m_d3dDevice.Get(), m_CommandList.Get(), m_PlayerShadowmap, RESOURCE_TEXTURE2D, m_GBufferForPlayerShadowIndex, DXGI_FORMAT_R24_UNORM_X8_TYPELESS);
+
 		auto resourceDesc = m_ComputeRWResource->GetDesc();
 
 		// 블러할 uav 를 srv로 힙에 추가
@@ -725,7 +728,8 @@ void CGameFramework::BuildObjects()
 	m_SceneMgr->BuildObjects(m_d3dDevice.Get(), m_CommandList.Get());
 
 	// 터레인을 위한 쉐도우 맵과 텍스쳐 연결하는 디스크립터 힙 생성...
-	GameScene::CreateShaderResourceViewsForShadow(m_d3dDevice.Get(), m_Shadowmap, ROOTPARAMETER_SHADOWTEXTURE, false, 3); 
+	GameScene::CreateShaderResourceViewsForShadow(m_d3dDevice.Get(), m_Shadowmap, ROOTPARAMETER_SHADOWTEXTURE, false, 3);
+	GameScene::CreateShaderResourceViewsForShadow(m_d3dDevice.Get(), m_PlayerShadowmap, ROOTPARAMETER_PLAYERSHADOWTEXTURE, false, 4);
 	// 순서 변경 X /////////////
 
 
