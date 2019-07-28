@@ -106,9 +106,6 @@
     <Filter Include="06.ComputeShader">
       <UniqueIdentifier>{7769c5e9-5d6f-49a5-ba85-21c9bd1660b4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="99.etc\Collider">
-      <UniqueIdentifier>{e42b872b-d74d-4d65-862f-295508e73de7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="99.etc\Collision">
       <UniqueIdentifier>{08871af7-7e49-4250-9196-1ced0dbcb5b1}</UniqueIdentifier>
     </Filter>
@@ -459,6 +456,12 @@
     </Filter>
     <Filter Include="03.GameObject\06.SkillEffect\HealingEffect">
       <UniqueIdentifier>{3c185763-7633-4d13-83d3-4c3657aadc60}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="99.etc\NewFilter1">
+      <UniqueIdentifier>{c0fba754-fa84-4091-8706-3db3ed6bc4b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\03.Mesh\03.EffectMesh">
+      <UniqueIdentifier>{f7a7015b-d365-4d19-9d32-b7ccda861e33}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -942,6 +945,9 @@
     <ClInclude Include="HealingEffect.h">
       <Filter>03.GameObject\06.SkillEffect\HealingEffect</Filter>
     </ClInclude>
+    <ClInclude Include="EffectMesh.h">
+      <Filter>02.Component\03.Mesh\03.EffectMesh</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1402,6 +1408,9 @@
     </ClCompile>
     <ClCompile Include="HealingEffect.cpp">
       <Filter>03.GameObject\06.SkillEffect\HealingEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="EffectMesh.cpp">
+      <Filter>02.Component\03.Mesh\03.EffectMesh</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

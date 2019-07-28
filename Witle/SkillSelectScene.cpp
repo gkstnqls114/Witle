@@ -15,7 +15,8 @@
 
 MyDescriptorHeap* SkillSelectScene::m_pHeap{ nullptr };
 Texture* SkillSelectScene::m_pTexture{ nullptr };
-int SkillSelectScene::m_SelectedIndex[SKILL_SELECTED]{ 0, 1, 2, 3 }; // 선택된 네 개의 인덱스들. 기본으로 0 1 2 3으로 설정
+int SkillSelectScene::m_SelectedIndex[SKILL_SELECTED]
+{ ENUM_SKILL::SKILL_SHIELD, ENUM_SKILL::SKILL_BLESSING, ENUM_SKILL::SKILL_HEALING, ENUM_SKILL::SKILL_FIREBALL }; // 선택된 네 개의 인덱스들. 기본으로 0 1 2 3으로 설정
 
 SkillSelectScene::SkillSelectScene()
 {

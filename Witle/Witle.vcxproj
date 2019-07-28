@@ -158,6 +158,7 @@
     <ClInclude Include="Avoidance.h" />
     <ClInclude Include="BallEffect.h" />
     <ClInclude Include="BasicCam.h" />
+    <ClInclude Include="EffectMesh.h" />
     <ClInclude Include="HealingEffect.h" />
     <ClInclude Include="BlessingEffect.h" />
     <ClInclude Include="BossIdleAction.h" />
@@ -320,6 +321,7 @@
     <ClCompile Include="Avoidance.cpp" />
     <ClCompile Include="BallEffect.cpp" />
     <ClCompile Include="BasicCam.cpp" />
+    <ClCompile Include="EffectMesh.cpp" />
     <ClCompile Include="HealingEffect.cpp" />
     <ClCompile Include="BlessingEffect.cpp" />
     <ClCompile Include="BossIdleAction.cpp" />

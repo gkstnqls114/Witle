@@ -1,7 +1,7 @@
 #pragma once
 #include "SkillEffect.h"
 
-class SphereMesh;
+class EffectMesh;
 class Movement;
 class MyBSphere;
 
@@ -17,7 +17,7 @@ protected:
 	virtual void ReleaseMemberUploadBuffers() override;
 
 private:
-	SphereMesh* m_HealingEffectMesh{ nullptr };
+	EffectMesh* m_HealingEffectMesh{ nullptr };
 
 public:
 	HealingEffect(const std::string& entityID, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
