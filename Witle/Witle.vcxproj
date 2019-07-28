@@ -158,6 +158,8 @@
     <ClInclude Include="Avoidance.h" />
     <ClInclude Include="BallEffect.h" />
     <ClInclude Include="BasicCam.h" />
+    <ClInclude Include="HealingEffect.h" />
+    <ClInclude Include="BlessingEffect.h" />
     <ClInclude Include="BossIdleAction.h" />
     <ClInclude Include="BossMoveAction.h" />
     <ClInclude Include="BossSampleAction_1.h" />
@@ -172,6 +174,7 @@
     <ClInclude Include="HitAction.h" />
     <ClInclude Include="GraphicsRootSignatureMgr.h" />
     <ClInclude Include="IceBall.h" />
+    <ClInclude Include="ShieldEffect.h" />
     <ClInclude Include="SkillStg.h" />
     <ClInclude Include="SceneMgr.h" />
     <ClInclude Include="SkillIconShader.h" />
@@ -317,6 +320,8 @@
     <ClCompile Include="Avoidance.cpp" />
     <ClCompile Include="BallEffect.cpp" />
     <ClCompile Include="BasicCam.cpp" />
+    <ClCompile Include="HealingEffect.cpp" />
+    <ClCompile Include="BlessingEffect.cpp" />
     <ClCompile Include="BossIdleAction.cpp" />
     <ClCompile Include="BossMoveAction.cpp" />
     <ClCompile Include="BossSampleAction_1.cpp" />
@@ -361,6 +366,7 @@
     <ClCompile Include="InstancingLineShader.cpp" />
     <ClCompile Include="InstancingStandardShader.cpp" />
     <ClCompile Include="SceneMgr.cpp" />
+    <ClCompile Include="ShieldEffect.cpp" />
     <ClCompile Include="SkillIconShader.cpp" />
     <ClCompile Include="SkillSelectScene.cpp" />
     <ClCompile Include="SkillStg.cpp" />

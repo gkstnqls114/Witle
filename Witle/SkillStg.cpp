@@ -5,6 +5,9 @@
 #include "FireBall.h"
 #include "IceBall.h"
 #include "LightningBall.h" 
+#include "ShieldEffect.h"
+#include "HealingEffect.h"
+#include "BlessingEffect.h"
 // Skill Effect ฐüทร ////////////////////////////
 
 #include "SkillStg.h"
@@ -21,16 +24,16 @@ SkillStg::~SkillStg()
 
 void SkillStg::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList)
 {
-	skillEffect[0] = new FireBall("FireBall", pd3dDevice, pd3dCommandList);
-	skillEffect[1] = new IceBall("IceBall", pd3dDevice, pd3dCommandList);
-	skillEffect[2] = new LightningBall("LightingBall", pd3dDevice, pd3dCommandList);
+	skillEffect[ENUM_SKILL::SKILL_FIREBALL] = new FireBall("FireBall", pd3dDevice, pd3dCommandList);
+	skillEffect[ENUM_SKILL::SKILL_ICEBALL] = new IceBall("IceBall", pd3dDevice, pd3dCommandList);
+	skillEffect[ENUM_SKILL::SKILL_LIGHTNINGBALL] = new LightningBall("LightingBall", pd3dDevice, pd3dCommandList);
 
-	skillEffect[3] = new FireBall("FireBall", pd3dDevice, pd3dCommandList);
-	skillEffect[4] = new IceBall("FireBall", pd3dDevice, pd3dCommandList);
-	skillEffect[5] = new LightningBall("FireBall", pd3dDevice, pd3dCommandList);
+	skillEffect[ENUM_SKILL::SKILL_SHIELD] = new ShieldEffect("Shield", pd3dDevice, pd3dCommandList);
+	skillEffect[ENUM_SKILL::SKILL_BLESSING] = new BlessingEffect("Blessing", pd3dDevice, pd3dCommandList);
+	skillEffect[ENUM_SKILL::SKILL_HEALING] = new HealingEffect("Healing", pd3dDevice, pd3dCommandList);
 
-	skillEffect[6] = new FireBall("FireBall", pd3dDevice, pd3dCommandList);
-	skillEffect[7] = new IceBall("FireBall", pd3dDevice, pd3dCommandList); 
+	skillEffect[ENUM_SKILL::SKILL_METEOR] = new FireBall("FireBall", pd3dDevice, pd3dCommandList);
+	skillEffect[ENUM_SKILL::SKILL_ICESPEAR] = new IceBall("FireBall", pd3dDevice, pd3dCommandList);
 }
 
 void SkillStg::ReleaseUploadBuffers()

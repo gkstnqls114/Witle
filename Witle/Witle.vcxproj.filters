@@ -451,6 +451,15 @@
     <Filter Include="05.Shader\02.GraphicsShader\ShadowShader\PlayerShadowSkinnedShader">
       <UniqueIdentifier>{183b1c6d-0866-4823-9c7a-1a36c0bff9b0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.GameObject\06.SkillEffect\ShieldEffect">
+      <UniqueIdentifier>{6977ff69-7c83-456e-9374-8e832b2bc239}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameObject\06.SkillEffect\BlessingEffect">
+      <UniqueIdentifier>{3475d845-c517-475d-9ce5-d4a809e3936a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameObject\06.SkillEffect\HealingEffect">
+      <UniqueIdentifier>{3c185763-7633-4d13-83d3-4c3657aadc60}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -924,6 +933,15 @@
     <ClInclude Include="PlayerShadowSkinnedShader.h">
       <Filter>05.Shader\02.GraphicsShader\ShadowShader\PlayerShadowSkinnedShader</Filter>
     </ClInclude>
+    <ClInclude Include="ShieldEffect.h">
+      <Filter>03.GameObject\06.SkillEffect\ShieldEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="BlessingEffect.h">
+      <Filter>03.GameObject\06.SkillEffect\BlessingEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="HealingEffect.h">
+      <Filter>03.GameObject\06.SkillEffect\HealingEffect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1375,6 +1393,15 @@
     </ClCompile>
     <ClCompile Include="PlayerShadowSkinnedShader.cpp">
       <Filter>05.Shader\02.GraphicsShader\ShadowShader\PlayerShadowSkinnedShader</Filter>
+    </ClCompile>
+    <ClCompile Include="ShieldEffect.cpp">
+      <Filter>03.GameObject\06.SkillEffect\ShieldEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="BlessingEffect.cpp">
+      <Filter>03.GameObject\06.SkillEffect\BlessingEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="HealingEffect.cpp">
+      <Filter>03.GameObject\06.SkillEffect\HealingEffect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
