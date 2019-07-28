@@ -41,6 +41,7 @@
 
 // 쉐이더 이름들
 
+#define SHADER_CUBE "Cube"
 #define SHADER_TERRAIN "Terrain"
 #define SHADER_SCREEN "Screen"
 #define SHADER_PICKINGPOINT "PikcingPoint"
@@ -54,3 +55,5 @@
 #define SHADER_TERRAIN_FORSHADOW "TerrainForShadow" 
 #define SHADER_SKILLICON "SkillIcon"
 #define SHADER_EFFECTMESH "EffectMesh"
+#define SHADER_BLENDMESH "BlendMeshShader"
+

@@ -723,6 +723,8 @@ void CGameFramework::BuildObjects()
 	
 	///////////////////////////////////////////////////////////////////////////// 리소스 생성
 	GraphicsRootSignatureMgr::BuildObject(m_d3dDevice.Get()); // 루트 시그니처 먼저 생성
+	BuildShaders(); // 생성된 루트 시그니처를 사용하는 쉐이더 생성
+	
 	SkillStg::GetInstance()->BuildObjects(m_d3dDevice.Get(), m_CommandList.Get()); // 스킬 이펙트 생성
 
 	m_SceneMgr = new SceneMgr; 
@@ -732,7 +734,6 @@ void CGameFramework::BuildObjects()
 	TextureStorage::GetInstance()->CreateTextures(m_d3dDevice.Get(), m_CommandList.Get());
 	ModelStorage::GetInstance()->CreateModels(m_d3dDevice.Get(), m_CommandList.Get(), GraphicsRootSignatureMgr::GetGraphicsRootSignature());
 	   
-	BuildShaders();
 	 
 	m_SceneMgr->BuildObjects(m_d3dDevice.Get(), m_CommandList.Get());
 

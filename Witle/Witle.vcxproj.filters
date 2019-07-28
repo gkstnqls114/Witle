@@ -463,6 +463,9 @@
     <Filter Include="02.Component\03.Mesh\03.EffectMesh">
       <UniqueIdentifier>{f7a7015b-d365-4d19-9d32-b7ccda861e33}</UniqueIdentifier>
     </Filter>
+    <Filter Include="05.Shader\02.GraphicsShader\BlendMeshShader">
+      <UniqueIdentifier>{52402bfb-bbf0-480b-80b4-923ccd7b3f4f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -948,6 +951,9 @@
     <ClInclude Include="EffectMesh.h">
       <Filter>02.Component\03.Mesh\03.EffectMesh</Filter>
     </ClInclude>
+    <ClInclude Include="BlendMeshShader.h">
+      <Filter>05.Shader\02.GraphicsShader\BlendMeshShader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1411,6 +1417,9 @@
     </ClCompile>
     <ClCompile Include="EffectMesh.cpp">
       <Filter>02.Component\03.Mesh\03.EffectMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="BlendMeshShader.cpp">
+      <Filter>05.Shader\02.GraphicsShader\BlendMeshShader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

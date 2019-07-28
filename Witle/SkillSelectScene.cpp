@@ -202,7 +202,7 @@ void SkillSelectScene::FinishSkillSelect()
 {
 	for (int x = 0; x < SKILL_SELECTED; ++x)
 	{
-		PlayerSkillMgr::GetInstance()->SetSkillEffect(SkillStg::GetInstance()->GetSkillEffect(x), x);
+		PlayerSkillMgr::GetInstance()->SetSkillEffect(SkillStg::GetInstance()->GetSkillEffect(m_SelectedIndex[x]), x);
 	}
 }
 
