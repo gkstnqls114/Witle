@@ -21,6 +21,7 @@ ID3D12RootSignature * GraphicsRootSignatureMgr::CreateGraphicsRootSignature(ID3D
 	pRootParameters[ROOTPARAMETER_HPPERCENTAGE] = d3dUtil::CreateRootParameterConstants(1, 5);  // b5: HP percentage
 	pRootParameters[ROOTPARAMETER_TIME] = d3dUtil::CreateRootParameterConstants(1, 6);  // b6: Elapsed Time
 	pRootParameters[ROOTPARAMETER_LIGHTFORSHADOW] = d3dUtil::CreateRootParameterCBV(9);          // b9: Light Info For Shadow
+	pRootParameters[ROOTPARAMETER_PLAYER_LIGHTFORSHADOW] = d3dUtil::CreateRootParameterCBV(10);          // b10: Player Light Info For Shadow
 
 	D3D12_DESCRIPTOR_RANGE pTextureDescriptorRanges[5];
 	pTextureDescriptorRanges[0] = d3dUtil::CreateDescriptorRangeSRV(1, 0); //t0: gtxtTexture

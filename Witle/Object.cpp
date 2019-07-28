@@ -10,6 +10,8 @@
 #include "SkinnedShaderForShadow.h"
 #include "StandardShaderForShadow.h" 
 #include "Object.h"
+#include "PlayerShadowStandardShader.h"
+#include "PlayerShadowSkinnedShader.h"
 #include "Scene.h"
 
 
@@ -157,6 +159,9 @@ Shader *CMaterial::m_pSkinnedAnimationWireFrameShader = NULL;
 Shader					*CMaterial::m_pWireFrameShader_ForShadow{ NULL };
 Shader					*CMaterial::m_pSkinnedShader_ForShadow{ NULL };
 
+Shader					*CMaterial::m_pWireFrameShader_ForPlayerShadow{ NULL };
+Shader					*CMaterial::m_pSkinnedShader_ForPlayerShadow{ NULL };
+
 void CMaterial::ReleaseShaders()
 {
 	if (m_pWireFrameShader)
@@ -187,6 +192,12 @@ void CMaterial::PrepareShaders(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandLi
 	 
 	m_pSkinnedShader_ForShadow = new SkinnedShaderForShadow();
 	m_pSkinnedShader_ForShadow->CreateShader(pd3dDevice, pd3dGraphicsRootSignature);
+	 
+	m_pWireFrameShader_ForPlayerShadow = new PlayerShadowStandardShader();
+	m_pWireFrameShader_ForPlayerShadow->CreateShader(pd3dDevice, pd3dGraphicsRootSignature);
+
+	m_pSkinnedShader_ForPlayerShadow = new PlayerShadowSkinnedShader();
+	m_pSkinnedShader_ForPlayerShadow->CreateShader(pd3dDevice, pd3dGraphicsRootSignature);
 }
 
 bool CMaterial::IsWireFrameShader( )
@@ -939,6 +950,56 @@ void LoadObject::RenderForShadow(ID3D12GraphicsCommandList * pd3dCommandList)
 	if (m_pChild)
 	{
 		m_pChild->RenderForShadow(pd3dCommandList);
+	}
+}
+
+void LoadObject::RenderForPlayerShadow(ID3D12GraphicsCommandList * pd3dCommandList, Player * player)
+{
+	if (m_pSkinnedAnimationController) m_pSkinnedAnimationController->UpdateShaderVariables(pd3dCommandList, m_xmf4x4World);
+
+	if (m_pMesh)
+	{
+		UpdateShaderVariable(pd3dCommandList, &m_xmf4x4World);
+
+		if (m_nMaterials > 0)
+		{
+			for (int i = 0; i < m_nMaterials; i++)
+			{
+				if (m_ppMaterials[i])
+				{
+					if (m_ppMaterials[i]->m_pShader)
+					{
+						// 흑흑 내가 이래야한다니.........
+						// 일단 쉐이더가 그림자용 아니면 전환되도록 if문 해놓은..
+						if (m_ppMaterials[i]->IsWireFrameShader())
+						{
+							CMaterial::m_pWireFrameShader_ForPlayerShadow->OnPrepareRender(pd3dCommandList);
+						}
+						else if (m_ppMaterials[i]->IsSkinnedAnimationWireFrameShader())
+						{
+							CMaterial::m_pSkinnedShader_ForPlayerShadow->OnPrepareRender(pd3dCommandList);
+						}
+						else
+						{
+							assert(false);
+						}
+
+					}
+					m_ppMaterials[i]->UpdateShaderVariable(pd3dCommandList);
+				}
+
+				m_pMesh->Render(pd3dCommandList, i);
+			}
+		}
+	}
+
+	if (m_pSibling)
+	{
+		m_pSibling->RenderForPlayerShadow(pd3dCommandList, player);
+	}
+	if (m_pChild)
+	{
+		m_pChild->RenderForPlayerShadow(pd3dCommandList, player);
 	}
 }
 

@@ -181,10 +181,12 @@ void Player::RenderForShadow(ID3D12GraphicsCommandList * pd3dCommandList)
 	m_pHaep->UpdateShaderVariable(pd3dCommandList);
 
 	m_pTexture_Cloth->UpdateShaderVariable(pd3dCommandList, 0);
-	m_pLoadObject_Cloth->RenderForShadow(pd3dCommandList);
+	m_pLoadObject_Cloth->RenderForPlayerShadow(pd3dCommandList, this);
+	//m_pLoadObject_Cloth->RenderForShadow(pd3dCommandList);
 
 	m_pTexture_Body->UpdateShaderVariable(pd3dCommandList, 0);
-	m_pLoadObject_Body->RenderForShadow(pd3dCommandList);
+	m_pLoadObject_Body->RenderForPlayerShadow(pd3dCommandList, this);
+	// m_pLoadObject_Body->RenderForShadow(pd3dCommandList);
 }
 
 void Player::ReleaseMembers()

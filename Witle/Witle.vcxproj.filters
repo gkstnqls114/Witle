@@ -445,6 +445,12 @@
     <Filter Include="05.Shader\02.GraphicsShader\UIWorldShader">
       <UniqueIdentifier>{e09192d1-232e-4c75-ad22-9cbdcb320559}</UniqueIdentifier>
     </Filter>
+    <Filter Include="05.Shader\02.GraphicsShader\ShadowShader\PlayerShadowStandardShader">
+      <UniqueIdentifier>{cf0c0347-6b99-4c6f-9943-2afa0257ed93}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Shader\02.GraphicsShader\ShadowShader\PlayerShadowSkinnedShader">
+      <UniqueIdentifier>{183b1c6d-0866-4823-9c7a-1a36c0bff9b0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -912,6 +918,12 @@
     <ClInclude Include="ComputeShader.h">
       <Filter>05.Shader\01.ComputeShader</Filter>
     </ClInclude>
+    <ClInclude Include="PlayerShadowStandardShader.h">
+      <Filter>05.Shader\02.GraphicsShader\ShadowShader\PlayerShadowStandardShader</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerShadowSkinnedShader.h">
+      <Filter>05.Shader\02.GraphicsShader\ShadowShader\PlayerShadowSkinnedShader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1357,6 +1369,12 @@
     </ClCompile>
     <ClCompile Include="ComputeShader.cpp">
       <Filter>05.Shader\01.ComputeShader</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerShadowStandardShader.cpp">
+      <Filter>05.Shader\02.GraphicsShader\ShadowShader\PlayerShadowStandardShader</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerShadowSkinnedShader.cpp">
+      <Filter>05.Shader\02.GraphicsShader\ShadowShader\PlayerShadowSkinnedShader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

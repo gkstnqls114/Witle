@@ -52,6 +52,7 @@ VS_TERRAIN_OUTPUT VSTerrain(VS_TERRAIN_INPUT input)
 float4 PSTerrain(VS_TERRAIN_OUTPUT input) : SV_TARGET
 { 
     float4 shadowPosition = mul(input.positionW, gShadowTransform);
+    float4 PlayershadowPosition = mul(input.positionW, gPlayerShadowTransform);
 
 	float4 cBaseTexColor = gtxtTerrainBaseTexture.Sample(gWrapSamplerState, input.uv0);
 	float4 cDetailTexColor = gtxtTerrainDetailTexture.Sample(gWrapSamplerState, input.uv1);
@@ -74,12 +75,18 @@ float4 PSTerrain(VS_TERRAIN_OUTPUT input) : SV_TARGET
     ////// 그림자 계산 1 ...
       
     float fShadowFactor = CalcShadowFactor(shadowPosition); 
-    float fPlayerShadowFactor = CalcPlayerShadowFactor(shadowPosition);
+    float fPlayerShadowFactor = CalcPlayerShadowFactor(PlayershadowPosition);
+    
     
     // 현재 바닥이 그냥 위를 바라보고 있으므로...
     float3 normalW = float3(0.0, 1.0, 0.0);
 
-    float4 cllumination = Lighting(input.positionW.xyz, normalW, fPlayerShadowFactor);
+    float FinalShadowFactor = fPlayerShadowFactor;
+    if (fShadowFactor < fPlayerShadowFactor) // 값이 적은 쪽으로 
+    {
+        FinalShadowFactor = fShadowFactor;
+    }
+    float4 cllumination = Lighting(input.positionW.xyz, normalW, FinalShadowFactor);
      
     finalColor = lerp(finalColor, cllumination, 0.5f);
     

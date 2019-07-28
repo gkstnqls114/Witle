@@ -60,6 +60,41 @@ VS_STANDARD_OUTPUT VSStandard(VS_STANDARD_INPUT input)
     return (output);
 }
 
+
+VS_STANDARD_OUTPUT VSStandardForPlayer(VS_STANDARD_INPUT input)
+{
+    VS_STANDARD_OUTPUT output;
+
+    // 현재 여기에서 view 는 조명 위치에서의 matrix... 
+    output.positionW = mul(float4(input.position, 1.0f), gmtxWorld);
+    output.position = mul(mul(output.positionW, gmtxPlayerLightView), gmtxPlayerLightProjection);
+     
+	// Output vertex attributes for interpolation across triangle.
+    //float4 texC = mul(float4(input.uv, 0.0f, 1.0f), gTexTransform);
+    //vout.TexC = mul(texC, matData.MatTransform).xy;
+    output.TexC = input.uv;
+	
+    return (output);
+}
+
+
+VS_STANDARD_OUTPUT VSSkinnedForPlayer(VS_SKINNED_STANDARD_INPUT input)
+{
+    VS_STANDARD_OUTPUT output;
+     
+    float4x4 mtxVertexToBoneWorld = (float4x4) 0.0f;
+    for (int i = 0; i < MAX_VERTEX_INFLUENCES; i++)
+    {
+        mtxVertexToBoneWorld += input.weights[i] * mul(gpmtxBoneOffsets[input.indices[i]], gpmtxBoneTransforms[input.indices[i]]);
+    }
+    float4 posW = mul(float4(input.position, 1.0f), mtxVertexToBoneWorld);
+    output.positionW = posW;
+    output.position = mul(mul(posW, gmtxPlayerLightView), gmtxPlayerLightProjection);
+    output.TexC = input.uv;
+
+    return (output);
+}
+ 
 VS_STANDARD_OUTPUT VSSkinned(VS_SKINNED_STANDARD_INPUT input)
 { 
     VS_STANDARD_OUTPUT output;
