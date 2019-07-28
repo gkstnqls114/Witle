@@ -70,6 +70,7 @@ private:
 	const UINT m_DsvDescriptorsCount{ 1 + m_GBuffersCountForDepth + m_ShadowmapCount };
 	static const UINT m_GBuffersCount{ m_GBuffersCountForDepth + m_GBuffersCountForRenderTarget };
 
+	// 0: color, 1: normal 2: specualr
 	ID3D12Resource*				m_GBuffersForRenderTarget[m_GBuffersCountForRenderTarget];
 	D3D12_CPU_DESCRIPTOR_HANDLE m_GBufferCPUHandleForRenderTarget[m_GBuffersCountForRenderTarget];
 

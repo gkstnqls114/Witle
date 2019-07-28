@@ -17,6 +17,10 @@ class ShowTextureShader :
 	virtual D3D12_SHADER_BYTECODE		CreateGeometryShader(ID3DBlob **ppd3dShaderBlob) override;
 	// PSO 를 생성할 때 필요한 인자들
 
+	virtual DXGI_FORMAT GetRTVFormat()
+	{
+		return DXGI_FORMAT_R8G8B8A8_UNORM;
+	};
 
 public:
 	ShowTextureShader();

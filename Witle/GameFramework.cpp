@@ -41,7 +41,7 @@
 #include "GameFramework.h"
 
 static const bool DefferedRendering = false;
-static const bool blurTEST = false;
+static const bool blurTEST = true;
 
 void CGameFramework::Render()
 {
@@ -625,7 +625,11 @@ void CGameFramework::CreateGBufferView()
 		DXGI_FORMAT textureType ;
 		D3D12_RESOURCE_FLAGS flag = D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET;
 		 
-		if (i == 1) // ³ë¸»°ª
+		if (i == 0)
+		{
+			textureType = DXGI_FORMAT_R16G16B16A16_FLOAT;
+		}
+		else if (i == 1) // ³ë¸»°ª
 		{
 			textureType = DXGI_FORMAT_R11G11B10_FLOAT; // 32BIT ³ë¸Ö 
 
@@ -665,8 +669,13 @@ void CGameFramework::CreateGBufferView()
 		// ·»´õÅ¸°Ù ºä »ý¼º
 		m_GBufferCPUHandleForRenderTarget[i] = d3dRtvCPUDescriptorHandle;
 		m_GBufferCPUHandleForRenderTarget[i].ptr += (m_RtvDescriptorSize * i);
-		 
-		if (i == 1)
+
+		if (i == 0)
+		{
+			d3dRenderTargetViewDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
+			d3dRenderTargetViewDesc.Format = DXGI_FORMAT_R16G16B16A16_FLOAT;
+		}
+		else if (i == 1)
 		{
 			d3dRenderTargetViewDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
 			d3dRenderTargetViewDesc.Format = DXGI_FORMAT_R11G11B10_FLOAT;
@@ -1135,7 +1144,6 @@ void CGameFramework::RenderSwapChain()
 		m_SceneMgr->GetCurrScene()->Render(m_CommandList.Get(), false);
 	}
 
-	RenderShadowMap();
 }
 
 void CGameFramework::DefferedRenderSwapChain()
