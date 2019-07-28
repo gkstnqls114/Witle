@@ -1,9 +1,9 @@
 #include "Variables.hlsl"
 #include "Light.hlsl"
 
-// gtxtAlbedoTexture : gbuffer 1 ( base color + specint)
-// gtxtSpecularTexture :  gbuffer 2 (nomral);
-// gtxtNormalTexture :  gbuffer 3;
+// gtxtAlbedoTexture : gbuffer 0 ( base color + specint)
+// gtxtSpecularTexture :  gbuffer 1 (nomral);
+// gtxtNormalTexture :  gbuffer 2; (어디다가 쓰는거엿지)
 // gtxtMetallicTexture :  gbuffer 4 (깊이);
 
 static const float2 arrBasePos[4] =

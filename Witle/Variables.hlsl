@@ -88,6 +88,19 @@ TextureCube gtxtSkyCubeTexture : register(t13);
  
 // 출력
 RWTexture2D<float4> gtxtRWOutput : register(u0);
+RWStructuredBuffer<float> gAverageLum : register(u1);
+
+//Res: 백 버퍼의 높이와 너비를 4로 나눈 값
+static const uint2 Res = uint2(1024 / 4, 720 / 4);
+
+// 백 버퍼의 높이와 너비를 곱한 후 16으로 나눈 값
+static const uint Domain = uint(1024 * 720 / 16);
+
+// 백 버퍼의 높이와 너비를 곱한 후 16으로 나눈 후 1024를 곱한 값
+static const uint GroupSize = uint(1024 * 720 / 16 * 1024);
+
+// 휘도 계산을 위한 상수
+static const float4 LUM_FACTOR = float4(0.299, 0.587, 0.114, 0);
 
 //인스턴싱 데이터를 위한 구조체
 struct INSTANCING_TRANSFORM

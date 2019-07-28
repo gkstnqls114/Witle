@@ -1448,5 +1448,8 @@
     <FxCompile Include="SkillIconShader.hlsl">
       <Filter>HLSL</Filter>
     </FxCompile>
+    <FxCompile Include="TonemappingComputeShader.hlsl">
+      <Filter>HLSL</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>
