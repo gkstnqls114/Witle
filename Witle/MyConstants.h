@@ -7,6 +7,15 @@
 
 
 //// Enum Type ////////////////////////////////////
+enum ENUM_SKILLTYPE
+{
+	SKILLTYPE_NONE = -1,
+	SKILLTYPE_ATTACK,
+	SKILLTYPE_RECOVERY,
+	SKILLTYPE_BUFF,
+	SKILLTYPE_DEBUFF
+};
+
 enum ENUM_SKILL
 {
 	SKILL_FIREBALL,

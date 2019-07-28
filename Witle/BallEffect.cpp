@@ -33,7 +33,7 @@ void BallEffect::ReleaseMemberUploadBuffers()
 }
 
 BallEffect::BallEffect(const std::string & entityID, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ENUM_BALLEFFECT type)
-	:SkillEffect(entityID, 5.f)
+	:SkillEffect(entityID, 5.f, ENUM_SKILLTYPE::SKILLTYPE_ATTACK)
 {
 	m_BallEffectMesh = new SphereMesh(this, pd3dDevice, pd3dCommandList, 50, 50, 10, 10);
 

@@ -27,16 +27,17 @@ protected:
 
 public:
 	const float m_CoolTime{ 0.f }; // 스킬을 재시작 하는 쿨타임
+	const ENUM_SKILLTYPE m_Skilltype{ENUM_SKILLTYPE::SKILLTYPE_NONE};
 
 protected: 
 	void UpdateMovement();
 	 
 public: 
 	// distance: 1초당 움직이는 거리 ... ex: 2000 = 20m
-	SkillEffect(const std::string& entityID, float cooltime, float distance = 5000);
+	SkillEffect(const std::string& entityID, float cooltime, ENUM_SKILLTYPE skilltype, float distance = 5000);
 	virtual ~SkillEffect();
 
-	void Update(float); 
+	virtual void Update(float); 
 	void Move(const XMFLOAT3& xmf3Shift);
 
 	// 설정된 위치값과 노말 방향 값을 통해 가속도를 계산하여 설정합니다.

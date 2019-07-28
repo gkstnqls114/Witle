@@ -33,7 +33,7 @@ void HealingEffect::ReleaseMemberUploadBuffers()
 }
 
 HealingEffect::HealingEffect(const std::string & entityID, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList)
-	:SkillEffect(entityID, 5.f)
+	:SkillEffect(entityID, 5.f, ENUM_SKILLTYPE::SKILLTYPE_RECOVERY)
 {
 	m_HealingEffectMesh = new SphereMesh(this, pd3dDevice, pd3dCommandList, 50, 50, 10, 10);
 	 

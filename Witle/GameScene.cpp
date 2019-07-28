@@ -813,6 +813,9 @@ void GameScene::LastUpdate(float fElapsedTime)
 	{
 		// 스킬 활성화가 되어있지 않다면 넘어간다.
 		if (!PlayerSkillMgr::GetInstance()->GetSkillEffect(index)->isActive) continue;
+		
+		// 만약 스킬이 ATTACK 타입이 아니라면 넘어간다.
+		if (PlayerSkillMgr::GetInstance()->GetSkillEffect(index)->skillEffect->m_Skilltype != SKILLTYPE_ATTACK) continue;
 		 
 		MyCollider* skill_collider = PlayerSkillMgr::GetInstance()->GetSkillEffect(index)->skillEffect->GetCollier();
 
@@ -903,8 +906,6 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 	if (m_pPlayer) m_pPlayer->Render(pd3dCommandList, isGBuffers);
 
 	if (m_WideareaMagic) m_WideareaMagic->Render(pd3dCommandList, isGBuffers);
-
-	PlayerSkillMgr::GetInstance()->Render(pd3dCommandList, isGBuffers);
 
 #ifdef CHECK_SUBVIEWS
 	m_lookAboveCamera->SetViewportsAndScissorRects(pd3dCommandList);
@@ -1004,6 +1005,9 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 	cooltime = PlayerSkillMgr::GetInstance()->GetSkillEffect(3)->RemainCoolTimePrecentage;
 	pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_HPPERCENTAGE, 1, &cooltime, 0);
 	m_SampleUISkill4->Render(pd3dCommandList);
+
+
+	PlayerSkillMgr::GetInstance()->Render(pd3dCommandList, isGBuffers);
 
 }
 
