@@ -81,11 +81,12 @@ void EffectMesh::CreateTexture(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandL
 
 void EffectMesh::Render(ID3D12GraphicsCommandList * commandList, bool isGBuffers)
 {
-	ShaderManager::GetInstance()->SetPSO(commandList, SHADER_EFFECTMESH, isGBuffers);
-	commandList->IASetPrimitiveTopology(GetPrimitiveTopology());
+	// SHADER_EFFECTMESH 아직 없음...
+	//ShaderManager::GetInstance()->SetPSO(commandList, SHADER_EFFECTMESH, isGBuffers);
+	//commandList->IASetPrimitiveTopology(GetPrimitiveTopology());
 
-	D3D12_VERTEX_BUFFER_VIEW pVertexBufferViews[] = { GetVertexBufferView(0) };
-	commandList->IASetVertexBuffers(0, _countof(pVertexBufferViews), pVertexBufferViews);
+	//D3D12_VERTEX_BUFFER_VIEW pVertexBufferViews[] = { GetVertexBufferView(0) };
+	//commandList->IASetVertexBuffers(0, _countof(pVertexBufferViews), pVertexBufferViews);
 
-	commandList->DrawInstanced(GetVertexCount(), 1, 0, 0);
+	//commandList->DrawInstanced(GetVertexCount(), 1, 0, 0);
 }

@@ -13,7 +13,7 @@ void BlessingEffect::Render(ID3D12GraphicsCommandList * pd3dCommandList, bool is
 
 void BlessingEffect::UpdateCollider()
 {
-	static_cast<MyBSphere*>(m_MyCollider)->GetBSphere()->Center = m_Transform.GetPosition();
+
 }
 
 void BlessingEffect::ReleaseMembers()

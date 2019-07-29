@@ -1,18 +1,10 @@
 #pragma once
 
 class Player;
-class SkillEffect;
 class PlayerStatus;
- 
-struct SKILL
-{
-	SkillEffect* skillEffect{ nullptr };
-	XMFLOAT3 spawnPosition; // 스킬 시작 지점
-	bool isActive{ false }; // 활성화 여부
-	float RemainCoolTime; // 남은 쿨타임
-	float RemainCoolTimePrecentage; // 남은 쿨타임 .. 0이면 스킬 사용가능 1이면 막 스킬 사용함
-};
-
+class SkillEffect;
+class SelectableSkill;
+  
 // 플레이어가 사용하는 스킬들의 이펙트를 관리하는 클래스입니다.
 // 해당 클래스 내부에서 스킬을 생성하지 않고 SkillStg를 통해 가져오고 설정해야합니다.
 class PlayerSkillMgr
@@ -20,7 +12,7 @@ class PlayerSkillMgr
 	static PlayerSkillMgr* m_Instance;
 
 	// 스킬 이펙트와 스킬 이펙트가 사용되는 유무를 나타내는 구조체입니다. 
-	SKILL* m_skill{ nullptr }; 
+	SelectableSkill* m_skill{ nullptr };
 
 	// 스킬이 날가아는 최대 거리
 	const float m_distance{ 2000.f };
@@ -60,11 +52,8 @@ public:
 	// 해당 index에 해당하는 스킬 이펙트를 비활성화합니다.
 	void Deactive(int index);
 
-	SKILL* GetSkillEffect(int index) { return &m_skill[index]; }; 
+	SelectableSkill* GetSkillEffect(int index);
 	
 	// 스킬 이펙트를 설정합니다.
-	void SetSkillEffect(SkillEffect* skilleffect, UINT index) 
-	{
-		m_skill[index].skillEffect = skilleffect;
-	}
+	void SetSkillEffect(SkillEffect* skilleffect, UINT index);
 };

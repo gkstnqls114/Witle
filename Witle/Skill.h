@@ -2,6 +2,7 @@
 #include "GameObject.h"
 
 class PlayerStatus;
+class SkillEffect;
 
 class ISkill
 	: public GameObject
@@ -18,6 +19,7 @@ public:
 	virtual void DoNotUse() = 0;
 	virtual void DoUse() = 0;
 	virtual void IsFinish() = 0;
+
 };
 
 class FixedSkill
@@ -62,16 +64,25 @@ class SelectableSkill
 protected: 
 
 protected:
-	virtual void ReleaseMembers() = 0;
-	virtual void ReleaseMemberUploadBuffers() = 0;
+	virtual void ReleaseMembers() {};
+	virtual void ReleaseMemberUploadBuffers() {};
 
-	virtual void PrepareMember() = 0;
+	virtual void PrepareMember() {};
 
+	virtual void DoNotUse() {};
+	virtual void DoUse() {};
 	virtual void IsFinish() override {};
+	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers) override {};
 
 public:
 	SelectableSkill() : ISkill("Skill") {};
 	virtual ~SelectableSkill();
 
+public:
+	SkillEffect* skillEffect{ nullptr };
+	XMFLOAT3 spawnPosition; // 스킬 시작 지점
+	bool isActive{ false }; // 활성화 여부
+	float RemainCoolTime; // 남은 쿨타임
+	float RemainCoolTimePrecentage; // 남은 쿨타임 .. 0이면 스킬 사용가능 1이면 막 스킬 사용함
 
 };

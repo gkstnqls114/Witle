@@ -13,7 +13,7 @@ void HealingEffect::Render(ID3D12GraphicsCommandList * pd3dCommandList, bool isG
 
 void HealingEffect::UpdateCollider()
 {
-	static_cast<MyBSphere*>(m_MyCollider)->GetBSphere()->Center = m_Transform.GetPosition();
+
 }
 
 void HealingEffect::ReleaseMembers()

@@ -722,6 +722,7 @@ void CGameFramework::BuildObjects()
 	m_CommandList->Reset(m_CommandAllocator.Get(), NULL);
 	
 	///////////////////////////////////////////////////////////////////////////// 리소스 생성
+	// 순서 변경 X /////////////
 	GraphicsRootSignatureMgr::BuildObject(m_d3dDevice.Get()); // 루트 시그니처 먼저 생성
 	BuildShaders(); // 생성된 루트 시그니처를 사용하는 쉐이더 생성
 	
@@ -729,7 +730,6 @@ void CGameFramework::BuildObjects()
 
 	m_SceneMgr = new SceneMgr; 
 
-	// 순서 변경 X /////////////
 	// 루트 시그니처를 통해 모든 오브젝트 갖고온다.
 	TextureStorage::GetInstance()->CreateTextures(m_d3dDevice.Get(), m_CommandList.Get());
 	ModelStorage::GetInstance()->CreateModels(m_d3dDevice.Get(), m_CommandList.Get(), GraphicsRootSignatureMgr::GetGraphicsRootSignature());

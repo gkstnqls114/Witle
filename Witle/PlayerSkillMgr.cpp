@@ -8,6 +8,7 @@
 #include "PlayerManager.h"
 // Skill Effect ฐüทร ////////////////////////////
 
+#include "Skill.h"
 #include "PlayerStatus.h"
 #include "Player.h"
 #include "PlayerSkillMgr.h"
@@ -16,7 +17,7 @@ PlayerSkillMgr* PlayerSkillMgr::m_Instance{ nullptr };
 
 PlayerSkillMgr::PlayerSkillMgr()
 {
-	m_skill = new SKILL[SKILL_SELECTED]; 
+	m_skill = new SelectableSkill[SKILL_SELECTED];
 }
 
 PlayerSkillMgr::~PlayerSkillMgr()
@@ -90,6 +91,16 @@ void PlayerSkillMgr::Activate(PlayerStatus* MPstaus, int index)
 void PlayerSkillMgr::Deactive(int index)
 { 
 	m_skill[index].isActive = false;
+}
+
+SelectableSkill * PlayerSkillMgr::GetSkillEffect(int index)
+{
+	return &m_skill[index];
+}
+
+void PlayerSkillMgr::SetSkillEffect(SkillEffect * skilleffect, UINT index)
+{
+	m_skill[index].skillEffect = skilleffect;
 }
 
 void PlayerSkillMgr::Deactivate()
