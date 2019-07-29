@@ -28,8 +28,11 @@ public:
 
 private:
 	std::map< std::string, ComponentBase*> m_Components;
-	std::string m_EntityID; 
+#ifdef _DEBUG
+	std::string m_EntityID;  
+#else // _DEBUG 
 
+#endif
 protected:
 	Transform m_Transform; //월드변환을 위한 좌표계
 	ComponentBase* GetComponent(const std::string& id) const;
@@ -60,7 +63,14 @@ public:
 
 	const Transform& GetTransform() const { return m_Transform; }
 	Transform& GetTransform() { return m_Transform; }
-	const std::string& GetName() const { return m_EntityID; }
+	const std::string& GetName() const 
+	{ 
+#ifdef _DEBUG
+		return m_EntityID;
+#else // _DEBUG 
+		return std::string();
+#endif
+	}
 };
 
 class EmptyGameObject

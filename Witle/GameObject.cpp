@@ -26,7 +26,11 @@ void GameObject::ReleaseComponentUploadBuffers()
 }
 
 GameObject::GameObject(const std::string & entityID)
+#ifdef _DEBUG
 	: m_EntityID(entityID), m_Transform(this)
+#else // _DEBUG
+	: m_Transform(this)
+#endif
 {
 
 }
