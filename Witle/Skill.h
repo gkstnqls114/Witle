@@ -74,10 +74,11 @@ protected:
 	virtual void IsFinish() override {};
 	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers) override {};
 
-	virtual void Active() {};
 public:
 	SelectableSkill() : ISkill("Skill") {};
 	virtual ~SelectableSkill();
+
+	virtual void Active() = 0;
 
 	ENUM_SELECTABLESKILL GetSelectableSkillType() const { return m_SelectableSkillType; }
 

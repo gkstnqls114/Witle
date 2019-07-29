@@ -55,8 +55,7 @@ void SkillStg::ReleaseObjects()
 	}
 }
 
-SkillEffect * SkillStg::GetSkillEffect(int index) const
+SelectableSkill * SkillStg::GetSkill(int index) const
 {
-	return m_SelectableSkills[index]->m_skillEffect;
+	return m_SelectableSkills[index];
 }
- 

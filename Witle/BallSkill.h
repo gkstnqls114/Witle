@@ -5,6 +5,9 @@ class BallSkill :
 	public SelectableSkill
 {
 public:
+	virtual void Active() override {};
+
+public:
 	BallSkill();
 	virtual ~BallSkill();
 

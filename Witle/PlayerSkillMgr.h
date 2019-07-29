@@ -11,8 +11,8 @@ class PlayerSkillMgr
 {
 	static PlayerSkillMgr* m_Instance;
 
-	// 스킬 이펙트와 스킬 이펙트가 사용되는 유무를 나타내는 구조체입니다. 
-	SelectableSkill* m_skill{ nullptr };
+	// SkillStg에서 가져온 SelectableSkill 포인터를 저장하는 배열.
+	SelectableSkill** m_skill{ nullptr };
 
 	// 스킬이 날가아는 최대 거리
 	const float m_distance{ 2000.f };
@@ -55,7 +55,7 @@ public:
 	SelectableSkill* GetSkillEffect(int index);
 	
 	// 스킬 이펙트를 설정합니다.
-	void SetSkillEffect(SkillEffect* skilleffect, UINT index);
+	void SetSkill(SelectableSkill* skilleffect, UINT index);
 
 	// 해당 스킬이 활성화 되었는지 확인합니다.
 	// 만약 고른 스킬 중에서 해당 스킬이 존재하지 않을 경우 false를 반환합니다.

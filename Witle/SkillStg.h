@@ -29,5 +29,5 @@ public:
 	void ReleaseUploadBuffers();
 	void ReleaseObjects();
 
-	SkillEffect* GetSkillEffect(int index) const;
+	SelectableSkill* GetSkill(int index) const;
 };
