@@ -762,9 +762,6 @@ void GameScene::Update(float fElapsedTime)
 		}
 	}
 
-	// 플레이어 스킬 이동 업데이트
-	PlayerSkillMgr::GetInstance()->Update(fElapsedTime);
-
 	for (int x = 0; x < 5; ++x)
 	{
 		m_AltarSphere[x]->Update(fElapsedTime);
@@ -781,6 +778,9 @@ void GameScene::Update(float fElapsedTime)
 	{
 		m_TestMonster[i]->Update(fElapsedTime);
 	}
+
+	// 플레이어 스킬 이동 업데이트.. 플레이어 포지션에 맞춰야 하므로 반드시 Player Update이후에 호출해야함.
+	PlayerSkillMgr::GetInstance()->Update(fElapsedTime);
 	//// 순서 변경 X ////
 
 	for (int x = 0; x < 5; ++x)

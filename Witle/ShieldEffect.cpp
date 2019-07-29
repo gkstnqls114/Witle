@@ -49,5 +49,7 @@ ShieldEffect::~ShieldEffect()
 
 void ShieldEffect::Update(float)
 {
-	SetVelocity(PlayerManager::GetMainPlayer()->GetTransform().GetPosition(), 75, XMFLOAT3(0, 1, 0));
+	m_Transform.SetIdentity();
+	m_Transform.SetPosition(Vector3::Add(PlayerManager::GetMainPlayer()->GetTransform().GetPosition(), Vector3::ScalarProduct(XMFLOAT3(0, 1, 0), 75.f, false)));
+	m_Transform.Update(0.f);
 }

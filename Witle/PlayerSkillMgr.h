@@ -34,6 +34,7 @@ public:
 	void UpdatePhysics(float fElapsedTime);
 
 	// 활성화된 스킬을 가속도를 통해 이동시키고 시간을 계산하는 등의 일을 합니다.
+	// 쉴드의 경우, 위치를 플레이어 포지션에 맞춰야 하므로 반드시 Player Update 이후에 호출해야합니다.
 	void Update(float fElapsedTime);
 
 	void Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers);
