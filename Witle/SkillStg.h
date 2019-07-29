@@ -1,14 +1,15 @@
 #pragma once
- 
+  
+class SelectableSkill;
 class SkillEffect;
 
-// 스킬이펙트 클래스와 관련되는 클래스들을 저장하는 클래스입니다.
+// 선택할수 있는 스킬인 SelectableSkill 클래스와 관련되는 인스턴스들을 저장하는 클래스입니다.
 // 단순하게 저장하고 꺼낼 수 만 있습니다.
 class SkillStg
 {
 	static SkillStg* m_Instance;
 
-	SkillEffect* skillEffect[8];
+	SelectableSkill* m_SelectableSkills[SKILL_TO_CHOOSE];
 
 public:
 	SkillStg();
@@ -28,5 +29,5 @@ public:
 	void ReleaseUploadBuffers();
 	void ReleaseObjects();
 
-	SkillEffect* GetSkillEffect(int index) const { return skillEffect[index]; }
+	SkillEffect* GetSkillEffect(int index) const;
 };

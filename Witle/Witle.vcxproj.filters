@@ -469,6 +469,12 @@
     <Filter Include="12.Skill\BallSkill\LightningBallSkill">
       <UniqueIdentifier>{0c5fbdca-f2d3-4337-9589-3fb20799f03d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="12.Skill\Blessing">
+      <UniqueIdentifier>{3c3f59d5-9eb7-4b5d-a2d3-cc580d51f16f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="12.Skill\Healing">
+      <UniqueIdentifier>{ce3072d2-21e9-489d-b4a7-8c68fff0f3cb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -960,6 +966,12 @@
     <ClInclude Include="FireBallSkill.h">
       <Filter>12.Skill\BallSkill\FireBallSkill</Filter>
     </ClInclude>
+    <ClInclude Include="Healing.h">
+      <Filter>12.Skill\Healing</Filter>
+    </ClInclude>
+    <ClInclude Include="Blessing.h">
+      <Filter>12.Skill\Blessing</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1429,6 +1441,12 @@
     </ClCompile>
     <ClCompile Include="FireBallSkill.cpp">
       <Filter>12.Skill\BallSkill\FireBallSkill</Filter>
+    </ClCompile>
+    <ClCompile Include="Healing.cpp">
+      <Filter>12.Skill\Healing</Filter>
+    </ClCompile>
+    <ClCompile Include="Blessing.cpp">
+      <Filter>12.Skill\Blessing</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -5,7 +5,7 @@ class IceBallSkill :
 	public BallSkill
 {
 public:
-	IceBallSkill();
+	IceBallSkill(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList);
 	virtual ~IceBallSkill();
 
 };

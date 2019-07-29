@@ -815,9 +815,9 @@ void GameScene::LastUpdate(float fElapsedTime)
 		if (!PlayerSkillMgr::GetInstance()->GetSkillEffect(index)->isActive) continue;
 		
 		// 만약 스킬이 ATTACK 타입이 아니라면 넘어간다.
-		if (PlayerSkillMgr::GetInstance()->GetSkillEffect(index)->skillEffect->m_Skilltype != SKILLTYPE_ATTACK) continue;
+		if (PlayerSkillMgr::GetInstance()->GetSkillEffect(index)->m_skillEffect->m_Skilltype != SKILLTYPE_ATTACK) continue;
 		 
-		MyCollider* skill_collider = PlayerSkillMgr::GetInstance()->GetSkillEffect(index)->skillEffect->GetCollier();
+		MyCollider* skill_collider = PlayerSkillMgr::GetInstance()->GetSkillEffect(index)->m_skillEffect->GetCollier();
 
 		// 모든 몬스터 끼리 충돌체크
 		for (int i = 0; i < m_TestMonsterCount; ++i)

@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "SkillEffect.h"
 #include "Skill.h"
 
 FixedSkill::~FixedSkill()
@@ -14,6 +15,21 @@ void FixedSkill::Update(float fTimeElapsed)
 	}
 
 	m_SkillTime += fTimeElapsed; 
+}
+
+void SelectableSkill::ReleaseMembers()
+{
+	if (m_skillEffect)
+	{
+		m_skillEffect->ReleaseObjects();
+		delete m_skillEffect;
+		m_skillEffect = nullptr;
+	}
+}
+
+void SelectableSkill::ReleaseMemberUploadBuffers()
+{
+	if (m_skillEffect) m_skillEffect->ReleaseUploadBuffers(); 
 }
 
 SelectableSkill::~SelectableSkill()

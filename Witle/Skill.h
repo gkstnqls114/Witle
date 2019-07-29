@@ -64,8 +64,8 @@ class SelectableSkill
 protected: 
 
 protected:
-	virtual void ReleaseMembers() {};
-	virtual void ReleaseMemberUploadBuffers() {};
+	virtual void ReleaseMembers();
+	virtual void ReleaseMemberUploadBuffers();
 
 	virtual void PrepareMember() {};
 
@@ -74,6 +74,7 @@ protected:
 	virtual void IsFinish() override {};
 	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers) override {};
 
+	virtual void Active() {};
 public:
 	SelectableSkill() : ISkill("Skill") {};
 	virtual ~SelectableSkill();
@@ -84,7 +85,7 @@ private:
 	ENUM_SELECTABLESKILL m_SelectableSkillType{ ENUM_SELECTABLESKILL::SELECTABLESKILL_NONE };
 
 public:
-	SkillEffect* skillEffect{ nullptr };
+	SkillEffect* m_skillEffect{ nullptr };
 	XMFLOAT3 spawnPosition; // 스킬 시작 지점
 	bool isActive{ false }; // 활성화 여부
 	float RemainCoolTime; // 남은 쿨타임
