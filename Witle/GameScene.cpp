@@ -826,8 +826,7 @@ void GameScene::LastUpdate(float fElapsedTime)
 			if (m_TestMonster[i]->GetStatus()->m_Guage <= 0.f) continue;
 
 			if (Collision::isCollide(m_TestMonster[i]->GetBOBox(), skill_collider))
-			{
-				std::cout << "½ºÅ³¿¡ ºÎµúÈû" << std::endl;
+			{ 
 				m_TestMonster[i]->SubstractHP(5);
 				PlayerSkillMgr::GetInstance()->Deactive(index);
 			}

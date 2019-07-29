@@ -38,7 +38,7 @@ ShieldEffect::ShieldEffect(const std::string & entityID, ID3D12Device * pd3dDevi
 	:SkillEffect(entityID, 5.f, ENUM_SKILLTYPE::SKILLTYPE_BUFF)
 {
 	m_ShieldEffectMesh = new SphereMesh(this, pd3dDevice, pd3dCommandList, true, 150, 150, 10, 10);
-	m_ShieldEffectMesh->CreateTexture(pd3dDevice, pd3dCommandList, L"Image/Shield.dds");
+	// m_ShieldEffectMesh->CreateTexture(pd3dDevice, pd3dCommandList, L"Image/Shield.dds");
 }
 
 

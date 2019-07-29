@@ -18,7 +18,8 @@ protected:
 public:
 	virtual void DoNotUse() = 0;
 	virtual void DoUse() = 0;
-	virtual void IsFinish() = 0;
+	// 끝나는 조건 확인
+	virtual bool IsFinish() = 0;
 
 };
 
@@ -37,7 +38,7 @@ protected:
 
 	virtual void PrepareMember() = 0;
 
-	virtual void IsFinish() override {};
+	virtual bool IsFinish() override { return true; };
 
 public:
 	FixedSkill() : ISkill("Skill") {};
@@ -60,9 +61,7 @@ public:
 
 class SelectableSkill
 	: public ISkill
-{
-protected: 
-
+{ 
 protected:
 	virtual void ReleaseMembers();
 	virtual void ReleaseMemberUploadBuffers();
@@ -71,14 +70,19 @@ protected:
 
 	virtual void DoNotUse() {};
 	virtual void DoUse() {};
-	virtual void IsFinish() override {};
 	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers) override {};
+	
+	virtual void UpdateActive(float fElapsedTime) = 0;
+
+public:
+	virtual void Active() = 0;
+	virtual bool IsFinish() override = 0;
+	virtual void Update(float fElapsedTime) override;
 
 public:
 	SelectableSkill() : ISkill("Skill") {};
 	virtual ~SelectableSkill();
 
-	virtual void Active() = 0;
 
 	ENUM_SELECTABLESKILL GetSelectableSkillType() const { return m_SelectableSkillType; }
 

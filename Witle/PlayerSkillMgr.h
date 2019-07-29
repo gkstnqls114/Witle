@@ -14,14 +14,8 @@ class PlayerSkillMgr
 	// SkillStg에서 가져온 SelectableSkill 포인터를 저장하는 배열.
 	SelectableSkill** m_skill{ nullptr };
 
-	// 스킬이 날가아는 최대 거리
-	const float m_distance{ 2000.f };
 
 private:
-	// 스킬 이펙트를 비활성화합니다.
-	// 날아갔던 위치에서부터 일정 거리 이상으로 멀어지면 비활성화합니다. 
-	void Deactivate();
-
 	PlayerSkillMgr();
 	virtual ~PlayerSkillMgr();
 	
@@ -39,7 +33,7 @@ public:
 	// 가속도를 설정합니다.
 	void UpdatePhysics(float fElapsedTime);
 
-	// 활성화된 스킬을 가속도를 통해 이동시킵니다.
+	// 활성화된 스킬을 가속도를 통해 이동시키고 시간을 계산하는 등의 일을 합니다.
 	void Update(float fElapsedTime);
 
 	void Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers);

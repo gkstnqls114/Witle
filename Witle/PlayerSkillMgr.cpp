@@ -33,26 +33,7 @@ void PlayerSkillMgr::Update(float fElapsedTime)
 {
 	for (int x = 0; x < SKILL_SELECTED; ++x)
 	{
-		if (m_skill[x]->RemainCoolTime <= 0.f)
-		{
-			m_skill[x]->RemainCoolTime = 0.f;
-		}
-		else
-		{
-			m_skill[x]->RemainCoolTime -= fElapsedTime;
-			m_skill[x]->RemainCoolTimePrecentage = m_skill[x]->RemainCoolTime / m_skill[x]->m_skillEffect->m_CoolTime;
-		}
-	}
-
-	Deactivate();
-
-	for (int x = 0; x < SKILL_SELECTED; ++x)
-	{
-		if (m_skill[x]->isActive)
-		{
-			m_skill[x]->m_skillEffect->Update(fElapsedTime);
-
-		}
+		m_skill[x]->Update(fElapsedTime);
 	}
 }
 
@@ -116,17 +97,3 @@ bool PlayerSkillMgr::isActive(ENUM_SELECTABLESKILL type)
 	}
 	return false;
 }
-
-void PlayerSkillMgr::Deactivate()
-{
-	for (int x = 0; x < SKILL_SELECTED; ++x)
-	{
-		if (!m_skill[x]->isActive) continue;
-		 
-		if (Vector3::Length(m_skill[x]->spawnPosition, m_skill[x]->m_skillEffect->GetTransform().GetPosition()) > m_distance)
-		{
-			m_skill[x]->isActive = false;
-		}
-	}
-}
- 
