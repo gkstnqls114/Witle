@@ -346,9 +346,6 @@
     <Filter Include="03.GameObject\06.SkillEffect\BallEffect">
       <UniqueIdentifier>{3aed64bc-49ae-4db7-a73a-2f6ad948697e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03.GameObject\06.SkillEffect\BallEffect\01.FireBall">
-      <UniqueIdentifier>{5f802b24-9dfa-40b9-9c6c-204d6fceb781}</UniqueIdentifier>
-    </Filter>
     <Filter Include="03.GameObject\06.SkillEffect\BallEffect\02.IceBall">
       <UniqueIdentifier>{137616ff-1770-4a1f-b265-5812f05fa7d9}</UniqueIdentifier>
     </Filter>
@@ -459,6 +456,18 @@
     </Filter>
     <Filter Include="12.Skill\BallSkill">
       <UniqueIdentifier>{5f575cb2-c95a-42d9-953b-39dd79fc72d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameObject\06.SkillEffect\BallEffect\01.FireBall">
+      <UniqueIdentifier>{5f802b24-9dfa-40b9-9c6c-204d6fceb781}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="12.Skill\BallSkill\FireBallSkill">
+      <UniqueIdentifier>{bddafa17-37fa-43a4-9eb1-201a7b7c5d72}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="12.Skill\BallSkill\IceBallSkill">
+      <UniqueIdentifier>{7a571627-8e9c-4c24-a22e-5fb5003142db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="12.Skill\BallSkill\LightningBallSkill">
+      <UniqueIdentifier>{0c5fbdca-f2d3-4337-9589-3fb20799f03d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -864,9 +873,6 @@
     <ClInclude Include="SkillEffect.h">
       <Filter>03.GameObject\06.SkillEffect</Filter>
     </ClInclude>
-    <ClInclude Include="FireBall.h">
-      <Filter>03.GameObject\06.SkillEffect\BallEffect\01.FireBall</Filter>
-    </ClInclude>
     <ClInclude Include="IceBall.h">
       <Filter>03.GameObject\06.SkillEffect\BallEffect\02.IceBall</Filter>
     </ClInclude>
@@ -941,6 +947,18 @@
     </ClInclude>
     <ClInclude Include="BallSkill.h">
       <Filter>12.Skill\BallSkill</Filter>
+    </ClInclude>
+    <ClInclude Include="FireBall.h">
+      <Filter>03.GameObject\06.SkillEffect\BallEffect\01.FireBall</Filter>
+    </ClInclude>
+    <ClInclude Include="LightningBallSkill.h">
+      <Filter>12.Skill\BallSkill\LightningBallSkill</Filter>
+    </ClInclude>
+    <ClInclude Include="IceBallSkill.h">
+      <Filter>12.Skill\BallSkill\IceBallSkill</Filter>
+    </ClInclude>
+    <ClInclude Include="FireBallSkill.h">
+      <Filter>12.Skill\BallSkill\FireBallSkill</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1328,9 +1346,6 @@
     <ClCompile Include="SkillEffect.cpp">
       <Filter>03.GameObject\06.SkillEffect</Filter>
     </ClCompile>
-    <ClCompile Include="FireBall.cpp">
-      <Filter>03.GameObject\06.SkillEffect\BallEffect\01.FireBall</Filter>
-    </ClCompile>
     <ClCompile Include="IceBall.cpp">
       <Filter>03.GameObject\06.SkillEffect\BallEffect\02.IceBall</Filter>
     </ClCompile>
@@ -1402,6 +1417,18 @@
     </ClCompile>
     <ClCompile Include="BallSkill.cpp">
       <Filter>12.Skill\BallSkill</Filter>
+    </ClCompile>
+    <ClCompile Include="FireBall.cpp">
+      <Filter>03.GameObject\06.SkillEffect\BallEffect\01.FireBall</Filter>
+    </ClCompile>
+    <ClCompile Include="LightningBallSkill.cpp">
+      <Filter>12.Skill\BallSkill\LightningBallSkill</Filter>
+    </ClCompile>
+    <ClCompile Include="IceBallSkill.cpp">
+      <Filter>12.Skill\BallSkill\IceBallSkill</Filter>
+    </ClCompile>
+    <ClCompile Include="FireBallSkill.cpp">
+      <Filter>12.Skill\BallSkill\FireBallSkill</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

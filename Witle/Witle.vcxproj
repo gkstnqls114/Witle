@@ -176,6 +176,9 @@
     <ClInclude Include="HitAction.h" />
     <ClInclude Include="GraphicsRootSignatureMgr.h" />
     <ClInclude Include="IceBall.h" />
+    <ClInclude Include="IceBallSkill.h" />
+    <ClInclude Include="FireBallSkill.h" />
+    <ClInclude Include="LightningBallSkill.h" />
     <ClInclude Include="ShieldEffect.h" />
     <ClInclude Include="SkillStg.h" />
     <ClInclude Include="SceneMgr.h" />
@@ -367,6 +370,9 @@
     <ClCompile Include="IdleAction.cpp" />
     <ClCompile Include="InstancingLineShader.cpp" />
     <ClCompile Include="InstancingStandardShader.cpp" />
+    <ClCompile Include="IceBallSkill.cpp" />
+    <ClCompile Include="FireBallSkill.cpp" />
+    <ClCompile Include="LightningBallSkill.cpp" />
     <ClCompile Include="SceneMgr.cpp" />
     <ClCompile Include="ShieldEffect.cpp" />
     <ClCompile Include="SkillIconShader.cpp" />
