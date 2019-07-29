@@ -18,6 +18,7 @@ protected:
 
 private:
 	SphereMesh* m_ShieldEffectMesh{ nullptr };
+	
 
 public:
 	ShieldEffect(const std::string& entityID, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);

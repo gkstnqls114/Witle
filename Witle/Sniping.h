@@ -8,7 +8,7 @@ class Player;
 
 // 스나이핑을 위한 카메라 컴포넌트를 관리한다.
 class Sniping :
-	public Skill
+	public FixedSkill
 { 
 public:
 	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers) override {};

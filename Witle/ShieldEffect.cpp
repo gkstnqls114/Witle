@@ -37,8 +37,10 @@ void ShieldEffect::ReleaseMemberUploadBuffers()
 ShieldEffect::ShieldEffect(const std::string & entityID, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList)
 	:SkillEffect(entityID, 5.f, ENUM_SKILLTYPE::SKILLTYPE_BUFF)
 {
-	m_ShieldEffectMesh = new SphereMesh(this, pd3dDevice, pd3dCommandList, true, 50, 50, 10, 10);
+	m_ShieldEffectMesh = new SphereMesh(this, pd3dDevice, pd3dCommandList, true, 150, 150, 10, 10);
+	m_ShieldEffectMesh->CreateTexture(pd3dDevice, pd3dCommandList, L"Image/Shield.dds");
 }
+
 
 ShieldEffect::~ShieldEffect()
 {

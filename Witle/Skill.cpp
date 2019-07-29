@@ -1,11 +1,11 @@
 #include "stdafx.h"
 #include "Skill.h"
 
-Skill::~Skill()
+FixedSkill::~FixedSkill()
 {
 }
 
-void Skill::Update(float fTimeElapsed)
+void FixedSkill::Update(float fTimeElapsed)
 {
 	if (!m_isUsing) return;
 	if (m_UsingTime < m_SkillTime)
@@ -14,4 +14,8 @@ void Skill::Update(float fTimeElapsed)
 	}
 
 	m_SkillTime += fTimeElapsed; 
+}
+
+SelectableSkill::~SelectableSkill()
+{
 }

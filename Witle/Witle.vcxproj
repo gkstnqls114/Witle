@@ -155,8 +155,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="AltarSphere.h" />
-    <ClInclude Include="Avoidance.h" />
     <ClInclude Include="BallEffect.h" />
+    <ClInclude Include="BallSkill.h" />
     <ClInclude Include="BasicCam.h" />
     <ClInclude Include="BlendMeshShader.h" />
     <ClInclude Include="EffectMesh.h" />
@@ -279,7 +279,6 @@
     <ClInclude Include="Shape.h" />
     <ClInclude Include="Shield.h" />
     <ClInclude Include="Skill.h" />
-    <ClInclude Include="SkillRestraint.h" />
     <ClInclude Include="SkinnedMesh.h" />
     <ClInclude Include="SkinnedShader.h" />
     <ClInclude Include="SkyBox.h" />
@@ -288,7 +287,6 @@
     <ClInclude Include="SpaceCat.h" />
     <ClInclude Include="Sniping.h" />
     <ClInclude Include="SoundManager.h" />
-    <ClInclude Include="SpeedReduction.h" />
     <ClInclude Include="SphereMesh.h" />
     <ClInclude Include="SpotLight.h" />
     <ClInclude Include="StandardShader.h" />
@@ -319,8 +317,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AltarSphere.cpp" />
-    <ClCompile Include="Avoidance.cpp" />
     <ClCompile Include="BallEffect.cpp" />
+    <ClCompile Include="BallSkill.cpp" />
     <ClCompile Include="BasicCam.cpp" />
     <ClCompile Include="BlendMeshShader.cpp" />
     <ClCompile Include="EffectMesh.cpp" />
@@ -434,7 +432,6 @@
     <ClCompile Include="Shape.cpp" />
     <ClCompile Include="Shield.cpp" />
     <ClCompile Include="Skill.cpp" />
-    <ClCompile Include="SkillRestraint.cpp" />
     <ClCompile Include="SkinnedMesh.cpp" />
     <ClCompile Include="SkinnedShader.cpp" />
     <ClCompile Include="SkyBox.cpp" />
@@ -442,7 +439,6 @@
     <ClCompile Include="SpaceCat.cpp" />
     <ClCompile Include="Sniping.cpp" />
     <ClCompile Include="SoundManager.cpp" />
-    <ClCompile Include="SpeedReduction.cpp" />
     <ClCompile Include="SphereMesh.cpp" />
     <ClCompile Include="SpotLight.cpp" />
     <ClCompile Include="StandardShader.cpp" />

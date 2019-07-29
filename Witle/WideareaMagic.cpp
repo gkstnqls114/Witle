@@ -25,16 +25,7 @@ void WideareaMagic::SetPosition(XMFLOAT3 pos)
 
 void WideareaMagic::Update(float fTimeElapsed)
 {
-	if (!m_isUsing) return;
-	//if (m_UsingTime < m_SkillTime)
-	//{
-	//	DoNotUse();
-	//}
 
-	//m_SkillTime += fTimeElapsed;
-	//std::cout << m_SkillTime << std::endl;
-	m_Transform.Rotate(0.f, rotateValue * fTimeElapsed, 0.f);
-	m_Transform.Update(fTimeElapsed);
 }
 
 WideareaMagic::~WideareaMagic()
@@ -65,19 +56,16 @@ void WideareaMagic::ReleaseMemberUploadBuffers()
 
 void WideareaMagic::DoNotUse()
 {
-	m_isUsing = false;
+
 }
 
 void WideareaMagic::DoUse()
 {
-	m_isUsing = true;
-	
+
 }
 
 void WideareaMagic::Render(ID3D12GraphicsCommandList* commandList, bool isGBuffers)
 {
-	if (!m_isUsing) return; 
-	 
 	m_MyBSphere->Render(commandList, m_Transform.GetWorldMatrix()); 
 	UpdateShaderVariable(commandList, m_Transform.GetpWorldMatrix());
 	m_CylinderMesh->Render(commandList, isGBuffers);

@@ -97,7 +97,7 @@ void PlayerSkillMgr::Deactivate()
 	for (int x = 0; x < SKILL_SELECTED; ++x)
 	{
 		if (!m_skill[x].isActive) continue;
-
+		 
 		if (Vector3::Length(m_skill[x].spawnPosition, m_skill[x].skillEffect->GetTransform().GetPosition()) > m_distance)
 		{
 			m_skill[x].isActive = false;

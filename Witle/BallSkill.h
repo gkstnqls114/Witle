@@ -1,11 +1,12 @@
 #pragma once
 #include "Skill.h"
 
-class Shield :
+class BallSkill :
 	public SelectableSkill
 {
 public:
-	Shield();
-	virtual ~Shield();
+	BallSkill();
+	virtual ~BallSkill();
+
 };
 

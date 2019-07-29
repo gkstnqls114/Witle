@@ -14,7 +14,7 @@ public:
 	// 업데이트 된 위치에 맞추어 Collider를 설정합니다.
 	// 반드시 Transform의 위치를 업데이트하고 나서 사용해주세요.
 	virtual void UpdateCollider() = 0;
-
+	
 protected:
 	virtual void ReleaseMembers() override;
 	virtual void ReleaseMemberUploadBuffers() override;
@@ -45,4 +45,5 @@ public:
 
 	// 현재 충돌체를 리턴합니다.
 	MyCollider* GetCollier() const { return m_MyCollider; }
+
 };

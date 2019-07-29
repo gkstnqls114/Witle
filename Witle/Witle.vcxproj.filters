@@ -85,9 +85,6 @@
     <Filter Include="12.Skill">
       <UniqueIdentifier>{0f80f977-3e90-4509-87ff-01987697acb0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="12.Skill\SpeedReduction">
-      <UniqueIdentifier>{e362a9d3-7742-407d-ab9b-94618cb9d0ec}</UniqueIdentifier>
-    </Filter>
     <Filter Include="12.Skill\Shield">
       <UniqueIdentifier>{40600771-f58a-4f3e-b3e7-5447920072d2}</UniqueIdentifier>
     </Filter>
@@ -96,12 +93,6 @@
     </Filter>
     <Filter Include="12.Skill\Sniping">
       <UniqueIdentifier>{49673245-1d36-428d-b79b-ce583395f8f5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="12.Skill\Avoidance">
-      <UniqueIdentifier>{83ec167d-cca9-4761-be56-49b0668a2500}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="12.Skill\SkillRestraint">
-      <UniqueIdentifier>{dfc629d6-2b26-45c0-ac96-a6cd8663a74c}</UniqueIdentifier>
     </Filter>
     <Filter Include="06.ComputeShader">
       <UniqueIdentifier>{7769c5e9-5d6f-49a5-ba85-21c9bd1660b4}</UniqueIdentifier>
@@ -466,6 +457,9 @@
     <Filter Include="05.Shader\02.GraphicsShader\BlendMeshShader">
       <UniqueIdentifier>{52402bfb-bbf0-480b-80b4-923ccd7b3f4f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="12.Skill\BallSkill">
+      <UniqueIdentifier>{5f575cb2-c95a-42d9-953b-39dd79fc72d3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -609,20 +603,11 @@
     <ClInclude Include="Skill.h">
       <Filter>12.Skill</Filter>
     </ClInclude>
-    <ClInclude Include="Avoidance.h">
-      <Filter>12.Skill\Avoidance</Filter>
-    </ClInclude>
     <ClInclude Include="Shield.h">
       <Filter>12.Skill\Shield</Filter>
     </ClInclude>
-    <ClInclude Include="SkillRestraint.h">
-      <Filter>12.Skill\SkillRestraint</Filter>
-    </ClInclude>
     <ClInclude Include="Sniping.h">
       <Filter>12.Skill\Sniping</Filter>
-    </ClInclude>
-    <ClInclude Include="SpeedReduction.h">
-      <Filter>12.Skill\SpeedReduction</Filter>
     </ClInclude>
     <ClInclude Include="WideareaMagic.h">
       <Filter>12.Skill\WideareaMagic</Filter>
@@ -954,6 +939,9 @@
     <ClInclude Include="BlendMeshShader.h">
       <Filter>05.Shader\02.GraphicsShader\BlendMeshShader</Filter>
     </ClInclude>
+    <ClInclude Include="BallSkill.h">
+      <Filter>12.Skill\BallSkill</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1079,20 +1067,11 @@
     <ClCompile Include="Skill.cpp">
       <Filter>12.Skill</Filter>
     </ClCompile>
-    <ClCompile Include="Avoidance.cpp">
-      <Filter>12.Skill\Avoidance</Filter>
-    </ClCompile>
-    <ClCompile Include="SpeedReduction.cpp">
-      <Filter>12.Skill\SpeedReduction</Filter>
-    </ClCompile>
     <ClCompile Include="Shield.cpp">
       <Filter>12.Skill\Shield</Filter>
     </ClCompile>
     <ClCompile Include="Sniping.cpp">
       <Filter>12.Skill\Sniping</Filter>
-    </ClCompile>
-    <ClCompile Include="SkillRestraint.cpp">
-      <Filter>12.Skill\SkillRestraint</Filter>
     </ClCompile>
     <ClCompile Include="WideareaMagic.cpp">
       <Filter>12.Skill\WideareaMagic</Filter>
@@ -1420,6 +1399,9 @@
     </ClCompile>
     <ClCompile Include="BlendMeshShader.cpp">
       <Filter>05.Shader\02.GraphicsShader\BlendMeshShader</Filter>
+    </ClCompile>
+    <ClCompile Include="BallSkill.cpp">
+      <Filter>12.Skill\BallSkill</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
