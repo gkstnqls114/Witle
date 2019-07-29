@@ -43,7 +43,7 @@
 #include "GameFramework.h"
 
 static const bool DefferedRendering = false;
-static const bool blurTEST = false;
+static const bool blurTEST = true;
 
 void CGameFramework::Render()
 {
@@ -82,6 +82,9 @@ void CGameFramework::Render()
 			// 조명처리된 화면을 그립니다.
 			// RenderOnRT(&CGameFramework::RenderSwapChain, m_RenderTargetBuffers[m_SwapChainBufferIndex], m_SwapChainCPUHandle[m_SwapChainBufferIndex], m_DepthStencilCPUHandle);
 			RenderOnRTs(&CGameFramework::RenderSwapChain, 1, &m_GBuffersForRenderTarget[0], &m_GBufferCPUHandleForRenderTarget[0], m_GBufferCPUHandleForDepth[0]);
+
+			DownScale();
+			 
 
 			Blur();
 
@@ -974,8 +977,8 @@ void CGameFramework::BuildShaders()
 	m_horizenShader->CreateShader(m_d3dDevice.Get(), GraphicsRootSignatureMgr::GetGraphicsRootSignature()); 
 	m_downScaleFirstPassShader = new DownScaleFirstPassShader();
 	m_downScaleFirstPassShader->CreateShader(m_d3dDevice.Get(), GraphicsRootSignatureMgr::GetGraphicsRootSignature());
-	m_downScaleSecondtPassShader = new DownScaleSecondPassShader();
-	m_downScaleSecondtPassShader->CreateShader(m_d3dDevice.Get(), GraphicsRootSignatureMgr::GetGraphicsRootSignature());
+	m_downScaleSecondPassShader = new DownScaleSecondPassShader();
+	m_downScaleSecondPassShader->CreateShader(m_d3dDevice.Get(), GraphicsRootSignatureMgr::GetGraphicsRootSignature());
 	// compute shader ///////////////
 
 	CMaterial::PrepareShaders(m_d3dDevice.Get(), m_CommandList.Get(), GraphicsRootSignatureMgr::GetGraphicsRootSignature());
@@ -1143,6 +1146,41 @@ void CGameFramework::Blur()
 	d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_ComputeRWResource, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_COMMON);
 }
 
+void CGameFramework::DownScale()
+{
+	d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_ComputeRWResource, D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
+
+	// 다운 스케일 첫번째 PASS //////////////////////////////////
+	m_downScaleFirstPassShader->SetPSO(m_CommandList.Get());
+
+	// 사용할 리소스 업데이트
+	m_GBufferHeap->UpdateShaderVariable(m_CommandList.Get());
+	m_CommandList->SetComputeRootDescriptorTable(ROOTPARAMETER_TEXTURE, m_GBufferHeap->GetGPUDescriptorHandleForHeapStart());
+	m_CommandList->SetComputeRootDescriptorTable(ROOTPARAMETER_BLURTEST, m_GBufferHeap->GetGPUUAVDescriptorStartHandle());
+	// 사용할 리소스 업데이트
+
+	UINT groupX = (UINT)ceilf(GameScreen::GetWidth() / 1024.F);
+	m_CommandList->Dispatch(groupX, GameScreen::GetHeight(), 1);
+	// 다운 스케일 첫번째 PASS //////////////////////////////////
+
+
+	// 다운 스케일 두번째 PASS //////////////////////////////////
+	m_downScaleSecondPassShader->SetPSO(m_CommandList.Get());
+
+	// 사용할 리소스 업데이트
+	m_GBufferHeap->UpdateShaderVariable(m_CommandList.Get());
+	m_CommandList->SetComputeRootDescriptorTable(ROOTPARAMETER_TEXTURE, m_GBufferHeap->GetGPUDescriptorHandleForHeapStart());
+	m_CommandList->SetComputeRootDescriptorTable(ROOTPARAMETER_BLURTEST, m_GBufferHeap->GetGPUUAVDescriptorStartHandle());
+	// 사용할 리소스 업데이트
+
+	groupX = (UINT)ceilf(GameScreen::GetHeight() / 1024.f / 64.f);
+	m_CommandList->Dispatch(groupX, GameScreen::GetHeight(), 1);
+	// 다운 스케일 두번째 PASS //////////////////////////////////
+
+
+	d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_ComputeRWResource, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_COMMON);
+}
+ 
 void CGameFramework::RenderSwapChain()
 {  
 	// 장면을 렌더합니다.

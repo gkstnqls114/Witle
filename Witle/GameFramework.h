@@ -105,7 +105,7 @@ private:
 
 	// 톤매핑을 위한 컴퓨트 쉐이더
 	DownScaleFirstPassShader* m_downScaleFirstPassShader{ nullptr };
-	DownScaleSecondPassShader* m_downScaleSecondtPassShader{ nullptr };
+	DownScaleSecondPassShader* m_downScaleSecondPassShader{ nullptr };
 
 	//// 컴퓨트 쉐이더를 위한 변수 ///////////////////////////////////////////
 
@@ -159,7 +159,10 @@ private:
 
 	// 계산 쉐이더를 통해 블러링합니다.
 	void Blur();
-	
+
+	// 휘도 계산을 위한 다운 스케일을 진행합니다.
+	void DownScale();
+	 
 	// SwapChain에 현재 장면을 렌더링합니다.
 	void RenderSwapChain();
 	

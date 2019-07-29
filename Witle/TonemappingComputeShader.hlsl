@@ -26,8 +26,7 @@ float DownScale4x4(uint2 CurPixel, uint groupThreadId)
             [unroll]
             for (int j = 0; j < 4; ++j)
             {
-                downScaled += gtxtAlbedoTexture.Load(nFullResPos, int2(j, i));
-                
+                downScaled += gtxtTexture.Load(nFullResPos, int2(j, i)); 
             }
         }
         downScaled /= 16.0;
