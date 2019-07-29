@@ -173,6 +173,8 @@
     <ClInclude Include="CreepyMonster.h" />
     <ClInclude Include="DefferedShader.h" />
     <ClInclude Include="Dragon.h" />
+    <ClInclude Include="DownScaleSecondPassShader.h" />
+    <ClInclude Include="DownScaleFirstPassShader.h" />
     <ClInclude Include="LightningBall.h" />
     <ClInclude Include="FireBall.h" />
     <ClInclude Include="HitAction.h" />
@@ -352,6 +354,8 @@
     <ClCompile Include="AttackAction.cpp" />
     <ClCompile Include="DefferedShader.cpp" />
     <ClCompile Include="Dragon.cpp" />
+    <ClCompile Include="DownScaleSecondPassShader.cpp" />
+    <ClCompile Include="DownScaleFirstPassShader.cpp" />
     <ClCompile Include="LightningBall.cpp" />
     <ClCompile Include="FireBall.cpp" />
     <ClCompile Include="GameScene.cpp" />
@@ -596,9 +600,11 @@
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compute</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.1</ShaderModel>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">DownScaledFirstPass</EntryPointName>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">DownScaledFirstPass</EntryPointName>
     </FxCompile>
     <FxCompile Include="Shadow.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compute</ShaderType>

@@ -89,6 +89,7 @@ TextureCube gtxtSkyCubeTexture : register(t13);
 // 출력
 RWTexture2D<float4> gtxtRWOutput : register(u0);
 RWStructuredBuffer<float> gAverageLum : register(u1);
+RWStructuredBuffer<float> gAverageValues1D : register(u2);
 
 //Res: 백 버퍼의 높이와 너비를 4로 나눈 값
 static const uint2 Res = uint2(1024 / 4, 720 / 4);

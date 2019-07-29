@@ -94,9 +94,6 @@
     <Filter Include="12.Skill\Sniping">
       <UniqueIdentifier>{49673245-1d36-428d-b79b-ce583395f8f5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="06.ComputeShader">
-      <UniqueIdentifier>{7769c5e9-5d6f-49a5-ba85-21c9bd1660b4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="99.etc\Collision">
       <UniqueIdentifier>{08871af7-7e49-4250-9196-1ced0dbcb5b1}</UniqueIdentifier>
     </Filter>
@@ -474,6 +471,12 @@
     </Filter>
     <Filter Include="12.Skill\Healing">
       <UniqueIdentifier>{ce3072d2-21e9-489d-b4a7-8c68fff0f3cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Shader\01.ComputeShader\DownScaleFirstPassShader">
+      <UniqueIdentifier>{6ee2e74a-caaa-4abd-915f-f7887036feba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Shader\01.ComputeShader\DownScaleSecondPassShader">
+      <UniqueIdentifier>{1105c8d9-d374-48ab-ab6b-e19051a8f988}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -972,6 +975,12 @@
     <ClInclude Include="Blessing.h">
       <Filter>12.Skill\Blessing</Filter>
     </ClInclude>
+    <ClInclude Include="DownScaleFirstPassShader.h">
+      <Filter>05.Shader\01.ComputeShader\DownScaleFirstPassShader</Filter>
+    </ClInclude>
+    <ClInclude Include="DownScaleSecondPassShader.h">
+      <Filter>05.Shader\01.ComputeShader\DownScaleSecondPassShader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1447,6 +1456,12 @@
     </ClCompile>
     <ClCompile Include="Blessing.cpp">
       <Filter>12.Skill\Blessing</Filter>
+    </ClCompile>
+    <ClCompile Include="DownScaleFirstPassShader.cpp">
+      <Filter>05.Shader\01.ComputeShader\DownScaleFirstPassShader</Filter>
+    </ClCompile>
+    <ClCompile Include="DownScaleSecondPassShader.cpp">
+      <Filter>05.Shader\01.ComputeShader\DownScaleSecondPassShader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

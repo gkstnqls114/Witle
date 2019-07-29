@@ -10,6 +10,8 @@ class HorizonBlurShader;
 class VerticalBlurShader;
 class MyDescriptorHeap;
 class CLoadedModelInfo;
+class DownScaleFirstPassShader;
+class DownScaleSecondPassShader;
 
 class CGameFramework
 { 
@@ -100,6 +102,10 @@ private:
 	// 블러를 위한 컴퓨트
 	HorizonBlurShader* m_horizenShader{ nullptr };
 	VerticalBlurShader* m_verticalShader{ nullptr };
+
+	// 톤매핑을 위한 컴퓨트 쉐이더
+	DownScaleFirstPassShader* m_downScaleFirstPassShader{ nullptr };
+	DownScaleSecondPassShader* m_downScaleSecondtPassShader{ nullptr };
 
 	//// 컴퓨트 쉐이더를 위한 변수 ///////////////////////////////////////////
 

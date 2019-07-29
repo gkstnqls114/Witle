@@ -28,6 +28,8 @@
 //// ETC ////////////////////////////
 #include "HorizonBlurShader.h"
 #include "VerticalBlurShader.h"
+#include "DownScaleFirstPassShader.h"
+#include "DownScaleSecondPassShader.h"
 #include "QuadtreeTerrain.h"
 #include "ComputeShader.h"
 #include "CameraObject.h"
@@ -970,6 +972,10 @@ void CGameFramework::BuildShaders()
 	m_verticalShader->CreateShader(m_d3dDevice.Get(), GraphicsRootSignatureMgr::GetGraphicsRootSignature());
 	m_horizenShader = new HorizonBlurShader();
 	m_horizenShader->CreateShader(m_d3dDevice.Get(), GraphicsRootSignatureMgr::GetGraphicsRootSignature()); 
+	m_downScaleFirstPassShader = new DownScaleFirstPassShader();
+	m_downScaleFirstPassShader->CreateShader(m_d3dDevice.Get(), GraphicsRootSignatureMgr::GetGraphicsRootSignature());
+	m_downScaleSecondtPassShader = new DownScaleSecondPassShader();
+	m_downScaleSecondtPassShader->CreateShader(m_d3dDevice.Get(), GraphicsRootSignatureMgr::GetGraphicsRootSignature());
 	// compute shader ///////////////
 
 	CMaterial::PrepareShaders(m_d3dDevice.Get(), m_CommandList.Get(), GraphicsRootSignatureMgr::GetGraphicsRootSignature());
@@ -1113,7 +1119,7 @@ void CGameFramework::Blur()
 	// 사용할 리소스 업데이트
 	m_GBufferHeap->UpdateShaderVariable(m_CommandList.Get());
 	m_CommandList->SetComputeRootDescriptorTable(ROOTPARAMETER_TEXTURE, m_GBufferHeap->GetGPUDescriptorHandleForHeapStart());
-	m_CommandList->SetComputeRootDescriptorTable(ROOTPARAMETER_READWRITE, m_GBufferHeap->GetGPUUAVDescriptorStartHandle());
+	m_CommandList->SetComputeRootDescriptorTable(ROOTPARAMETER_BLURTEST, m_GBufferHeap->GetGPUUAVDescriptorStartHandle());
 	// 사용할 리소스 업데이트
 
 	UINT groupX = (UINT)ceilf(GameScreen::GetWidth() / 256.F);
@@ -1127,7 +1133,7 @@ void CGameFramework::Blur()
 	// 사용할 리소스 업데이트
 	m_GBufferHeap->UpdateShaderVariable(m_CommandList.Get());
 	m_CommandList->SetComputeRootDescriptorTable(ROOTPARAMETER_TEXTURE, m_GBufferHeap->GetGPUDescriptorHandleForHeapStart());
-	m_CommandList->SetComputeRootDescriptorTable(ROOTPARAMETER_READWRITE, m_GBufferHeap->GetGPUUAVDescriptorStartHandle());
+	m_CommandList->SetComputeRootDescriptorTable(ROOTPARAMETER_BLURTEST, m_GBufferHeap->GetGPUUAVDescriptorStartHandle());
 	// 사용할 리소스 업데이트
 
 	UINT groupY = (UINT)ceilf(GameScreen::GetHeight() / 256.F);

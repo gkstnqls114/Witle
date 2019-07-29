@@ -24,7 +24,7 @@ float DownScale4x4(uint2 CurPixel, uint groupThreadId)
         for (int i = 0; i < 4; ++i)
         {
             [unroll]
-            for (int j = 0; j < 4; ++i)
+            for (int j = 0; j < 4; ++j)
             {
                 downScaled += gtxtAlbedoTexture.Load(nFullResPos, int2(j, i));
                 
@@ -127,7 +127,7 @@ void DownScaledSecondPass(uint3 groupID : SV_GroupID, uint3 dispatchThreadID : S
 
     if(dispatchThreadID.x < GroupSize)
     {
-        avgLum = AverageValues1D[dispatchThreadID.x];
+        avgLum = gAverageValues1D[dispatchThreadID.x];
     }
     ShardAvgFinal[dispatchThreadID.x] = avgLum;
 
