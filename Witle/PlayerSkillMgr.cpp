@@ -103,6 +103,18 @@ void PlayerSkillMgr::SetSkillEffect(SkillEffect * skilleffect, UINT index)
 	m_skill[index].skillEffect = skilleffect;
 }
 
+bool PlayerSkillMgr::isActive(ENUM_SELECTABLESKILL type)
+{
+	for (int x = 0; x < SKILL_SELECTED; ++x)
+	{
+		if (m_skill[x].GetSelectableSkillType() == type)
+		{
+			return m_skill[x].isActive;
+		}
+	}
+	return false;
+}
+
 void PlayerSkillMgr::Deactivate()
 {
 	for (int x = 0; x < SKILL_SELECTED; ++x)

@@ -24,16 +24,16 @@ SkillStg::~SkillStg()
 
 void SkillStg::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList)
 {
-	skillEffect[ENUM_SKILL::SKILL_FIREBALL] = new FireBall("FireBall", pd3dDevice, pd3dCommandList);
-	skillEffect[ENUM_SKILL::SKILL_ICEBALL] = new IceBall("IceBall", pd3dDevice, pd3dCommandList);
-	skillEffect[ENUM_SKILL::SKILL_LIGHTNINGBALL] = new LightningBall("LightingBall", pd3dDevice, pd3dCommandList);
+	skillEffect[ENUM_SELECTABLESKILL::SELECTABLESKILL_FIREBALL] = new FireBall("FireBall", pd3dDevice, pd3dCommandList);
+	skillEffect[ENUM_SELECTABLESKILL::SELECTABLESKILL_ICEBALL] = new IceBall("IceBall", pd3dDevice, pd3dCommandList);
+	skillEffect[ENUM_SELECTABLESKILL::SELECTABLESKILL_LIGHTNINGBALL] = new LightningBall("LightingBall", pd3dDevice, pd3dCommandList);
 
-	skillEffect[ENUM_SKILL::SKILL_SHIELD] = new ShieldEffect("Shield", pd3dDevice, pd3dCommandList);
-	skillEffect[ENUM_SKILL::SKILL_BLESSING] = new BlessingEffect("Blessing", pd3dDevice, pd3dCommandList);
-	skillEffect[ENUM_SKILL::SKILL_HEALING] = new HealingEffect("Healing", pd3dDevice, pd3dCommandList);
+	skillEffect[ENUM_SELECTABLESKILL::SELECTABLESKILL_SHIELD] = new ShieldEffect("Shield", pd3dDevice, pd3dCommandList);
+	skillEffect[ENUM_SELECTABLESKILL::SELECTABLESKILL_BLESSING] = new BlessingEffect("Blessing", pd3dDevice, pd3dCommandList);
+	skillEffect[ENUM_SELECTABLESKILL::SELECTABLESKILL_HEALING] = new HealingEffect("Healing", pd3dDevice, pd3dCommandList);
 
-	skillEffect[ENUM_SKILL::SKILL_METEOR] = new FireBall("FireBall", pd3dDevice, pd3dCommandList);
-	skillEffect[ENUM_SKILL::SKILL_ICESPEAR] = new IceBall("FireBall", pd3dDevice, pd3dCommandList);
+	skillEffect[ENUM_SELECTABLESKILL::SELECTABLESKILL_METEOR] = new FireBall("FireBall", pd3dDevice, pd3dCommandList);
+	skillEffect[ENUM_SELECTABLESKILL::SELECTABLESKILL_ICESPEAR] = new IceBall("FireBall", pd3dDevice, pd3dCommandList);
 }
 
 void SkillStg::ReleaseUploadBuffers()

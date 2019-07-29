@@ -78,6 +78,11 @@ public:
 	SelectableSkill() : ISkill("Skill") {};
 	virtual ~SelectableSkill();
 
+	ENUM_SELECTABLESKILL GetSelectableSkillType() const { return m_SelectableSkillType; }
+
+private:
+	ENUM_SELECTABLESKILL m_SelectableSkillType{ ENUM_SELECTABLESKILL::SELECTABLESKILL_NONE };
+
 public:
 	SkillEffect* skillEffect{ nullptr };
 	XMFLOAT3 spawnPosition; // 스킬 시작 지점
