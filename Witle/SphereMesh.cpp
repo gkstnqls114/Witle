@@ -246,8 +246,14 @@ void SphereMesh::CreateTexture(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandL
 
 void SphereMesh::Render(ID3D12GraphicsCommandList * commandList, bool isGBuffers)
 {
-	if(isGBuffers) m_pShader->OnPrepareRenderForGBuffers(commandList);
-	else m_pShader->OnPrepareRender(commandList);
+	if (isGBuffers)
+	{
+		m_pShader->OnPrepareRenderForGBuffers(commandList);
+	}
+	else
+	{
+		m_pShader->OnPrepareRender(commandList);
+	}
 
 	commandList->IASetPrimitiveTopology(GetPrimitiveTopology());
 

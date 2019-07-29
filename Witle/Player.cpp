@@ -160,7 +160,7 @@ Player::~Player()
 void Player::Render(ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffers)
 {
 	if (m_pSniping) m_pSniping->Render(pd3dCommandList, isGBuffers);
-	m_pMyBOBox->Render(pd3dCommandList);
+	// m_pMyBOBox->Render(pd3dCommandList);
 
 	if (!m_isRendering) return; //만약 스나이핑 모드라면 플레이어를 렌더링하지 않는다.
 	m_pHaep->UpdateShaderVariable(pd3dCommandList);

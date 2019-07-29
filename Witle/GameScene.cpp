@@ -952,7 +952,8 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 		Mesh* terrainMesh = m_Terrain->GetComponent<Mesh>("TerrainMesh");
 		m_pQuadtreeTerrain->Render(pd3dCommandList, m_Terrain, m_pd3dCbvSrvDescriptorHeap->GetpDescriptorHeap(), isGBuffers);
 	}
-
+ 
+	PlayerSkillMgr::GetInstance()->Render(pd3dCommandList, isGBuffers);
 
 
 	/// ui map과 스킬 관련 렌더링..
@@ -1004,9 +1005,6 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 	cooltime = PlayerSkillMgr::GetInstance()->GetSkillEffect(3)->RemainCoolTimePrecentage;
 	pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_HPPERCENTAGE, 1, &cooltime, 0);
 	m_SampleUISkill4->Render(pd3dCommandList);
-
-
-	PlayerSkillMgr::GetInstance()->Render(pd3dCommandList, isGBuffers);
 
 }
 

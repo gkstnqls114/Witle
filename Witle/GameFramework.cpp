@@ -43,7 +43,7 @@
 #include "GameFramework.h"
 
 static const bool DefferedRendering = false;
-static const bool blurTEST = true;
+static const bool blurTEST = false;
 
 void CGameFramework::Render()
 {
