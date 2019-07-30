@@ -91,7 +91,7 @@ void DownScaled4to1(uint dispatchThreadID, uint groupThreadID, uint groupID, flo
 
         // 최종 값을 1D UAV에 기록 후
         // 다음 과정으로
-        gAverageLum[groupID] = fFinalAvgLum;
+        gAverageValues1D[groupID] = fFinalAvgLum;
     }
 }
 

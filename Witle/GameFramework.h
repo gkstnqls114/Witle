@@ -96,8 +96,22 @@ private:
 
 
 	//// 컴퓨트 쉐이더를 위한 변수 ///////////////////////////////////////////
-	  
-	ID3D12Resource* m_ComputeRWResource; // 작성함 
+
+	const int NumDataElements = (1280 * 720) / (16 * 1024);
+
+	// 블러를 위한 텍스쳐
+	ID3D12Resource* m_ComputeRWResource; 
+
+	// 톤매핑을 위한 변수
+	ComPtr<ID3D12Resource> mInputBufferA = nullptr;
+	ComPtr<ID3D12Resource> mInputUploadBufferA = nullptr;
+	ComPtr<ID3D12Resource> mInputBufferB = nullptr;
+	ComPtr<ID3D12Resource> mInputUploadBufferB = nullptr;
+	ComPtr<ID3D12Resource> mOutputBuffer = nullptr;
+	ComPtr<ID3D12Resource> mReadBackBuffer = nullptr;
+
+	ID3D12Resource* m_DownScaleFirstResource; // 작성함 
+	ID3D12Resource* m_DownScaleSecondResource; // 작성함 
 	  
 	// 블러를 위한 컴퓨트
 	HorizonBlurShader* m_horizenShader{ nullptr };
@@ -123,6 +137,7 @@ private:
 	void CreateRenderTargetView();
 	void CreateDepthStencilView(); 
 	void CreateRWResourceViews(); 
+	void CreateRWBuffer();
 
 	// 스왑 체인을 위한 깊이스텐실뷰와 렌더타겟뷰와는 다르게 사용될
 	// GBuffer 리소스와 그를 위한 뷰를 생성합니다.
@@ -218,6 +233,9 @@ public:
 
 	// 렌더링을 처리하는 함수입니다.
 	void Render();
+
+	// 렌더링 이후 디버그하는 함수
+	void Debug();
 
 	// 윈도우의 메시지(키보드, 마우스 입력)를 처리하는 함수입니다.
 	LRESULT CALLBACK OnProcessingWindowMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam);
