@@ -16,6 +16,6 @@ void AttackAction::UpdateState(float fElpasedTime, GeneralMonsterActionMgr * act
 {
 	// Attack 애니메이션이 끝나지 않았을 경우 Chnage State 하지 않는다.
 	if (!static_cast<Monster*>(m_pOwner)->GetpLoadObject()->IsTrackAnimationSetFinish(0, SPACECAT_ATTACK.ID)) return;
-	
+
 	actionMgr->ChangeStateToChase();
 }

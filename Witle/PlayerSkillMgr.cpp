@@ -27,7 +27,7 @@ PlayerSkillMgr::~PlayerSkillMgr()
 }
 
 void PlayerSkillMgr::UpdatePhysics(float fElapsedTime)
-{  
+{
 
 }
 
@@ -65,14 +65,14 @@ void PlayerSkillMgr::Render(ID3D12GraphicsCommandList * pd3dCommandList, bool is
 		if (!m_skill[x].isActive) continue;
 
 		XMFLOAT4X4 xmf4x4World;
-		XMStoreFloat4x4(&xmf4x4World, XMMatrixTranspose(XMLoadFloat4x4(&m_skill[x].skillEffect->GetTransform().GetWorldMatrix()))); 
+		XMStoreFloat4x4(&xmf4x4World, XMMatrixTranspose(XMLoadFloat4x4(&m_skill[x].skillEffect->GetTransform().GetWorldMatrix())));
 		pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_WORLD, 16, &xmf4x4World, 0);
 		m_skill[x].skillEffect->Render(pd3dCommandList, isGBuffers);
 	}
 }
 
 void PlayerSkillMgr::Activate(PlayerStatus* MPstaus, ENUM_SKILL skilltype)
-{ 
+{
 	if (m_skill[skilltype].isActive) return;
 	if (m_skill[skilltype].RemainCoolTime > 0.f) return;
 	if ((MPstaus->m_Guage - 10/*사용하는 마나 게이지*/) < 0.f) return;
@@ -87,11 +87,11 @@ void PlayerSkillMgr::Activate(PlayerStatus* MPstaus, ENUM_SKILL skilltype)
 		m_skill[skilltype].spawnPosition,
 		75,
 		PlayerManager::GetMainPlayer()->GetTransform().GetLook()
-	); 
+	);
 }
 
 void PlayerSkillMgr::Deactive(int index)
-{ 
+{
 	m_skill[index].isActive = false;
 }
 
@@ -107,4 +107,3 @@ void PlayerSkillMgr::Deactivate()
 		}
 	}
 }
- 

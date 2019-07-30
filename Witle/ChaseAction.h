@@ -22,6 +22,4 @@ public:
 public:
 	ChaseAction(GameObject* pOwner) : GeneralMonsterAction(pOwner) {};
 	virtual ~ChaseAction() {};
-	 
-
 };

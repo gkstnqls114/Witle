@@ -98,7 +98,7 @@ void GameScene::CreateCbvSrvDescriptorHeaps(ID3D12Device * pd3dDevice, ID3D12Gra
 {
 	m_pd3dCbvSrvDescriptorHeap = new MyDescriptorHeap();
 	m_pd3dCbvSrvDescriptorHeap->CreateCbvSrvUavDescriptorHeaps(pd3dDevice, pd3dCommandList, nConstantBufferViews, nShaderResourceViews, 0);
-	 
+
 	m_d3dCbvCPUDescriptorNextHandle = m_d3dCbvCPUDescriptorStartHandle = m_pd3dCbvSrvDescriptorHeap->GetCPUDescriptorHandleForHeapStart();
 	m_d3dCbvGPUDescriptorNextHandle = m_d3dCbvGPUDescriptorStartHandle = m_pd3dCbvSrvDescriptorHeap->GetGPUDescriptorHandleForHeapStart();
 	m_d3dSrvCPUDescriptorNextHandle.ptr = m_d3dSrvCPUDescriptorStartHandle.ptr = m_d3dCbvCPUDescriptorStartHandle.ptr + (d3dUtil::gnCbvSrvDescriptorIncrementSize * nConstantBufferViews);
@@ -157,14 +157,14 @@ D3D12_GPU_DESCRIPTOR_HANDLE GameScene::CreateShaderResourceViewsForShadow(ID3D12
 	D3D12_RESOURCE_DESC d3dResourceDesc = pShaderResource->GetDesc();
 	d3dResourceDesc.Format = DXGI_FORMAT_R24_UNORM_X8_TYPELESS;
 	D3D12_SHADER_RESOURCE_VIEW_DESC d3dShaderResourceViewDesc = d3dUtil::GetShaderResourceViewDesc(d3dResourceDesc, nTextureType);
-	
+
 	// 몇번째인지
 	D3D12_CPU_DESCRIPTOR_HANDLE hCPU = m_pd3dCbvSrvDescriptorHeap->GetCPUDescriptorHandleForHeapStart();
 	for (int i = 0; i < index; ++i)
 	{
-		hCPU.ptr += d3dUtil::gnCbvSrvDescriptorIncrementSize; 
+		hCPU.ptr += d3dUtil::gnCbvSrvDescriptorIncrementSize;
 	}
-	
+
 	pd3dDevice->CreateShaderResourceView(pShaderResource, &d3dShaderResourceViewDesc, hCPU);
 
 	return(d3dSrvGPUDescriptorHandle);
@@ -215,7 +215,7 @@ bool GameScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM w
 			// SoundManager::GetInstance()->Stop(ENUM_SOUND::BROOM);
 			break;
 
-		case '2': 
+		case '2':
 			// 스나이핑 스킬
 			if (m_Sniping->GetisUsing())
 			{
@@ -285,7 +285,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 
 	// 디스크립터 힙 설정
 	GameScene::CreateCbvSrvDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 4);
-	 
+
 	m_AimPoint = new AimPoint("AimPoint", pd3dDevice, pd3dCommandList, POINT{ int(GameScreen::GetWidth()) / 2, int(GameScreen::GetHeight()) / 2 }, 100.f, 100.f, L"Image/AimPoint.dds");
 	// m_WideareaMagic = new WideareaMagic(pd3dDevice, pd3dCommandList);
 
@@ -300,7 +300,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	// 스카이 박스 생성 ///////////////////////////////////
 
 	// 터레인 생성 ////////////////////////////////////////
-	XMFLOAT3 xmf3Scale(39.0625f * 3.f, 1.0f, 39.0625f * 3.f); 
+	XMFLOAT3 xmf3Scale(39.0625f * 3.f, 1.0f, 39.0625f * 3.f);
 	// XMFLOAT3 xmf3Scale(1.f, 1.0f, 1.f);
 	XMFLOAT4 xmf4Color(0.0f, 0.5f, 0.0f, 0.0f);
 	m_Terrain = new Terrain("Terrain", pd3dDevice, pd3dCommandList, L"Image/HeightMap.raw", 257, 257, 257, 257, xmf3Scale, xmf4Color);
@@ -312,29 +312,30 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	PlayerManager::SetMainPlayer(m_pPlayer);
 	m_PlayerSkillMgr = new PlayerSkillMgr(pd3dDevice, pd3dCommandList);
 	// 플레이어 관련 ////////////////////////////////////////
-	 
+
 	// 테스트용  
 	std::random_device rd;
 	std::mt19937 mersenne(rd());
 	std::uniform_int_distribution<> die(2000, 15000);
 	std::uniform_int_distribution<> monstertype(0, 3);
-	 
-	m_Dragon = new Dragon("Dragon",
-			XMFLOAT3(15000, 0, 15000),
-			pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
-	
-	m_TestMonster = new Monster*[m_TestMonsterCount];
 
-/*
-	m_TestMonster[0] = new Dragon("SpaceCat",
+	m_Dragon = new Dragon("Dragon",
 		XMFLOAT3(15000, 0, 15000),
 		pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
-*/
+
+	m_TestMonster = new Monster*[m_TestMonsterCount];
+
+	/*
+		m_TestMonster[0] = new Dragon("SpaceCat",
+			XMFLOAT3(15000, 0, 15000),
+			pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
+	*/
 	int spacecatblue_count = 0;
 	int spacecatgreen_count = 0;
 	int spacecatpink_count = 0;
 	int creepymonster_count = 0;
 	int boss_count = 0;
+
 	MonsterTransformStorage* instance = MonsterTransformStorage::GetInstance();
 	instance->CreateInfo(pd3dDevice, pd3dCommandList);
 
@@ -381,6 +382,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 				instance->GetPosition(boss_count, DRAGON),
 				pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
 			boss_count += 1;
+
 			if (boss_count == 1)
 			{
 				continue;
@@ -435,49 +437,49 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	GameScene::CreateShaderResourceViews(pd3dDevice, m_Terrain->GetTexture(), ROOTPARAMETER_TEXTUREBASE, true);
 
 	// UI 이미지 추가
-	 m_TESTGameObject = new EmptyGameObject("Test");
-	 
-	 // 미니맵
-	 m_SampleUIMap = new UI2DImage(
-		 m_TESTGameObject, pd3dDevice, pd3dCommandList,
-		 POINT{ int(GameScreen::GetWidth()) / 2 + 500, int(GameScreen::GetHeight()) / 2 - 220 },
-		 m_UIMapSize.x,
-		 m_UIMapSize.y, 
-		 nullptr
-	 );
+	m_TESTGameObject = new EmptyGameObject("Test");
 
-	 // 스킬 1
-	 m_SampleUISkill1 = new UI2DImage(
-		 m_TESTGameObject, pd3dDevice, pd3dCommandList,
-		 POINT{ int(GameScreen::GetWidth()) / 2 - 300, int(GameScreen::GetHeight()) / 2 + 270 }, 100, 100, 
-		 nullptr
-	 );
+	// 미니맵
+	m_SampleUIMap = new UI2DImage(
+		m_TESTGameObject, pd3dDevice, pd3dCommandList,
+		POINT{ int(GameScreen::GetWidth()) / 2 + 500, int(GameScreen::GetHeight()) / 2 - 220 },
+		m_UIMapSize.x,
+		m_UIMapSize.y,
+		nullptr
+	);
 
-	 // 스킬 2
-	 m_SampleUISkill2 = new UI2DImage(
-		 m_TESTGameObject, pd3dDevice, pd3dCommandList,
-		 POINT{ int(GameScreen::GetWidth()) / 2 - 100, int(GameScreen::GetHeight()) / 2 + 270 }, 100, 100, 
-		 nullptr
-	 );
+	// 스킬 1
+	m_SampleUISkill1 = new UI2DImage(
+		m_TESTGameObject, pd3dDevice, pd3dCommandList,
+		POINT{ int(GameScreen::GetWidth()) / 2 - 300, int(GameScreen::GetHeight()) / 2 + 270 }, 100, 100,
+		nullptr
+	);
 
-	 // 스킬 3
-	 m_SampleUISkill3 = new UI2DImage(
-		 m_TESTGameObject, pd3dDevice, pd3dCommandList,
-		 POINT{ int(GameScreen::GetWidth()) / 2 + 100, int(GameScreen::GetHeight()) / 2 + 270 }, 100, 100,
-		 nullptr
-	 );
+	// 스킬 2
+	m_SampleUISkill2 = new UI2DImage(
+		m_TESTGameObject, pd3dDevice, pd3dCommandList,
+		POINT{ int(GameScreen::GetWidth()) / 2 - 100, int(GameScreen::GetHeight()) / 2 + 270 }, 100, 100,
+		nullptr
+	);
 
-	 // 스킬 4
-	 m_SampleUISkill4 = new UI2DImage(
-		 m_TESTGameObject, pd3dDevice, pd3dCommandList,
-		 POINT{ int(GameScreen::GetWidth()) / 2 + 300, int(GameScreen::GetHeight()) / 2 + 270 }, 100, 100, 
-		 nullptr
-	 );
-	 
-	 XMFLOAT4X4 tr;
-	 tr = StaticObjectStorage::GetInstance()->GetAltarTransform(0, ALTAR_IN);
-	 XMFLOAT3 pos{ tr._41, 0 , tr._43 }; // 월드 포지션
-	 m_AltarSphere[0] = new AltarSphere("AltarSphere0", pos, pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
+	// 스킬 3
+	m_SampleUISkill3 = new UI2DImage(
+		m_TESTGameObject, pd3dDevice, pd3dCommandList,
+		POINT{ int(GameScreen::GetWidth()) / 2 + 100, int(GameScreen::GetHeight()) / 2 + 270 }, 100, 100,
+		nullptr
+	);
+
+	// 스킬 4
+	m_SampleUISkill4 = new UI2DImage(
+		m_TESTGameObject, pd3dDevice, pd3dCommandList,
+		POINT{ int(GameScreen::GetWidth()) / 2 + 300, int(GameScreen::GetHeight()) / 2 + 270 }, 100, 100,
+		nullptr
+	);
+
+	XMFLOAT4X4 tr;
+	tr = StaticObjectStorage::GetInstance()->GetAltarTransform(0, ALTAR_IN);
+	XMFLOAT3 pos{ tr._41, 0 , tr._43 }; // 월드 포지션
+	m_AltarSphere[0] = new AltarSphere("AltarSphere0", pos, pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
 
 	// ui map 포지션으로 변경하기 위해 크기 축소
 	pos.x = pos.x * (float(m_UIMapSize.x) / 30000.f);
@@ -617,7 +619,7 @@ void GameScene::ReleaseObjects()
 		m_SkyBox->ReleaseObjects();
 		delete m_SkyBox;
 		m_SkyBox = nullptr;
-	} 
+	}
 	if (m_Sniping)
 	{
 		m_Sniping->ReleaseObjects();
@@ -705,7 +707,7 @@ bool GameScene::ProcessInput(HWND hWnd, float fElapsedTime)
 
 void GameScene::UpdatePhysics(float fElapsedTime)
 {
-	m_Dragon->UpdateState(fElapsedTime); 
+	m_Dragon->UpdateState(fElapsedTime);
 	// 스킬 이펙트 가속도 처리
 	m_PlayerSkillMgr->UpdatePhysics(fElapsedTime);
 
@@ -814,7 +816,7 @@ void GameScene::LastUpdate(float fElapsedTime)
 	{
 		// 스킬 활성화가 되어있지 않다면 넘어간다.
 		if (!m_PlayerSkillMgr->GetSkillEffect(index)->isActive) continue;
-		 
+
 		MyCollider* skill_collider = m_PlayerSkillMgr->GetSkillEffect(index)->skillEffect->GetCollier();
 
 		// 모든 몬스터 끼리 충돌체크
@@ -829,7 +831,20 @@ void GameScene::LastUpdate(float fElapsedTime)
 				m_TestMonster[i]->SubstractHP(5);
 				m_PlayerSkillMgr->Deactive(index);
 			}
-		} 
+
+		}
+
+		//////////////////////////////////////////////////////// BOSS
+		// 체력이 0보다 적으면 검사하지 않는다.
+		if (m_Dragon->GetStatus()->m_Guage <= 0.f) continue;
+
+		if (Collision::isCollide(m_Dragon->GetBOBox(), skill_collider))
+		{
+			std::cout << "보스 스킬에 맞음" << std::endl;
+			m_Dragon->SubstractHP(5);
+			m_PlayerSkillMgr->Deactive(index);
+		}
+		//////////////////////////////////////////////////////// BOSS
 	}
 
 	// Update한 위치로 몬스터가 공격 시에 몬스터/플레이어충돌체크 확인 ///////////////////////////
@@ -852,7 +867,7 @@ void GameScene::LastUpdate(float fElapsedTime)
 	if (m_pQuadtreeTerrain) m_pQuadtreeTerrain->LastUpdate(fElapsedTime);
 	// 순서변경X  
 }
- 
+
 void GameScene::AnimateObjects(float fTimeElapsed)
 {
 	if (m_pPlayer) m_pPlayer->Animate(fTimeElapsed);
@@ -864,7 +879,9 @@ void GameScene::AnimateObjects(float fTimeElapsed)
 			if (m_AltarSphere[x]->GetisActive()) m_AltarSphere[x]->Animate(fTimeElapsed);
 		}
 	}
+
 	m_Dragon->Animate(fTimeElapsed);
+
 	for (int i = 0; i < m_TestMonsterCount; ++i)
 	{
 		if (m_TestMonster[i]) m_TestMonster[i]->Animate(fTimeElapsed);
@@ -872,7 +889,7 @@ void GameScene::AnimateObjects(float fTimeElapsed)
 }
 
 void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers)
-{ 
+{
 	// 렌더링
 	extern MeshRenderer gMeshRenderer;
 
@@ -900,7 +917,7 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 	}
 
 	// 스카이박스 렌더
-	if(m_SkyBox) m_SkyBox->Render(pd3dCommandList, isGBuffers);
+	if (m_SkyBox) m_SkyBox->Render(pd3dCommandList, isGBuffers);
 
 	//pd3dCommandList->SetDescriptorHeaps(1, &m_pd3dCbvSrvDescriptorHeap);
 
@@ -908,7 +925,7 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 
 	if (m_WideareaMagic) m_WideareaMagic->Render(pd3dCommandList, isGBuffers);
 
-	if(m_PlayerSkillMgr) m_PlayerSkillMgr->Render(pd3dCommandList, isGBuffers);
+	if (m_PlayerSkillMgr) m_PlayerSkillMgr->Render(pd3dCommandList, isGBuffers);
 
 #ifdef CHECK_SUBVIEWS
 	m_lookAboveCamera->SetViewportsAndScissorRects(pd3dCommandList);
@@ -925,7 +942,7 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 	if (!m_isSkyMode)
 	{
 		if (m_pPlayer) m_pPlayer->RenderStatus(pd3dCommandList, isGBuffers);
-		
+
 		if (!m_pPlayer->GetBroom()->GetisPrepare() && !m_pPlayer->GetBroom()->GetisUsing())
 		{
 			if (m_AimPoint) m_AimPoint->Render(pd3dCommandList, isGBuffers);
@@ -933,6 +950,7 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 	}
 
 	m_Dragon->Render(pd3dCommandList, isGBuffers);
+
 	for (int i = 0; i < m_TestMonsterCount; ++i)
 	{
 		if (m_TestMonster[i]) m_TestMonster[i]->Render(pd3dCommandList, isGBuffers);
@@ -988,24 +1006,24 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 	m_SampleUIMap->Render(pd3dCommandList);
 
 
-	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_SKILLICON, isGBuffers); 
-	float cooltime = m_PlayerSkillMgr->GetSkillEffect(0)->RemainCoolTimePrecentage; 
+	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_SKILLICON, isGBuffers);
+	float cooltime = m_PlayerSkillMgr->GetSkillEffect(0)->RemainCoolTimePrecentage;
 	pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_HPPERCENTAGE, 1, &cooltime, 0);
 	SkillSelectScene::m_pTexture->UpdateShaderVariable(pd3dCommandList, SkillSelectScene::m_SelectedIndex[0]);
 	m_SampleUISkill1->Render(pd3dCommandList);
 
-	SkillSelectScene::m_pTexture->UpdateShaderVariable(pd3dCommandList, SkillSelectScene::m_SelectedIndex[1]);  
-	cooltime = m_PlayerSkillMgr->GetSkillEffect(1)->RemainCoolTimePrecentage; 
+	SkillSelectScene::m_pTexture->UpdateShaderVariable(pd3dCommandList, SkillSelectScene::m_SelectedIndex[1]);
+	cooltime = m_PlayerSkillMgr->GetSkillEffect(1)->RemainCoolTimePrecentage;
 	pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_HPPERCENTAGE, 1, &cooltime, 0);
 	m_SampleUISkill2->Render(pd3dCommandList);
 
-	SkillSelectScene::m_pTexture->UpdateShaderVariable(pd3dCommandList, SkillSelectScene::m_SelectedIndex[2]);  
-	cooltime = m_PlayerSkillMgr->GetSkillEffect(2)->RemainCoolTimePrecentage; 
+	SkillSelectScene::m_pTexture->UpdateShaderVariable(pd3dCommandList, SkillSelectScene::m_SelectedIndex[2]);
+	cooltime = m_PlayerSkillMgr->GetSkillEffect(2)->RemainCoolTimePrecentage;
 	pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_HPPERCENTAGE, 1, &cooltime, 0);
 	m_SampleUISkill3->Render(pd3dCommandList);
 
-	SkillSelectScene::m_pTexture->UpdateShaderVariable(pd3dCommandList, SkillSelectScene::m_SelectedIndex[3]); 
-	cooltime = m_PlayerSkillMgr->GetSkillEffect(3)->RemainCoolTimePrecentage; 
+	SkillSelectScene::m_pTexture->UpdateShaderVariable(pd3dCommandList, SkillSelectScene::m_SelectedIndex[3]);
+	cooltime = m_PlayerSkillMgr->GetSkillEffect(3)->RemainCoolTimePrecentage;
 	pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_HPPERCENTAGE, 1, &cooltime, 0);
 	m_SampleUISkill4->Render(pd3dCommandList);
 
@@ -1019,14 +1037,14 @@ void GameScene::RenderForShadow(ID3D12GraphicsCommandList * pd3dCommandList)
 
 	// 렌더링
 	extern MeshRenderer gMeshRenderer;
-	 
+
 	// 클라 화면 설정	
 	if (m_isSkyMode)
 	{
 
 	}
 	else
-	{  
+	{
 		m_pMainCamera->SetViewportsAndScissorRects(pd3dCommandList);
 		m_pMainCamera->GetCamera()->UpdateShaderVariables(pd3dCommandList, 1);
 		m_pMainCamera->GetCamera()->UpdateLightShaderVariables(pd3dCommandList, &LightManager::m_pLights->m_pLights[2]);
@@ -1045,7 +1063,7 @@ void GameScene::RenderForShadow(ID3D12GraphicsCommandList * pd3dCommandList)
 		// m_pQuadtreeTerrain->RenderTerrainForShadow(pd3dCommandList, m_Terrain, m_pd3dCbvSrvDescriptorHeap);
 		m_pQuadtreeTerrain->RenderInstancingObjectsForShadow(pd3dCommandList);
 	}
-	
+
 }
 
 void GameScene::ReleaseUploadBuffers()

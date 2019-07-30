@@ -9,6 +9,7 @@ class MonsterMovement;
 class BossIdleAction
 	: public BossMonsterAction
 {
+	const float m_IdleTime{ 3.f }; //Idle 상태로 있는 시간
 
 public:
 	virtual void UpdateVelocity(float fElpasedTime, MonsterMovement* movement) override;
@@ -16,7 +17,7 @@ public:
 	virtual void UpdateState(float fElpasedTime, BossMonsterActionMgr* actionMgr) override;
 
 public:
-	BossIdleAction(GameObject* pOwner) : BossMonsterAction(pOwner) { };
+	BossIdleAction(GameObject* pOwner, float idleTime) : BossMonsterAction(pOwner), m_IdleTime(idleTime) { };
 	virtual ~BossIdleAction() {};
 
 };

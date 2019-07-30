@@ -47,12 +47,10 @@ void GeneralMonsterActionMgr::ChangeStateBefore()
 	if (m_CurrMonsterAction == &m_IdleAction)
 	{
 		ChangeStateToIdle();
-		//SoundManager::GetInstance()->Stop(ENUM_SOUND::MUSHROOM_MOVE);
 	}
 	else if (m_CurrMonsterAction == &m_MoveAction)
 	{
 		ChangeStateToMove();
-		//SoundManager::GetInstance()->Play(ENUM_SOUND::MUSHROOM_MOVE);
 	}
 	else if (m_CurrMonsterAction == &m_ChaseAction)
 	{
@@ -82,7 +80,7 @@ void GeneralMonsterActionMgr::ChangeStateToIdle()
 	m_CurrMonsterAction->Init();
 	static_cast<Monster*>(m_pOwner)->SetAnimationState(SPACECAT_IDLE.ID);
 	static_cast<Monster*>(m_pOwner)->SetisAttacking(false);
-	//SoundManager::GetInstance()->Stop(ENUM_SOUND::MUSHROOM_MOVE);
+	// printf("몬스터 대기", "%d");
 }
 
 void GeneralMonsterActionMgr::ChangeStateToMove()
@@ -91,7 +89,7 @@ void GeneralMonsterActionMgr::ChangeStateToMove()
 	m_CurrMonsterAction->Init();
 	static_cast<Monster*>(m_pOwner)->SetAnimationState(SPACECAT_MOVE.ID);
 	static_cast<Monster*>(m_pOwner)->SetisAttacking(false);
-	//SoundManager::GetInstance()->Play(ENUM_SOUND::MUSHROOM_MOVE);
+	// printf("몬스터 이동", "%d");
 }
 
 void GeneralMonsterActionMgr::ChangeStateToChase()
@@ -133,4 +131,5 @@ void GeneralMonsterActionMgr::ChangeStateToAttack()
 	m_CurrMonsterAction->Init();
 	static_cast<Monster*>(m_pOwner)->SetAnimationState(SPACECAT_ATTACK.ID);
 	static_cast<Monster*>(m_pOwner)->SetisAttacking(true);
+	printf("몬스터 어택\n");
 }

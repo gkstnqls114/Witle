@@ -117,7 +117,7 @@ CMaterial::CMaterial(int nTextures)
 }
 
 CMaterial::~CMaterial()
-{  
+{
 	assert(!(m_nTextures == 0 && m_ppTextures != NULL));
 	if (m_nTextures > 0)
 	{
@@ -132,8 +132,8 @@ CMaterial::~CMaterial()
 }
 
 void CMaterial::SetShader(Shader *pShader)
-{ 
-	m_pShader = pShader; 
+{
+	m_pShader = pShader;
 }
 
 void CMaterial::SetTexture(CTexture *pTexture, UINT nTexture)
@@ -177,30 +177,30 @@ void CMaterial::ReleaseShaders()
 void CMaterial::PrepareShaders(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature)
 {
 	m_pWireFrameShader = new StandardShader();
-	m_pWireFrameShader->CreateShader(pd3dDevice, pd3dGraphicsRootSignature); 
+	m_pWireFrameShader->CreateShader(pd3dDevice, pd3dGraphicsRootSignature);
 
 	m_pSkinnedAnimationWireFrameShader = new SkinnedShader();
-	m_pSkinnedAnimationWireFrameShader->CreateShader(pd3dDevice, pd3dGraphicsRootSignature); 
+	m_pSkinnedAnimationWireFrameShader->CreateShader(pd3dDevice, pd3dGraphicsRootSignature);
 
 	m_pWireFrameShader_ForShadow = new StandardShaderForShadow();
 	m_pWireFrameShader_ForShadow->CreateShader(pd3dDevice, pd3dGraphicsRootSignature);
-	 
+
 	m_pSkinnedShader_ForShadow = new SkinnedShaderForShadow();
 	m_pSkinnedShader_ForShadow->CreateShader(pd3dDevice, pd3dGraphicsRootSignature);
 }
 
-bool CMaterial::IsWireFrameShader( )
+bool CMaterial::IsWireFrameShader()
 {
 	return m_pShader == m_pWireFrameShader;
 }
 
-bool CMaterial::IsSkinnedAnimationWireFrameShader( )
+bool CMaterial::IsSkinnedAnimationWireFrameShader()
 {
 	return m_pShader == m_pSkinnedAnimationWireFrameShader;
 }
 
 void CMaterial::SetWireFrameShader()
-{ 
+{
 	CMaterial::SetShader(m_pWireFrameShader);
 }
 
@@ -353,11 +353,11 @@ void CAnimationSet::SetPosition(float fTrackPosition, float Accumulate)
 	case ANIMATION_TYPE_ONCE:
 	{
 		if (Accumulate >= (m_fEndTime - m_fStartTime))
-		{ 
+		{
 			m_fPosition = m_fEndTime;
 		}
 		else
-		{ 
+		{
 			m_fPosition = m_fStartTime + Accumulate;
 		}
 		break;
@@ -368,7 +368,7 @@ void CAnimationSet::SetPosition(float fTrackPosition, float Accumulate)
 		break;
 	}
 	}
-	 
+
 	if (m_pAnimationCallbackHandler)
 	{
 		void *pCallbackData = GetCallbackData();
@@ -428,8 +428,8 @@ CAnimationSets::~CAnimationSets()
 {
 	if (m_ppAnimationSets)
 	{
-		 for (int i = 0; i < m_nAnimationSets; i++)
-		 {
+		for (int i = 0; i < m_nAnimationSets; i++)
+		{
 			if (m_ppAnimationSets[i])
 			{
 				if (i == 0)m_ppAnimationSets[i]->ReleaseObject();
@@ -486,7 +486,7 @@ CAnimationController::CAnimationController(ID3D12Device *pd3dDevice, ID3D12Graph
 
 CAnimationController::~CAnimationController()
 {
-	ReleaseObjects(); 
+	ReleaseObjects();
 }
 
 void CAnimationController::SetCallbackKeys(int nAnimationSet, int nCallbackKeys)
@@ -511,13 +511,13 @@ bool CAnimationController::IsTrackAnimationSetFinish(int nAnimationTrack, int nA
 	{
 		bool isEnd = true;
 		if (m_pAnimationSets[0].m_ppAnimationSets[nAnimationSet]->m_nType == ANIMATION_TYPE_ONCE)
-		{ 
+		{
 			float fPos = m_pAnimationSets[0].m_ppAnimationSets[nAnimationSet]->m_fPosition;
 			float fEnd = m_pAnimationSets[0].m_ppAnimationSets[nAnimationSet]->m_fEndTime;
 			isEnd = fabsf(fPos - fEnd) < EPSILON;
 			if (isEnd) Accumulate = 0.f;
 		}
-		
+
 		return isEnd;
 	}
 	else
@@ -556,14 +556,14 @@ void CAnimationController::SetTrackWeight(int nAnimationTrack, float fWeight)
 }
 
 void CAnimationController::ReleaseObjects()
-{  
+{
 	if (m_pAnimationTracks)
-	{ 
+	{
 		delete[] m_pAnimationTracks;
 		m_pAnimationTracks = NULL;
 	}
 	if (m_ppd3dcbSkinningBoneTransforms)
-	{ 
+	{
 		for (int i = 0; i < m_nSkinnedMeshes; i++)
 		{
 			if (m_ppd3dcbSkinningBoneTransforms[i])
@@ -587,7 +587,7 @@ void CAnimationController::ReleaseObjects()
 	{
 		delete[] m_ppSkinnedMeshes;
 		m_ppSkinnedMeshes = NULL;
-	} 
+	}
 }
 
 void CAnimationController::UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList, const XMFLOAT4X4& world)
@@ -614,10 +614,10 @@ void CAnimationController::AdvanceTime(float fTimeElapsed, LoadObject *pRootGame
 			if (m_pAnimationTracks[k].m_bEnable)
 			{
 				CAnimationSet *pAnimationSet = m_pAnimationSets->m_ppAnimationSets[m_pAnimationTracks[k].m_nAnimationSet];
-				
+
 				//추가
 				float fTrackPosition = m_pAnimationTracks[k].m_fPosition;
-				
+
 				float ElapsedTime = fTrackPosition - prevTime;
 				Accumulate = Accumulate + ElapsedTime;
 				//추가
@@ -625,7 +625,7 @@ void CAnimationController::AdvanceTime(float fTimeElapsed, LoadObject *pRootGame
 				pAnimationSet->Animate(fTrackPosition, m_pAnimationTracks[k].m_fWeight, Accumulate);
 
 				//추가
-				prevTime = fTrackPosition; 
+				prevTime = fTrackPosition;
 				//추가
 
 			}
@@ -651,9 +651,9 @@ void CLoadedModelInfo::ReleaseUploadBuffers()
 }
 
 void CLoadedModelInfo::ReleaseObjects()
-{ 
+{
 	if (m_pAnimationSets)
-	{ 
+	{
 		delete m_pAnimationSets;
 		m_pAnimationSets = nullptr;
 	}
@@ -787,7 +787,7 @@ void LoadObject::SetShader(int nMaterial, Shader *pShader)
 	if (m_ppMaterials[nMaterial])
 	{
 		m_ppMaterials[nMaterial]->SetShader(pShader);
-	} 
+	}
 }
 
 void LoadObject::SetWireFrameShader()
@@ -955,13 +955,13 @@ void LoadObject::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuff
 			for (int i = 0; i < m_nMaterials; i++)
 			{
 				if (m_ppMaterials[i])
-				{ 
+				{
 					if (m_ppMaterials[i]->m_pShader)
-					{ 
+					{
 						// m_ppMaterials[i]->m_pShader->Render(pd3dCommandList);
-						if(isGBuffers) m_ppMaterials[i]->m_pShader->OnPrepareRenderForGBuffers(pd3dCommandList);
+						if (isGBuffers) m_ppMaterials[i]->m_pShader->OnPrepareRenderForGBuffers(pd3dCommandList);
 						else  m_ppMaterials[i]->m_pShader->OnPrepareRender(pd3dCommandList);
-					} 
+					}
 					m_ppMaterials[i]->UpdateShaderVariable(pd3dCommandList);
 				}
 
@@ -1022,8 +1022,8 @@ void LoadObject::RenderInstancing(ID3D12GraphicsCommandList * pd3dCommandList, i
 	if (m_pSkinnedAnimationController) m_pSkinnedAnimationController->UpdateShaderVariables(pd3dCommandList, m_xmf4x4World);
 
 	if (m_pMesh)
-	{ 
-		m_pMesh->RenderInstancing(pd3dCommandList, 0, InstanceCount); 
+	{
+		m_pMesh->RenderInstancing(pd3dCommandList, 0, InstanceCount);
 	}
 
 	if (m_pSibling) m_pSibling->RenderInstancing(pd3dCommandList, InstanceCount, isGBuffers);
@@ -1069,7 +1069,7 @@ void LoadObject::ReleaseObjects()
 		m_pSkinnedAnimationController = nullptr;
 	}
 	if (m_pMesh)
-	{  
+	{
 		delete m_pMesh;
 		m_pMesh = nullptr;
 	}
@@ -1222,10 +1222,10 @@ LoadObject *LoadObject::LoadFrameHierarchyFromFile(ID3D12Device *pd3dDevice, ID3
 		}
 		else if (!strcmp(pstrToken, "<Mesh>:"))
 		{
-			CMesh *pMesh = new CMesh(pd3dDevice, pd3dCommandList); 
+			CMesh *pMesh = new CMesh(pd3dDevice, pd3dCommandList);
 			pMesh->LoadMeshFromFile(pd3dDevice, pd3dCommandList, pInFile);
 			pGameObject->SetMesh(pMesh);
-			 
+
 			pGameObject->SetWireFrameShader();
 		}
 		else if (!strcmp(pstrToken, "<SkinDeformations>:"))
@@ -1240,7 +1240,7 @@ LoadObject *LoadObject::LoadFrameHierarchyFromFile(ID3D12Device *pd3dDevice, ID3
 			if (!strcmp(pstrToken, "<Mesh>:")) pSkinnedMesh->LoadMeshFromFile(pd3dDevice, pd3dCommandList, pInFile);
 
 			pGameObject->SetMesh(pSkinnedMesh);
-			  
+
 			pGameObject->SetSkinnedAnimationWireFrameShader();
 		}
 		else if (!strcmp(pstrToken, "<Children>:"))
@@ -1273,7 +1273,7 @@ LoadObject *LoadObject::LoadFrameHierarchyFromFile(ID3D12Device *pd3dDevice, ID3
 }
 
 LoadObject * LoadObject::NotLoadFrameHierarchyFromFile(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, LoadObject * pParent, FILE * pInFile, Shader * pShader, int * pnSkinnedMeshes)
-{ 
+{
 	char pstrToken[64] = { '\0' };
 	UINT nReads = 0;
 
@@ -1300,10 +1300,10 @@ LoadObject * LoadObject::NotLoadFrameHierarchyFromFile(ID3D12Device * pd3dDevice
 		{
 			if (pnSkinnedMeshes) (*pnSkinnedMeshes)++;
 
-			CSkinnedMesh::NotLoadSkinDeformationsFromFile(pd3dDevice, pd3dCommandList, pInFile); 
+			CSkinnedMesh::NotLoadSkinDeformationsFromFile(pd3dDevice, pd3dCommandList, pInFile);
 
 			::ReadStringFromFile(pInFile, pstrToken); //<Mesh>:
-			if (!strcmp(pstrToken, "<Mesh>:")) { 
+			if (!strcmp(pstrToken, "<Mesh>:")) {
 				CMesh::NotLoadMeshFromFile(pd3dDevice, pd3dCommandList, pInFile);
 			}
 
@@ -1339,7 +1339,7 @@ LoadObject * LoadObject::NotLoadFrameHierarchyFromFile(ID3D12Device * pd3dDevice
 	}
 	return(pGameObject);
 }
- 
+
 
 void LoadObject::PrintFrameInfo(LoadObject *pGameObject, LoadObject *pParent)
 {
@@ -1364,7 +1364,7 @@ void LoadObject::LoadAnimationFromFile(FILE *pInFile, CLoadedModelInfo *pLoadedM
 		::ReadStringFromFile(pInFile, pstrToken);
 		if (!strcmp(pstrToken, "<AnimationSets>:"))
 		{
-			nAnimationSets = ::ReadIntegerFromFile(pInFile); 
+			nAnimationSets = ::ReadIntegerFromFile(pInFile);
 			pLoadedModel->m_pAnimationSets = new CAnimationSets(nAnimationSets);
 		}
 		else if (!strcmp(pstrToken, "<AnimationSet>:"))
@@ -1376,7 +1376,7 @@ void LoadObject::LoadAnimationFromFile(FILE *pInFile, CLoadedModelInfo *pLoadedM
 			float fStartTime = ::ReadFloatFromFile(pInFile);
 			float fEndTime = ::ReadFloatFromFile(pInFile);
 
-			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[0] = new CAnimationSet(fStartTime,						   fStartTime + SECOND_PER_FRAME * 75.f, pstrToken);
+			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[0] = new CAnimationSet(fStartTime, fStartTime + SECOND_PER_FRAME * 75.f, pstrToken);
 			/*pLoadedModel->m_pAnimationSets->m_ppAnimationSets[1] = new CAnimationSet(fStartTime + SECOND_PER_FRAME * 76.f, fStartTime + SECOND_PER_FRAME * 95.f, pstrToken);
 			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[2] = new CAnimationSet(fStartTime + SECOND_PER_FRAME * 96.f, fStartTime + SECOND_PER_FRAME * 115.f, pstrToken);
 			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[3] = new CAnimationSet(fStartTime + SECOND_PER_FRAME * 116.f, fStartTime + SECOND_PER_FRAME * 135.f, pstrToken);
@@ -1542,21 +1542,21 @@ void LoadObject::LoadAnimationFromFile_forPlayer(FILE * pInFile, CLoadedModelInf
 			float fStartTime = ::ReadFloatFromFile(pInFile);
 			float fEndTime = ::ReadFloatFromFile(pInFile);
 
-			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[ANIMATION_IDLE.ID] =         new CAnimationSet(ANIMATION_IDLE.StartTime,          ANIMATION_IDLE.EndTime, pstrToken);
-			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[ANIMATION_FORWARD.ID] =      new CAnimationSet(ANIMATION_FORWARD.StartTime,       ANIMATION_FORWARD.EndTime, pstrToken);
-			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[ANIMATION_BACKWARD.ID] =     new CAnimationSet(ANIMATION_BACKWARD.StartTime,      ANIMATION_BACKWARD.EndTime, pstrToken);
-			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[ANIMATION_LEFT.ID] =         new CAnimationSet(ANIMATION_LEFT.StartTime,          ANIMATION_LEFT.EndTime, pstrToken);
-			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[ANIMATION_RIGHT.ID] =        new CAnimationSet(ANIMATION_RIGHT.StartTime,         ANIMATION_RIGHT.EndTime, pstrToken);
-			
-			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[ANIMATION_ATTACK.ID] =       new CAnimationSet(ANIMATION_ATTACK.StartTime,        ANIMATION_ATTACK.EndTime, pstrToken);
+			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[ANIMATION_IDLE.ID] = new CAnimationSet(ANIMATION_IDLE.StartTime, ANIMATION_IDLE.EndTime, pstrToken);
+			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[ANIMATION_FORWARD.ID] = new CAnimationSet(ANIMATION_FORWARD.StartTime, ANIMATION_FORWARD.EndTime, pstrToken);
+			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[ANIMATION_BACKWARD.ID] = new CAnimationSet(ANIMATION_BACKWARD.StartTime, ANIMATION_BACKWARD.EndTime, pstrToken);
+			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[ANIMATION_LEFT.ID] = new CAnimationSet(ANIMATION_LEFT.StartTime, ANIMATION_LEFT.EndTime, pstrToken);
+			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[ANIMATION_RIGHT.ID] = new CAnimationSet(ANIMATION_RIGHT.StartTime, ANIMATION_RIGHT.EndTime, pstrToken);
+
+			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[ANIMATION_ATTACK.ID] = new CAnimationSet(ANIMATION_ATTACK.StartTime, ANIMATION_ATTACK.EndTime, pstrToken);
 			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[ANIMATION_ATTACK.ID]->m_nType = ANIMATION_TYPE_ONCE;
-			
-			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[ANIMATION_BROOMPREPARE.ID] = new CAnimationSet(ANIMATION_BROOMPREPARE.StartTime,  ANIMATION_BROOMPREPARE.EndTime, pstrToken);
+
+			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[ANIMATION_BROOMPREPARE.ID] = new CAnimationSet(ANIMATION_BROOMPREPARE.StartTime, ANIMATION_BROOMPREPARE.EndTime, pstrToken);
 			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[ANIMATION_BROOMPREPARE.ID]->m_nType = ANIMATION_TYPE_ONCE;
-			
-			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[ANIMATION_BROOMIDLE.ID] =    new CAnimationSet(ANIMATION_BROOMIDLE.StartTime,     ANIMATION_BROOMIDLE.EndTime, pstrToken);
+
+			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[ANIMATION_BROOMIDLE.ID] = new CAnimationSet(ANIMATION_BROOMIDLE.StartTime, ANIMATION_BROOMIDLE.EndTime, pstrToken);
 			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[ANIMATION_BROOMFORWARD.ID] = new CAnimationSet(ANIMATION_BROOMFORWARD.StartTime, ANIMATION_BROOMFORWARD.EndTime, pstrToken);
-			
+
 			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[ANIMATION_DEAD.ID] = new CAnimationSet(ANIMATION_DEAD.StartTime, ANIMATION_DEAD.EndTime, pstrToken);
 			pLoadedModel->m_pAnimationSets->m_ppAnimationSets[ANIMATION_DEAD.ID]->m_nType = ANIMATION_TYPE_ONCE;
 
@@ -1666,7 +1666,7 @@ void LoadObject::LoadAnimationFromFile_forMonster(FILE * pInFile, CLoadedModelIn
 			{
 				pLoadedModel->m_pAnimationSets->m_ppAnimationSets[i] = new CAnimationSet(infos[i].StartTime, infos[i].EndTime, pstrToken);
 				pLoadedModel->m_pAnimationSets->m_ppAnimationSets[i]->m_nType = infos[i].Type;
-			} 
+			}
 			CAnimationSet *pAnimationSet = pLoadedModel->m_pAnimationSets->m_ppAnimationSets[nAnimationSet];
 
 			::ReadStringFromFile(pInFile, pstrToken);
@@ -1805,7 +1805,7 @@ CLoadedModelInfo * LoadObject::LoadGeometryAndAnimationFromFile_forPlayer(ID3D12
 }
 
 CLoadedModelInfo * LoadObject::LoadGeometryAndAnimationFromFile_forMonster(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, const char * pstrFileName, Shader * pShader, int AnimationCount, ANIMATION_INFO * infos)
-{ 
+{
 	FILE *pInFile = NULL;
 	::fopen_s(&pInFile, pstrFileName, "rb");
 	::rewind(pInFile);
@@ -1924,8 +1924,8 @@ CLoadedModelInfo * LoadObject::LoadJustAnimationFromFile(CLoadedModelInfo* pMode
 
 	return(pModelInfo);
 }
- 
- 
+
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 CHeightMapTerrain::CHeightMapTerrain(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, LPCTSTR pFileName, int nWidth, int nLength, XMFLOAT3 xmf3Scale, XMFLOAT4 xmf4Color) : LoadObject(1)
@@ -1970,4 +1970,4 @@ CHeightMapTerrain::~CHeightMapTerrain(void)
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  
- 
+

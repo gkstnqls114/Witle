@@ -49,6 +49,7 @@ void MoveAction::UpdateState(float fElpasedTime, GeneralMonsterActionMgr * actio
 	Monster* pMonsterOwner = static_cast<Monster*>(m_pOwner);
 
 	bool isNearPlayer = PlayerManager::IsNearPlayer(m_pOwner->GetTransform().GetPosition(), pMonsterOwner->GetRecognitionRange()->m_RecognitionRange);
+
 	if (isNearPlayer)
 	{
 		actionMgr->SetZeroTotalTime(); // 이거 왜 한거지.. ?

@@ -43,7 +43,7 @@ Dragon::Dragon(const std::string & entityID, const XMFLOAT3& SpawnPoint,
 	ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature)
 	: Monster(entityID, 100.f, SpawnPoint, pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature)
 {
-	m_RecognitionRange = new RecognitionRange(this, 500.f, 2.f);
+	m_RecognitionRange = new RecognitionRange(this, 2000.f, 2.f);
 	m_RecognitionRange->CreateDebugMesh(pd3dDevice, pd3dCommandList);
 
 	m_MonsterMovement = new MonsterMovement(this, 1, 1, true);
@@ -66,18 +66,19 @@ Dragon::Dragon(const std::string & entityID, const XMFLOAT3& SpawnPoint,
 	infos[5] = BOSS_SKILL2;
 	infos[6] = BOSS_SKILL3;
 	infos[7] = BOSS_SKILL4;
+
 	infos[8] = BOSS_SKILL5;
 	infos[9] = BOSS_SKILL6;
 	infos[10] = BOSS_SKILL7;
 	infos[11] = BOSS_SKILL8;
 	infos[12] = BOSS_SKILL9;
+
 	infos[13] = BOSS_DEAD;
 	infos[14] = BOSS_HIT;
 
 	m_MonsterModel = LoadObject::LoadGeometryAndAnimationFromFile_forMonster(
 		pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/Dragon.bin", NULL,
 		BOSSMONSTER_ANIMATIONE, infos);
-	// printf("º¸½º", "%d");
 
 	m_pLoadObject = m_MonsterModel->m_pModelRootObject;
 	m_pLoadObject->m_pSkinnedAnimationController = new CAnimationController(pd3dDevice, pd3dCommandList, 1, m_MonsterModel);
@@ -85,18 +86,16 @@ Dragon::Dragon(const std::string & entityID, const XMFLOAT3& SpawnPoint,
 
 	m_Transform.SetPosition(SpawnPoint);
 
-	XMFLOAT3 extents{ 50.f, 50.f, 50.f };
+	XMFLOAT3 extents{ 250.f, 150.f, 200.f };
 	m_pMyBOBox = new MyBOBox(this, pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 75.F, 0.F }, extents);
-
-	// static_cast<BossMonsterActionMgr*>(m_MonsterMovement->GetMonsterActionMgr())->ChangeStateToSample_1();
 
 	if (rand() % 2)
 	{
-		static_cast<BossMonsterActionMgr*>(m_MonsterMovement->GetMonsterActionMgr())->BossMoveAction();
+		static_cast<BossMonsterActionMgr*>(m_MonsterMovement->GetMonsterActionMgr())->ChangeBossStateToMove();
 	}
 	else
 	{
-		static_cast<BossMonsterActionMgr*>(m_MonsterMovement->GetMonsterActionMgr())->BossIdleAction();
+		static_cast<BossMonsterActionMgr*>(m_MonsterMovement->GetMonsterActionMgr())->ChangeBossStateToIdle();
 	}
 }
 
