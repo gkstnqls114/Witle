@@ -109,9 +109,7 @@ void DownScaledFirstPass( uint3 groupID : SV_GroupID, uint3 dispatchThreadID : S
     avgLum = DownScaled1024to4(dispatchThreadID.x, groupThreadID.x, avgLum);
 
     // 4에서 1로 다운 스케일
-    DownScaled4to1(dispatchThreadID.x, groupThreadID.x, groupID.x, avgLum);
-    
-    gtxtRWOutput[dispatchThreadID.xy] = 0.5f;
+    DownScaled4to1(dispatchThreadID.x, groupThreadID.x, groupID.x, avgLum); 
 }
 
 

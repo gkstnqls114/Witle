@@ -61,27 +61,16 @@ ID3D12RootSignature * GraphicsRootSignatureMgr::CreateGraphicsRootSignature(ID3D
 	pRootParameters[ROOTPARAMETER_SKYBOX] = d3dUtil::CreateRootParameterTable(1, &pd3dDescriptorRanges[7], D3D12_SHADER_VISIBILITY_PIXEL); //t15: SKYBOX
 
 
-	D3D12_DESCRIPTOR_RANGE pUavDescriptorRanges[3];
+	D3D12_DESCRIPTOR_RANGE pUavDescriptorRanges[1];
 	pUavDescriptorRanges[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_UAV;
 	pUavDescriptorRanges[0].NumDescriptors = 1;
 	pUavDescriptorRanges[0].BaseShaderRegister = 0; // RWTexture2D<float4> gtxtRWOutput : register(u0)
 	pUavDescriptorRanges[0].RegisterSpace = 0;
 	pUavDescriptorRanges[0].OffsetInDescriptorsFromTableStart = 0;
 
-	pUavDescriptorRanges[1].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_UAV;
-	pUavDescriptorRanges[1].NumDescriptors = 1;
-	pUavDescriptorRanges[1].BaseShaderRegister = 1; // RWStructuredBuffer<float> gAverageLum : register(u1);
-	pUavDescriptorRanges[1].RegisterSpace = 0;
-	pUavDescriptorRanges[1].OffsetInDescriptorsFromTableStart = 0;
-
-	pUavDescriptorRanges[2].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_UAV;
-	pUavDescriptorRanges[2].NumDescriptors = 1;
-	pUavDescriptorRanges[2].BaseShaderRegister = 2; // RWStructuredBuffer<float> gAverageValues1D : register(u2);
-	pUavDescriptorRanges[2].RegisterSpace = 0;
-	pUavDescriptorRanges[2].OffsetInDescriptorsFromTableStart = 0;
 	pRootParameters[ROOTPARAMETER_BLURTEST] = d3dUtil::CreateRootParameterTable(1, &pUavDescriptorRanges[0], D3D12_SHADER_VISIBILITY_ALL);
-	pRootParameters[ROOTPARAMETER_AVGLUM] = d3dUtil::CreateRootParameterTable(1, &pUavDescriptorRanges[1], D3D12_SHADER_VISIBILITY_ALL);
-	pRootParameters[ROOTPARAMETER_MIDDLEAVGLUM] = d3dUtil::CreateRootParameterTable(1, &pUavDescriptorRanges[2], D3D12_SHADER_VISIBILITY_ALL);
+	pRootParameters[ROOTPARAMETER_AVGLUM] = d3dUtil::CreateRootParameterUAV(1); 
+	pRootParameters[ROOTPARAMETER_MIDDLEAVGLUM] = d3dUtil::CreateRootParameterUAV(2);  
 	//// 루트 패러미터 ///////////////////////////////////////////////////////////////////// 
 
 

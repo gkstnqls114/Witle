@@ -97,7 +97,8 @@ private:
 
 	//// 컴퓨트 쉐이더를 위한 변수 ///////////////////////////////////////////
 
-	const int NumDataElements = (1280 * 720) / (16 * 1024);
+	// const int NumDataElements = (1280 * 720) / (16 * 1024);
+	const int NumDataElements = 1;
 	 
 	// 블러를 위한 텍스쳐
 	ID3D12Resource* m_ComputeRWResource; 

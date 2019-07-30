@@ -43,7 +43,7 @@
 #include "GameFramework.h"
 
 static const bool DefferedRendering = false;
-static const bool blurTEST = false;
+static const bool blurTEST = true;
 
 void CGameFramework::Render()
 {
@@ -85,7 +85,7 @@ void CGameFramework::Render()
 
 			DownScale();
 			  
-			// Blur();
+			Blur();
 
 			// 텍스쳐를 그립니다.
 			// 블러링된 텍스쳐를 전환
@@ -129,17 +129,17 @@ void CGameFramework::Render()
 
 void CGameFramework::Debug()
 {
-	// Map the data so we can read it on CPU.
-	float* mappedData = nullptr;
-	ThrowIfFailed(mReadBackBuffer->Map(0, nullptr, reinterpret_cast<void**>(&mappedData)));
+	//// Map the data so we can read it on CPU.
+	//float* mappedData = nullptr;
+	//ThrowIfFailed(mReadBackBuffer->Map(0, nullptr, reinterpret_cast<void**>(&mappedData)));
+	// 
+	//for (int i = 0; i < NumDataElements; ++i)
+	//{
+	//	std::cout << mappedData[i] << " ";
+	//}
+	//std::cout << std::endl;
 
-	for (int i = 0; i < NumDataElements; ++i)
-	{
-		std::cout << mappedData[i] << " ";
-	}
-	std::cout << std::endl;
-
-	mReadBackBuffer->Unmap(0, nullptr);
+	//mReadBackBuffer->Unmap(0, nullptr);
 }
 
 CGameFramework::CGameFramework()
@@ -1222,18 +1222,16 @@ void CGameFramework::DownScale()
 
 	//m_CommandList->SetComputeRootShaderResourceView(0, mInputBufferA->GetGPUVirtualAddress());
 	//m_CommandList->SetComputeRootShaderResourceView(1, mInputBufferB->GetGPUVirtualAddress());
-	m_CommandList->SetComputeRootUnorderedAccessView(ROOTPARAMETER_MIDDLEAVGLUM, mOutputBuffer->GetGPUVirtualAddress());
+	m_CommandList->SetComputeRootUnorderedAccessView(ROOTPARAMETER_AVGLUM, mOutputBuffer->GetGPUVirtualAddress());
 
-	// Schedule to copy the data to the default buffer to the readback buffer.
-	m_CommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(mOutputBuffer,
-		D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_COPY_SOURCE));
-
-	m_CommandList->CopyResource(mReadBackBuffer, mOutputBuffer);
-
-	m_CommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(mOutputBuffer,
-		D3D12_RESOURCE_STATE_COPY_SOURCE, D3D12_RESOURCE_STATE_COMMON));
-	 
 	m_CommandList->Dispatch(1, 1, 1);
+
+	//// 리소스 카피 
+	//m_CommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(mOutputBuffer, D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_COPY_SOURCE));
+	//m_CommandList->CopyResource(mReadBackBuffer, mOutputBuffer);
+	//m_CommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(mOutputBuffer, D3D12_RESOURCE_STATE_COPY_SOURCE, D3D12_RESOURCE_STATE_COMMON));
+	//// 리소스 카피 
+
 	// 다운 스케일 첫번째 PASS //////////////////////////////////
 
 
