@@ -164,7 +164,6 @@ bool CGameFramework::OnCreate(HINSTANCE hInstance, HWND hMainWnd)
 	CreateSwapChain();
 	CreateShadowmapView();
 	CreateRWResourceViews();
-	CreateRWBuffer();
 	// 절대 순서 변경 금지 ////////////
 
 	BuildObjects();
@@ -260,14 +259,12 @@ void CGameFramework::CreateRWResourceViews()
 			DXGI_FORMAT_R8G8B8A8_UNORM,
 			D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS/*다름*/,
 			D3D12_RESOURCE_STATE_COMMON/*다름*/,
-			NULL/*, 0*/ /*인덱스*/); 
-
-	
+			NULL/*, 0*/ /*인덱스*/);  
 }
 
 void CGameFramework::CreateRWBuffer()
 {
-	// Generate some data.
+	// Generate some data.  
 	std::vector<float> dataA(NumDataElements);
 	std::vector<float> dataB(NumDataElements);
 	for (int i = 0; i < NumDataElements; ++i)
@@ -277,7 +274,7 @@ void CGameFramework::CreateRWBuffer()
 		dataB[i] = 0.0f; 
 	}
 
-	UINT64 byteSize = dataA.size() * sizeof(float);
+	UINT64 byteSize = NumDataElements * sizeof(float);
 
 	// Create some buffers to be used as SRVs.
 	mInputBufferA = d3dUtil::CreateDefaultBuffer(
@@ -285,14 +282,14 @@ void CGameFramework::CreateRWBuffer()
 		m_CommandList.Get(),
 		dataA.data(),
 		byteSize,
-		mInputUploadBufferA);
+		&mInputUploadBufferA);
 
 	mInputBufferB = d3dUtil::CreateDefaultBuffer(
 		m_d3dDevice.Get(),
 		m_CommandList.Get(),
 		dataB.data(),
 		byteSize,
-		mInputUploadBufferB);
+		&mInputUploadBufferB);
 
 	// Create the buffer that will be a UAV.
 	ThrowIfFailed(m_d3dDevice->CreateCommittedResource(
@@ -790,8 +787,10 @@ void CGameFramework::BuildObjects()
 	
 	///////////////////////////////////////////////////////////////////////////// 리소스 생성
 	// 순서 변경 X /////////////
+
 	GraphicsRootSignatureMgr::BuildObject(m_d3dDevice.Get()); // 루트 시그니처 먼저 생성
 	BuildShaders(); // 생성된 루트 시그니처를 사용하는 쉐이더 생성
+	CreateRWBuffer(); // CommandList Reset된 이후에 해야함
 	
 	SkillStg::GetInstance()->BuildObjects(m_d3dDevice.Get(), m_CommandList.Get()); // 스킬 이펙트 생성
 
@@ -1226,16 +1225,15 @@ void CGameFramework::DownScale()
 	m_CommandList->SetComputeRootUnorderedAccessView(ROOTPARAMETER_MIDDLEAVGLUM, mOutputBuffer->GetGPUVirtualAddress());
 
 	// Schedule to copy the data to the default buffer to the readback buffer.
-	m_CommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(mOutputBuffer.Get(),
+	m_CommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(mOutputBuffer,
 		D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_COPY_SOURCE));
 
-	m_CommandList->CopyResource(mReadBackBuffer.Get(), mOutputBuffer.Get());
+	m_CommandList->CopyResource(mReadBackBuffer, mOutputBuffer);
 
-	m_CommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(mOutputBuffer.Get(),
+	m_CommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(mOutputBuffer,
 		D3D12_RESOURCE_STATE_COPY_SOURCE, D3D12_RESOURCE_STATE_COMMON));
-
-	UINT groupX = (UINT)ceilf(GameScreen::GetWidth() / 1024.F);
-	m_CommandList->Dispatch(groupX, GameScreen::GetHeight(), 1);
+	 
+	m_CommandList->Dispatch(1, 1, 1);
 	// 다운 스케일 첫번째 PASS //////////////////////////////////
 
 

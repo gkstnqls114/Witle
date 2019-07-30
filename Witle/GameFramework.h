@@ -98,17 +98,19 @@ private:
 	//// 컴퓨트 쉐이더를 위한 변수 ///////////////////////////////////////////
 
 	const int NumDataElements = (1280 * 720) / (16 * 1024);
-
+	 
 	// 블러를 위한 텍스쳐
 	ID3D12Resource* m_ComputeRWResource; 
 
 	// 톤매핑을 위한 변수
-	ComPtr<ID3D12Resource> mInputBufferA = nullptr;
-	ComPtr<ID3D12Resource> mInputUploadBufferA = nullptr;
-	ComPtr<ID3D12Resource> mInputBufferB = nullptr;
-	ComPtr<ID3D12Resource> mInputUploadBufferB = nullptr;
-	ComPtr<ID3D12Resource> mOutputBuffer = nullptr;
-	ComPtr<ID3D12Resource> mReadBackBuffer = nullptr;
+	ID3D12Resource* mInputBufferA = nullptr;
+	ID3D12Resource* mInputUploadBufferA = nullptr;
+
+	ID3D12Resource* mInputBufferB = nullptr;
+	ID3D12Resource* mInputUploadBufferB = nullptr;
+
+	ID3D12Resource* mOutputBuffer = nullptr;
+	ID3D12Resource* mReadBackBuffer = nullptr;
 
 	ID3D12Resource* m_DownScaleFirstResource; // 작성함 
 	ID3D12Resource* m_DownScaleSecondResource; // 작성함 
