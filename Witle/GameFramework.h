@@ -97,25 +97,19 @@ private:
 
 	//// 컴퓨트 쉐이더를 위한 변수 ///////////////////////////////////////////
 
-	// const int NumDataElements = (1280 * 720) / (16 * 1024);
-	const int NumDataElements = 1;
-	 
+	
 	// 블러를 위한 텍스쳐
 	ID3D12Resource* m_ComputeRWResource; 
 
-	// 톤매핑을 위한 변수
-	ID3D12Resource* mInputBufferA = nullptr;
-	ID3D12Resource* mInputUploadBufferA = nullptr;
+	// 톤매핑을 위한 변수 
+	const int NumMiddleAvgLum = (1280 * 720) / (16 * 1024);
+	ID3D12Resource* m_RWMiddleAvgLum = nullptr;
+	ID3D12Resource* m_ReadBackMiddleAvgLumBuffer = nullptr;
 
-	ID3D12Resource* mInputBufferB = nullptr;
-	ID3D12Resource* mInputUploadBufferB = nullptr;
-
-	ID3D12Resource* mOutputBuffer = nullptr;
-	ID3D12Resource* mReadBackBuffer = nullptr;
-
-	ID3D12Resource* m_DownScaleFirstResource; // 작성함 
-	ID3D12Resource* m_DownScaleSecondResource; // 작성함 
-	  
+	const int NumAvgLum = 1;
+	ID3D12Resource* m_RWAvgLum = nullptr; 
+	ID3D12Resource* m_ReadBackAvgLumBuffer = nullptr;
+	 
 	// 블러를 위한 컴퓨트
 	HorizonBlurShader* m_horizenShader{ nullptr };
 	VerticalBlurShader* m_verticalShader{ nullptr };

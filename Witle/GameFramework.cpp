@@ -129,17 +129,27 @@ void CGameFramework::Render()
 
 void CGameFramework::Debug()
 {
-	//// Map the data so we can read it on CPU.
-	//float* mappedData = nullptr;
-	//ThrowIfFailed(mReadBackBuffer->Map(0, nullptr, reinterpret_cast<void**>(&mappedData)));
-	// 
-	//for (int i = 0; i < NumDataElements; ++i)
-	//{
-	//	std::cout << mappedData[i] << " ";
-	//}
-	//std::cout << std::endl;
+	// Map the data so we can read it on CPU.
+	float* mappedData1 = nullptr;
+	float* mappedData2 = nullptr;
+	ThrowIfFailed(m_ReadBackMiddleAvgLumBuffer->Map(0, nullptr, reinterpret_cast<void**>(&mappedData1)));
+	ThrowIfFailed(m_ReadBackAvgLumBuffer->Map(0, nullptr, reinterpret_cast<void**>(&mappedData2)));
+	 
+	for (int i = 0; i < NumMiddleAvgLum; ++i)
+	{
+		std::cout << mappedData1[i] << " ";
+	}
+	std::cout << std::endl;
 
-	//mReadBackBuffer->Unmap(0, nullptr);
+	for (int i = 0; i < NumAvgLum; ++i)
+	{
+		std::cout << mappedData2[i] << " ";
+	}
+	std::cout << std::endl;
+	std::cout << std::endl;
+
+	m_ReadBackMiddleAvgLumBuffer->Unmap(0, nullptr);
+	m_ReadBackAvgLumBuffer->Unmap(0, nullptr);
 }
 
 CGameFramework::CGameFramework()
@@ -263,33 +273,31 @@ void CGameFramework::CreateRWResourceViews()
 }
 
 void CGameFramework::CreateRWBuffer()
-{
-	// Generate some data.  
-	std::vector<float> dataA(NumDataElements);
-	std::vector<float> dataB(NumDataElements);
-	for (int i = 0; i < NumDataElements; ++i)
-	{
-		dataA[i] = 0.f;
+{ 
+	// Middle Avg Lum ............ ///////////////////
+	UINT64 byteSize = NumMiddleAvgLum * sizeof(float);
+	 
+	// Create the buffer that will be a UAV.
+	ThrowIfFailed(m_d3dDevice->CreateCommittedResource(
+		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
+		D3D12_HEAP_FLAG_NONE,
+		&CD3DX12_RESOURCE_DESC::Buffer(byteSize, D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS),
+		D3D12_RESOURCE_STATE_UNORDERED_ACCESS,
+		nullptr,
+		IID_PPV_ARGS(&m_RWMiddleAvgLum)));
 
-		dataB[i] = 0.0f; 
-	}
+	ThrowIfFailed(m_d3dDevice->CreateCommittedResource(
+		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_READBACK),
+		D3D12_HEAP_FLAG_NONE,
+		&CD3DX12_RESOURCE_DESC::Buffer(byteSize),
+		D3D12_RESOURCE_STATE_COPY_DEST,
+		nullptr,
+		IID_PPV_ARGS(&m_ReadBackMiddleAvgLumBuffer)));
+	// Middle Avg Lum ............ ///////////////////
 
-	UINT64 byteSize = NumDataElements * sizeof(float);
 
-	// Create some buffers to be used as SRVs.
-	mInputBufferA = d3dUtil::CreateDefaultBuffer(
-		m_d3dDevice.Get(),
-		m_CommandList.Get(),
-		dataA.data(),
-		byteSize,
-		&mInputUploadBufferA);
-
-	mInputBufferB = d3dUtil::CreateDefaultBuffer(
-		m_d3dDevice.Get(),
-		m_CommandList.Get(),
-		dataB.data(),
-		byteSize,
-		&mInputUploadBufferB);
+	// Avg Lum ............ ///////////////////
+	byteSize = NumAvgLum * sizeof(float);
 
 	// Create the buffer that will be a UAV.
 	ThrowIfFailed(m_d3dDevice->CreateCommittedResource(
@@ -298,7 +306,7 @@ void CGameFramework::CreateRWBuffer()
 		&CD3DX12_RESOURCE_DESC::Buffer(byteSize, D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS),
 		D3D12_RESOURCE_STATE_UNORDERED_ACCESS,
 		nullptr,
-		IID_PPV_ARGS(&mOutputBuffer)));
+		IID_PPV_ARGS(&m_RWAvgLum)));
 
 	ThrowIfFailed(m_d3dDevice->CreateCommittedResource(
 		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_READBACK),
@@ -306,7 +314,8 @@ void CGameFramework::CreateRWBuffer()
 		&CD3DX12_RESOURCE_DESC::Buffer(byteSize),
 		D3D12_RESOURCE_STATE_COPY_DEST,
 		nullptr,
-		IID_PPV_ARGS(&mReadBackBuffer)));
+		IID_PPV_ARGS(&m_ReadBackAvgLumBuffer)));
+	// Avg Lum ............ ///////////////////
 }
 
 void CGameFramework::ReleaseSwapChainBuffer()
@@ -1186,7 +1195,7 @@ void CGameFramework::Blur()
 	m_CommandList->SetComputeRootDescriptorTable(ROOTPARAMETER_BLURTEST, m_GBufferHeap->GetGPUUAVDescriptorStartHandle());
 	// 사용할 리소스 업데이트
 
-	UINT groupX = (UINT)ceilf(GameScreen::GetWidth() / 256.F);
+	UINT groupX = (UINT)ceilf(float(GameScreen::GetWidth()) / 256.F);
 	m_CommandList->Dispatch(groupX, GameScreen::GetHeight(), 1);
 	// 수평 블러 //////////////////////////////////
 
@@ -1217,36 +1226,39 @@ void CGameFramework::DownScale()
 	// 사용할 리소스 업데이트
 	m_GBufferHeap->UpdateShaderVariable(m_CommandList.Get());
 	m_CommandList->SetComputeRootDescriptorTable(ROOTPARAMETER_TEXTURE, m_GBufferHeap->GetGPUDescriptorHandleForHeapStart());
-	m_CommandList->SetComputeRootDescriptorTable(ROOTPARAMETER_BLURTEST, m_GBufferHeap->GetGPUUAVDescriptorStartHandle());
+	m_CommandList->SetComputeRootUnorderedAccessView(ROOTPARAMETER_MIDDLEAVGLUM, m_RWMiddleAvgLum->GetGPUVirtualAddress());
+	m_CommandList->SetComputeRootUnorderedAccessView(ROOTPARAMETER_AVGLUM, m_RWAvgLum->GetGPUVirtualAddress());
 	// 사용할 리소스 업데이트
 
-	//m_CommandList->SetComputeRootShaderResourceView(0, mInputBufferA->GetGPUVirtualAddress());
-	//m_CommandList->SetComputeRootShaderResourceView(1, mInputBufferB->GetGPUVirtualAddress());
-	m_CommandList->SetComputeRootUnorderedAccessView(ROOTPARAMETER_AVGLUM, mOutputBuffer->GetGPUVirtualAddress());
-
-	m_CommandList->Dispatch(1, 1, 1);
-
-	//// 리소스 카피 
-	//m_CommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(mOutputBuffer, D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_COPY_SOURCE));
-	//m_CommandList->CopyResource(mReadBackBuffer, mOutputBuffer);
-	//m_CommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(mOutputBuffer, D3D12_RESOURCE_STATE_COPY_SOURCE, D3D12_RESOURCE_STATE_COMMON));
-	//// 리소스 카피 
-
-	// 다운 스케일 첫번째 PASS //////////////////////////////////
+	UINT groupX = (UINT)ceilf((float(GameScreen::GetWidth()) / 1024.f));
+	m_CommandList->Dispatch(groupX, GameScreen::GetHeight(), 1);
+    // 다운 스케일 첫번째 PASS //////////////////////////////////
 
 
-	//// 다운 스케일 두번째 PASS //////////////////////////////////
-	//m_downScaleSecondPassShader->SetPSO(m_CommandList.Get());
+	// 다운 스케일 두번째 PASS //////////////////////////////////
+	m_downScaleSecondPassShader->SetPSO(m_CommandList.Get());
 
-	//// 사용할 리소스 업데이트
-	//m_GBufferHeap->UpdateShaderVariable(m_CommandList.Get());
-	//m_CommandList->SetComputeRootDescriptorTable(ROOTPARAMETER_TEXTURE, m_GBufferHeap->GetGPUDescriptorHandleForHeapStart());
-	//m_CommandList->SetComputeRootDescriptorTable(ROOTPARAMETER_BLURTEST, m_GBufferHeap->GetGPUUAVDescriptorStartHandle());
-	//// 사용할 리소스 업데이트
+	// 사용할 리소스 업데이트
+	m_GBufferHeap->UpdateShaderVariable(m_CommandList.Get());
+	m_CommandList->SetComputeRootDescriptorTable(ROOTPARAMETER_TEXTURE, m_GBufferHeap->GetGPUDescriptorHandleForHeapStart());
+	m_CommandList->SetComputeRootUnorderedAccessView(ROOTPARAMETER_MIDDLEAVGLUM, m_RWMiddleAvgLum->GetGPUVirtualAddress());
+	m_CommandList->SetComputeRootUnorderedAccessView(ROOTPARAMETER_AVGLUM, m_RWAvgLum->GetGPUVirtualAddress());
+	// 사용할 리소스 업데이트
 
-	//groupX = (UINT)ceilf(GameScreen::GetHeight() / 1024.f / 64.f);
-	//m_CommandList->Dispatch(groupX, GameScreen::GetHeight(), 1);
-	//// 다운 스케일 두번째 PASS //////////////////////////////////
+	groupX = (UINT)ceilf(GameScreen::GetHeight() / 64.f);
+	m_CommandList->Dispatch(groupX, GameScreen::GetHeight(), 1);
+	// 다운 스케일 두번째 PASS //////////////////////////////////
+
+
+	// 리소스 카피 
+	m_CommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(m_RWMiddleAvgLum, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_COPY_SOURCE));
+	m_CommandList->CopyResource(m_ReadBackMiddleAvgLumBuffer, m_RWMiddleAvgLum);
+	m_CommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(m_RWMiddleAvgLum, D3D12_RESOURCE_STATE_COPY_SOURCE, D3D12_RESOURCE_STATE_UNORDERED_ACCESS));
+
+	m_CommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(m_RWAvgLum, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_COPY_SOURCE));
+	m_CommandList->CopyResource(m_ReadBackAvgLumBuffer, m_RWAvgLum);
+	m_CommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(m_RWAvgLum, D3D12_RESOURCE_STATE_COPY_SOURCE, D3D12_RESOURCE_STATE_UNORDERED_ACCESS));
+	// 리소스 카피  
 
 
 	d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_ComputeRWResource, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_COMMON);
