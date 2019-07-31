@@ -56,4 +56,5 @@
 #define SHADER_SKILLICON "SkillIcon"
 #define SHADER_EFFECTMESH "EffectMesh"
 #define SHADER_BLENDMESH "BlendMeshShader"
+#define SHADER_TONEMAPPING "ToneMapping" 
 

@@ -161,6 +161,7 @@
     <ClInclude Include="BlendMeshShader.h" />
     <ClInclude Include="Blessing.h" />
     <ClInclude Include="EffectMesh.h" />
+    <ClInclude Include="TonemappingShader.h" />
     <ClInclude Include="Healing.h" />
     <ClInclude Include="HealingEffect.h" />
     <ClInclude Include="BlessingEffect.h" />
@@ -330,6 +331,7 @@
     <ClCompile Include="BlendMeshShader.cpp" />
     <ClCompile Include="Blessing.cpp" />
     <ClCompile Include="EffectMesh.cpp" />
+    <ClCompile Include="TonemappingShader.cpp" />
     <ClCompile Include="Healing.cpp" />
     <ClCompile Include="HealingEffect.cpp" />
     <ClCompile Include="BlessingEffect.cpp" />
@@ -548,6 +550,17 @@
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="TonemappingShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="Light.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>

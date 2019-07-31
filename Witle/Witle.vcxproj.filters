@@ -478,6 +478,9 @@
     <Filter Include="05.Shader\01.ComputeShader\DownScaleSecondPassShader">
       <UniqueIdentifier>{1105c8d9-d374-48ab-ab6b-e19051a8f988}</UniqueIdentifier>
     </Filter>
+    <Filter Include="05.Shader\02.GraphicsShader\TonemappingShader">
+      <UniqueIdentifier>{4d2165cb-a68e-4c46-8f26-40d1e42c9dfd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -981,6 +984,9 @@
     <ClInclude Include="DownScaleSecondPassShader.h">
       <Filter>05.Shader\01.ComputeShader\DownScaleSecondPassShader</Filter>
     </ClInclude>
+    <ClInclude Include="TonemappingShader.h">
+      <Filter>05.Shader\02.GraphicsShader\TonemappingShader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1463,6 +1469,9 @@
     <ClCompile Include="DownScaleSecondPassShader.cpp">
       <Filter>05.Shader\01.ComputeShader\DownScaleSecondPassShader</Filter>
     </ClCompile>
+    <ClCompile Include="TonemappingShader.cpp">
+      <Filter>05.Shader\02.GraphicsShader\TonemappingShader</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Witle.rc">
@@ -1536,6 +1545,9 @@
       <Filter>HLSL</Filter>
     </FxCompile>
     <FxCompile Include="TonemappingComputeShader.hlsl">
+      <Filter>HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="TonemappingShader.hlsl">
       <Filter>HLSL</Filter>
     </FxCompile>
   </ItemGroup>
