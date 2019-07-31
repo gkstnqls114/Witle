@@ -79,22 +79,33 @@ void CGameFramework::Render()
 			d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_Shadowmap, D3D12_RESOURCE_STATE_DEPTH_WRITE, D3D12_RESOURCE_STATE_GENERIC_READ);
 			// 쉐도우 맵을 그립니다.
 
-			// 조명처리된 화면을 그립니다.
-			// RenderOnRT(&CGameFramework::RenderSwapChain, m_RenderTargetBuffers[m_SwapChainBufferIndex], m_SwapChainCPUHandle[m_SwapChainBufferIndex], m_DepthStencilCPUHandle);
-			RenderOnRTs(&CGameFramework::RenderSwapChain, 1, &m_GBuffersForRenderTarget[0], &m_GBufferCPUHandleForRenderTarget[0], m_GBufferCPUHandleForDepth[0]);
+			// 플레이어 쉐도우 맵을 그립니다.
+			d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_PlayerShadowmap, D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_DEPTH_WRITE);
+			RenderOnRTs(&CGameFramework::RenderForPlayerShadow, 0, NULL, NULL, m_PlayerShadowmapCPUHandle);
+			d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_PlayerShadowmap, D3D12_RESOURCE_STATE_DEPTH_WRITE, D3D12_RESOURCE_STATE_GENERIC_READ);
+			// 쉐도우 맵을 그립니다.
+			 
+			// 조명처리된 화면을 GBuffer에 그립니다. 그립니다.
+			RenderOnRTs(&CGameFramework::RenderSwapChain, 1, m_GBuffersForRenderTarget, m_GBufferCPUHandleForRenderTarget, m_GBufferCPUHandleForDepth[0]);
 
+			// 휘도를 구합니다.
 			DownScale();
-			  
-			RenderOnRT(&CGameFramework::ToneMapping, m_RenderTargetBuffers[m_SwapChainBufferIndex], m_SwapChainCPUHandle[m_SwapChainBufferIndex], m_DepthStencilCPUHandle);
+
+			// 톤매핑을 합니다.
+			// RenderOnRT(&CGameFramework::ToneMapping, m_RenderTargetBuffers[m_SwapChainBufferIndex], m_SwapChainCPUHandle[m_SwapChainBufferIndex], m_DepthStencilCPUHandle);
+
+
+			// 그냥 그립니다.. 지금 톤매핑 휘도 이상한거 같아서 테스트해봐야함..
+			RenderOnRT(&CGameFramework::RenderSwapChain, m_RenderTargetBuffers[m_SwapChainBufferIndex], m_SwapChainCPUHandle[m_SwapChainBufferIndex], m_DepthStencilCPUHandle);
+
 
 			// 블러링용
 			//Blur();
 			//
+			// RenderOnRTs(&CGameFramework::RenderSwapChain, 1, &m_GBuffersForRenderTarget[0], &m_GBufferCPUHandleForRenderTarget[0], m_GBufferCPUHandleForDepth[0]);
 			//d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_ComputeRWResource, D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_GENERIC_READ);
 			//RenderOnRT(&CGameFramework::RenderToTexture, m_RenderTargetBuffers[m_SwapChainBufferIndex], m_SwapChainCPUHandle[m_SwapChainBufferIndex], m_DepthStencilCPUHandle);
 			//d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_ComputeRWResource, D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_COMMON);
-
-			 
 		}
 		else
 		{
@@ -132,11 +143,11 @@ void CGameFramework::Render()
 void CGameFramework::Debug()
 {
 #if _DEBUG
-	//// Map the data so we can read it on CPU.
-	//float* mappedData1 = nullptr;
-	//float* mappedData2 = nullptr;
-	//ThrowIfFailed(m_ReadBackMiddleAvgLumBuffer->Map(0, nullptr, reinterpret_cast<void**>(&mappedData1)));
-	//ThrowIfFailed(m_ReadBackAvgLumBuffer->Map(0, nullptr, reinterpret_cast<void**>(&mappedData2)));
+	// Map the data so we can read it on CPU.
+	float* mappedData1 = nullptr;
+	float* mappedData2 = nullptr;
+	ThrowIfFailed(m_ReadBackMiddleAvgLumBuffer->Map(0, nullptr, reinterpret_cast<void**>(&mappedData1)));
+	ThrowIfFailed(m_ReadBackAvgLumBuffer->Map(0, nullptr, reinterpret_cast<void**>(&mappedData2)));
 
 	//for (int i = 0; i < NumMiddleAvgLum; ++i)
 	//{
@@ -144,15 +155,15 @@ void CGameFramework::Debug()
 	//}
 	//std::cout << std::endl;
 
-	//for (int i = 0; i < NumAvgLum; ++i)
-	//{
-	//	std::cout << mappedData2[i] << " ";
-	//}
-	//std::cout << std::endl;
-	//std::cout << std::endl;
+	for (int i = 0; i < NumAvgLum; ++i)
+	{
+		std::cout << mappedData2[i] << " ";
+	}
+	std::cout << std::endl;
+	std::cout << std::endl;
 
-	//m_ReadBackMiddleAvgLumBuffer->Unmap(0, nullptr);
-	//m_ReadBackAvgLumBuffer->Unmap(0, nullptr);
+	m_ReadBackMiddleAvgLumBuffer->Unmap(0, nullptr);
+	m_ReadBackAvgLumBuffer->Unmap(0, nullptr);
 #endif // _DEBUG 
 }
 
@@ -1366,7 +1377,7 @@ void CGameFramework::ToneMapping()
 
 	//// 리소스만 바꾼다.. 
 	D3D12_GPU_DESCRIPTOR_HANDLE handle = m_GBufferHeap->GetGPUDescriptorHandleForHeapStart(); // 0번째 리소스
-	handle.ptr = handle.ptr + d3dUtil::gnCbvSrvDescriptorIncrementSize * (m_GBufferForUAV);
+	// handle.ptr = handle.ptr + d3dUtil::gnCbvSrvDescriptorIncrementSize * (m_GBufferForUAV);
 
 	D3D12_VIEWPORT	Viewport{ 0.f, 0.f, GameScreen::GetWidth() , GameScreen::GetHeight(), 1.0f, 0.0f };
 	D3D12_RECT		ScissorRect{ 0, 0, GameScreen::GetWidth() , GameScreen::GetHeight() };
