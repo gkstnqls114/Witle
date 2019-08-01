@@ -127,6 +127,6 @@ void Dragon::Animate(float fElapsedTime)
 	LoadObject* p = m_pLoadObject->FindFrame("Bone001");
 	XMFLOAT3 pos = XMFLOAT3(p->m_xmf4x4World._41, p->m_xmf4x4World._42 + 50, p->m_xmf4x4World._43);
 
-	m_pMyBOBox->Rotate(0.f, 0.f, m_MonsterMovement->m_fPitch);
+	m_pMyBOBox->Rotate(0.f, m_MonsterMovement->m_fPitch, 0.f);
 	m_pMyBOBox->SetPosition(pos);
 }

@@ -113,7 +113,7 @@ void MyBOBox::RenderInstancing(ID3D12GraphicsCommandList * pd3dCommandList, int 
 
 // 말이 Rotate지만, 실제로 roll, yaw, pitch에 맞춰서 축을 다시 설정하고 있다.
 // 기준이 되는 position 에 따라 공전 수행
-void MyBOBox::Rotate(float roll, float yaw, float pitch)
+void MyBOBox::Rotate(float roll, float pitch, float yaw)
 {
 	m_BOBox.Orientation = Quaternion::ToQuaternion(roll, pitch, yaw);
 
