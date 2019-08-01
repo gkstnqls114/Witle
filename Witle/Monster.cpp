@@ -85,10 +85,13 @@ Monster::Monster(const std::string & entityID, float spawnRange, const XMFLOAT3&
 	);
 
 	// 디버그용
+#ifdef _DEBUG 
 	m_pDebugObject = new EmptyGameObject("SpawnPosition");
 	m_pDebugObject->GetTransform().SetPosition(SpawnPoint);
 	m_pDebugObject->GetTransform().Update(0.f); // position update위해...
 	m_pDebugSpawnMesh = new LineSphere(m_pDebugObject, pd3dDevice, pd3dCommandList, XMFLOAT4(0, 0, 1, 0), m_SpawnRange, m_SpawnRange);
+#endif // _DEBUG 
+
 }
 
 Monster::~Monster()
@@ -98,12 +101,14 @@ Monster::~Monster()
 
 void Monster::Render(ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffers)
 {
+#ifdef _DEBUG
 	if (RENDER_DEBUG)
 	{
 		m_pMyBOBox->Render(pd3dCommandList);
 		m_pDebugSpawnMesh->Render(pd3dCommandList, isGBuffers);
 		m_RecognitionRange->RenderDebug(pd3dCommandList);
 	}
+#endif // _DEBUG
 
 	m_pHaep->UpdateShaderVariable(pd3dCommandList);
 	m_pTexture->UpdateShaderVariable(pd3dCommandList, 0);
@@ -121,12 +126,6 @@ void Monster::RenderForShadow(ID3D12GraphicsCommandList * pd3dCommandList)
 
 void Monster::ReleaseMembers()
 {
-	if (m_pDebugSpawnMesh)
-	{
-		m_pDebugSpawnMesh->ReleaseObjects();
-		delete m_pDebugSpawnMesh;
-		m_pDebugSpawnMesh = nullptr;
-	}
 	if (m_MonsterHP)
 	{
 		m_MonsterHP->ReleaseObjects();
@@ -139,12 +138,20 @@ void Monster::ReleaseMembers()
 		delete m_RecognitionRange;
 		m_RecognitionRange = nullptr;
 	}
+#ifdef _DEBUG
 	if (m_pDebugObject)
 	{
 		m_pDebugObject->ReleaseObjects();
 		delete m_pDebugObject;
 		m_pDebugObject = nullptr;
 	}
+	if (m_pDebugSpawnMesh)
+	{
+		m_pDebugSpawnMesh->ReleaseObjects();
+		delete m_pDebugSpawnMesh;
+		m_pDebugSpawnMesh = nullptr;
+	}
+#endif // _DEBUG
 	if (m_pTexture)
 	{
 		m_pTexture->ReleaseObjects();
@@ -186,7 +193,11 @@ void Monster::ReleaseMembers()
 void Monster::ReleaseMemberUploadBuffers()
 {
 	if (m_MonsterHP) m_MonsterHP->ReleaseUploadBuffers();
+
+#ifdef _DEBUG
 	if (m_pDebugSpawnMesh) m_pDebugSpawnMesh->ReleaseUploadBuffers();
+#endif // _DEBUG
+
 	if (m_pTexture) m_pTexture->ReleaseUploadBuffers();
 	if (m_pLoadObject) m_pLoadObject->ReleaseUploadBuffers();
 	if (m_MonsterModel)m_MonsterModel->ReleaseUploadBuffers();
