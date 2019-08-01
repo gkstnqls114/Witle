@@ -823,16 +823,17 @@ void CGameFramework::BuildObjects()
 	// 터레인 오브젝트에서 사용될 모든 텍스쳐과 모델을 가져온다.
 	TextureStorage::GetInstance()->CreateTextures(m_d3dDevice.Get(), m_CommandList.Get());
 	ModelStorage::GetInstance()->CreateModels(m_d3dDevice.Get(), m_CommandList.Get(), GraphicsRootSignatureMgr::GetGraphicsRootSignature());
-	   
 	 
+	// 모든 씬의 오브젝트 및 텍스쳐들을 빌드합니다.
 	m_SceneMgr->BuildObjects(m_d3dDevice.Get(), m_CommandList.Get());
 
 	// 터레인을 위한 쉐도우 맵과 텍스쳐 연결하는 디스크립터 힙 생성...
 	GameScene::CreateShaderResourceViewsForShadow(m_d3dDevice.Get(), m_Shadowmap, ROOTPARAMETER_SHADOWTEXTURE, false, 3);
 	GameScene::CreateShaderResourceViewsForShadow(m_d3dDevice.Get(), m_PlayerShadowmap, ROOTPARAMETER_PLAYERSHADOWTEXTURE, false, 4);
+
+	// 빌드되고 연결된 텍스쳐 개수만큼 SRV 힙을 생성하고, 각 모든 텍스쳐들을 연결합니다.
+	m_SceneMgr->BuildHeap(m_d3dDevice.Get(), m_CommandList.Get());
 	// 순서 변경 X /////////////
-
-
 	///////////////////////////////////////////////////////////////////////////// 리소스 생성
 
 	hResult = m_CommandList->Close();

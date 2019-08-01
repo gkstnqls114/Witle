@@ -36,6 +36,7 @@ public:
 	void ReleaseObjects();
 	void ReleaseUploadBuffers();
 	void BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList);
+	void BuildHeap(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList);
 
 	Scene* GetCurrScene() const { return m_pCurrScene; }
 

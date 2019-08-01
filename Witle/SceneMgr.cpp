@@ -56,6 +56,11 @@ void SceneMgr::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList
 	m_SkillSelectScene->BuildObjects(pd3dDevice, pd3dCommandList);
 }
 
+void SceneMgr::BuildHeap(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList)
+{
+
+}
+
 void SceneMgr::ChangeSceneToGame()
 {
 	m_pCurrScene = m_GameScene;
