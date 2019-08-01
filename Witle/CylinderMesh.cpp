@@ -95,13 +95,7 @@ void CylinderMesh::CalculateVertexNormals(XMFLOAT3 * pxmf3Normals, XMFLOAT3 * px
 void CylinderMesh::ReleaseObjects()
 {
 	Mesh::ReleaseObjects();
-
-	if (m_Heap)
-	{
-		m_Heap->ReleaseObjects();
-		delete m_Heap;
-		m_Heap = nullptr;
-	}
+	 
 	if (m_Texture)
 	{
 		delete m_Texture;
@@ -199,20 +193,16 @@ CylinderMesh::~CylinderMesh()
 }
 
 void CylinderMesh::CreateTexture(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, const wchar_t *pszFileName)
-{
-	m_Heap = new MyDescriptorHeap();
-	m_Heap->CreateCbvSrvUavDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 1, 0, ENUM_SCENE::SCENE_GAME);
-	m_Texture = new Texture(ENUM_SCENE::SCENE_GAME, 1);
-	m_Texture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, pszFileName, 0);
-	m_Heap->CreateShaderResourceViews(pd3dDevice,  m_Texture, ROOTPARAMETER_TEXTURE, false);
+{ 
+	m_Texture = new Texture(ENUM_SCENE::SCENE_GAME, ROOTPARAMETER_INDEX(ROOTPARAMETER_TEXTURE), false, 1);
+	m_Texture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, pszFileName, 0); 
 }
 
 void CylinderMesh::Render(ID3D12GraphicsCommandList * commandList, bool isGBuffers)
 { 
 	ShaderManager::GetInstance()->SetPSO(commandList, "Cube", isGBuffers);
 	commandList->IASetPrimitiveTopology( GetPrimitiveTopology());
-
-	if (m_Heap) m_Heap->UpdateShaderVariable(commandList);
+	 
 	if (m_Texture) m_Texture->UpdateShaderVariables(commandList);
 
 	D3D12_VERTEX_BUFFER_VIEW pVertexBufferViews[] = { GetVertexBufferView(0) };

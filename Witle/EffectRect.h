@@ -26,8 +26,7 @@ private:
 			: position(p), uv(u), time(t), velocity(v) {}
 	};
 
-	// 텍스쳐관련 정보
-	MyDescriptorHeap* m_pHeap{ nullptr };
+	// 텍스쳐관련 정보 
 	Texture* m_pTexture{ nullptr };
 
 public:

@@ -8,13 +8,7 @@
 #define RECTANGLE_VERTEX_COUNT 6
 
 void UI3DImage::ReleaseObjects()
-{
-	if (m_pHeap)
-	{
-		m_pHeap->ReleaseObjects();
-		delete m_pHeap;
-		m_pHeap = nullptr;
-	}
+{ 
 	if (m_pTexture)
 	{
 		m_pTexture->ReleaseObjects();
@@ -34,12 +28,9 @@ UI3DImage::UI3DImage(GameObject * pOwner, ID3D12Device * pd3dDevice, ID3D12Graph
 	m_ComponenetID = SHAPE_TYPE_ID::RECTANGLE_SHAPE;
 
 	if (filepath)
-	{
-		m_pHeap = new MyDescriptorHeap();
-		m_pHeap->CreateCbvSrvUavDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 1, 0, ENUM_SCENE::SCENE_GAME);
-		m_pTexture = new Texture(ENUM_SCENE::SCENE_GAME, 1, RESOURCE_TEXTURE2D);
-		m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, filepath, 0);
-		m_pHeap->CreateShaderResourceViews(pd3dDevice,  m_pTexture, ROOTPARAMETER_TEXTURE, true);
+	{ 
+		m_pTexture = new Texture(ENUM_SCENE::SCENE_GAME, ROOTPARAMETER_INDEX(ROOTPARAMETER_TEXTURE), false, 1, RESOURCE_TEXTURE2D);
+		m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, filepath, 0); 
 	}
 
 	m_nVertexBufferViews = 1;
@@ -88,12 +79,9 @@ UI3DImage::UI3DImage(GameObject * pOwner, ID3D12Device * pd3dDevice, ID3D12Graph
 	m_ComponenetID = SHAPE_TYPE_ID::RECTANGLE_SHAPE;
 
 	if (filepath)
-	{
-		m_pHeap = new MyDescriptorHeap();
-		m_pHeap->CreateCbvSrvUavDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 1, 0, ENUM_SCENE::SCENE_GAME);
-		m_pTexture = new Texture(ENUM_SCENE::SCENE_GAME, 1, RESOURCE_TEXTURE2D);
-		m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, filepath, 0);
-		m_pHeap->CreateShaderResourceViews(pd3dDevice,  m_pTexture, ROOTPARAMETER_TEXTURE, true);
+	{ 
+		m_pTexture = new Texture(ENUM_SCENE::SCENE_GAME, ROOTPARAMETER_INDEX(ROOTPARAMETER_TEXTURE), false, 1, RESOURCE_TEXTURE2D);
+		m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, filepath, 0); 
 	}
 
 	m_nVertexBufferViews = 1;
@@ -149,9 +137,8 @@ void UI3DImage::Update(float fElapsedTime)
 }
 
 void UI3DImage::Render(ID3D12GraphicsCommandList *pd3dCommandList, const XMFLOAT4X4& world)
-{  
-	if (m_pHeap) m_pHeap->UpdateShaderVariable(pd3dCommandList);
-	if (m_pTexture) m_pTexture->UpdateShaderVariables(pd3dCommandList);
+{   
+	if(m_pTexture) m_pTexture->UpdateShaderVariables(pd3dCommandList);
 
 	// 월드행렬 설정
 	XMFLOAT4X4 xmf4x4World;

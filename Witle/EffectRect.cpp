@@ -12,11 +12,7 @@
 void BroomEffectRect::ReleaseObjects()
 {
 	Shape::ReleaseObjects();
-	if (m_pHeap)
-	{
-		m_pHeap->ReleaseObjects();
-		delete m_pHeap;
-	}
+
 	if (m_pTexture)
 	{
 		m_pTexture->ReleaseObjects();
@@ -34,12 +30,9 @@ BroomEffectRect::BroomEffectRect(GameObject * pOwner, ID3D12Device * pd3dDevice,
 	: Shape(pOwner)
 {
 	m_ComponenetID = SHAPE_TYPE_ID::BROOMEFFECT_SHAPE;
-
-	m_pHeap = new MyDescriptorHeap();
-	m_pHeap->CreateCbvSrvUavDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 1, 0, ENUM_SCENE::SCENE_GAME);
-	m_pTexture = new Texture(ENUM_SCENE::SCENE_GAME, 1, RESOURCE_TEXTURE2D);
-	m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Image/Dust.dds", 0);
-	m_pHeap->CreateShaderResourceViews(pd3dDevice,  m_pTexture, ROOTPARAMETER_TEXTURE, true);
+	  
+	m_pTexture = new Texture(ENUM_SCENE::SCENE_GAME, ROOTPARAMETER_INDEX(ROOTPARAMETER_TEXTURE), false, 1, RESOURCE_TEXTURE2D);
+	m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Image/Dust.dds", 0); 
 
 	m_nVertexBufferViews = 1;
 	m_pVertexBufferViews = new D3D12_VERTEX_BUFFER_VIEW[m_nVertexBufferViews];
@@ -110,7 +103,7 @@ BroomEffectRect::~BroomEffectRect()
 void BroomEffectRect::Render(ID3D12GraphicsCommandList * pd3dCommandList, const Shader * shader)
 { 
 	pd3dCommandList->SetPipelineState(shader->GetPSO()); 
-	m_pHeap->UpdateShaderVariable(pd3dCommandList);
+
 	m_pTexture->UpdateShaderVariables(pd3dCommandList);
 
 	pd3dCommandList->IASetPrimitiveTopology(m_d3dPrimitiveTopology);
@@ -124,7 +117,7 @@ void BroomEffectRect::Render(ID3D12GraphicsCommandList * pd3dCommandList, const 
 void BroomEffectRect::Render(ID3D12GraphicsCommandList * pd3dCommandList, float fElapsedTime, bool isGBuffers)
 {
 	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_PICKINGPOINT, isGBuffers);
-	m_pHeap->UpdateShaderVariable(pd3dCommandList);
+
 	m_pTexture->UpdateShaderVariables(pd3dCommandList);
 	pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_HPPERCENTAGE, 1, &fElapsedTime, 0);
 

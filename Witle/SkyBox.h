@@ -7,8 +7,7 @@ class Texture;
 
 class SkyBox
 	: public GameObject
-{ 
-	MyDescriptorHeap * m_Heap { nullptr };
+{  
 	Texture * m_Texture{ nullptr };
 	LoadObject* m_LoadObject  { nullptr };
 

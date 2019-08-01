@@ -62,8 +62,6 @@ void QuadtreeTerrain::RenderTerrainObjects(ID3D12GraphicsCommandList * pd3dComma
 {
 	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, "InstancingStandardShader", isGBuffers);
 	
-	// 설명자 힙 설정
-	TextureStorage::GetInstance()->SetHeap(pd3dCommandList);
 	RecursiveRenderTerrainObjects(m_pRootNode, pd3dCommandList, isGBuffers);
 	  
 	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, "InstancingLine", isGBuffers);

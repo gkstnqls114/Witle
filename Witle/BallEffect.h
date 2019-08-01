@@ -21,8 +21,7 @@ protected:
 private:
 	SphereMesh* m_BallEffectMesh{ nullptr };
 	SphereMesh* m_InBallEffectMesh{ nullptr };
-
-	MyDescriptorHeap* m_Heap{ nullptr };
+	 
 	Texture* m_Texture{ nullptr };
 
 public:

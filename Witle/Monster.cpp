@@ -110,7 +110,6 @@ void Monster::Render(ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffer
 	}
 #endif // _DEBUG
 
-	m_pHaep->UpdateShaderVariable(pd3dCommandList);
 	m_pTexture->UpdateShaderVariable(pd3dCommandList, 0);
 	m_pLoadObject->Render(pd3dCommandList, isGBuffers);
 
@@ -119,7 +118,6 @@ void Monster::Render(ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffer
 
 void Monster::RenderForShadow(ID3D12GraphicsCommandList * pd3dCommandList)
 {
-	m_pHaep->UpdateShaderVariable(pd3dCommandList);
 	m_pTexture->UpdateShaderVariable(pd3dCommandList, 0);
 	m_pLoadObject->RenderForShadow(pd3dCommandList);
 }

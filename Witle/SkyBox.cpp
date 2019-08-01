@@ -7,13 +7,7 @@
 #include "SkyBox.h"
 
 void SkyBox::ReleaseMembers()
-{
-	if (m_Heap)
-	{
-		m_Heap->ReleaseObjects();
-		delete m_Heap;
-		m_Heap = nullptr;
-	}
+{ 
 	if (m_Texture)
 	{
 		m_Texture->ReleaseShaderVariables();
@@ -43,14 +37,10 @@ SkyBox::SkyBox(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandL
 	m_LoadObject->SetMesh(pSkyBoxMesh);
 	m_LoadObject->CreateShaderVariables(pd3dDevice, pd3dCommandList);
 
-	Texture *pSkyBoxTexture = new Texture(ENUM_SCENE::SCENE_GAME, 1, RESOURCE_TEXTURE_CUBE, 0);
+	Texture *pSkyBoxTexture = new Texture(ENUM_SCENE::SCENE_GAME, ROOTPARAMETER_INDEX(ROOTPARAMETER_SKYBOX), false, 1, RESOURCE_TEXTURE_CUBE, 0);
 	pSkyBoxTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Image/SkyBox_0.dds", 0);
 	m_Texture = pSkyBoxTexture;
-	 
-	m_Heap = new MyDescriptorHeap();
-	m_Heap->CreateCbvSrvUavDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 1, 0, ENUM_SCENE::SCENE_GAME);
-	m_Heap->CreateShaderResourceViews(pd3dDevice,  pSkyBoxTexture, ROOTPARAMETER_SKYBOX, RESOURCE_TEXTURE_CUBE, 0);
-
+	  
 	CMaterial *pSkyBoxMaterial = new CMaterial(1);
 	// pSkyBoxMaterial->SetTexture(pSkyBoxTexture);
 	// pSkyBoxMaterial->SetShader(ShaderManager::GetInstance()->SetShader(pd3dCommandList, "SkyBoxShader"));
@@ -72,7 +62,7 @@ void SkyBox::Update(float fElapsedTime)
 void SkyBox::Render(ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffers)
 {
 	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, "SkyBoxShader", isGBuffers);
-	m_Heap->UpdateShaderVariable(pd3dCommandList);
+
 	m_Texture->UpdateShaderVariables(pd3dCommandList);
 	m_LoadObject->Render(pd3dCommandList, isGBuffers);
 }

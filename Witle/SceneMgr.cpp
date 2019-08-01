@@ -58,7 +58,7 @@ void SceneMgr::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList
 
 void SceneMgr::BuildHeap(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList)
 {
-
+	GameScene::CreateCbvSrvDescriptorHeaps(pd3dDevice, pd3dCommandList);
 }
 
 void SceneMgr::ChangeSceneToGame()

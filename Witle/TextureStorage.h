@@ -9,8 +9,7 @@ class TextureStorage
 	 
 	// name과 texture
 	std::map<std::string, Texture*> m_TextureStorage;
-	std::list<std::string> m_expection;
-	MyDescriptorHeap* m_Heap{ nullptr }; // 터레인 오브젝트들의 텍스쳐를 위한 설명자 힙
+	std::list<std::string> m_expection; 
 
 	bool m_isCreate{ false };
 
@@ -40,6 +39,4 @@ public:
 
 	void CreateTextures(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList);
 	Texture* const GetTexture(const std::string& name);
-	const MyDescriptorHeap * GetHeap() const { return m_Heap; }
-	void SetHeap(ID3D12GraphicsCommandList * pd3dCommandList);
 };

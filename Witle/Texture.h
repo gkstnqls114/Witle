@@ -10,7 +10,7 @@ class Texture
 		D3D12_GPU_DESCRIPTOR_HANDLE		m_d3dSrvGpuDescriptorHandle{ NULL };
 	};
 public:
-	Texture(ENUM_SCENE SceneType, int nTextureResources = 1, UINT nResourceType = RESOURCE_TEXTURE2D, int nSamplers = 0);
+	Texture(ENUM_SCENE SceneType, ROOTPARAMETER_INDEX rpIndex, bool bAutoIncrement, int nTextureResources = 1, UINT nResourceType = RESOURCE_TEXTURE2D, int nSamplers = 0);
 	virtual ~Texture();
 
 private:
@@ -31,6 +31,8 @@ public:
 	void Release() { if (--m_nReferences <= 0) delete this; }
 
 	void SetRootArgument(int nIndex, UINT nRootParameterIndex, D3D12_GPU_DESCRIPTOR_HANDLE d3dsrvGpuDescriptorHandle);
+	void SethGPU(int nIndex, D3D12_GPU_DESCRIPTOR_HANDLE d3dsrvGpuDescriptorHandle);
+
 	void SetSampler(int nIndex, D3D12_GPU_DESCRIPTOR_HANDLE d3dSamplerGpuDescriptorHandle);
 
 	void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList);

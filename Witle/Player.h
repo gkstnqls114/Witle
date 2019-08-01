@@ -39,8 +39,7 @@ private:
 
 	Texture*			m_pTexture_Cloth{ nullptr };
 	Texture*			m_pTexture_Body{ nullptr };
-
-	MyDescriptorHeap*			   m_pHaep{ nullptr };
+	 
 	CLoadedModelInfo*  m_PlayerModel_Cloth{ nullptr };
 	CLoadedModelInfo*  m_PlayerModel_Body{nullptr };
 	LoadObject*		   m_pLoadObject_Cloth{ nullptr };

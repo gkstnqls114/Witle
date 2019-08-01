@@ -17,14 +17,13 @@ TextureStorage::~TextureStorage()
 
 void TextureStorage::CreateTexture(const std::string & name, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, int heapindex)
 {
-	m_TextureStorage[name] = new Texture(ENUM_SCENE::SCENE_GAME);
+	m_TextureStorage[name] = new Texture(ENUM_SCENE::SCENE_GAME, ROOTPARAMETER_INDEX(ROOTPARAMETER_TEXTURE), false, 1);
 	std::wstring path = { L"Model/Textures/" };
 	std::wstring wname;
 	wname.assign(name.begin(), name.end()); 
 	path.append(wname);
 	path.append(L".dds");
 	m_TextureStorage[name]->LoadTextureFromFile(pd3dDevice, pd3dCommandList, path.c_str(), 0);
-	m_Heap->CreateShaderResourceViews(pd3dDevice,  m_TextureStorage[name], ROOTPARAMETER_TEXTURE, RESOURCE_TEXTURE2D, heapindex);
 }
 
 void TextureStorage::ReleaseUploadBuffers()
@@ -36,15 +35,7 @@ void TextureStorage::ReleaseUploadBuffers()
 }
 
 void TextureStorage::ReleaseObjects()
-{
-	if (m_Heap)
-	{
-		m_Heap->ReleaseObjects();
-
-		delete m_Heap;
-		m_Heap = nullptr;
-	}
-	
+{ 
 	for (auto& texture : m_TextureStorage)
 	{
 		if (texture.first == TREE_BG_1) continue;
@@ -58,9 +49,7 @@ void TextureStorage::ReleaseObjects()
 }
 
 void TextureStorage::CreateTextures(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList)
-{
-	m_Heap = new MyDescriptorHeap();
-	m_Heap->CreateCbvSrvUavDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 18, 0, ENUM_SCENE::SCENE_GAME);
+{  
 	int heapIndex = 0;
 	CreateTexture(ALTAR_IN, pd3dDevice, pd3dCommandList, heapIndex++);
 	CreateTexture(ALTAR_OUT, pd3dDevice, pd3dCommandList, heapIndex++);
@@ -95,10 +84,5 @@ Texture * const TextureStorage::GetTexture(const std::string & name)
 {
 	if (m_TextureStorage.find(name) == m_TextureStorage.end()) return nullptr;
 	return m_TextureStorage[name];
-}
-
-void TextureStorage::SetHeap(ID3D12GraphicsCommandList * pd3dCommandList)
-{
-	m_Heap->UpdateShaderVariable(pd3dCommandList);
 }
  

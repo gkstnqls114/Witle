@@ -19,13 +19,8 @@
  
 void CreepyMonster::ReleaseMembers()
 {
-	Monster::ReleaseMembers();
-	if (m_pHaep)
-	{
-		m_pHaep->ReleaseObjects();
-		delete m_pHaep;
-		m_pHaep = nullptr;
-	}
+	Monster::ReleaseMembers(); 
+
 	if (m_pTexture)
 	{
 		m_pTexture->ReleaseObjects();
@@ -49,15 +44,10 @@ CreepyMonster::CreepyMonster(const std::string & entityID, const XMFLOAT3& Spawn
 
 	m_MonsterMovement = new MonsterMovement(this, 1, 1);
 	m_MonsterMovement->m_fDistance = 100;
-
-	m_pHaep = new MyDescriptorHeap();
-	m_pHaep->CreateCbvSrvUavDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 1, 0, ENUM_SCENE::SCENE_GAME);
-	m_pTexture = new Texture(ENUM_SCENE::SCENE_GAME, 1, RESOURCE_TEXTURE2D);
-	m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/CreepyMonster.dds", 0);
 	 
-	m_pHaep->CreateShaderResourceViews(pd3dDevice,  m_pTexture, ROOTPARAMETER_TEXTURE, false, 0);
-
-
+	m_pTexture = new Texture(ENUM_SCENE::SCENE_GAME, ROOTPARAMETER_INDEX(ROOTPARAMETER_TEXTURE), false, 1, RESOURCE_TEXTURE2D);
+	m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/CreepyMonster.dds", 0);
+	  
 	ANIMATION_INFO infos[CREEPYMONSTER_ANIMATIONE];
 	infos[0] = CREEPYMONSTER_IDLE;
 	infos[1] = CREEPYMONSTER_MOVE;

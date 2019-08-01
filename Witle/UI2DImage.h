@@ -21,8 +21,7 @@ private:
 		UIVertex(XMFLOAT3 p, XMFLOAT4 c, XMFLOAT2 u) : position(p), uv(u) {}
 	};
 
-	// 텍스쳐관련 정보
-	MyDescriptorHeap* m_pHeap{ nullptr };
+	// 텍스쳐관련 정보 
 	Texture* m_pTexture{ nullptr };
 	
 	RECT m_rect;

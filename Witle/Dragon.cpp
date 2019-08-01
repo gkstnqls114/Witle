@@ -19,12 +19,7 @@
 void Dragon::ReleaseMembers()
 {
 	Monster::ReleaseMembers();
-	if (m_pHaep)
-	{
-		m_pHaep->ReleaseObjects();
-		delete m_pHaep;
-		m_pHaep = nullptr;
-	}
+
 	if (m_pTexture)
 	{
 		m_pTexture->ReleaseObjects();
@@ -49,15 +44,11 @@ Dragon::Dragon(const std::string & entityID, const XMFLOAT3& SpawnPoint,
 
 	m_MonsterMovement = new MonsterMovement(this, 1, 1, true);
 	m_MonsterMovement->m_fDistance = 100;
-
-	m_pHaep = new MyDescriptorHeap();
-	m_pHaep->CreateCbvSrvUavDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 1, 0, ENUM_SCENE::SCENE_GAME);
-	m_pTexture = new Texture(ENUM_SCENE::SCENE_GAME, 1, RESOURCE_TEXTURE2D);
+	 
+	m_pTexture = new Texture(ENUM_SCENE::SCENE_GAME, ROOTPARAMETER_INDEX(ROOTPARAMETER_TEXTURE), false, 1, RESOURCE_TEXTURE2D);
 
 	m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/Dragon.dds", 0);
-
-	m_pHaep->CreateShaderResourceViews(pd3dDevice,  m_pTexture, ROOTPARAMETER_TEXTURE, false, 0);
-
+	 
 	ANIMATION_INFO infos[BOSSMONSTER_ANIMATIONE];
 	infos[0] = BOSS_IDLE;
 	infos[1] = BOSS_MOVE;

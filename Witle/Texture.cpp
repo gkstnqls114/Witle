@@ -11,7 +11,7 @@
 
 #include "Texture.h"
 
-Texture::Texture(ENUM_SCENE SceneType, int nTextures, UINT nTextureType, int nSamplers)
+Texture::Texture(ENUM_SCENE SceneType, ROOTPARAMETER_INDEX rpIndex, bool bAutoIncrement, int nTextures, UINT nTextureType, int nSamplers)
 { 
 	switch (SceneType)
 	{
@@ -41,6 +41,13 @@ Texture::Texture(ENUM_SCENE SceneType, int nTextures, UINT nTextureType, int nSa
 		m_ppd3dTextures = new ID3D12Resource*[m_nTextures];
 	}
 
+	// root parameter 미리 설정
+	for (int x = 0; x < m_nTextures; ++x)
+	{
+		m_pRootArgumentInfos[x].m_nRootParameterIndex = (bAutoIncrement) ? (rpIndex.rpIndex + x) : rpIndex.rpIndex;
+		m_pRootArgumentInfos[x].m_d3dSrvGpuDescriptorHandle.ptr = NULL;
+	}
+
 	m_nSamplers = nSamplers;
 	if (m_nSamplers > 0) m_pd3dSamplerGpuDescriptorHandles = new D3D12_GPU_DESCRIPTOR_HANDLE[m_nSamplers];
 }
@@ -68,6 +75,11 @@ Texture::~Texture()
 void Texture::SetRootArgument(int nIndex, UINT nRootParameterIndex, D3D12_GPU_DESCRIPTOR_HANDLE d3dSrvGpuDescriptorHandle)
 {
 	m_pRootArgumentInfos[nIndex].m_nRootParameterIndex = nRootParameterIndex;
+	m_pRootArgumentInfos[nIndex].m_d3dSrvGpuDescriptorHandle = d3dSrvGpuDescriptorHandle;
+}
+
+void Texture::SethGPU(int nIndex, D3D12_GPU_DESCRIPTOR_HANDLE d3dSrvGpuDescriptorHandle)
+{ 
 	m_pRootArgumentInfos[nIndex].m_d3dSrvGpuDescriptorHandle = d3dSrvGpuDescriptorHandle;
 }
 

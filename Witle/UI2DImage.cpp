@@ -21,12 +21,9 @@ UI2DImage::UI2DImage(GameObject * pOwner, ID3D12Device * pd3dDevice, ID3D12Graph
 	m_ComponenetID = SHAPE_TYPE_ID::RECTANGLE_SHAPE;
 
 	if (filepath)
-	{
-		m_pHeap = new MyDescriptorHeap();
-		m_pHeap->CreateCbvSrvUavDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 1, 0, ENUM_SCENE::SCENE_GAME);
-		m_pTexture = new Texture(ENUM_SCENE::SCENE_GAME, 1, RESOURCE_TEXTURE2D);
-		m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, filepath, 0);
-		m_pHeap->CreateShaderResourceViews(pd3dDevice,  m_pTexture, ROOTPARAMETER_TEXTURE, true);
+	{ 
+		m_pTexture = new Texture(ENUM_SCENE::SCENE_GAME, ROOTPARAMETER_INDEX(ROOTPARAMETER_TEXTURE), false, 1, RESOURCE_TEXTURE2D);
+		m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, filepath, 0); 
 	}
 
 	m_nVertexBufferViews = 1;
@@ -75,12 +72,9 @@ UI2DImage::UI2DImage(GameObject * pOwner, ID3D12Device * pd3dDevice, ID3D12Graph
 	m_ComponenetID = SHAPE_TYPE_ID::RECTANGLE_SHAPE;
 
 	if (filepath)
-	{
-		m_pHeap = new MyDescriptorHeap();
-		m_pHeap->CreateCbvSrvUavDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 1, 0, ENUM_SCENE::SCENE_GAME);
-		m_pTexture = new Texture(ENUM_SCENE::SCENE_GAME, 1, RESOURCE_TEXTURE2D);
-		m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, filepath, 0);
-		m_pHeap->CreateShaderResourceViews(pd3dDevice,  m_pTexture, ROOTPARAMETER_TEXTURE, true);
+	{ 
+		m_pTexture = new Texture(ENUM_SCENE::SCENE_GAME, ROOTPARAMETER_INDEX(ROOTPARAMETER_TEXTURE), false, 1, RESOURCE_TEXTURE2D);
+		m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, filepath, 0); 
 	}
 
 	m_nVertexBufferViews = 1;
@@ -137,13 +131,9 @@ void UI2DImage::Update(float fElapsedTime)
 }
 
 void UI2DImage::Render(ID3D12GraphicsCommandList * pd3dCommandList)
-{ 
-	if (m_pHeap)
-	{
-		m_pHeap->UpdateShaderVariable(pd3dCommandList);
-		m_pTexture->UpdateShaderVariables(pd3dCommandList);
-	}
-
+{  
+	if(m_pTexture) m_pTexture->UpdateShaderVariables(pd3dCommandList);
+	
 	pd3dCommandList->IASetPrimitiveTopology(m_d3dPrimitiveTopology);
 
 	D3D12_VERTEX_BUFFER_VIEW pVertexBufferViews[] = { m_pVertexBufferViews[0] };

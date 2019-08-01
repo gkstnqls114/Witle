@@ -42,12 +42,8 @@ bool AltarSphere::RENDER_DEBUG{ true };
 AltarSphere::AltarSphere(const std::string & entityID, const XMFLOAT3& SpawnPoint, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature)
 	: GameObject(entityID)
 {  
-	m_pHaep = new MyDescriptorHeap();
-	m_pHaep->CreateCbvSrvUavDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 1, 0, ENUM_SCENE::SCENE_GAME);
-	m_pTexture = new Texture(ENUM_SCENE::SCENE_GAME, 1, RESOURCE_TEXTURE2D);
+	m_pTexture = new Texture(ENUM_SCENE::SCENE_GAME, ROOTPARAMETER_INDEX(ROOTPARAMETER_TEXTURE), false, 1, RESOURCE_TEXTURE2D);
 	m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/Altar_Sphere.dds", 0);
-
-	m_pHaep->CreateShaderResourceViews(pd3dDevice,  m_pTexture, ROOTPARAMETER_TEXTURE, false, 0);
 
 	ANIMATION_INFO infos[ALTARSPHERE_ANIMATIONE];
 	infos[0] = ALTARSPHERE_FLOW;
@@ -85,9 +81,8 @@ void AltarSphere::Render(ID3D12GraphicsCommandList * pd3dCommandList, bool isGBu
 	{
 		m_pMyBOBox->Render(pd3dCommandList); 
 	}
-
-	m_pHaep->UpdateShaderVariable(pd3dCommandList);
-	m_pTexture->UpdateShaderVariable(pd3dCommandList, 0);
+	 
+	m_pTexture->UpdateShaderVariables(pd3dCommandList);
 	m_pLoadObject->Render(pd3dCommandList, isGBuffers); 
 
 	if (m_isEnguaged)

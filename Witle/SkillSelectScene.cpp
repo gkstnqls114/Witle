@@ -144,7 +144,7 @@ void SkillSelectScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCom
 	m_pHeap->CreateCbvSrvUavDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, SKILL_TO_CHOOSE + 1, 0, ENUM_SCENE::SCENE_SKILLSELECT);
 
 	// 선택하지 않은 스킬도 설정하기위해 ...
-	m_pTexture = new Texture(ENUM_SCENE::SCENE_GAME, SKILL_TO_CHOOSE + 1, RESOURCE_TEXTURE2D);
+	m_pTexture = new Texture(ENUM_SCENE::SCENE_SKILLSELECT, ROOTPARAMETER_INDEX(ROOTPARAMETER_TEXTURE), false, SKILL_TO_CHOOSE + 1, RESOURCE_TEXTURE2D);
 	for (int x = 0; x < SKILL_TO_CHOOSE + 1; ++x)
 	{
 		m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, filepaths[x], x);

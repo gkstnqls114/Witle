@@ -103,18 +103,12 @@ XMFLOAT3 Player::CalculateAlreadyPosition(float fTimeElapsed)
 
 Player::Player(const std::string & entityID, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, void * pContext)
 	: GameObject(entityID)
-{ 
-	m_pHaep = new MyDescriptorHeap();
-	m_pHaep->CreateCbvSrvUavDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 2, 0, ENUM_SCENE::SCENE_GAME);
-
-	m_pTexture_Cloth = new Texture(ENUM_SCENE::SCENE_GAME, 1, RESOURCE_TEXTURE2D);
+{  
+	m_pTexture_Cloth = new Texture(ENUM_SCENE::SCENE_GAME, ROOTPARAMETER_INDEX(ROOTPARAMETER_TEXTURE), false, 1, RESOURCE_TEXTURE2D);
 	m_pTexture_Cloth->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/Character_cloth_D.dds", 0);
-	m_pTexture_Body = new Texture(ENUM_SCENE::SCENE_GAME, 1, RESOURCE_TEXTURE2D);
+	m_pTexture_Body = new Texture(ENUM_SCENE::SCENE_GAME, ROOTPARAMETER_INDEX(ROOTPARAMETER_TEXTURE), false, 1, RESOURCE_TEXTURE2D);
 	m_pTexture_Body->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/Character_body_D.dds", 0);
-
-	m_pHaep->CreateShaderResourceViews(pd3dDevice,  m_pTexture_Cloth, ROOTPARAMETER_TEXTURE, false, 0);
-	m_pHaep->CreateShaderResourceViews(pd3dDevice,  m_pTexture_Body, ROOTPARAMETER_TEXTURE, false, 1);
-
+	 
 	m_PlayerModel_Cloth = LoadObject::LoadGeometryAndAnimationFromFile_forPlayer(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/Character_cloth.bin", NULL);
 	m_PlayerModel_Body = LoadObject::LoadGeometryAndAnimationFromFile_forPlayer(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/Character_body.bin", NULL);
 	m_pLoadObject_Cloth = m_PlayerModel_Cloth->m_pModelRootObject;
@@ -163,7 +157,7 @@ void Player::Render(ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffers
 	// m_pMyBOBox->Render(pd3dCommandList);
 
 	if (!m_isRendering) return; //만약 스나이핑 모드라면 플레이어를 렌더링하지 않는다.
-	m_pHaep->UpdateShaderVariable(pd3dCommandList);
+
 	m_pTexture_Cloth->UpdateShaderVariable(pd3dCommandList, 0);
 	m_pLoadObject_Cloth->Render(pd3dCommandList, isGBuffers);
 	m_pTexture_Body->UpdateShaderVariable(pd3dCommandList, 0);
@@ -177,9 +171,7 @@ void Player::Render(ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffers
 }
 
 void Player::RenderForShadow(ID3D12GraphicsCommandList * pd3dCommandList)
-{
-	m_pHaep->UpdateShaderVariable(pd3dCommandList);
-
+{  
 	m_pTexture_Cloth->UpdateShaderVariable(pd3dCommandList, 0);
 	m_pLoadObject_Cloth->RenderForPlayerShadow(pd3dCommandList, this);
 	//m_pLoadObject_Cloth->RenderForShadow(pd3dCommandList);
@@ -193,13 +185,7 @@ void Player::ReleaseMembers()
 {
 	m_pPlayerUpdatedContext = nullptr;
 	m_pCameraUpdatedContext = nullptr;
-
-	if (m_pHaep)
-	{
-		m_pHaep->ReleaseObjects();
-		delete m_pHaep;
-		m_pHaep = nullptr;
-	}
+	 
 	if (m_BroomEffectRect)
 	{
 		m_BroomEffectRect->ReleaseObjects();

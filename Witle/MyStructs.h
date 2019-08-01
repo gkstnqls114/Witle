@@ -1,6 +1,16 @@
 #pragma once
 #include "stdafx.h"
 
+struct ROOTPARAMETER_INDEX
+{
+	UINT rpIndex;
+
+	explicit ROOTPARAMETER_INDEX(UINT index)
+	{
+		rpIndex = index;
+	}
+};
+
 struct MATERIAL
 {
 	XMFLOAT4						m_xmf4Ambient;

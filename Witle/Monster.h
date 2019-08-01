@@ -48,8 +48,7 @@ protected:
 	MonsterStatus*	   m_MonsterHPStatus{ nullptr };
 	MyBOBox*		   m_pMyBOBox{ nullptr };
 	 
-	Texture*			m_pTexture{ nullptr };
-	MyDescriptorHeap*	m_pHaep{ nullptr };
+	Texture*			m_pTexture{ nullptr }; 
 
 	CLoadedModelInfo*  m_MonsterModel{ nullptr };
 	LoadObject*		   m_pLoadObject{ nullptr };

@@ -26,8 +26,7 @@ private:
 		SphereVertex(XMFLOAT3 xmf3Position, XMFLOAT3 xmf3normal, XMFLOAT4 xmf4Diffuse = XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f)) { position = xmf3Position; diffuse = xmf4Diffuse;  normal = xmf3normal; }
 		~SphereVertex() { }
 	};
-
-	MyDescriptorHeap * m_Heap{ nullptr };
+	 
 	Texture*           m_Texture{ nullptr };
 	Shader*				m_pShader{ nullptr };
 private:

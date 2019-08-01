@@ -73,7 +73,7 @@
 #include "UI2DImage.h"
 #include "GameScene.h"
 
-std::list<Texture*>         GameScene::m_pConnectedTexture;
+std::list<Texture*>         GameScene::m_pConnectedTextureList;
 
 ID3D12DescriptorHeap*		GameScene::m_pd3dCbvSrUavDescriptorHeap { nullptr };
 UINT	   		            GameScene::m_TextureCount{ 0 };
@@ -105,12 +105,15 @@ GameScene::~GameScene()
 
 void GameScene::ConnectTexture(Texture * pTexture)
 {
-	m_pConnectedTexture.push_back(pTexture);
+	assert(pTexture != nullptr);
+
+	m_pConnectedTextureList.push_back(pTexture);
 	m_TextureCount += 1;
 }
 
 void GameScene::CreateCbvSrvDescriptorHeaps(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList)
 {
+	// 연결된 텍스쳐 개수만큼 힙 설정
 	UINT nConstantBufferViews = 0;
 	UINT nShaderResourceViews = m_TextureCount;
 	UINT nUnorderedAcessViews = 0;
@@ -127,9 +130,23 @@ void GameScene::CreateCbvSrvDescriptorHeaps(ID3D12Device * pd3dDevice, ID3D12Gra
 
 	m_SrvCPUDescriptorStartHandle.ptr = m_CbvCPUDescriptorStartHandle.ptr + (d3dUtil::gnCbvSrvDescriptorIncrementSize * nConstantBufferViews);
 	m_SrvGPUDescriptorStartHandle.ptr = m_CbvGPUDescriptorStartHandle.ptr + (d3dUtil::gnCbvSrvDescriptorIncrementSize * nConstantBufferViews);
-
+	
 	m_UavCPUDescriptorStartHandle.ptr = m_SrvCPUDescriptorStartHandle.ptr + (d3dUtil::gnCbvSrvDescriptorIncrementSize * nShaderResourceViews);
 	m_UavGPUDescriptorStartHandle.ptr = m_SrvGPUDescriptorStartHandle.ptr + (d3dUtil::gnCbvSrvDescriptorIncrementSize * nShaderResourceViews);
+	
+	m_CbvCPUDescriptorNextHandle = m_CbvCPUDescriptorStartHandle;
+	m_CbvGPUDescriptorNextHandle = m_CbvGPUDescriptorStartHandle;
+	m_SrvCPUDescriptorNextHandle = m_SrvCPUDescriptorStartHandle;
+	m_SrvGPUDescriptorNextHandle = m_SrvGPUDescriptorStartHandle;
+	m_UavCPUDescriptorNextHandle = m_UavCPUDescriptorStartHandle;
+	m_UavGPUDescriptorNextHandle = m_UavGPUDescriptorStartHandle;
+	// 연결된 텍스쳐 개수만큼 힙 설정
+
+	// 연결된 텍스쳐에 뷰 설정
+	for (auto& pTexture : m_pConnectedTextureList)
+	{
+		CreateShaderResourceViewsForTextureBase(pd3dDevice, pTexture);
+	}
 }
 
 void GameScene::CreateCbvSrvDescriptorHeaps(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, int nConstant, int nShader)
@@ -137,6 +154,31 @@ void GameScene::CreateCbvSrvDescriptorHeaps(ID3D12Device * pd3dDevice, ID3D12Gra
 	m_MyDescriptorHeap = new MyDescriptorHeap();
 	m_MyDescriptorHeap->CreateCbvSrvUavDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, nShader, 0, ENUM_SCENE::SCENE_NONE);
 }
+
+void GameScene::CreateShaderResourceViewsForTextureBase(ID3D12Device * pd3dDevice, Texture * pTexture)
+{ 
+	D3D12_CPU_DESCRIPTOR_HANDLE d3dSrvCPUDescriptorHandle = m_SrvCPUDescriptorNextHandle;
+	D3D12_GPU_DESCRIPTOR_HANDLE d3dSrvGPUDescriptorHandle = m_SrvGPUDescriptorNextHandle;
+	 
+	int nTextures = pTexture->GetTextures();
+	int nTextureType = pTexture->GetTextureType();
+	for (int i = 0; i < nTextures; i++)
+	{
+		ID3D12Resource *pShaderResource = pTexture->GetTexture(i);
+		D3D12_RESOURCE_DESC d3dResourceDesc = pShaderResource->GetDesc();
+		D3D12_SHADER_RESOURCE_VIEW_DESC d3dShaderResourceViewDesc = d3dUtil::GetShaderResourceViewDesc(d3dResourceDesc, nTextureType);
+		pd3dDevice->CreateShaderResourceView(pShaderResource, &d3dShaderResourceViewDesc, d3dSrvCPUDescriptorHandle);
+
+		pTexture->SethGPU(i, d3dSrvGPUDescriptorHandle);
+
+		d3dSrvCPUDescriptorHandle.ptr += d3dUtil::gnCbvSrvDescriptorIncrementSize;
+		d3dSrvGPUDescriptorHandle.ptr += d3dUtil::gnCbvSrvDescriptorIncrementSize;
+	}
+
+	m_SrvCPUDescriptorNextHandle = d3dSrvCPUDescriptorHandle;
+	m_SrvGPUDescriptorNextHandle = d3dSrvGPUDescriptorHandle;
+}
+ 
 
 D3D12_GPU_DESCRIPTOR_HANDLE GameScene::CreateConstantBufferViews(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, int nConstantBufferViews, ID3D12Resource * pd3dConstantBuffers, UINT nStride)
 {
@@ -919,10 +961,10 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 		m_pMainCamera->GetCamera()->UpdateShaderVariables(pd3dCommandList, ROOTPARAMETER_CAMERA);
 	}
 
+	pd3dCommandList->SetDescriptorHeaps(1, &m_pd3dCbvSrUavDescriptorHeap);
+	
 	// 스카이박스 렌더
 	if (m_SkyBox) m_SkyBox->Render(pd3dCommandList, isGBuffers);
-
-	//pd3dCommandList->SetDescriptorHeaps(1, &m_pd3dCbvSrvDescriptorHeap);
 
 	if (m_pPlayer) m_pPlayer->Render(pd3dCommandList, isGBuffers);
 
@@ -951,7 +993,7 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 	}
 
 	m_Dragon->Render(pd3dCommandList, isGBuffers);
-
+	
 	for (int i = 0; i < m_TestMonsterCount; ++i)
 	{
 		if (m_TestMonster[i]) m_TestMonster[i]->Render(pd3dCommandList, isGBuffers);
@@ -969,15 +1011,15 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 		if (m_AltarSphere[x])m_AltarSphere[x]->Render(pd3dCommandList, isGBuffers);
 	}
 
-	// 터레인
-	if (m_Terrain)
-	{
-		Mesh* terrainMesh = m_Terrain->GetComponent<Mesh>("TerrainMesh");
-		m_pQuadtreeTerrain->Render(pd3dCommandList, m_Terrain, m_MyDescriptorHeap->GetpDescriptorHeap(), isGBuffers);
-	}
  
 	PlayerSkillMgr::GetInstance()->Render(pd3dCommandList, isGBuffers);
 
+
+	// 터레인
+	if (m_Terrain)
+	{ 
+		m_pQuadtreeTerrain->Render(pd3dCommandList, m_Terrain, m_MyDescriptorHeap->GetpDescriptorHeap(), isGBuffers);
+	}
 
 	/// ui map과 스킬 관련 렌더링..
 	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_UIMAPFORPLAYER, isGBuffers);
@@ -1002,32 +1044,31 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 	m_UIAltar_4->Render(pd3dCommandList);
 	m_UIAltar_5->Render(pd3dCommandList);
 
-	SkillSelectScene::m_pHeap->UpdateShaderVariable(pd3dCommandList);
+	//SkillSelectScene::m_pHeap->UpdateShaderVariable(pd3dCommandList);
 
-	SkillSelectScene::m_pTexture->UpdateShaderVariable(pd3dCommandList, 8); // 임시로 검은색으로 렌더링
-	m_SampleUIMap->Render(pd3dCommandList);
+	//SkillSelectScene::m_pTexture->UpdateShaderVariable(pd3dCommandList, 8); // 임시로 검은색으로 렌더링
+	//m_SampleUIMap->Render(pd3dCommandList);
 
+	//ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_SKILLICON, isGBuffers); 
+	//float cooltime = PlayerSkillMgr::GetInstance()->GetSkillEffect(0)->RemainCoolTimePrecentage;
+	//pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_HPPERCENTAGE, 1, &cooltime, 0);
+	//SkillSelectScene::m_pTexture->UpdateShaderVariable(pd3dCommandList, SkillSelectScene::m_SelectedIndex[0]);
+	//m_SampleUISkill1->Render(pd3dCommandList);
 
-	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_SKILLICON, isGBuffers); 
-	float cooltime = PlayerSkillMgr::GetInstance()->GetSkillEffect(0)->RemainCoolTimePrecentage;
-	pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_HPPERCENTAGE, 1, &cooltime, 0);
-	SkillSelectScene::m_pTexture->UpdateShaderVariable(pd3dCommandList, SkillSelectScene::m_SelectedIndex[0]);
-	m_SampleUISkill1->Render(pd3dCommandList);
+	//SkillSelectScene::m_pTexture->UpdateShaderVariable(pd3dCommandList, SkillSelectScene::m_SelectedIndex[1]);  
+	//cooltime = PlayerSkillMgr::GetInstance()->GetSkillEffect(1)->RemainCoolTimePrecentage;
+	//pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_HPPERCENTAGE, 1, &cooltime, 0);
+	//m_SampleUISkill2->Render(pd3dCommandList);
 
-	SkillSelectScene::m_pTexture->UpdateShaderVariable(pd3dCommandList, SkillSelectScene::m_SelectedIndex[1]);  
-	cooltime = PlayerSkillMgr::GetInstance()->GetSkillEffect(1)->RemainCoolTimePrecentage;
-	pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_HPPERCENTAGE, 1, &cooltime, 0);
-	m_SampleUISkill2->Render(pd3dCommandList);
+	//SkillSelectScene::m_pTexture->UpdateShaderVariable(pd3dCommandList, SkillSelectScene::m_SelectedIndex[2]);  
+	//cooltime = PlayerSkillMgr::GetInstance()->GetSkillEffect(2)->RemainCoolTimePrecentage;
+	//pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_HPPERCENTAGE, 1, &cooltime, 0);
+	//m_SampleUISkill3->Render(pd3dCommandList);
 
-	SkillSelectScene::m_pTexture->UpdateShaderVariable(pd3dCommandList, SkillSelectScene::m_SelectedIndex[2]);  
-	cooltime = PlayerSkillMgr::GetInstance()->GetSkillEffect(2)->RemainCoolTimePrecentage;
-	pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_HPPERCENTAGE, 1, &cooltime, 0);
-	m_SampleUISkill3->Render(pd3dCommandList);
-
-	SkillSelectScene::m_pTexture->UpdateShaderVariable(pd3dCommandList, SkillSelectScene::m_SelectedIndex[3]); 
-	cooltime = PlayerSkillMgr::GetInstance()->GetSkillEffect(3)->RemainCoolTimePrecentage;
-	pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_HPPERCENTAGE, 1, &cooltime, 0);
-	m_SampleUISkill4->Render(pd3dCommandList);
+	//SkillSelectScene::m_pTexture->UpdateShaderVariable(pd3dCommandList, SkillSelectScene::m_SelectedIndex[3]); 
+	//cooltime = PlayerSkillMgr::GetInstance()->GetSkillEffect(3)->RemainCoolTimePrecentage;
+	//pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_HPPERCENTAGE, 1, &cooltime, 0);
+	//m_SampleUISkill4->Render(pd3dCommandList);
 
 }
 
