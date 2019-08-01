@@ -43,6 +43,7 @@ Dragon::Dragon(const std::string & entityID, const XMFLOAT3& SpawnPoint,
 	ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature)
 	: Monster(entityID, 100.f, SpawnPoint, pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature)
 {
+
 	m_RecognitionRange = new RecognitionRange(this, 2000.f, 2.f);
 	m_RecognitionRange->CreateDebugMesh(pd3dDevice, pd3dCommandList);
 
@@ -84,9 +85,12 @@ Dragon::Dragon(const std::string & entityID, const XMFLOAT3& SpawnPoint,
 	m_pLoadObject->m_pSkinnedAnimationController = new CAnimationController(pd3dDevice, pd3dCommandList, 1, m_MonsterModel);
 	m_pLoadObject->m_pSkinnedAnimationController->SetTrackAnimationSet(0, 0);
 
+	// Bip001_Spine 프레임을 가져옵니다.
+	m_BOBoxFrame = m_pLoadObject->FindFrame("Bip001_Spine");
+
 	m_Transform.SetPosition(SpawnPoint);
 
-	XMFLOAT3 extents{ 150.f, 130.f, 150.f };
+	XMFLOAT3 extents{ 150.f, 100.f, 230.f };
 	m_pMyBOBox = new MyBOBox(this, pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 0.F, 0.F }, extents);
 
 	if (rand() % 2)
@@ -105,6 +109,7 @@ Dragon::~Dragon()
 
 void Dragon::Update(float fElapsedTime)
 {
+	return;
 	// 이동량을 계산한다. 
 	m_MonsterMovement->Update(fElapsedTime);
 
@@ -122,11 +127,15 @@ void Dragon::UpdateState(float fElapsedTime)
 
 void Dragon::Animate(float fElapsedTime)
 {
+	// 몬스터 애니메이션에 대한 행렬을 업데이트합니다.
 	Monster::Animate(fElapsedTime);
 	 
-	LoadObject* p = m_pLoadObject->FindFrame("Bip001_Spine");
-	XMFLOAT3 pos = XMFLOAT3(p->m_xmf4x4World._41, p->m_xmf4x4World._42, p->m_xmf4x4World._43);
+	// m_BOBoxFrame은 Bip001_Spine 상의 월드행렬을 가져옵니다.
+	// 해당 프레임에 맞추어 바운딩 박스 위치와 회전을 재설정 합니다.
+	XMFLOAT3 pos = XMFLOAT3(m_BOBoxFrame->m_xmf4x4World._41, m_BOBoxFrame->m_xmf4x4World._42, m_BOBoxFrame->m_xmf4x4World._43);
+	XMFLOAT3 offset = Vector3::ScalarProduct(m_Transform.GetLook(), 100.f, false);
+	XMFLOAT3 result_pos = Vector3::Add(pos, offset);
 
 	m_pMyBOBox->Rotate(0.f, m_MonsterMovement->m_fPitch, 0.f);
-	m_pMyBOBox->SetPosition(pos);
+	m_pMyBOBox->SetPosition(result_pos);
 }

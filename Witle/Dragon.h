@@ -4,6 +4,9 @@
 class Dragon
 	: public Monster
 {
+private:
+	LoadObject* m_BOBoxFrame;
+
 protected:
 	virtual void ReleaseMembers() override;
 	virtual void ReleaseMemberUploadBuffers() override;

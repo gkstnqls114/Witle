@@ -859,6 +859,12 @@ void GameScene::LastUpdate(float fElapsedTime)
 	//	}
 	//}
 
+
+	if (Collision::isCollide(m_pPlayer->GetBOBox()->GetBOBox(), m_Dragon->GetBOBox()->GetBOBox()))
+	{
+		std::cout << "ºÎµúÈû" << std::endl;
+	}
+
 	// Ä«¸Þ¶ó ÇÁ·¯½ºÅÒ°ú ÄõµåÆ®¸® ÁöÇü ·»´õ¸µ Ã¼Å©
 	if (m_pMainCamera && m_pQuadtreeTerrain)
 	{
