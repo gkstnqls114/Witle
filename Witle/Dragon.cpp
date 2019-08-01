@@ -86,8 +86,8 @@ Dragon::Dragon(const std::string & entityID, const XMFLOAT3& SpawnPoint,
 
 	m_Transform.SetPosition(SpawnPoint);
 
-	XMFLOAT3 extents{ 250.f, 150.f, 200.f };
-	m_pMyBOBox = new MyBOBox(this, pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 75.F, 0.F }, extents);
+	XMFLOAT3 extents{ 150.f, 130.f, 150.f };
+	m_pMyBOBox = new MyBOBox(this, pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 0.F, 0.F }, extents);
 
 	if (rand() % 2)
 	{
@@ -105,14 +105,14 @@ Dragon::~Dragon()
 
 void Dragon::Update(float fElapsedTime)
 {
-	// 이동량을 계산한다. 
-	m_MonsterMovement->Update(fElapsedTime);
+	//// 이동량을 계산한다. 
+	//m_MonsterMovement->Update(fElapsedTime);
 
-	// 회전 각도를 고정시킨다.
-	m_Transform.SetRotate(m_MonsterMovement->m_fRoll, m_MonsterMovement->m_fPitch, m_MonsterMovement->m_fYaw);
+	//// 회전 각도를 고정시킨다.
+	//m_Transform.SetRotate(m_MonsterMovement->m_fRoll, m_MonsterMovement->m_fPitch, m_MonsterMovement->m_fYaw);
 
-	// 이동량만큼 움직인다. 
-	Move(Vector3::ScalarProduct(m_MonsterMovement->m_xmf3Velocity, fElapsedTime, false));
+	//// 이동량만큼 움직인다. 
+	//Move(Vector3::ScalarProduct(m_MonsterMovement->m_xmf3Velocity, fElapsedTime, false));
 }
 
 void Dragon::UpdateState(float fElapsedTime)
@@ -124,8 +124,8 @@ void Dragon::Animate(float fElapsedTime)
 {
 	Monster::Animate(fElapsedTime);
 	 
-	LoadObject* p = m_pLoadObject->FindFrame("Bone001");
-	XMFLOAT3 pos = XMFLOAT3(p->m_xmf4x4World._41, p->m_xmf4x4World._42 + 50, p->m_xmf4x4World._43);
+	LoadObject* p = m_pLoadObject->FindFrame("Bip001_Spine");
+	XMFLOAT3 pos = XMFLOAT3(p->m_xmf4x4World._41, p->m_xmf4x4World._42, p->m_xmf4x4World._43);
 
 	m_pMyBOBox->Rotate(0.f, m_MonsterMovement->m_fPitch, 0.f);
 	m_pMyBOBox->SetPosition(pos);
