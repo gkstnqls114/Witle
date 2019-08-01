@@ -113,7 +113,6 @@ void Dragon::Update(float fElapsedTime)
 
 	// 이동량만큼 움직인다. 
 	Move(Vector3::ScalarProduct(m_MonsterMovement->m_xmf3Velocity, fElapsedTime, false));
-
 }
 
 void Dragon::UpdateState(float fElapsedTime)
@@ -124,9 +123,10 @@ void Dragon::UpdateState(float fElapsedTime)
 void Dragon::Animate(float fElapsedTime)
 {
 	Monster::Animate(fElapsedTime);
-
+	 
 	LoadObject* p = m_pLoadObject->FindFrame("Bone001");
 	XMFLOAT3 pos = XMFLOAT3(p->m_xmf4x4World._41, p->m_xmf4x4World._42 + 50, p->m_xmf4x4World._43);
 
+	m_pMyBOBox->Rotate(0.f, 0.f, m_MonsterMovement->m_fPitch);
 	m_pMyBOBox->SetPosition(pos);
 }

@@ -12,6 +12,10 @@ public:
 	virtual void ReleaseObjects() override;
 	virtual void ReleaseUploadBuffers() override;
 
+private:
+	// 해당 Degree 값에 맞는 회전 행렬을 구합니다.
+	XMFLOAT4X4 SetRotate(float x, float y, float z);
+
 protected: 
 	XMFLOAT4X4 m_world;
 	XMFLOAT3 m_Pivot; // 회전중심

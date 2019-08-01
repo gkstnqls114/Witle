@@ -62,6 +62,40 @@ void MyBOBox::ReleaseUploadBuffers()
 	if(m_pLineCube) m_pLineCube->ReleaseUploadBuffers();
 }
 
+XMFLOAT4X4 MyBOBox::SetRotate(float x, float y, float z)
+{
+	XMFLOAT3 right{ 1, 0, 0 };
+	XMFLOAT3 up{ 0, 1, 0 };
+	XMFLOAT3 look{ 0, 0, 1 };
+
+	if (x != 0.0f)
+	{
+		XMMATRIX xmmtxRotate = XMMatrixRotationAxis(XMLoadFloat3(&right), XMConvertToRadians(x));
+		look = Vector3::TransformNormal(look, xmmtxRotate);
+		up = Vector3::TransformNormal(up, xmmtxRotate);
+	}
+	if (y != 0.0f)
+	{
+		XMMATRIX xmmtxRotate = XMMatrixRotationAxis(XMLoadFloat3(&up), XMConvertToRadians(y));
+		look = Vector3::TransformNormal(look, xmmtxRotate);
+		right = Vector3::TransformNormal(right, xmmtxRotate);
+	}
+	if (z != 0.0f)
+	{
+		XMMATRIX xmmtxRotate = XMMatrixRotationAxis(XMLoadFloat3(&look), XMConvertToRadians(z));
+		up = Vector3::TransformNormal(up, xmmtxRotate);
+		right = Vector3::TransformNormal(right, xmmtxRotate);
+	}
+
+	/*회전으로 인해 플레이어의 로컬 x-축, y-축, z-축이 서로 직교하지 않을 수 있으므로 z-축(LookAt 벡터)을 기준으
+	로 하여 서로 직교하고 단위벡터가 되도록 한다.*/
+	XMFLOAT3 new_look = Vector3::Normalize(look);
+	XMFLOAT3 new_right = Vector3::CrossProduct(up, look, true);
+	XMFLOAT3 new_up = Vector3::CrossProduct(look, right, true);
+
+	return Matrix4x4::WorldMatrix(m_BOBox.Center, new_right, new_up, new_look);
+}
+
 void MyBOBox::Render(ID3D12GraphicsCommandList * pd3dCommandList)
 { 
 	// if (!RENDER_BBOX) return;
@@ -81,18 +115,9 @@ void MyBOBox::RenderInstancing(ID3D12GraphicsCommandList * pd3dCommandList, int 
 // 기준이 되는 position 에 따라 공전 수행
 void MyBOBox::Rotate(float roll, float yaw, float pitch)
 {
-	m_BOBox.Orientation = Quaternion::ToQuaternion(roll, yaw, pitch);
-	 
-	XMFLOAT4X4 rotate = Matrix4x4::RotateMatrix(roll, yaw, pitch);
-	XMFLOAT4X4 world = m_world;
-	world._41 = m_Pivot.x; 
-	world._42 = m_Pivot.y;
-	world._43 = m_Pivot.z; // 회전중심을 피봇으로 맞추기위해서 설정.
-	m_world = Matrix4x4::Multiply(m_world, rotate); // 해당 플레이어 위치에 대한 자전을 수행한다.
+	m_BOBox.Orientation = Quaternion::ToQuaternion(roll, pitch, yaw);
 
-	m_world._41 = m_BOBox.Center.x;
-	m_world._42 = m_BOBox.Center.y;
-	m_world._43 = m_BOBox.Center.z; 
+	m_world = SetRotate(roll, pitch, yaw);
 }
 
 void MyBOBox::Move(const XMFLOAT3 & xmf3Shift)
