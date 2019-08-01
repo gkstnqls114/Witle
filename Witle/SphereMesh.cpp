@@ -3,6 +3,7 @@
 #include "MyDescriptorHeap.h"
 #include "Texture.h"
 #include "ShaderManager.h"
+#include "Shader.h"
 #include "SphereMesh.h"
 
 #define CYILNDER_VERTEX_COUNT 36
@@ -121,9 +122,17 @@ void SphereMesh::ReleaseUploadBuffers()
 }
 
 SphereMesh::SphereMesh(GameObject* pOwner, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList,
-	float radius , float height , float topRadius , float bottomRadius , int sectorCount, int stackCount)
+	bool isBlend, float radius , float height , float topRadius , float bottomRadius , int sectorCount, int stackCount)
 	:Mesh(pOwner)
 {
+	if(isBlend)
+	{
+		m_pShader = ShaderManager::GetInstance()->GetShader(SHADER_BLENDMESH);
+	}
+	else
+	{
+		m_pShader = ShaderManager::GetInstance()->GetShader(SHADER_CUBE);
+	}
 	m_ComponenetID = MESH_TYPE_ID::CYLINDER_MESH;
 
 	m_nVertexBufferViews = 1;
@@ -237,7 +246,15 @@ void SphereMesh::CreateTexture(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandL
 
 void SphereMesh::Render(ID3D12GraphicsCommandList * commandList, bool isGBuffers)
 {
-	ShaderManager::GetInstance()->SetPSO(commandList, "Cube", isGBuffers);
+	if (isGBuffers)
+	{
+		m_pShader->OnPrepareRenderForGBuffers(commandList);
+	}
+	else
+	{
+		m_pShader->OnPrepareRender(commandList);
+	}
+
 	commandList->IASetPrimitiveTopology(GetPrimitiveTopology());
 
 	if (m_Heap) m_Heap->UpdateShaderVariable(commandList);

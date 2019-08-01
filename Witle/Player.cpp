@@ -160,7 +160,7 @@ Player::~Player()
 void Player::Render(ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffers)
 {
 	if (m_pSniping) m_pSniping->Render(pd3dCommandList, isGBuffers);
-	m_pMyBOBox->Render(pd3dCommandList);
+	// m_pMyBOBox->Render(pd3dCommandList);
 
 	if (!m_isRendering) return; //만약 스나이핑 모드라면 플레이어를 렌더링하지 않는다.
 	m_pHaep->UpdateShaderVariable(pd3dCommandList);
@@ -181,10 +181,12 @@ void Player::RenderForShadow(ID3D12GraphicsCommandList * pd3dCommandList)
 	m_pHaep->UpdateShaderVariable(pd3dCommandList);
 
 	m_pTexture_Cloth->UpdateShaderVariable(pd3dCommandList, 0);
-	m_pLoadObject_Cloth->RenderForShadow(pd3dCommandList);
+	m_pLoadObject_Cloth->RenderForPlayerShadow(pd3dCommandList, this);
+	//m_pLoadObject_Cloth->RenderForShadow(pd3dCommandList);
 
 	m_pTexture_Body->UpdateShaderVariable(pd3dCommandList, 0);
-	m_pLoadObject_Body->RenderForShadow(pd3dCommandList);
+	m_pLoadObject_Body->RenderForPlayerShadow(pd3dCommandList, this);
+	// m_pLoadObject_Body->RenderForShadow(pd3dCommandList);
 }
 
 void Player::ReleaseMembers()

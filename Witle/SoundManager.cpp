@@ -3,8 +3,11 @@
 
 SoundManager* SoundManager::m_Instance;
 
+const static bool isUsing = false;
 SoundManager::SoundManager()
 {
+	if (!isUsing) return;
+
 	FMOD::System_Create(&pSystem);
 	pSystem->init(
 		FMOD_MAX_CHANNEL_WIDTH
@@ -92,6 +95,8 @@ SoundManager::SoundManager()
 
 SoundManager::~SoundManager()
 {
+	if (!isUsing) return;
+
 	for (int i = 0; i < SOUND_TYPE; ++i)
 	{
 		pSound[i]->release();
@@ -103,6 +108,8 @@ SoundManager::~SoundManager()
 
 void SoundManager::Play(int type)
 {
+	if (!isUsing) return;
+
 	pSystem->update();
 	pSystem->playSound(pSound[(int)type]
 		, nullptr, false, &pChannel[(int)type]);
@@ -110,5 +117,7 @@ void SoundManager::Play(int type)
 
 void SoundManager::Stop(int type)
 {
+	if (!isUsing) return;
+
 	pChannel[(int)type]->stop();
 }

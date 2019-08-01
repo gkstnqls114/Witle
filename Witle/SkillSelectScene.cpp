@@ -9,11 +9,14 @@
 #include "Texture.h"
 #include "GraphicsRootSignatureMgr.h"
 #include "MyDescriptorHeap.h"
+#include "PlayerSkillMgr.h"
+#include "SkillStg.h"
 #include "SkillSelectScene.h"
 
 MyDescriptorHeap* SkillSelectScene::m_pHeap{ nullptr };
 Texture* SkillSelectScene::m_pTexture{ nullptr };
-int SkillSelectScene::m_SelectedIndex[SKILL_SELECTED]{ 8, 8, 8, 8 }; // 선택된 네 개의 인덱스들
+int SkillSelectScene::m_SelectedIndex[SKILL_SELECTED]
+{ ENUM_SELECTABLESKILL::SELECTABLESKILL_SHIELD, ENUM_SELECTABLESKILL::SELECTABLESKILL_BLESSING, ENUM_SELECTABLESKILL::SELECTABLESKILL_HEALING, ENUM_SELECTABLESKILL::SELECTABLESKILL_FIREBALL }; // 선택된 네 개의 인덱스들. 기본으로 0 1 2 3으로 설정
 
 SkillSelectScene::SkillSelectScene()
 {
@@ -197,6 +200,10 @@ void SkillSelectScene::LastUpdate(float fElapsedTime)
 
 void SkillSelectScene::FinishSkillSelect()
 {
+	for (int x = 0; x < SKILL_SELECTED; ++x)
+	{
+		PlayerSkillMgr::GetInstance()->SetSkill(SkillStg::GetInstance()->GetSkill(m_SelectedIndex[x]), x);
+	}
 }
 
 void SkillSelectScene::AnimateObjects(float fTimeElapsed)

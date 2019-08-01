@@ -2,15 +2,20 @@
 #include "d3dx12.h"
 #include "MeshRenderer.h"
  
-class SceneMgr;
+class SceneMgr; 
+
 class Texture;
 class ComputeShader;
+class HorizonBlurShader;
+class VerticalBlurShader;
 class MyDescriptorHeap;
-
 class CLoadedModelInfo;
+class DownScaleFirstPassShader;
+class DownScaleSecondPassShader;
 
 class CGameFramework
-{
+{ 
+	typedef void (CGameFramework::*renderFuncPtr)(); // 게임프레임워크의 렌더링 함수 포인터
 
 private:
 	HINSTANCE m_hInstance;
@@ -56,19 +61,18 @@ private:
 private:  
 	//// GBuffer 와 쉐도우맵을 위해 필요한 변수들 ////////////////////////////////////
 
-	float	m_GBufferClearValue[3][4]
+	float	m_clearValueColor[4]
 	{
-		{ 0.f, 0.f, 0.f, 1.f },
-		{ 0.f, 1.f, 0.f, 1.f },
-		{ 0.f, 0.f, 1.f, 1.f }
+		0.5f, 0.f, 0.f, 1.f
 	};
 
 	static const UINT m_GBuffersCountForDepth{ 1 };
-	static const UINT m_ShadowmapCount{ 1 };
+	static const UINT m_ShadowmapCount{ 2 };
 	static const UINT m_GBuffersCountForRenderTarget{ 3 };
 	const UINT m_DsvDescriptorsCount{ 1 + m_GBuffersCountForDepth + m_ShadowmapCount };
 	static const UINT m_GBuffersCount{ m_GBuffersCountForDepth + m_GBuffersCountForRenderTarget };
 
+	// 0: color, 1: normal 2: specualr
 	ID3D12Resource*				m_GBuffersForRenderTarget[m_GBuffersCountForRenderTarget];
 	D3D12_CPU_DESCRIPTOR_HANDLE m_GBufferCPUHandleForRenderTarget[m_GBuffersCountForRenderTarget];
 
@@ -76,38 +80,49 @@ private:
 	D3D12_CPU_DESCRIPTOR_HANDLE m_GBufferCPUHandleForDepth[m_GBuffersCountForDepth];
 
 	ID3D12Resource*				m_Shadowmap;
+	ID3D12Resource*				m_PlayerShadowmap; // 플레이어 위치에서 그려질 쉐도우맵
 	D3D12_CPU_DESCRIPTOR_HANDLE m_ShadowmapCPUHandle;
+	D3D12_CPU_DESCRIPTOR_HANDLE m_PlayerShadowmapCPUHandle;
 
-	MyDescriptorHeap* m_GBufferHeap{ nullptr };
-	MyDescriptorHeap* m_ShadowmapHeap{ nullptr };
-
-	CD3DX12_CPU_DESCRIPTOR_HANDLE m_hCpuSrvForShadow;
-	CD3DX12_GPU_DESCRIPTOR_HANDLE m_hGpuSrvForShadow;
-	CD3DX12_CPU_DESCRIPTOR_HANDLE m_hCpuDsvForShadow;
-
+	UINT m_GBufferHeapCount{ m_GBuffersCount + m_ShadowmapCount + 1 /*uav*/};
+	UINT m_GBufferForDepthIndex = m_GBufferHeapCount - 4;
+	UINT m_GBufferForUAV = m_GBufferHeapCount - 3;
+	UINT m_GBufferForShadowIndex = m_GBufferHeapCount - 2;
+	UINT m_GBufferForPlayerShadowIndex = m_GBufferHeapCount - 1;
+	MyDescriptorHeap* m_GBufferHeap{ nullptr }; // GBuffer 뿐만 아니라 Shadow도 담습니다.
+	MyDescriptorHeap* m_ShadowmapHeap{ nullptr };  
 	//// GBuffer 와 쉐도우맵을 위해 필요한 변수들 ////////////////////////////////////
 
 
 
 	//// 컴퓨트 쉐이더를 위한 변수 ///////////////////////////////////////////
 
-	float	m_RWClearValue[4] = { 1.f, 0.f, 1.f, 0.f };
-	ID3D12Resource* m_ComputeRWResource; // 작성함 
+	
+	// 블러를 위한 텍스쳐
+	ID3D12Resource* m_ComputeRWResource; 
 
-	const UINT m_UAVParameterIndex = 0;
-	D3D12_GPU_DESCRIPTOR_HANDLE m_UAVGPUDescriptorHandle;
+	// 톤매핑을 위한 변수 
+	const int NumMiddleAvgLum = (1280 * 720) / (16 * 1024);
+	ID3D12Resource* m_RWMiddleAvgLum = nullptr;
+	ID3D12Resource* m_ReadBackMiddleAvgLumBuffer = nullptr;
 
+	const int NumAvgLum = 1;
+	ID3D12Resource* m_RWAvgLum = nullptr; 
+	ID3D12Resource* m_ReadBackAvgLumBuffer = nullptr;
+	 
 	// 블러를 위한 컴퓨트
-	ComputeShader* m_horizenShader{ nullptr };
-	ComputeShader* m_verticalShader{ nullptr };
+	HorizonBlurShader* m_horizenShader{ nullptr };
+	VerticalBlurShader* m_verticalShader{ nullptr };
+
+	// 톤매핑을 위한 컴퓨트 쉐이더
+	DownScaleFirstPassShader* m_downScaleFirstPassShader{ nullptr };
+	DownScaleSecondPassShader* m_downScaleSecondPassShader{ nullptr };
 
 	//// 컴퓨트 쉐이더를 위한 변수 ///////////////////////////////////////////
 
 private:  
 	//// OnCreate() 내부에서 사용되는 필수적으로 호출해야하는 함수들 ///////////
-	
-	void CreateRWResourceViews() ;
-	
+	 
 	void ReleaseSwapChainBuffer();
 	void ReleaseGBuffers();
 	void ReleaseDepthStencilBuffer();
@@ -117,7 +132,9 @@ private:
 	void CreateDirect3DDevice();
 	void CreateRtvAndDsvDescriptorHeaps();
 	void CreateRenderTargetView();
-	void CreateDepthStencilView();
+	void CreateDepthStencilView(); 
+	void CreateRWResourceViews(); 
+	void CreateRWBuffer();
 
 	// 스왑 체인을 위한 깊이스텐실뷰와 렌더타겟뷰와는 다르게 사용될
 	// GBuffer 리소스와 그를 위한 뷰를 생성합니다.
@@ -154,30 +171,41 @@ private:
 
 	// 계산 쉐이더를 통해 블러링합니다.
 	void Blur();
-	
+
+	// 휘도 계산을 위한 다운 스케일을 진행합니다.
+	void DownScale();
+	 
 	// SwapChain에 현재 장면을 렌더링합니다.
 	void RenderSwapChain();
 	
 	// SwapChain에 디퍼드 쉐이더를 통해 현재 장면을 렌더링합니다.
 	void DefferedRenderSwapChain();
 
+	void RenderToTexture();
+
 	// Shadow 맵만 렌더링합니다.
 	void RenderForShadow();
+
+	// 플레이어 Shadow 맵만 렌더링합니다.
+	void RenderForPlayerShadow();
+
+	// Compute 쉐이더를 통해 hdr을 위한 텍스쳐를 계산합니다.
+	void ToneMapping();
 
 	// 키보드와 마우스 메시지를 처리하는 부분이다.
 	void OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam);
 	void OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam);
 
 private:
+	// 깊이 버퍼와 그릴 렌더타겟을 하나 골라 장면을 렌더링합니다.
+	void RenderOnRT(renderFuncPtr renderPtr,ID3D12Resource* pRendertargetResource, D3D12_CPU_DESCRIPTOR_HANDLE renderTarget, D3D12_CPU_DESCRIPTOR_HANDLE depthStencil);
+	
+	// 깊이 버퍼와 그릴 렌더타겟을 여러 개 골라 장면을 렌더링합니다.
+	void RenderOnRTs(renderFuncPtr renderPtr, UINT RenderTargetCount,ID3D12Resource** resource, D3D12_CPU_DESCRIPTOR_HANDLE* renderTarget, D3D12_CPU_DESCRIPTOR_HANDLE depthStencil);
+
 	// GBuffer에 장면을 렌더링합니다.
 	void RenderOnGbuffer();
-
-	// 컴퓨터 쉐이더에 장면을 렌더링합니다.
-	void RenderOnCompute();
-
-	// 스왑체인에 장면을 렌더링합니다.
-	void RenderOnSwapchain();
-
+	 
 	// 렌더했던 Gbuffer를 이용하여 렌더링합니다.
 	void DefferedRenderOnSwapchain();
 
@@ -186,10 +214,7 @@ private:
 
 	// 필요한 쉐이더를 빌드합니다.
 	void BuildShaders(); 
-
-	// Shadow Transform 을 업데이트합니다.
-	void UpdateShaderTransform();
-	  
+	 
 public:
 	CGameFramework();
 	~CGameFramework();
@@ -206,12 +231,14 @@ public:
 	// 렌더링을 처리하는 함수입니다.
 	void Render();
 
+	// 렌더링 이후 디버그하는 함수
+	void Debug();
+
 	// 윈도우의 메시지(키보드, 마우스 입력)를 처리하는 함수입니다.
 	LRESULT CALLBACK OnProcessingWindowMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam);
 	
 private: 
 	// 현재 사용하는 장면을 관리하는 매니저입니다
-	SceneMgr *m_SceneMgr{ nullptr };
-	 
+	SceneMgr *m_SceneMgr{ nullptr }; 
 };
 

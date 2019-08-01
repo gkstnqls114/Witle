@@ -5,8 +5,7 @@
 ID3D12RootSignature* GraphicsRootSignatureMgr::m_d3dGraphicsRootSignature{ nullptr };
 
 ID3D12RootSignature * GraphicsRootSignatureMgr::CreateGraphicsRootSignature(ID3D12Device * pd3dDevice)
-{
-
+{ 
 	HRESULT hResult = S_FALSE;
 	ID3D12RootSignature* pd3dGraphicsRootSignature = nullptr;
 
@@ -21,18 +20,21 @@ ID3D12RootSignature * GraphicsRootSignatureMgr::CreateGraphicsRootSignature(ID3D
 	pRootParameters[ROOTPARAMETER_HPPERCENTAGE] = d3dUtil::CreateRootParameterConstants(1, 5);  // b5: HP percentage
 	pRootParameters[ROOTPARAMETER_TIME] = d3dUtil::CreateRootParameterConstants(1, 6);  // b6: Elapsed Time
 	pRootParameters[ROOTPARAMETER_LIGHTFORSHADOW] = d3dUtil::CreateRootParameterCBV(9);          // b9: Light Info For Shadow
+	pRootParameters[ROOTPARAMETER_PLAYER_LIGHTFORSHADOW] = d3dUtil::CreateRootParameterCBV(10);          // b10: Player Light Info For Shadow
 
-	D3D12_DESCRIPTOR_RANGE pTextureDescriptorRanges[4];
+	D3D12_DESCRIPTOR_RANGE pTextureDescriptorRanges[5];
 	pTextureDescriptorRanges[0] = d3dUtil::CreateDescriptorRangeSRV(1, 0); //t0: gtxtTexture
 	pTextureDescriptorRanges[1] = d3dUtil::CreateDescriptorRangeSRV(1, 1); //t1: gtxtTerrainBaseTexture
 	pTextureDescriptorRanges[2] = d3dUtil::CreateDescriptorRangeSRV(1, 2); //t2: gtxtTerrainDetailTexture	
 	pTextureDescriptorRanges[3] = d3dUtil::CreateDescriptorRangeSRV(1, 3); //t3: gtxtShadow	
-
+	pTextureDescriptorRanges[4] = d3dUtil::CreateDescriptorRangeSRV(1, 4); //t4: gtxtShadow	
+	 
 	// 다시 루프 패러미터 
-	pRootParameters[ROOTPARAMETER_TEXTURE] = d3dUtil::CreateRootParameterTable(1, &pTextureDescriptorRanges[0], D3D12_SHADER_VISIBILITY_PIXEL);
-	pRootParameters[ROOTPARAMETER_TEXTUREBASE] = d3dUtil::CreateRootParameterTable(1, &pTextureDescriptorRanges[1], D3D12_SHADER_VISIBILITY_PIXEL);
-	pRootParameters[ROOTPARAMETER_TEXTUREDETAIL] = d3dUtil::CreateRootParameterTable(1, &pTextureDescriptorRanges[2], D3D12_SHADER_VISIBILITY_PIXEL);
+	pRootParameters[ROOTPARAMETER_TEXTURE] = d3dUtil::CreateRootParameterTable(1, &pTextureDescriptorRanges[0], D3D12_SHADER_VISIBILITY_ALL);
+	pRootParameters[ROOTPARAMETER_TEXTUREBASE] = d3dUtil::CreateRootParameterTable(1, &pTextureDescriptorRanges[1], D3D12_SHADER_VISIBILITY_ALL);
+	pRootParameters[ROOTPARAMETER_TEXTUREDETAIL] = d3dUtil::CreateRootParameterTable(1, &pTextureDescriptorRanges[2], D3D12_SHADER_VISIBILITY_ALL);
 	pRootParameters[ROOTPARAMETER_SHADOWTEXTURE] = d3dUtil::CreateRootParameterTable(1, &pTextureDescriptorRanges[3], D3D12_SHADER_VISIBILITY_PIXEL);
+	pRootParameters[ROOTPARAMETER_PLAYERSHADOWTEXTURE] = d3dUtil::CreateRootParameterTable(1, &pTextureDescriptorRanges[4], D3D12_SHADER_VISIBILITY_PIXEL);
 
 	D3D12_DESCRIPTOR_RANGE pd3dDescriptorRanges[8];
 	pd3dDescriptorRanges[0] = d3dUtil::CreateDescriptorRangeSRV(1, 6);  //t6: gtxtAlbedoTexture
@@ -58,6 +60,17 @@ ID3D12RootSignature * GraphicsRootSignatureMgr::CreateGraphicsRootSignature(ID3D
 	pRootParameters[ROOTPARAMETER_INSTANCING] = d3dUtil::CreateRootParameterSRV(14, 0, D3D12_SHADER_VISIBILITY_VERTEX); //t14: Instacing World
 	pRootParameters[ROOTPARAMETER_SKYBOX] = d3dUtil::CreateRootParameterTable(1, &pd3dDescriptorRanges[7], D3D12_SHADER_VISIBILITY_PIXEL); //t15: SKYBOX
 
+
+	D3D12_DESCRIPTOR_RANGE pUavDescriptorRanges[1];
+	pUavDescriptorRanges[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_UAV;
+	pUavDescriptorRanges[0].NumDescriptors = 1;
+	pUavDescriptorRanges[0].BaseShaderRegister = 0; // RWTexture2D<float4> gtxtRWOutput : register(u0)
+	pUavDescriptorRanges[0].RegisterSpace = 0;
+	pUavDescriptorRanges[0].OffsetInDescriptorsFromTableStart = 0;
+
+	pRootParameters[ROOTPARAMETER_BLURTEST] = d3dUtil::CreateRootParameterTable(1, &pUavDescriptorRanges[0], D3D12_SHADER_VISIBILITY_ALL);
+	pRootParameters[ROOTPARAMETER_AVGLUM] = d3dUtil::CreateRootParameterUAV(1); 
+	pRootParameters[ROOTPARAMETER_MIDDLEAVGLUM] = d3dUtil::CreateRootParameterUAV(2);  
 	//// 루트 패러미터 ///////////////////////////////////////////////////////////////////// 
 
 
@@ -123,10 +136,10 @@ ID3D12RootSignature * GraphicsRootSignatureMgr::CreateGraphicsRootSignature(ID3D
 	ID3DBlob *pd3dSignatureBlob = nullptr;
 	ID3DBlob *pd3dErrorBlob = nullptr;
 	hResult = ::D3D12SerializeRootSignature(&d3dRootSignatureDesc, D3D_ROOT_SIGNATURE_VERSION_1, &pd3dSignatureBlob, &pd3dErrorBlob);
-	assert(hResult == S_OK);
+	// assert(hResult == S_OK);
 
 	hResult = pd3dDevice->CreateRootSignature(0, pd3dSignatureBlob->GetBufferPointer(), pd3dSignatureBlob->GetBufferSize(), IID_PPV_ARGS(&pd3dGraphicsRootSignature));
-	assert(hResult == S_OK);
+	// assert(hResult == S_OK);
 
 	if (pd3dSignatureBlob) pd3dSignatureBlob->Release();
 	if (pd3dErrorBlob) pd3dErrorBlob->Release();

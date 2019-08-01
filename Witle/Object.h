@@ -16,6 +16,7 @@
 
 class Shader;
 class CStandardShader;
+class Player;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
@@ -99,6 +100,9 @@ private:
 public:
 	static Shader					*m_pWireFrameShader_ForShadow;
 	static Shader					*m_pSkinnedShader_ForShadow;
+
+	static Shader					*m_pWireFrameShader_ForPlayerShadow;
+	static Shader					*m_pSkinnedShader_ForPlayerShadow;
 
 public:
 	void AddRef() { m_nReferences++; }
@@ -428,6 +432,7 @@ public:
 	virtual void OnPrepareRender() { }
 	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers);
 	void RenderForShadow(ID3D12GraphicsCommandList *pd3dCommandList);
+	void RenderForPlayerShadow(ID3D12GraphicsCommandList *pd3dCommandList, Player* player);
 	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, CAnimationController* pSkinnedAnimationController, bool isGBuffers);
 	virtual void RenderInstancing(ID3D12GraphicsCommandList *pd3dCommandList, int InstanceCount, bool isGBuffers);
 

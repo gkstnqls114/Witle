@@ -1,8 +1,6 @@
 #pragma once
 #include "Scene.h"
 
-#define SKILL_TO_CHOOSE 8
-#define SKILL_SELECTED 4
 
 class UI2DImage;
 class Texture;
@@ -42,6 +40,7 @@ public:
 	// 화면에 그림을 그리는 함수.
 	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers) override;
 	virtual void RenderForShadow(ID3D12GraphicsCommandList *pd3dCommandList) override;
+	virtual void RenderForPlayerShadow(ID3D12GraphicsCommandList *pd3dCommandList) override {};
 
 	//// UpdateGamelogic ///////////////////////////////////
 
@@ -62,7 +61,7 @@ public:
 	virtual void LastUpdate(float ElapsedTime) override;
 	//// UpdateGamelogic ///////////////////////////////////
 
-	// 스킬 매니저에 해당 텍스쳐 넣는다.
+	// SkillStg에서 스킬을 꺼내 PlayerSkillMgr에서 사용할 스킬을 설정합니다.
 	void FinishSkillSelect();
 
 protected:

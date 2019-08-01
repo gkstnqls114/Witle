@@ -10,7 +10,6 @@ class Status
 { 
 protected:
 	virtual void SetAnimationStateToHit() = 0;
-	void SubstractHP(int damage);
 
 public:
 	int m_Guage{ 100 };
@@ -24,4 +23,7 @@ public:
 	Status(GameObject* pOwner );
 	virtual ~Status(); 
 	virtual void Damage(int damage, int state) = 0;
+
+	void SubstractHP(UINT damage);
+	void AddHP(UINT damage);
 };

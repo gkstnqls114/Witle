@@ -99,6 +99,7 @@ public:
 
 	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers) override;
 	virtual void RenderForShadow(ID3D12GraphicsCommandList *pd3dCommandList) override;
+	virtual void RenderForPlayerShadow(ID3D12GraphicsCommandList *pd3dCommandList) override;
 
 	virtual void ReleaseUploadBuffers() override;
 
@@ -114,8 +115,7 @@ protected:
 	
 	Player*                 m_pPlayer        { nullptr };
 	WideareaMagic*          m_WideareaMagic  { nullptr };
-	Sniping*				m_Sniping        { nullptr };
-	PlayerSkillMgr*         m_PlayerSkillMgr { nullptr }; 
+	Sniping*				m_Sniping        { nullptr }; 
 	
 	// 플레이어 관련 ////////////////////////////c
 

@@ -66,6 +66,18 @@ D3D12_ROOT_PARAMETER d3dUtil::CreateRootParameterSRV(UINT ShaderRegister, UINT R
 	return d3dRootParameter;
 }
 
+D3D12_ROOT_PARAMETER d3dUtil::CreateRootParameterUAV(UINT ShaderRegister, UINT RegisterSpace, D3D12_SHADER_VISIBILITY ShaderVisibility)
+{
+	D3D12_ROOT_PARAMETER d3dRootParameter;
+
+	d3dRootParameter.ParameterType = D3D12_ROOT_PARAMETER_TYPE_UAV;
+	d3dRootParameter.Descriptor.ShaderRegister = ShaderRegister;
+	d3dRootParameter.Descriptor.RegisterSpace = RegisterSpace;
+	d3dRootParameter.ShaderVisibility = ShaderVisibility;
+
+	return d3dRootParameter;
+}
+
 D3D12_ROOT_PARAMETER d3dUtil::CreateRootParameterTable(UINT NumDescriptorRanges, D3D12_DESCRIPTOR_RANGE* pDescriptorRanges, D3D12_SHADER_VISIBILITY ShaderVisibility)
 {
 	D3D12_ROOT_PARAMETER d3dRootParameter;
@@ -162,6 +174,54 @@ ID3D12Resource* d3dUtil::CreateBufferResource(ID3D12Device *pd3dDevice, ID3D12Gr
 		}
 	}
 	return(pd3dBuffer);
+}
+
+ID3D12Resource* d3dUtil::CreateDefaultBuffer(ID3D12Device * device, ID3D12GraphicsCommandList * cmdList, const void * initData, UINT64 byteSize, ID3D12Resource** uploadBuffer)
+{ 
+	ID3D12Resource* defaultBuffer;
+
+	// Create the actual default buffer resource.
+	ThrowIfFailed(device->CreateCommittedResource(
+		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
+		D3D12_HEAP_FLAG_NONE,
+		&CD3DX12_RESOURCE_DESC::Buffer(byteSize),
+		D3D12_RESOURCE_STATE_COMMON,
+		nullptr,
+		IID_PPV_ARGS(&defaultBuffer)));
+
+	// In order to copy CPU memory data into our default buffer, we need to create
+	// an intermediate upload heap. 
+	ThrowIfFailed(device->CreateCommittedResource(
+		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
+		D3D12_HEAP_FLAG_NONE,
+		&CD3DX12_RESOURCE_DESC::Buffer(byteSize),
+		D3D12_RESOURCE_STATE_GENERIC_READ,
+		nullptr,
+		IID_PPV_ARGS(&*uploadBuffer)));
+
+
+	// Describe the data we want to copy into the default buffer.
+	D3D12_SUBRESOURCE_DATA subResourceData = {};
+	::ZeroMemory(&subResourceData, sizeof(D3D12_SUBRESOURCE_DATA));
+	subResourceData.pData = initData;
+	subResourceData.RowPitch = byteSize;
+	subResourceData.SlicePitch = subResourceData.RowPitch;
+
+	// Schedule to copy the data to the default buffer resource.  At a high level, the helper function UpdateSubresources
+	// will copy the CPU memory into the intermediate upload heap.  Then, using ID3D12CommandList::CopySubresourceRegion,
+	// the intermediate upload heap data will be copied to mBuffer.
+	cmdList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(defaultBuffer, D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_COPY_DEST));
+
+	UpdateSubresources<1>(cmdList, defaultBuffer, *uploadBuffer, 0, 0, 1, &subResourceData);
+
+	cmdList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(defaultBuffer, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_GENERIC_READ));
+
+	// Note: uploadBuffer has to be kept alive after the above function calls because
+	// the command list has not been executed yet that performs the actual copy.
+	// The caller can Release the uploadBuffer after it knows the copy has been executed.
+
+
+	return defaultBuffer;
 }
 
 ID3D12Resource * d3dUtil::CreateTextureResourceFromDDSFile(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, const wchar_t * pszFileName, ID3D12Resource ** ppd3dUploadBuffer, D3D12_RESOURCE_STATES d3dResourceStates)

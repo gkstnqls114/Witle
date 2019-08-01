@@ -37,6 +37,7 @@ public:
 	static D3D12_ROOT_PARAMETER CreateRootParameterConstants(UINT Num32BitValues, UINT ShaderRegister, UINT RegisterSpace = 0, D3D12_SHADER_VISIBILITY ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL);
 	static D3D12_ROOT_PARAMETER CreateRootParameterCBV(UINT ShaderRegister, UINT RegisterSpace = 0, D3D12_SHADER_VISIBILITY ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL);
 	static D3D12_ROOT_PARAMETER CreateRootParameterSRV(UINT ShaderRegister, UINT RegisterSpace = 0, D3D12_SHADER_VISIBILITY ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL);
+	static D3D12_ROOT_PARAMETER CreateRootParameterUAV(UINT ShaderRegister, UINT RegisterSpace = 0, D3D12_SHADER_VISIBILITY ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL);
 	static D3D12_ROOT_PARAMETER CreateRootParameterTable(UINT NumDescriptorRanges, D3D12_DESCRIPTOR_RANGE* pDescriptorRanges, D3D12_SHADER_VISIBILITY ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL);
 
 	static ID3D12Resource* CreateBufferResource(ID3D12Device *pd3dDevice,
@@ -44,6 +45,13 @@ public:
 		d3dHeapType = D3D12_HEAP_TYPE_UPLOAD, D3D12_RESOURCE_STATES d3dResourceStates =
 		D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, ID3D12Resource **ppd3dUploadBuffer =
 		NULL);
+
+	static ID3D12Resource* d3dUtil::CreateDefaultBuffer(
+		ID3D12Device* device,
+		ID3D12GraphicsCommandList* cmdList,
+		const void* initData,
+		UINT64 byteSize,
+		ID3D12Resource** uploadBuffer); 
 
 	static ID3D12Resource *CreateTextureResourceFromDDSFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, const wchar_t *pszFileName, ID3D12Resource **ppd3dUploadBuffer, D3D12_RESOURCE_STATES d3dResourceStates);
 	static ID3D12Resource *CreateTextureResourceFromWICFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, const wchar_t *pszFileName, ID3D12Resource **ppd3dUploadBuffer, D3D12_RESOURCE_STATES d3dResourceStates);

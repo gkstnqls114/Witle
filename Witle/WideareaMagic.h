@@ -6,7 +6,7 @@ class GameObject;
 class MyBSphere;
 
 class WideareaMagic :
-	public Skill
+	public SelectableSkill
 {
 	const float rotateValue = 30.f; 
 	MyBSphere* m_MyBSphere{ nullptr };

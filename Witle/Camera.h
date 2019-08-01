@@ -32,8 +32,15 @@ private:
 		XMFLOAT4X4						m_xmf4x4LightTransform;
 	};
 
+	struct VS_CB_PLAYER_LIGHT_INFO
+	{ 
+		XMFLOAT4X4						m_xmf4x4PlayerLightView;
+		XMFLOAT4X4						m_xmf4x4PlayerLightProjection;
+		XMFLOAT4X4						m_xmf4x4PlayerLightTransform;
+	};
+
 	MyFrustum*   m_pFrustum{ nullptr };
-	BoundingSphere mSceneBounds;
+	// BoundingSphere mSceneBounds;
 
 	float m_fNearPlaneDistance;
 	float m_fFarPlaneDistance;
@@ -43,9 +50,13 @@ private:
 
 	ID3D12Resource					*m_pd3dcbLight{ nullptr };
 	VS_CB_LIGHT_INFO				*m_pcbMappedLight{ nullptr };
+	 
+	ID3D12Resource					*m_pd3dcbPlayerLight{ nullptr };
+	VS_CB_PLAYER_LIGHT_INFO				*m_pcbMappedPlayerLight{ nullptr };
+
 private:
 	void ReleaseShaderVariables();
-
+	
 public:
 	virtual void ReleaseObjects() override;
 	virtual void ReleaseUploadBuffers() override;
@@ -72,7 +83,8 @@ protected:
 
 protected:  
 	virtual void MoveSmoothly(float fTimeElapsed, const XMFLOAT3& xmf3LookAt) {}; 
-
+	void UpdateLightShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList, const LIGHT* light, bool isPlayer);
+	
 public:
 	Camera(GameObject* pOwner, const XMFLOAT3& AtOffset = {0.f, 200.f, 0.f});
 	Camera(GameObject* pOwner,  Camera *pCamera);
@@ -150,6 +162,5 @@ public:
 	XMFLOAT4X4 GenerateLightViewMatrix(const LIGHT* light) const ;
 	XMFLOAT4X4 GenerateLightProjectionMatrix(const LIGHT* light) const;
 	void UpdateLightShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList, const LIGHT* light);
-	// 조명 위치에 자리한 조명 변환 뷰을 위해 필요 //////////////////////////////
-
+	 
 };

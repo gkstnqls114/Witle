@@ -53,15 +53,25 @@ Camera::~Camera()
 
 void Camera::CreateShaderVariables(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList)
 {
+	// 카메라 상수 버퍼
 	UINT ncbElementBytes = ((sizeof(VS_CB_CAMERA_INFO) + 255) & ~255); //256의 배수
 	m_pd3dcbCamera = d3dUtil::CreateBufferResource(pd3dDevice, pd3dCommandList, NULL, ncbElementBytes, D3D12_HEAP_TYPE_UPLOAD, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, NULL);
 
 	m_pd3dcbCamera->Map(0, NULL, (void **)&m_pcbMappedCamera);
 
+
+	// 그림자 조명 버퍼
 	ncbElementBytes = ((sizeof(VS_CB_LIGHT_INFO) + 255) & ~255); //256의 배수
 	m_pd3dcbLight = d3dUtil::CreateBufferResource(pd3dDevice, pd3dCommandList, NULL, ncbElementBytes, D3D12_HEAP_TYPE_UPLOAD, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, NULL);
 
 	m_pd3dcbLight->Map(0, NULL, (void **)&m_pcbMappedLight);
+
+
+	// 플레이어 조명 버퍼 
+	ncbElementBytes = ((sizeof(VS_CB_PLAYER_LIGHT_INFO) + 255) & ~255); //256의 배수
+	m_pd3dcbPlayerLight = d3dUtil::CreateBufferResource(pd3dDevice, pd3dCommandList, NULL, ncbElementBytes, D3D12_HEAP_TYPE_UPLOAD, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, NULL);
+
+	m_pd3dcbPlayerLight->Map(0, NULL, (void **)&m_pcbMappedPlayerLight);
 }
 
 void Camera::UpdateShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList, int parameterIndex)
@@ -208,13 +218,28 @@ XMFLOAT4X4 Camera::GenerateLightProjectionMatrix(const LIGHT * light) const
 	return 	Matrix4x4::OrthographicLH(GameScreen::GetClientWidth(), GameScreen::GetClientHeight(), m_fNearPlaneDistance, m_fFarPlaneDistance);;
 }
 
-void Camera::UpdateLightShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList, const LIGHT* light)
-{     
-	//auto playerpos = PlayerManager::GetMainPlayer()->GetTransform().GetPosition();
-	//auto playerlook = PlayerManager::GetMainPlayer()->GetTransform().GetLook();
-	//auto boundcenter = Vector3::Add(playerpos, Vector3::ScalarProduct(playerlook, m_fFarPlaneDistance / 2.f, false));
-	auto boundcenter = XMFLOAT3(15000, 0, 15000);
-	mSceneBounds = BoundingSphere { boundcenter, 17000 };
+void Camera::UpdateLightShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList, const LIGHT * light)
+{
+	UpdateLightShaderVariables(pd3dCommandList, light, true);
+	UpdateLightShaderVariables(pd3dCommandList, light, false);
+
+}
+ 
+void Camera::UpdateLightShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList, const LIGHT* light, bool isPlayer)
+{
+	XMFLOAT3 boundcenter;
+	BoundingSphere mSceneBounds;
+
+	if (isPlayer)
+	{
+		boundcenter = PlayerManager::GetMainPlayer()->GetTransform().GetPosition();
+		mSceneBounds = BoundingSphere{ boundcenter, 3000.f };
+	}
+	else
+	{ 
+		boundcenter = XMFLOAT3(15000.f, 0.f, 15000.f);
+		mSceneBounds = BoundingSphere{ boundcenter, 17000.f };
+	}
 	
 	// Only the first "main" light casts a shadow.
 	XMVECTOR lightDir = XMLoadFloat3(&light->Direction);
@@ -234,9 +259,7 @@ void Camera::UpdateLightShaderVariables(ID3D12GraphicsCommandList * pd3dCommandL
 	float r = sphereCenterLS.x + mSceneBounds.Radius;
 	float t = sphereCenterLS.y + mSceneBounds.Radius;
 	float f = sphereCenterLS.z + mSceneBounds.Radius;
-/*
-	mLightNearZ = 0.1;
-	mLightFarZ = 30000;*/
+
 	XMMATRIX lightProj = XMMatrixOrthographicOffCenterLH(l, r, b, t, n, f);
 
 	// Transform NDC space [-1,+1]^2 to texture space [0,1]^2
@@ -248,25 +271,53 @@ void Camera::UpdateLightShaderVariables(ID3D12GraphicsCommandList * pd3dCommandL
 
 	XMMATRIX S = lightView * lightProj*T;
 
-	XMFLOAT4X4 xmf4x4LightView;
-	xmf4x4LightView = GenerateLightViewMatrix(light);
+	XMFLOAT4X4 xmf4x4LightView; 
 	XMStoreFloat4x4(&xmf4x4LightView, XMMatrixTranspose(lightView));
-	::memcpy(&m_pcbMappedLight->m_xmf4x4LightView, &xmf4x4LightView, sizeof(XMFLOAT4X4));
+	if (isPlayer)
+	{
+		::memcpy(&m_pcbMappedPlayerLight->m_xmf4x4PlayerLightView, &xmf4x4LightView, sizeof(XMFLOAT4X4));
+	}
+	else
+	{ 
+		::memcpy(&m_pcbMappedLight->m_xmf4x4LightView, &xmf4x4LightView, sizeof(XMFLOAT4X4));
+	}
 
-	XMFLOAT4X4 xmf4x4Projection;
-	xmf4x4Projection = GenerateLightProjectionMatrix(light);
+	XMFLOAT4X4 xmf4x4Projection; 
 	XMStoreFloat4x4(&xmf4x4Projection, XMMatrixTranspose(lightProj));
-	::memcpy(&m_pcbMappedLight->m_xmf4x4LightProjection, &xmf4x4Projection, sizeof(XMFLOAT4X4));
-	
+	if (isPlayer)
+	{
+		::memcpy(&m_pcbMappedPlayerLight->m_xmf4x4PlayerLightProjection, &xmf4x4Projection, sizeof(XMFLOAT4X4));
+	}
+	else
+	{
+		::memcpy(&m_pcbMappedLight->m_xmf4x4LightProjection, &xmf4x4Projection, sizeof(XMFLOAT4X4));
+	}
+
 	XMFLOAT4X4 xmf4x4LightTransform; 
 	XMStoreFloat4x4(&xmf4x4LightTransform, XMMatrixTranspose(S));
-	::memcpy(&m_pcbMappedLight->m_xmf4x4LightTransform, &xmf4x4LightTransform, sizeof(XMFLOAT4X4));
+	if (isPlayer)
+	{
+		::memcpy(&m_pcbMappedPlayerLight->m_xmf4x4PlayerLightTransform, &xmf4x4LightTransform, sizeof(XMFLOAT4X4));
+	}
+	else
+	{
+		::memcpy(&m_pcbMappedLight->m_xmf4x4LightTransform, &xmf4x4LightTransform, sizeof(XMFLOAT4X4));
+	} 
 
+	if (isPlayer)
+	{
+		D3D12_GPU_VIRTUAL_ADDRESS d3dGpuVirtualAddress = m_pd3dcbPlayerLight->GetGPUVirtualAddress();
+		pd3dCommandList->SetGraphicsRootConstantBufferView(ROOTPARAMETER_PLAYER_LIGHTFORSHADOW, d3dGpuVirtualAddress);
 
-	D3D12_GPU_VIRTUAL_ADDRESS d3dGpuVirtualAddress = m_pd3dcbLight->GetGPUVirtualAddress();
-	pd3dCommandList->SetGraphicsRootConstantBufferView(ROOTPARAMETER_LIGHTFORSHADOW, d3dGpuVirtualAddress);
+	}
+	else
+	{
+		D3D12_GPU_VIRTUAL_ADDRESS d3dGpuVirtualAddress = m_pd3dcbLight->GetGPUVirtualAddress();
+		pd3dCommandList->SetGraphicsRootConstantBufferView(ROOTPARAMETER_LIGHTFORSHADOW, d3dGpuVirtualAddress);
+
+	}
 }
-
+ 
 void Camera::SetViewportsAndScissorRects(ID3D12GraphicsCommandList *pd3dCommandList)
 {
 	pd3dCommandList->RSSetViewports(1, &m_d3dViewport);

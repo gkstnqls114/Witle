@@ -1,6 +1,7 @@
 #pragma once
 #include "Mesh.h"
 
+class Shader;
 class Texture;
 class MyDescriptorHeap;
 
@@ -28,6 +29,7 @@ private:
 
 	MyDescriptorHeap * m_Heap{ nullptr };
 	Texture*           m_Texture{ nullptr };
+	Shader*				m_pShader{ nullptr };
 private:
 	void CalculateTriangleListVertexNormals(XMFLOAT3 *pxmf3Normals, XMFLOAT3 *pxmf3Positions, int nVertices);
 	void CalculateTriangleListVertexNormals(XMFLOAT3 *pxmf3Normals, XMFLOAT3 *pxmf3Positions, UINT nVertices, UINT *pnIndices, UINT nIndices);
@@ -39,7 +41,7 @@ public:
 	virtual void ReleaseUploadBuffers() override;
 
 public:
-	SphereMesh(GameObject* pOwner, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, 
+	SphereMesh(GameObject* pOwner, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, bool isBlend = false,
 		float radius = 500, float height = 500, float topRadius = 10, float bottomRadius = 10, int sectorCount = 10, int stackCount = 10
 	);
 	virtual ~SphereMesh();

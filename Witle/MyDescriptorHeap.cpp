@@ -25,7 +25,7 @@ void MyDescriptorHeap::ReleaseObjects()
 
 
 void MyDescriptorHeap::CreateCbvSrvUavDescriptorHeaps(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, int nConstantBufferViews, int nShaderResourceViews, int nUnorderedAcessViews)
-{
+{ 
 	D3D12_DESCRIPTOR_HEAP_DESC d3dDescriptorHeapDesc;
 	d3dDescriptorHeapDesc.NumDescriptors = nConstantBufferViews + nShaderResourceViews + nUnorderedAcessViews; //CBVs + SRVs + UAVs 
 	d3dDescriptorHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
@@ -134,4 +134,17 @@ void MyDescriptorHeap::CreateUnorderedAccessViews(ID3D12Device * pd3dDevice, ID3
 		UAVGPUDescriptorHandle.ptr += d3dUtil::gnCbvSrvDescriptorIncrementSize;
 		UAVCPUDescriptorHandle.ptr += d3dUtil::gnCbvSrvDescriptorIncrementSize;
 	}
+}
+
+void MyDescriptorHeap::CreateUnorderedAccessViews(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12Resource * pResource, int nTypes, UINT count, DXGI_FORMAT format)
+{
+	D3D12_CPU_DESCRIPTOR_HANDLE UAVCPUDescriptorHandle = m_d3dUAVCPUDescriptorStartHandle;
+	D3D12_GPU_DESCRIPTOR_HANDLE UAVGPUDescriptorHandle = m_d3dUAVGPUDescriptorStartHandle;
+
+	int nTextureType = nTypes;
+	ID3D12Resource *pShaderResource = pResource;
+	D3D12_RESOURCE_DESC d3dResourceDesc = pShaderResource->GetDesc();
+
+	D3D12_UNORDERED_ACCESS_VIEW_DESC d3dShaderResourceViewDesc = d3dUtil::GetUnorderedAccessViewDesc(d3dResourceDesc, nTextureType);
+	pd3dDevice->CreateUnorderedAccessView(pShaderResource, nullptr, &d3dShaderResourceViewDesc, UAVCPUDescriptorHandle); 
 }
