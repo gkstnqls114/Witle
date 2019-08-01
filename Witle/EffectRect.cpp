@@ -36,10 +36,10 @@ BroomEffectRect::BroomEffectRect(GameObject * pOwner, ID3D12Device * pd3dDevice,
 	m_ComponenetID = SHAPE_TYPE_ID::BROOMEFFECT_SHAPE;
 
 	m_pHeap = new MyDescriptorHeap();
-	m_pHeap->CreateCbvSrvUavDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 1, 0);
+	m_pHeap->CreateCbvSrvUavDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 1, 0, ENUM_SCENE::SCENE_GAME);
 	m_pTexture = new Texture(1, RESOURCE_TEXTURE2D);
 	m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Image/Dust.dds", 0);
-	m_pHeap->CreateShaderResourceViews(pd3dDevice, pd3dCommandList, m_pTexture, ROOTPARAMETER_TEXTURE, true);
+	m_pHeap->CreateShaderResourceViews(pd3dDevice,  m_pTexture, ROOTPARAMETER_TEXTURE, true);
 
 	m_nVertexBufferViews = 1;
 	m_pVertexBufferViews = new D3D12_VERTEX_BUFFER_VIEW[m_nVertexBufferViews];

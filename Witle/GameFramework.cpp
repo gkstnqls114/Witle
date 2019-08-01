@@ -554,7 +554,7 @@ void CGameFramework::CreateShadowmapView()
 
 	// 디스크립터 생성 /////////////////////////////////////////////
 	m_ShadowmapHeap = new MyDescriptorHeap();
-	m_ShadowmapHeap->CreateCbvSrvUavDescriptorHeaps(m_d3dDevice.Get(), m_CommandList.Get(), 0, m_ShadowmapCount, 0);
+	m_ShadowmapHeap->CreateCbvSrvUavDescriptorHeaps(m_d3dDevice.Get(), m_CommandList.Get(), 0, m_ShadowmapCount, 0, ENUM_SCENE::SCENE_NONE);
 
 	 // Create SRV to resource so we can sample the shadow map in a shader program.
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
@@ -702,7 +702,7 @@ void CGameFramework::CreateDepthStencilView()
 	m_d3dDevice->CreateDepthStencilView(m_GBuffersForDepth[0], &d3dDepthStencilViewDesc, m_GBufferCPUHandleForDepth[0]);
 	
 	// 힙에 추가
-	m_GBufferHeap->CreateShaderResourceViews(m_d3dDevice.Get(), m_CommandList.Get(), m_GBuffersForDepth[0], RESOURCE_TEXTURE2D, m_GBufferForDepthIndex, DXGI_FORMAT_R24_UNORM_X8_TYPELESS);
+	m_GBufferHeap->CreateShaderResourceViews(m_d3dDevice.Get(), m_GBuffersForDepth[0], RESOURCE_TEXTURE2D, m_GBufferForDepthIndex, DXGI_FORMAT_R24_UNORM_X8_TYPELESS);
 
 }
 
@@ -781,22 +781,22 @@ void CGameFramework::CreateGBufferView()
 	if (!m_GBufferHeap)
 	{
 		m_GBufferHeap = new MyDescriptorHeap();
-		m_GBufferHeap->CreateCbvSrvUavDescriptorHeaps(m_d3dDevice.Get(), m_CommandList.Get(), 0, m_GBufferHeapCount, 1 /*blur 위해...*/);
+		m_GBufferHeap->CreateCbvSrvUavDescriptorHeaps(m_d3dDevice.Get(), m_CommandList.Get(), 0, m_GBufferHeapCount, 1 /*blur 위해...*/, ENUM_SCENE::SCENE_NONE);
 		for (int i = 0; i < m_GBuffersCountForRenderTarget; ++i)
 		{
-			m_GBufferHeap->CreateShaderResourceViews(m_d3dDevice.Get(), m_CommandList.Get(), m_GBuffersCountForRenderTarget, m_GBuffersForRenderTarget[i], RESOURCE_TEXTURE2D, i);
+			m_GBufferHeap->CreateShaderResourceViews(m_d3dDevice.Get(), m_GBuffersCountForRenderTarget, m_GBuffersForRenderTarget[i], RESOURCE_TEXTURE2D, i);
 		} 
 
 		// 쉐도우 맵도 힙에 추가한다...!!!
-		m_GBufferHeap->CreateShaderResourceViews(m_d3dDevice.Get(), m_CommandList.Get(), m_Shadowmap, RESOURCE_TEXTURE2D, m_GBufferForShadowIndex, DXGI_FORMAT_R24_UNORM_X8_TYPELESS);
+		m_GBufferHeap->CreateShaderResourceViews(m_d3dDevice.Get(), m_Shadowmap, RESOURCE_TEXTURE2D, m_GBufferForShadowIndex, DXGI_FORMAT_R24_UNORM_X8_TYPELESS);
 
 		// 쉐도우 맵도 힙에 추가한다...!!!
-		m_GBufferHeap->CreateShaderResourceViews(m_d3dDevice.Get(), m_CommandList.Get(), m_PlayerShadowmap, RESOURCE_TEXTURE2D, m_GBufferForPlayerShadowIndex, DXGI_FORMAT_R24_UNORM_X8_TYPELESS);
+		m_GBufferHeap->CreateShaderResourceViews(m_d3dDevice.Get(), m_PlayerShadowmap, RESOURCE_TEXTURE2D, m_GBufferForPlayerShadowIndex, DXGI_FORMAT_R24_UNORM_X8_TYPELESS);
 
 		auto resourceDesc = m_ComputeRWResource->GetDesc();
 
 		// 블러할 uav 를 srv로 힙에 추가
-		m_GBufferHeap->CreateShaderResourceViews(m_d3dDevice.Get(), m_CommandList.Get(), m_ComputeRWResource, RESOURCE_TEXTURE2D, m_GBufferForUAV, resourceDesc.Format);
+		m_GBufferHeap->CreateShaderResourceViews(m_d3dDevice.Get(), m_ComputeRWResource, RESOURCE_TEXTURE2D, m_GBufferForUAV, resourceDesc.Format);
 
 		// 블러를 할 uav도 힙에 추가한다...
 		m_GBufferHeap->CreateUnorderedAccessViews(m_d3dDevice.Get(), m_CommandList.Get(), m_ComputeRWResource, RESOURCE_TEXTURE2D, 1, resourceDesc.Format);
@@ -820,7 +820,7 @@ void CGameFramework::BuildObjects()
 
 	m_SceneMgr = new SceneMgr; 
 
-	// 루트 시그니처를 통해 모든 오브젝트 갖고온다.
+	// 터레인 오브젝트에서 사용될 모든 텍스쳐과 모델을 가져온다.
 	TextureStorage::GetInstance()->CreateTextures(m_d3dDevice.Get(), m_CommandList.Get());
 	ModelStorage::GetInstance()->CreateModels(m_d3dDevice.Get(), m_CommandList.Get(), GraphicsRootSignatureMgr::GetGraphicsRootSignature());
 	   

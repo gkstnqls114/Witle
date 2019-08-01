@@ -23,10 +23,10 @@ UI2DImage::UI2DImage(GameObject * pOwner, ID3D12Device * pd3dDevice, ID3D12Graph
 	if (filepath)
 	{
 		m_pHeap = new MyDescriptorHeap();
-		m_pHeap->CreateCbvSrvUavDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 1, 0);
+		m_pHeap->CreateCbvSrvUavDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 1, 0, ENUM_SCENE::SCENE_GAME);
 		m_pTexture = new Texture(1, RESOURCE_TEXTURE2D);
 		m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, filepath, 0);
-		m_pHeap->CreateShaderResourceViews(pd3dDevice, pd3dCommandList, m_pTexture, ROOTPARAMETER_TEXTURE, true);
+		m_pHeap->CreateShaderResourceViews(pd3dDevice,  m_pTexture, ROOTPARAMETER_TEXTURE, true);
 	}
 
 	m_nVertexBufferViews = 1;
@@ -77,10 +77,10 @@ UI2DImage::UI2DImage(GameObject * pOwner, ID3D12Device * pd3dDevice, ID3D12Graph
 	if (filepath)
 	{
 		m_pHeap = new MyDescriptorHeap();
-		m_pHeap->CreateCbvSrvUavDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 1, 0);
+		m_pHeap->CreateCbvSrvUavDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 1, 0, ENUM_SCENE::SCENE_GAME);
 		m_pTexture = new Texture(1, RESOURCE_TEXTURE2D);
 		m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, filepath, 0);
-		m_pHeap->CreateShaderResourceViews(pd3dDevice, pd3dCommandList, m_pTexture, ROOTPARAMETER_TEXTURE, true);
+		m_pHeap->CreateShaderResourceViews(pd3dDevice,  m_pTexture, ROOTPARAMETER_TEXTURE, true);
 	}
 
 	m_nVertexBufferViews = 1;

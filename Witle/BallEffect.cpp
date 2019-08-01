@@ -58,7 +58,7 @@ BallEffect::BallEffect(const std::string & entityID, ID3D12Device * pd3dDevice, 
 	m_InBallEffectMesh = new SphereMesh(this, pd3dDevice, pd3dCommandList, true, 20, 20, 10, 10);
 	
 	m_Heap = new MyDescriptorHeap();
-	m_Heap->CreateCbvSrvUavDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 2, 0);
+	m_Heap->CreateCbvSrvUavDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 2, 0, ENUM_SCENE::SCENE_GAME);
 	m_Texture = new Texture(2);
 
 	switch (type)
@@ -78,7 +78,7 @@ BallEffect::BallEffect(const std::string & entityID, ID3D12Device * pd3dDevice, 
 	default:
 		break;
 	}
-	m_Heap->CreateShaderResourceViews(pd3dDevice, pd3dCommandList, m_Texture, ROOTPARAMETER_TEXTURE, false);
+	m_Heap->CreateShaderResourceViews(pd3dDevice, m_Texture, ROOTPARAMETER_TEXTURE, false);
 
 	m_MyCollider = new MyBSphere(this, pd3dDevice, pd3dCommandList, 50);
 }

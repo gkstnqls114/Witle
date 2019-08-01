@@ -141,7 +141,7 @@ void SkillSelectScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCom
 	};
 
 	m_pHeap = new MyDescriptorHeap();
-	m_pHeap->CreateCbvSrvUavDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, SKILL_TO_CHOOSE + 1, 0);
+	m_pHeap->CreateCbvSrvUavDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, SKILL_TO_CHOOSE + 1, 0, ENUM_SCENE::SCENE_SKILLSELECT);
 
 	// 선택하지 않은 스킬도 설정하기위해 ...
 	m_pTexture = new Texture(SKILL_TO_CHOOSE + 1, RESOURCE_TEXTURE2D);
@@ -149,7 +149,7 @@ void SkillSelectScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCom
 	{
 		m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, filepaths[x], x);
 	}
-	m_pHeap->CreateShaderResourceViews(pd3dDevice, pd3dCommandList, m_pTexture, ROOTPARAMETER_TEXTURE, false);
+	m_pHeap->CreateShaderResourceViews(pd3dDevice,  m_pTexture, ROOTPARAMETER_TEXTURE, false);
 	 
 
 	// 임시로 선택할 스킬 이미지 로드 ///////////////////////

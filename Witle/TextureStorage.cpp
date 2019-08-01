@@ -24,7 +24,7 @@ void TextureStorage::CreateTexture(const std::string & name, ID3D12Device * pd3d
 	path.append(wname);
 	path.append(L".dds");
 	m_TextureStorage[name]->LoadTextureFromFile(pd3dDevice, pd3dCommandList, path.c_str(), 0);
-	m_Heap->CreateShaderResourceViews(pd3dDevice, pd3dCommandList, m_TextureStorage[name], ROOTPARAMETER_TEXTURE, RESOURCE_TEXTURE2D, heapindex);
+	m_Heap->CreateShaderResourceViews(pd3dDevice,  m_TextureStorage[name], ROOTPARAMETER_TEXTURE, RESOURCE_TEXTURE2D, heapindex);
 }
 
 void TextureStorage::ReleaseUploadBuffers()
@@ -60,7 +60,7 @@ void TextureStorage::ReleaseObjects()
 void TextureStorage::CreateTextures(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList)
 {
 	m_Heap = new MyDescriptorHeap();
-	m_Heap->CreateCbvSrvUavDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 18, 0);
+	m_Heap->CreateCbvSrvUavDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 18, 0, ENUM_SCENE::SCENE_GAME);
 	int heapIndex = 0;
 	CreateTexture(ALTAR_IN, pd3dDevice, pd3dCommandList, heapIndex++);
 	CreateTexture(ALTAR_OUT, pd3dDevice, pd3dCommandList, heapIndex++);

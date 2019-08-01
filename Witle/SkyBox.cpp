@@ -48,8 +48,8 @@ SkyBox::SkyBox(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandL
 	m_Texture = pSkyBoxTexture;
 	 
 	m_Heap = new MyDescriptorHeap();
-	m_Heap->CreateCbvSrvUavDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 1, 0);
-	m_Heap->CreateShaderResourceViews(pd3dDevice, pd3dCommandList, pSkyBoxTexture, ROOTPARAMETER_SKYBOX, RESOURCE_TEXTURE_CUBE, 0);
+	m_Heap->CreateCbvSrvUavDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 1, 0, ENUM_SCENE::SCENE_GAME);
+	m_Heap->CreateShaderResourceViews(pd3dDevice,  pSkyBoxTexture, ROOTPARAMETER_SKYBOX, RESOURCE_TEXTURE_CUBE, 0);
 
 	CMaterial *pSkyBoxMaterial = new CMaterial(1);
 	// pSkyBoxMaterial->SetTexture(pSkyBoxTexture);
