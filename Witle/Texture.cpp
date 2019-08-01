@@ -1,10 +1,37 @@
 #include "stdafx.h"
 #include "MyDescriptorHeap.h"
 #include "d3dUtil.h"
+
+// Scene /////////////////////
+#include "MainScene.h"
+#include "GameScene.h"
+#include "MainScene.h"
+#include "SkillSelectScene.h"
+// Scene /////////////////////
+
 #include "Texture.h"
 
-Texture::Texture(int nTextures, UINT nTextureType, int nSamplers)
+Texture::Texture(ENUM_SCENE SceneType, int nTextures, UINT nTextureType, int nSamplers)
 { 
+	switch (SceneType)
+	{
+	case ENUM_SCENE::SCENE_NONE:
+
+		break;
+	case ENUM_SCENE::SCENE_MAIN:
+
+		break;
+	case ENUM_SCENE::SCENE_GAME:
+		GameScene::ConnectTexture(this);
+		break;
+
+	case ENUM_SCENE::SCENE_SKILLSELECT:
+
+		break;
+	default:
+		break;
+	}
+
 	m_nTextureType = nTextureType;
 	m_nTextures = nTextures;
 	if (m_nTextures > 0)

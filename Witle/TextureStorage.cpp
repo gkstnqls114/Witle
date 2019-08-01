@@ -17,7 +17,7 @@ TextureStorage::~TextureStorage()
 
 void TextureStorage::CreateTexture(const std::string & name, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, int heapindex)
 {
-	m_TextureStorage[name] = new Texture();
+	m_TextureStorage[name] = new Texture(ENUM_SCENE::SCENE_GAME);
 	std::wstring path = { L"Model/Textures/" };
 	std::wstring wname;
 	wname.assign(name.begin(), name.end()); 

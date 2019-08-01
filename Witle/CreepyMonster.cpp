@@ -52,7 +52,7 @@ CreepyMonster::CreepyMonster(const std::string & entityID, const XMFLOAT3& Spawn
 
 	m_pHaep = new MyDescriptorHeap();
 	m_pHaep->CreateCbvSrvUavDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 1, 0, ENUM_SCENE::SCENE_GAME);
-	m_pTexture = new Texture(1, RESOURCE_TEXTURE2D);
+	m_pTexture = new Texture(ENUM_SCENE::SCENE_GAME, 1, RESOURCE_TEXTURE2D);
 	m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/CreepyMonster.dds", 0);
 	 
 	m_pHaep->CreateShaderResourceViews(pd3dDevice,  m_pTexture, ROOTPARAMETER_TEXTURE, false, 0);

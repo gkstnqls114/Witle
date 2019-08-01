@@ -43,7 +43,7 @@ Terrain::Terrain(const std::string& entityID, ID3D12Device * pd3dDevice, ID3D12G
 
 	InsertComponent("TerrainMesh", pterrainMesh);
 
-	Texture *pTerrainTexture = new Texture(2, RESOURCE_TEXTURE2D, 0);
+	Texture *pTerrainTexture = new Texture(ENUM_SCENE::SCENE_GAME, 2, RESOURCE_TEXTURE2D, 0);
 
 	pTerrainTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Image/Base_Texture.dds", 0);
 	pTerrainTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Image/Detail_Texture_7.dds", 1);

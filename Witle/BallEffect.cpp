@@ -59,7 +59,7 @@ BallEffect::BallEffect(const std::string & entityID, ID3D12Device * pd3dDevice, 
 	
 	m_Heap = new MyDescriptorHeap();
 	m_Heap->CreateCbvSrvUavDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 2, 0, ENUM_SCENE::SCENE_GAME);
-	m_Texture = new Texture(2);
+	m_Texture = new Texture(ENUM_SCENE::SCENE_GAME, 2);
 
 	switch (type)
 	{

@@ -37,7 +37,7 @@ BroomEffectRect::BroomEffectRect(GameObject * pOwner, ID3D12Device * pd3dDevice,
 
 	m_pHeap = new MyDescriptorHeap();
 	m_pHeap->CreateCbvSrvUavDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 1, 0, ENUM_SCENE::SCENE_GAME);
-	m_pTexture = new Texture(1, RESOURCE_TEXTURE2D);
+	m_pTexture = new Texture(ENUM_SCENE::SCENE_GAME, 1, RESOURCE_TEXTURE2D);
 	m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Image/Dust.dds", 0);
 	m_pHeap->CreateShaderResourceViews(pd3dDevice,  m_pTexture, ROOTPARAMETER_TEXTURE, true);
 

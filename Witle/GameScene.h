@@ -48,6 +48,7 @@ class GameScene
 	: public Scene
 {
 public:
+	static std::list<Texture* > m_pConnectedTexture;
 	static ID3D12DescriptorHeap			*m_pd3dCbvSrUavDescriptorHeap;
 	static MyDescriptorHeap			*m_MyDescriptorHeap; // 게임씬에서 사용되는 터레인 텍스쳐와 쉐도우 맵 설정을 위함
 	static UINT			m_TextureCount;
@@ -67,13 +68,13 @@ private:
 	static D3D12_CPU_DESCRIPTOR_HANDLE	m_UavCPUDescriptorNextHandle;
 	static D3D12_GPU_DESCRIPTOR_HANDLE	m_UavGPUDescriptorNextHandle;
 
-public:
+public: 
+	static void ConnectTexture(Texture* pTexture);
 
 	// 마찬가지로 게임씬 내부에서 사용되는 터레인 텍스쳐와 외부에서 호출되는 쉐도우맵 위해서
 	static void CreateShaderResourceViewsForShadow(ID3D12Device *pd3dDevice, ID3D12Resource *pResource, UINT nRootParameter, bool bAutoIncrement, int index);
 
 protected:
-	static void ConnectTexture(const Texture* pTexture);
 	static void CreateCbvSrvDescriptorHeaps(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
 	static void CreateCbvSrvDescriptorHeaps(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, int nConstant, int nShader);
 

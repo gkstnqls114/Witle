@@ -10,7 +10,7 @@ class Texture
 		D3D12_GPU_DESCRIPTOR_HANDLE		m_d3dSrvGpuDescriptorHandle{ NULL };
 	};
 public:
-	Texture(int nTextureResources = 1, UINT nResourceType = RESOURCE_TEXTURE2D, int nSamplers = 0);
+	Texture(ENUM_SCENE SceneType, int nTextureResources = 1, UINT nResourceType = RESOURCE_TEXTURE2D, int nSamplers = 0);
 	virtual ~Texture();
 
 private:

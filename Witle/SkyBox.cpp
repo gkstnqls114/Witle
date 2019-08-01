@@ -43,7 +43,7 @@ SkyBox::SkyBox(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandL
 	m_LoadObject->SetMesh(pSkyBoxMesh);
 	m_LoadObject->CreateShaderVariables(pd3dDevice, pd3dCommandList);
 
-	Texture *pSkyBoxTexture = new Texture(1, RESOURCE_TEXTURE_CUBE, 0);
+	Texture *pSkyBoxTexture = new Texture(ENUM_SCENE::SCENE_GAME, 1, RESOURCE_TEXTURE_CUBE, 0);
 	pSkyBoxTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Image/SkyBox_0.dds", 0);
 	m_Texture = pSkyBoxTexture;
 	 

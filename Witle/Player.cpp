@@ -107,9 +107,9 @@ Player::Player(const std::string & entityID, ID3D12Device * pd3dDevice, ID3D12Gr
 	m_pHaep = new MyDescriptorHeap();
 	m_pHaep->CreateCbvSrvUavDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 2, 0, ENUM_SCENE::SCENE_GAME);
 
-	m_pTexture_Cloth = new Texture(1, RESOURCE_TEXTURE2D);
+	m_pTexture_Cloth = new Texture(ENUM_SCENE::SCENE_GAME, 1, RESOURCE_TEXTURE2D);
 	m_pTexture_Cloth->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/Character_cloth_D.dds", 0);
-	m_pTexture_Body = new Texture(1, RESOURCE_TEXTURE2D);
+	m_pTexture_Body = new Texture(ENUM_SCENE::SCENE_GAME, 1, RESOURCE_TEXTURE2D);
 	m_pTexture_Body->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/Character_body_D.dds", 0);
 
 	m_pHaep->CreateShaderResourceViews(pd3dDevice,  m_pTexture_Cloth, ROOTPARAMETER_TEXTURE, false, 0);

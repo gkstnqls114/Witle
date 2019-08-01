@@ -72,7 +72,9 @@
 
 #include "UI2DImage.h"
 #include "GameScene.h"
- 
+
+std::list<Texture*>         GameScene::m_pConnectedTexture;
+
 ID3D12DescriptorHeap*		GameScene::m_pd3dCbvSrUavDescriptorHeap { nullptr };
 UINT	   		            GameScene::m_TextureCount{ 0 };
 MyDescriptorHeap			*GameScene::m_MyDescriptorHeap{ nullptr }; // 게임씬에서 사용되는 터레인 텍스쳐와 쉐도우 맵 설정을 위함
@@ -101,8 +103,9 @@ GameScene::~GameScene()
 
 }
 
-void GameScene::ConnectTexture(const Texture * pTexture)
+void GameScene::ConnectTexture(Texture * pTexture)
 {
+	m_pConnectedTexture.push_back(pTexture);
 	m_TextureCount += 1;
 }
 

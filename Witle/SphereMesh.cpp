@@ -239,7 +239,7 @@ void SphereMesh::CreateTexture(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandL
 {
 	m_Heap = new MyDescriptorHeap();
 	m_Heap->CreateCbvSrvUavDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 1, 0, ENUM_SCENE::SCENE_GAME);
-	m_Texture = new Texture(1);
+	m_Texture = new Texture(ENUM_SCENE::SCENE_GAME, 1);
 	m_Texture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, pszFileName, 0);
 	m_Heap->CreateShaderResourceViews(pd3dDevice,  m_Texture, ROOTPARAMETER_TEXTURE, false);
 }
