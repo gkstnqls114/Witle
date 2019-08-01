@@ -192,7 +192,7 @@ bool CGameFramework::OnCreate(HINSTANCE hInstance, HWND hMainWnd)
 	// 절대 순서 변경 금지 ////////////
 
 	BuildObjects();
-	 
+	
 	GameScreen::SetSwapChain(m_SwapChain.Get());
 
 	return true;
@@ -831,8 +831,8 @@ void CGameFramework::BuildObjects()
 	m_SceneMgr->BuildHeap(m_d3dDevice.Get(), m_CommandList.Get());
 
 	// 터레인을 위한 쉐도우 맵과 힙 연결...
-	//GameScene::CreateSrvDescriptorHeapsForShadowmap(m_d3dDevice.Get(), m_CommandList.Get(), m_Shadowmap);
-	//GameScene::CreateSrvDescriptorHeapsForPlayerShadowmap(m_d3dDevice.Get(), m_CommandList.Get(), m_PlayerShadowmap);
+	GameScene::CreateSrvDescriptorHeapsForShadowmap(m_d3dDevice.Get(), m_CommandList.Get(), m_Shadowmap);
+	GameScene::CreateSrvDescriptorHeapsForPlayerShadowmap(m_d3dDevice.Get(), m_CommandList.Get(), m_PlayerShadowmap);
 
 	// 순서 변경 X /////////////
 	///////////////////////////////////////////////////////////////////////////// 리소스 생성

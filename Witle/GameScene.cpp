@@ -159,15 +159,16 @@ void GameScene::CreateCbvSrvDescriptorHeaps(ID3D12Device * pd3dDevice, ID3D12Gra
 }
 
 void GameScene::CreateSrvDescriptorHeapsForPlayerShadowmap(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12Resource* pShadowmap)
-{
+{ 
 	D3D12_CPU_DESCRIPTOR_HANDLE d3dSrvCPUDescriptorHandle = m_SrvCPUDescriptorStartHandle;
 	D3D12_GPU_DESCRIPTOR_HANDLE d3dSrvGPUDescriptorHandle = m_SrvGPUDescriptorStartHandle;
-	d3dSrvCPUDescriptorHandle.ptr = d3dSrvCPUDescriptorHandle.ptr + d3dUtil::gnCbvSrvDescriptorIncrementSize * (m_TextureCount + m_ShadowmapCount - 1);
-	d3dSrvGPUDescriptorHandle.ptr = d3dSrvGPUDescriptorHandle.ptr + d3dUtil::gnCbvSrvDescriptorIncrementSize * (m_TextureCount + m_ShadowmapCount - 1);
 
-	// Srv 맨마지막 인덱스에 위치함
+	d3dSrvCPUDescriptorHandle.ptr = d3dSrvCPUDescriptorHandle.ptr + (m_TextureCount + m_ShadowmapCount - 1) * d3dUtil::gnCbvSrvDescriptorIncrementSize;
+	d3dSrvGPUDescriptorHandle.ptr = d3dSrvGPUDescriptorHandle.ptr + (m_TextureCount + m_ShadowmapCount - 1) * d3dUtil::gnCbvSrvDescriptorIncrementSize;
+
 	ID3D12Resource *pShaderResource = pShadowmap;
 	D3D12_RESOURCE_DESC d3dResourceDesc = pShaderResource->GetDesc();
+	d3dResourceDesc.Format = DXGI_FORMAT_R24_UNORM_X8_TYPELESS;
 	D3D12_SHADER_RESOURCE_VIEW_DESC d3dShaderResourceViewDesc = d3dUtil::GetShaderResourceViewDesc(d3dResourceDesc, RESOURCE_TEXTURE2D);
 	pd3dDevice->CreateShaderResourceView(pShaderResource, &d3dShaderResourceViewDesc, d3dSrvCPUDescriptorHandle);
 
@@ -176,15 +177,16 @@ void GameScene::CreateSrvDescriptorHeapsForPlayerShadowmap(ID3D12Device * pd3dDe
 }
 
 void GameScene::CreateSrvDescriptorHeapsForShadowmap(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12Resource* pShadowmap)
-{ 
+{
 	D3D12_CPU_DESCRIPTOR_HANDLE d3dSrvCPUDescriptorHandle = m_SrvCPUDescriptorStartHandle;
 	D3D12_GPU_DESCRIPTOR_HANDLE d3dSrvGPUDescriptorHandle = m_SrvGPUDescriptorStartHandle;
-	d3dSrvCPUDescriptorHandle.ptr = d3dSrvCPUDescriptorHandle.ptr + d3dUtil::gnCbvSrvDescriptorIncrementSize * (m_TextureCount + m_ShadowmapCount - 2);
-	d3dSrvGPUDescriptorHandle.ptr = d3dSrvGPUDescriptorHandle.ptr + d3dUtil::gnCbvSrvDescriptorIncrementSize * (m_TextureCount + m_ShadowmapCount - 2);
 
-	// Srv 맨마지막 인덱스에 위치함
+	d3dSrvCPUDescriptorHandle.ptr = d3dSrvCPUDescriptorHandle.ptr + (m_TextureCount + m_ShadowmapCount - 2) * d3dUtil::gnCbvSrvDescriptorIncrementSize;
+	d3dSrvGPUDescriptorHandle.ptr = d3dSrvGPUDescriptorHandle.ptr + (m_TextureCount + m_ShadowmapCount - 2) * d3dUtil::gnCbvSrvDescriptorIncrementSize;
+
 	ID3D12Resource *pShaderResource = pShadowmap;
 	D3D12_RESOURCE_DESC d3dResourceDesc = pShaderResource->GetDesc();
+	d3dResourceDesc.Format = DXGI_FORMAT_R24_UNORM_X8_TYPELESS;
 	D3D12_SHADER_RESOURCE_VIEW_DESC d3dShaderResourceViewDesc = d3dUtil::GetShaderResourceViewDesc(d3dResourceDesc, RESOURCE_TEXTURE2D);
 	pd3dDevice->CreateShaderResourceView(pShaderResource, &d3dShaderResourceViewDesc, d3dSrvCPUDescriptorHandle);
 
@@ -960,8 +962,9 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 	// 힙 설정
 	pd3dCommandList->SetDescriptorHeaps(1, &m_pd3dCbvSrUavDescriptorHeap);
 	
-	//pd3dCommandList->SetGraphicsRootDescriptorTable(ROOTPARAMETER_SHADOWTEXTURE, m_hGPUShadowmap);
-	//pd3dCommandList->SetGraphicsRootDescriptorTable(ROOTPARAMETER_PLAYERSHADOWTEXTURE, m_hGPUPlayerShadowmap);
+	// 쉐도우 맵 연결
+	pd3dCommandList->SetGraphicsRootDescriptorTable(ROOTPARAMETER_SHADOWTEXTURE, m_hGPUShadowmap);
+	pd3dCommandList->SetGraphicsRootDescriptorTable(ROOTPARAMETER_PLAYERSHADOWTEXTURE, m_hGPUPlayerShadowmap);
 
 	//  조명 설정
 	D3D12_GPU_VIRTUAL_ADDRESS d3dcbLightsGpuVirtualAddress = m_pd3dcbLights->GetGPUVirtualAddress();
