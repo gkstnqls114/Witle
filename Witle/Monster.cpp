@@ -73,12 +73,12 @@ XMFLOAT3 Monster::CalculateAlreadyPosition(float fTimeElapsed)
 }
 
 
-Monster::Monster(const std::string & entityID, float spawnRange, const XMFLOAT3& SpawnPoint, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature)
-	: m_SpawnRange(spawnRange), m_SpawnPoint(SpawnPoint), GameObject(entityID)
+Monster::Monster(const std::string & entityID, float spawnRange, const XMFLOAT3& SpawnPoint, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, float HpBarY)
+	: m_SpawnRange(spawnRange), m_SpawnPoint(SpawnPoint), GameObject(entityID), m_HpBarY(HpBarY)
 {
 	m_MonsterHPStatus = new MonsterStatus(this, pd3dDevice, pd3dCommandList);
 	
-	m_MonsterHP = new UI3DImage(this, pd3dDevice, pd3dCommandList, POINT{0, 0},
+	m_MonsterHPUI = new UI3DImage(this, pd3dDevice, pd3dCommandList, POINT{0, 0},
 		100.F,
 		30.f,
 		L"Image/Red.dds"
@@ -126,11 +126,11 @@ void Monster::RenderForShadow(ID3D12GraphicsCommandList * pd3dCommandList)
 
 void Monster::ReleaseMembers()
 {
-	if (m_MonsterHP)
+	if (m_MonsterHPUI)
 	{
-		m_MonsterHP->ReleaseObjects();
-		delete m_MonsterHP;
-		m_MonsterHP = nullptr;
+		m_MonsterHPUI->ReleaseObjects();
+		delete m_MonsterHPUI;
+		m_MonsterHPUI = nullptr;
 	}
 	if (m_RecognitionRange)
 	{
@@ -192,7 +192,7 @@ void Monster::ReleaseMembers()
 
 void Monster::ReleaseMemberUploadBuffers()
 {
-	if (m_MonsterHP) m_MonsterHP->ReleaseUploadBuffers();
+	if (m_MonsterHPUI) m_MonsterHPUI->ReleaseUploadBuffers();
 
 #ifdef _DEBUG
 	if (m_pDebugSpawnMesh) m_pDebugSpawnMesh->ReleaseUploadBuffers();
@@ -233,7 +233,7 @@ void Monster::RenderHpStatus(ID3D12GraphicsCommandList * pd3dCommandList, bool i
 
 	// set look at.... ºôº¸µå Ã³¸®...
 	XMFLOAT4X4 uiWorld = m_Transform.GetWorldMatrix();
-	uiWorld._42 += 200;
+	uiWorld._42 += m_HpBarY;
 
 	XMFLOAT3 xmf3Position(uiWorld._41, uiWorld._42, uiWorld._43);
 
@@ -246,7 +246,7 @@ void Monster::RenderHpStatus(ID3D12GraphicsCommandList * pd3dCommandList, bool i
 	float percentage = float(m_MonsterHPStatus->m_Guage) / float(m_MonsterHPStatus->m_MAXGuage) * 100.f;
 	pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_HPPERCENTAGE, 1, &percentage, 0);
 
-	m_MonsterHP->Render(pd3dCommandList, uiWorld);
+	m_MonsterHPUI->Render(pd3dCommandList, uiWorld);
 }
 
 void Monster::SetTrackAnimationSet()

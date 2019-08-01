@@ -42,7 +42,7 @@ public:
 	virtual void UpdateState(float fElapsedTime) = 0; 
 
 protected:
-	UI3DImage*			m_MonsterHP{ nullptr };
+	UI3DImage*			m_MonsterHPUI{ nullptr };
 	RecognitionRange*   m_RecognitionRange{ nullptr };
 	MonsterMovement*    m_MonsterMovement{ nullptr };
 	MonsterStatus*	   m_MonsterHPStatus{ nullptr };
@@ -58,10 +58,11 @@ protected:
 
 	XMFLOAT3 m_SpawnPoint;
 	const float    m_SpawnRange{ 500.f };
-	// Spawn Point 주위로 Range를 확인하기 위해 임시로 설정
+	const float m_HpBarY{ 200.f };
 
 #ifdef _DEBUG 
 	GameObject * m_pDebugObject{ nullptr };
+	// Spawn Point 주위로 Range를 확인하기 위해 임시로 설정
 	LineMesh* m_pDebugSpawnMesh{ nullptr };
 #endif
 
@@ -80,7 +81,8 @@ public:
 		RENDER_DEBUG = !RENDER_DEBUG;
 	}
 
-	Monster(const std::string& entityID, float spawnRange, const XMFLOAT3& SpwanPoint, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature);
+	// float HpBarY: HP Bar UI의 Y 값 위치
+	Monster(const std::string& entityID, float spawnRange, const XMFLOAT3& SpwanPoint, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, float HpBarY = 200.f);
 	virtual ~Monster();
 	 
 	void RenderHpStatus(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers);
