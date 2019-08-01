@@ -59,29 +59,32 @@ void SceneMgr::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList
 void SceneMgr::ChangeSceneToGame()
 {
 	m_pCurrScene = m_GameScene;
+	m_CurrSceneType = ENUM_SCENE::SCENE_GAME;
 }
 
 void SceneMgr::ChangeSceneToMain()
 {
 	m_pCurrScene = m_MainScene;
+	m_CurrSceneType = ENUM_SCENE::SCENE_MAIN;
 }
 
 void SceneMgr::ChangeSceneToSkillSelect()
 {
 	m_pCurrScene = m_SkillSelectScene;
+	m_CurrSceneType = ENUM_SCENE::SCENE_SKILLSELECT;
 }
 
 bool SceneMgr::IsGameScene() const
 {
-	return m_pCurrScene == m_GameScene;
+	return m_CurrSceneType == ENUM_SCENE::SCENE_GAME;
 }
 
 bool SceneMgr::IsMainScene() const
 {
-	return m_pCurrScene == m_MainScene;
+	return m_CurrSceneType == ENUM_SCENE::SCENE_MAIN;
 }
 
 bool SceneMgr::IsSkillSelectScene() const
 {
-	return m_pCurrScene == m_SkillSelectScene;
+	return m_CurrSceneType == ENUM_SCENE::SCENE_SKILLSELECT;
 }

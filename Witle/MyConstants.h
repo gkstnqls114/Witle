@@ -7,6 +7,14 @@
 
 
 //// Enum Type ////////////////////////////////////
+enum ENUM_SCENE
+{
+	SCENE_NONE = -1,
+	SCENE_MAIN,
+	SCENE_SKILLSELECT,
+	SCENE_GAME
+};
+
 enum ENUM_SKILLTYPE
 {
 	SKILLTYPE_NONE = -1,

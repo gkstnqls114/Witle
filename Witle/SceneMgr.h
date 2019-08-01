@@ -10,6 +10,7 @@ class SceneMgr
 	static SceneMgr* m_Instace;
 	
 	Scene* m_pCurrScene{ nullptr };
+	ENUM_SCENE m_CurrSceneType{ ENUM_SCENE::SCENE_NONE };
 
 	// 사용하는 장면 목록들 //////////////////
 	
