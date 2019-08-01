@@ -13,24 +13,6 @@
 
 Texture::Texture(ENUM_SCENE SceneType, ROOTPARAMETER_INDEX rpIndex, bool bAutoIncrement, int nTextures, UINT nTextureType, int nSamplers)
 { 
-	switch (SceneType)
-	{
-	case ENUM_SCENE::SCENE_NONE:
-
-		break;
-	case ENUM_SCENE::SCENE_MAIN:
-
-		break;
-	case ENUM_SCENE::SCENE_GAME:
-		GameScene::ConnectTexture(this);
-		break;
-
-	case ENUM_SCENE::SCENE_SKILLSELECT:
-
-		break;
-	default:
-		break;
-	}
 
 	m_nTextureType = nTextureType;
 	m_nTextures = nTextures;
@@ -50,6 +32,26 @@ Texture::Texture(ENUM_SCENE SceneType, ROOTPARAMETER_INDEX rpIndex, bool bAutoIn
 
 	m_nSamplers = nSamplers;
 	if (m_nSamplers > 0) m_pd3dSamplerGpuDescriptorHandles = new D3D12_GPU_DESCRIPTOR_HANDLE[m_nSamplers];
+
+
+	switch (SceneType)
+	{
+	case ENUM_SCENE::SCENE_NONE:
+
+		break;
+	case ENUM_SCENE::SCENE_MAIN:
+
+		break;
+	case ENUM_SCENE::SCENE_GAME:
+		GameScene::ConnectTexture(this);
+		break;
+
+	case ENUM_SCENE::SCENE_SKILLSELECT:
+
+		break;
+	default:
+		break;
+	}
 }
 
 Texture::~Texture()
@@ -127,14 +129,29 @@ void Texture::ReleaseObjects()
 	ReleaseShaderVariables();
 }
 
+void Texture::ShowPath()
+{
+#if _DEBUG
+	std::wcout << path << std::endl;
+#endif // _DEBUG
+
+}
+
 void Texture::LoadTextureFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, const wchar_t *pszFileName, UINT nIndex)
 {
+#if _DEBUG
+	path = pszFileName;
+#endif // _DEBUG
+
 	m_ppd3dTextures[nIndex] = d3dUtil::CreateTextureResourceFromFile(pd3dDevice, pd3dCommandList, pszFileName, &m_ppd3dTextureUploadBuffers[nIndex], D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
-	 
 }
 
 void Texture::LoadTextureFromFile(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, const wchar_t * pszFileName, UINT nIndex, bool bIsDDSFile)
-{  
+{
+#if _DEBUG
+	path = pszFileName;
+#endif // _DEBUG
+
 	if (bIsDDSFile)
 		m_ppd3dTextures[nIndex] = d3dUtil::CreateTextureResourceFromDDSFile(pd3dDevice, pd3dCommandList, pszFileName, &(m_ppd3dTextureUploadBuffers[nIndex]), D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 	else

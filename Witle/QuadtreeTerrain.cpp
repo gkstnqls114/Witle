@@ -447,20 +447,10 @@ void QuadtreeTerrain::Render(ID3D12GraphicsCommandList * pd3dCommandList, Terrai
 {
 	// ÁöÇü ·»´õ
 	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_TERRAIN, isGBuffers);
-	pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_WORLD, 16, &Matrix4x4::Identity(), 0); 
-	pd3dCommandList->SetDescriptorHeaps(1, &pHeap); 
 
+	pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_WORLD, 16, &Matrix4x4::Identity(), 0); 
+	
 	pTerrain->UpdateShaderVariables(pd3dCommandList);
-	auto hGPU = pHeap->GetGPUDescriptorHandleForHeapStart();
-	//pd3dCommandList->SetGraphicsRootDescriptorTable(ROOTPARAMETER_TEXTURE, hGPU);
-	hGPU.ptr += d3dUtil::gnCbvSrvDescriptorIncrementSize;
-	//pd3dCommandList->SetGraphicsRootDescriptorTable(ROOTPARAMETER_TEXTUREBASE, hGPU);
-	hGPU.ptr += d3dUtil::gnCbvSrvDescriptorIncrementSize;
-	//pd3dCommandList->SetGraphicsRootDescriptorTable(ROOTPARAMETER_TEXTUREDETAIL, hGPU);
-	hGPU.ptr += d3dUtil::gnCbvSrvDescriptorIncrementSize;
-	pd3dCommandList->SetGraphicsRootDescriptorTable(ROOTPARAMETER_SHADOWTEXTURE, hGPU);
-	hGPU.ptr += d3dUtil::gnCbvSrvDescriptorIncrementSize;
-	pd3dCommandList->SetGraphicsRootDescriptorTable(ROOTPARAMETER_PLAYERSHADOWTEXTURE, hGPU);
 
 	RecursiveRender(m_pRootNode, pd3dCommandList, isGBuffers); // ÁöÇü ·»´õ	 
 

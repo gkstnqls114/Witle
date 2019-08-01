@@ -9,6 +9,11 @@ class Texture
 		UINT							m_nRootParameterIndex{ 0 };
 		D3D12_GPU_DESCRIPTOR_HANDLE		m_d3dSrvGpuDescriptorHandle{ NULL };
 	};
+
+#if _DEBUG
+	std::wstring path;
+#endif // _DEBUG
+
 public:
 	Texture(ENUM_SCENE SceneType, ROOTPARAMETER_INDEX rpIndex, bool bAutoIncrement, int nTextureResources = 1, UINT nResourceType = RESOURCE_TEXTURE2D, int nSamplers = 0);
 	virtual ~Texture();
@@ -51,5 +56,5 @@ public:
 	void ReleaseUploadBuffers();
 	void ReleaseObjects();
 	 
-
+	void ShowPath();
 };

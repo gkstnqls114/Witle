@@ -47,13 +47,18 @@ struct MATERIALS;
 class GameScene
 	: public Scene
 {
-public:
+private:
+	static UINT m_ShadowmapCount;
 	static std::list<Texture* > m_pConnectedTextureList;
-	static ID3D12DescriptorHeap			*m_pd3dCbvSrUavDescriptorHeap;
-	static MyDescriptorHeap			*m_MyDescriptorHeap; // 게임씬에서 사용되는 터레인 텍스쳐와 쉐도우 맵 설정을 위함
+	static ID3D12DescriptorHeap			*m_pd3dCbvSrUavDescriptorHeap; 
 	static UINT			m_TextureCount;
 
 private:
+	static D3D12_CPU_DESCRIPTOR_HANDLE	m_hCPUShadowmap;
+	static D3D12_GPU_DESCRIPTOR_HANDLE	m_hGPUShadowmap;
+	static D3D12_CPU_DESCRIPTOR_HANDLE	m_hCPUPlayerShadowmap;
+	static D3D12_GPU_DESCRIPTOR_HANDLE	m_hGPUPlayerShadowmap;
+
 	static D3D12_CPU_DESCRIPTOR_HANDLE	m_CbvCPUDescriptorStartHandle;
 	static D3D12_GPU_DESCRIPTOR_HANDLE	m_CbvGPUDescriptorStartHandle;
 	static D3D12_CPU_DESCRIPTOR_HANDLE	m_SrvCPUDescriptorStartHandle;
@@ -72,19 +77,13 @@ public:
 	static void ConnectTexture(Texture* pTexture);
 
 	static void CreateCbvSrvDescriptorHeaps(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
-
-	// 마찬가지로 게임씬 내부에서 사용되는 터레인 텍스쳐와 외부에서 호출되는 쉐도우맵 위해서
-	static void CreateShaderResourceViewsForShadow(ID3D12Device *pd3dDevice, ID3D12Resource *pResource, UINT nRootParameter, bool bAutoIncrement, int index);
+	static void CreateSrvDescriptorHeapsForPlayerShadowmap(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12Resource* pShadowmap);
+	static void CreateSrvDescriptorHeapsForShadowmap(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12Resource* pShadowmap);
 
 protected:
-	static void CreateCbvSrvDescriptorHeaps(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, int nConstant, int nShader);
-
 	static void CreateShaderResourceViewsForTextureBase(ID3D12Device * pd3dDevice, Texture * pTexture);
 
 	static D3D12_GPU_DESCRIPTOR_HANDLE CreateConstantBufferViews(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, int nConstantBufferViews, ID3D12Resource *pd3dConstantBuffers, UINT nStride);
-
-	// 마찬가지로 게임씬 내부에서 사용되는 터레인 텍스쳐와 외부에서 호출되는 쉐도우맵 위해서
-	static void CreateShaderResourceViews(ID3D12Device *pd3dDevice, Texture *pTexture, UINT nRootParameter, bool bAutoIncrement);
 
 	D3D12_CPU_DESCRIPTOR_HANDLE GetCPUCbvDescriptorStartHandle() { return(m_CbvCPUDescriptorStartHandle); }
 	D3D12_GPU_DESCRIPTOR_HANDLE GetGPUCbvDescriptorStartHandle() { return(m_CbvGPUDescriptorStartHandle); }

@@ -73,11 +73,15 @@
 #include "UI2DImage.h"
 #include "GameScene.h"
 
+UINT				    	GameScene::m_ShadowmapCount{ 2 };
 std::list<Texture*>         GameScene::m_pConnectedTextureList;
-
 ID3D12DescriptorHeap*		GameScene::m_pd3dCbvSrUavDescriptorHeap { nullptr };
 UINT	   		            GameScene::m_TextureCount{ 0 };
-MyDescriptorHeap			*GameScene::m_MyDescriptorHeap{ nullptr }; // 게임씬에서 사용되는 터레인 텍스쳐와 쉐도우 맵 설정을 위함
+
+D3D12_CPU_DESCRIPTOR_HANDLE	GameScene::m_hCPUShadowmap;
+D3D12_GPU_DESCRIPTOR_HANDLE	GameScene::m_hGPUShadowmap;
+D3D12_CPU_DESCRIPTOR_HANDLE	GameScene::m_hCPUPlayerShadowmap;
+D3D12_GPU_DESCRIPTOR_HANDLE	GameScene::m_hGPUPlayerShadowmap;
 
 D3D12_CPU_DESCRIPTOR_HANDLE	GameScene::m_CbvCPUDescriptorStartHandle;
 D3D12_GPU_DESCRIPTOR_HANDLE	GameScene::m_CbvGPUDescriptorStartHandle;
@@ -108,14 +112,14 @@ void GameScene::ConnectTexture(Texture * pTexture)
 	assert(pTexture != nullptr);
 
 	m_pConnectedTextureList.push_back(pTexture);
-	m_TextureCount += 1;
+	m_TextureCount += pTexture->GetTextures();
 }
 
 void GameScene::CreateCbvSrvDescriptorHeaps(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList)
 {
 	// 연결된 텍스쳐 개수만큼 힙 설정
 	UINT nConstantBufferViews = 0;
-	UINT nShaderResourceViews = m_TextureCount;
+	UINT nShaderResourceViews = m_TextureCount + m_ShadowmapCount;
 	UINT nUnorderedAcessViews = 0;
 
 	D3D12_DESCRIPTOR_HEAP_DESC d3dDescriptorHeapDesc;
@@ -143,20 +147,55 @@ void GameScene::CreateCbvSrvDescriptorHeaps(ID3D12Device * pd3dDevice, ID3D12Gra
 	// 연결된 텍스쳐 개수만큼 힙 설정
 
 	// 연결된 텍스쳐에 뷰 설정
+	int index = 0;
 	for (auto& pTexture : m_pConnectedTextureList)
 	{
+#if _DEBUG
+		std::cout << index++ << "  :  ";
+#endif // _DEBUG
+
 		CreateShaderResourceViewsForTextureBase(pd3dDevice, pTexture);
 	}
 }
 
-void GameScene::CreateCbvSrvDescriptorHeaps(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, int nConstant, int nShader)
+void GameScene::CreateSrvDescriptorHeapsForPlayerShadowmap(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12Resource* pShadowmap)
 {
-	m_MyDescriptorHeap = new MyDescriptorHeap();
-	m_MyDescriptorHeap->CreateCbvSrvUavDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, nShader, 0, ENUM_SCENE::SCENE_NONE);
+	D3D12_CPU_DESCRIPTOR_HANDLE d3dSrvCPUDescriptorHandle = m_SrvCPUDescriptorStartHandle;
+	D3D12_GPU_DESCRIPTOR_HANDLE d3dSrvGPUDescriptorHandle = m_SrvGPUDescriptorStartHandle;
+	d3dSrvCPUDescriptorHandle.ptr = d3dSrvCPUDescriptorHandle.ptr + d3dUtil::gnCbvSrvDescriptorIncrementSize * (m_TextureCount + m_ShadowmapCount - 1);
+	d3dSrvGPUDescriptorHandle.ptr = d3dSrvGPUDescriptorHandle.ptr + d3dUtil::gnCbvSrvDescriptorIncrementSize * (m_TextureCount + m_ShadowmapCount - 1);
+
+	// Srv 맨마지막 인덱스에 위치함
+	ID3D12Resource *pShaderResource = pShadowmap;
+	D3D12_RESOURCE_DESC d3dResourceDesc = pShaderResource->GetDesc();
+	D3D12_SHADER_RESOURCE_VIEW_DESC d3dShaderResourceViewDesc = d3dUtil::GetShaderResourceViewDesc(d3dResourceDesc, RESOURCE_TEXTURE2D);
+	pd3dDevice->CreateShaderResourceView(pShaderResource, &d3dShaderResourceViewDesc, d3dSrvCPUDescriptorHandle);
+
+	m_hCPUPlayerShadowmap = d3dSrvCPUDescriptorHandle;
+	m_hGPUPlayerShadowmap = d3dSrvGPUDescriptorHandle;
 }
 
+void GameScene::CreateSrvDescriptorHeapsForShadowmap(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12Resource* pShadowmap)
+{ 
+	D3D12_CPU_DESCRIPTOR_HANDLE d3dSrvCPUDescriptorHandle = m_SrvCPUDescriptorStartHandle;
+	D3D12_GPU_DESCRIPTOR_HANDLE d3dSrvGPUDescriptorHandle = m_SrvGPUDescriptorStartHandle;
+	d3dSrvCPUDescriptorHandle.ptr = d3dSrvCPUDescriptorHandle.ptr + d3dUtil::gnCbvSrvDescriptorIncrementSize * (m_TextureCount + m_ShadowmapCount - 2);
+	d3dSrvGPUDescriptorHandle.ptr = d3dSrvGPUDescriptorHandle.ptr + d3dUtil::gnCbvSrvDescriptorIncrementSize * (m_TextureCount + m_ShadowmapCount - 2);
+
+	// Srv 맨마지막 인덱스에 위치함
+	ID3D12Resource *pShaderResource = pShadowmap;
+	D3D12_RESOURCE_DESC d3dResourceDesc = pShaderResource->GetDesc();
+	D3D12_SHADER_RESOURCE_VIEW_DESC d3dShaderResourceViewDesc = d3dUtil::GetShaderResourceViewDesc(d3dResourceDesc, RESOURCE_TEXTURE2D);
+	pd3dDevice->CreateShaderResourceView(pShaderResource, &d3dShaderResourceViewDesc, d3dSrvCPUDescriptorHandle);
+
+	m_hCPUShadowmap = d3dSrvCPUDescriptorHandle;
+	m_hGPUShadowmap = d3dSrvGPUDescriptorHandle;
+}
+ 
 void GameScene::CreateShaderResourceViewsForTextureBase(ID3D12Device * pd3dDevice, Texture * pTexture)
 { 
+	pTexture->ShowPath();
+
 	D3D12_CPU_DESCRIPTOR_HANDLE d3dSrvCPUDescriptorHandle = m_SrvCPUDescriptorNextHandle;
 	D3D12_GPU_DESCRIPTOR_HANDLE d3dSrvGPUDescriptorHandle = m_SrvGPUDescriptorNextHandle;
 	 
@@ -195,24 +234,7 @@ D3D12_GPU_DESCRIPTOR_HANDLE GameScene::CreateConstantBufferViews(ID3D12Device * 
 	}
 	return(d3dCbvGPUDescriptorHandle);
 }
-
-void GameScene::CreateShaderResourceViews(ID3D12Device * pd3dDevice, Texture * pTexture, UINT nRootParameter, bool bAutoIncrement)
-{
-	assert(!(pTexture == nullptr));
-
-	m_MyDescriptorHeap->CreateShaderResourceViews(pd3dDevice, pTexture, nRootParameter, bAutoIncrement);
-}
-
-void GameScene::CreateShaderResourceViewsForShadow(ID3D12Device * pd3dDevice, ID3D12Resource * pResource, UINT nRootParameter, bool bAutoIncrement, int index)
-{
-
-	assert(!(pTexture == nullptr));
-
-	int nTextureType = RESOURCE_TEXTURE2D;
-	m_MyDescriptorHeap->CreateShaderResourceViews(pd3dDevice, pResource, nTextureType, index, DXGI_FORMAT_R24_UNORM_X8_TYPELESS);
-	  
-}
-
+ 
 bool GameScene::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam)
 {
 	return false;
@@ -324,9 +346,6 @@ bool GameScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM w
 void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList)
 {
 	BuildLightsAndMaterials(pd3dDevice, pd3dCommandList);
-
-	//// 디스크립터 힙 설정
-	GameScene::CreateCbvSrvDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 5);
 	 
 	m_AimPoint = new AimPoint("AimPoint", pd3dDevice, pd3dCommandList, POINT{ int(GameScreen::GetWidth()) / 2, int(GameScreen::GetHeight()) / 2 }, 100.f, 100.f, L"Image/AimPoint.dds");
 	// m_WideareaMagic = new WideareaMagic(pd3dDevice, pd3dCommandList);
@@ -473,10 +492,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	m_lookAboveCamera->GetCamera()->SetOffset(XMFLOAT3(0.0f, 0.f, 10.f));
 	m_lookAboveCamera->GetCamera()->Rotate(90.f, 0.f, 0.f);
 #endif 
-
-	// 리소스 뷰 설정
-	GameScene::CreateShaderResourceViews(pd3dDevice, m_Terrain->GetTexture(), ROOTPARAMETER_TEXTUREBASE, true);
-
+	 
 	// UI 이미지 추가
 	m_TESTGameObject = new EmptyGameObject("Test");
 
@@ -941,6 +957,12 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 	// 렌더링
 	extern MeshRenderer gMeshRenderer;
 
+	// 힙 설정
+	pd3dCommandList->SetDescriptorHeaps(1, &m_pd3dCbvSrUavDescriptorHeap);
+	
+	//pd3dCommandList->SetGraphicsRootDescriptorTable(ROOTPARAMETER_SHADOWTEXTURE, m_hGPUShadowmap);
+	//pd3dCommandList->SetGraphicsRootDescriptorTable(ROOTPARAMETER_PLAYERSHADOWTEXTURE, m_hGPUPlayerShadowmap);
+
 	//  조명 설정
 	D3D12_GPU_VIRTUAL_ADDRESS d3dcbLightsGpuVirtualAddress = m_pd3dcbLights->GetGPUVirtualAddress();
 	pd3dCommandList->SetGraphicsRootConstantBufferView(ROOTPARAMETER_LIGHTS, d3dcbLightsGpuVirtualAddress); //Lights
@@ -960,10 +982,7 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 		m_pMainCamera->SetViewportsAndScissorRects(pd3dCommandList);
 		m_pMainCamera->GetCamera()->UpdateShaderVariables(pd3dCommandList, ROOTPARAMETER_CAMERA);
 	}
-
-	pd3dCommandList->SetDescriptorHeaps(1, &m_pd3dCbvSrUavDescriptorHeap);
-	
-	// 스카이박스 렌더
+	 
 	if (m_SkyBox) m_SkyBox->Render(pd3dCommandList, isGBuffers);
 
 	if (m_pPlayer) m_pPlayer->Render(pd3dCommandList, isGBuffers);
@@ -1018,7 +1037,7 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 	// 터레인
 	if (m_Terrain)
 	{ 
-		m_pQuadtreeTerrain->Render(pd3dCommandList, m_Terrain, m_MyDescriptorHeap->GetpDescriptorHeap(), isGBuffers);
+		m_pQuadtreeTerrain->Render(pd3dCommandList, m_Terrain, nullptr /*딱히 의미없음*/, isGBuffers);
 	}
 
 	/// ui map과 스킬 관련 렌더링..

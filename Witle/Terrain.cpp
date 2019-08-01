@@ -74,9 +74,7 @@ Terrain::~Terrain()
 }
 
 void Terrain::UpdateShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList)
-{
-	// Èü ¼³Á¤
-	// pd3dCommandList->SetDescriptorHeaps(1, &m_pd3dCbvSrvDescriptorHeap);
+{ 
 	static_cast<Texture *>(m_ResourceBase)->UpdateShaderVariables(pd3dCommandList);
 }
 
