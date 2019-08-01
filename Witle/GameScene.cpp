@@ -846,13 +846,7 @@ void GameScene::LastUpdate(float fElapsedTime)
 		}
 		//////////////////////////////////////////////////////// BOSS
 	}
-
-	// 보스와 충돌이 잘 되는지 확인
-	if (Collision::isCollide(m_pPlayer->GetBOBox()->GetBOBox(), m_Dragon->GetBOBox()->GetBOBox()))
-	{
-		std::cout << "보스 충돌 확인" << std::endl;
-	}
-
+	  
 	// Update한 위치로 몬스터가 공격 시에 몬스터/플레이어충돌체크 확인 ///////////////////////////
 	//for (int i = 0; i < m_TestMonsterCount; ++i)
 	//{
