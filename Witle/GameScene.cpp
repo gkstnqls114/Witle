@@ -843,7 +843,7 @@ void GameScene::LastUpdate(float fElapsedTime)
 		{
 			std::cout << "보스 스킬에 맞음" << std::endl;
 			m_Dragon->SubstractHP(5);
-			m_PlayerSkillMgr->Deactive(index);
+			PlayerSkillMgr::GetInstance()->Deactive(index);
 		}
 		//////////////////////////////////////////////////////// BOSS
 	}
