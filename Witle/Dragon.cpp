@@ -99,8 +99,7 @@ Dragon::~Dragon()
 }
 
 void Dragon::Update(float fElapsedTime)
-{
-	return;
+{ 
 	// 이동량을 계산한다. 
 	m_MonsterMovement->Update(fElapsedTime);
 

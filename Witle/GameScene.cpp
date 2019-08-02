@@ -922,7 +922,7 @@ void GameScene::LastUpdate(float fElapsedTime)
 
 	if (Collision::isCollide(m_pPlayer->GetBOBox()->GetBOBox(), m_Dragon->GetBOBox()->GetBOBox()))
 	{
-		std::cout << "부딪힘" << std::endl;
+		// 드래곤과 플레이어 부딪히는 것 테스트
 	}
 
 	// 카메라 프러스텀과 쿼드트리 지형 렌더링 체크
