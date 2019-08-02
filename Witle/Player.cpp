@@ -25,11 +25,7 @@
 #include "Terrain.h"
 
 #include "Player.h"
- 
-static float playerOffestX = 0.f;
-static float playerOffestY = 57.f;
-static float playerOffestZ = 50.f;
-
+  
 void Player::OnPlayerUpdateCallback(float fTimeElapsed)
 {
 	if (!m_pPlayerUpdatedContext) return;
