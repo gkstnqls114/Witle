@@ -12,7 +12,8 @@ void BallSkill::UpdateActive(float fElapsedTime)
 {
 }
 
-BallSkill::BallSkill()
+BallSkill::BallSkill(const std::string& entityID, float cooltime)
+	:SelectableSkill(entityID, cooltime)
 {
 }
 

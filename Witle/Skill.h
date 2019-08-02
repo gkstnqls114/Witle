@@ -41,7 +41,7 @@ protected:
 	virtual bool IsFinish() override { return true; };
 
 public:
-	FixedSkill() : ISkill("Skill") {};
+	FixedSkill(const std::string& entityID) : ISkill(entityID) {};
 	virtual ~FixedSkill();
 
 	bool GetisUsing() const { return m_isUsing; }
@@ -61,7 +61,7 @@ public:
 
 class SelectableSkill
 	: public ISkill
-{ 
+{  
 protected:
 	virtual void ReleaseMembers();
 	virtual void ReleaseMemberUploadBuffers();
@@ -79,15 +79,16 @@ public:
 	virtual bool IsFinish() override = 0;
 	virtual void Update(float fElapsedTime) override;
 
-public:
-	SelectableSkill() : ISkill("Skill") {};
+public: 
+	SelectableSkill(const std::string& entityID, float cooltime) : ISkill(entityID) , m_CoolTime(cooltime) {};
 	virtual ~SelectableSkill();
 
-
+	float GetCoolTime() const { return m_CoolTime; }
 	ENUM_SELECTABLESKILL GetSelectableSkillType() const { return m_SelectableSkillType; }
 
 private:
 	ENUM_SELECTABLESKILL m_SelectableSkillType{ ENUM_SELECTABLESKILL::SELECTABLESKILL_NONE };
+	const float m_CoolTime{ 0.f }; // 스킬을 재시작 하는 쿨타임
 
 public:
 	SkillEffect* m_skillEffect{ nullptr };

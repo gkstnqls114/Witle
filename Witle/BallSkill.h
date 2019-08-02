@@ -13,7 +13,7 @@ public:
 	virtual void UpdateActive(float fElapsedTime) override;
 
 public:
-	BallSkill();
+	BallSkill(const std::string& entityID, float cooltime);
 	virtual ~BallSkill();
 
 };

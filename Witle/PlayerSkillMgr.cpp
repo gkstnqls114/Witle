@@ -60,7 +60,7 @@ void PlayerSkillMgr::Activate(PlayerStatus* MPstaus, int index)
 
 	MPstaus->m_Guage -= 10.f;
 	m_skill[index]->isActive = true;
-	m_skill[index]->RemainCoolTime = m_skill[index]->m_skillEffect->m_CoolTime;
+	m_skill[index]->RemainCoolTime = m_skill[index]->GetCoolTime();
 	m_skill[index]->spawnPosition =
 		PlayerManager::GetMainPlayer()->GetTransform().GetPosition();
 

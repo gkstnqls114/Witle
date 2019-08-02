@@ -30,6 +30,7 @@ void Sniping::ReleaseMemberUploadBuffers()
 }
 
 Sniping::Sniping(CameraObject* pCamera, Player* pPlayer, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList)
+	:FixedSkill("Sniping")
 {  
 	m_pCameraObject = pCamera;
 	m_pPlayer = pPlayer;

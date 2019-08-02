@@ -98,11 +98,26 @@ enum LIGHT_TYPE
 	SPOT_LIGHT,
 	DIRECTIONAL_LIGHT
 };
+//// Enum Type ////////////////////////////////////
 
+//// 구현 스킬에 대하여 ////////////////////////////
+#define COOLTIME_FIREBALL 3
+#define COOLTIME_ICEBALL 3
+#define COOLTIME_LIGHTNINGBALL 3
+#define COOLTIME_SHIELD 5
+#define COOLTIME_BLESSING 5
+#define COOLTIME_HEALING 10
+
+#define USEMP_FIREBALL 10
+#define USEMP_ICEBALL 10
+#define USEMP_LIGHTNINGBALL 10
+#define USEMP_SHIELD 5
+#define USEMP_BLESSING 15
+#define USEMP_HEALING 15 
+//// 구현 스킬에 대하여 ////////////////////////////
 
 #define SKILL_TO_CHOOSE 8 // 고를수 있는 스킬 가짓수
 #define SKILL_SELECTED 4 // 선택 가능한 스킬 가짓수
-//// Enum Type ////////////////////////////////////
 
 #define PI				    3.141592
 
