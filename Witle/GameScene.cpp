@@ -1066,31 +1066,31 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 	m_UIAltar_4->Render(pd3dCommandList);
 	m_UIAltar_5->Render(pd3dCommandList);
 
-	//SkillSelectScene::m_pHeap->UpdateShaderVariable(pd3dCommandList);
+	SkillSelectScene::m_pHeap->UpdateShaderVariable(pd3dCommandList);
 
-	//SkillSelectScene::m_pTexture->UpdateShaderVariable(pd3dCommandList, 8); // 임시로 검은색으로 렌더링
-	//m_SampleUIMap->Render(pd3dCommandList);
+	SkillSelectScene::m_pTexture->UpdateShaderVariable(pd3dCommandList, 8); // 임시로 검은색으로 렌더링
+	m_SampleUIMap->Render(pd3dCommandList);
 
-	//ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_SKILLICON, isGBuffers); 
-	//float cooltime = PlayerSkillMgr::GetInstance()->GetSkillEffect(0)->RemainCoolTimePrecentage;
-	//pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_HPPERCENTAGE, 1, &cooltime, 0);
-	//SkillSelectScene::m_pTexture->UpdateShaderVariable(pd3dCommandList, SkillSelectScene::m_SelectedIndex[0]);
-	//m_SampleUISkill1->Render(pd3dCommandList);
+	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_SKILLICON, isGBuffers); 
+	float cooltime = PlayerSkillMgr::GetInstance()->GetSkillEffect(0)->RemainCoolTimePrecentage;
+	pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_HPPERCENTAGE, 1, &cooltime, 0);
+	SkillSelectScene::m_pTexture->UpdateShaderVariable(pd3dCommandList, SkillSelectScene::m_SelectedIndex[0]);
+	m_SampleUISkill1->Render(pd3dCommandList);
 
-	//SkillSelectScene::m_pTexture->UpdateShaderVariable(pd3dCommandList, SkillSelectScene::m_SelectedIndex[1]);  
-	//cooltime = PlayerSkillMgr::GetInstance()->GetSkillEffect(1)->RemainCoolTimePrecentage;
-	//pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_HPPERCENTAGE, 1, &cooltime, 0);
-	//m_SampleUISkill2->Render(pd3dCommandList);
+	SkillSelectScene::m_pTexture->UpdateShaderVariable(pd3dCommandList, SkillSelectScene::m_SelectedIndex[1]);  
+	cooltime = PlayerSkillMgr::GetInstance()->GetSkillEffect(1)->RemainCoolTimePrecentage;
+	pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_HPPERCENTAGE, 1, &cooltime, 0);
+	m_SampleUISkill2->Render(pd3dCommandList);
 
-	//SkillSelectScene::m_pTexture->UpdateShaderVariable(pd3dCommandList, SkillSelectScene::m_SelectedIndex[2]);  
-	//cooltime = PlayerSkillMgr::GetInstance()->GetSkillEffect(2)->RemainCoolTimePrecentage;
-	//pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_HPPERCENTAGE, 1, &cooltime, 0);
-	//m_SampleUISkill3->Render(pd3dCommandList);
+	SkillSelectScene::m_pTexture->UpdateShaderVariable(pd3dCommandList, SkillSelectScene::m_SelectedIndex[2]);  
+	cooltime = PlayerSkillMgr::GetInstance()->GetSkillEffect(2)->RemainCoolTimePrecentage;
+	pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_HPPERCENTAGE, 1, &cooltime, 0);
+	m_SampleUISkill3->Render(pd3dCommandList);
 
-	//SkillSelectScene::m_pTexture->UpdateShaderVariable(pd3dCommandList, SkillSelectScene::m_SelectedIndex[3]); 
-	//cooltime = PlayerSkillMgr::GetInstance()->GetSkillEffect(3)->RemainCoolTimePrecentage;
-	//pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_HPPERCENTAGE, 1, &cooltime, 0);
-	//m_SampleUISkill4->Render(pd3dCommandList);
+	SkillSelectScene::m_pTexture->UpdateShaderVariable(pd3dCommandList, SkillSelectScene::m_SelectedIndex[3]); 
+	cooltime = PlayerSkillMgr::GetInstance()->GetSkillEffect(3)->RemainCoolTimePrecentage;
+	pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_HPPERCENTAGE, 1, &cooltime, 0);
+	m_SampleUISkill4->Render(pd3dCommandList);
 }
 
 void GameScene::RenderForShadow(ID3D12GraphicsCommandList * pd3dCommandList)
@@ -1163,63 +1163,11 @@ void GameScene::UpdateCollision(float fElapsedTime)
 	};
 
 	// 외곽 4 부분과 충돌처리 확인한다.
-	bool isCollision = Collision::ProcessCollide(m_pPlayer, 4, outside_box, fElapsedTime);
+	Collision::ProcessCollideEdge(m_pPlayer, 4, outside_box, fElapsedTime);
 	 
+	// 플레이어와 지형지물 충돌을 확인한다. 
+	Collision::ProcessCollideTerrainObject(m_pPlayer, m_pQuadtreeTerrain, fElapsedTime);
 
-	// 플레이어와 지형지물 충돌체크 ///////////////////////// 
-	BoundingOrientedBox AlreadyPlayerBBox = m_pPlayer->CalculateAlreadyBoundingBox(fElapsedTime);
-	XMFLOAT3 AlreadyPositon{ AlreadyPlayerBBox.Center.x, AlreadyPlayerBBox.Center.y, AlreadyPlayerBBox.Center.z };
-
-	XMINT4 IDs = m_pQuadtreeTerrain->GetIDs(AlreadyPositon);
-	int TerrainCount = m_pQuadtreeTerrain->GetTerrainPieceCount();
-
-	// Ti: Terrain Index
-	for (int Ti = 0; Ti < TerrainCount; ++Ti)
-	{
-		int TerrainIndex = Ti;
-		//if (Ti == 0) TerrainIndex = IDs.x;
-		//else if (Ti == 1) TerrainIndex = IDs.y;
-		//else if (Ti == 2) TerrainIndex = IDs.z;
-		//else if (Ti == 3) TerrainIndex = IDs.w;
-
-		//if (TerrainIndex == -1) continue;
-
-		for (const auto& name : ModelStorage::GetInstance()->m_NameList)
-		{
-			MyBOBox* box = ModelStorage::GetInstance()->GetBOBox(name);
-			if (!box) continue; // 충돌박스가 없다면 다른 오브젝트를 검사하자.
-
-			XMFLOAT4X4* pWorldMatrix = StaticObjectStorage::GetInstance(m_pQuadtreeTerrain)->GetWorldMatrix(TerrainIndex, name);
-
-			// 트레인 조각 내부 오브젝트 개수만큼 충돌 체크
-			for (int i = 0; i < StaticObjectStorage::GetInstance(m_pQuadtreeTerrain)->GetObjectCount(TerrainIndex, name); ++i)
-			{
-				//월드 행렬 갖고온다.
-
-				// 모델 충돌박스를 월드행렬 곱한다. 일단 현재는 포지션으로 이동
-				MyBOBox worldBox = *box;
-				worldBox.Move(XMFLOAT3(pWorldMatrix[i]._41, 0, pWorldMatrix[i]._43));
-
-				XMFLOAT3 slideVector{ 0.f, 0.f, 0.f };
-
-				bool isSlide = Collision::ProcessCollision(
-					AlreadyPlayerBBox,
-					worldBox,
-					m_pPlayer->GetTransform().GetPosition(),
-					m_pPlayer->GetVelocity(),
-					fElapsedTime,
-					true,
-					slideVector);
-
-				if (isSlide)
-				{
-					m_pPlayer->SetVelocity(slideVector);
-				}
-
-			}
-		}
-	}
-	// 플레이어와 지형지물 충돌체크 ///////////////////////// 
 
 
 

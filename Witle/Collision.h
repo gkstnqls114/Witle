@@ -6,6 +6,7 @@ class Player;
 class Monster;
 class MyCollider;
 class MyBOBox;
+class QuadtreeTerrain;
 
 class Collision
 {
@@ -59,7 +60,9 @@ public:
 		float fElapsedTime,
 		bool StaticObjIsMove,
 		/*out*/XMFLOAT3& SlideVector);
-
-	static bool ProcessCollide(Player* player, int TerrainObjectCount, const MyBOBox* terrainObject, float fElapsedTime);
-	 
+	
+	static void ProcessCollideEdge(Player* player, int TerrainObjectCount, const MyBOBox* terrainObject, float fElapsedTime);
+	
+	static void ProcessCollideTerrainObject(Player* player, const QuadtreeTerrain* quadTerrain, float fElapsedTime);
+	
 };
