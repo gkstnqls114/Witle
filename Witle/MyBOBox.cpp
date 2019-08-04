@@ -8,13 +8,13 @@ bool MyBOBox::RENDER_BBOX = true;
 MyBOBox::MyBOBox(GameObject* pOwner, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, XMFLOAT3 center, XMFLOAT3 extents, XMFLOAT4 quaternion)
 	: MyCollider(pOwner, COLLIDER_TYPE::BOUNDING_BOX)
 {
-	m_BOBox = BoundingOrientedBox(XMFLOAT3(0.F, 0.F, 0.F), extents, quaternion);
+	m_BOBox = BoundingOrientedBox(center, extents, quaternion);
 
 	m_world = Matrix4x4::Identity();
 	m_Pivot = center;
-	m_world._41 = m_Pivot.x;
-	m_world._42 = m_Pivot.y;
-	m_world._43 = m_Pivot.z;
+	m_world._41 = center.x;
+	m_world._42 = center.y;
+	m_world._43 = center.z;
 	m_pLineCube = new LineCube(pOwner, pd3dDevice, pd3dCommandList, m_BOBox.Center, m_BOBox.Extents);
 	 
 	m_BoBoxPlane[0] = Plane::Plane(Vector3::Add(center, XMFLOAT3(extents.x, 0.f, 0.f)), XMFLOAT3(1.f, 0.f, 0.f)); // +x¸é normal (1, 0, 0) 
@@ -133,9 +133,9 @@ void MyBOBox::SetPosition(const XMFLOAT3 & pos)
 {
 	m_BOBox.Center = pos;
 	 
-	m_world._41 = m_BOBox.Center.x;
-	m_world._42 = m_BOBox.Center.y;
-	m_world._43 = m_BOBox.Center.z; 
+	m_world._41 = m_BOBox.Center.x + m_Pivot.x;
+	m_world._42 = m_BOBox.Center.y + m_Pivot.y;
+	m_world._43 = m_BOBox.Center.z + m_Pivot.z;
 }
 
 bool MyBOBox::IsIn(int index, const XMFLOAT3 & intersectionPoint)
