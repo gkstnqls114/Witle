@@ -6,7 +6,9 @@ class LineCube;
 class MyBOBox
 	: public MyCollider
 { 
+#ifdef _DEBUG
 	static bool RENDER_BBOX;
+#endif // _DEBUG
 
 public: 
 	virtual void ReleaseObjects() override;
@@ -19,17 +21,16 @@ private:
 protected: 
 	XMFLOAT4X4 m_world;
 	XMFLOAT3 m_Pivot; // 회전중심
+#ifdef _DEBUG
 	LineCube* m_pLineCube{ nullptr }; 
+#endif // _DEBUG
 
 	BoundingOrientedBox m_BOBox;
 	XMFLOAT4 m_BoBoxPlane[4]; // 0: +X, 1: -X, 2: +Z, 3: -Z
 	 
 public:
-	static void CHANGEMODE()
-	{
-		RENDER_BBOX = !RENDER_BBOX;
-	}
-
+	static void CHANGEMODE();
+	
 	MyBOBox(GameObject* pOwner, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, XMFLOAT3 center, XMFLOAT3 extents, XMFLOAT4 quaternion = XMFLOAT4(0.f, 0.f, 0.f, 1.f));
 	MyBOBox(const MyBOBox& other);
 	MyBOBox(XMFLOAT3 center, XMFLOAT3 extents);

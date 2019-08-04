@@ -3,7 +3,16 @@
 #include "ShaderManager.h"
 #include "LineCube.h"
 #include "MyBOBox.h"
+#ifdef _DEBUG
 bool MyBOBox::RENDER_BBOX = true;
+#endif // _DEBUG
+
+void MyBOBox::CHANGEMODE()
+{
+#ifdef _DEBUG
+	RENDER_BBOX = !RENDER_BBOX;
+#endif // _DEBUG
+}
 
 MyBOBox::MyBOBox(GameObject* pOwner, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, XMFLOAT3 center, XMFLOAT3 extents, XMFLOAT4 quaternion)
 	: MyCollider(pOwner, COLLIDER_TYPE::BOUNDING_BOX)
@@ -15,7 +24,10 @@ MyBOBox::MyBOBox(GameObject* pOwner, ID3D12Device * pd3dDevice, ID3D12GraphicsCo
 	m_world._41 = center.x;
 	m_world._42 = center.y;
 	m_world._43 = center.z;
+
+#ifdef _DEBUG
 	m_pLineCube = new LineCube(pOwner, pd3dDevice, pd3dCommandList, m_BOBox.Center, m_BOBox.Extents);
+#endif // _DEBUG
 	 
 	m_BoBoxPlane[0] = Plane::Plane(Vector3::Add(center, XMFLOAT3(extents.x, 0.f, 0.f)), XMFLOAT3(1.f, 0.f, 0.f)); // +x면 normal (1, 0, 0) 
 	m_BoBoxPlane[1] = Plane::Plane(Vector3::Add(center, XMFLOAT3(-extents.x, 0.f, 0.f)), XMFLOAT3(-1.f, 0.f, 0.f)); // -x면 normal (-1, 0, 0)
@@ -26,7 +38,9 @@ MyBOBox::MyBOBox(GameObject* pOwner, ID3D12Device * pd3dDevice, ID3D12GraphicsCo
 MyBOBox::MyBOBox(const MyBOBox & other) 
 	:MyCollider(m_pOwner, COLLIDER_TYPE::BOUNDING_BOX)
 {
+#ifdef _DEBUG
 	m_pLineCube = nullptr;
+#endif // _DEBUG
 	m_BOBox = other.m_BOBox;
 	for (int i = 0; i < 4; ++i)
 	{
@@ -47,19 +61,27 @@ MyBOBox::MyBOBox(XMFLOAT3 center, XMFLOAT3 extents)
 
 MyBOBox::~MyBOBox()
 {  
+
+#ifdef _DEBUG
 	if (m_pLineCube)
 	{
 		delete m_pLineCube;
+		m_pLineCube = nullptr;
 	} 
+#endif // _DEBUG
 }
   
 void MyBOBox::ReleaseObjects()
 {
+#ifdef _DEBUG
 	if(m_pLineCube) m_pLineCube->ReleaseObjects();
+#endif // _DEBUG
 }
 void MyBOBox::ReleaseUploadBuffers()
 {
+#ifdef _DEBUG
 	if(m_pLineCube) m_pLineCube->ReleaseUploadBuffers();
+#endif // _DEBUG
 }
 
 XMFLOAT4X4 MyBOBox::SetRotate(float x, float y, float z)
@@ -98,17 +120,22 @@ XMFLOAT4X4 MyBOBox::SetRotate(float x, float y, float z)
 
 void MyBOBox::Render(ID3D12GraphicsCommandList * pd3dCommandList)
 { 
-	// if (!RENDER_BBOX) return;
+
+#ifdef _DEBUG
+	if (!RENDER_BBOX) return;
 	if (m_pLineCube)
 	{
 		pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Line")->GetPSO());
 		m_pLineCube->Render(pd3dCommandList, m_world, true);
 	}
+#endif // _DEBUG
 }
 void MyBOBox::RenderInstancing(ID3D12GraphicsCommandList * pd3dCommandList, int InstancingCount)
-{
+{ 
+#ifdef _DEBUG 
 	if (!RENDER_BBOX) return;
 	if (m_pLineCube) m_pLineCube->RenderInstancing(pd3dCommandList, InstancingCount);
+#endif // _DEBUG
 } 
 
 // 말이 Rotate지만, 실제로 roll, yaw, pitch에 맞춰서 축을 다시 설정하고 있다.
