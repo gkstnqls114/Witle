@@ -2,6 +2,7 @@
 #include "MyCollider.h"
 #include "MyBOBox.h"
 #include "MyBSphere.h"
+#include "Player.h"
 #include "Collision.h"
 
 bool Collision::isCollide(MyCollider* collider, const XMFLOAT3 & origin, const XMFLOAT3 & direction, float & dist)
@@ -74,6 +75,32 @@ bool Collision::ProcessCollision(const BoundingOrientedBox & moveObject,
 	return false;
 }
 
+bool Collision::ProcessCollide(Player * player, int TerrainObjectCount, const MyBOBox * terrainObject, float fElapsedTime)
+{
+	BoundingOrientedBox AlreadyPlayerBBox = player->CalculateAlreadyBoundingBox(fElapsedTime);
+	XMFLOAT3 AlreadyPositon{ AlreadyPlayerBBox.Center.x, AlreadyPlayerBBox.Center.y, AlreadyPlayerBBox.Center.z };
+	XMFLOAT3 slideVector{ 0.f, 0.f, 0.f };
+	bool isSlide = false;
+	for (int i = 0; i < TerrainObjectCount; ++i)
+	{
+		isSlide = Collision::ProcessCollision(
+			AlreadyPlayerBBox,
+			terrainObject[i],
+			player->GetTransform().GetPosition(),
+			player->GetVelocity(),
+			fElapsedTime,
+			false,
+			slideVector);
+
+		if (isSlide)
+		{ 
+			player->SetVelocity(slideVector); 
+		}
+	}
+	 
+	return false;
+}
+ 
 bool Collision::isCollide(MyCollider * a, MyCollider * b)
 {
 	COLLIDER_TYPE A_type = a->GetType();

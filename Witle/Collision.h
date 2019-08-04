@@ -2,6 +2,8 @@
 
 struct RAY;
 
+class Player;
+class Monster;
 class MyCollider;
 class MyBOBox;
 
@@ -10,7 +12,6 @@ class Collision
 private: 
 
 public:
-
 	static bool isCollide(const BoundingOrientedBox& box, const XMFLOAT3& origin, const XMFLOAT3& direction, float& dist)
 	{
 		return box.Intersects(XMLoadFloat3(&origin), XMLoadFloat3(&direction), dist);
@@ -58,5 +59,7 @@ public:
 		float fElapsedTime,
 		bool StaticObjIsMove,
 		/*out*/XMFLOAT3& SlideVector);
+
+	static bool ProcessCollide(Player* player, int TerrainObjectCount, const MyBOBox* terrainObject, float fElapsedTime);
 	 
 };
