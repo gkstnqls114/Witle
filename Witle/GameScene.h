@@ -136,7 +136,7 @@ protected:
 
 	// 몬스터 관련 ////////////////////////////
 
-	int						m_TestMonsterCount{ 10 };
+	int						m_TestMonsterCount{ 1 };
 	Monster**				m_TestMonster{ nullptr };
 	Monster*				m_AltarMonster{ nullptr };
 	

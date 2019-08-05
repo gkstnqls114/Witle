@@ -8,172 +8,168 @@
 // 현재 gbuffer 4개 전부 안쓰지만 일단 그 대용으로 ㅠㅠ..
 // 여기서 gbuffer0이 HDRTex
 
-groupshared float SharedPosition[1024]; // 공유메모리 그룹에 중간값 저장
+// Group shared memory to store the intermidiate results
+groupshared float SharedPositions[1024];
 
 float DownScale4x4(uint2 CurPixel, uint groupThreadId)
 {
     float avgLum = 0.0;
 
-    // 픽셀 결합 생략
-    if(CurPixel.y < Res.y)
+	// Skip out of bound pixels
+    if (CurPixel.y < Res.y)
     {
-        // 4x4 픽셀 결합 그룹 값 합산
+		// Sum a group of 4x4 pixels
         int3 nFullResPos = int3(CurPixel * 4, 0);
         float4 downScaled = float4(0.0, 0.0, 0.0, 0.0);
-        [unroll]
-        for (int i = 0; i < 4; ++i)
+		[unroll]
+        for (int i = 0; i < 4; i++)
         {
-            [unroll]
-            for (int j = 0; j < 4; ++j)
+			[unroll]
+            for (int j = 0; j < 4; j++)
             {
-                downScaled += gtxtTexture.Load(nFullResPos, int2(j, i)); 
+                downScaled += gtxtTexture.Load(nFullResPos, int2(j, i));
             }
         }
         downScaled /= 16.0;
 
-        // 픽셀별 휘도값 계산
+		// Calculate the lumenace value for this pixel
         avgLum = dot(downScaled, LUM_FACTOR);
-        
-        // 공유메모리에 결과 기록
-        SharedPosition[groupThreadId] = avgLum;
+
+		// Write the result to the shared memory
+        SharedPositions[groupThreadId] = avgLum;
     }
 
-    // 동기화 후 다음 단계로
+	// Synchronize before next step
     GroupMemoryBarrierWithGroupSync();
-
+	
     return avgLum;
 }
 
-// float DownScale4x4(uint2 CurPixel, uint groupThreadId) 에서 구한 값을
-// 4개의 값으로 다운 스케일한다.
-float DownScaled1024to4(uint dispatchThreadID, uint groupThreadID, float avgLum)
+float DownScale1024to4(uint dispatchThreadId, uint groupThreadId, float avgLum)
 {
-    // 다운 스케일 코드를 확장
-    [unroll]
-    for (uint groupSize = 4, step1 = 1, step2 = 2, step3 = 3;
-        groupSize < 1024;
-        groupSize *= 4, step1 *= 4, step2 *= 4, step3 *=3)
+	// Expend the downscale code from a loop
+	[unroll]
+    for (uint groupSize = 4, step1 = 1, step2 = 2, step3 = 3; groupSize < 1024; groupSize *= 4, step1 *= 4, step2 *= 4, step3 *= 4)
     {
-        //팍샐 굘헙 계산 생략
-        if(groupThreadID % groupSize == 0 )
+		// Skip out of bound pixels
+        if (groupThreadId % groupSize == 0)
         {
-            //휘도값 계산
+			// Calculate the luminance sum for this step
             float stepAvgLum = avgLum;
-            stepAvgLum += dispatchThreadID + step1 < Domain ? SharedPosition[groupThreadID + step1] : avgLum;
-            stepAvgLum += dispatchThreadID + step2 < Domain ? SharedPosition[groupThreadID + step2] : avgLum;
-            stepAvgLum += dispatchThreadID + step3 < Domain ? SharedPosition[groupThreadID + step3] : avgLum;
-            
-            // 결과값 저장
+            stepAvgLum += dispatchThreadId + step1 < Domain ? SharedPositions[groupThreadId + step1] : avgLum;
+            stepAvgLum += dispatchThreadId + step2 < Domain ? SharedPositions[groupThreadId + step2] : avgLum;
+            stepAvgLum += dispatchThreadId + step3 < Domain ? SharedPositions[groupThreadId + step3] : avgLum;
+		
+			// Store the results
             avgLum = stepAvgLum;
-            SharedPosition[groupThreadID] = stepAvgLum;
-
+            SharedPositions[groupThreadId] = stepAvgLum;
         }
 
-        // 동기화후 다음으로
+		// Synchronize before next step
         GroupMemoryBarrierWithGroupSync();
     }
-    
+
     return avgLum;
 }
 
-// 네개의 값을 하나의 평균값으로 다운스케일한 후 저장한다.
-void DownScaled4to1(uint dispatchThreadID, uint groupThreadID, uint groupID, float avgLum)
+void DownScale4to1(uint dispatchThreadId, uint groupThreadId, uint groupId, float avgLum)
 {
-    if(groupThreadID == 0)
+    if (groupThreadId == 0)
     {
-        // 스레드 그룹에 대한 평균 휘도 값 계산
+		// Calculate the average lumenance for this thread group
         float fFinalAvgLum = avgLum;
-        
-        fFinalAvgLum += dispatchThreadID + 256 < Domain ? SharedPosition[groupThreadID + 256] : avgLum;
-        fFinalAvgLum += dispatchThreadID + 512 < Domain ? SharedPosition[groupThreadID + 512] : avgLum;
-        fFinalAvgLum += dispatchThreadID + 768 < Domain ? SharedPosition[groupThreadID + 768] : avgLum;
+        fFinalAvgLum += dispatchThreadId + 256 < Domain ? SharedPositions[groupThreadId + 256] : avgLum;
+        fFinalAvgLum += dispatchThreadId + 512 < Domain ? SharedPositions[groupThreadId + 512] : avgLum;
+        fFinalAvgLum += dispatchThreadId + 768 < Domain ? SharedPositions[groupThreadId + 768] : avgLum;
         fFinalAvgLum /= 1024.0;
 
-        // 최종 값을 1D UAV에 기록 후
-        // 다음 과정으로
-        gAverageValues1D[groupID] = fFinalAvgLum;
+		// Write the final value into the 1D UAV which will be used on the next step
+        gAverageLum[groupId] = fFinalAvgLum;
     }
 }
 
-
-// 첫번째 과정
 [numthreads(1024, 1, 1)]
-void DownScaledFirstPass( uint3 groupID : SV_GroupID, uint3 dispatchThreadID : SV_DispatchThreadID , uint3 groupThreadID : SV_GroupThreadID)
+void DownScaleFirstPass(uint3 dispatchThreadId : SV_DispatchThreadID, uint3 groupThreadId : SV_GroupThreadID, uint3 groupId : SV_GroupID)
 {
-    uint2 CurPixel = uint2(dispatchThreadID.x % Res.x, dispatchThreadID.x / Res.x);
+    uint2 CurPixel = uint2(dispatchThreadId.x % Res.x, dispatchThreadId.x / Res.x);
 
-    // 16 픽셀 메모리 그룹을 하나의 픽셀로 줄여 공유 메모리에 저장
-    float avgLum = DownScale4x4(dispatchThreadID.x, groupThreadID.x);
+	// Reduce a group of 16 pixels to a single pixel and store in the shared memory
+    float avgLum = DownScale4x4(CurPixel, groupThreadId.x);
 
-    // 1024에서 4로 다운 스케일
-    avgLum = DownScaled1024to4(dispatchThreadID.x, groupThreadID.x, avgLum);
+	// Down scale from 1024 to 4
+    avgLum = DownScale1024to4(dispatchThreadId.x, groupThreadId.x, avgLum);
 
-    // 4에서 1로 다운 스케일
-    DownScaled4to1(dispatchThreadID.x, groupThreadID.x, groupID.x, avgLum);
+	// Downscale from 4 to 1
+    DownScale4to1(dispatchThreadId.x, groupThreadId.x, groupId.x, avgLum);
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Second pass - convert the 1D average values into a single value
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #define MAX_GROUPS 64
-groupshared float ShardAvgFinal[MAX_GROUPS]; // 공유메모리 그룹에 중간값 저장
 
-// 두번째 과정
-// 중간값 휘도 srv와 평균 휘도 uav를 지정해 사용
+// Group shared memory to store the intermidiate results
+groupshared float SharedAvgFinal[MAX_GROUPS];
+
 [numthreads(MAX_GROUPS, 1, 1)]
-void DownScaledSecondPass(uint3 groupID : SV_GroupID, uint3 dispatchThreadID : SV_DispatchThreadID, uint3 groupThreadID : SV_GroupThreadID)
+void DownScaleSecondPass(uint3 groupId : SV_GroupID, uint3 groupThreadId : SV_GroupThreadID,
+    uint3 dispatchThreadId : SV_DispatchThreadID, uint groupIndex : SV_GroupIndex)
 {
-    // 공유 메모리에 1d값 저장 // 1D가 뭐야.. 아이디도 아니고..
+	// Fill the shared memory with the 1D values
     float avgLum = 0.0;
-
-    if(dispatchThreadID.x < GroupSize)
+    if (dispatchThreadId.x < GroupSize)
     {
-        avgLum = gAverageValues1D[dispatchThreadID.x];
+        avgLum = gAverageValues1D[dispatchThreadId.x];
     }
-    ShardAvgFinal[dispatchThreadID.x] = avgLum;
+    SharedAvgFinal[dispatchThreadId.x] = avgLum;
 
-    GroupMemoryBarrierWithGroupSync(); // 동기화 후 다음 과정으로
+    GroupMemoryBarrierWithGroupSync(); // Sync before next step
 
-    // 64에서 16으로 다운 스케일...
-    if(dispatchThreadID.x % 4 == 0)
+	// Downscale from 64 to 16
+    if (dispatchThreadId.x % 4 == 0)
     {
+		// Calculate the luminance sum for this step
         float stepAvgLum = avgLum;
-        stepAvgLum += dispatchThreadID.x + 1 < GroupSize ? ShardAvgFinal[dispatchThreadID.x + 1] : avgLum;
-        stepAvgLum += dispatchThreadID.x + 2 < GroupSize ? ShardAvgFinal[dispatchThreadID.x + 2] : avgLum;
-        stepAvgLum += dispatchThreadID.x + 3 < GroupSize ? ShardAvgFinal[dispatchThreadID.x + 3] : avgLum;
-
-        // 결과 값 저장
+        stepAvgLum += dispatchThreadId.x + 1 < GroupSize ? SharedAvgFinal[dispatchThreadId.x + 1] : avgLum;
+        stepAvgLum += dispatchThreadId.x + 2 < GroupSize ? SharedAvgFinal[dispatchThreadId.x + 2] : avgLum;
+        stepAvgLum += dispatchThreadId.x + 3 < GroupSize ? SharedAvgFinal[dispatchThreadId.x + 3] : avgLum;
+		
+		// Store the results
         avgLum = stepAvgLum;
-        ShardAvgFinal[dispatchThreadID.x] = stepAvgLum;
+        SharedAvgFinal[dispatchThreadId.x] = stepAvgLum;
     }
-    
-    GroupMemoryBarrierWithGroupSync(); // 동기화 후 다음 과정으로
 
-    // 16에서 4로 다운 스케일...
-    if (dispatchThreadID.x % 16 == 0)
+    GroupMemoryBarrierWithGroupSync(); // Sync before next step
+
+	// Downscale from 16 to 4
+    if (dispatchThreadId.x % 16 == 0)
     {
+		// Calculate the luminance sum for this step
         float stepAvgLum = avgLum;
-        stepAvgLum += dispatchThreadID.x + 4 < GroupSize ? ShardAvgFinal[dispatchThreadID.x + 4] : avgLum;
-        stepAvgLum += dispatchThreadID.x + 8 < GroupSize ? ShardAvgFinal[dispatchThreadID.x + 8] : avgLum;
-        stepAvgLum += dispatchThreadID.x + 12 < GroupSize ? ShardAvgFinal[dispatchThreadID.x + 12] : avgLum;
+        stepAvgLum += dispatchThreadId.x + 4 < GroupSize ? SharedAvgFinal[dispatchThreadId.x + 4] : avgLum;
+        stepAvgLum += dispatchThreadId.x + 8 < GroupSize ? SharedAvgFinal[dispatchThreadId.x + 8] : avgLum;
+        stepAvgLum += dispatchThreadId.x + 12 < GroupSize ? SharedAvgFinal[dispatchThreadId.x + 12] : avgLum;
 
-        // 결과 값 저장
+		// Store the results
         avgLum = stepAvgLum;
-        ShardAvgFinal[dispatchThreadID.x] = stepAvgLum;
+        SharedAvgFinal[dispatchThreadId.x] = stepAvgLum;
     }
-    
-    GroupMemoryBarrierWithGroupSync(); // 동기화 후 다음 과정으로
 
-    // 4에서 1로 다운 스케일...
-    if (dispatchThreadID.x == 0)
+    GroupMemoryBarrierWithGroupSync(); // Sync before next step
+
+	// Downscale from 4 to 1
+    if (dispatchThreadId.x == 0)
     {
-        float stepAvgLum = avgLum;
-        stepAvgLum += dispatchThreadID.x + 16 < GroupSize ? ShardAvgFinal[dispatchThreadID.x + 16] : avgLum;
-        stepAvgLum += dispatchThreadID.x + 32 < GroupSize ? ShardAvgFinal[dispatchThreadID.x + 32] : avgLum;
-        stepAvgLum += dispatchThreadID.x + 48 < GroupSize ? ShardAvgFinal[dispatchThreadID.x + 48] : avgLum;
+		// Calculate the average luminace
+        float fFinalLumValue = avgLum;
+        fFinalLumValue += dispatchThreadId.x + 16 < GroupSize ? SharedAvgFinal[dispatchThreadId.x + 16] : avgLum;
+        fFinalLumValue += dispatchThreadId.x + 32 < GroupSize ? SharedAvgFinal[dispatchThreadId.x + 32] : avgLum;
+        fFinalLumValue += dispatchThreadId.x + 48 < GroupSize ? SharedAvgFinal[dispatchThreadId.x + 48] : avgLum;
+        fFinalLumValue /= 64.0;
 
-        stepAvgLum /= 64.0;
-
-        // 결과 값 저장
-        gAverageLum[0] = stepAvgLum;
+		// Store the final value
+        gAverageLum[0] = max(fFinalLumValue, 0.0001);
 
     }
 }
