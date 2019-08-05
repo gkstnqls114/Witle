@@ -1153,7 +1153,7 @@ void GameScene::ReleaseUploadBuffers()
 }
 
 void GameScene::UpdateCollision(float fElapsedTime)
-{  
+{
 	// 외곽처리
 	MyBOBox outside_box[4]{
 		{XMFLOAT3(-100, 0, 15000), XMFLOAT3(100, 3000, 20000)},
@@ -1164,7 +1164,7 @@ void GameScene::UpdateCollision(float fElapsedTime)
 
 	// 외곽 4 부분과 충돌처리 확인한다.
 	Collision::ProcessCollideEdge(m_pPlayer, 4, outside_box, fElapsedTime);
-	 
+
 	// 플레이어와 지형지물 충돌을 확인한다. 
 	Collision::ProcessCollideTerrainObject(m_pPlayer, m_pQuadtreeTerrain, fElapsedTime);
 
@@ -1172,7 +1172,11 @@ void GameScene::UpdateCollision(float fElapsedTime)
 
 
 	// 몬스터 충돌체크 ///////////////////////// 
-	 
+	for (int x = 0; x < m_TestMonsterCount; ++x)
+	{
+		Collision::ProcessCollideTerrainObject(m_TestMonster[x], m_pQuadtreeTerrain, fElapsedTime);
+	}
+
 	// 몬스터 충돌체크 ///////////////////////// 
 }
 

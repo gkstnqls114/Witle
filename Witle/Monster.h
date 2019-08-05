@@ -109,9 +109,11 @@ public:
 	float GetSpawnRange() const { return m_SpawnRange; }
 	LoadObject* GetpLoadObject() const { return m_pLoadObject; }
 	bool GetisAttacking() const { return m_isAttacking; }
+	XMFLOAT3 GetVelocity() const;
 	//// Get /////////////////// 
 	
 	//// Set /////////////////// 
+	void SetVelocity(const XMFLOAT3& velocity);
 	void SetAnimationState(int state);
 	void SetisAttacking(bool b) { m_isAttacking = b; }
 	//// Set /////////////////// 
