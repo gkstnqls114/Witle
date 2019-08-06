@@ -1253,16 +1253,16 @@ void CGameFramework::DownScale()
 
 
 	// 다운 스케일 두번째 PASS //////////////////////////////////
-	//m_downScaleSecondPassShader->SetPSO(m_CommandList.Get());
+	m_downScaleSecondPassShader->SetPSO(m_CommandList.Get());
 
-	//// 사용할 리소스 업데이트
-	//m_GBufferHeap->UpdateShaderVariable(m_CommandList.Get());
-	//m_CommandList->SetComputeRootDescriptorTable(ROOTPARAMETER_TEXTURE, m_GBufferHeap->GetGPUDescriptorHandleForHeapStart());
-	//m_CommandList->SetComputeRootUnorderedAccessView(ROOTPARAMETER_MIDDLEAVGLUM, m_RWMiddleAvgLum->GetGPUVirtualAddress());
-	//m_CommandList->SetComputeRootUnorderedAccessView(ROOTPARAMETER_AVGLUM, m_RWAvgLum->GetGPUVirtualAddress());
-	//// 사용할 리소스 업데이트
-	// 
-	//m_CommandList->Dispatch(1, 1, 1);
+	// 사용할 리소스 업데이트
+	m_GBufferHeap->UpdateShaderVariable(m_CommandList.Get());
+	m_CommandList->SetComputeRootDescriptorTable(ROOTPARAMETER_TEXTURE, m_GBufferHeap->GetGPUDescriptorHandleForHeapStart());
+	m_CommandList->SetComputeRootUnorderedAccessView(ROOTPARAMETER_MIDDLEAVGLUM, m_RWMiddleAvgLum->GetGPUVirtualAddress());
+	m_CommandList->SetComputeRootUnorderedAccessView(ROOTPARAMETER_AVGLUM, m_RWAvgLum->GetGPUVirtualAddress());
+	// 사용할 리소스 업데이트
+	 
+	m_CommandList->Dispatch(1, 1, 1);
 	// 다운 스케일 두번째 PASS //////////////////////////////////
 
 
