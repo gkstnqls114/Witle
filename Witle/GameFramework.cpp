@@ -1247,23 +1247,22 @@ void CGameFramework::DownScale()
 	m_CommandList->SetComputeRootUnorderedAccessView(ROOTPARAMETER_AVGLUM, m_RWAvgLum->GetGPUVirtualAddress());
 	// 사용할 리소스 업데이트
 
-	UINT groupX = (UINT)ceilf((float(GameScreen::GetWidth()) / 1024.f));
-	m_CommandList->Dispatch(groupX, GameScreen::GetHeight(), 1);
+	UINT groupX = (UINT)ceil((float)((GameScreen::GetWidth() * GameScreen::GetHeight()) / 16.f) / 1024.f);
+	m_CommandList->Dispatch(groupX, 1, 1);
     // 다운 스케일 첫번째 PASS //////////////////////////////////
 
 
 	// 다운 스케일 두번째 PASS //////////////////////////////////
-	m_downScaleSecondPassShader->SetPSO(m_CommandList.Get());
+	//m_downScaleSecondPassShader->SetPSO(m_CommandList.Get());
 
-	// 사용할 리소스 업데이트
-	m_GBufferHeap->UpdateShaderVariable(m_CommandList.Get());
-	m_CommandList->SetComputeRootDescriptorTable(ROOTPARAMETER_TEXTURE, m_GBufferHeap->GetGPUDescriptorHandleForHeapStart());
-	m_CommandList->SetComputeRootUnorderedAccessView(ROOTPARAMETER_MIDDLEAVGLUM, m_RWMiddleAvgLum->GetGPUVirtualAddress());
-	m_CommandList->SetComputeRootUnorderedAccessView(ROOTPARAMETER_AVGLUM, m_RWAvgLum->GetGPUVirtualAddress());
-	// 사용할 리소스 업데이트
-
-	groupX = (UINT)ceilf(GameScreen::GetHeight() / 64.f);
-	m_CommandList->Dispatch(groupX, GameScreen::GetHeight(), 1);
+	//// 사용할 리소스 업데이트
+	//m_GBufferHeap->UpdateShaderVariable(m_CommandList.Get());
+	//m_CommandList->SetComputeRootDescriptorTable(ROOTPARAMETER_TEXTURE, m_GBufferHeap->GetGPUDescriptorHandleForHeapStart());
+	//m_CommandList->SetComputeRootUnorderedAccessView(ROOTPARAMETER_MIDDLEAVGLUM, m_RWMiddleAvgLum->GetGPUVirtualAddress());
+	//m_CommandList->SetComputeRootUnorderedAccessView(ROOTPARAMETER_AVGLUM, m_RWAvgLum->GetGPUVirtualAddress());
+	//// 사용할 리소스 업데이트
+	// 
+	//m_CommandList->Dispatch(1, 1, 1);
 	// 다운 스케일 두번째 PASS //////////////////////////////////
 
 

@@ -46,20 +46,13 @@ PS_INPUT VSMain(uint nVertexID : SV_VertexID)
 }
 
 
-const float g_fMiddleGreyMax = 6.0;
-const float g_fMiddleGrey = 0.863f;
-const float g_fWhiteMax = 6.0f;
-const float g_fWhite = 1.53f;
-
-const float MiddleGrey = 0.0001f;
-const float LumWhiteSqr = 1.53f;
 
 float3 ToneMapping(float3 HDRColor)
 {
     // 현재 픽셀에 대한 휘도 스케일 계산
     float LScale = dot(HDRColor, LUM_FACTOR);
-    //LScale = LScale * (MiddleGrey / gAverageLum[0]);
-    //LScale = (LScale + LScale * LScale / LumWhiteSqr) / (1.0 + LScale);
+    // LScale = float(MiddleGrey / gAverageLum[0]) * LScale;
+    // LScale = (LScale + (LScale * LScale / LumWhiteSqr)) / (1.0 + LScale);
 
     // 휘도 스케일을 픽셀 색상에 적용
     return HDRColor * LScale;

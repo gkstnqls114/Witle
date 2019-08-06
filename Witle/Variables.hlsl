@@ -105,6 +105,14 @@ static const uint GroupSize = 58982400;
 // 휘도 계산을 위한 상수
 static const float4 LUM_FACTOR = float4(0.299, 0.587, 0.114, 0);
 
+const float g_fMiddleGreyMax = 6.0;
+const float g_fMiddleGrey = 0.863f;
+const float g_fWhiteMax = 6.0f;
+const float g_fWhite = 1.53f;
+
+static const float MiddleGrey = 0.5f;
+static const float LumWhiteSqr = 1.53f;
+
 //인스턴싱 데이터를 위한 구조체
 struct INSTANCING_TRANSFORM
 {
