@@ -162,6 +162,7 @@
     <ClInclude Include="Blessing.h" />
     <ClInclude Include="BloomRevealShader.h" />
     <ClInclude Include="EffectMesh.h" />
+    <ClInclude Include="Mushroom.h" />
     <ClInclude Include="TonemappingShader.h" />
     <ClInclude Include="Healing.h" />
     <ClInclude Include="HealingEffect.h" />
@@ -339,6 +340,7 @@
     <ClCompile Include="Blessing.cpp" />
     <ClCompile Include="BloomRevealShader.cpp" />
     <ClCompile Include="EffectMesh.cpp" />
+    <ClCompile Include="Mushroom.cpp" />
     <ClCompile Include="TonemappingShader.cpp" />
     <ClCompile Include="Healing.cpp" />
     <ClCompile Include="HealingEffect.cpp" />

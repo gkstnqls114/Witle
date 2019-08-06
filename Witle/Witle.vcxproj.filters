@@ -502,6 +502,9 @@
     <Filter Include="05.Shader\01.ComputeShader\BloomRevealShader">
       <UniqueIdentifier>{e99d1fda-e0de-4f94-9850-57e70a3ddea0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.GameObject\02.Monster\Mushroom">
+      <UniqueIdentifier>{8623c3fb-9a4e-4a4e-8798-185c3153fc64}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -1029,6 +1032,9 @@
     <ClInclude Include="BloomRevealShader.h">
       <Filter>05.Shader\01.ComputeShader\BloomRevealShader</Filter>
     </ClInclude>
+    <ClInclude Include="Mushroom.h">
+      <Filter>03.GameObject\02.Monster\Mushroom</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1534,6 +1540,9 @@
     </ClCompile>
     <ClCompile Include="BloomRevealShader.cpp">
       <Filter>05.Shader\01.ComputeShader\BloomRevealShader</Filter>
+    </ClCompile>
+    <ClCompile Include="Mushroom.cpp">
+      <Filter>03.GameObject\02.Monster\Mushroom</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

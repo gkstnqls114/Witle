@@ -36,6 +36,7 @@
 
 //// 몬스터 관련 헤더 //////////////////////////
 #include "SpaceCat.h"
+#include "Mushroom.h"
 #include "Dragon.h"
 #include "CreepyMonster.h"
 #include "MonsterStatus.h"
@@ -396,6 +397,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	int spacecatgreen_count = 0;
 	int spacecatpink_count = 0;
 	int creepymonster_count = 0;
+	int mushroom_count = 0;
 	int boss_count = 0;
 
 	MonsterTransformStorage* instance = MonsterTransformStorage::GetInstance();
@@ -412,6 +414,15 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 				instance->GetPosition(creepymonster_count, CREEPYMONSTER),
 				pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
 			creepymonster_count += 1;
+		}
+		else if (value == ENUM_MONSTER::MONSTER_MUSHROOM)
+		{
+			if (instance->Count(MUSHROOM) <= mushroom_count)continue;
+
+			m_TestMonster[i] = new Mushroom("Mushroom",
+				instance->GetPosition(mushroom_count, MUSHROOM),
+				pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
+			mushroom_count += 1;
 		}
 		else if (value == ENUM_MONSTER::MONSTER_SPACECATBLUE)
 		{
