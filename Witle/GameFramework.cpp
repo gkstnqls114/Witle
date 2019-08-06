@@ -92,6 +92,7 @@ void CGameFramework::Render()
 			// 휘도를 구합니다.
 			DownScale();
 
+			// bloom 을 위한 텍스쳐를 구합니다.
 			Bloom();
 
 			// 톤매핑을 합니다.
@@ -1260,13 +1261,43 @@ void CGameFramework::Blur()
 }
 
 void CGameFramework::Bloom()
-{
+{  
+	d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_RWHDRTex_1_16, D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
+
+	// Bloom 을 위해 휘도값을 MiddleBloom 텍스쳐에 저장하는 PASS //////////////////////////////////
+	m_BloomRevealShader->SetPSO(m_CommandList.Get());
+
+	// 사용할 리소스 업데이트
+	m_GBufferHeap->UpdateShaderVariable(m_CommandList.Get());
+	m_CommandList->SetComputeRootDescriptorTable(ROOTPARAMETER_TEXTURE, m_GBufferHeap->GetGPUSrvDescriptorHandle(m_GBufferForHDR1_16));
+	m_CommandList->SetComputeRootDescriptorTable(ROOTPARAMETER_UAV, m_GBufferHeap->GetGPUUAVDescriptorHandle(2));
+	m_CommandList->SetComputeRootUnorderedAccessView(ROOTPARAMETER_MIDDLEAVGLUM, m_RWMiddleAvgLum->GetGPUVirtualAddress());
+	m_CommandList->SetComputeRootUnorderedAccessView(ROOTPARAMETER_AVGLUM, m_RWAvgLum->GetGPUVirtualAddress());
+	// 사용할 리소스 업데이트
+
+	UINT groupX = (UINT)ceil((float)((GameScreen::GetWidth() * GameScreen::GetHeight()) / 16.f / 16.f) / 1024.f);
+	m_CommandList->Dispatch(groupX, 1, 1);
+	// Bloom 을 위해 휘도값을 MiddleBloom 텍스쳐에 저장하는 PASS //////////////////////////////////
+	
+
+	// MiddleBloom 텍스쳐를 블러링하여 Bloom 텍스쳐로 저장하는 PASS //////////////////////////////////
+	//m_downScaleSecondPassShader->SetPSO(m_CommandList.Get());
+
+	//// 사용할 리소스 업데이트
+	//m_GBufferHeap->UpdateShaderVariable(m_CommandList.Get());
+	//m_CommandList->SetComputeRootDescriptorTable(ROOTPARAMETER_TEXTURE, m_GBufferHeap->GetGPUDescriptorHandleForHeapStart());
+	//m_CommandList->SetComputeRootUnorderedAccessView(ROOTPARAMETER_MIDDLEAVGLUM, m_RWMiddleAvgLum->GetGPUVirtualAddress());
+	//m_CommandList->SetComputeRootUnorderedAccessView(ROOTPARAMETER_AVGLUM, m_RWAvgLum->GetGPUVirtualAddress());
+	//// 사용할 리소스 업데이트
+
+	//m_CommandList->Dispatch(1, 1, 1);
+	// MiddleBloom 텍스쳐를 블러링하여 Bloom 텍스쳐로 저장하는 PASS //////////////////////////////////
+
+	d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_RWHDRTex_1_16, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_COMMON);
 }
 
 void CGameFramework::DownScale()
-{
-	d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_RWBloomTex, D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
-
+{  
 	// 다운 스케일 첫번째 PASS //////////////////////////////////
 	m_downScaleFirstPassShader->SetPSO(m_CommandList.Get());
 
@@ -1307,8 +1338,6 @@ void CGameFramework::DownScale()
 	m_CommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(m_RWAvgLum, D3D12_RESOURCE_STATE_COPY_SOURCE, D3D12_RESOURCE_STATE_UNORDERED_ACCESS));
 	// 리소스 카피  
 
-
-	d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_RWBloomTex, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_COMMON);
 }
  
 void CGameFramework::RenderSwapChain()
