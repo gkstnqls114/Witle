@@ -97,9 +97,11 @@ private:
 
 	UINT m_GBufferHeapCount{ m_GBuffersCount + m_ShadowmapCount + m_PostProcessingCount /*uav*/};
 	UINT m_GBufferForDepthIndex = m_GBufferHeapCount - 6;
+
 	UINT m_GBufferForHDR1_16 = m_GBufferHeapCount - 5;
 	UINT m_GBufferForMiddleBloom = m_GBufferHeapCount - 4;
 	UINT m_GBufferForBloom = m_GBufferHeapCount - 3;
+
 	UINT m_GBufferForShadowIndex = m_GBufferHeapCount - 2;
 	UINT m_GBufferForPlayerShadowIndex = m_GBufferHeapCount - 1;
 	MyDescriptorHeap* m_GBufferHeap{ nullptr }; // GBuffer 뿐만 아니라 Shadow도 담습니다.
