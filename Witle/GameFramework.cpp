@@ -89,6 +89,9 @@ void CGameFramework::Render()
 			// 조명처리된 화면을 GBuffer에 그립니다. 그립니다.
 			RenderOnRTs(&CGameFramework::RenderSwapChain, 1, m_GBuffersForRenderTarget, m_GBufferCPUHandleForRenderTarget, m_GBufferCPUHandleForDepth[0]);
 
+			// gbuffer heap을 설정합니다.
+			m_GBufferHeap->UpdateShaderVariable(m_CommandList.Get());
+
 			// 휘도를 구합니다.
 			DownScale();
 
@@ -1291,7 +1294,6 @@ void CGameFramework::DownScale()
 	m_downScaleFirstPassShader->SetPSO(m_CommandList.Get());
 
 	// 사용할 리소스 업데이트
-	m_GBufferHeap->UpdateShaderVariable(m_CommandList.Get());
 	m_CommandList->SetComputeRootDescriptorTable(ROOTPARAMETER_TEXTURE, m_GBufferHeap->GetGPUDescriptorHandleForHeapStart());
 	m_CommandList->SetComputeRootDescriptorTable(ROOTPARAMETER_UAV, m_GBufferHeap->GetGPUUAVDescriptorHandle(0));
 	m_CommandList->SetComputeRootUnorderedAccessView(ROOTPARAMETER_MIDDLEAVGLUM, m_RWMiddleAvgLum->GetGPUVirtualAddress());
@@ -1306,9 +1308,7 @@ void CGameFramework::DownScale()
 	// 다운 스케일 두번째 PASS //////////////////////////////////
 	m_downScaleSecondPassShader->SetPSO(m_CommandList.Get());
 
-	// 사용할 리소스 업데이트
-	m_GBufferHeap->UpdateShaderVariable(m_CommandList.Get());
-	m_CommandList->SetComputeRootDescriptorTable(ROOTPARAMETER_TEXTURE, m_GBufferHeap->GetGPUDescriptorHandleForHeapStart());
+	// 사용할 리소스 업데이트 
 	m_CommandList->SetComputeRootUnorderedAccessView(ROOTPARAMETER_MIDDLEAVGLUM, m_RWMiddleAvgLum->GetGPUVirtualAddress());
 	m_CommandList->SetComputeRootUnorderedAccessView(ROOTPARAMETER_AVGLUM, m_RWAvgLum->GetGPUVirtualAddress());
 	// 사용할 리소스 업데이트
@@ -1429,16 +1429,15 @@ void CGameFramework::ToneMapping()
 	m_CommandList->SetGraphicsRootUnorderedAccessView(ROOTPARAMETER_AVGLUM, m_RWAvgLum->GetGPUVirtualAddress());
 
 	//// 리소스만 바꾼다.. 
-	// D3D12_GPU_DESCRIPTOR_HANDLE handle = m_GBufferHeap->GetGPUSrvDescriptorHandle(0); // 0번째 리소스 
-	D3D12_GPU_DESCRIPTOR_HANDLE handle = m_GBufferHeap->GetGPUUAVDescriptorHandle(0); // 0번째 리소스 
-
+	
 	D3D12_VIEWPORT	Viewport{ 0.f, 0.f, GameScreen::GetWidth() , GameScreen::GetHeight(), 1.0f, 0.0f };
 	D3D12_RECT		ScissorRect{ 0, 0, GameScreen::GetWidth() , GameScreen::GetHeight() };
 
 	m_CommandList->RSSetViewports(1, &Viewport);
 	m_CommandList->RSSetScissorRects(1, &ScissorRect);
 
-	m_CommandList->SetGraphicsRootDescriptorTable(ROOTPARAMETER_TEXTURE, handle);
+	m_CommandList->SetGraphicsRootDescriptorTable(ROOTPARAMETER_TEXTURE, m_GBufferHeap->GetGPUSrvDescriptorHandle(0));
+	m_CommandList->SetGraphicsRootDescriptorTable(ROOTPARAMETER_TEXTUREBASE, m_GBufferHeap->GetGPUSrvDescriptorHandle(m_GBufferForBloom));
 
 	m_CommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	m_CommandList->DrawInstanced(6, 1, 0, 0);

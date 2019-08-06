@@ -32,7 +32,8 @@ float DownScale4x4(uint2 CurPixel, uint groupThreadId)
         }
         downScaled /= 16.0;
         gtxtRWOutput[CurPixel.xy] = downScaled; // 1/4 이미지 해상도 저장
-		// Calculate the lumenace value for this pixel
+		
+        // Calculate the lumenace value for this pixel
         avgLum = dot(downScaled, LUM_FACTOR);
 
 		// Write the result to the shared memory

@@ -105,6 +105,9 @@ static const uint GroupSize = 58982400;
 // 블룸 임계값 비율
 static const float fBloomThreshold = 1.03f;
 
+// 블룸 임계값 비율
+static const float fBloomScale = 0.73f;
+
 // 휘도 계산을 위한 상수
 static const float4 LUM_FACTOR = float4(0.299, 0.587, 0.114, 0);
 
