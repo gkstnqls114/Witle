@@ -78,9 +78,7 @@ void TextureStorage::CreateTextures(ID3D12Device * pd3dDevice, ID3D12GraphicsCom
 	CreateTexture(SPACECAT_BLUE, pd3dDevice, pd3dCommandList);
 	CreateTexture(SPACECAT_PINK, pd3dDevice, pd3dCommandList);
 
-
-	// ±×¿Ü
-	CreateTexture("Red", pd3dDevice, pd3dCommandList);
+	 
 
 }
  
