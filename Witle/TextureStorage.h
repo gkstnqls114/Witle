@@ -17,7 +17,7 @@ private:
 	TextureStorage();
 	~TextureStorage();
 
-	void CreateTexture(const std::string& name, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, int heapindex);
+	void CreateTexture(const std::string& name, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList);
 public:
 	static TextureStorage* GetInstance()
 	{

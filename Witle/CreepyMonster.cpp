@@ -8,6 +8,7 @@
 #include "GeneralMonsterActionMgr.h"
 // For Monster ///////////////
 
+#include "TextureStorage.h"
 #include "ModelStorage.h"
 #include "MyDescriptorHeap.h"
 #include "Object.h"
@@ -45,9 +46,8 @@ CreepyMonster::CreepyMonster(const std::string & entityID, const XMFLOAT3& Spawn
 	m_MonsterMovement = new MonsterMovement(this, 1, 1);
 	m_MonsterMovement->m_fDistance = 100;
 	 
-	m_pTexture = new Texture(ENUM_SCENE::SCENE_GAME, ROOTPARAMETER_INDEX(ROOTPARAMETER_TEXTURE), false, 1, RESOURCE_TEXTURE2D);
-	m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/CreepyMonster.dds", 0);
-	  
+	m_pTexture = TextureStorage::GetInstance()->GetTexture(CREEPYMONSTER);
+
 	ANIMATION_INFO infos[CREEPYMONSTER_ANIMATIONE];
 	infos[0] = CREEPYMONSTER_IDLE;
 	infos[1] = CREEPYMONSTER_MOVE;

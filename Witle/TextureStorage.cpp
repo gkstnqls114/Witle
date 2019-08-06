@@ -15,9 +15,9 @@ TextureStorage::~TextureStorage()
 
 }
 
-void TextureStorage::CreateTexture(const std::string & name, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, int heapindex)
+void TextureStorage::CreateTexture(const std::string & name, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList)
 {
-	m_TextureStorage[name] = new Texture(ENUM_SCENE::SCENE_GAME, ROOTPARAMETER_INDEX(ROOTPARAMETER_TEXTURE), false, 1);
+	m_TextureStorage[name] = new Texture(ENUM_SCENE::SCENE_GAME, ROOTPARAMETER_INDEX(ROOTPARAMETER_TEXTURE), false, 1, RESOURCE_TEXTURE2D);
 	std::wstring path = { L"Model/Textures/" };
 	std::wstring wname;
 	wname.assign(name.begin(), name.end()); 
@@ -49,35 +49,39 @@ void TextureStorage::ReleaseObjects()
 }
 
 void TextureStorage::CreateTextures(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList)
-{  
-	int heapIndex = 0;
-	CreateTexture(ALTAR_IN, pd3dDevice, pd3dCommandList, heapIndex++);
-	CreateTexture(ALTAR_OUT, pd3dDevice, pd3dCommandList, heapIndex++);
-
-	CreateTexture(BUSH, pd3dDevice, pd3dCommandList, heapIndex++);
-	m_TextureStorage[BUSHSQUARE] = m_TextureStorage[BUSH];
-	// CreateTexture(BUSHSQUARE, pd3dDevice, pd3dCommandList, heapIndex++);
-	CreateTexture(Cliff, pd3dDevice, pd3dCommandList, heapIndex++);
-	CreateTexture(Flower, pd3dDevice, pd3dCommandList, heapIndex++);
-	CreateTexture(REED, pd3dDevice, pd3dCommandList, heapIndex++);
-
-	CreateTexture(RUIN_ARCH, pd3dDevice, pd3dCommandList, heapIndex++);
-	CreateTexture(RUIN_BROKENPILLA, pd3dDevice, pd3dCommandList, heapIndex++);
-	CreateTexture(RUIN_PILLAR, pd3dDevice, pd3dCommandList, heapIndex++);
-	CreateTexture(RUIN_SQUARE, pd3dDevice, pd3dCommandList, heapIndex++);
-
-	CreateTexture(SUNFLOWER, pd3dDevice, pd3dCommandList, heapIndex++);
-
-	CreateTexture(TREE_1, pd3dDevice, pd3dCommandList, heapIndex++);
-	m_TextureStorage[TREE_BG_1] = m_TextureStorage[TREE_1];
-	//CreateTexture(TREE_BG_1, pd3dDevice, pd3dCommandList, heapIndex++);
-	CreateTexture(TREE_3, pd3dDevice, pd3dCommandList, heapIndex++);
-	m_TextureStorage[TREE_BG_3] = m_TextureStorage[TREE_3];
-	// CreateTexture(TREE_BG_3, pd3dDevice, pd3dCommandList, heapIndex++);
-	CreateTexture(TREE_2, pd3dDevice, pd3dCommandList, heapIndex++);
+{   
+	// 터레인 오브젝트 들의 텍스쳐 미리 로드
+	CreateTexture(ALTAR_IN, pd3dDevice, pd3dCommandList);
+	CreateTexture(ALTAR_OUT, pd3dDevice, pd3dCommandList); 
+	CreateTexture(BUSH, pd3dDevice, pd3dCommandList);
+	m_TextureStorage[BUSHSQUARE] = m_TextureStorage[BUSH]; 
+	CreateTexture(Cliff, pd3dDevice, pd3dCommandList);
+	CreateTexture(Flower, pd3dDevice, pd3dCommandList);
+	CreateTexture(REED, pd3dDevice, pd3dCommandList); 
+	CreateTexture(RUIN_ARCH, pd3dDevice, pd3dCommandList);
+	CreateTexture(RUIN_BROKENPILLA, pd3dDevice, pd3dCommandList);
+	CreateTexture(RUIN_PILLAR, pd3dDevice, pd3dCommandList);
+	CreateTexture(RUIN_SQUARE, pd3dDevice, pd3dCommandList); 
+	CreateTexture(SUNFLOWER, pd3dDevice, pd3dCommandList); 
+	CreateTexture(TREE_1, pd3dDevice, pd3dCommandList);
+	m_TextureStorage[TREE_BG_1] = m_TextureStorage[TREE_1]; 
+	CreateTexture(TREE_3, pd3dDevice, pd3dCommandList);
+	m_TextureStorage[TREE_BG_3] = m_TextureStorage[TREE_3]; 
+	CreateTexture(TREE_2, pd3dDevice, pd3dCommandList);
 	m_TextureStorage[TREE_BG_2] = m_TextureStorage[TREE_2];
-	// CreateTexture(TREE_BG_2, pd3dDevice, pd3dCommandList, heapIndex++);
-	 
+
+
+	// 몬스터 들의 텍스쳐 미리 로드
+	CreateTexture(CREEPYMONSTER, pd3dDevice, pd3dCommandList);
+	CreateTexture(MUSHROOM, pd3dDevice, pd3dCommandList);
+	CreateTexture(SPACECAT_GREEN, pd3dDevice, pd3dCommandList);
+	CreateTexture(SPACECAT_BLUE, pd3dDevice, pd3dCommandList);
+	CreateTexture(SPACECAT_PINK, pd3dDevice, pd3dCommandList);
+
+
+	// 그외
+	CreateTexture("Red", pd3dDevice, pd3dCommandList);
+
 }
  
 Texture * const TextureStorage::GetTexture(const std::string & name)

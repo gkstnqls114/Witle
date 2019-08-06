@@ -8,6 +8,7 @@
 #include "GeneralMonsterActionMgr.h"
 // For Monster ///////////////
 
+#include "TextureStorage.h"
 #include "ModelStorage.h"
 #include "MyDescriptorHeap.h"
 #include "Object.h"
@@ -43,9 +44,7 @@ Mushroom::Mushroom(const std::string & entityID, const XMFLOAT3& SpawnPoint,
 	m_MonsterMovement = new MonsterMovement(this, 1, 1);
 	m_MonsterMovement->m_fDistance = 100;
 
-	m_pTexture = new Texture(ENUM_SCENE::SCENE_GAME, ROOTPARAMETER_INDEX(ROOTPARAMETER_TEXTURE), false, 1, RESOURCE_TEXTURE2D);
-	m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/Mashroom.dds", 0);
-	
+	m_pTexture = TextureStorage::GetInstance()->GetTexture(MUSHROOM);
 
 	ANIMATION_INFO infos[MUSHROOM_ANIMATIONE];
 	infos[0] = ANI_MUSHROOM_IDLE;
