@@ -103,9 +103,9 @@ void CGameFramework::Render()
 			//Blur();
 			//
 			// RenderOnRTs(&CGameFramework::RenderSwapChain, 1, &m_GBuffersForRenderTarget[0], &m_GBufferCPUHandleForRenderTarget[0], m_GBufferCPUHandleForDepth[0]);
-			//d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_ComputeRWResource, D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_GENERIC_READ);
+			//d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_RWBloomTex, D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_GENERIC_READ);
 			//RenderOnRT(&CGameFramework::RenderToTexture, m_RenderTargetBuffers[m_SwapChainBufferIndex], m_SwapChainCPUHandle[m_SwapChainBufferIndex], m_DepthStencilCPUHandle);
-			//d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_ComputeRWResource, D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_COMMON);
+			//d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_RWBloomTex, D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_COMMON);
 		}
 		else
 		{
@@ -278,13 +278,21 @@ void CGameFramework::CreateRWResourceViews()
 { 
 	// 리소스 생성
 	// 버퍼도 아니고, 리소스 상태가 깊이 스텐실도 렌더 타겟도 아니라면 클리어밸류는 NULL
-	m_ComputeRWResource = d3dUtil::CreateTexture2DResource
+	m_RWBloomTex = d3dUtil::CreateTexture2DResource
 		(m_d3dDevice.Get(), m_CommandList.Get(), 
-			GameScreen::GetWidth(), GameScreen::GetHeight(),
+			GameScreen::GetWidth() / 4, GameScreen::GetHeight() / 4,
 			DXGI_FORMAT_R8G8B8A8_UNORM,
 			D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS/*다름*/,
 			D3D12_RESOURCE_STATE_COMMON/*다름*/,
 			NULL/*, 0*/ /*인덱스*/);  
+
+	m_RWHDRTex_1_16 = d3dUtil::CreateTexture2DResource
+	(m_d3dDevice.Get(), m_CommandList.Get(),
+		GameScreen::GetWidth() / 4, GameScreen::GetHeight() / 4,
+		DXGI_FORMAT_R8G8B8A8_UNORM,
+		D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS/*다름*/,
+		D3D12_RESOURCE_STATE_COMMON/*다름*/,
+		NULL/*, 0*/ /*인덱스*/);
 }
 
 void CGameFramework::CreateRWBuffer()
@@ -781,7 +789,7 @@ void CGameFramework::CreateGBufferView()
 	if (!m_GBufferHeap)
 	{
 		m_GBufferHeap = new MyDescriptorHeap();
-		m_GBufferHeap->CreateCbvSrvUavDescriptorHeaps(m_d3dDevice.Get(), m_CommandList.Get(), 0, m_GBufferHeapCount, 1 /*blur 위해...*/, ENUM_SCENE::SCENE_NONE);
+		m_GBufferHeap->CreateCbvSrvUavDescriptorHeaps(m_d3dDevice.Get(), m_CommandList.Get(), 0, m_GBufferHeapCount, m_PostProcessingCount, ENUM_SCENE::SCENE_NONE);
 		for (int i = 0; i < m_GBuffersCountForRenderTarget; ++i)
 		{
 			m_GBufferHeap->CreateShaderResourceViews(m_d3dDevice.Get(), m_GBuffersCountForRenderTarget, m_GBuffersForRenderTarget[i], RESOURCE_TEXTURE2D, i);
@@ -793,13 +801,16 @@ void CGameFramework::CreateGBufferView()
 		// 쉐도우 맵도 힙에 추가한다...!!!
 		m_GBufferHeap->CreateShaderResourceViews(m_d3dDevice.Get(), m_PlayerShadowmap, RESOURCE_TEXTURE2D, m_GBufferForPlayerShadowIndex, DXGI_FORMAT_R24_UNORM_X8_TYPELESS);
 
-		auto resourceDesc = m_ComputeRWResource->GetDesc();
+		auto resourceDesc = m_RWBloomTex->GetDesc();
 
 		// 블러할 uav 를 srv로 힙에 추가
-		m_GBufferHeap->CreateShaderResourceViews(m_d3dDevice.Get(), m_ComputeRWResource, RESOURCE_TEXTURE2D, m_GBufferForUAV, resourceDesc.Format);
-
+		m_GBufferHeap->CreateShaderResourceViews(m_d3dDevice.Get(), m_RWHDRTex_1_16, RESOURCE_TEXTURE2D, m_GBufferForHDR1_16, resourceDesc.Format);
+		
+		m_GBufferHeap->CreateShaderResourceViews(m_d3dDevice.Get(), m_RWBloomTex, RESOURCE_TEXTURE2D, m_GBufferForBloom, resourceDesc.Format);
+		 
 		// 블러를 할 uav도 힙에 추가한다...
-		m_GBufferHeap->CreateUnorderedAccessViews(m_d3dDevice.Get(), m_CommandList.Get(), m_ComputeRWResource, RESOURCE_TEXTURE2D, 1, resourceDesc.Format);
+		m_GBufferHeap->CreateUnorderedAccessViews(m_d3dDevice.Get(), m_CommandList.Get(), m_RWHDRTex_1_16, RESOURCE_TEXTURE2D, 0, resourceDesc.Format);
+		m_GBufferHeap->CreateUnorderedAccessViews(m_d3dDevice.Get(), m_CommandList.Get(), m_RWBloomTex, RESOURCE_TEXTURE2D, 1, resourceDesc.Format);
 	} 
 }
 
@@ -1201,7 +1212,7 @@ void CGameFramework::OnResizeBackBuffers()
 
 void CGameFramework::Blur()
 {
-	d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_ComputeRWResource, D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
+	d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_RWBloomTex, D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
 
 	// 수평 블러 //////////////////////////////////
 	m_horizenShader->SetPSO(m_CommandList.Get()); 
@@ -1230,12 +1241,12 @@ void CGameFramework::Blur()
 	m_CommandList->Dispatch(GameScreen::GetWidth(), groupY, 1);
 	// 수직 블러 //////////////////////////////////
 
-	d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_ComputeRWResource, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_COMMON);
+	d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_RWBloomTex, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_COMMON);
 }
 
 void CGameFramework::DownScale()
 {
-	d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_ComputeRWResource, D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
+	d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_RWBloomTex, D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
 
 	// 다운 스케일 첫번째 PASS //////////////////////////////////
 	m_downScaleFirstPassShader->SetPSO(m_CommandList.Get());
@@ -1277,7 +1288,7 @@ void CGameFramework::DownScale()
 	// 리소스 카피  
 
 
-	d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_ComputeRWResource, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_COMMON);
+	d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_RWBloomTex, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_COMMON);
 }
  
 void CGameFramework::RenderSwapChain()
@@ -1335,7 +1346,7 @@ void CGameFramework::RenderToTexture()
 
 	//// 리소스만 바꾼다.. 
 	D3D12_GPU_DESCRIPTOR_HANDLE handle = m_GBufferHeap->GetGPUDescriptorHandleForHeapStart(); // 0번째 리소스
-	handle.ptr = handle.ptr + d3dUtil::gnCbvSrvDescriptorIncrementSize * (m_GBufferForUAV);
+	handle.ptr = handle.ptr + d3dUtil::gnCbvSrvDescriptorIncrementSize * (m_GBufferForBloom);
 
 	D3D12_VIEWPORT	Viewport{ 0.f, 0.f, GameScreen::GetWidth() , GameScreen::GetHeight(), 1.0f, 0.0f };
 	D3D12_RECT		ScissorRect{ 0, 0, GameScreen::GetWidth() , GameScreen::GetHeight() };
@@ -1381,7 +1392,7 @@ void CGameFramework::ToneMapping()
 
 	//// 리소스만 바꾼다.. 
 	D3D12_GPU_DESCRIPTOR_HANDLE handle = m_GBufferHeap->GetGPUDescriptorHandleForHeapStart(); // 0번째 리소스
-	// handle.ptr = handle.ptr + d3dUtil::gnCbvSrvDescriptorIncrementSize * (m_GBufferForUAV);
+	// handle.ptr = handle.ptr + d3dUtil::gnCbvSrvDescriptorIncrementSize * (m_GBufferForBloom);
 
 	D3D12_VIEWPORT	Viewport{ 0.f, 0.f, GameScreen::GetWidth() , GameScreen::GetHeight(), 1.0f, 0.0f };
 	D3D12_RECT		ScissorRect{ 0, 0, GameScreen::GetWidth() , GameScreen::GetHeight() };

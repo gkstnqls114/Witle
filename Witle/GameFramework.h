@@ -69,6 +69,7 @@ private:
 	static const UINT m_GBuffersCountForDepth{ 1 };
 	static const UINT m_ShadowmapCount{ 2 };
 	static const UINT m_GBuffersCountForRenderTarget{ 3 };
+	static const UINT m_PostProcessingCount{ 2 };
 	const UINT m_DsvDescriptorsCount{ 1 + m_GBuffersCountForDepth + m_ShadowmapCount };
 	static const UINT m_GBuffersCount{ m_GBuffersCountForDepth + m_GBuffersCountForRenderTarget };
 
@@ -84,9 +85,13 @@ private:
 	D3D12_CPU_DESCRIPTOR_HANDLE m_ShadowmapCPUHandle;
 	D3D12_CPU_DESCRIPTOR_HANDLE m_PlayerShadowmapCPUHandle;
 
-	UINT m_GBufferHeapCount{ m_GBuffersCount + m_ShadowmapCount + 1 /*uav*/};
-	UINT m_GBufferForDepthIndex = m_GBufferHeapCount - 4;
-	UINT m_GBufferForUAV = m_GBufferHeapCount - 3;
+	ID3D12Resource*				m_RWHDRTex_1_16; // HDR 텍스쳐(gbuffer 0번째)를 16분의 1로 줄인(x /= 4, y /= 4) 텍스쳐
+	D3D12_CPU_DESCRIPTOR_HANDLE m_hCPUHDRTex_1_16;
+	 
+	UINT m_GBufferHeapCount{ m_GBuffersCount + m_ShadowmapCount + m_PostProcessingCount /*uav*/};
+	UINT m_GBufferForDepthIndex = m_GBufferHeapCount - 5;
+	UINT m_GBufferForHDR1_16 = m_GBufferHeapCount - 4;
+	UINT m_GBufferForBloom = m_GBufferHeapCount - 3;
 	UINT m_GBufferForShadowIndex = m_GBufferHeapCount - 2;
 	UINT m_GBufferForPlayerShadowIndex = m_GBufferHeapCount - 1;
 	MyDescriptorHeap* m_GBufferHeap{ nullptr }; // GBuffer 뿐만 아니라 Shadow도 담습니다.
@@ -99,7 +104,7 @@ private:
 
 	
 	// 블러를 위한 텍스쳐
-	ID3D12Resource* m_ComputeRWResource; 
+	ID3D12Resource* m_RWBloomTex; 
 
 	// 톤매핑을 위한 변수 
 	const int NumMiddleAvgLum = (1280 * 720) / (16 * 1024);
