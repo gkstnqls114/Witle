@@ -148,13 +148,7 @@ void Monster::ReleaseMembers()
 		delete m_pDebugSpawnMesh;
 		m_pDebugSpawnMesh = nullptr;
 	}
-#endif // _DEBUG
-	if (m_pTexture)
-	{
-		m_pTexture->ReleaseObjects();
-		delete m_pTexture;
-		m_pTexture = nullptr;
-	}
+#endif // _DEBUG 
 	if (m_pLoadObject)
 	{
 		m_pLoadObject->ReleaseObjects();
@@ -195,7 +189,6 @@ void Monster::ReleaseMemberUploadBuffers()
 	if (m_pDebugSpawnMesh) m_pDebugSpawnMesh->ReleaseUploadBuffers();
 #endif // _DEBUG
 
-	if (m_pTexture) m_pTexture->ReleaseUploadBuffers();
 	if (m_pLoadObject) m_pLoadObject->ReleaseUploadBuffers();
 	if (m_MonsterModel)m_MonsterModel->ReleaseUploadBuffers();
 	if (m_pMyBOBox)m_pMyBOBox->ReleaseUploadBuffers();
