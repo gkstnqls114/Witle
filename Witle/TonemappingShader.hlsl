@@ -66,13 +66,14 @@ float3 ToneMappingAndBloom(PS_INPUT input)
     // Bloom 분포 추가
     Color += fBloomScale * gtxtTerrainBaseTexture.Sample(gssClamp, input.uv).xyz;
 
-    // 현재 픽셀에 대한 휘도 스케일 계산
-    float LScale = dot(Color, LUM_FACTOR);
-    LScale = float(MiddleGrey / gAverageLum[0]) * LScale;
-    LScale = (LScale + (LScale * LScale / LumWhiteSqr)) / (1.0 + LScale);
+    return Color;
+    //// 현재 픽셀에 대한 휘도 스케일 계산
+    //float LScale = dot(Color, LUM_FACTOR);
+    //LScale = float(MiddleGrey / gAverageLum[0]) * LScale;
+    //LScale = (LScale + (LScale * LScale / LumWhiteSqr)) / (1.0 + LScale);
 
-    // 휘도 스케일을 픽셀 색상에 적용
-    return Color * LScale;
+    //// 휘도 스케일을 픽셀 색상에 적용
+    //return Color * LScale;
 }
 
 //픽셀 셰이더를 정의한다.
