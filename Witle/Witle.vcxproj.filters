@@ -499,6 +499,9 @@
     <Filter Include="04.Scene\MainScene\LobbyScene">
       <UniqueIdentifier>{033ba113-a22a-419b-8d84-91a47f23756e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="05.Shader\01.ComputeShader\BloomRevealShader">
+      <UniqueIdentifier>{e99d1fda-e0de-4f94-9850-57e70a3ddea0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -1023,6 +1026,9 @@
     <ClInclude Include="BossSkillAction4.h">
       <Filter>02.Component\ForMonster\BossMonsterAction\BossSkillAction4</Filter>
     </ClInclude>
+    <ClInclude Include="BloomRevealShader.h">
+      <Filter>05.Shader\01.ComputeShader\BloomRevealShader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1526,6 +1532,9 @@
     <ClCompile Include="BossSkillAction4.cpp">
       <Filter>02.Component\ForMonster\BossMonsterAction\BossSkillAction4</Filter>
     </ClCompile>
+    <ClCompile Include="BloomRevealShader.cpp">
+      <Filter>05.Shader\01.ComputeShader\BloomRevealShader</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Witle.rc">
@@ -1602,6 +1611,9 @@
       <Filter>HLSL</Filter>
     </FxCompile>
     <FxCompile Include="TonemappingShader.hlsl">
+      <Filter>HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="BloomRevealShader.hlsl">
       <Filter>HLSL</Filter>
     </FxCompile>
   </ItemGroup>

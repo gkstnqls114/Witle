@@ -6,7 +6,7 @@
 // gtxtMetallicTexture :  gbuffer 4 (깊이);
 
 // 현재 gbuffer 4개 전부 안쓰지만 일단 그 대용으로 ㅠㅠ..
-// 여기서 gbuffer0이 HDRTex
+// 여기서 gbuffer0이 HDRTex 인데 paramter_texture로 texture 인자 통해 갖고옴
 
 // Group shared memory to store the intermidiate results
 groupshared float SharedPositions[1024];
@@ -31,7 +31,7 @@ float DownScale4x4(uint2 CurPixel, uint groupThreadId)
             }
         }
         downScaled /= 16.0;
-
+        gtxtRWOutput[CurPixel.xy] = downScaled; // 1/4 이미지 해상도 저장
 		// Calculate the lumenace value for this pixel
         avgLum = dot(downScaled, LUM_FACTOR);
 

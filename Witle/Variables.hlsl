@@ -102,9 +102,13 @@ static const uint Domain = 57600;
 // 백 버퍼의 높이와 너비를 곱한 후 16으로 나눈 후 1024를 곱한 값
 static const uint GroupSize = 58982400;
 
+// 블룸 임계값 비율
+static const float fBloomThreshold = 1.03f;
+
 // 휘도 계산을 위한 상수
 static const float4 LUM_FACTOR = float4(0.299, 0.587, 0.114, 0);
 
+// 예제 코드에 나와있던 최대값들
 const float g_fMiddleGreyMax = 6.0;
 const float g_fMiddleGrey = 0.863f;
 const float g_fWhiteMax = 6.0f;

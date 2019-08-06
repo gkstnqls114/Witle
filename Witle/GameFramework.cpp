@@ -30,6 +30,7 @@
 #include "VerticalBlurShader.h"
 #include "DownScaleFirstPassShader.h"
 #include "DownScaleSecondPassShader.h"
+#include "BloomRevealShader.h"
 #include "QuadtreeTerrain.h"
 #include "ComputeShader.h"
 #include "CameraObject.h"
@@ -91,6 +92,8 @@ void CGameFramework::Render()
 			// 휘도를 구합니다.
 			DownScale();
 
+			Bloom();
+
 			// 톤매핑을 합니다.
 			RenderOnRT(&CGameFramework::ToneMapping, m_RenderTargetBuffers[m_SwapChainBufferIndex], m_SwapChainCPUHandle[m_SwapChainBufferIndex], m_DepthStencilCPUHandle);
 
@@ -98,14 +101,6 @@ void CGameFramework::Render()
 			// 그냥 그립니다.. 지금 톤매핑 휘도 이상한거 같아서 테스트해봐야함..
 			// RenderOnRT(&CGameFramework::RenderSwapChain, m_RenderTargetBuffers[m_SwapChainBufferIndex], m_SwapChainCPUHandle[m_SwapChainBufferIndex], m_DepthStencilCPUHandle);
 
-
-			// 블러링용
-			//Blur();
-			//
-			// RenderOnRTs(&CGameFramework::RenderSwapChain, 1, &m_GBuffersForRenderTarget[0], &m_GBufferCPUHandleForRenderTarget[0], m_GBufferCPUHandleForDepth[0]);
-			//d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_RWBloomTex, D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_GENERIC_READ);
-			//RenderOnRT(&CGameFramework::RenderToTexture, m_RenderTargetBuffers[m_SwapChainBufferIndex], m_SwapChainCPUHandle[m_SwapChainBufferIndex], m_DepthStencilCPUHandle);
-			//d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_RWBloomTex, D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_COMMON);
 		}
 		else
 		{
@@ -278,13 +273,6 @@ void CGameFramework::CreateRWResourceViews()
 { 
 	// 리소스 생성
 	// 버퍼도 아니고, 리소스 상태가 깊이 스텐실도 렌더 타겟도 아니라면 클리어밸류는 NULL
-	m_RWBloomTex = d3dUtil::CreateTexture2DResource
-		(m_d3dDevice.Get(), m_CommandList.Get(), 
-			GameScreen::GetWidth() / 4, GameScreen::GetHeight() / 4,
-			DXGI_FORMAT_R8G8B8A8_UNORM,
-			D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS/*다름*/,
-			D3D12_RESOURCE_STATE_COMMON/*다름*/,
-			NULL/*, 0*/ /*인덱스*/);  
 
 	m_RWHDRTex_1_16 = d3dUtil::CreateTexture2DResource
 	(m_d3dDevice.Get(), m_CommandList.Get(),
@@ -293,6 +281,25 @@ void CGameFramework::CreateRWResourceViews()
 		D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS/*다름*/,
 		D3D12_RESOURCE_STATE_COMMON/*다름*/,
 		NULL/*, 0*/ /*인덱스*/);
+
+	m_RWMiddleBloomTex = d3dUtil::CreateTexture2DResource
+	(m_d3dDevice.Get(), m_CommandList.Get(),
+		GameScreen::GetWidth() / 4, GameScreen::GetHeight() / 4,
+		DXGI_FORMAT_R8G8B8A8_UNORM,
+		D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS/*다름*/,
+		D3D12_RESOURCE_STATE_COMMON/*다름*/,
+		NULL/*, 0*/ /*인덱스*/);
+
+	
+
+	m_RWBloomTex = d3dUtil::CreateTexture2DResource
+		(m_d3dDevice.Get(), m_CommandList.Get(), 
+			GameScreen::GetWidth() / 4, GameScreen::GetHeight() / 4,
+			DXGI_FORMAT_R8G8B8A8_UNORM,
+			D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS/*다름*/,
+			D3D12_RESOURCE_STATE_COMMON/*다름*/,
+			NULL/*, 0*/ /*인덱스*/);  
+
 }
 
 void CGameFramework::CreateRWBuffer()
@@ -805,12 +812,13 @@ void CGameFramework::CreateGBufferView()
 
 		// 블러할 uav 를 srv로 힙에 추가
 		m_GBufferHeap->CreateShaderResourceViews(m_d3dDevice.Get(), m_RWHDRTex_1_16, RESOURCE_TEXTURE2D, m_GBufferForHDR1_16, resourceDesc.Format);
-		
+		m_GBufferHeap->CreateShaderResourceViews(m_d3dDevice.Get(), m_RWMiddleBloomTex, RESOURCE_TEXTURE2D, m_GBufferForMiddleBloom, resourceDesc.Format);
 		m_GBufferHeap->CreateShaderResourceViews(m_d3dDevice.Get(), m_RWBloomTex, RESOURCE_TEXTURE2D, m_GBufferForBloom, resourceDesc.Format);
 		 
 		// 블러를 할 uav도 힙에 추가한다...
 		m_GBufferHeap->CreateUnorderedAccessViews(m_d3dDevice.Get(), m_CommandList.Get(), m_RWHDRTex_1_16, RESOURCE_TEXTURE2D, 0, resourceDesc.Format);
-		m_GBufferHeap->CreateUnorderedAccessViews(m_d3dDevice.Get(), m_CommandList.Get(), m_RWBloomTex, RESOURCE_TEXTURE2D, 1, resourceDesc.Format);
+		m_GBufferHeap->CreateUnorderedAccessViews(m_d3dDevice.Get(), m_CommandList.Get(), m_RWMiddleBloomTex, RESOURCE_TEXTURE2D, 1, resourceDesc.Format);
+		m_GBufferHeap->CreateUnorderedAccessViews(m_d3dDevice.Get(), m_CommandList.Get(), m_RWBloomTex, RESOURCE_TEXTURE2D, 2, resourceDesc.Format);
 	} 
 }
 
@@ -1071,12 +1079,19 @@ void CGameFramework::BuildShaders()
 	// compute shader ////////////////
 	m_verticalShader = new VerticalBlurShader();
 	m_verticalShader->CreateShader(m_d3dDevice.Get(), GraphicsRootSignatureMgr::GetGraphicsRootSignature());
+	
 	m_horizenShader = new HorizonBlurShader();
 	m_horizenShader->CreateShader(m_d3dDevice.Get(), GraphicsRootSignatureMgr::GetGraphicsRootSignature()); 
+	
 	m_downScaleFirstPassShader = new DownScaleFirstPassShader();
 	m_downScaleFirstPassShader->CreateShader(m_d3dDevice.Get(), GraphicsRootSignatureMgr::GetGraphicsRootSignature());
+	
 	m_downScaleSecondPassShader = new DownScaleSecondPassShader();
 	m_downScaleSecondPassShader->CreateShader(m_d3dDevice.Get(), GraphicsRootSignatureMgr::GetGraphicsRootSignature());
+	
+	m_BloomRevealShader = new BloomRevealShader();
+	m_BloomRevealShader->CreateShader(m_d3dDevice.Get(), GraphicsRootSignatureMgr::GetGraphicsRootSignature());
+
 	// compute shader ///////////////
 
 	CMaterial::PrepareShaders(m_d3dDevice.Get(), m_CommandList.Get(), GraphicsRootSignatureMgr::GetGraphicsRootSignature());
@@ -1220,7 +1235,7 @@ void CGameFramework::Blur()
 	// 사용할 리소스 업데이트
 	m_GBufferHeap->UpdateShaderVariable(m_CommandList.Get());
 	m_CommandList->SetComputeRootDescriptorTable(ROOTPARAMETER_TEXTURE, m_GBufferHeap->GetGPUDescriptorHandleForHeapStart());
-	m_CommandList->SetComputeRootDescriptorTable(ROOTPARAMETER_BLURTEST, m_GBufferHeap->GetGPUUAVDescriptorStartHandle());
+	m_CommandList->SetComputeRootDescriptorTable(ROOTPARAMETER_UAV, m_GBufferHeap->GetGPUUAVDescriptorStartHandle());
 	// 사용할 리소스 업데이트
 
 	UINT groupX = (UINT)ceilf(float(GameScreen::GetWidth()) / 256.F);
@@ -1234,7 +1249,7 @@ void CGameFramework::Blur()
 	// 사용할 리소스 업데이트
 	m_GBufferHeap->UpdateShaderVariable(m_CommandList.Get());
 	m_CommandList->SetComputeRootDescriptorTable(ROOTPARAMETER_TEXTURE, m_GBufferHeap->GetGPUDescriptorHandleForHeapStart());
-	m_CommandList->SetComputeRootDescriptorTable(ROOTPARAMETER_BLURTEST, m_GBufferHeap->GetGPUUAVDescriptorStartHandle());
+	m_CommandList->SetComputeRootDescriptorTable(ROOTPARAMETER_UAV, m_GBufferHeap->GetGPUUAVDescriptorStartHandle());
 	// 사용할 리소스 업데이트
 
 	UINT groupY = (UINT)ceilf(GameScreen::GetHeight() / 256.F);
@@ -1242,6 +1257,10 @@ void CGameFramework::Blur()
 	// 수직 블러 //////////////////////////////////
 
 	d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_RWBloomTex, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_COMMON);
+}
+
+void CGameFramework::Bloom()
+{
 }
 
 void CGameFramework::DownScale()
@@ -1254,6 +1273,7 @@ void CGameFramework::DownScale()
 	// 사용할 리소스 업데이트
 	m_GBufferHeap->UpdateShaderVariable(m_CommandList.Get());
 	m_CommandList->SetComputeRootDescriptorTable(ROOTPARAMETER_TEXTURE, m_GBufferHeap->GetGPUDescriptorHandleForHeapStart());
+	m_CommandList->SetComputeRootDescriptorTable(ROOTPARAMETER_UAV, m_GBufferHeap->GetGPUUAVDescriptorStartHandle());
 	m_CommandList->SetComputeRootUnorderedAccessView(ROOTPARAMETER_MIDDLEAVGLUM, m_RWMiddleAvgLum->GetGPUVirtualAddress());
 	m_CommandList->SetComputeRootUnorderedAccessView(ROOTPARAMETER_AVGLUM, m_RWAvgLum->GetGPUVirtualAddress());
 	// 사용할 리소스 업데이트

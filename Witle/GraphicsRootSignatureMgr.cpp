@@ -68,7 +68,7 @@ ID3D12RootSignature * GraphicsRootSignatureMgr::CreateGraphicsRootSignature(ID3D
 	pUavDescriptorRanges[0].RegisterSpace = 0;
 	pUavDescriptorRanges[0].OffsetInDescriptorsFromTableStart = 0;
 
-	pRootParameters[ROOTPARAMETER_BLURTEST] = d3dUtil::CreateRootParameterTable(1, &pUavDescriptorRanges[0], D3D12_SHADER_VISIBILITY_ALL);
+	pRootParameters[ROOTPARAMETER_UAV] = d3dUtil::CreateRootParameterTable(1, &pUavDescriptorRanges[0], D3D12_SHADER_VISIBILITY_ALL);
 	pRootParameters[ROOTPARAMETER_AVGLUM] = d3dUtil::CreateRootParameterUAV(1); 
 	pRootParameters[ROOTPARAMETER_MIDDLEAVGLUM] = d3dUtil::CreateRootParameterUAV(2);  
 	//// 루트 패러미터 ///////////////////////////////////////////////////////////////////// 
