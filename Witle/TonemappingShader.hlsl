@@ -51,8 +51,8 @@ float3 ToneMapping(float3 HDRColor)
 {
     // 현재 픽셀에 대한 휘도 스케일 계산
     float LScale = dot(HDRColor, LUM_FACTOR);
-    // LScale = float(MiddleGrey / gAverageLum[0]) * LScale;
-    // LScale = (LScale + (LScale * LScale / LumWhiteSqr)) / (1.0 + LScale);
+    LScale = float(MiddleGrey / gAverageLum[0]) * LScale;
+    LScale = (LScale + (LScale * LScale / LumWhiteSqr)) / (1.0 + LScale);
 
     // 휘도 스케일을 픽셀 색상에 적용
     return HDRColor * LScale;

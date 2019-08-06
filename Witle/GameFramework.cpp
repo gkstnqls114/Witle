@@ -143,27 +143,27 @@ void CGameFramework::Render()
 void CGameFramework::Debug()
 {
 #if _DEBUG
-	// Map the data so we can read it on CPU.
-	float* mappedData1 = nullptr;
-	float* mappedData2 = nullptr;
-	ThrowIfFailed(m_ReadBackMiddleAvgLumBuffer->Map(0, nullptr, reinterpret_cast<void**>(&mappedData1)));
-	ThrowIfFailed(m_ReadBackAvgLumBuffer->Map(0, nullptr, reinterpret_cast<void**>(&mappedData2)));
+	//// Map the data so we can read it on CPU.
+	//float* mappedData1 = nullptr;
+	//float* mappedData2 = nullptr;
+	//ThrowIfFailed(m_ReadBackMiddleAvgLumBuffer->Map(0, nullptr, reinterpret_cast<void**>(&mappedData1)));
+	//ThrowIfFailed(m_ReadBackAvgLumBuffer->Map(0, nullptr, reinterpret_cast<void**>(&mappedData2)));
 
-	for (int i = 0; i < NumMiddleAvgLum; ++i)
-	{
-		std::cout << mappedData1[i] << " ";
-	}
-	std::cout << std::endl;
+	//for (int i = 0; i < NumMiddleAvgLum; ++i)
+	//{
+	//	std::cout << mappedData1[i] << " ";
+	//}
+	//std::cout << std::endl;
 
-	for (int i = 0; i < NumAvgLum; ++i)
-	{
-		std::cout << mappedData2[i] << " ";
-	}
-	std::cout << std::endl;
-	std::cout << std::endl;
+	//for (int i = 0; i < NumAvgLum; ++i)
+	//{
+	//	std::cout << mappedData2[i] << " ";
+	//}
+	//std::cout << std::endl;
+	//std::cout << std::endl;
 
-	m_ReadBackMiddleAvgLumBuffer->Unmap(0, nullptr);
-	m_ReadBackAvgLumBuffer->Unmap(0, nullptr);
+	//m_ReadBackMiddleAvgLumBuffer->Unmap(0, nullptr);
+	//m_ReadBackAvgLumBuffer->Unmap(0, nullptr);
 #endif // _DEBUG 
 }
 
@@ -1375,6 +1375,9 @@ void CGameFramework::ToneMapping()
 	MainCameraMgr::GetMainCamera()->GetCamera()->SetViewportsAndScissorRects(m_CommandList.Get());
 	MainCameraMgr::GetMainCamera()->GetCamera()->UpdateShaderVariables(m_CommandList.Get(), ROOTPARAMETER_CAMERA);
 	MainCameraMgr::GetMainCamera()->GetCamera()->UpdateLightShaderVariables(m_CommandList.Get(), &LightManager::m_pLights->m_pLights[2]);
+	 
+	m_CommandList->SetGraphicsRootUnorderedAccessView(ROOTPARAMETER_MIDDLEAVGLUM, m_RWMiddleAvgLum->GetGPUVirtualAddress());
+	m_CommandList->SetGraphicsRootUnorderedAccessView(ROOTPARAMETER_AVGLUM, m_RWAvgLum->GetGPUVirtualAddress());
 
 	//// 리소스만 바꾼다.. 
 	D3D12_GPU_DESCRIPTOR_HANDLE handle = m_GBufferHeap->GetGPUDescriptorHandleForHeapStart(); // 0번째 리소스

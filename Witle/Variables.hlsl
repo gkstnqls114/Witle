@@ -110,8 +110,8 @@ const float g_fMiddleGrey = 0.863f;
 const float g_fWhiteMax = 6.0f;
 const float g_fWhite = 1.53f;
 
-static const float MiddleGrey = 0.5f;
-static const float LumWhiteSqr = 1.53f;
+static const float MiddleGrey = 1.063f;
+static const float LumWhiteSqr = 1.03f;
 
 //인스턴싱 데이터를 위한 구조체
 struct INSTANCING_TRANSFORM

@@ -169,7 +169,6 @@ void DownScaleSecondPass(uint3 groupId : SV_GroupID, uint3 groupThreadId : SV_Gr
         fFinalLumValue /= 64.0;
 
 		// Store the final value 
-        gAverageLum[0] = max(fFinalLumValue, 0.0001);
-
+        gAverageLum[0] = max(fFinalLumValue, 0.0001); 
     }
 }
