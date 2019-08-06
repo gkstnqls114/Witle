@@ -84,7 +84,7 @@ void DownScale4to1(uint dispatchThreadId, uint groupThreadId, uint groupId, floa
         fFinalAvgLum /= 1024.0;
 
 		// Write the final value into the 1D UAV which will be used on the next step
-        gAverageLum[groupId] = fFinalAvgLum; 
+        gAverageValues1D[groupId] = fFinalAvgLum;
     }
 }
 
@@ -168,8 +168,7 @@ void DownScaleSecondPass(uint3 groupId : SV_GroupID, uint3 groupThreadId : SV_Gr
         fFinalLumValue += dispatchThreadId.x + 48 < GroupSize ? SharedAvgFinal[dispatchThreadId.x + 48] : avgLum;
         fFinalLumValue /= 64.0;
 
-		// Store the final value
-        // gAverageLum[0] = fFinalLumValue;
+		// Store the final value 
         gAverageLum[0] = max(fFinalLumValue, 0.0001);
 
     }
