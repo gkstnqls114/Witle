@@ -136,7 +136,7 @@ protected:
 
 	// 몬스터 관련 ////////////////////////////
 
-	int						m_TestMonsterCount{ 10 }; //원래 108마리..
+	int						m_TestMonsterCount{ 10 }; //원래 107마리..
 	Monster**				m_TestMonster{ nullptr };
 	Monster*				m_AltarMonster{ nullptr };
 	
@@ -157,8 +157,7 @@ protected:
 	Monster*				m_Dragon{ nullptr };
 
 	AltarSphere*			m_AltarSphere[5];
-	// MyRectangle*            m_GuageBar[5]; 
-
+	 
 #ifdef CHECK_SUBVIEWS
 	CameraObject*			m_lookAboveCamera{ nullptr };
 #endif

@@ -380,19 +380,14 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	std::random_device rd;
 	std::mt19937 mersenne(rd());
 	std::uniform_int_distribution<> die(2000, 15000);
-	std::uniform_int_distribution<> monstertype(0, 3);
+	std::uniform_int_distribution<> monstertype(0, 5);
 
 	m_Dragon = new Dragon("Dragon",
 		XMFLOAT3(15000, 0, 15000),
 		pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
 
 	m_TestMonster = new Monster*[m_TestMonsterCount];
-
-	/*
-		m_TestMonster[0] = new Dragon("SpaceCat",
-			XMFLOAT3(15000, 0, 15000),
-			pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
-	*/
+	 
 	int spacecatblue_count = 0;
 	int spacecatgreen_count = 0;
 	int spacecatpink_count = 0;
@@ -409,6 +404,10 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 
 		if (value == ENUM_MONSTER::MONSTER_CREEPYMONSTER)
 		{
+#ifdef _DEBUG
+			std::cout << instance->Count(CREEPYMONSTER) << "마리가 최대입니다. 현재 " << creepymonster_count << "마리 "<< std::endl;
+#endif // _DEBUG
+
 			if (instance->Count(CREEPYMONSTER) <= creepymonster_count)continue;
 			m_TestMonster[i] = new CreepyMonster("CreepyMonster",
 				instance->GetPosition(creepymonster_count, CREEPYMONSTER),
@@ -417,6 +416,10 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 		}
 		else if (value == ENUM_MONSTER::MONSTER_MUSHROOM)
 		{
+
+#ifdef _DEBUG
+			std::cout << instance->Count(MUSHROOM) << "마리가 최대입니다. 현재 " << mushroom_count << "마리 " << std::endl;
+#endif // _DEBUG
 			if (instance->Count(MUSHROOM) <= mushroom_count)continue;
 
 			m_TestMonster[i] = new Mushroom("Mushroom",
@@ -425,7 +428,10 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 			mushroom_count += 1;
 		}
 		else if (value == ENUM_MONSTER::MONSTER_SPACECATBLUE)
-		{
+		{ 
+#ifdef _DEBUG
+			std::cout << instance->Count(SPACECAT_BLUE) << "마리가 최대입니다. 현재 " << spacecatblue_count << "마리 " << std::endl;
+#endif // _DEBUG
 			if (instance->Count(SPACECAT_BLUE) <= spacecatblue_count)continue;
 			m_TestMonster[i] = new SpaceCat("SpaceCat",
 				instance->GetPosition(spacecatblue_count, SPACECAT_BLUE),
@@ -433,7 +439,10 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 			spacecatblue_count += 1;
 		}
 		else if (value == ENUM_MONSTER::MONSTER_SPACECATPINK)
-		{
+		{ 
+#ifdef _DEBUG
+			std::cout << instance->Count(SPACECAT_PINK) << "마리가 최대입니다. 현재 " << spacecatpink_count << "마리 " << std::endl;
+#endif // _DEBUG
 			if (instance->Count(SPACECAT_PINK) <= spacecatpink_count)continue;
 			m_TestMonster[i] = new SpaceCat("SpaceCat",
 				instance->GetPosition(spacecatpink_count, SPACECAT_PINK),
@@ -441,7 +450,10 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 			spacecatpink_count += 1;
 		}
 		else if (value == ENUM_MONSTER::MONSTER_SPACECATGREEN)
-		{
+		{ 
+#ifdef _DEBUG
+			std::cout << instance->Count(SPACECAT_GREEN) << "마리가 최대입니다. 현재 " << spacecatgreen_count << "마리 " << std::endl;
+#endif // _DEBUG
 			if (instance->Count(SPACECAT_GREEN) <= spacecatgreen_count)continue;
 			m_TestMonster[i] = new SpaceCat("SpaceCat",
 				instance->GetPosition(spacecatgreen_count, SPACECAT_GREEN),
@@ -449,7 +461,10 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 			spacecatgreen_count += 1;
 		}
 		else if (value == ENUM_MONSTER::MONSTER_BOSSMONSTER)
-		{
+		{ 
+#ifdef _DEBUG
+			std::cout << instance->Count(DRAGON) << "마리가 최대입니다. 현재 " << boss_count << "마리 " << std::endl;
+#endif // _DEBUG
 			if (instance->Count(DRAGON) <= boss_count)continue;
 			m_TestMonster[i] = new Dragon("Dragon",
 				instance->GetPosition(boss_count, DRAGON),
