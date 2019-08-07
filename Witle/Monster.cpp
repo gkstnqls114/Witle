@@ -148,13 +148,6 @@ void Monster::ReleaseMembers()
 		delete m_pDebugSpawnMesh;
 		m_pDebugSpawnMesh = nullptr;
 	}
-#endif // _DEBUG
-	if (m_pTexture)
-	{
-		m_pDebugSpawnMesh->ReleaseObjects();
-		delete m_pDebugSpawnMesh;
-		m_pDebugSpawnMesh = nullptr;
-	}
 #endif // _DEBUG 
 	if (m_pLoadObject)
 	{
