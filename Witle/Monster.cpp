@@ -73,22 +73,25 @@ XMFLOAT3 Monster::CalculateAlreadyPosition(float fTimeElapsed)
 }
 
 
-Monster::Monster(const std::string & entityID, float spawnRange, const XMFLOAT3& SpawnPoint, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature)
-	: m_SpawnRange(spawnRange), m_SpawnPoint(SpawnPoint), GameObject(entityID)
+Monster::Monster(const std::string & entityID, float spawnRange, const XMFLOAT3& SpawnPoint, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, float HpBarY)
+	: m_SpawnRange(spawnRange), m_SpawnPoint(SpawnPoint), GameObject(entityID), m_HpBarY(HpBarY)
 {
 	m_MonsterHPStatus = new MonsterStatus(this, pd3dDevice, pd3dCommandList);
-	
-	m_MonsterHP = new UI3DImage(this, pd3dDevice, pd3dCommandList, POINT{0, 0},
+
+	m_MonsterHPUI = new UI3DImage(this, pd3dDevice, pd3dCommandList, POINT{ 0, 0 },
 		100.F,
 		30.f,
 		L"Image/Red.dds"
 	);
 
 	// 디버그용
+#ifdef _DEBUG 
 	m_pDebugObject = new EmptyGameObject("SpawnPosition");
 	m_pDebugObject->GetTransform().SetPosition(SpawnPoint);
 	m_pDebugObject->GetTransform().Update(0.f); // position update위해...
 	m_pDebugSpawnMesh = new LineSphere(m_pDebugObject, pd3dDevice, pd3dCommandList, XMFLOAT4(0, 0, 1, 0), m_SpawnRange, m_SpawnRange);
+#endif // _DEBUG 
+
 }
 
 Monster::~Monster()
@@ -98,12 +101,14 @@ Monster::~Monster()
 
 void Monster::Render(ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffers)
 {
+#ifdef _DEBUG
 	if (RENDER_DEBUG)
 	{
 		m_pMyBOBox->Render(pd3dCommandList);
 		m_pDebugSpawnMesh->Render(pd3dCommandList, isGBuffers);
 		m_RecognitionRange->RenderDebug(pd3dCommandList);
 	}
+#endif // _DEBUG
 
 	m_pHaep->UpdateShaderVariable(pd3dCommandList);
 	m_pTexture->UpdateShaderVariable(pd3dCommandList, 0);
@@ -121,17 +126,11 @@ void Monster::RenderForShadow(ID3D12GraphicsCommandList * pd3dCommandList)
 
 void Monster::ReleaseMembers()
 {
-	if (m_pDebugSpawnMesh)
+	if (m_MonsterHPUI)
 	{
-		m_pDebugSpawnMesh->ReleaseObjects();
-		delete m_pDebugSpawnMesh;
-		m_pDebugSpawnMesh = nullptr;
-	}
-	if (m_MonsterHP)
-	{
-		m_MonsterHP->ReleaseObjects();
-		delete m_MonsterHP;
-		m_MonsterHP = nullptr;
+		m_MonsterHPUI->ReleaseObjects();
+		delete m_MonsterHPUI;
+		m_MonsterHPUI = nullptr;
 	}
 	if (m_RecognitionRange)
 	{
@@ -139,12 +138,20 @@ void Monster::ReleaseMembers()
 		delete m_RecognitionRange;
 		m_RecognitionRange = nullptr;
 	}
+#ifdef _DEBUG
 	if (m_pDebugObject)
 	{
 		m_pDebugObject->ReleaseObjects();
 		delete m_pDebugObject;
 		m_pDebugObject = nullptr;
 	}
+	if (m_pDebugSpawnMesh)
+	{
+		m_pDebugSpawnMesh->ReleaseObjects();
+		delete m_pDebugSpawnMesh;
+		m_pDebugSpawnMesh = nullptr;
+	}
+#endif // _DEBUG
 	if (m_pTexture)
 	{
 		m_pTexture->ReleaseObjects();
@@ -185,8 +192,12 @@ void Monster::ReleaseMembers()
 
 void Monster::ReleaseMemberUploadBuffers()
 {
-	if (m_MonsterHP) m_MonsterHP->ReleaseUploadBuffers();
+	if (m_MonsterHPUI) m_MonsterHPUI->ReleaseUploadBuffers();
+
+#ifdef _DEBUG
 	if (m_pDebugSpawnMesh) m_pDebugSpawnMesh->ReleaseUploadBuffers();
+#endif // _DEBUG
+
 	if (m_pTexture) m_pTexture->ReleaseUploadBuffers();
 	if (m_pLoadObject) m_pLoadObject->ReleaseUploadBuffers();
 	if (m_MonsterModel)m_MonsterModel->ReleaseUploadBuffers();
@@ -198,7 +209,7 @@ void Monster::SubstractHP(int sub)
 {
 	m_CurrAnimation = GetAnimationHitID();
 	m_pLoadObject->SetTrackAnimationSet(0, m_CurrAnimation);
-	
+
 	m_MonsterHPStatus->m_Guage -= sub;
 	std::cout << m_MonsterHPStatus->m_Guage << std::endl;
 }
@@ -222,7 +233,7 @@ void Monster::RenderHpStatus(ID3D12GraphicsCommandList * pd3dCommandList, bool i
 
 	// set look at.... 빌보드 처리...
 	XMFLOAT4X4 uiWorld = m_Transform.GetWorldMatrix();
-	uiWorld._42 += 200;
+	uiWorld._42 += m_HpBarY;
 
 	XMFLOAT3 xmf3Position(uiWorld._41, uiWorld._42, uiWorld._43);
 
@@ -235,7 +246,7 @@ void Monster::RenderHpStatus(ID3D12GraphicsCommandList * pd3dCommandList, bool i
 	float percentage = float(m_MonsterHPStatus->m_Guage) / float(m_MonsterHPStatus->m_MAXGuage) * 100.f;
 	pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_HPPERCENTAGE, 1, &percentage, 0);
 
-	m_MonsterHP->Render(pd3dCommandList, uiWorld);
+	m_MonsterHPUI->Render(pd3dCommandList, uiWorld);
 }
 
 void Monster::SetTrackAnimationSet()

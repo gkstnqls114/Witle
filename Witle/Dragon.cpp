@@ -41,7 +41,7 @@ void Dragon::ReleaseMemberUploadBuffers()
 
 Dragon::Dragon(const std::string & entityID, const XMFLOAT3& SpawnPoint,
 	ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature)
-	: Monster(entityID, 100.f, SpawnPoint, pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature)
+	: Monster(entityID, 100.f, SpawnPoint, pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, 400.f)
 {
 
 	m_RecognitionRange = new RecognitionRange(this, 2000.f, 2.f);
@@ -129,7 +129,7 @@ void Dragon::Animate(float fElapsedTime)
 {
 	// 몬스터 애니메이션에 대한 행렬을 업데이트합니다.
 	Monster::Animate(fElapsedTime);
-	 
+
 	// m_BOBoxFrame은 Bip001_Spine 상의 월드행렬을 가져옵니다.
 	// 해당 프레임에 맞추어 바운딩 박스 위치와 회전을 재설정 합니다.
 	XMFLOAT3 pos = XMFLOAT3(m_BOBoxFrame->m_xmf4x4World._41, m_BOBoxFrame->m_xmf4x4World._42, m_BOBoxFrame->m_xmf4x4World._43);

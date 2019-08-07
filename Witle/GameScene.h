@@ -109,7 +109,7 @@ public:
 
 	QuadtreeTerrain* GetQuadtreeTerrain() const { return m_pQuadtreeTerrain; }
 
-protected:
+public:
 	// 플레이어 관련 ////////////////////////////
 	
 	Player*                 m_pPlayer        { nullptr };

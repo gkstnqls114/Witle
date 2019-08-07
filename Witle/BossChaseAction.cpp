@@ -1,10 +1,15 @@
 #include "stdafx.h"
+#include "GameScene.h"
 #include "MonsterMovement.h"
+#include "BossChaseAction.h"
+#include "Monster.h"
+#include "MonsterStatus.h"
+#include "MyBOBox.h"
 #include "Player.h"
+#include "Dragon.h"
 #include "BossMonsterActionMgr.h"
 #include "PlayerManager.h"
-#include "BossChaseAction.h"
-
+#include "Collision.h"
 
 void BossChaseAction::UpdateVelocity(float fElpasedTime, MonsterMovement * movement)
 {
@@ -28,29 +33,134 @@ void BossChaseAction::UpdateVelocity(float fElpasedTime, MonsterMovement * movem
 
 void BossChaseAction::UpdateState(float fElpasedTime, BossMonsterActionMgr * actionMgr)
 {
+
 	int val = rand() % 5;
 
 	if (PlayerManager::IsNearPlayer(m_pOwner->GetTransform().GetPosition(), 150))
 	{
-		if (val == 0)
+		// 체력이 100 ~
+		if (m_Dragon->GetStatus()->m_Guage >= 100.f)
 		{
-			(actionMgr)->ChangeBossStateToAction0();
+			if (val == 0)
+			{
+				(actionMgr)->ChangeBossStateToAction0();
+
+				if (m_Dragon->GetisAttacking())
+				{
+					if (Collision::isCollide(m_pPlayer->GetBOBox()->GetBOBox(), m_Dragon->GetBOBox()->GetBOBox()))
+					{
+						m_pPlayer->SubstractHP(5);
+					}
+				}
+			}
+			else if (val == 1)
+			{
+				(actionMgr)->ChangeBossStateToAction1();
+
+				if (m_Dragon->GetisAttacking())
+				{
+					if (Collision::isCollide(m_pPlayer->GetBOBox()->GetBOBox(), m_Dragon->GetBOBox()->GetBOBox()))
+					{
+						m_pPlayer->SubstractHP(10);
+					}
+				}
+			}
 		}
-		else if (val == 1)
+		// 체력이 70 ~
+		else if (m_Dragon->GetStatus()->m_Guage > 70.f)
 		{
-			(actionMgr)->ChangeBossStateToAction1();
+			if (val == 0)
+			{
+				(actionMgr)->ChangeBossStateToAction0();
+
+				if (m_Dragon->GetisAttacking())
+				{
+					if (Collision::isCollide(m_pPlayer->GetBOBox()->GetBOBox(), m_Dragon->GetBOBox()->GetBOBox()))
+					{
+						m_pPlayer->SubstractHP(5);
+					}
+				}
+			}
+			else if (val == 1)
+			{
+				(actionMgr)->ChangeBossStateToAction1();
+
+				if (m_Dragon->GetisAttacking())
+				{
+					if (Collision::isCollide(m_pPlayer->GetBOBox()->GetBOBox(), m_Dragon->GetBOBox()->GetBOBox()))
+					{
+						m_pPlayer->SubstractHP(10);
+					}
+				}
+			}
+			else if (val == 2)
+			{
+				(actionMgr)->ChangeBossStateToAction2();
+
+				if (m_Dragon->GetisAttacking())
+				{
+					if (Collision::isCollide(m_pPlayer->GetBOBox()->GetBOBox(), m_Dragon->GetBOBox()->GetBOBox()))
+					{
+						m_pPlayer->SubstractHP(15);
+					}
+				}
+			}
 		}
-		else if (val == 2)
+		// 체력이 30 ~
+		else if (m_Dragon->GetStatus()->m_Guage > 30.f)
 		{
-			(actionMgr)->ChangeBossStateToAction2();
+			if (val == 0)
+			{
+				(actionMgr)->ChangeBossStateToAction0();
+
+				if (m_Dragon->GetisAttacking())
+				{
+					if (Collision::isCollide(m_pPlayer->GetBOBox()->GetBOBox(), m_Dragon->GetBOBox()->GetBOBox()))
+					{
+						m_pPlayer->SubstractHP(5);
+					}
+				}
+			}
+			else if (val == 1)
+			{
+				(actionMgr)->ChangeBossStateToAction1();
+
+				if (m_Dragon->GetisAttacking())
+				{
+					if (Collision::isCollide(m_pPlayer->GetBOBox()->GetBOBox(), m_Dragon->GetBOBox()->GetBOBox()))
+					{
+						m_pPlayer->SubstractHP(5);
+					}
+				}
+			}
+			else if (val == 2)
+			{
+				(actionMgr)->ChangeBossStateToAction2();
+
+				if (m_Dragon->GetisAttacking())
+				{
+					if (Collision::isCollide(m_pPlayer->GetBOBox()->GetBOBox(), m_Dragon->GetBOBox()->GetBOBox()))
+					{
+						m_pPlayer->SubstractHP(15);
+					}
+				}
+			}
+			else if (val == 3)
+			{
+				(actionMgr)->ChangeBossStateToAction3();
+
+				if (m_Dragon->GetisAttacking())
+				{
+					if (Collision::isCollide(m_pPlayer->GetBOBox()->GetBOBox(), m_Dragon->GetBOBox()->GetBOBox()))
+					{
+						m_pPlayer->SubstractHP(20);
+					}
+				}
+			}
 		}
-		else if (val == 3)
+		else if (m_Dragon->GetStatus()->m_Guage >= 0.f)
 		{
-			(actionMgr)->ChangeBossStateToAction3();
-		}
-		else if (val == 4)
-		{
-			(actionMgr)->ChangeBossStateToAction4();
+			(actionMgr)->ChangeBossStateToIdle();
 		}
 	}
 }

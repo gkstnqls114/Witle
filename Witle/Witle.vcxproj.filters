@@ -436,20 +436,20 @@
     <Filter Include="02.Component\ForMonster\BossMonsterAction\BossChaseAction">
       <UniqueIdentifier>{63ad1399-2d7f-4f2f-aae3-4ed5db475841}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.Component\ForMonster\BossMonsterAction\BossSkillAction0">
-      <UniqueIdentifier>{0911d8a6-6344-474c-80a0-259348c22573}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.Component\ForMonster\BossMonsterAction\BossSkillAction1">
-      <UniqueIdentifier>{3b92d029-5876-47a6-97c0-de431aef144d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.Component\ForMonster\BossMonsterAction\BossSkillAction2">
-      <UniqueIdentifier>{3235d4ae-c9c9-4bee-8b7d-de77195efd9e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.Component\ForMonster\BossMonsterAction\BossSkillAction3">
-      <UniqueIdentifier>{f7193322-ee24-4ff1-a2a4-8af43ec909c5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.Component\ForMonster\BossMonsterAction\BossSkillAction4">
       <UniqueIdentifier>{862d0e47-01df-45d9-b57f-2f8e60cecb4d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\ForMonster\BossMonsterAction\BossSkillAction0%28브레스%29">
+      <UniqueIdentifier>{0911d8a6-6344-474c-80a0-259348c22573}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\ForMonster\BossMonsterAction\BossSkillAction1%28내려찍기%29">
+      <UniqueIdentifier>{3b92d029-5876-47a6-97c0-de431aef144d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\ForMonster\BossMonsterAction\BossSkillAction2%28꼬리회전%29">
+      <UniqueIdentifier>{3235d4ae-c9c9-4bee-8b7d-de77195efd9e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\ForMonster\BossMonsterAction\BossSkillAction3%28돌진%29">
+      <UniqueIdentifier>{f7193322-ee24-4ff1-a2a4-8af43ec909c5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -913,19 +913,19 @@
       <Filter>02.Component\ForMonster\BossMonsterAction\BossMoveAction</Filter>
     </ClInclude>
     <ClInclude Include="BossSkillAction0.h">
-      <Filter>02.Component\ForMonster\BossMonsterAction\BossSkillAction0</Filter>
+      <Filter>02.Component\ForMonster\BossMonsterAction\BossSkillAction0%28브레스%29</Filter>
     </ClInclude>
     <ClInclude Include="BossChaseAction.h">
       <Filter>02.Component\ForMonster\BossMonsterAction\BossChaseAction</Filter>
     </ClInclude>
     <ClInclude Include="BossSkillAction1.h">
-      <Filter>02.Component\ForMonster\BossMonsterAction\BossSkillAction1</Filter>
+      <Filter>02.Component\ForMonster\BossMonsterAction\BossSkillAction1%28내려찍기%29</Filter>
     </ClInclude>
     <ClInclude Include="BossSkillAction2.h">
-      <Filter>02.Component\ForMonster\BossMonsterAction\BossSkillAction2</Filter>
+      <Filter>02.Component\ForMonster\BossMonsterAction\BossSkillAction2%28꼬리회전%29</Filter>
     </ClInclude>
     <ClInclude Include="BossSkillAction3.h">
-      <Filter>02.Component\ForMonster\BossMonsterAction\BossSkillAction3</Filter>
+      <Filter>02.Component\ForMonster\BossMonsterAction\BossSkillAction3%28돌진%29</Filter>
     </ClInclude>
     <ClInclude Include="BossSkillAction4.h">
       <Filter>02.Component\ForMonster\BossMonsterAction\BossSkillAction4</Filter>
@@ -1371,19 +1371,19 @@
       <Filter>04.Scene\GameScene</Filter>
     </ClCompile>
     <ClCompile Include="BossSkillAction0.cpp">
-      <Filter>02.Component\ForMonster\BossMonsterAction\BossSkillAction0</Filter>
+      <Filter>02.Component\ForMonster\BossMonsterAction\BossSkillAction0%28브레스%29</Filter>
     </ClCompile>
     <ClCompile Include="BossChaseAction.cpp">
       <Filter>02.Component\ForMonster\BossMonsterAction\BossChaseAction</Filter>
     </ClCompile>
     <ClCompile Include="BossSkillAction1.cpp">
-      <Filter>02.Component\ForMonster\BossMonsterAction\BossSkillAction1</Filter>
+      <Filter>02.Component\ForMonster\BossMonsterAction\BossSkillAction1%28내려찍기%29</Filter>
     </ClCompile>
     <ClCompile Include="BossSkillAction2.cpp">
-      <Filter>02.Component\ForMonster\BossMonsterAction\BossSkillAction2</Filter>
+      <Filter>02.Component\ForMonster\BossMonsterAction\BossSkillAction2%28꼬리회전%29</Filter>
     </ClCompile>
     <ClCompile Include="BossSkillAction3.cpp">
-      <Filter>02.Component\ForMonster\BossMonsterAction\BossSkillAction3</Filter>
+      <Filter>02.Component\ForMonster\BossMonsterAction\BossSkillAction3%28돌진%29</Filter>
     </ClCompile>
     <ClCompile Include="BossSkillAction4.cpp">
       <Filter>02.Component\ForMonster\BossMonsterAction\BossSkillAction4</Filter>
