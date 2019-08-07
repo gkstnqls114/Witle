@@ -33,8 +33,8 @@ void SkillStg::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList
 	m_SelectableSkills[ENUM_SELECTABLESKILL::SELECTABLESKILL_BLESSING] = new Blessing(pd3dDevice, pd3dCommandList);
 	m_SelectableSkills[ENUM_SELECTABLESKILL::SELECTABLESKILL_HEALING] = new Healing(pd3dDevice, pd3dCommandList);
 
-	m_SelectableSkills[ENUM_SELECTABLESKILL::SELECTABLESKILL_METEOR] = new FireBallSkill(pd3dDevice, pd3dCommandList);
-	m_SelectableSkills[ENUM_SELECTABLESKILL::SELECTABLESKILL_ICESPEAR] = new LightningBallSkill(pd3dDevice, pd3dCommandList);
+	//m_SelectableSkills[ENUM_SELECTABLESKILL::SELECTABLESKILL_METEOR] = new FireBallSkill(pd3dDevice, pd3dCommandList);
+	//m_SelectableSkills[ENUM_SELECTABLESKILL::SELECTABLESKILL_ICESPEAR] = new LightningBallSkill(pd3dDevice, pd3dCommandList);
 }
 
 void SkillStg::ReleaseUploadBuffers()

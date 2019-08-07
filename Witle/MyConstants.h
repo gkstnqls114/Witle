@@ -33,8 +33,8 @@ enum ENUM_SELECTABLESKILL
 	SELECTABLESKILL_SHIELD,
 	SELECTABLESKILL_BLESSING,
 	SELECTABLESKILL_HEALING,
-	SELECTABLESKILL_METEOR,
-	SELECTABLESKILL_ICESPEAR
+	//SELECTABLESKILL_METEOR,
+	//SELECTABLESKILL_ICESPEAR
 
 	// 최대 8개까지... 더이상 증가 X
 	//SKILL_LIGHTNING,
@@ -117,7 +117,7 @@ enum LIGHT_TYPE
 #define USEMP_HEALING 15 
 //// 구현 스킬에 대하여 ////////////////////////////
 
-#define SKILL_TO_CHOOSE 8 // 고를수 있는 스킬 가짓수
+#define SKILL_TO_CHOOSE 6 // 고를수 있는 스킬 가짓수
 #define SKILL_SELECTED 4 // 선택 가능한 스킬 가짓수
 
 #define PI				    3.141592

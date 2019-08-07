@@ -1079,7 +1079,7 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 
 	SkillSelectScene::m_pHeap->UpdateShaderVariable(pd3dCommandList);
 
-	SkillSelectScene::m_pTexture->UpdateShaderVariable(pd3dCommandList, 8); // 임시로 검은색으로 렌더링
+	SkillSelectScene::m_pTexture->UpdateShaderVariable(pd3dCommandList, SKILL_TO_CHOOSE); // 임시로 검은색으로 렌더링
 	m_SampleUIMap->Render(pd3dCommandList);
 
 	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_SKILLICON, isGBuffers); 

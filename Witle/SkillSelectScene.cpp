@@ -110,15 +110,13 @@ void SkillSelectScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCom
 	}
 
 	POINT tempchoosePoint[SKILL_TO_CHOOSE] = {
-		 POINT{ int(GameScreen::GetWidth()) / 2 - 300, int(GameScreen::GetHeight()) / 2 - 250 },
-		 POINT{ int(GameScreen::GetWidth()) / 2 - 100, int(GameScreen::GetHeight()) / 2 - 250 },
-		 POINT{ int(GameScreen::GetWidth()) / 2 + 100, int(GameScreen::GetHeight()) / 2 - 250 },
-		 POINT{ int(GameScreen::GetWidth()) / 2 + 300, int(GameScreen::GetHeight()) / 2 - 250 },
-
-		 POINT{ int(GameScreen::GetWidth()) / 2 - 300, int(GameScreen::GetHeight()) / 2 - 50 },
-		 POINT{ int(GameScreen::GetWidth()) / 2 - 100, int(GameScreen::GetHeight()) / 2 - 50 },
-		 POINT{ int(GameScreen::GetWidth()) / 2 + 100, int(GameScreen::GetHeight()) / 2 - 50 },
-		 POINT{ int(GameScreen::GetWidth()) / 2 + 300, int(GameScreen::GetHeight()) / 2 - 50 }
+		 POINT{ int(GameScreen::GetWidth()) / 2 - 200, int(GameScreen::GetHeight()) / 2 - 250 },
+		 POINT{ int(GameScreen::GetWidth()) / 2 -  0, int(GameScreen::GetHeight()) / 2 - 250 },
+		 POINT{ int(GameScreen::GetWidth()) / 2 + 200, int(GameScreen::GetHeight()) / 2 - 250 },
+		 
+		 POINT{ int(GameScreen::GetWidth()) / 2 - 200, int(GameScreen::GetHeight()) / 2 - 50 },
+		 POINT{ int(GameScreen::GetWidth()) / 2 -  0, int(GameScreen::GetHeight()) / 2 - 50 },
+		 POINT{ int(GameScreen::GetWidth()) / 2 + 200, int(GameScreen::GetHeight()) / 2 - 50 },
 	};
 	for (int x = 0; x < SKILL_TO_CHOOSE; ++x)
 	{
@@ -129,15 +127,13 @@ void SkillSelectScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCom
 	
 	// 임시로 선택할 스킬 이미지 로드 ///////////////////////
 	wchar_t* filepaths[SKILL_TO_CHOOSE + 1] = {
-		L"Image/SkillIconTEST1.dds",
-		L"Image/SkillIconTEST2.dds",
-		L"Image/SkillIconTEST3.dds",
-		L"Image/SkillIconTEST4.dds",
-		L"Image/SkillIconTEST5.dds",
-		L"Image/SkillIconTEST6.dds",
-		L"Image/SkillIconTEST7.dds",
-		L"Image/SkillIconTEST8.dds",
-		L"Image/SkillIconTEST9.dds"
+		L"Image/FireBall_icon.dds",
+		L"Image/IceBall_icon.dds",
+		L"Image/Lightning_icon.dds",
+		L"Image/Shield_icon.dds", 
+		L"Image/Blessing_icon.dds",
+		L"Image/Heal_icon.dds",
+		L"Image/Black.dds"
 	};
 
 	m_pHeap = new MyDescriptorHeap();
@@ -272,7 +268,7 @@ void SkillSelectScene::ClickSkillIcon(POINT cursor)
 		{
 			for (int y = 0; y < SKILL_SELECTED; ++y)
 			{
-				if (m_SelectedIndex[y] == 8)
+				if (m_SelectedIndex[y] == SKILL_TO_CHOOSE) // 맨마지막. 즉 BLACK
 				{
 					m_SelectedIndex[y] = x;
 					break;
@@ -286,7 +282,7 @@ void SkillSelectScene::ClickSkillIcon(POINT cursor)
 		if ((selectedPoint[x].x - 50) < cursor.x && cursor.x < (selectedPoint[x].x + 50) &&
 			(selectedPoint[x].y - 50) < cursor.y && cursor.y < (selectedPoint[x].y + 50))
 		{
-			m_SelectedIndex[x] = 8; // 8: 아무것도 선택하지 않음으로 변경
+			m_SelectedIndex[x] = SKILL_TO_CHOOSE; // SKILL_TO_CHOOSE: 아무것도 선택하지 않음으로 변경
 		}
 	}
 }
