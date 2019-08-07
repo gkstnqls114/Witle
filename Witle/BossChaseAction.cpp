@@ -32,24 +32,25 @@ void BossChaseAction::UpdateVelocity(float fElpasedTime, MonsterMovement * movem
 }
 
 void BossChaseAction::UpdateState(float fElpasedTime, BossMonsterActionMgr * actionMgr)
-{
-
+{ 
 	int val = rand() % 5;
+
+	Player* player = PlayerManager::GetMainPlayer();
 
 	if (PlayerManager::IsNearPlayer(m_pOwner->GetTransform().GetPosition(), 150))
 	{
 		// 체력이 100 ~
-		if (m_Dragon->GetStatus()->m_Guage >= 100.f)
+		if (static_cast<Monster*>(m_pOwner)->GetStatus()->m_Guage >= 100.f)
 		{
 			if (val == 0)
 			{
 				(actionMgr)->ChangeBossStateToAction0();
 
-				if (m_Dragon->GetisAttacking())
+				if (static_cast<Monster*>(m_pOwner)->GetisAttacking())
 				{
-					if (Collision::isCollide(m_pPlayer->GetBOBox()->GetBOBox(), m_Dragon->GetBOBox()->GetBOBox()))
+					if (Collision::isCollide(player->GetBOBox()->GetBOBox(), static_cast<Monster*>(m_pOwner)->GetBOBox()->GetBOBox()))
 					{
-						m_pPlayer->SubstractHP(5);
+						player->SubstractHP(5);
 					}
 				}
 			}
@@ -57,27 +58,27 @@ void BossChaseAction::UpdateState(float fElpasedTime, BossMonsterActionMgr * act
 			{
 				(actionMgr)->ChangeBossStateToAction1();
 
-				if (m_Dragon->GetisAttacking())
+				if (static_cast<Monster*>(m_pOwner)->GetisAttacking())
 				{
-					if (Collision::isCollide(m_pPlayer->GetBOBox()->GetBOBox(), m_Dragon->GetBOBox()->GetBOBox()))
+					if (Collision::isCollide(player->GetBOBox()->GetBOBox(), static_cast<Monster*>(m_pOwner)->GetBOBox()->GetBOBox()))
 					{
-						m_pPlayer->SubstractHP(10);
+						player->SubstractHP(10);
 					}
 				}
 			}
 		}
 		// 체력이 70 ~
-		else if (m_Dragon->GetStatus()->m_Guage > 70.f)
+		else if (static_cast<Monster*>(m_pOwner)->GetStatus()->m_Guage > 70.f)
 		{
 			if (val == 0)
 			{
 				(actionMgr)->ChangeBossStateToAction0();
 
-				if (m_Dragon->GetisAttacking())
+				if (static_cast<Monster*>(m_pOwner)->GetisAttacking())
 				{
-					if (Collision::isCollide(m_pPlayer->GetBOBox()->GetBOBox(), m_Dragon->GetBOBox()->GetBOBox()))
+					if (Collision::isCollide(player->GetBOBox()->GetBOBox(), static_cast<Monster*>(m_pOwner)->GetBOBox()->GetBOBox()))
 					{
-						m_pPlayer->SubstractHP(5);
+						player->SubstractHP(5);
 					}
 				}
 			}
@@ -85,11 +86,11 @@ void BossChaseAction::UpdateState(float fElpasedTime, BossMonsterActionMgr * act
 			{
 				(actionMgr)->ChangeBossStateToAction1();
 
-				if (m_Dragon->GetisAttacking())
+				if (static_cast<Monster*>(m_pOwner)->GetisAttacking())
 				{
-					if (Collision::isCollide(m_pPlayer->GetBOBox()->GetBOBox(), m_Dragon->GetBOBox()->GetBOBox()))
+					if (Collision::isCollide(player->GetBOBox()->GetBOBox(), static_cast<Monster*>(m_pOwner)->GetBOBox()->GetBOBox()))
 					{
-						m_pPlayer->SubstractHP(10);
+						player->SubstractHP(10);
 					}
 				}
 			}
@@ -97,27 +98,27 @@ void BossChaseAction::UpdateState(float fElpasedTime, BossMonsterActionMgr * act
 			{
 				(actionMgr)->ChangeBossStateToAction2();
 
-				if (m_Dragon->GetisAttacking())
+				if (static_cast<Monster*>(m_pOwner)->GetisAttacking())
 				{
-					if (Collision::isCollide(m_pPlayer->GetBOBox()->GetBOBox(), m_Dragon->GetBOBox()->GetBOBox()))
+					if (Collision::isCollide(player->GetBOBox()->GetBOBox(), static_cast<Monster*>(m_pOwner)->GetBOBox()->GetBOBox()))
 					{
-						m_pPlayer->SubstractHP(15);
+						player->SubstractHP(15);
 					}
 				}
 			}
 		}
 		// 체력이 30 ~
-		else if (m_Dragon->GetStatus()->m_Guage > 30.f)
+		else if (static_cast<Monster*>(m_pOwner)->GetStatus()->m_Guage > 30.f)
 		{
 			if (val == 0)
 			{
 				(actionMgr)->ChangeBossStateToAction0();
 
-				if (m_Dragon->GetisAttacking())
+				if (static_cast<Monster*>(m_pOwner)->GetisAttacking())
 				{
-					if (Collision::isCollide(m_pPlayer->GetBOBox()->GetBOBox(), m_Dragon->GetBOBox()->GetBOBox()))
+					if (Collision::isCollide(player->GetBOBox()->GetBOBox(), static_cast<Monster*>(m_pOwner)->GetBOBox()->GetBOBox()))
 					{
-						m_pPlayer->SubstractHP(5);
+						player->SubstractHP(5);
 					}
 				}
 			}
@@ -125,11 +126,11 @@ void BossChaseAction::UpdateState(float fElpasedTime, BossMonsterActionMgr * act
 			{
 				(actionMgr)->ChangeBossStateToAction1();
 
-				if (m_Dragon->GetisAttacking())
+				if (static_cast<Monster*>(m_pOwner)->GetisAttacking())
 				{
-					if (Collision::isCollide(m_pPlayer->GetBOBox()->GetBOBox(), m_Dragon->GetBOBox()->GetBOBox()))
+					if (Collision::isCollide(player->GetBOBox()->GetBOBox(), static_cast<Monster*>(m_pOwner)->GetBOBox()->GetBOBox()))
 					{
-						m_pPlayer->SubstractHP(5);
+						player->SubstractHP(5);
 					}
 				}
 			}
@@ -137,11 +138,11 @@ void BossChaseAction::UpdateState(float fElpasedTime, BossMonsterActionMgr * act
 			{
 				(actionMgr)->ChangeBossStateToAction2();
 
-				if (m_Dragon->GetisAttacking())
+				if (static_cast<Monster*>(m_pOwner)->GetisAttacking())
 				{
-					if (Collision::isCollide(m_pPlayer->GetBOBox()->GetBOBox(), m_Dragon->GetBOBox()->GetBOBox()))
+					if (Collision::isCollide(player->GetBOBox()->GetBOBox(), static_cast<Monster*>(m_pOwner)->GetBOBox()->GetBOBox()))
 					{
-						m_pPlayer->SubstractHP(15);
+						player->SubstractHP(15);
 					}
 				}
 			}
@@ -149,16 +150,16 @@ void BossChaseAction::UpdateState(float fElpasedTime, BossMonsterActionMgr * act
 			{
 				(actionMgr)->ChangeBossStateToAction3();
 
-				if (m_Dragon->GetisAttacking())
+				if (static_cast<Monster*>(m_pOwner)->GetisAttacking())
 				{
-					if (Collision::isCollide(m_pPlayer->GetBOBox()->GetBOBox(), m_Dragon->GetBOBox()->GetBOBox()))
+					if (Collision::isCollide(player->GetBOBox()->GetBOBox(), static_cast<Monster*>(m_pOwner)->GetBOBox()->GetBOBox()))
 					{
-						m_pPlayer->SubstractHP(20);
+						player->SubstractHP(20);
 					}
 				}
 			}
 		}
-		else if (m_Dragon->GetStatus()->m_Guage >= 0.f)
+		else if (static_cast<Monster*>(m_pOwner)->GetStatus()->m_Guage >= 0.f)
 		{
 			(actionMgr)->ChangeBossStateToIdle();
 		}
