@@ -152,7 +152,7 @@ void SkillSelectScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCom
 
 	for (int x = 0; x < SKILL_TO_CHOOSE; ++x)
 	{
-		m_UISkillToChoose[x] = new UI2DImage(m_TESTGameObject, pd3dDevice, pd3dCommandList, choosePoint[x], 150, 150,
+		m_UISkillToChoose[x] = new UI2DImage(m_TESTGameObject, ENUM_SCENE::SCENE_SKILLSELECT, pd3dDevice, pd3dCommandList, choosePoint[x], 150, 150,
 			nullptr);
 	}
 	// 임시로 선택할 스킬 이미지 로드 ///////////////////////
@@ -161,7 +161,7 @@ void SkillSelectScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCom
 	// 임시로 선택된 스킬 이미지 로드 ///////////////////////
 	for (int x = 0; x < SKILL_SELECTED; ++x)
 	{
-		m_UISkillSelected[x] = new UI2DImage(m_TESTGameObject, pd3dDevice, pd3dCommandList, selectedPoint[x], 100, 100,
+		m_UISkillSelected[x] = new UI2DImage(m_TESTGameObject, ENUM_SCENE::SCENE_SKILLSELECT, pd3dDevice, pd3dCommandList, selectedPoint[x], 100, 100,
 			nullptr);
 	} 
 	// 임시로 선택된 스킬 이미지 로드 ///////////////////////

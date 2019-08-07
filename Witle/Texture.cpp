@@ -48,7 +48,7 @@ Texture::Texture(ENUM_SCENE SceneType, ROOTPARAMETER_INDEX rpIndex, bool bAutoIn
 		break;
 
 	case ENUM_SCENE::SCENE_SKILLSELECT:
-
+		
 		break;
 	default:
 		break;

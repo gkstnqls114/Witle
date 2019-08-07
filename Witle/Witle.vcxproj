@@ -162,6 +162,7 @@
     <ClInclude Include="Blessing.h" />
     <ClInclude Include="BloomRevealShader.h" />
     <ClInclude Include="EffectMesh.h" />
+    <ClInclude Include="LoseScene.h" />
     <ClInclude Include="Mushroom.h" />
     <ClInclude Include="TonemappingShader.h" />
     <ClInclude Include="Healing.h" />
@@ -242,7 +243,6 @@
     <ClInclude Include="LineShader.h" />
     <ClInclude Include="LineSphere.h" />
     <ClInclude Include="MainScene.h" />
-    <ClInclude Include="LobbyScene.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Monster.h" />
     <ClInclude Include="MonsterAction.h" />
@@ -284,7 +284,7 @@
     <ClInclude Include="QuadtreeTerrain.h" />
     <ClInclude Include="MyRectangle.h" />
     <ClInclude Include="RecognitionRange.h" />
-    <ClInclude Include="RoomScene.h" />
+    <ClInclude Include="WinScene.h" />
     <ClInclude Include="ScreenShader.h" />
     <ClInclude Include="SearchAction.h" />
     <ClInclude Include="ShaderManager.h" />
@@ -340,6 +340,8 @@
     <ClCompile Include="Blessing.cpp" />
     <ClCompile Include="BloomRevealShader.cpp" />
     <ClCompile Include="EffectMesh.cpp" />
+    <ClCompile Include="LoseScene.cpp" />
+    <ClCompile Include="MainScene.cpp" />
     <ClCompile Include="Mushroom.cpp" />
     <ClCompile Include="TonemappingShader.cpp" />
     <ClCompile Include="Healing.cpp" />
@@ -413,8 +415,6 @@
     <ClCompile Include="LineCube.cpp" />
     <ClCompile Include="LineShader.cpp" />
     <ClCompile Include="LineSphere.cpp" />
-    <ClCompile Include="MainScene.cpp" />
-    <ClCompile Include="LobbyScene.cpp" />
     <ClCompile Include="MainCameraMgr.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="Mesh.cpp" />
@@ -454,7 +454,7 @@
     <ClCompile Include="QuadtreeTerrain.cpp" />
     <ClCompile Include="MyRectangle.cpp" />
     <ClCompile Include="RecognitionRange.cpp" />
-    <ClCompile Include="RoomScene.cpp" />
+    <ClCompile Include="WinScene.cpp" />
     <ClCompile Include="ScreenShader.cpp" />
     <ClCompile Include="SearchAction.cpp" />
     <ClCompile Include="ShaderManager.cpp" />

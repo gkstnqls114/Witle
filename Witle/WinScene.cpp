@@ -1,30 +1,37 @@
 #include "stdafx.h"
-#include "d3dUtil.h" 
+#include "d3dUtil.h"  
+#include "GameInput.h"
+#include "GameScreen.h"
+#include "UI2DImage.h"
+#include "GraphicsRootSignatureMgr.h"
+#include "ShaderManager.h" 
+#include "GameObject.h"
 #include "Texture.h"
-#include "LobbyScene.h"
 
-ID3D12DescriptorHeap*		LobbyScene::m_pd3dCbvSrvDescriptorHeap;
+#include "WinScene.h"
 
-D3D12_CPU_DESCRIPTOR_HANDLE	LobbyScene::m_d3dCbvCPUDescriptorStartHandle;
-D3D12_GPU_DESCRIPTOR_HANDLE	LobbyScene::m_d3dCbvGPUDescriptorStartHandle;
-D3D12_CPU_DESCRIPTOR_HANDLE	LobbyScene::m_d3dSrvCPUDescriptorStartHandle;
-D3D12_GPU_DESCRIPTOR_HANDLE	LobbyScene::m_d3dSrvGPUDescriptorStartHandle;
+ID3D12DescriptorHeap*		WinScene::m_pd3dCbvSrvDescriptorHeap;
 
-D3D12_CPU_DESCRIPTOR_HANDLE	LobbyScene::m_d3dCbvCPUDescriptorNextHandle;
-D3D12_GPU_DESCRIPTOR_HANDLE	LobbyScene::m_d3dCbvGPUDescriptorNextHandle;
-D3D12_CPU_DESCRIPTOR_HANDLE	LobbyScene::m_d3dSrvCPUDescriptorNextHandle;
-D3D12_GPU_DESCRIPTOR_HANDLE	LobbyScene::m_d3dSrvGPUDescriptorNextHandle;
+D3D12_CPU_DESCRIPTOR_HANDLE	WinScene::m_d3dCbvCPUDescriptorStartHandle;
+D3D12_GPU_DESCRIPTOR_HANDLE	WinScene::m_d3dCbvGPUDescriptorStartHandle;
+D3D12_CPU_DESCRIPTOR_HANDLE	WinScene::m_d3dSrvCPUDescriptorStartHandle;
+D3D12_GPU_DESCRIPTOR_HANDLE	WinScene::m_d3dSrvGPUDescriptorStartHandle;
 
-LobbyScene::LobbyScene()
+D3D12_CPU_DESCRIPTOR_HANDLE	WinScene::m_d3dCbvCPUDescriptorNextHandle;
+D3D12_GPU_DESCRIPTOR_HANDLE	WinScene::m_d3dCbvGPUDescriptorNextHandle;
+D3D12_CPU_DESCRIPTOR_HANDLE	WinScene::m_d3dSrvCPUDescriptorNextHandle;
+D3D12_GPU_DESCRIPTOR_HANDLE	WinScene::m_d3dSrvGPUDescriptorNextHandle;
+
+WinScene::WinScene()
 {
 
 }
 
-LobbyScene::~LobbyScene()
+WinScene::~WinScene()
 {
 
 }
-void LobbyScene::CreateCbvSrvDescriptorHeaps(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, int nConstantBufferViews, int nShaderResourceViews)
+void WinScene::CreateCbvSrvDescriptorHeaps(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, int nConstantBufferViews, int nShaderResourceViews)
 {
 	D3D12_DESCRIPTOR_HEAP_DESC d3dDescriptorHeapDesc;
 	d3dDescriptorHeapDesc.NumDescriptors = nConstantBufferViews + nShaderResourceViews; //CBVs + SRVs 
@@ -39,7 +46,7 @@ void LobbyScene::CreateCbvSrvDescriptorHeaps(ID3D12Device * pd3dDevice, ID3D12Gr
 	m_d3dSrvGPUDescriptorNextHandle.ptr = m_d3dSrvGPUDescriptorStartHandle.ptr = m_d3dCbvGPUDescriptorStartHandle.ptr + (d3dUtil::gnCbvSrvDescriptorIncrementSize * nConstantBufferViews);
 }
 
-D3D12_GPU_DESCRIPTOR_HANDLE LobbyScene::CreateConstantBufferViews(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, int nConstantBufferViews, ID3D12Resource * pd3dConstantBuffers, UINT nStride)
+D3D12_GPU_DESCRIPTOR_HANDLE WinScene::CreateConstantBufferViews(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, int nConstantBufferViews, ID3D12Resource * pd3dConstantBuffers, UINT nStride)
 {
 	D3D12_GPU_DESCRIPTOR_HANDLE d3dCbvGPUDescriptorHandle = m_d3dCbvGPUDescriptorNextHandle;
 	D3D12_GPU_VIRTUAL_ADDRESS d3dGpuVirtualAddress = pd3dConstantBuffers->GetGPUVirtualAddress();
@@ -55,7 +62,7 @@ D3D12_GPU_DESCRIPTOR_HANDLE LobbyScene::CreateConstantBufferViews(ID3D12Device *
 	return(d3dCbvGPUDescriptorHandle);
 }
 
-D3D12_GPU_DESCRIPTOR_HANDLE LobbyScene::CreateShaderResourceViews(ID3D12Device * pd3dDevice, Texture * pTexture, UINT nRootParameter, bool bAutoIncrement)
+D3D12_GPU_DESCRIPTOR_HANDLE WinScene::CreateShaderResourceViews(ID3D12Device * pd3dDevice, Texture * pTexture, UINT nRootParameter, bool bAutoIncrement)
 {
 	assert(!(pTexture == nullptr));
 
@@ -79,12 +86,12 @@ D3D12_GPU_DESCRIPTOR_HANDLE LobbyScene::CreateShaderResourceViews(ID3D12Device *
 	return(d3dSrvGPUDescriptorHandle);
 }
 
-bool LobbyScene::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam)
+bool WinScene::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam)
 {
 	return false;
 }
 
-bool LobbyScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam, float ElapsedTime)
+bool WinScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam, float ElapsedTime)
 {
 	switch (nMessageID)
 	{
@@ -117,59 +124,67 @@ bool LobbyScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM 
 	return false;
 }
 
-void LobbyScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList)
+void WinScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList)
 {
 	BuildLightsAndMaterials(pd3dDevice, pd3dCommandList);
+
+	// 카메라 설정
+	m_d3dViewport = D3D12_VIEWPORT{ 0.0f, 0.0f, static_cast<FLOAT>(GameScreen::GetWidth()) , static_cast<FLOAT>(GameScreen::GetHeight()), 0.0f, 1.0f };
+	m_d3dScissorRect = D3D12_RECT{ 0, 0, static_cast<LONG>(GameScreen::GetWidth()) ,static_cast<LONG>(GameScreen::GetHeight()) };
 	 
-	// 디스크립터 힙 설정
-	LobbyScene::CreateCbvSrvDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 3);
-
-
 }
 
-void LobbyScene::ReleaseObjects()
+void WinScene::ReleaseObjects()
 {
 
 }
 
-bool LobbyScene::ProcessInput(HWND hWnd, float ElapsedTime)
+bool WinScene::ProcessInput(HWND hWnd, float ElapsedTime)
 {
-
-
 	return true;
 }
 
+void WinScene::UpdatePhysics(float ElapsedTime)
+{
+}
+
 // ProcessInput에 의한 right, up, look, pos 를 월드변환 행렬에 갱신한다.
-void LobbyScene::Update(float fElapsedTime)
+void WinScene::Update(float fElapsedTime)
+{
+}
+
+void WinScene::LastUpdate(float fElapsedTime)
 {
 
 }
 
-void LobbyScene::LastUpdate(float fElapsedTime)
+void WinScene::AnimateObjects(float fTimeElapsed)
+{
+}
+
+void WinScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers)
+{
+	pd3dCommandList->SetGraphicsRootSignature(GraphicsRootSignatureMgr::GetGraphicsRootSignature());
+
+	// 클라 화면 설정
+	pd3dCommandList->RSSetViewports(1, &m_d3dViewport);
+	pd3dCommandList->RSSetScissorRects(1, &m_d3dScissorRect);
+
+	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_UISCREEN, false);
+	 
+}
+
+void WinScene::ReleaseUploadBuffers()
+{
+	// if (m_SampleUIImage) m_SampleUIImage->ReleaseUploadBuffers();
+}
+
+void WinScene::BuildLightsAndMaterials(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList)
 {
 
 }
 
-void LobbyScene::AnimateObjects(float fTimeElapsed)
-{
-}
-
-void LobbyScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers)
-{
-
-}
-
-void LobbyScene::ReleaseUploadBuffers()
-{
-
-}
-
-void LobbyScene::BuildLightsAndMaterials(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList)
-{
-
-}
-
-void LobbyScene::RenderShadowMap(ID3D12GraphicsCommandList * pd3dCommandList)
+void WinScene::RenderShadowMap(ID3D12GraphicsCommandList * pd3dCommandList)
 {
 }
 

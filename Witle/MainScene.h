@@ -74,6 +74,5 @@ private:
 	D3D12_RECT		m_d3dScissorRect;
 
 	GameObject* m_gameobject{ nullptr };
-	UI2DImage* m_Background{ nullptr };
-	Button* m_pBackGround{ nullptr };
+	UI2DImage* m_Background{ nullptr }; 
 };

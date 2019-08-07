@@ -1,38 +1,37 @@
 #include "stdafx.h"
+#include "d3dUtil.h"  
 #include "GameInput.h"
-#include "d3dUtil.h" 
-#include "Button.h"
-#include "GameObject.h"
-#include "GameScreen.H"
-#include "ShaderManager.h"
-#include "Texture.h"
+#include "GameScreen.h"
 #include "UI2DImage.h"
-#include "MyRectangle.h"
 #include "GraphicsRootSignatureMgr.h"
-#include "MainScene.h"
+#include "ShaderManager.h" 
+#include "GameObject.h"
+#include "Texture.h"
 
-ID3D12DescriptorHeap*		MainScene::m_pd3dCbvSrvDescriptorHeap;
+#include "LoseScene.h"
 
-D3D12_CPU_DESCRIPTOR_HANDLE	MainScene::m_d3dCbvCPUDescriptorStartHandle;
-D3D12_GPU_DESCRIPTOR_HANDLE	MainScene::m_d3dCbvGPUDescriptorStartHandle;
-D3D12_CPU_DESCRIPTOR_HANDLE	MainScene::m_d3dSrvCPUDescriptorStartHandle;
-D3D12_GPU_DESCRIPTOR_HANDLE	MainScene::m_d3dSrvGPUDescriptorStartHandle;
+ID3D12DescriptorHeap*		LoseScene::m_pd3dCbvSrvDescriptorHeap;
 
-D3D12_CPU_DESCRIPTOR_HANDLE	MainScene::m_d3dCbvCPUDescriptorNextHandle;
-D3D12_GPU_DESCRIPTOR_HANDLE	MainScene::m_d3dCbvGPUDescriptorNextHandle;
-D3D12_CPU_DESCRIPTOR_HANDLE	MainScene::m_d3dSrvCPUDescriptorNextHandle;
-D3D12_GPU_DESCRIPTOR_HANDLE	MainScene::m_d3dSrvGPUDescriptorNextHandle;
+D3D12_CPU_DESCRIPTOR_HANDLE	LoseScene::m_d3dCbvCPUDescriptorStartHandle;
+D3D12_GPU_DESCRIPTOR_HANDLE	LoseScene::m_d3dCbvGPUDescriptorStartHandle;
+D3D12_CPU_DESCRIPTOR_HANDLE	LoseScene::m_d3dSrvCPUDescriptorStartHandle;
+D3D12_GPU_DESCRIPTOR_HANDLE	LoseScene::m_d3dSrvGPUDescriptorStartHandle;
 
-MainScene::MainScene()
+D3D12_CPU_DESCRIPTOR_HANDLE	LoseScene::m_d3dCbvCPUDescriptorNextHandle;
+D3D12_GPU_DESCRIPTOR_HANDLE	LoseScene::m_d3dCbvGPUDescriptorNextHandle;
+D3D12_CPU_DESCRIPTOR_HANDLE	LoseScene::m_d3dSrvCPUDescriptorNextHandle;
+D3D12_GPU_DESCRIPTOR_HANDLE	LoseScene::m_d3dSrvGPUDescriptorNextHandle;
+
+LoseScene::LoseScene()
 {
 
 }
 
-MainScene::~MainScene()
+LoseScene::~LoseScene()
 {
 
 }
-void MainScene::CreateCbvSrvDescriptorHeaps(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, int nConstantBufferViews, int nShaderResourceViews)
+void LoseScene::CreateCbvSrvDescriptorHeaps(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, int nConstantBufferViews, int nShaderResourceViews)
 {
 	D3D12_DESCRIPTOR_HEAP_DESC d3dDescriptorHeapDesc;
 	d3dDescriptorHeapDesc.NumDescriptors = nConstantBufferViews + nShaderResourceViews; //CBVs + SRVs 
@@ -47,7 +46,7 @@ void MainScene::CreateCbvSrvDescriptorHeaps(ID3D12Device * pd3dDevice, ID3D12Gra
 	m_d3dSrvGPUDescriptorNextHandle.ptr = m_d3dSrvGPUDescriptorStartHandle.ptr = m_d3dCbvGPUDescriptorStartHandle.ptr + (d3dUtil::gnCbvSrvDescriptorIncrementSize * nConstantBufferViews);
 }
 
-D3D12_GPU_DESCRIPTOR_HANDLE MainScene::CreateConstantBufferViews(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, int nConstantBufferViews, ID3D12Resource * pd3dConstantBuffers, UINT nStride)
+D3D12_GPU_DESCRIPTOR_HANDLE LoseScene::CreateConstantBufferViews(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, int nConstantBufferViews, ID3D12Resource * pd3dConstantBuffers, UINT nStride)
 {
 	D3D12_GPU_DESCRIPTOR_HANDLE d3dCbvGPUDescriptorHandle = m_d3dCbvGPUDescriptorNextHandle;
 	D3D12_GPU_VIRTUAL_ADDRESS d3dGpuVirtualAddress = pd3dConstantBuffers->GetGPUVirtualAddress();
@@ -63,7 +62,7 @@ D3D12_GPU_DESCRIPTOR_HANDLE MainScene::CreateConstantBufferViews(ID3D12Device * 
 	return(d3dCbvGPUDescriptorHandle);
 }
 
-D3D12_GPU_DESCRIPTOR_HANDLE MainScene::CreateShaderResourceViews(ID3D12Device * pd3dDevice, Texture * pTexture, UINT nRootParameter, bool bAutoIncrement)
+D3D12_GPU_DESCRIPTOR_HANDLE LoseScene::CreateShaderResourceViews(ID3D12Device * pd3dDevice, Texture * pTexture, UINT nRootParameter, bool bAutoIncrement)
 {
 	assert(!(pTexture == nullptr));
 
@@ -87,12 +86,12 @@ D3D12_GPU_DESCRIPTOR_HANDLE MainScene::CreateShaderResourceViews(ID3D12Device * 
 	return(d3dSrvGPUDescriptorHandle);
 }
 
-bool MainScene::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam)
+bool LoseScene::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam)
 {
 	return false;
 }
 
-bool MainScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam, float ElapsedTime)
+bool LoseScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam, float ElapsedTime)
 {
 	switch (nMessageID)
 	{
@@ -111,10 +110,10 @@ bool MainScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM w
 		case 'A':
 			break;
 		case 'W':
-		case 'w': 
+		case 'w':
 			break;
 		case 'S':
-		case 's': 
+		case 's':
 			break;
 		default:
 			break;
@@ -125,7 +124,7 @@ bool MainScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM w
 	return false;
 }
 
-void MainScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList)
+void LoseScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList)
 {
 	BuildLightsAndMaterials(pd3dDevice, pd3dCommandList);
 
@@ -133,51 +132,39 @@ void MainScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	m_d3dViewport = D3D12_VIEWPORT{ 0.0f, 0.0f, static_cast<FLOAT>(GameScreen::GetWidth()) , static_cast<FLOAT>(GameScreen::GetHeight()), 0.0f, 1.0f };
 	m_d3dScissorRect = D3D12_RECT{ 0, 0, static_cast<LONG>(GameScreen::GetWidth()) ,static_cast<LONG>(GameScreen::GetHeight()) };
 
-	// 디스크립터 힙 설정
-	// MainScene::CreateCbvSrvDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 3);
 
-	m_gameobject = new EmptyGameObject("back");
-	m_Background = new UI2DImage(m_gameobject, ENUM_SCENE::SCENE_GAME, pd3dDevice, pd3dCommandList, RECT{
-		0, 0,
-		static_cast<LONG>(GameScreen::GetWidth()), static_cast<LONG>(GameScreen::GetHeight()) },
-		L"Image/Wittle_1280x720.dds"
-		);
-	 
-	// MainScene::CreateShaderResourceViews(pd3dDevice, m_pBackGround->GetTexture(false), ROOTPARAMETER_TEXTURE, true);
 }
 
-void MainScene::ReleaseObjects()
+void LoseScene::ReleaseObjects()
 {
 
 }
 
-bool MainScene::ProcessInput(HWND hWnd, float ElapsedTime)
+bool LoseScene::ProcessInput(HWND hWnd, float ElapsedTime)
 {
-
 	return true;
 }
 
-void MainScene::UpdatePhysics(float ElapsedTime)
+void LoseScene::UpdatePhysics(float ElapsedTime)
 {
 }
 
 // ProcessInput에 의한 right, up, look, pos 를 월드변환 행렬에 갱신한다.
-void MainScene::Update(float fElapsedTime)
+void LoseScene::Update(float fElapsedTime)
+{
+}
+
+void LoseScene::LastUpdate(float fElapsedTime)
 {
 
 }
 
-void MainScene::LastUpdate(float fElapsedTime)
+void LoseScene::AnimateObjects(float fTimeElapsed)
 {
-
-}
- 
-void MainScene::AnimateObjects(float fTimeElapsed)
-{ 
 }
 
-void MainScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers)
-{ 
+void LoseScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers)
+{
 	pd3dCommandList->SetGraphicsRootSignature(GraphicsRootSignatureMgr::GetGraphicsRootSignature());
 
 	// 클라 화면 설정
@@ -186,25 +173,20 @@ void MainScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 
 	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_UISCREEN, false);
 
-	//pd3dCommandList->SetDescriptorHeaps(1, &m_pd3dCbvSrvDescriptorHeap);
-	m_Background->Render(pd3dCommandList);
-	// m_pBackGround->Render(pd3dCommandList, isGBuffers);
+
 }
 
-void MainScene::RenderForShadow(ID3D12GraphicsCommandList * pd3dCommandList)
-{
-}
-
-void MainScene::ReleaseUploadBuffers()
-{
-
-} 
-void MainScene::BuildLightsAndMaterials(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList)
+void LoseScene::ReleaseUploadBuffers()
 {
 
 }
 
-void MainScene::RenderShadowMap(ID3D12GraphicsCommandList * pd3dCommandList)
+void LoseScene::BuildLightsAndMaterials(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList)
+{
+
+}
+
+void LoseScene::RenderShadowMap(ID3D12GraphicsCommandList * pd3dCommandList)
 {
 }
 

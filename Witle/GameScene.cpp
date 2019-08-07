@@ -526,7 +526,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 
 	// 미니맵
 	m_SampleUIMap = new UI2DImage(
-		m_TESTGameObject, pd3dDevice, pd3dCommandList,
+		m_TESTGameObject, ENUM_SCENE::SCENE_GAME, pd3dDevice, pd3dCommandList,
 		POINT{ int(GameScreen::GetWidth()) / 2 + 500, int(GameScreen::GetHeight()) / 2 - 220 },
 		m_UIMapSize.x,
 		m_UIMapSize.y,
@@ -534,29 +534,29 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	);
 
 	// 스킬 1
-	m_SampleUISkill1 = new UI2DImage(
-		m_TESTGameObject, pd3dDevice, pd3dCommandList,
+	m_SampleUISkill1 = new UI2DImage( 
+		m_TESTGameObject, ENUM_SCENE::SCENE_GAME, pd3dDevice, pd3dCommandList,
 		POINT{ int(GameScreen::GetWidth()) / 2 - 300, int(GameScreen::GetHeight()) / 2 + 270 }, 100, 100,
 		nullptr
 	);
 
 	// 스킬 2
 	m_SampleUISkill2 = new UI2DImage(
-		m_TESTGameObject, pd3dDevice, pd3dCommandList,
+		m_TESTGameObject, ENUM_SCENE::SCENE_GAME, pd3dDevice, pd3dCommandList,
 		POINT{ int(GameScreen::GetWidth()) / 2 - 100, int(GameScreen::GetHeight()) / 2 + 270 }, 100, 100,
 		nullptr
 	);
 
 	// 스킬 3
 	m_SampleUISkill3 = new UI2DImage(
-		m_TESTGameObject, pd3dDevice, pd3dCommandList,
+		m_TESTGameObject, ENUM_SCENE::SCENE_GAME, pd3dDevice, pd3dCommandList,
 		POINT{ int(GameScreen::GetWidth()) / 2 + 100, int(GameScreen::GetHeight()) / 2 + 270 }, 100, 100,
 		nullptr
 	);
 
 	// 스킬 4
 	m_SampleUISkill4 = new UI2DImage(
-		m_TESTGameObject, pd3dDevice, pd3dCommandList,
+		m_TESTGameObject, ENUM_SCENE::SCENE_GAME, pd3dDevice, pd3dCommandList,
 		POINT{ int(GameScreen::GetWidth()) / 2 + 300, int(GameScreen::GetHeight()) / 2 + 270 }, 100, 100,
 		nullptr
 	);
@@ -575,7 +575,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	pos.z += m_SampleUIMap->getRect().bottom;
 
 	m_UIAltar_1 = new UI2DImage(
-		m_TESTGameObject, pd3dDevice, pd3dCommandList,
+		m_TESTGameObject, ENUM_SCENE::SCENE_GAME, pd3dDevice, pd3dCommandList,
 		POINT{ int(pos.x), int(pos.z) },
 		20, 20,
 		L"Image/Red.dds"
@@ -590,7 +590,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	pos.x += m_SampleUIMap->getRect().left;
 	pos.z += m_SampleUIMap->getRect().bottom;
 	m_UIAltar_2 = new UI2DImage(
-		m_TESTGameObject, pd3dDevice, pd3dCommandList,
+		m_TESTGameObject, ENUM_SCENE::SCENE_GAME, pd3dDevice, pd3dCommandList,
 		POINT{ int(pos.x), int(pos.z) },
 		20, 20,
 		L"Image/Red.dds"
@@ -608,7 +608,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	pos.x += m_SampleUIMap->getRect().left;
 	pos.z += m_SampleUIMap->getRect().bottom;
 	m_UIAltar_3 = new UI2DImage(
-		m_TESTGameObject, pd3dDevice, pd3dCommandList,
+		m_TESTGameObject, ENUM_SCENE::SCENE_GAME, pd3dDevice, pd3dCommandList,
 		POINT{ int(pos.x), int(pos.z) },
 		20, 20,
 		L"Image/Red.dds"
@@ -626,7 +626,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	pos.x += m_SampleUIMap->getRect().left;
 	pos.z += m_SampleUIMap->getRect().bottom;
 	m_UIAltar_4 = new UI2DImage(
-		m_TESTGameObject, pd3dDevice, pd3dCommandList,
+		m_TESTGameObject, ENUM_SCENE::SCENE_GAME, pd3dDevice, pd3dCommandList,
 		POINT{ int(pos.x), int(pos.z) },
 		20, 20,
 		L"Image/Red.dds"
@@ -644,14 +644,14 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	pos.x += m_SampleUIMap->getRect().left;
 	pos.z += m_SampleUIMap->getRect().bottom;
 	m_UIAltar_5 = new UI2DImage(
-		m_TESTGameObject, pd3dDevice, pd3dCommandList,
+		m_TESTGameObject, ENUM_SCENE::SCENE_GAME, pd3dDevice, pd3dCommandList,
 		POINT{ int(pos.x), int(pos.z) },
 		20, 20,
 		L"Image/Red.dds"
 	);
 
 	m_UIPlayer = new UI2DImage(
-		m_TESTGameObject, pd3dDevice, pd3dCommandList,
+		m_TESTGameObject, ENUM_SCENE::SCENE_GAME, pd3dDevice, pd3dCommandList,
 		POINT{ 0, 0 },
 		10, 10,
 		L"Image/Red.dds"

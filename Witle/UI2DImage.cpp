@@ -15,14 +15,14 @@ void UI2DImage::ReleaseUploadBuffers()
 {
 }
 
-UI2DImage::UI2DImage(GameObject * pOwner, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, RECT rect, const wchar_t * filepath)
+UI2DImage::UI2DImage(GameObject * pOwner, ENUM_SCENE Scenetype, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, RECT rect, const wchar_t * filepath)
 	:UI2D(pOwner)
 {   
 	m_ComponenetID = SHAPE_TYPE_ID::RECTANGLE_SHAPE;
 
 	if (filepath)
 	{ 
-		m_pTexture = new Texture(ENUM_SCENE::SCENE_GAME, ROOTPARAMETER_INDEX(ROOTPARAMETER_TEXTURE), false, 1, RESOURCE_TEXTURE2D);
+		m_pTexture = new Texture(Scenetype, ROOTPARAMETER_INDEX(ROOTPARAMETER_TEXTURE), false, 1, RESOURCE_TEXTURE2D);
 		m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, filepath, 0); 
 	}
 
@@ -66,14 +66,14 @@ UI2DImage::UI2DImage(GameObject * pOwner, ID3D12Device * pd3dDevice, ID3D12Graph
 	m_pVertexBufferViews[0].SizeInBytes = m_nStride * m_vertexCount;
 }
 
-UI2DImage::UI2DImage(GameObject * pOwner, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, POINT center, float width, float height, const wchar_t * filepath)
+UI2DImage::UI2DImage(GameObject * pOwner, ENUM_SCENE Scenetype, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, POINT center, float width, float height, const wchar_t * filepath)
 	: UI2D(pOwner)
 {
 	m_ComponenetID = SHAPE_TYPE_ID::RECTANGLE_SHAPE;
 
 	if (filepath)
 	{ 
-		m_pTexture = new Texture(ENUM_SCENE::SCENE_GAME, ROOTPARAMETER_INDEX(ROOTPARAMETER_TEXTURE), false, 1, RESOURCE_TEXTURE2D);
+		m_pTexture = new Texture(Scenetype, ROOTPARAMETER_INDEX(ROOTPARAMETER_TEXTURE), false, 1, RESOURCE_TEXTURE2D);
 		m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, filepath, 0); 
 	}
 

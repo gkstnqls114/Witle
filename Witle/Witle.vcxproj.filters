@@ -103,9 +103,6 @@
     <Filter Include="99.etc\ID\TerrainObjectID">
       <UniqueIdentifier>{dd631a4a-4f0b-4012-957b-e1b304c15f34}</UniqueIdentifier>
     </Filter>
-    <Filter Include="04.Scene\RoomScene">
-      <UniqueIdentifier>{0cb84e77-e644-46e4-adeb-bac56c763ceb}</UniqueIdentifier>
-    </Filter>
     <Filter Include="03.GameObject\Button">
       <UniqueIdentifier>{03be92de-946d-46c5-9be8-52173edf3c04}</UniqueIdentifier>
     </Filter>
@@ -499,14 +496,17 @@
     <Filter Include="02.Component\ForMonster\BossMonsterAction\BossSkillAction4">
       <UniqueIdentifier>{862d0e47-01df-45d9-b57f-2f8e60cecb4d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="04.Scene\MainScene\LobbyScene">
-      <UniqueIdentifier>{033ba113-a22a-419b-8d84-91a47f23756e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="05.Shader\01.ComputeShader\BloomRevealShader">
       <UniqueIdentifier>{e99d1fda-e0de-4f94-9850-57e70a3ddea0}</UniqueIdentifier>
     </Filter>
     <Filter Include="03.GameObject\02.Monster\Mushroom">
       <UniqueIdentifier>{8623c3fb-9a4e-4a4e-8798-185c3153fc64}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.Scene\WinScene">
+      <UniqueIdentifier>{0cb84e77-e644-46e4-adeb-bac56c763ceb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.Scene\LoseScene">
+      <UniqueIdentifier>{274bf181-be42-494c-9f40-2264e8bd0ee1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -719,12 +719,6 @@
     </ClInclude>
     <ClInclude Include="TerrainObjectID.h">
       <Filter>99.etc\ID\TerrainObjectID</Filter>
-    </ClInclude>
-    <ClInclude Include="LobbyScene.h">
-      <Filter>04.Scene\MainScene\LobbyScene</Filter>
-    </ClInclude>
-    <ClInclude Include="RoomScene.h">
-      <Filter>04.Scene\RoomScene</Filter>
     </ClInclude>
     <ClInclude Include="QuadtreeTerrain.h">
       <Filter>03.GameObject\Terrain</Filter>
@@ -1038,6 +1032,12 @@
     <ClInclude Include="Mushroom.h">
       <Filter>03.GameObject\02.Monster\Mushroom</Filter>
     </ClInclude>
+    <ClInclude Include="WinScene.h">
+      <Filter>04.Scene\WinScene</Filter>
+    </ClInclude>
+    <ClInclude Include="LoseScene.h">
+      <Filter>04.Scene\LoseScene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1231,12 +1231,6 @@
     </ClCompile>
     <ClCompile Include="TerrainObjectID.cpp">
       <Filter>99.etc\ID\TerrainObjectID</Filter>
-    </ClCompile>
-    <ClCompile Include="LobbyScene.cpp">
-      <Filter>04.Scene\MainScene\LobbyScene</Filter>
-    </ClCompile>
-    <ClCompile Include="RoomScene.cpp">
-      <Filter>04.Scene\RoomScene</Filter>
     </ClCompile>
     <ClCompile Include="QuadtreeTerrain.cpp">
       <Filter>03.GameObject\Terrain</Filter>
@@ -1448,9 +1442,6 @@
     <ClCompile Include="SceneMgr.cpp">
       <Filter>13.Storage/Manager\12.SceneMgr</Filter>
     </ClCompile>
-    <ClCompile Include="MainScene.cpp">
-      <Filter>04.Scene\MainScene</Filter>
-    </ClCompile>
     <ClCompile Include="SkillSelectScene.cpp">
       <Filter>04.Scene\SkillSelectScene</Filter>
     </ClCompile>
@@ -1546,6 +1537,15 @@
     </ClCompile>
     <ClCompile Include="Mushroom.cpp">
       <Filter>03.GameObject\02.Monster\Mushroom</Filter>
+    </ClCompile>
+    <ClCompile Include="WinScene.cpp">
+      <Filter>04.Scene\WinScene</Filter>
+    </ClCompile>
+    <ClCompile Include="LoseScene.cpp">
+      <Filter>04.Scene\LoseScene</Filter>
+    </ClCompile>
+    <ClCompile Include="MainScene.cpp">
+      <Filter>04.Scene\MainScene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
