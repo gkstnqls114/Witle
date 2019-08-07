@@ -585,7 +585,7 @@ void CGameFramework::CreateShadowmapView()
 	auto hCpuSrvForShadow = m_ShadowmapHeap->GetCPUDescriptorHandleForHeapStart(); // 쉐이더 리소스 뷰 
 	m_d3dDevice->CreateShaderResourceView(m_Shadowmap, &srvDesc, hCpuSrvForShadow);
 
-	hCpuSrvForShadow.ptr += d3dUtil::gnDsvDescriptorIncrementSize;
+	hCpuSrvForShadow.ptr += d3dUtil::gnCbvSrvDescriptorIncrementSize;
 	m_d3dDevice->CreateShaderResourceView(m_PlayerShadowmap, &srvDesc, hCpuSrvForShadow); 
 	 
 	auto hCpuDsvForShadow = m_DsvHeap->GetCPUDescriptorHandleForHeapStart(); // 0: 기본 depth stencil
@@ -601,8 +601,8 @@ void CGameFramework::CreateShadowmapView()
 	dsvDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
 	dsvDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
 	dsvDesc.Texture2D.MipSlice = 0;
-	m_d3dDevice->CreateDepthStencilView(m_Shadowmap, &dsvDesc, m_ShadowmapCPUHandle);
 
+	m_d3dDevice->CreateDepthStencilView(m_Shadowmap, &dsvDesc, m_ShadowmapCPUHandle);
 	m_d3dDevice->CreateDepthStencilView(m_PlayerShadowmap, &dsvDesc, m_PlayerShadowmapCPUHandle);
 	
 	// 디스크립터 생성 /////////////////////////////////////////////
