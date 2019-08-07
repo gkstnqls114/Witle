@@ -148,6 +148,13 @@ void Monster::ReleaseMembers()
 		delete m_pDebugSpawnMesh;
 		m_pDebugSpawnMesh = nullptr;
 	}
+#endif // _DEBUG
+	if (m_pTexture)
+	{
+		m_pDebugSpawnMesh->ReleaseObjects();
+		delete m_pDebugSpawnMesh;
+		m_pDebugSpawnMesh = nullptr;
+	}
 #endif // _DEBUG 
 	if (m_pLoadObject)
 	{
@@ -199,7 +206,7 @@ void Monster::SubstractHP(int sub)
 {
 	m_CurrAnimation = GetAnimationHitID();
 	m_pLoadObject->SetTrackAnimationSet(0, m_CurrAnimation);
-	
+
 	m_MonsterHPStatus->m_Guage -= sub;
 	std::cout << m_MonsterHPStatus->m_Guage << std::endl;
 }

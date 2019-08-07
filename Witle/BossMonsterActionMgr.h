@@ -26,10 +26,10 @@ class BossMonsterActionMgr
 	BossIdleAction m_BossIdleAction;
 	BossMoveAction m_BossMoveAction;
 	BossChaseAction m_BossChaseAction;
-	BossSkillAction0 m_BossSkillAction0;
-	BossSkillAction1 m_BossSkillAction1;
-	BossSkillAction2 m_BossSkillAction2;
-	BossSkillAction3 m_BossSkillAction3;
+	BossSkillAction0 m_BossSkillBreath;
+	BossSkillAction1 m_BossSkilldownstroke;
+	BossSkillAction2 m_BossSkIllTailAttack;
+	BossSkillAction3 m_BossSkIlldash;
 	BossSkillAction4 m_BossSkillAction4;
 	// 현재 사용하는 액션(상태)들
 
@@ -50,10 +50,10 @@ public:
 		m_BossIdleAction(pOwner, IdleTime),
 		m_BossMoveAction(pOwner, MoveTime),
 		m_BossChaseAction(pOwner),
-		m_BossSkillAction0(pOwner),
-		m_BossSkillAction1(pOwner),
-		m_BossSkillAction2(pOwner),
-		m_BossSkillAction3(pOwner),
+		m_BossSkillBreath(pOwner),
+		m_BossSkilldownstroke(pOwner),
+		m_BossSkIllTailAttack(pOwner),
+		m_BossSkIlldash(pOwner),
 		m_BossSkillAction4(pOwner)
 	{
 		m_CurrMonsterAction = &m_BossIdleAction;
@@ -71,10 +71,10 @@ public:
 	bool Is_BossChaseAction() const { return (m_CurrMonsterAction == &m_BossChaseAction); } // 추격
 	// bool Is_BossSearchAction() const { return (m_CurrMonsterAction == &m_BossSearchAction); } // 필요할까?
 	// bool Is_BossDeadAction() const { return (m_CurrMonsterAction == &m_BossDeadAction); } // 죽음
-	bool Is_BossSkillAction0() const { return (m_CurrMonsterAction == &m_BossSkillAction0); }// 임시
-	bool Is_BossSkillAction1() const { return (m_CurrMonsterAction == &m_BossSkillAction1); }// 임시
-	bool Is_BossSkillAction2() const { return (m_CurrMonsterAction == &m_BossSkillAction2); }// 임시
-	bool Is_BossSkillAction3() const { return (m_CurrMonsterAction == &m_BossSkillAction3); }// 임시
+	bool Is_BossSkillActionBreath() const { return (m_CurrMonsterAction == &m_BossSkillBreath); }// 브레스
+	bool Is_BossSkillAction1() const { return (m_CurrMonsterAction == &m_BossSkilldownstroke); }// 내려찍기
+	bool Is_BossSkillActionTailAttack() const { return (m_CurrMonsterAction == &m_BossSkIllTailAttack); }// 꼬리회전
+	bool Is_BossSkillActiondash() const { return (m_CurrMonsterAction == &m_BossSkIlldash); }// 돌진
 	bool Is_BossSkillAction4() const { return (m_CurrMonsterAction == &m_BossSkillAction4); }// 임시
 	// bool Is_BossSkillAction5() const { return (m_CurrMonsterAction == &m_BossSkillAction5); }// 임시
 	// bool Is_BossSkillAction6() const { return (m_CurrMonsterAction == &m_BossSkillAction6); }// 임시

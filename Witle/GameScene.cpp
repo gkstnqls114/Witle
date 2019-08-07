@@ -920,19 +920,27 @@ void GameScene::LastUpdate(float fElapsedTime)
 
 		}
 
-		//////////////////////////////////////////////////////// BOSS
+		//////////////////////////////////////////////////////// BOSS를 때림
 		// 체력이 0보다 적으면 검사하지 않는다.
 		if (m_Dragon->GetStatus()->m_Guage <= 0.f) continue;
 
 		if (Collision::isCollide(m_Dragon->GetBOBox(), skill_collider))
 		{
-			std::cout << "보스 스킬에 맞음" << std::endl;
+			std::cout << "보스가 스킬에 맞음" << std::endl;
 			m_Dragon->SubstractHP(5);
 			PlayerSkillMgr::GetInstance()->Deactive(index);
 		}
-		//////////////////////////////////////////////////////// BOSS
+		//////////////////////////////////////////////////////// BOSS를 때림
 	}
-	  
+
+	// if (m_Dragon->GetisAttacking())
+	// {
+	// 	if (Collision::isCollide(m_pPlayer->GetBOBox()->GetBOBox(), m_Dragon->GetBOBox()->GetBOBox()))
+	// 	{
+	// 		m_pPlayer->SubstractHP(5);
+	// 	}
+	// }
+
 	// Update한 위치로 몬스터가 공격 시에 몬스터/플레이어충돌체크 확인 ///////////////////////////
 	//for (int i = 0; i < m_TestMonsterCount; ++i)
 	//{
@@ -945,11 +953,12 @@ void GameScene::LastUpdate(float fElapsedTime)
 	//	}
 	//}
 
-
+	// 보스 부딫힘
 	if (Collision::isCollide(m_pPlayer->GetBOBox()->GetBOBox(), m_Dragon->GetBOBox()->GetBOBox()))
 	{
 		std::cout << "부딪힘" << std::endl;
 	}
+	// 보스 부딫힘
 
 	// 카메라 프러스텀과 쿼드트리 지형 렌더링 체크
 	if (m_pMainCamera && m_pQuadtreeTerrain)
@@ -1195,6 +1204,25 @@ void GameScene::UpdateCollision(float fElapsedTime)
 	Collision::ProcessCollideTerrainObject(m_pPlayer, m_pQuadtreeTerrain, fElapsedTime);
 
 
+	// // 플레이어와 보스 충돌체크
+	// MyBOBox bossbox = result_pos;
+	// XMFLOAT3 slideVector{ 0.f, 0.f, 0.f };
+	// 
+	// // 이동한 박스를 통해 충돌한다.
+	// bool isSlide = Collision::ProcessCollision(
+	// 	AlreadyPlayerBBox,
+	// 	bossbox,
+	// 	m_pPlayer->GetTransform().GetPosition(),
+	// 	m_pPlayer->GetVelocity(),
+	// 	fElapsedTime,
+	// 	false,
+	// 	slideVector);
+	// 
+	// if (isSlide)
+	// {
+	// 	m_pPlayer->SetVelocity(slideVector);
+	// }
+	// // 플레이어와 보스 충돌체크
 
 
 	// 몬스터 충돌체크 ///////////////////////// 

@@ -54,19 +54,19 @@ void BossMonsterActionMgr::ChangeBossStateBefore()
 	// {
 	// 	ChangeBossStateToHit();
 	// }
-	else if (m_CurrMonsterAction == &m_BossSkillAction0)
+	else if (m_CurrMonsterAction == &m_BossSkillBreath)
 	{
 		ChangeBossStateToAction0();
 	}
-	else if (m_CurrMonsterAction == &m_BossSkillAction1)
+	else if (m_CurrMonsterAction == &m_BossSkilldownstroke)
 	{
 		ChangeBossStateToAction1();
 	}
-	else if (m_CurrMonsterAction == &m_BossSkillAction2)
+	else if (m_CurrMonsterAction == &m_BossSkIllTailAttack)
 	{
 		ChangeBossStateToAction2();
 	}
-	else if (m_CurrMonsterAction == &m_BossSkillAction3)
+	else if (m_CurrMonsterAction == &m_BossSkIlldash)
 	{
 		ChangeBossStateToAction3();
 	}
@@ -131,41 +131,42 @@ void BossMonsterActionMgr::ChangeBossStateToChase()
 // 스킬 0
 void BossMonsterActionMgr::ChangeBossStateToAction0()
 {
-	ChangeAction(&m_BossSkillAction0);
+	ChangeAction(&m_BossSkillBreath);
 	m_CurrMonsterAction->Init();
 	static_cast<Monster*>(m_pOwner)->SetAnimationState(BOSS_SKILL0.ID);
 	static_cast<Monster*>(m_pOwner)->SetisAttacking(true);
-	printf("보스 스킬 0\n");
+	printf("보스 브레스\n");
 }
 
 // 스킬 1
 void BossMonsterActionMgr::ChangeBossStateToAction1()
 {
-	ChangeAction(&m_BossSkillAction1);
+	ChangeAction(&m_BossSkilldownstroke);
 	m_CurrMonsterAction->Init();
 	static_cast<Monster*>(m_pOwner)->SetAnimationState(BOSS_SKILL1.ID);
 	static_cast<Monster*>(m_pOwner)->SetisAttacking(true);
-	printf("보스 스킬 1\n");
+	printf("보스 내려찍기\n");
 }
 
 // 스킬 2
 void BossMonsterActionMgr::ChangeBossStateToAction2()
 {
-	ChangeAction(&m_BossSkillAction2);
+	ChangeAction(&m_BossSkIllTailAttack);
 	m_CurrMonsterAction->Init();
 	static_cast<Monster*>(m_pOwner)->SetAnimationState(BOSS_SKILL2.ID);
 	static_cast<Monster*>(m_pOwner)->SetisAttacking(true);
-	printf("보스 스킬 2\n");
+	printf("보스 꼬리회전\n");
 }
 
 // 스킬 3
 void BossMonsterActionMgr::ChangeBossStateToAction3()
 {
-	ChangeAction(&m_BossSkillAction3);
+	ChangeAction(&m_BossSkIlldash);
 	m_CurrMonsterAction->Init();
 	static_cast<Monster*>(m_pOwner)->SetAnimationState(BOSS_SKILL3.ID);
 	static_cast<Monster*>(m_pOwner)->SetisAttacking(true);
-	printf("보스 스킬 3\n");
+
+	printf("보스 돌진\n");
 }
 
 // 스킬 4
