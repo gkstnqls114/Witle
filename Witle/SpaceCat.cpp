@@ -8,6 +8,7 @@
 #include "GeneralMonsterActionMgr.h"
 // For Monster ///////////////
 
+#include "TextureStorage.h"
 #include "ModelStorage.h"
 #include "MyDescriptorHeap.h"
 #include "Object.h"
@@ -42,21 +43,19 @@ SpaceCat::SpaceCat(const std::string & entityID, const XMFLOAT3& SpawnPoint,
 
 	m_MonsterMovement = new MonsterMovement(this, 1, 1);
 	m_MonsterMovement->m_fDistance = 100;
-	 
-	m_pTexture = new Texture(ENUM_SCENE::SCENE_GAME, ROOTPARAMETER_INDEX(ROOTPARAMETER_TEXTURE), false, 1, RESOURCE_TEXTURE2D);
-
+	
 	int val = rand() % 3;
 	if (val == 0)
 	{
-		m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/SpaceCat_Green.dds", 0);
+		m_pTexture = TextureStorage::GetInstance()->GetTexture(SPACECAT_GREEN);
 	}
 	else if (val == 1)
 	{
-		m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/SpaceCat_Blue.dds", 0);
+		m_pTexture = TextureStorage::GetInstance()->GetTexture(SPACECAT_BLUE);
 	}
 	else
 	{
-		m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/SpaceCat_Pink.dds", 0);
+		m_pTexture = TextureStorage::GetInstance()->GetTexture(SPACECAT_PINK);
 	}
 	 
 	ANIMATION_INFO infos[SPACECAT_ANIMATIONE];

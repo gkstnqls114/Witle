@@ -158,6 +158,10 @@ void MonsterTransformStorage::LoadNameAndPositionFromFile(ID3D12Device * pd3dDev
 			else if (!strcmp(name, CREEPYMONSTER))
 			{
 				LoadTransform(name, CREEPYMONSTER, transform);
+			} 
+			else if (!strcmp(name, MUSHROOM))
+			{
+				LoadTransform(name, MUSHROOM, transform);
 			}
 			else if (!strcmp(name, DRAGON))
 			{

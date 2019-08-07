@@ -24,7 +24,7 @@ void Broom::DoNotUse()
 }
 
 Broom::Broom(PlayerMovement* playerStatus)
-	: FixedSkill()
+	: FixedSkill("Broom")
 {
 	m_pPlayerMovement = playerStatus;
  	m_UsingTime = 5.f; // 사용 시간

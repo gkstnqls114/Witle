@@ -2,6 +2,11 @@
 #include "MyCollider.h"
 #include "MyBOBox.h"
 #include "MyBSphere.h"
+#include "Player.h"
+#include "Monster.h"
+#include "ModelStorage.h"
+#include "StaticObjectStorage.h"
+#include "QuadtreeTerrain.h"
 #include "Collision.h"
 
 bool Collision::isCollide(MyCollider* collider, const XMFLOAT3 & origin, const XMFLOAT3 & direction, float & dist)
@@ -74,6 +79,146 @@ bool Collision::ProcessCollision(const BoundingOrientedBox & moveObject,
 	return false;
 }
 
+void Collision::ProcessCollideEdge(Player * player, int TerrainObjectCount, const MyBOBox * terrainObject, float fElapsedTime)
+{
+	BoundingOrientedBox AlreadyPlayerBBox = player->CalculateAlreadyBoundingBox(fElapsedTime);
+	XMFLOAT3 AlreadyPositon{ AlreadyPlayerBBox.Center.x, AlreadyPlayerBBox.Center.y, AlreadyPlayerBBox.Center.z };
+	XMFLOAT3 slideVector{ 0.f, 0.f, 0.f };
+	bool isSlide = false;
+	for (int i = 0; i < TerrainObjectCount; ++i)
+	{
+		isSlide = Collision::ProcessCollision(
+			AlreadyPlayerBBox,
+			terrainObject[i],
+			player->GetTransform().GetPosition(),
+			player->GetVelocity(),
+			fElapsedTime,
+			false,
+			slideVector);
+
+		if (isSlide)
+		{ 
+			player->SetVelocity(slideVector); 
+		}
+	}
+	  
+}
+
+void Collision::ProcessCollideTerrainObject(Player * player, const QuadtreeTerrain * quadTerrain, float fElapsedTime)
+{ 
+	BoundingOrientedBox AlreadyPlayerBBox = player->CalculateAlreadyBoundingBox(fElapsedTime);
+	XMFLOAT3 AlreadyPositon{ AlreadyPlayerBBox.Center.x, AlreadyPlayerBBox.Center.y, AlreadyPlayerBBox.Center.z };
+
+	XMINT4 IDs = quadTerrain->GetIDs(AlreadyPositon);
+	int TerrainCount = quadTerrain->GetTerrainPieceCount();
+
+	// Ti: Terrain Index
+	for (int Ti = 0; Ti < TerrainCount; ++Ti)
+	{
+		int TerrainIndex = Ti;
+		//if (Ti == 0) TerrainIndex = IDs.x;
+		//else if (Ti == 1) TerrainIndex = IDs.y;
+		//else if (Ti == 2) TerrainIndex = IDs.z;
+		//else if (Ti == 3) TerrainIndex = IDs.w;
+
+		//if (TerrainIndex == -1) continue;
+
+		for (const auto& name : ModelStorage::GetInstance()->m_NameList)
+		{
+			MyBOBox* box = ModelStorage::GetInstance()->GetBOBox(name);
+			if (!box) continue; // 충돌박스가 없다면 다른 오브젝트를 검사하자.
+
+			XMFLOAT4X4* pWorldMatrix = StaticObjectStorage::GetInstance(quadTerrain)->GetWorldMatrix(TerrainIndex, name);
+
+			// 트레인 조각 내부 오브젝트 개수만큼 충돌 체크
+			for (int i = 0; i < StaticObjectStorage::GetInstance(quadTerrain)->GetObjectCount(TerrainIndex, name); ++i)
+			{
+				//월드 행렬 갖고온다.
+
+				// 모델 충돌박스를 월드행렬 곱한다. 일단 현재는 포지션으로 이동
+				MyBOBox worldBox = *box;
+				worldBox.Move(XMFLOAT3(pWorldMatrix[i]._41, 0, pWorldMatrix[i]._43));
+
+				XMFLOAT3 slideVector{ 0.f, 0.f, 0.f };
+
+				bool isSlide = Collision::ProcessCollision(
+					AlreadyPlayerBBox,
+					worldBox,
+					player->GetTransform().GetPosition(),
+					player->GetVelocity(),
+					fElapsedTime,
+					true,
+					slideVector);
+
+				if (isSlide)
+				{
+					player->SetVelocity(slideVector);
+					return;
+				}
+
+			}
+		}
+	} 
+}
+
+void Collision::ProcessCollideTerrainObject(Monster * monster, const QuadtreeTerrain * quadTerrain, float fElapsedTime)
+{
+	BoundingOrientedBox AlreadyPlayerBBox = monster->CalculateAlreadyBoundingBox(fElapsedTime);
+	XMFLOAT3 AlreadyPositon{ AlreadyPlayerBBox.Center.x, AlreadyPlayerBBox.Center.y, AlreadyPlayerBBox.Center.z };
+
+	XMINT4 IDs = quadTerrain->GetIDs(AlreadyPositon);
+	int TerrainCount = quadTerrain->GetTerrainPieceCount();
+
+	// Ti: Terrain Index
+	for (int Ti = 0; Ti < TerrainCount; ++Ti)
+	{
+		int TerrainIndex = Ti;
+		//if (Ti == 0) TerrainIndex = IDs.x;
+		//else if (Ti == 1) TerrainIndex = IDs.y;
+		//else if (Ti == 2) TerrainIndex = IDs.z;
+		//else if (Ti == 3) TerrainIndex = IDs.w;
+
+		//if (TerrainIndex == -1) continue;
+
+		for (const auto& name : ModelStorage::GetInstance()->m_NameList)
+		{
+			MyBOBox* box = ModelStorage::GetInstance()->GetBOBox(name);
+			if (!box) continue; // 충돌박스가 없다면 다른 오브젝트를 검사하자.
+
+			XMFLOAT4X4* pWorldMatrix = StaticObjectStorage::GetInstance(quadTerrain)->GetWorldMatrix(TerrainIndex, name);
+
+			// 트레인 조각 내부 오브젝트 개수만큼 충돌 체크
+			for (int i = 0; i < StaticObjectStorage::GetInstance(quadTerrain)->GetObjectCount(TerrainIndex, name); ++i)
+			{
+				//월드 행렬 갖고온다.
+
+				// 모델 충돌박스를 월드행렬 곱한다. 일단 현재는 포지션으로 이동
+				MyBOBox worldBox = *box;
+				worldBox.Move(XMFLOAT3(pWorldMatrix[i]._41, 0, pWorldMatrix[i]._43));
+
+				XMFLOAT3 slideVector{ 0.f, 0.f, 0.f };
+
+				bool isSlide = Collision::ProcessCollision(
+					AlreadyPlayerBBox,
+					worldBox,
+					monster->GetTransform().GetPosition(),
+					monster->GetVelocity(),
+					fElapsedTime,
+					true,
+					slideVector);
+
+				if (isSlide)
+				{
+					std::cout << "속도 변경" << std::endl;
+					monster->SetVelocity(slideVector);
+					return;
+				}
+
+			}
+		}
+	}
+}
+ 
 bool Collision::isCollide(MyCollider * a, MyCollider * b)
 {
 	COLLIDER_TYPE A_type = a->GetType();

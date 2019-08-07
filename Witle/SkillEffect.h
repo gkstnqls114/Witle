@@ -26,7 +26,6 @@ protected:
 	MyCollider* m_MyCollider{ nullptr };
 
 public:
-	const float m_CoolTime{ 0.f }; // 스킬을 재시작 하는 쿨타임
 	const ENUM_SKILLTYPE m_Skilltype{ENUM_SKILLTYPE::SKILLTYPE_NONE};
 
 protected: 

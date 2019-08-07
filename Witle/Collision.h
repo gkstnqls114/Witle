@@ -2,15 +2,17 @@
 
 struct RAY;
 
+class Player;
+class Monster;
 class MyCollider;
 class MyBOBox;
+class QuadtreeTerrain;
 
 class Collision
 {
 private: 
 
 public:
-
 	static bool isCollide(const BoundingOrientedBox& box, const XMFLOAT3& origin, const XMFLOAT3& direction, float& dist)
 	{
 		return box.Intersects(XMLoadFloat3(&origin), XMLoadFloat3(&direction), dist);
@@ -58,5 +60,10 @@ public:
 		float fElapsedTime,
 		bool StaticObjIsMove,
 		/*out*/XMFLOAT3& SlideVector);
-	 
+	
+	static void ProcessCollideEdge(Player* player, int TerrainObjectCount, const MyBOBox* terrainObject, float fElapsedTime);
+	
+	static void ProcessCollideTerrainObject(Player* player, const QuadtreeTerrain* quadTerrain, float fElapsedTime);
+	static void ProcessCollideTerrainObject(Monster* player, const QuadtreeTerrain* quadTerrain, float fElapsedTime);
+	
 };

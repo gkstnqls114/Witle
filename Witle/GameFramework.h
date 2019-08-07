@@ -12,6 +12,7 @@ class MyDescriptorHeap;
 class CLoadedModelInfo;
 class DownScaleFirstPassShader;
 class DownScaleSecondPassShader;
+class BloomRevealShader;
 
 class CGameFramework
 { 
@@ -63,12 +64,13 @@ private:
 
 	float	m_clearValueColor[4]
 	{
-		0.5f, 0.f, 0.f, 1.f
+		1.f, 0.f, 0.f, 1.f
 	};
 
 	static const UINT m_GBuffersCountForDepth{ 1 };
 	static const UINT m_ShadowmapCount{ 2 };
 	static const UINT m_GBuffersCountForRenderTarget{ 3 };
+	static const UINT m_PostProcessingCount{ 3 };
 	const UINT m_DsvDescriptorsCount{ 1 + m_GBuffersCountForDepth + m_ShadowmapCount };
 	static const UINT m_GBuffersCount{ m_GBuffersCountForDepth + m_GBuffersCountForRenderTarget };
 
@@ -84,9 +86,22 @@ private:
 	D3D12_CPU_DESCRIPTOR_HANDLE m_ShadowmapCPUHandle;
 	D3D12_CPU_DESCRIPTOR_HANDLE m_PlayerShadowmapCPUHandle;
 
-	UINT m_GBufferHeapCount{ m_GBuffersCount + m_ShadowmapCount + 1 /*uav*/};
-	UINT m_GBufferForDepthIndex = m_GBufferHeapCount - 4;
-	UINT m_GBufferForUAV = m_GBufferHeapCount - 3;
+	ID3D12Resource*				m_RWHDRTex_1_16; // HDR 텍스쳐(gbuffer 0번째)를 16분의 1로 줄인(x /= 4, y /= 4) 텍스쳐
+	D3D12_CPU_DESCRIPTOR_HANDLE m_hCPUHDRTex_1_16;
+
+	// 블룸 완성본을 위한 텍스쳐
+	ID3D12Resource* m_RWBloomTex;
+	
+	// HDR -> Bloom 중간과정을 위한 텍스쳐
+	ID3D12Resource* m_RWMiddleBloomTex;
+
+	UINT m_GBufferHeapCount{ m_GBuffersCount + m_ShadowmapCount + m_PostProcessingCount /*uav*/};
+	UINT m_GBufferForDepthIndex = m_GBufferHeapCount - 6;
+
+	UINT m_GBufferForHDR1_16 = m_GBufferHeapCount - 5;
+	UINT m_GBufferForMiddleBloom = m_GBufferHeapCount - 4;
+	UINT m_GBufferForBloom = m_GBufferHeapCount - 3;
+
 	UINT m_GBufferForShadowIndex = m_GBufferHeapCount - 2;
 	UINT m_GBufferForPlayerShadowIndex = m_GBufferHeapCount - 1;
 	MyDescriptorHeap* m_GBufferHeap{ nullptr }; // GBuffer 뿐만 아니라 Shadow도 담습니다.
@@ -98,8 +113,6 @@ private:
 	//// 컴퓨트 쉐이더를 위한 변수 ///////////////////////////////////////////
 
 	
-	// 블러를 위한 텍스쳐
-	ID3D12Resource* m_ComputeRWResource; 
 
 	// 톤매핑을 위한 변수 
 	const int NumMiddleAvgLum = (1280 * 720) / (16 * 1024);
@@ -113,6 +126,7 @@ private:
 	// 블러를 위한 컴퓨트
 	HorizonBlurShader* m_horizenShader{ nullptr };
 	VerticalBlurShader* m_verticalShader{ nullptr };
+	BloomRevealShader* m_BloomRevealShader{ nullptr };
 
 	// 톤매핑을 위한 컴퓨트 쉐이더
 	DownScaleFirstPassShader* m_downScaleFirstPassShader{ nullptr };
@@ -171,6 +185,9 @@ private:
 
 	// 계산 쉐이더를 통해 블러링합니다.
 	void Blur();
+
+	// Bloom 을 위해 텍스쳐를 계산합니다.
+	void Bloom();
 
 	// 휘도 계산을 위한 다운 스케일을 진행합니다.
 	void DownScale();

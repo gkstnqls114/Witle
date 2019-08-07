@@ -3,7 +3,7 @@
 
 D3D12_SHADER_BYTECODE DownScaleFirstPassShader::CreateComputeShader(ID3DBlob ** ppd3dShaderBlob)
 {
-	return ComputeShader::CompileShaderFromFile(L"TonemappingComputeShader.hlsl", "DownScaledFirstPass", ppd3dShaderBlob);
+	return ComputeShader::CompileShaderFromFile(L"TonemappingComputeShader.hlsl", "DownScaleFirstPass", ppd3dShaderBlob);
 }
 
 DownScaleFirstPassShader::DownScaleFirstPassShader()

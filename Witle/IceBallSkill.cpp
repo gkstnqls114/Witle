@@ -4,6 +4,7 @@
 
  
 IceBallSkill::IceBallSkill(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList)
+	: BallSkill("IceBall", COOLTIME_ICEBALL)
 {
 	m_skillEffect = new IceBall("FireBallEffect", pd3dDevice, pd3dCommandList);
 }

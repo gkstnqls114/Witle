@@ -1,19 +1,18 @@
 #pragma once
 #include "Monster.h"
-class Dragon
+
+class Mushroom
 	: public Monster
 {
-private:
-	LoadObject* m_BOBoxFrame;
+	virtual int GetAnimationHitID() { return ANI_MUSHROOM_HIT.ID; };
 
 protected:
 	virtual void ReleaseMembers() override;
 	virtual void ReleaseMemberUploadBuffers() override;
-	virtual int GetAnimationHitID() override { return 0; }; // 현재 임시로 0 반환합니다.
 
 public:
-	Dragon(const std::string& entityID, const XMFLOAT3& SpawnPoint, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature);
-	virtual ~Dragon();
+	Mushroom(const std::string& entityID, const XMFLOAT3& SpawnPoint, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature);
+	virtual ~Mushroom();
 
 	virtual void Update(float) override;
 

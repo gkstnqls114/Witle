@@ -48,11 +48,17 @@ public:
 	//D3D12_CPU_DESCRIPTOR_HANDLE GetCPUCbvDescriptorStartHandle() const { return(m_CbvCPUDescriptorStartHandle); }
 	//D3D12_GPU_DESCRIPTOR_HANDLE GetGPUCbvDescriptorStartHandle() const { return(m_CbvGPUDescriptorStartHandle); }
 
-	//D3D12_CPU_DESCRIPTOR_HANDLE GetCPUSrvDescriptorStartHandle() const { return(m_SrvCPUDescriptorStartHandle); }
-	//D3D12_GPU_DESCRIPTOR_HANDLE GetGPUSrvDescriptorStartHandle() const { return(m_SrvGPUDescriptorStartHandle); }
+	D3D12_CPU_DESCRIPTOR_HANDLE GetCPUSrvDescriptorStartHandle() const { return(m_SrvCPUDescriptorStartHandle); }
+	D3D12_GPU_DESCRIPTOR_HANDLE GetGPUSrvDescriptorStartHandle() const { return(m_SrvGPUDescriptorStartHandle); }
 
+	D3D12_CPU_DESCRIPTOR_HANDLE GetCPUSrvDescriptorHandle(int index) const;
+	D3D12_GPU_DESCRIPTOR_HANDLE GetGPUSrvDescriptorHandle(int index) const;
+	
 	D3D12_CPU_DESCRIPTOR_HANDLE GetCPUUAVDescriptorStartHandle() const { return(m_d3dUAVCPUDescriptorStartHandle); }
 	D3D12_GPU_DESCRIPTOR_HANDLE GetGPUUAVDescriptorStartHandle() const { return(m_d3dUAVGPUDescriptorStartHandle); }
+
+	D3D12_CPU_DESCRIPTOR_HANDLE GetCPUUAVDescriptorHandle(int index) const;
+	D3D12_GPU_DESCRIPTOR_HANDLE GetGPUUAVDescriptorHandle(int index) const;
 
 	ID3D12DescriptorHeap* GetpDescriptorHeap() const { return m_pd3dCbvSrvUavDescriptorHeap; };
 	UINT GetNumDescriptors() const { return m_pd3dCbvSrvUavDescriptorHeap->GetDesc().NumDescriptors;}

@@ -80,17 +80,20 @@ void ModelStorage::CreateModels(ID3D12Device * pd3dDevice, ID3D12GraphicsCommand
 	// 충돌박스 목록
 	test = new EmptyGameObject("Empty");
 
-	m_ModelStorage[TREE_1].modelBOBox = new MyBOBox(test, pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 0.F, 0.F }, XMFLOAT3{ 200.F, 200.F, 200.F });
-	m_ModelStorage[TREE_BG_1].modelBOBox = new MyBOBox(test, pd3dDevice, pd3dCommandList, XMFLOAT3{0.F, 0.F, 0.F}, XMFLOAT3{ 200.F, 200.F, 200.F });
-	m_ModelStorage[TREE_2].modelBOBox = new MyBOBox(test, pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 0.F, 0.F }, XMFLOAT3{ 100.F, 100.F, 100.F });
-	m_ModelStorage[TREE_BG_2].modelBOBox = new MyBOBox(test, pd3dDevice, pd3dCommandList, XMFLOAT3{0.F, 0.F, 0.F},XMFLOAT3{ 200.F, 200.F, 200.F });
-	m_ModelStorage[TREE_3].modelBOBox = new MyBOBox(test, pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 0.F, 0.F }, XMFLOAT3{ 100.F, 100.F, 100.F });
-	m_ModelStorage[TREE_BG_3].modelBOBox = new MyBOBox(test, pd3dDevice, pd3dCommandList, XMFLOAT3{0.F, 0.F, 0.F},XMFLOAT3{ 200.F, 200.F, 200.F });
-	m_ModelStorage[RUIN_ARCH].modelBOBox = new MyBOBox(test, pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 0.F, 0.F }, XMFLOAT3{ 300.F, 300.F, 300.F });
-	m_ModelStorage[RUIN_BROKENPILLA].modelBOBox = new MyBOBox(test, pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 0.F, 0.F }, XMFLOAT3{ 300.F, 300.F, 300.F });
-	m_ModelStorage[RUIN_PILLAR].modelBOBox = new MyBOBox(test, pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 0.F, 0.F }, XMFLOAT3{ 400.F, 400.F, 400.F });
-	m_ModelStorage[RUIN_SQUARE].modelBOBox = new MyBOBox(test, pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 0.F, 0.F }, XMFLOAT3{ 400.F, 400.F, 400.F });
-	m_ModelStorage[ALTAR_IN].modelBOBox = new MyBOBox(test, pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 0.F, 0.F }, XMFLOAT3{ 200.F, 200.F, 200.F });
+	// 충돌박스 
+	m_ModelStorage[TREE_1].modelBOBox = new MyBOBox(test, pd3dDevice, pd3dCommandList, XMFLOAT3{ -4.5F, 300.F / 2.f, -20.f }, XMFLOAT3{ 140.f / 2.f, 300.f /2.f, 150.f / 2.f });
+	m_ModelStorage[TREE_BG_1].modelBOBox = new MyBOBox(test, pd3dDevice, pd3dCommandList, XMFLOAT3{-16.5f, 600.f /2.f, -36.f}, XMFLOAT3{ 220.F / 2.f, 600.F /2.f, 250.F /2.f});
+	m_ModelStorage[TREE_2].modelBOBox = new MyBOBox(test, pd3dDevice, pd3dCommandList, XMFLOAT3{ 15.F, 600.F /2.f, 63.F }, XMFLOAT3{ 260.F / 2.f, 600.F / 2.f ,260.F / 2.f});
+	m_ModelStorage[TREE_BG_2].modelBOBox = new MyBOBox(test, pd3dDevice, pd3dCommandList, XMFLOAT3{15.F, 600.F / 2.f, 99.F},XMFLOAT3{ 400.F/ 2.f, 600.F/ 2.f, 430.F/ 2.f });
+	m_ModelStorage[TREE_3].modelBOBox = new MyBOBox(test, pd3dDevice, pd3dCommandList, XMFLOAT3{ -13.F, 600.F / 2.f, -51.f }, XMFLOAT3{ 310.F/ 2.f, 600.F/ 2.f, 300.F/ 2.f });
+
+	m_ModelStorage[TREE_BG_3].modelBOBox = new MyBOBox(test, pd3dDevice, pd3dCommandList, XMFLOAT3{-18.F, 600.F / 2.f, -74.F},XMFLOAT3{ 450.F/ 2.f, 600.F/ 2.f, 450.F/ 2.f });	
+	m_ModelStorage[RUIN_ARCH].modelBOBox = new MyBOBox(test, pd3dDevice, pd3dCommandList, XMFLOAT3{ -10.f, 600.F /2.f, 93.7f }, XMFLOAT3{ 580.F / 2.f, 600.F / 2.f, 240.F / 2.f });	
+	m_ModelStorage[RUIN_BROKENPILLA].modelBOBox = new MyBOBox(test, pd3dDevice, pd3dCommandList, XMFLOAT3{ 3.F, 400.F / 2.f, 104.F }, XMFLOAT3{ 125.F / 2.f, 400.F/ 2.f, 155.F/ 2.f });
+	m_ModelStorage[RUIN_PILLAR].modelBOBox = new MyBOBox(test, pd3dDevice, pd3dCommandList, XMFLOAT3{ -119.f, 600.f / 2.f, -419.f }, XMFLOAT3{ 290.F/ 2.f, 600.F/ 2.f, 490.F/ 2.f });
+	m_ModelStorage[RUIN_SQUARE].modelBOBox = new MyBOBox(test, pd3dDevice, pd3dCommandList, XMFLOAT3{ -181.F, 350.F / 2.f, 5.F }, XMFLOAT3{ 615.F/ 2.f, 350.F/ 2.f, 430.F/ 2.f });
+	
+	m_ModelStorage[ALTAR_IN].modelBOBox = new MyBOBox(test, pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 230.F, 0.F }, XMFLOAT3{ 660.F / 2.f, 460.F / 2.f, 580.F / 2.f});
 	// m_ModelStorage[ALTAR_IN].modelBOBox = new MyBOBox(pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 0.F, 0.F }, XMFLOAT3{ 200.F, 200.F, 200.F });
 	// m_ModelStorage[SUNFLOWER].modelBOBox = new MyBOBox(pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 0.F, 0.F }, XMFLOAT3{ 400.F, 400.F, 400.F });
 	

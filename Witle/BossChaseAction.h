@@ -1,5 +1,6 @@
 #pragma once
 #include "MonsterAction.h"
+#include "GameScene.h"
 
 class MonsterMovement;
 

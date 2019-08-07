@@ -36,6 +36,7 @@
 
 //// 몬스터 관련 헤더 //////////////////////////
 #include "SpaceCat.h"
+#include "Mushroom.h"
 #include "Dragon.h"
 #include "CreepyMonster.h"
 #include "MonsterStatus.h"
@@ -379,23 +380,19 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	std::random_device rd;
 	std::mt19937 mersenne(rd());
 	std::uniform_int_distribution<> die(2000, 15000);
-	std::uniform_int_distribution<> monstertype(0, 3);
+	std::uniform_int_distribution<> monstertype(0, 5);
 
 	m_Dragon = new Dragon("Dragon",
 		XMFLOAT3(15000, 0, 15000),
 		pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
 
 	m_TestMonster = new Monster*[m_TestMonsterCount];
-
-	/*
-		m_TestMonster[0] = new Dragon("SpaceCat",
-			XMFLOAT3(15000, 0, 15000),
-			pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
-	*/
+	 
 	int spacecatblue_count = 0;
 	int spacecatgreen_count = 0;
 	int spacecatpink_count = 0;
 	int creepymonster_count = 0;
+	int mushroom_count = 0;
 	int boss_count = 0;
 
 	MonsterTransformStorage* instance = MonsterTransformStorage::GetInstance();
@@ -407,14 +404,34 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 
 		if (value == ENUM_MONSTER::MONSTER_CREEPYMONSTER)
 		{
+#ifdef _DEBUG
+			std::cout << instance->Count(CREEPYMONSTER) << "마리가 최대입니다. 현재 " << creepymonster_count << "마리 "<< std::endl;
+#endif // _DEBUG
+
 			if (instance->Count(CREEPYMONSTER) <= creepymonster_count)continue;
 			m_TestMonster[i] = new CreepyMonster("CreepyMonster",
 				instance->GetPosition(creepymonster_count, CREEPYMONSTER),
 				pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
 			creepymonster_count += 1;
 		}
-		else if (value == ENUM_MONSTER::MONSTER_SPACECATBLUE)
+		else if (value == ENUM_MONSTER::MONSTER_MUSHROOM)
 		{
+
+#ifdef _DEBUG
+			std::cout << instance->Count(MUSHROOM) << "마리가 최대입니다. 현재 " << mushroom_count << "마리 " << std::endl;
+#endif // _DEBUG
+			if (instance->Count(MUSHROOM) <= mushroom_count)continue;
+
+			m_TestMonster[i] = new Mushroom("Mushroom",
+				instance->GetPosition(mushroom_count, MUSHROOM),
+				pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
+			mushroom_count += 1;
+		}
+		else if (value == ENUM_MONSTER::MONSTER_SPACECATBLUE)
+		{ 
+#ifdef _DEBUG
+			std::cout << instance->Count(SPACECAT_BLUE) << "마리가 최대입니다. 현재 " << spacecatblue_count << "마리 " << std::endl;
+#endif // _DEBUG
 			if (instance->Count(SPACECAT_BLUE) <= spacecatblue_count)continue;
 			m_TestMonster[i] = new SpaceCat("SpaceCat",
 				instance->GetPosition(spacecatblue_count, SPACECAT_BLUE),
@@ -422,7 +439,10 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 			spacecatblue_count += 1;
 		}
 		else if (value == ENUM_MONSTER::MONSTER_SPACECATPINK)
-		{
+		{ 
+#ifdef _DEBUG
+			std::cout << instance->Count(SPACECAT_PINK) << "마리가 최대입니다. 현재 " << spacecatpink_count << "마리 " << std::endl;
+#endif // _DEBUG
 			if (instance->Count(SPACECAT_PINK) <= spacecatpink_count)continue;
 			m_TestMonster[i] = new SpaceCat("SpaceCat",
 				instance->GetPosition(spacecatpink_count, SPACECAT_PINK),
@@ -430,7 +450,10 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 			spacecatpink_count += 1;
 		}
 		else if (value == ENUM_MONSTER::MONSTER_SPACECATGREEN)
-		{
+		{ 
+#ifdef _DEBUG
+			std::cout << instance->Count(SPACECAT_GREEN) << "마리가 최대입니다. 현재 " << spacecatgreen_count << "마리 " << std::endl;
+#endif // _DEBUG
 			if (instance->Count(SPACECAT_GREEN) <= spacecatgreen_count)continue;
 			m_TestMonster[i] = new SpaceCat("SpaceCat",
 				instance->GetPosition(spacecatgreen_count, SPACECAT_GREEN),
@@ -438,7 +461,10 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 			spacecatgreen_count += 1;
 		}
 		else if (value == ENUM_MONSTER::MONSTER_BOSSMONSTER)
-		{
+		{ 
+#ifdef _DEBUG
+			std::cout << instance->Count(DRAGON) << "마리가 최대입니다. 현재 " << boss_count << "마리 " << std::endl;
+#endif // _DEBUG
 			if (instance->Count(DRAGON) <= boss_count)continue;
 			m_TestMonster[i] = new Dragon("Dragon",
 				instance->GetPosition(boss_count, DRAGON),
@@ -894,19 +920,27 @@ void GameScene::LastUpdate(float fElapsedTime)
 
 		}
 
-		//////////////////////////////////////////////////////// BOSS
+		//////////////////////////////////////////////////////// BOSS를 때림
 		// 체력이 0보다 적으면 검사하지 않는다.
 		if (m_Dragon->GetStatus()->m_Guage <= 0.f) continue;
 
 		if (Collision::isCollide(m_Dragon->GetBOBox(), skill_collider))
 		{
-			std::cout << "보스 스킬에 맞음" << std::endl;
+			std::cout << "보스가 스킬에 맞음" << std::endl;
 			m_Dragon->SubstractHP(5);
 			PlayerSkillMgr::GetInstance()->Deactive(index);
 		}
-		//////////////////////////////////////////////////////// BOSS
+		//////////////////////////////////////////////////////// BOSS를 때림
 	}
-	  
+
+	// if (m_Dragon->GetisAttacking())
+	// {
+	// 	if (Collision::isCollide(m_pPlayer->GetBOBox()->GetBOBox(), m_Dragon->GetBOBox()->GetBOBox()))
+	// 	{
+	// 		m_pPlayer->SubstractHP(5);
+	// 	}
+	// }
+
 	// Update한 위치로 몬스터가 공격 시에 몬스터/플레이어충돌체크 확인 ///////////////////////////
 	//for (int i = 0; i < m_TestMonsterCount; ++i)
 	//{
@@ -919,11 +953,12 @@ void GameScene::LastUpdate(float fElapsedTime)
 	//	}
 	//}
 
-
+	// 보스 부딫힘
 	if (Collision::isCollide(m_pPlayer->GetBOBox()->GetBOBox(), m_Dragon->GetBOBox()->GetBOBox()))
 	{
 		// 드래곤과 플레이어 부딪히는 것 테스트
 	}
+	// 보스 부딫힘
 
 	// 카메라 프러스텀과 쿼드트리 지형 렌더링 체크
 	if (m_pMainCamera && m_pQuadtreeTerrain)
@@ -1068,7 +1103,7 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 
 	SkillSelectScene::m_pHeap->UpdateShaderVariable(pd3dCommandList);
 
-	SkillSelectScene::m_pTexture->UpdateShaderVariable(pd3dCommandList, 8); // 임시로 검은색으로 렌더링
+	SkillSelectScene::m_pTexture->UpdateShaderVariable(pd3dCommandList, SKILL_TO_CHOOSE); // 임시로 검은색으로 렌더링
 	m_SampleUIMap->Render(pd3dCommandList);
 
 	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_SKILLICON, isGBuffers); 
@@ -1152,17 +1187,8 @@ void GameScene::ReleaseUploadBuffers()
 	}
 }
 
-
-void GameScene::UpdateCollision(const BoundingOrientedBox & AlreadyPlayerBBox, float fElapsedTime)
-{
-}
-
 void GameScene::UpdateCollision(float fElapsedTime)
 {
-	// 플레이어 충돌체크 ///////////////////////// 
-	BoundingOrientedBox AlreadyPlayerBBox = m_pPlayer->CalculateAlreadyBoundingBox(fElapsedTime);
-	XMFLOAT3 AlreadyPositon{ AlreadyPlayerBBox.Center.x, AlreadyPlayerBBox.Center.y, AlreadyPlayerBBox.Center.z };
-
 	// 외곽처리
 	MyBOBox outside_box[4]{
 		{XMFLOAT3(-100, 0, 15000), XMFLOAT3(100, 3000, 20000)},
@@ -1171,82 +1197,39 @@ void GameScene::UpdateCollision(float fElapsedTime)
 		{XMFLOAT3(15000, 0, -100), XMFLOAT3(30000, 3000, 100)},
 	};
 
-	// 외곽부분 나가지 못하도록 충돌체크
-	for (int i = 0; i < 4; ++i)
-	{
-		XMFLOAT3 slideVector{ 0.f, 0.f, 0.f };
+	// 외곽 4 부분과 충돌처리 확인한다.
+	Collision::ProcessCollideEdge(m_pPlayer, 4, outside_box, fElapsedTime);
 
-		// 이동한 박스를 통해 충돌한다.
-		bool isSlide = Collision::ProcessCollision(
-			AlreadyPlayerBBox,
-			outside_box[i],
-			m_pPlayer->GetTransform().GetPosition(),
-			m_pPlayer->GetVelocity(),
-			fElapsedTime,
-			false,
-			slideVector);
+	// 플레이어와 지형지물 충돌을 확인한다. 
+	Collision::ProcessCollideTerrainObject(m_pPlayer, m_pQuadtreeTerrain, fElapsedTime);
 
-		if (isSlide)
-		{
-			m_pPlayer->SetVelocity(slideVector);
-		}
-	}
 
-	// 플레이어와 지형지물 충돌체크 ///////////////////////// 
-	XMINT4 IDs = m_pQuadtreeTerrain->GetIDs(AlreadyPositon);
-	int TerrainCount = m_pQuadtreeTerrain->GetTerrainPieceCount();
-
-	// Ti: Terrain Index
-	for (int Ti = 0; Ti < TerrainCount; ++Ti)
-	{
-		int TerrainIndex = Ti;
-		//if (Ti == 0) TerrainIndex = IDs.x;
-		//else if (Ti == 1) TerrainIndex = IDs.y;
-		//else if (Ti == 2) TerrainIndex = IDs.z;
-		//else if (Ti == 3) TerrainIndex = IDs.w;
-
-		//if (TerrainIndex == -1) continue;
-
-		for (const auto& name : ModelStorage::GetInstance()->m_NameList)
-		{
-			MyBOBox* box = ModelStorage::GetInstance()->GetBOBox(name);
-			if (!box) continue; // 충돌박스가 없다면 다른 오브젝트를 검사하자.
-
-			XMFLOAT4X4* pWorldMatrix = StaticObjectStorage::GetInstance(m_pQuadtreeTerrain)->GetWorldMatrix(TerrainIndex, name);
-
-			// 트레인 조각 내부 오브젝트 개수만큼 충돌 체크
-			for (int i = 0; i < StaticObjectStorage::GetInstance(m_pQuadtreeTerrain)->GetObjectCount(TerrainIndex, name); ++i)
-			{
-				//월드 행렬 갖고온다.
-
-				// 모델 충돌박스를 월드행렬 곱한다. 일단 현재는 포지션으로 이동
-				MyBOBox worldBox = *box;
-				worldBox.Move(XMFLOAT3(pWorldMatrix[i]._41, 0, pWorldMatrix[i]._43));
-
-				XMFLOAT3 slideVector{ 0.f, 0.f, 0.f };
-
-				bool isSlide = Collision::ProcessCollision(
-					AlreadyPlayerBBox,
-					worldBox,
-					m_pPlayer->GetTransform().GetPosition(),
-					m_pPlayer->GetVelocity(),
-					fElapsedTime,
-					true,
-					slideVector);
-
-				if (isSlide)
-				{
-					m_pPlayer->SetVelocity(slideVector);
-				}
-
-			}
-		}
-	}
-	// 플레이어와 지형지물 충돌체크 ///////////////////////// 
-
+	// // 플레이어와 보스 충돌체크
+	// MyBOBox bossbox = result_pos;
+	// XMFLOAT3 slideVector{ 0.f, 0.f, 0.f };
+	// 
+	// // 이동한 박스를 통해 충돌한다.
+	// bool isSlide = Collision::ProcessCollision(
+	// 	AlreadyPlayerBBox,
+	// 	bossbox,
+	// 	m_pPlayer->GetTransform().GetPosition(),
+	// 	m_pPlayer->GetVelocity(),
+	// 	fElapsedTime,
+	// 	false,
+	// 	slideVector);
+	// 
+	// if (isSlide)
+	// {
+	// 	m_pPlayer->SetVelocity(slideVector);
+	// }
+	// // 플레이어와 보스 충돌체크
 
 
 	// 몬스터 충돌체크 ///////////////////////// 
+	for (int x = 0; x < m_TestMonsterCount; ++x)
+	{
+		Collision::ProcessCollideTerrainObject(m_TestMonster[x], m_pQuadtreeTerrain, fElapsedTime);
+	}
 
 	// 몬스터 충돌체크 ///////////////////////// 
 }

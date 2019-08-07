@@ -117,8 +117,7 @@ void Monster::Render(ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffer
 }
 
 void Monster::RenderForShadow(ID3D12GraphicsCommandList * pd3dCommandList)
-{
-	m_pTexture->UpdateShaderVariable(pd3dCommandList, 0);
+{ 
 	m_pLoadObject->RenderForShadow(pd3dCommandList);
 }
 
@@ -149,13 +148,7 @@ void Monster::ReleaseMembers()
 		delete m_pDebugSpawnMesh;
 		m_pDebugSpawnMesh = nullptr;
 	}
-#endif // _DEBUG
-	if (m_pTexture)
-	{
-		m_pTexture->ReleaseObjects();
-		delete m_pTexture;
-		m_pTexture = nullptr;
-	}
+#endif // _DEBUG 
 	if (m_pLoadObject)
 	{
 		m_pLoadObject->ReleaseObjects();
@@ -196,7 +189,6 @@ void Monster::ReleaseMemberUploadBuffers()
 	if (m_pDebugSpawnMesh) m_pDebugSpawnMesh->ReleaseUploadBuffers();
 #endif // _DEBUG
 
-	if (m_pTexture) m_pTexture->ReleaseUploadBuffers();
 	if (m_pLoadObject) m_pLoadObject->ReleaseUploadBuffers();
 	if (m_MonsterModel)m_MonsterModel->ReleaseUploadBuffers();
 	if (m_pMyBOBox)m_pMyBOBox->ReleaseUploadBuffers();
@@ -207,7 +199,7 @@ void Monster::SubstractHP(int sub)
 {
 	m_CurrAnimation = GetAnimationHitID();
 	m_pLoadObject->SetTrackAnimationSet(0, m_CurrAnimation);
-	
+
 	m_MonsterHPStatus->m_Guage -= sub;
 	std::cout << m_MonsterHPStatus->m_Guage << std::endl;
 }
@@ -266,6 +258,16 @@ void Monster::Rotate(float x, float y, float z)
 {
 	m_Transform.Rotate(x, y, z);
 	m_pMyBOBox->Rotate(m_MonsterMovement->m_fRoll, m_MonsterMovement->m_fYaw, m_MonsterMovement->m_fPitch);
+}
+
+XMFLOAT3 Monster::GetVelocity() const
+{
+	return m_MonsterMovement->m_xmf3Velocity;
+}
+
+void Monster::SetVelocity(const XMFLOAT3 & velocity)
+{
+	m_MonsterMovement->m_xmf3Velocity = velocity;
 }
 
 void Monster::SetAnimationState(int state)

@@ -14,13 +14,11 @@
 #include "Object.h"
 #include "MyBOBox.h"
 #include "Texture.h"
-#include "CreepyMonster.h"
+#include "Mushroom.h"
 
-#include "SoundManager.h"
- 
-void CreepyMonster::ReleaseMembers()
+void Mushroom::ReleaseMembers()
 {
-	Monster::ReleaseMembers(); 
+	Monster::ReleaseMembers();
 
 	if (m_pTexture)
 	{
@@ -30,34 +28,36 @@ void CreepyMonster::ReleaseMembers()
 	}
 }
 
-void CreepyMonster::ReleaseMemberUploadBuffers()
+void Mushroom::ReleaseMemberUploadBuffers()
 {
 	Monster::ReleaseMemberUploadBuffers();
 	if (m_pTexture)m_pTexture->ReleaseUploadBuffers();
 }
 
-CreepyMonster::CreepyMonster(const std::string & entityID, const XMFLOAT3& SpawnPoint,
+Mushroom::Mushroom(const std::string & entityID, const XMFLOAT3& SpawnPoint,
 	ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature)
-	: Monster(entityID, 500.f, SpawnPoint, pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature)
+	: Monster(entityID, 100.f, SpawnPoint, pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature)
 {
-	m_RecognitionRange = new RecognitionRange(this, 1000.f, 2.f);
+	m_RecognitionRange = new RecognitionRange(this, 500.f, 2.f);
 	m_RecognitionRange->CreateDebugMesh(pd3dDevice, pd3dCommandList);
 
 	m_MonsterMovement = new MonsterMovement(this, 1, 1);
 	m_MonsterMovement->m_fDistance = 100;
-	 
-	m_pTexture = TextureStorage::GetInstance()->GetTexture(CREEPYMONSTER);
 
-	ANIMATION_INFO infos[CREEPYMONSTER_ANIMATIONE];
-	infos[0] = CREEPYMONSTER_IDLE;
-	infos[1] = CREEPYMONSTER_MOVE;
-	infos[2] = CREEPYMONSTER_ATTACK;
-	infos[3] = CREEPYMONSTER_DEAD;
-	infos[4] = CREEPYMONSTER_HIT;
+	m_pTexture = TextureStorage::GetInstance()->GetTexture(MUSHROOM);
+
+	ANIMATION_INFO infos[MUSHROOM_ANIMATIONE];
+	infos[0] = ANI_MUSHROOM_IDLE;
+	infos[1] = ANI_MUSHROOM_MOVE;
+	infos[2] = ANI_MUSHROOM_ATTACK;
+	infos[3] = ANI_MUSHROOM_DEAD;
+	infos[4] = ANI_MUSHROOM_HIT;
 
 	m_MonsterModel = LoadObject::LoadGeometryAndAnimationFromFile_forMonster(
-		pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/CreepyMonster.bin", NULL,
-		CREEPYMONSTER_ANIMATIONE, infos);
+		pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/Mashroom.bin", NULL,
+		MUSHROOM_ANIMATIONE, infos);
+
+	// m_MonsterModel = ModelStorage::GetInstance()->GetModelInfo(Mushroom);
 
 	m_pLoadObject = m_MonsterModel->m_pModelRootObject;
 	m_pLoadObject->m_pSkinnedAnimationController = new CAnimationController(pd3dDevice, pd3dCommandList, 1, m_MonsterModel);
@@ -65,10 +65,8 @@ CreepyMonster::CreepyMonster(const std::string & entityID, const XMFLOAT3& Spawn
 
 	m_Transform.SetPosition(SpawnPoint);
 
-
 	XMFLOAT3 extents{ 50.f, 50.f, 50.f };
 	m_pMyBOBox = new MyBOBox(this, pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 75.F, 0.F }, extents);
-
 
 	if (rand() % 2)
 	{
@@ -80,11 +78,11 @@ CreepyMonster::CreepyMonster(const std::string & entityID, const XMFLOAT3& Spawn
 	}
 }
 
-CreepyMonster::~CreepyMonster()
+Mushroom::~Mushroom()
 {
 }
 
-void CreepyMonster::Update(float fElapsedTime)
+void Mushroom::Update(float fElapsedTime)
 {
 	// 이동량을 계산한다. 
 	m_MonsterMovement->Update(fElapsedTime);
@@ -97,16 +95,16 @@ void CreepyMonster::Update(float fElapsedTime)
 
 }
 
-void CreepyMonster::UpdateState(float fElapsedTime)
+void Mushroom::UpdateState(float fElapsedTime)
 {
 	m_MonsterMovement->UpdateState(fElapsedTime);
 }
 
-void CreepyMonster::Animate(float fElapsedTime)
+void Mushroom::Animate(float fElapsedTime)
 {
 	Monster::Animate(fElapsedTime);
-	
-	LoadObject* p = m_pLoadObject->FindFrame("Bip001");
+
+	LoadObject* p = m_pLoadObject->FindFrame("Bone001");
 	XMFLOAT3 pos = XMFLOAT3(p->m_xmf4x4World._41, p->m_xmf4x4World._42 + 50, p->m_xmf4x4World._43);
 
 	m_pMyBOBox->SetPosition(pos);

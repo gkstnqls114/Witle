@@ -3,7 +3,7 @@
 
 D3D12_SHADER_BYTECODE DownScaleSecondPassShader::CreateComputeShader(ID3DBlob ** ppd3dShaderBlob)
 {
-	return ComputeShader::CompileShaderFromFile(L"TonemappingComputeShader.hlsl", "DownScaledSecondPass", ppd3dShaderBlob);
+	return ComputeShader::CompileShaderFromFile(L"TonemappingComputeShader.hlsl", "DownScaleSecondPass", ppd3dShaderBlob);
 }
 
 DownScaleSecondPassShader::DownScaleSecondPassShader()

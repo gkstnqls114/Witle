@@ -19,7 +19,7 @@ void SkillEffect::UpdateMovement()
 }
  
 SkillEffect::SkillEffect(const std::string & entityID, float cooltime, ENUM_SKILLTYPE skilltype, float distance)
-	:GameObject(entityID) , m_CoolTime(cooltime), m_Skilltype(skilltype)
+	:GameObject(entityID) , m_Skilltype(skilltype)
 {
 	m_Movement = new Movement(this);
 	m_Movement->m_fDistance = distance;

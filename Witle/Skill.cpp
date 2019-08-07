@@ -42,7 +42,7 @@ void SelectableSkill::Update(float fElapsedTime)
 	else
 	{
 		RemainCoolTime -= fElapsedTime;
-		RemainCoolTimePrecentage = RemainCoolTime / m_skillEffect->m_CoolTime;
+		RemainCoolTimePrecentage = RemainCoolTime / m_CoolTime;
 	}
 	 
 	// 만약 끝나는 조건이 된다면 Active 를 false로 설정

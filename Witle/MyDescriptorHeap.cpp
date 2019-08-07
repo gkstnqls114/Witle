@@ -136,10 +136,13 @@ void MyDescriptorHeap::CreateUnorderedAccessViews(ID3D12Device * pd3dDevice, ID3
 	}
 }
 
-void MyDescriptorHeap::CreateUnorderedAccessViews(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12Resource * pResource, int nTypes, UINT count, DXGI_FORMAT format)
+void MyDescriptorHeap::CreateUnorderedAccessViews(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12Resource * pResource, int nTypes, UINT index, DXGI_FORMAT format)
 {
 	D3D12_CPU_DESCRIPTOR_HANDLE UAVCPUDescriptorHandle = m_d3dUAVCPUDescriptorStartHandle;
 	D3D12_GPU_DESCRIPTOR_HANDLE UAVGPUDescriptorHandle = m_d3dUAVGPUDescriptorStartHandle;
+
+	UAVCPUDescriptorHandle.ptr = UAVCPUDescriptorHandle.ptr + (index * d3dUtil::gnCbvSrvDescriptorIncrementSize);
+	UAVGPUDescriptorHandle.ptr = UAVGPUDescriptorHandle.ptr + (index * d3dUtil::gnCbvSrvDescriptorIncrementSize);
 
 	int nTextureType = nTypes;
 	ID3D12Resource *pShaderResource = pResource;
@@ -147,4 +150,32 @@ void MyDescriptorHeap::CreateUnorderedAccessViews(ID3D12Device * pd3dDevice, ID3
 
 	D3D12_UNORDERED_ACCESS_VIEW_DESC d3dShaderResourceViewDesc = d3dUtil::GetUnorderedAccessViewDesc(d3dResourceDesc, nTextureType);
 	pd3dDevice->CreateUnorderedAccessView(pShaderResource, nullptr, &d3dShaderResourceViewDesc, UAVCPUDescriptorHandle); 
+}
+
+D3D12_CPU_DESCRIPTOR_HANDLE MyDescriptorHeap::GetCPUSrvDescriptorHandle(int index) const
+{
+	D3D12_CPU_DESCRIPTOR_HANDLE hCPU = m_SrvCPUDescriptorStartHandle;
+	hCPU.ptr += (d3dUtil::gnCbvSrvDescriptorIncrementSize * index);
+	return hCPU;
+}
+
+D3D12_GPU_DESCRIPTOR_HANDLE MyDescriptorHeap::GetGPUSrvDescriptorHandle(int index) const
+{
+	D3D12_GPU_DESCRIPTOR_HANDLE hGPU = m_SrvGPUDescriptorStartHandle;
+	hGPU.ptr += (d3dUtil::gnCbvSrvDescriptorIncrementSize * index);
+	return hGPU;
+}
+
+D3D12_CPU_DESCRIPTOR_HANDLE MyDescriptorHeap::GetCPUUAVDescriptorHandle(int index) const
+{
+	D3D12_CPU_DESCRIPTOR_HANDLE hCPU = m_d3dUAVCPUDescriptorStartHandle;
+	hCPU.ptr += (d3dUtil::gnCbvSrvDescriptorIncrementSize * index);
+	return hCPU;
+}
+
+D3D12_GPU_DESCRIPTOR_HANDLE MyDescriptorHeap::GetGPUUAVDescriptorHandle(int index) const
+{
+	D3D12_GPU_DESCRIPTOR_HANDLE hGPU = m_d3dUAVGPUDescriptorStartHandle;
+	hGPU.ptr += (d3dUtil::gnCbvSrvDescriptorIncrementSize * index);
+	return hGPU;
 }

@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "TextureStorage.h"
 #include "MyDescriptorHeap.h"
 #include "d3dUtil.h"
 

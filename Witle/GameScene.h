@@ -96,7 +96,6 @@ protected:
 	D3D12_GPU_DESCRIPTOR_HANDLE GetGPUSrvDescriptorNextHandle() { return(m_SrvGPUDescriptorNextHandle); }
 
 protected:
-	void UpdateCollision(const BoundingOrientedBox& AlreadyPlayerBBox, float fElapsedTime);
 	void UpdateCollision(float fElapsedTime);
 	void BuildLightsAndMaterials(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList);
 	
@@ -125,7 +124,7 @@ public:
 
 	QuadtreeTerrain* GetQuadtreeTerrain() const { return m_pQuadtreeTerrain; }
 
-protected:
+public:
 	// 플레이어 관련 ////////////////////////////
 	
 	Player*                 m_pPlayer        { nullptr };
@@ -137,7 +136,7 @@ protected:
 
 	// 몬스터 관련 ////////////////////////////
 
-	int						m_TestMonsterCount{ 10 };
+	int						m_TestMonsterCount{ 10 }; //원래 107마리..
 	Monster**				m_TestMonster{ nullptr };
 	Monster*				m_AltarMonster{ nullptr };
 	
@@ -158,8 +157,7 @@ protected:
 	Monster*				m_Dragon{ nullptr };
 
 	AltarSphere*			m_AltarSphere[5];
-	// MyRectangle*            m_GuageBar[5]; 
-
+	 
 #ifdef CHECK_SUBVIEWS
 	CameraObject*			m_lookAboveCamera{ nullptr };
 #endif

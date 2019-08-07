@@ -25,11 +25,7 @@
 #include "Terrain.h"
 
 #include "Player.h"
- 
-static float playerOffestX = 0.f;
-static float playerOffestY = 57.f;
-static float playerOffestZ = 50.f;
-
+  
 void Player::OnPlayerUpdateCallback(float fTimeElapsed)
 {
 	if (!m_pPlayerUpdatedContext) return;
@@ -172,13 +168,9 @@ void Player::Render(ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffers
 
 void Player::RenderForShadow(ID3D12GraphicsCommandList * pd3dCommandList)
 {  
-	m_pTexture_Cloth->UpdateShaderVariable(pd3dCommandList, 0);
 	m_pLoadObject_Cloth->RenderForPlayerShadow(pd3dCommandList, this);
-	//m_pLoadObject_Cloth->RenderForShadow(pd3dCommandList);
-
-	m_pTexture_Body->UpdateShaderVariable(pd3dCommandList, 0);
+	
 	m_pLoadObject_Body->RenderForPlayerShadow(pd3dCommandList, this);
-	// m_pLoadObject_Body->RenderForShadow(pd3dCommandList);
 }
 
 void Player::ReleaseMembers()
