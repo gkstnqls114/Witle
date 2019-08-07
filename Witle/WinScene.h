@@ -56,6 +56,12 @@ public:
 	virtual void AnimateObjects(float fTimeElapsed) override;
 	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers) override;
 
+	// 그림자를 렌더링하기 위한 함수입니다.
+	virtual void RenderForShadow(ID3D12GraphicsCommandList *pd3dCommandList) override;
+
+	// 플레이어 그림자를 렌더링하기 위한 함수입니다.
+	virtual void RenderForPlayerShadow(ID3D12GraphicsCommandList *pd3dCommandList) override;
+
 	virtual void ReleaseUploadBuffers() override;
 
 	virtual void UpdatePhysics(float ElapsedTime) override;
@@ -67,5 +73,7 @@ protected:
 private:
 	D3D12_VIEWPORT	m_d3dViewport;
 	D3D12_RECT		m_d3dScissorRect;
-	 
+
+	GameObject* m_gameobject{ nullptr };
+	UI2DImage* m_Background{ nullptr };
 };

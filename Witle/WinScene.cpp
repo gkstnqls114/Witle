@@ -174,6 +174,14 @@ void WinScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffer
 	 
 }
 
+void WinScene::RenderForShadow(ID3D12GraphicsCommandList * pd3dCommandList)
+{
+}
+
+void WinScene::RenderForPlayerShadow(ID3D12GraphicsCommandList * pd3dCommandList)
+{
+}
+
 void WinScene::ReleaseUploadBuffers()
 {
 	// if (m_SampleUIImage) m_SampleUIImage->ReleaseUploadBuffers();

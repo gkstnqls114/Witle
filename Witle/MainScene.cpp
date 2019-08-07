@@ -11,6 +11,9 @@
 #include "GraphicsRootSignatureMgr.h"
 #include "MainScene.h"
 
+std::list<Texture*>         MainScene::m_pConnectedTextureList;
+UINT	   		            MainScene::m_TextureCount{ 0 };
+
 ID3D12DescriptorHeap*		MainScene::m_pd3dCbvSrvDescriptorHeap;
 
 D3D12_CPU_DESCRIPTOR_HANDLE	MainScene::m_d3dCbvCPUDescriptorStartHandle;
@@ -32,6 +35,15 @@ MainScene::~MainScene()
 {
 
 }
+
+void MainScene::ConnectTexture(Texture * pTexture)
+{
+	assert(pTexture != nullptr);
+
+	m_pConnectedTextureList.push_back(pTexture);
+	m_TextureCount += pTexture->GetTextures();
+}
+
 void MainScene::CreateCbvSrvDescriptorHeaps(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, int nConstantBufferViews, int nShaderResourceViews)
 {
 	D3D12_DESCRIPTOR_HEAP_DESC d3dDescriptorHeapDesc;
@@ -134,16 +146,16 @@ void MainScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	m_d3dScissorRect = D3D12_RECT{ 0, 0, static_cast<LONG>(GameScreen::GetWidth()) ,static_cast<LONG>(GameScreen::GetHeight()) };
 
 	// 디스크립터 힙 설정
-	// MainScene::CreateCbvSrvDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 3);
+	MainScene::CreateCbvSrvDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 3);
 
 	m_gameobject = new EmptyGameObject("back");
-	m_Background = new UI2DImage(m_gameobject, ENUM_SCENE::SCENE_GAME, pd3dDevice, pd3dCommandList, RECT{
+	m_Background = new UI2DImage(m_gameobject, ENUM_SCENE::SCENE_MAIN, pd3dDevice, pd3dCommandList, RECT{
 		0, 0,
 		static_cast<LONG>(GameScreen::GetWidth()), static_cast<LONG>(GameScreen::GetHeight()) },
 		L"Image/Wittle_1280x720.dds"
 		);
 	 
-	// MainScene::CreateShaderResourceViews(pd3dDevice, m_pBackGround->GetTexture(false), ROOTPARAMETER_TEXTURE, true);
+	 MainScene::CreateShaderResourceViews(pd3dDevice, m_Background->GetpTexture(), ROOTPARAMETER_TEXTURE, true);
 }
 
 void MainScene::ReleaseObjects()
@@ -186,9 +198,8 @@ void MainScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 
 	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_UISCREEN, false);
 
-	//pd3dCommandList->SetDescriptorHeaps(1, &m_pd3dCbvSrvDescriptorHeap);
-	m_Background->Render(pd3dCommandList);
-	// m_pBackGround->Render(pd3dCommandList, isGBuffers);
+	pd3dCommandList->SetDescriptorHeaps(1, &m_pd3dCbvSrvDescriptorHeap);
+	m_Background->Render(pd3dCommandList); 
 }
 
 void MainScene::RenderForShadow(ID3D12GraphicsCommandList * pd3dCommandList)

@@ -176,6 +176,14 @@ void LoseScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 
 }
 
+void LoseScene::RenderForShadow(ID3D12GraphicsCommandList * pd3dCommandList)
+{
+}
+
+void LoseScene::RenderForPlayerShadow(ID3D12GraphicsCommandList * pd3dCommandList)
+{
+}
+
 void LoseScene::ReleaseUploadBuffers()
 {
 

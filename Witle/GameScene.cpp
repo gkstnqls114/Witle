@@ -76,8 +76,8 @@
 
 UINT				    	GameScene::m_ShadowmapCount{ 2 };
 std::list<Texture*>         GameScene::m_pConnectedTextureList;
-ID3D12DescriptorHeap*		GameScene::m_pd3dCbvSrUavDescriptorHeap { nullptr };
 UINT	   		            GameScene::m_TextureCount{ 0 };
+ID3D12DescriptorHeap*		GameScene::m_pd3dCbvSrUavDescriptorHeap { nullptr };
 
 D3D12_CPU_DESCRIPTOR_HANDLE	GameScene::m_hCPUShadowmap;
 D3D12_GPU_DESCRIPTOR_HANDLE	GameScene::m_hGPUShadowmap;

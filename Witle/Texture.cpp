@@ -40,7 +40,7 @@ Texture::Texture(ENUM_SCENE SceneType, ROOTPARAMETER_INDEX rpIndex, bool bAutoIn
 	case ENUM_SCENE::SCENE_NONE:
 
 		break;
-	case ENUM_SCENE::SCENE_MAIN:
+	case ENUM_SCENE::SCENE_MAIN: 
 
 		break;
 	case ENUM_SCENE::SCENE_GAME:

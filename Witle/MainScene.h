@@ -11,6 +11,13 @@ class MainScene
 	: public Scene
 {
 private:
+	static std::list<Texture* > m_pConnectedTextureList;
+	static UINT			m_TextureCount;
+
+public:
+	static void ConnectTexture(Texture* pTexture);
+
+private:
 	static ID3D12DescriptorHeap			*m_pd3dCbvSrvDescriptorHeap;
 
 	static D3D12_CPU_DESCRIPTOR_HANDLE	m_d3dCbvCPUDescriptorStartHandle;

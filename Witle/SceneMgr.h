@@ -4,6 +4,8 @@ class Scene;
 class GameScene;
 class MainScene;
 class SkillSelectScene;
+class LoseScene;
+class WinScene;
 
 class SceneMgr
 {
@@ -14,9 +16,11 @@ class SceneMgr
 
 	// 사용하는 장면 목록들 //////////////////
 	
-	GameScene* m_GameScene{ nullptr };
-	MainScene* m_MainScene{ nullptr };
+	GameScene* m_GameScene { nullptr };
+	MainScene* m_MainScene { nullptr };
 	SkillSelectScene* m_SkillSelectScene{ nullptr };
+	LoseScene* m_LoseScene { nullptr };
+	WinScene* m_WinScene { nullptr };
 
 	// 사용하는 장면 목록들 //////////////////
 
@@ -45,6 +49,8 @@ public:
 	void ChangeSceneToGame();
 	void ChangeSceneToMain();
 	void ChangeSceneToSkillSelect();
+	void ChangeSceneToWin();
+	void ChangeSceneToLose();
 
 	// 장면을 전환하는 함수들
 

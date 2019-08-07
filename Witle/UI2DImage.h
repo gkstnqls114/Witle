@@ -41,4 +41,7 @@ public:
 	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList) override;
 
 	RECT getRect() const { return m_rect; }
+
+	Texture* GetpTexture() const { return m_pTexture; }
+
 };
