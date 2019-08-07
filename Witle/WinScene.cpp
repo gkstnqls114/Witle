@@ -131,7 +131,18 @@ void WinScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList
 	// 카메라 설정
 	m_d3dViewport = D3D12_VIEWPORT{ 0.0f, 0.0f, static_cast<FLOAT>(GameScreen::GetWidth()) , static_cast<FLOAT>(GameScreen::GetHeight()), 0.0f, 1.0f };
 	m_d3dScissorRect = D3D12_RECT{ 0, 0, static_cast<LONG>(GameScreen::GetWidth()) ,static_cast<LONG>(GameScreen::GetHeight()) };
-	 
+
+	// 디스크립터 힙 설정
+	WinScene::CreateCbvSrvDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, 3);
+ 
+	m_gameobject = new EmptyGameObject("back");
+	m_Background = new UI2DImage(m_gameobject, ENUM_SCENE::SCENE_MAIN, pd3dDevice, pd3dCommandList, RECT{
+		0, 0,
+		static_cast<LONG>(GameScreen::GetWidth()), static_cast<LONG>(GameScreen::GetHeight()) },
+		L"Image/Win.dds"
+		);
+
+	WinScene::CreateShaderResourceViews(pd3dDevice, m_Background->GetpTexture(), ROOTPARAMETER_TEXTURE, true);
 }
 
 void WinScene::ReleaseObjects()
@@ -171,7 +182,9 @@ void WinScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffer
 	pd3dCommandList->RSSetScissorRects(1, &m_d3dScissorRect);
 
 	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_UISCREEN, false);
-	 
+
+	pd3dCommandList->SetDescriptorHeaps(1, &m_pd3dCbvSrvDescriptorHeap);
+	m_Background->Render(pd3dCommandList);
 }
 
 void WinScene::RenderForShadow(ID3D12GraphicsCommandList * pd3dCommandList)

@@ -44,7 +44,7 @@
 #include "GameFramework.h"
 
 static const bool DefferedRendering = false;
-static const bool blurTEST = true;
+static const bool isBloom = true;
 
 void CGameFramework::Render()
 {
@@ -72,7 +72,7 @@ void CGameFramework::Render()
 	}
 	else
 	{
-		if (blurTEST)
+		if (isBloom)
 		{
 			// 쉐도우 맵을 그립니다.
 			d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_Shadowmap, D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_DEPTH_WRITE);
@@ -103,11 +103,7 @@ void CGameFramework::Render()
 
 			// 톤매핑을 합니다.
 			RenderOnRT(&CGameFramework::ToneMapping, m_RenderTargetBuffers[m_SwapChainBufferIndex], m_SwapChainCPUHandle[m_SwapChainBufferIndex], m_DepthStencilCPUHandle);
-
-
-			// 그냥 그립니다.. 지금 톤매핑 휘도 이상한거 같아서 테스트해봐야함..
-			// RenderOnRT(&CGameFramework::RenderSwapChain, m_RenderTargetBuffers[m_SwapChainBufferIndex], m_SwapChainCPUHandle[m_SwapChainBufferIndex], m_DepthStencilCPUHandle);
-
+			 
 		}
 		else
 		{
@@ -994,9 +990,45 @@ void CGameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPA
 		m_SceneMgr->GetCurrScene()->OnProcessingKeyboardMessage(hWnd, nMessageID, wParam, lParam, 0.f);
 	}
 
+	bool isStateChange = false;
 	switch (nMessageID)
 	{
-	case WM_KEYDOWN:   
+	case WM_KEYDOWN:    
+		switch (wParam)
+		{
+		case VK_F5: // Main Scene 으로 전환
+		{
+			isStateChange = true;
+			m_SceneMgr->ChangeSceneToMain();
+			break;
+		}
+		case VK_F6: // Skill Select Scene 으로 전환
+		{
+			isStateChange = true;
+			m_SceneMgr->ChangeSceneToSkillSelect();
+			break;
+		}
+		case VK_F7: // Game Scene 으로 전환
+		{
+			isStateChange = true;
+			m_SceneMgr->ChangeSceneToGame();
+			break;
+		}
+		case VK_F8: // Win Scene 으로 전환
+		{
+			isStateChange = true;
+			m_SceneMgr->ChangeSceneToWin();
+			break;
+		}
+		case VK_F9: // Lose Scene 으로 전환
+		{
+			isStateChange = true;
+			m_SceneMgr->ChangeSceneToLose();
+			break;
+		}
+		default:
+			break;
+		}
 		break;
 	case WM_KEYUP: 
 		switch (wParam)
@@ -1020,6 +1052,16 @@ void CGameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPA
 			OnResizeBackBuffers();
 			break;
 		} 
+
+		case VK_F5:  
+		case VK_F6:  
+		case VK_F7:  
+		case VK_F8:  
+		case VK_F9:  
+		{
+			isStateChange = true; 
+			break;
+		}
 		default:
 			break;
 		}
@@ -1028,6 +1070,9 @@ void CGameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPA
 		break;
 	}
 
+	// 만약 F8 ~ F12로 장면 전환한 경우 아래는 적용하지 않는다.
+	if (isStateChange) return;
+
 	// 만약 아무키나 누르면 장면 전환 ///////////////////
 	if (m_SceneMgr->IsMainScene())
 	{
@@ -1035,7 +1080,6 @@ void CGameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPA
 	}
 	else if (m_SceneMgr->IsSkillSelectScene())
 	{
-		static_cast<SkillSelectScene *>(m_SceneMgr->GetCurrScene())->FinishSkillSelect();
 		m_SceneMgr->ChangeSceneToGame();
 	}
 }

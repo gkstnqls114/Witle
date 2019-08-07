@@ -72,6 +72,7 @@ void SceneMgr::BuildHeap(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * 
 
 void SceneMgr::ChangeSceneToGame()
 {
+	m_SkillSelectScene->FinishSkillSelect(); // Skill Select에서 설정된 스킬 연결
 	m_pCurrScene = m_GameScene;
 	m_CurrSceneType = ENUM_SCENE::SCENE_GAME;
 }
