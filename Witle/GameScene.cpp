@@ -524,10 +524,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	 
 	// UI 이미지 추가
 	m_TESTGameObject = new EmptyGameObject("Test");
-
-	// 테스트
-	m_testHitEffect = new HitEffect(pd3dDevice, pd3dCommandList);
-
+	 
 	// 미니맵
 	m_SampleUIMap = new UI2DImage(
 		m_TESTGameObject, ENUM_SCENE::SCENE_GAME, pd3dDevice, pd3dCommandList,
@@ -851,9 +848,7 @@ void GameScene::Update(float fElapsedTime)
 	{
 		m_AltarSphere[x]->Update(fElapsedTime);
 	}
-
-	m_testHitEffect->Update(fElapsedTime);
-
+	 
 	//// 순서 변경 X //// 
 	if (m_pPlayer) m_pPlayer->Update(fElapsedTime); //Velocity를 통해 pos 이동
 
@@ -946,11 +941,7 @@ void GameScene::LastUpdate(float fElapsedTime)
 		if (m_TestMonster[i]->GetisAttacking())
 		{
 			if (Collision::isCollide(m_pPlayer->GetBOBox()->GetBOBox(), m_TestMonster[i]->GetBOBox()->GetBOBox()))
-			{
-				auto p = m_TestMonster[i]->GetTransform().GetPosition();
-				hitEffectTr._41 = p.x;
-				hitEffectTr._42 = p.y;
-				hitEffectTr._43 = p.z;
+			{ 
 				m_pPlayer->SubstractHP(5);
 			}
 		}
@@ -1028,7 +1019,6 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 
 	if (m_pPlayer) m_pPlayer->Render(pd3dCommandList, isGBuffers);
 	 
-	if (m_testHitEffect)m_testHitEffect->Render(pd3dCommandList, hitEffectTr);
 
 #ifdef CHECK_SUBVIEWS
 	m_lookAboveCamera->SetViewportsAndScissorRects(pd3dCommandList);
@@ -1178,8 +1168,7 @@ void GameScene::ReleaseUploadBuffers()
 {
 	if (m_SkyBox) m_SkyBox->ReleaseUploadBuffers();
 	if (m_AimPoint)m_AimPoint->ReleaseUploadBuffers();
-	if (m_Sniping) m_Sniping->ReleaseUploadBuffers(); 
-	if (m_testHitEffect) m_testHitEffect->ReleaseUploadBuffers();
+	if (m_Sniping) m_Sniping->ReleaseUploadBuffers();  
 	if (m_SkyBox) m_SkyBox->ReleaseUploadBuffers();
 	if (m_pPlayer) m_pPlayer->ReleaseUploadBuffers();
 	if (m_Terrain) m_Terrain->ReleaseUploadBuffers();

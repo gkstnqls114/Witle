@@ -1,56 +1,59 @@
 #include "stdafx.h"
 
-#include "SkillEffect.h"
-// Selectable Skill 관련 //////////////////////////// 
-#include "Skill.h"
-#include "FireBallSkill.h"
-#include "IceBallSkill.h"
-#include "LightningBallSkill.h"
-#include "Shield.h"
-#include "Blessing.h"
-#include "Healing.h"
-// Selectable Skill 관련 ////////////////////////////
+#include "HitEffect.h"
+#include "GameObject.h"
 
 #include "EffectMgr.h"
 
 EffectMgr* EffectMgr::m_Instance{ nullptr };
-
-EffectMgr::EffectMgr()
-{
-}
-
+ 
 EffectMgr::~EffectMgr()
 {
 }
 
 void EffectMgr::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList)
 {
+	m_GameObject = new EmptyGameObject("test");
 
-
+	for (auto& effect : m_EffectList)
+	{
+		effect.pEffect = new HitEffect(m_GameObject, pd3dDevice, pd3dCommandList);
+	} 
 }
 
 void EffectMgr::ReleaseUploadBuffers()
 {
-
+	for (auto& effect : m_EffectList)
+	{
+		effect.pEffect->ReleaseUploadBuffers();
+		delete effect.pEffect;
+		effect.pEffect = nullptr;
+	} 
 }
 
 void EffectMgr::ReleaseObjects()
-{
-
+{ 
+	for (auto& effect : m_EffectList)
+	{
+		effect.pEffect->ReleaseObjects();
+		delete effect.pEffect;
+		effect.pEffect = nullptr;
+	}
 }
 
 void EffectMgr::Update(float fElapsedTime)
-{
-	
+{ 
+	for (auto& effect : m_EffectList)
+	{
+		effect.pEffect->Update(fElapsedTime);
+	}
 }
 
 void EffectMgr::Render(ID3D12GraphicsCommandList * pd3dCommandList)
-{
-	XMFLOAT4X4 world;
-
-	for (const auto& pos : m_effectPositionList)
-	{
-
+{ 
+	for (const auto& effect : m_EffectList)
+	{ 
+		effect.pEffect->Render(pd3dCommandList, effect.pos);
 	}
 }
 
@@ -62,7 +65,13 @@ void EffectMgr::AddEffectPosition(ENUM_EFFECT type, const XMFLOAT3 pos)
 
 		break;
 	case EFFECT_TEST:
-		m_effectPositionList.push_back(pos);
+		for (auto& effect : m_EffectList)
+		{
+			if (effect.pEffect->IsActive()) continue;
+
+			effect.pos = pos;
+			effect.pEffect->Active();
+		}
 		break;
 	default:
 		break;

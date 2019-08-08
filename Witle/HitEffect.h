@@ -1,17 +1,17 @@
 #pragma once
-#include "GameObject.h"
+#include "ComponentBase.h"
 
-class MyRectangle;
+class UI3DImage;
 
 // Hit Effect
 class HitEffect
-	: public GameObject
+	: public ComponentBase
 { 
 private: 
 	const float m_ChangeIndexTime{ 0.1f };
 	float m_TotalTime{ 0.f };
 
-	bool isActive{ true };
+	bool isActive{ false };
 
 	float m_CurrIndex{ 0 };
 	
@@ -22,19 +22,23 @@ private:
 	float m_ResolY { 1 };
 	
 	UI3DImage*			m_HitEffect{ nullptr }; 
-	 
-protected:
-	virtual void ReleaseMembers() override;
-	virtual void ReleaseMemberUploadBuffers() override;
+	  
+public: 
+	virtual void ReleaseObjects() override;
+	virtual void ReleaseUploadBuffers() override;
 	 
 public:
-	HitEffect(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
+	HitEffect(GameObject* pOwner, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
 	virtual ~HitEffect();
 
 	// Update: 이동에 관련된 행동을 수행
 	virtual void Update(float) override;
 
 	// Update 수행 이전 반드시 호출 
-	void Render(ID3D12GraphicsCommandList *pd3dCommandList, const XMFLOAT4X4 world);
+	void Render(ID3D12GraphicsCommandList *pd3dCommandList, const XMFLOAT3& pos);
 	
+	bool IsActive() const { return isActive; }
+
+	void Active() { isActive = true; }
+	void Deactive() { isActive = false; }
 };

@@ -1,17 +1,24 @@
 #pragma once
+#include "GameObject.h"
  
 class HitEffect;
 
 class EffectMgr
 {
 	static EffectMgr* m_Instance;
-	 
-	HitEffect* m_HitEffect{ nullptr };
 
-	std::list<XMFLOAT3> m_effectPositionList;
+	struct HITEFFECT
+	{
+		HitEffect* pEffect;
+		XMFLOAT3 pos;
+	};
+	const int m_MaxEffect{ 10 };
+	std::vector<HITEFFECT> m_EffectList;
+
+	GameObject* m_GameObject{ nullptr };
 
 public:
-	EffectMgr();
+	EffectMgr() : m_EffectList(m_MaxEffect) {};
 	virtual ~EffectMgr();
 
 	static EffectMgr* GetInstance()

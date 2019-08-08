@@ -126,10 +126,7 @@ public:
 	QuadtreeTerrain* GetQuadtreeTerrain() const { return m_pQuadtreeTerrain; }
 
 public:
-	//테스트용
-	XMFLOAT4X4 hitEffectTr { Matrix4x4::Identity() };
-	HitEffect *m_testHitEffect{ nullptr };
-
+	
 	// 플레이어 관련 ////////////////////////////
 	
 	Player*                 m_pPlayer        { nullptr }; 
