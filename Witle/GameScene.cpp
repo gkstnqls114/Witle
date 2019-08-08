@@ -526,7 +526,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	m_TESTGameObject = new EmptyGameObject("Test");
 
 	// 테스트
-	m_testHitEffect = new HitEffect(m_TESTGameObject, pd3dDevice, pd3dCommandList);
+	m_testHitEffect = new HitEffect(pd3dDevice, pd3dCommandList);
 
 	// 미니맵
 	m_SampleUIMap = new UI2DImage(

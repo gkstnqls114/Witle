@@ -24,7 +24,7 @@ protected:
 	virtual void ReleaseMemberUploadBuffers() = 0;
 
 public:
-	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers) = 0;
+	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers) {};
 
 private:
 	std::map< std::string, ComponentBase*> m_Components;

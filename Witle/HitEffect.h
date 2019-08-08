@@ -1,11 +1,11 @@
 #pragma once
-#include "ComponentBase.h"
+#include "GameObject.h"
 
 class MyRectangle;
 
 // Hit Effect
 class HitEffect
-	: public ComponentBase
+	: public GameObject
 { 
 private: 
 	const float m_ChangeIndexTime{ 0.1f };
@@ -22,13 +22,13 @@ private:
 	float m_ResolY { 1 };
 	
 	UI3DImage*			m_HitEffect{ nullptr }; 
-
+	 
+protected:
+	virtual void ReleaseMembers() override;
+	virtual void ReleaseMemberUploadBuffers() override;
+	 
 public:
-	virtual void ReleaseObjects() override;
-	virtual void ReleaseUploadBuffers() override;
-
-public:
-	HitEffect(GameObject* pOwner, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
+	HitEffect(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
 	virtual ~HitEffect();
 
 	// Update: 이동에 관련된 행동을 수행
