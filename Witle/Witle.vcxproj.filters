@@ -514,6 +514,9 @@
     <Filter Include="03.GameObject\HitEffect">
       <UniqueIdentifier>{ec815beb-c83d-4d1d-a06e-af703512ee3a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="13.Storage/Manager\14.EffectMgr">
+      <UniqueIdentifier>{50028e9e-0ba9-485a-b233-e05a4f46f278}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -1050,6 +1053,9 @@
     <ClInclude Include="HitEffect.h">
       <Filter>03.GameObject\HitEffect</Filter>
     </ClInclude>
+    <ClInclude Include="EffectMgr.h">
+      <Filter>13.Storage/Manager\14.EffectMgr</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1564,6 +1570,9 @@
     </ClCompile>
     <ClCompile Include="HitEffect.cpp">
       <Filter>03.GameObject\HitEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="EffectMgr.cpp">
+      <Filter>13.Storage/Manager\14.EffectMgr</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
