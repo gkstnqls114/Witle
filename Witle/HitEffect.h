@@ -8,7 +8,7 @@ class HitEffect
 	: public ComponentBase
 { 
 private: 
-	const float m_ChangeIndexTime{ 1.f };
+	const float m_ChangeIndexTime{ 0.1f };
 	float m_TotalTime{ 0.f };
 
 	bool isActive{ true };
