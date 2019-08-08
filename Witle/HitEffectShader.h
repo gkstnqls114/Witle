@@ -1,7 +1,7 @@
 #pragma once
 #include "Shader.h"
 
-class LineShader :
+class HitEffectShader :
 	public Shader
 {
 	// PSO 를 생성할 때 필요한 인자들
@@ -20,10 +20,10 @@ class LineShader :
 
 
 public:
-	LineShader();
-	virtual ~LineShader();
+	HitEffectShader();
+	virtual ~HitEffectShader();
 
-	virtual void						CreateShader(ID3D12Device *pd3dDevice, ID3D12RootSignature* const pd3dGraphicsRootSignature) override;
+	virtual void						CreateShader(ID3D12Device *pd3dDevice, ID3D12RootSignature*const pd3dGraphicsRootSignature) override;
 	virtual void						Update(float ElapsedTime) override;
 
 };

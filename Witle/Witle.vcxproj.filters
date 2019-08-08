@@ -352,9 +352,6 @@
     <Filter Include="05.Shader\01.ComputeShader\HorizonBlurShader">
       <UniqueIdentifier>{b03b7801-6b9f-4962-83c6-87e0924de456}</UniqueIdentifier>
     </Filter>
-    <Filter Include="05.Shader\01.ComputeShader\VerticalBlurShader">
-      <UniqueIdentifier>{ed62e02a-815b-4a30-81f6-f42801d21808}</UniqueIdentifier>
-    </Filter>
     <Filter Include="05.Shader\02.GraphicsShader">
       <UniqueIdentifier>{e1916dca-d069-47fd-b699-d38cd0c281bd}</UniqueIdentifier>
     </Filter>
@@ -507,6 +504,12 @@
     </Filter>
     <Filter Include="04.Scene\LoseScene">
       <UniqueIdentifier>{274bf181-be42-494c-9f40-2264e8bd0ee1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Shader\02.GraphicsShader\VerticalBlurShader">
+      <UniqueIdentifier>{ed62e02a-815b-4a30-81f6-f42801d21808}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Shader\02.GraphicsShader\HitEffectShader">
+      <UniqueIdentifier>{3c25fa64-0e54-48be-a924-dc00a0493edc}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -667,7 +670,7 @@
       <Filter>05.Shader\01.ComputeShader\HorizonBlurShader</Filter>
     </ClInclude>
     <ClInclude Include="VerticalBlurShader.h">
-      <Filter>05.Shader\01.ComputeShader\VerticalBlurShader</Filter>
+      <Filter>05.Shader\02.GraphicsShader\VerticalBlurShader</Filter>
     </ClInclude>
     <ClInclude Include="SkinnedMesh.h">
       <Filter>02.Component\SkinnedMesh</Filter>
@@ -1038,6 +1041,9 @@
     <ClInclude Include="LoseScene.h">
       <Filter>04.Scene\LoseScene</Filter>
     </ClInclude>
+    <ClInclude Include="HitEffectShader.h">
+      <Filter>05.Shader\02.GraphicsShader\HitEffectShader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1179,7 +1185,7 @@
       <Filter>05.Shader\01.ComputeShader\HorizonBlurShader</Filter>
     </ClCompile>
     <ClCompile Include="VerticalBlurShader.cpp">
-      <Filter>05.Shader\01.ComputeShader\VerticalBlurShader</Filter>
+      <Filter>05.Shader\02.GraphicsShader\VerticalBlurShader</Filter>
     </ClCompile>
     <ClCompile Include="SkinnedMesh.cpp">
       <Filter>02.Component\SkinnedMesh</Filter>
@@ -1547,6 +1553,9 @@
     <ClCompile Include="MainScene.cpp">
       <Filter>04.Scene\MainScene</Filter>
     </ClCompile>
+    <ClCompile Include="HitEffectShader.cpp">
+      <Filter>05.Shader\02.GraphicsShader\HitEffectShader</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Witle.rc">
@@ -1626,6 +1635,9 @@
       <Filter>HLSL</Filter>
     </FxCompile>
     <FxCompile Include="BloomRevealShader.hlsl">
+      <Filter>HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="HitEffectShader.hlsl">
       <Filter>HLSL</Filter>
     </FxCompile>
   </ItemGroup>
