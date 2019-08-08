@@ -129,6 +129,30 @@ struct INSTANCING_TRANSFORM
 
 StructuredBuffer<INSTANCING_TRANSFORM> gmtxInstancingWorld : register(t14);
 
+float gain(float x, float k)
+{
+    float a = 0.5 * pow(2.0 * ((x < 0.5) ? x : 1.0 - x), k);
+    return (x < 0.5) ? a : 1.0 - a;
+}
+
+float quadraticThroughAGivenPoint(float x, float a, float b)
+{ 
+    float epsilon = 0.00001;
+    float min_param_a = 0.0 + epsilon;
+    float max_param_a = 1.0 - epsilon;
+    float min_param_b = 0.0;
+    float max_param_b = 1.0;
+    a = min(max_param_a, max(min_param_a, a));
+    b = min(max_param_b, max(min_param_b, b));
+  
+    float A = (1 - b) / (1 - a) - (b / a);
+    float B = (A * (a * a) - b) / a;
+    float y = A * (x * x) - B * (x);
+    y = min(1, max(0, y));
+  
+    return y;
+}
+
 float NormalizeSpecPower(float specpower)
 {
     float2 specpowerRange = float2(1, 2);
