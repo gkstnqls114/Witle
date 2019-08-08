@@ -162,6 +162,7 @@
     <ClInclude Include="Blessing.h" />
     <ClInclude Include="BloomRevealShader.h" />
     <ClInclude Include="EffectMesh.h" />
+    <ClInclude Include="HitEffect.h" />
     <ClInclude Include="HitEffectShader.h" />
     <ClInclude Include="LoseScene.h" />
     <ClInclude Include="Mushroom.h" />
@@ -341,6 +342,7 @@
     <ClCompile Include="Blessing.cpp" />
     <ClCompile Include="BloomRevealShader.cpp" />
     <ClCompile Include="EffectMesh.cpp" />
+    <ClCompile Include="HitEffect.cpp" />
     <ClCompile Include="HitEffectShader.cpp" />
     <ClCompile Include="LoseScene.cpp" />
     <ClCompile Include="MainScene.cpp" />

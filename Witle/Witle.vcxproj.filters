@@ -511,6 +511,9 @@
     <Filter Include="05.Shader\02.GraphicsShader\HitEffectShader">
       <UniqueIdentifier>{3c25fa64-0e54-48be-a924-dc00a0493edc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.GameObject\HitEffect">
+      <UniqueIdentifier>{ec815beb-c83d-4d1d-a06e-af703512ee3a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -1044,6 +1047,9 @@
     <ClInclude Include="HitEffectShader.h">
       <Filter>05.Shader\02.GraphicsShader\HitEffectShader</Filter>
     </ClInclude>
+    <ClInclude Include="HitEffect.h">
+      <Filter>03.GameObject\HitEffect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1555,6 +1561,9 @@
     </ClCompile>
     <ClCompile Include="HitEffectShader.cpp">
       <Filter>05.Shader\02.GraphicsShader\HitEffectShader</Filter>
+    </ClCompile>
+    <ClCompile Include="HitEffect.cpp">
+      <Filter>03.GameObject\HitEffect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

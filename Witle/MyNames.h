@@ -58,4 +58,5 @@
 #define SHADER_EFFECTMESH "EffectMesh"
 #define SHADER_BLENDMESH "BlendMeshShader"
 #define SHADER_TONEMAPPING "ToneMapping" 
+#define SHADER_HITEFFECT "HitEffect"
 
