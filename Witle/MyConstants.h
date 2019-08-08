@@ -7,6 +7,12 @@
 
 
 //// Enum Type ////////////////////////////////////
+enum ENUM_EFFECT
+{
+	EFFECT_NONE = -1,
+	EFFECT_TEST
+};
+
 enum ENUM_SCENE
 {
 	SCENE_NONE = -1,
