@@ -6,7 +6,9 @@ class EffectMgr
 {
 	static EffectMgr* m_Instance;
 	 
-	std::queue<HitEffect*> m_EffectQueue;
+	HitEffect* m_HitEffect{ nullptr };
+
+	std::queue<HitEffect*> m_EffectTransformQueue;
 
 public:
 	EffectMgr();
@@ -26,4 +28,5 @@ public:
 	void ReleaseUploadBuffers();
 	void ReleaseObjects();
 	 
+	void AddEffect(ENUM_EFFECT type);
 };

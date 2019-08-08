@@ -37,4 +37,17 @@ void EffectMgr::ReleaseUploadBuffers()
 void EffectMgr::ReleaseObjects()
 {
 
-} 
+}
+void EffectMgr::AddEffect(ENUM_EFFECT type)
+{
+	switch (type)
+	{
+	case EFFECT_NONE:
+		break;
+	case EFFECT_TEST:
+
+		break;
+	default:
+		break;
+	}
+}
