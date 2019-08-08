@@ -8,18 +8,18 @@ class HitEffect
 	: public ComponentBase
 { 
 private: 
-	const float m_ChangeIndexTime{ 2.f };
+	const float m_ChangeIndexTime{ 1.f };
 	float m_TotalTime{ 0.f };
 
 	bool isActive{ true };
 
-	int m_CurrIndex{ 0 };
+	float m_CurrIndex{ 0 };
 	
 	// 해당 스프라이트가 가로로 몇개가 있는지
-	float m_ResolX{ 0 }; 
+	float m_ResolX{ 4 }; 
 	
 	// 해당 스프라이트가 세로로 몇개가 있는지
-	float m_ResolY {0};
+	float m_ResolY { 1 };
 	
 	UI3DImage*			m_HitEffect{ nullptr }; 
 
