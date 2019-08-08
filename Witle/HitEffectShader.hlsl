@@ -55,8 +55,8 @@ float4 PSHitEffect(VS_SCREEN_OUTPUT input) : SV_TARGET
 	 
     float4 color = gtxtTexture.Sample(gWrapSamplerState, newTex);
      
-    if (color.a < 0.5)
-        discard;
+    //if (color.a < 0.5)
+    //    discard;
 
     return color;
 }

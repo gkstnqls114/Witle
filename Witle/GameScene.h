@@ -22,6 +22,7 @@ class AltarSphere;
 class Camera;
 class CylinderMesh;
 class LineSphere;
+class HitEffect;
 //// Componenet ///////////////
 
 //// UI ///////////////
@@ -125,10 +126,12 @@ public:
 	QuadtreeTerrain* GetQuadtreeTerrain() const { return m_pQuadtreeTerrain; }
 
 public:
+	//테스트용
+	HitEffect *m_testHitEffect{ nullptr };
+
 	// 플레이어 관련 ////////////////////////////
 	
-	Player*                 m_pPlayer        { nullptr };
-	WideareaMagic*          m_WideareaMagic  { nullptr };
+	Player*                 m_pPlayer        { nullptr }; 
 	Sniping*				m_Sniping        { nullptr }; 
 	
 	// 플레이어 관련 ////////////////////////////c

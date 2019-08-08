@@ -22,7 +22,8 @@
 #include "TerrainForShadow.h"
 #include "SkillIconShader.h"
 #include "BlendMeshShader.h" 
-#include "TonemappingShader.h" 
+#include "TonemappingShader.h"
+#include "HitEffectShader.h"
 //// Shader ////////////////////////// 
 
 #include "ShaderManager.h"
@@ -154,6 +155,10 @@ void ShaderManager::BuildShaders(ID3D12Device * pd3dDevice, ID3D12RootSignature 
 	TonemappingShader* pTonemappingShader = new TonemappingShader();
 	pTonemappingShader->CreateShader(pd3dDevice, pd3dGraphicsRootSignature);
 	InsertShader(SHADER_TONEMAPPING, pTonemappingShader);
+
+	HitEffectShader* pHitEffectShader = new HitEffectShader();
+	pHitEffectShader->CreateShader(pd3dDevice, pd3dGraphicsRootSignature);
+	InsertShader(SHADER_HITEFFECT, pHitEffectShader);
 }
 
 bool ShaderManager::InsertShader(const std::string& s, Shader * pso)

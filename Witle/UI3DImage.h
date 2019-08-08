@@ -20,7 +20,7 @@ private:
 		XMFLOAT2 uv;
 
 		UIVertex() {}
-		UIVertex(XMFLOAT3 p, XMFLOAT4 c, XMFLOAT2 u) : position(p), uv(u) {}
+		UIVertex(XMFLOAT3 p, XMFLOAT2 u) : position(p), uv(u) {}
 	};
 
 	// 텍스쳐관련 정보 

@@ -108,12 +108,12 @@ D3D12_PRIMITIVE_TOPOLOGY_TYPE HitEffectShader::CreatePrimitiveTopologyType()
 
 D3D12_SHADER_BYTECODE HitEffectShader::CreateVertexShader(ID3DBlob ** ppd3dShaderBlob)
 {
-	return(Shader::CompileShaderFromFile(L"HitEffectShader.hlsl", "VSHitEffec", "vs_5_1", ppd3dShaderBlob));
+	return(Shader::CompileShaderFromFile(L"HitEffectShader.hlsl", "VSHitEffect", "vs_5_1", ppd3dShaderBlob));
 }
 
 D3D12_SHADER_BYTECODE HitEffectShader::CreatePixelShader(ID3DBlob ** ppd3dShaderBlob)
 {
-	return(Shader::CompileShaderFromFile(L"HitEffectShader.hlsl", "PSHitEffec", "ps_5_1", ppd3dShaderBlob));
+	return(Shader::CompileShaderFromFile(L"HitEffectShader.hlsl", "PSHitEffect", "ps_5_1", ppd3dShaderBlob));
 }
 
 D3D12_SHADER_BYTECODE HitEffectShader::CreatePixelShaderForGBuffers(ID3DBlob ** ppd3dShaderBlob)

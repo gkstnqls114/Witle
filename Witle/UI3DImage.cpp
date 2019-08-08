@@ -61,7 +61,7 @@ UI3DImage::UI3DImage(GameObject * pOwner, ID3D12Device * pd3dDevice, ID3D12Graph
 	UIVertex pVertices[RECTANGLE_VERTEX_COUNT];
 	for (int x = 0; x < RECTANGLE_VERTEX_COUNT; ++x)
 	{
-		pVertices[x] = UIVertex(pxmf3Positions[x], XMFLOAT4{ 1.f, 1.f, 1.f, 1.f }, pxmf2UVs[x]);
+		pVertices[x] = UIVertex(pxmf3Positions[x], pxmf2UVs[x]);
 	}
 
 	m_pPositionBuffer = d3dUtil::CreateBufferResource(pd3dDevice, pd3dCommandList, pVertices,
@@ -114,7 +114,7 @@ UI3DImage::UI3DImage(GameObject * pOwner, ID3D12Device * pd3dDevice, ID3D12Graph
 	UIVertex pVertices[RECTANGLE_VERTEX_COUNT];
 	for (int x = 0; x < RECTANGLE_VERTEX_COUNT; ++x)
 	{
-		pVertices[x] = UIVertex(pxmf3Positions[x], XMFLOAT4{ 1.f, 1.f, 1.f, 1.f }, pxmf2UVs[x]);
+		pVertices[x] = UIVertex(pxmf3Positions[x], pxmf2UVs[x]);
 	}
 
 	m_pPositionBuffer = d3dUtil::CreateBufferResource(pd3dDevice, pd3dCommandList, pVertices,

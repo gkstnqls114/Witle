@@ -51,8 +51,9 @@
 // 나중에 코드 수정 
 #include "SkillSelectScene.h"
 
-#include "MyBOBox.h"
+#include "HitEffect.h"
 #include "SkillEffect.h"
+#include "MyBOBox.h" 
 #include "Collision.h"
 #include "Status.h"
 #include "Object.h" //교수님코드 
@@ -524,6 +525,9 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	// UI 이미지 추가
 	m_TESTGameObject = new EmptyGameObject("Test");
 
+	// 테스트
+	m_testHitEffect = new HitEffect(m_TESTGameObject, pd3dDevice, pd3dCommandList);
+
 	// 미니맵
 	m_SampleUIMap = new UI2DImage(
 		m_TESTGameObject, ENUM_SCENE::SCENE_GAME, pd3dDevice, pd3dCommandList,
@@ -709,13 +713,7 @@ void GameScene::ReleaseObjects()
 		m_Sniping->ReleaseObjects();
 		delete m_Sniping;
 		m_Sniping = nullptr;
-	}
-	if (m_WideareaMagic)
-	{
-		m_WideareaMagic->ReleaseObjects();
-		delete m_WideareaMagic;
-		m_WideareaMagic = nullptr;
-	}
+	} 
 	if (m_AimPoint)
 	{
 		m_AimPoint->ReleaseObjects();
@@ -854,11 +852,12 @@ void GameScene::Update(float fElapsedTime)
 		m_AltarSphere[x]->Update(fElapsedTime);
 	}
 
+	m_testHitEffect->Update(fElapsedTime);
+
 	//// 순서 변경 X //// 
 	if (m_pPlayer) m_pPlayer->Update(fElapsedTime); //Velocity를 통해 pos 이동
 
-	if (m_SkyBox) m_SkyBox->Update(fElapsedTime);
-	if (m_WideareaMagic) m_WideareaMagic->Update(fElapsedTime);
+	if (m_SkyBox) m_SkyBox->Update(fElapsedTime); 
 
 	m_Dragon->Update(fElapsedTime);
 	for (int i = 0; i < m_TestMonsterCount; ++i)
@@ -1024,8 +1023,8 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 	if (m_SkyBox) m_SkyBox->Render(pd3dCommandList, isGBuffers);
 
 	if (m_pPlayer) m_pPlayer->Render(pd3dCommandList, isGBuffers);
-
-	if (m_WideareaMagic) m_WideareaMagic->Render(pd3dCommandList, isGBuffers);
+	 
+	if (m_testHitEffect)m_testHitEffect->Render(pd3dCommandList, m_pPlayer->GetTransform().GetWorldMatrix());
 
 #ifdef CHECK_SUBVIEWS
 	m_lookAboveCamera->SetViewportsAndScissorRects(pd3dCommandList);
@@ -1049,7 +1048,7 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 		}
 	}
 
-	m_Dragon->Render(pd3dCommandList, isGBuffers);
+	// m_Dragon->Render(pd3dCommandList, isGBuffers);
 	
 	for (int i = 0; i < m_TestMonsterCount; ++i)
 	{
@@ -1175,8 +1174,8 @@ void GameScene::ReleaseUploadBuffers()
 {
 	if (m_SkyBox) m_SkyBox->ReleaseUploadBuffers();
 	if (m_AimPoint)m_AimPoint->ReleaseUploadBuffers();
-	if (m_Sniping) m_Sniping->ReleaseUploadBuffers();
-	if (m_WideareaMagic) m_WideareaMagic->ReleaseUploadBuffers();
+	if (m_Sniping) m_Sniping->ReleaseUploadBuffers(); 
+	if (m_testHitEffect) m_testHitEffect->ReleaseUploadBuffers();
 	if (m_SkyBox) m_SkyBox->ReleaseUploadBuffers();
 	if (m_pPlayer) m_pPlayer->ReleaseUploadBuffers();
 	if (m_Terrain) m_Terrain->ReleaseUploadBuffers();
