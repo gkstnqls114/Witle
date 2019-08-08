@@ -941,16 +941,20 @@ void GameScene::LastUpdate(float fElapsedTime)
 	// }
 
 	// Update한 위치로 몬스터가 공격 시에 몬스터/플레이어충돌체크 확인 ///////////////////////////
-	//for (int i = 0; i < m_TestMonsterCount; ++i)
-	//{
-	//	if (m_TestMonster[i]->GetisAttacking())
-	//	{
-	//		if (Collision::isCollide(m_pPlayer->GetBOBox()->GetBOBox(), m_TestMonster[i]->GetBOBox()->GetBOBox()))
-	//		{
-	//			m_pPlayer->SubstractHP(5);
-	//		}
-	//	}
-	//}
+	for (int i = 0; i < m_TestMonsterCount; ++i)
+	{
+		if (m_TestMonster[i]->GetisAttacking())
+		{
+			if (Collision::isCollide(m_pPlayer->GetBOBox()->GetBOBox(), m_TestMonster[i]->GetBOBox()->GetBOBox()))
+			{
+				auto p = m_TestMonster[i]->GetTransform().GetPosition();
+				hitEffectTr._41 = p.x;
+				hitEffectTr._42 = p.y;
+				hitEffectTr._43 = p.z;
+				m_pPlayer->SubstractHP(5);
+			}
+		}
+	}
 
 	// 보스 부딫힘
 	if (Collision::isCollide(m_pPlayer->GetBOBox()->GetBOBox(), m_Dragon->GetBOBox()->GetBOBox()))
@@ -1024,7 +1028,7 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 
 	if (m_pPlayer) m_pPlayer->Render(pd3dCommandList, isGBuffers);
 	 
-	if (m_testHitEffect)m_testHitEffect->Render(pd3dCommandList, m_pPlayer->GetTransform().GetWorldMatrix());
+	if (m_testHitEffect)m_testHitEffect->Render(pd3dCommandList, hitEffectTr);
 
 #ifdef CHECK_SUBVIEWS
 	m_lookAboveCamera->SetViewportsAndScissorRects(pd3dCommandList);

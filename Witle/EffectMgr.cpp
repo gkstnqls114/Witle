@@ -38,16 +38,33 @@ void EffectMgr::ReleaseObjects()
 {
 
 }
-void EffectMgr::AddEffect(ENUM_EFFECT type)
+
+void EffectMgr::Update(float fElapsedTime)
+{
+	
+}
+
+void EffectMgr::Render(ID3D12GraphicsCommandList * pd3dCommandList)
+{
+	XMFLOAT4X4 world;
+
+	for (const auto& pos : m_effectPositionList)
+	{
+
+	}
+}
+
+void EffectMgr::AddEffectPosition(ENUM_EFFECT type, const XMFLOAT3 pos)
 {
 	switch (type)
 	{
 	case EFFECT_NONE:
+
 		break;
 	case EFFECT_TEST:
-
+		m_effectPositionList.push_back(pos);
 		break;
 	default:
 		break;
 	}
-}
+} 

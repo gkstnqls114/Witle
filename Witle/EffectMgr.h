@@ -8,7 +8,7 @@ class EffectMgr
 	 
 	HitEffect* m_HitEffect{ nullptr };
 
-	std::queue<HitEffect*> m_EffectTransformQueue;
+	std::list<XMFLOAT3> m_effectPositionList;
 
 public:
 	EffectMgr();
@@ -27,6 +27,10 @@ public:
 	void BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
 	void ReleaseUploadBuffers();
 	void ReleaseObjects();
+
+	void Update(float fElapsedTime);
+
+	void Render(ID3D12GraphicsCommandList *pd3dCommandList);
 	 
-	void AddEffect(ENUM_EFFECT type);
+	void AddEffectPosition(ENUM_EFFECT type, const XMFLOAT3 pos);
 };
