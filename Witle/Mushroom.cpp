@@ -18,20 +18,12 @@
 
 void Mushroom::ReleaseMembers()
 {
-	Monster::ReleaseMembers();
-
-	if (m_pTexture)
-	{
-		m_pTexture->ReleaseObjects();
-		delete m_pTexture;
-		m_pTexture = nullptr;
-	}
+	Monster::ReleaseMembers(); 
 }
 
 void Mushroom::ReleaseMemberUploadBuffers()
 {
-	Monster::ReleaseMemberUploadBuffers();
-	if (m_pTexture)m_pTexture->ReleaseUploadBuffers();
+	Monster::ReleaseMemberUploadBuffers(); 
 }
 
 Mushroom::Mushroom(const std::string & entityID, const XMFLOAT3& SpawnPoint,

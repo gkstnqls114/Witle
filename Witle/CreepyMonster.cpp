@@ -20,20 +20,12 @@
  
 void CreepyMonster::ReleaseMembers()
 {
-	Monster::ReleaseMembers(); 
-
-	if (m_pTexture)
-	{
-		m_pTexture->ReleaseObjects();
-		delete m_pTexture;
-		m_pTexture = nullptr;
-	}
+	Monster::ReleaseMembers();  
 }
 
 void CreepyMonster::ReleaseMemberUploadBuffers()
 {
-	Monster::ReleaseMemberUploadBuffers();
-	if (m_pTexture)m_pTexture->ReleaseUploadBuffers();
+	Monster::ReleaseMemberUploadBuffers(); 
 }
 
 CreepyMonster::CreepyMonster(const std::string & entityID, const XMFLOAT3& SpawnPoint,

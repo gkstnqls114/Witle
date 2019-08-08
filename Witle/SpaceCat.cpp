@@ -19,19 +19,11 @@
 void SpaceCat::ReleaseMembers()
 {
 	Monster::ReleaseMembers();
-
-	if (m_pTexture)
-	{
-		m_pTexture->ReleaseObjects();
-		delete m_pTexture;
-		m_pTexture = nullptr;
-	}
 }
 
 void SpaceCat::ReleaseMemberUploadBuffers()
 {
-	Monster::ReleaseMemberUploadBuffers();
-	if (m_pTexture)m_pTexture->ReleaseUploadBuffers();
+	Monster::ReleaseMemberUploadBuffers(); 
 }
 
 SpaceCat::SpaceCat(const std::string & entityID, const XMFLOAT3& SpawnPoint,
