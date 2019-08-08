@@ -9,8 +9,8 @@
 #include "CameraObject.h"
 #include "GameObject.h"
 #include "HitEffect.h"
- 
-void HitEffect::ReleaseObjects()
+   
+void HitEffect::ReleaseMembers()
 {
 	if (m_HitEffect)
 	{
@@ -20,17 +20,17 @@ void HitEffect::ReleaseObjects()
 	}
 }
 
-void HitEffect::ReleaseUploadBuffers()
+void HitEffect::ReleaseMemberUploadBuffers()
 {
 	if (m_HitEffect) m_HitEffect->ReleaseUploadBuffers();
 }
 
-HitEffect::HitEffect(GameObject * pOwner, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList)
-	: ComponentBase(pOwner)
+HitEffect::HitEffect(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList)
+	: GameObject("HitEffect")
 {
 	m_ResolX = 5;
 	m_ResolY = 1;
-	m_HitEffect = new UI3DImage(pOwner, pd3dDevice, pd3dCommandList, POINT{ 0, 0 }, 100, 123, 
+	m_HitEffect = new UI3DImage(this, pd3dDevice, pd3dCommandList, POINT{ 0, 0 }, 100, 123, 
 	L"Image/sprite test2.dds");
 }
 

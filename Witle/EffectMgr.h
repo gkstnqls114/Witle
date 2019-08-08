@@ -1,9 +1,13 @@
 #pragma once
  
+class HitEffect;
+
 class EffectMgr
 {
 	static EffectMgr* m_Instance;
 	 
+	std::queue<HitEffect*> m_EffectQueue;
+
 public:
 	EffectMgr();
 	virtual ~EffectMgr();
