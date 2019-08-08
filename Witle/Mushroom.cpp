@@ -66,7 +66,7 @@ Mushroom::Mushroom(const std::string & entityID, const XMFLOAT3& SpawnPoint,
 	m_Transform.SetPosition(SpawnPoint);
 
 	XMFLOAT3 extents{ 50.f, 50.f, 50.f };
-	m_pMyBOBox = new MyBOBox(this, pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 75.F, 0.F }, extents);
+	m_pMyBOBox = new MyBOBox(this, pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 0.F, 0.F }, extents);
 
 	if (rand() % 2)
 	{
