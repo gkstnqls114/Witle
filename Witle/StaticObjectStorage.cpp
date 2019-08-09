@@ -23,8 +23,8 @@ void StaticObjectStorage::UpdateShaderVariables(ID3D12GraphicsCommandList * pd3d
 bool StaticObjectStorage::LoadTransform(char * name, const char * comp_name, const XMINT4 & IDs, const XMFLOAT4X4 & tr)
 { 
 	bool result = false;
-
-	if (!strcmp(name, comp_name))
+	 
+	if (!strcmp(name, comp_name) || !strcmp(name, "Cylinder001") /*Floor때문에 하드코딩*/)
 	{
 		// 만약 name이 절벽인 경우...
 		if (!strcmp(name, Cliff))
@@ -58,20 +58,37 @@ bool StaticObjectStorage::LoadTransform(char * name, const char * comp_name, con
 
 			if (terrainIDs == -1) continue;
 
-			m_StaticObjectStorage[comp_name][terrainIDs].TerrainObjectCount += 1;
+			if (!strcmp(name, "Cylinder001"))
+			{ 
+				m_StaticObjectStorage[RUIN_FLOOR][terrainIDs].TerrainObjectCount += 1;
 
-			LoadObject* TestObject = ModelStorage::GetInstance()->GetRootObject(comp_name);
-			TestObject->SetTransform(tr);
-			TestObject->UpdateTransform(NULL);
+				LoadObject* TestObject = ModelStorage::GetInstance()->GetRootObject(RUIN_FLOOR);
+				TestObject->SetTransform(tr);
+				TestObject->UpdateTransform(NULL);
 
-			m_StaticObjectStorage[comp_name][terrainIDs].TransformList.emplace_back(TestObject->m_pChild->m_xmf4x4World);
-			if (!strcmp(comp_name, ALTAR_IN))
-			{
-				m_AltarTransformStorage.emplace_back(tr);
+				m_StaticObjectStorage[RUIN_FLOOR][terrainIDs].TransformList.emplace_back(TestObject->m_pChild->m_xmf4x4World);
+				 
+				delete TestObject;
+				TestObject = nullptr;
 			}
+			else
+			{
 
-			delete TestObject;
-			TestObject = nullptr;
+				m_StaticObjectStorage[comp_name][terrainIDs].TerrainObjectCount += 1;
+
+				LoadObject* TestObject = ModelStorage::GetInstance()->GetRootObject(comp_name);
+				TestObject->SetTransform(tr);
+				TestObject->UpdateTransform(NULL);
+
+				m_StaticObjectStorage[comp_name][terrainIDs].TransformList.emplace_back(TestObject->m_pChild->m_xmf4x4World);
+				if (!strcmp(comp_name, ALTAR_IN))
+				{
+					m_AltarTransformStorage.emplace_back(tr);
+				}
+
+				delete TestObject;
+				TestObject = nullptr;
+			}
 
 			result = true;
 		}

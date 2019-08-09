@@ -76,6 +76,7 @@ void TextureStorage::CreateTextures(ID3D12Device * pd3dDevice, ID3D12GraphicsCom
 	CreateModelTexture(REED, pd3dDevice, pd3dCommandList); 
 	CreateModelTexture(RUIN_ARCH, pd3dDevice, pd3dCommandList);
 	CreateModelTexture(RUIN_BROKENPILLA, pd3dDevice, pd3dCommandList);
+	CreateModelTexture(RUIN_FLOOR, pd3dDevice, pd3dCommandList);
 	CreateModelTexture(RUIN_PILLAR, pd3dDevice, pd3dCommandList);
 	CreateModelTexture(RUIN_SQUARE, pd3dDevice, pd3dCommandList); 
 	CreateModelTexture(SUNFLOWER, pd3dDevice, pd3dCommandList); 
