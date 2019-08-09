@@ -19,19 +19,22 @@ set3DAttributes 리스너의 위치를 얻어오기 위한 함수
 		ChannelControl :: set3DSpread를 사용하여 오른쪽과 왼쪽의 사운드를 조절 할 수 있다.
 */
 
+// 플레이어 현재 위치 가져오기
+// PlayerManager::GetMainPlayer();
+
+// 현재 위치 가져오기
+// PlayerManager::GetMainPlayer()->GetTransform().GetPosition();
+
 #include "stdafx.h"
+#include "MyConstants.h"
 #include "SoundManager.h"
+
+#include "Player.h"
+#include "PlayerManager.h"
 
 SoundManager* SoundManager::m_Instance;
 
-const static bool isUsing = false;
-
-// extern PlayerMovement gMoveMent;
-// extern Player * Player_Sound;
-
-// pChannel[SOUND_TYPE]->set3DAttributes(&Player_Sound.Temp_move, Player_Sound.Temp_move, 0); // -> 인자 (pos,vel,alt_pan_pos)
-// 	// pChannel[SOUND_TYPE]->setPriority(); // 
-// pChannel[SOUND_TYPE]->setVolume(volume); // -> 볼륨
+const static bool isUsing = true;
 
 SoundManager::SoundManager()
 {
@@ -45,6 +48,11 @@ SoundManager::SoundManager()
 	);
 
 	for (auto& p : pSound) p = nullptr;
+
+	// pSystem->set3DSettings(1.0f, 1.0f, 1.0f);
+	// pChannel[SOUND_TYPE]->set3DAttributes((FMOD_VECTOR*)&PlayerManager::GetMainPlayer()->GetTransform().GetPosition(), (FMOD_VECTOR*)&PlayerManager::GetMainPlayer()->GetTransform().GetPosition(), 0); // -> 인자 (pos,vel,alt_pan_pos)
+	// // pChannel[SOUND_TYPE]->setPriority(); // 
+	// pChannel[SOUND_TYPE]->setVolume(Volume); // -> 볼륨
 
 	// 사운드 추가
 
@@ -83,6 +91,8 @@ SoundManager::SoundManager()
 		, nullptr
 		, &pSound[(int)ENUM_SOUND::LOSE_SOUND]
 	);
+	//4번 널값 들어가는거
+
 	// 장면 //////////////////////////////////////////////////////////////////
 
 	// 플레이어 //////////////////////////////////////////////////////////////////
@@ -120,7 +130,7 @@ SoundManager::SoundManager()
 		, nullptr
 		, &pSound[(int)ENUM_SOUND::PLAYER_MAGIC_MISIL]
 	);
-
+	// 9번 널값파일없음
 	pSystem->createSound( // 플레이어 파이어볼
 		"Sound/Effect/magic_misil.mp3"
 		, FMOD_DEFAULT | FMOD_LOOP_OFF
@@ -238,7 +248,7 @@ SoundManager::SoundManager()
 	);
 	// 보스 몬스터 //////////////////////////////////////////////////////////////////
 
-	// pChannel[SOUND_TYPE]->set3DMinMaxDistance(SOUND_MIN, SOUND_MAX);
+	pChannel[SOUND_TYPE]->set3DMinMaxDistance(SOUND_MIN, SOUND_MAX);
 }
 
 
