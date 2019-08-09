@@ -13,8 +13,7 @@
 MonsterAttackHitEffect::MonsterAttackHitEffect(GameObject* pOwner, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList)
 	: HitEffect(pOwner, 5, 1)
 {
-	m_HitEffect = new UI3DImage(pOwner, pd3dDevice, pd3dCommandList, POINT{ 0, 0 }, 100, 123,
-		L"Image/sprite test2.dds");
+	m_HitEffect = new UI3DImage(pOwner, pd3dDevice, pd3dCommandList, POINT{ 0, 0 }, 100, 123, "sprite test2.dds");
 }
 
 MonsterAttackHitEffect::~MonsterAttackHitEffect()

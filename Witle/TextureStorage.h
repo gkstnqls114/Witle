@@ -17,7 +17,8 @@ private:
 	TextureStorage();
 	~TextureStorage();
 
-	void CreateTexture(const std::string& name, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList);
+	void CreateModelTexture(const std::string& name, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList);
+	void CreateImageTexture(const std::string& name, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList);
 public:
 	static TextureStorage* GetInstance()
 	{
@@ -36,7 +37,7 @@ public:
 
 	void ReleaseUploadBuffers();
 	void ReleaseObjects();
-
+	
 	void CreateTextures(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList);
 	Texture* const GetTexture(const std::string& name);
 };
