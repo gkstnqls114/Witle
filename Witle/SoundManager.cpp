@@ -89,7 +89,7 @@ SoundManager::SoundManager()
 	);
 
 	pSystem->createStream( // Lose
-		"Sound/BGM/low.mp3"
+		"Sound/BGM/lose.mp3"
 		, FMOD_LOOP_NORMAL | FMOD_2D
 		, nullptr
 		, &pSound[(int)ENUM_SOUND::LOSE_SOUND]

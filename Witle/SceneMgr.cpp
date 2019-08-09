@@ -78,6 +78,9 @@ void SceneMgr::BuildHeap(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * 
 void SceneMgr::ChangeSceneToGame()
 {
 	// 사운드 ///////////////////////////////////////////////////////////
+	SoundManager::GetInstance()->Stop(ENUM_SOUND::MAIN_SOUND);
+	SoundManager::GetInstance()->Stop(ENUM_SOUND::WIN_SOUND);
+	SoundManager::GetInstance()->Stop(ENUM_SOUND::LOSE_SOUND);
 	SoundManager::GetInstance()->Stop(ENUM_SOUND::SKILLPAGE_SOUND);
 	SoundManager::GetInstance()->Play(ENUM_SOUND::GAME_SOUND);
 	// 사운드 ///////////////////////////////////////////////////////////
@@ -91,6 +94,8 @@ void SceneMgr::ChangeSceneToGame()
 void SceneMgr::ChangeSceneToMain()
 {
 	// 사운드 ///////////////////////////////////////////////////////////
+	SoundManager::GetInstance()->Stop(ENUM_SOUND::WIN_SOUND);
+	SoundManager::GetInstance()->Stop(ENUM_SOUND::LOSE_SOUND);
 	SoundManager::GetInstance()->Stop(ENUM_SOUND::SKILLPAGE_SOUND);
 	SoundManager::GetInstance()->Stop(ENUM_SOUND::GAME_SOUND);
 	SoundManager::GetInstance()->Play(ENUM_SOUND::MAIN_SOUND);
@@ -104,6 +109,9 @@ void SceneMgr::ChangeSceneToMain()
 void SceneMgr::ChangeSceneToSkillSelect()
 {
 	// 사운드 ///////////////////////////////////////////////////////////
+	SoundManager::GetInstance()->Stop(ENUM_SOUND::WIN_SOUND);
+	SoundManager::GetInstance()->Stop(ENUM_SOUND::LOSE_SOUND);
+	SoundManager::GetInstance()->Stop(ENUM_SOUND::GAME_SOUND);
 	SoundManager::GetInstance()->Stop(ENUM_SOUND::MAIN_SOUND);
 	SoundManager::GetInstance()->Play(ENUM_SOUND::SKILLPAGE_SOUND);
 	// 사운드 ///////////////////////////////////////////////////////////
@@ -116,7 +124,10 @@ void SceneMgr::ChangeSceneToSkillSelect()
 void SceneMgr::ChangeSceneToWin()
 {
 	// 사운드 ///////////////////////////////////////////////////////////
+	SoundManager::GetInstance()->Stop(ENUM_SOUND::LOSE_SOUND);
 	SoundManager::GetInstance()->Stop(ENUM_SOUND::GAME_SOUND);
+	SoundManager::GetInstance()->Stop(ENUM_SOUND::MAIN_SOUND);
+	SoundManager::GetInstance()->Stop(ENUM_SOUND::SKILLPAGE_SOUND);
 	SoundManager::GetInstance()->Play(ENUM_SOUND::WIN_SOUND);
 	// 사운드 ///////////////////////////////////////////////////////////
 
@@ -129,6 +140,9 @@ void SceneMgr::ChangeSceneToLose()
 {
 	// 사운드 ///////////////////////////////////////////////////////////
 	SoundManager::GetInstance()->Stop(ENUM_SOUND::GAME_SOUND);
+	SoundManager::GetInstance()->Stop(ENUM_SOUND::MAIN_SOUND);
+	SoundManager::GetInstance()->Stop(ENUM_SOUND::SKILLPAGE_SOUND);
+	SoundManager::GetInstance()->Stop(ENUM_SOUND::WIN_SOUND);
 	SoundManager::GetInstance()->Play(ENUM_SOUND::LOSE_SOUND);
 	// 사운드 ///////////////////////////////////////////////////////////
 
