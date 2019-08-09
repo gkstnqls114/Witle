@@ -954,7 +954,7 @@ void GameScene::LastUpdate(float fElapsedTime)
 			auto monstercenterpos = m_TestMonster[i]->GetBOBox()->GetBOBox().Center;
 			auto effectpos = Vector3::Add(playercenterpos, Vector3::ScalarProduct(Vector3::Subtract(playercenterpos, monstercenterpos), 0.5, false));
 
-			HitEffectMgr::GetInstance()->AddEffectPosition(ENUM_EFFECT::EFFECT_TEST, effectpos);
+			HitEffectMgr::GetInstance()->AddMonsterHitEffectPosition(effectpos);
 
 			m_TestMonster[i]->FinishAttack();
 			m_pPlayer->SubstractHP(5);
