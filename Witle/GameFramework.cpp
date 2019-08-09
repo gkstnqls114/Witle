@@ -18,7 +18,7 @@
 #include "SceneMgr.h"
 #include "LightManager.h"
 #include "SkillStg.h"
-#include "EffectMgr.h"
+#include "HitEffectMgr.h"
 //// Manager ////////////////////////// 
 
 //// Scene //////////////////////////  
@@ -818,7 +818,7 @@ void CGameFramework::BuildObjects()
 	CreateRWBuffer(); // CommandList Reset된 이후에 해야함
 	
 	SkillStg::GetInstance()->BuildObjects(m_d3dDevice.Get(), m_CommandList.Get()); // 스킬 이펙트 생성
-	EffectMgr::GetInstance()->BuildObjects(m_d3dDevice.Get(), m_CommandList.Get());
+	HitEffectMgr::GetInstance()->BuildObjects(m_d3dDevice.Get(), m_CommandList.Get());
 
 	m_SceneMgr = new SceneMgr; 
 
@@ -852,7 +852,7 @@ void CGameFramework::BuildObjects()
 	SkillStg::GetInstance()->ReleaseUploadBuffers();
 	TextureStorage::GetInstance()->ReleaseUploadBuffers();
 	ModelStorage::GetInstance()->ReleaseUploadBuffers();
-	EffectMgr::GetInstance()->ReleaseUploadBuffers();
+	HitEffectMgr::GetInstance()->ReleaseUploadBuffers();
 	//// 업로드 힙 릴리즈 ///////////////////////////////////////////////////////////////////////// 
 
 
@@ -883,13 +883,13 @@ void CGameFramework::ReleaseObjects()
 	TextureStorage::GetInstance()->ReleaseObjects();
 	ModelStorage::GetInstance()->ReleaseObjects();
 	ShaderManager::GetInstance()->ReleaseObjects();
-	EffectMgr::GetInstance()->ReleaseObjects();
+	HitEffectMgr::GetInstance()->ReleaseObjects();
 
 	StaticObjectStorage::ReleaseInstance();
 	ShaderManager::ReleaseInstance();
 	TextureStorage::ReleaseInstance();
 	ModelStorage::ReleaseInstance();
-	EffectMgr::ReleaseInstance();
+	HitEffectMgr::ReleaseInstance();
 
 }
 

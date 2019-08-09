@@ -508,9 +508,6 @@
     <Filter Include="05.Shader\02.GraphicsShader\HitEffectShader">
       <UniqueIdentifier>{3c25fa64-0e54-48be-a924-dc00a0493edc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="13.Storage/Manager\14.EffectMgr">
-      <UniqueIdentifier>{50028e9e-0ba9-485a-b233-e05a4f46f278}</UniqueIdentifier>
-    </Filter>
     <Filter Include="05.Shader\02.GraphicsShader\ToneCuveAndBloomShader">
       <UniqueIdentifier>{4d2165cb-a68e-4c46-8f26-40d1e42c9dfd}</UniqueIdentifier>
     </Filter>
@@ -537,6 +534,9 @@
     </Filter>
     <Filter Include="02.Component\10.HitEffect\MonsterAttackHitEffect">
       <UniqueIdentifier>{41412228-5e66-4a91-aa42-0bfc010eadff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="13.Storage/Manager\14.HitEffectMgr">
+      <UniqueIdentifier>{50028e9e-0ba9-485a-b233-e05a4f46f278}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1071,9 +1071,6 @@
     <ClInclude Include="HitEffect.h">
       <Filter>02.Component\10.HitEffect</Filter>
     </ClInclude>
-    <ClInclude Include="EffectMgr.h">
-      <Filter>13.Storage/Manager\14.EffectMgr</Filter>
-    </ClInclude>
     <ClInclude Include="ToneCuveAndBloomShader.h">
       <Filter>05.Shader\02.GraphicsShader\ToneCuveAndBloomShader</Filter>
     </ClInclude>
@@ -1097,6 +1094,9 @@
     </ClInclude>
     <ClInclude Include="MonsterAttackHitEffect.h">
       <Filter>02.Component\10.HitEffect\MonsterAttackHitEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="HitEffectMgr.h">
+      <Filter>13.Storage/Manager\14.HitEffectMgr</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1610,9 +1610,6 @@
     <ClCompile Include="HitEffect.cpp">
       <Filter>02.Component\10.HitEffect</Filter>
     </ClCompile>
-    <ClCompile Include="EffectMgr.cpp">
-      <Filter>13.Storage/Manager\14.EffectMgr</Filter>
-    </ClCompile>
     <ClCompile Include="ToneCuveAndBloomShader.cpp">
       <Filter>05.Shader\02.GraphicsShader\ToneCuveAndBloomShader</Filter>
     </ClCompile>
@@ -1636,6 +1633,9 @@
     </ClCompile>
     <ClCompile Include="MonsterAttackHitEffect.cpp">
       <Filter>02.Component\10.HitEffect\MonsterAttackHitEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="HitEffectMgr.cpp">
+      <Filter>13.Storage/Manager\14.HitEffectMgr</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

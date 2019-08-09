@@ -11,15 +11,15 @@
 
 #include "GameObject.h"
 
-#include "EffectMgr.h"
+#include "HitEffectMgr.h"
 
-EffectMgr* EffectMgr::m_Instance{ nullptr };
+HitEffectMgr* HitEffectMgr::m_Instance{ nullptr };
  
-EffectMgr::~EffectMgr()
+HitEffectMgr::~HitEffectMgr()
 {
 }
 
-void EffectMgr::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList)
+void HitEffectMgr::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList)
 {
 	m_GameObject = new EmptyGameObject("test");
 
@@ -29,7 +29,7 @@ void EffectMgr::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	} 
 }
 
-void EffectMgr::ReleaseUploadBuffers()
+void HitEffectMgr::ReleaseUploadBuffers()
 {
 	for (int i = 0; i < m_MaxEffect; ++i)
 	{
@@ -37,7 +37,7 @@ void EffectMgr::ReleaseUploadBuffers()
 	} 
 }
 
-void EffectMgr::ReleaseObjects()
+void HitEffectMgr::ReleaseObjects()
 {
 	for (int i = 0; i < m_MaxEffect; ++i)
 	{
@@ -47,7 +47,7 @@ void EffectMgr::ReleaseObjects()
 	}
 }
 
-void EffectMgr::Update(float fElapsedTime)
+void HitEffectMgr::Update(float fElapsedTime)
 {
 	for (int i = 0; i < m_MaxEffect; ++i)
 	{
@@ -55,7 +55,7 @@ void EffectMgr::Update(float fElapsedTime)
 	}
 }
 
-void EffectMgr::Render(ID3D12GraphicsCommandList * pd3dCommandList)
+void HitEffectMgr::Render(ID3D12GraphicsCommandList * pd3dCommandList)
 {
 	for (int i = 0; i < m_MaxEffect; ++i)
 	{
@@ -63,7 +63,7 @@ void EffectMgr::Render(ID3D12GraphicsCommandList * pd3dCommandList)
 	}
 }
 
-void EffectMgr::AddEffectPosition(ENUM_EFFECT type, const XMFLOAT3 pos)
+void HitEffectMgr::AddEffectPosition(ENUM_EFFECT type, const XMFLOAT3 pos)
 {
 	switch (type)
 	{

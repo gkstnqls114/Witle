@@ -3,9 +3,9 @@
  
 class HitEffect;
 
-class EffectMgr
+class HitEffectMgr
 {
-	static EffectMgr* m_Instance;
+	static HitEffectMgr* m_Instance;
 
 	struct HITEFFECT
 	{
@@ -18,14 +18,14 @@ class EffectMgr
 	GameObject* m_GameObject{ nullptr };
 
 public:
-	EffectMgr() : m_EffectList(m_MaxEffect) {};
-	virtual ~EffectMgr();
+	HitEffectMgr() : m_EffectList(m_MaxEffect) {};
+	virtual ~HitEffectMgr();
 
-	static EffectMgr* GetInstance()
+	static HitEffectMgr* GetInstance()
 	{
 		if (nullptr == m_Instance)
 		{
-			m_Instance = new EffectMgr;
+			m_Instance = new HitEffectMgr;
 		}
 
 		return m_Instance;
