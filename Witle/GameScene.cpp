@@ -941,18 +941,21 @@ void GameScene::LastUpdate(float fElapsedTime)
 	// Update한 위치로 몬스터가 공격 시에 몬스터/플레이어충돌체크 확인 ///////////////////////////
 	for (int i = 0; i < m_TestMonsterCount; ++i)
 	{
-		if (m_TestMonster[i]->GetisAttacking())
-		{
-			if (Collision::isCollide(m_pPlayer->GetBOBox()->GetBOBox(), m_TestMonster[i]->GetBOBox()->GetBOBox()))
-			{ 
-				auto playercenterpos = m_pPlayer->GetBOBox()->GetBOBox().Center;
-				auto monstercenterpos = m_TestMonster[i]->GetBOBox()->GetBOBox().Center;
-				auto effectpos = Vector3::Add(playercenterpos, Vector3::ScalarProduct(Vector3::Subtract(playercenterpos, monstercenterpos), 0.5, false));
+		if (!m_TestMonster[i]->GetisAttacking()) continue;
+		if (m_TestMonster[i]->GetisFinishAttack()) continue;
 
-				EffectMgr::GetInstance()->AddEffectPosition(ENUM_EFFECT::EFFECT_TEST, effectpos);
-				m_pPlayer->SubstractHP(5);
-			}
+		if (Collision::isCollide(m_pPlayer->GetBOBox()->GetBOBox(), m_TestMonster[i]->GetBOBox()->GetBOBox()))
+		{
+			auto playercenterpos = m_pPlayer->GetBOBox()->GetBOBox().Center;
+			auto monstercenterpos = m_TestMonster[i]->GetBOBox()->GetBOBox().Center;
+			auto effectpos = Vector3::Add(playercenterpos, Vector3::ScalarProduct(Vector3::Subtract(playercenterpos, monstercenterpos), 0.5, false));
+
+			EffectMgr::GetInstance()->AddEffectPosition(ENUM_EFFECT::EFFECT_TEST, effectpos);
+
+			m_TestMonster[i]->FinishAttack();
+			m_pPlayer->SubstractHP(5);
 		}
+
 	}
 
 	// 보스 부딫힘

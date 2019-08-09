@@ -38,7 +38,7 @@ private:
 	static bool RENDER_DEBUG;
 
 public:
-	virtual void Update(float fElapsedTime) = 0;
+	virtual void Update(float fElapsedTime);
 	virtual void UpdateState(float fElapsedTime) = 0;
 
 protected:
@@ -55,10 +55,17 @@ protected:
 
 	bool m_isAttacking{ false };
 
+	// 플레이어와 공격이 충돌되면 true 함
+	bool m_isFinishAttack{ false };
+	// 해당 아래 변수 시간이 되면 m_isFinishAttack = false가 됨
+	const float m_FinishAttackUnlockTime{ 3.f };
+	// 해당 아래 변수 시간을 통해 관리한다.
+	float m_TotalTime{ 0.f };
+
 	XMFLOAT3 m_SpawnPoint;
 	const float    m_SpawnRange{ 500.f };
-	const float m_HpBarY{ 200.f };
-
+	const float m_HpBarY{ 200.f }; 
+	 
 #ifdef _DEBUG 
 	GameObject * m_pDebugObject{ nullptr };
 	// Spawn Point 주위로 Range를 확인하기 위해 임시로 설정
@@ -109,6 +116,7 @@ public:
 	float GetSpawnRange() const { return m_SpawnRange; }
 	LoadObject* GetpLoadObject() const { return m_pLoadObject; }
 	bool GetisAttacking() const { return m_isAttacking; }
+	bool GetisFinishAttack() const { return m_isFinishAttack; } 
 	XMFLOAT3 GetVelocity() const;
 	//// Get /////////////////// 
 
@@ -116,6 +124,7 @@ public:
 	void SetVelocity(const XMFLOAT3& velocity);
 	void SetAnimationState(int state);
 	void SetisAttacking(bool b) { m_isAttacking = b; }
+	void FinishAttack() { m_isFinishAttack = true; }
 	//// Set /////////////////// 
 
 };

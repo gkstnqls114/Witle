@@ -121,6 +121,19 @@ void Monster::RenderForShadow(ID3D12GraphicsCommandList * pd3dCommandList)
 	m_pLoadObject->RenderForShadow(pd3dCommandList);
 }
 
+void Monster::Update(float fElapsedTime)
+{
+	if (m_isFinishAttack)
+	{
+		m_TotalTime += fElapsedTime;
+		if (m_TotalTime >= m_FinishAttackUnlockTime)
+		{
+			m_TotalTime = 0.f;
+			m_isFinishAttack = false;
+		}
+	}
+}
+
 void Monster::ReleaseMembers()
 {
 	if (m_MonsterHPUI)
