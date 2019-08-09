@@ -7,7 +7,6 @@ class UI3DImage;
 class HitEffect
 	: public ComponentBase
 { 
-private: 
 	const float m_ChangeIndexTime{ 0.1f };
 	float m_TotalTime{ 0.f };
 
@@ -21,6 +20,7 @@ private:
 	// 해당 스프라이트가 세로로 몇개가 있는지
 	float m_ResolY { 1 };
 	
+protected: 
 	UI3DImage*			m_HitEffect{ nullptr }; 
 	  
 public: 
@@ -28,10 +28,10 @@ public:
 	virtual void ReleaseUploadBuffers() override;
 	 
 public:
-	HitEffect(GameObject* pOwner, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
+	HitEffect(GameObject* pOwner, float resolX, float resolY, float changeIndexTime = 0.1f);
 	virtual ~HitEffect();
 
-	// Update: 이동에 관련된 행동을 수행
+	// Update: 시간에 대한 index 관리
 	virtual void Update(float) override;
 
 	// Update 수행 이전 반드시 호출 

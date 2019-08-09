@@ -1,6 +1,14 @@
 #include "stdafx.h"
 
-#include "HitEffect.h"
+// Hit Effect 클래스들
+#include "NormalHitEffect.h"
+#include "IceBallHitEffect.h"
+#include "FireBallHitEffect.h"
+#include "LightningBallHitEffect.h"
+#include "MonsterAttackHitEffect.h"
+#include "NormalHitEffect.h"
+// Hit Effect 클래스들
+
 #include "GameObject.h"
 
 #include "EffectMgr.h"
@@ -17,7 +25,7 @@ void EffectMgr::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 
 	for (int i = 0 ; i < m_MaxEffect ; ++i)
 	{
-		m_EffectList[i].pEffect = new HitEffect(m_GameObject, pd3dDevice, pd3dCommandList);
+		m_EffectList[i].pEffect = new NormalHitEffect(m_GameObject, pd3dDevice, pd3dCommandList);
 	} 
 }
 

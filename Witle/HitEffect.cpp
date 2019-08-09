@@ -26,13 +26,9 @@ void HitEffect::ReleaseUploadBuffers()
 	if (m_HitEffect) m_HitEffect->ReleaseUploadBuffers();
 }
 
-HitEffect::HitEffect(GameObject* pOwner, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList)
-	: ComponentBase(pOwner)
-{
-	m_ResolX = 5;
-	m_ResolY = 1;
-	m_HitEffect = new UI3DImage(pOwner, pd3dDevice, pd3dCommandList, POINT{ 0, 0 }, 100, 123,
-	L"Image/sprite test2.dds");
+HitEffect::HitEffect(GameObject* pOwner, float resolX, float resolY, float changeIndexTime)
+	: ComponentBase(pOwner), m_ResolX(resolX), m_ResolY(resolY), m_ChangeIndexTime(changeIndexTime)
+{  
 }
 
 HitEffect::~HitEffect()
