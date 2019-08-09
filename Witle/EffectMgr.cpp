@@ -66,9 +66,10 @@ void EffectMgr::AddEffectPosition(ENUM_EFFECT type, const XMFLOAT3 pos)
 		for (int i = 0; i < m_MaxEffect; ++i)
 		{
 			if (m_EffectList[i].pEffect->IsActive()) continue;
-
+			 
 			m_EffectList[i].pos = pos;
 			m_EffectList[i].pEffect->Active();
+			break;
 		}
 		break;
 	default:
