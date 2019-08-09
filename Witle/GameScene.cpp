@@ -791,7 +791,8 @@ void GameScene::UpdatePhysics(float fElapsedTime)
 	// 스킬 이펙트 가속도 처리
 	PlayerSkillMgr::GetInstance()->UpdatePhysics(fElapsedTime);
 
-	for (int i = 0; i < m_TestMonsterCount; ++i) {
+	for (int i = 0; i < m_TestMonsterCount; ++i) 
+	{
 		m_TestMonster[i]->UpdateState(fElapsedTime); // State와 업데이트 처리...
 	}
 
@@ -923,7 +924,10 @@ void GameScene::LastUpdate(float fElapsedTime)
 
 		if (Collision::isCollide(m_Dragon->GetBOBox(), skill_collider))
 		{
+
+#ifdef _DEBUG
 			std::cout << "보스가 스킬에 맞음" << std::endl;
+#endif // _DEBUG
 			m_Dragon->SubstractHP(5);
 			PlayerSkillMgr::GetInstance()->Deactive(index);
 		}

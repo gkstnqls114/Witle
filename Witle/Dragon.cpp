@@ -115,6 +115,8 @@ void Dragon::Update(float fElapsedTime)
 void Dragon::UpdateState(float fElapsedTime)
 {
 	m_MonsterMovement->UpdateState(fElapsedTime);
+
+	m_MonsterMovement->UpdateVelocity(fElapsedTime); // State 상태에 따라 Velocity를 갱신(Set)한다.
 }
 
 void Dragon::Animate(float fElapsedTime)

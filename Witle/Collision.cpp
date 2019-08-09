@@ -208,8 +208,7 @@ void Collision::ProcessCollideTerrainObject(Monster * monster, const QuadtreeTer
 					slideVector);
 
 				if (isSlide)
-				{
-					std::cout << "속도 변경" << std::endl;
+				{ 
 					monster->SetVelocity(slideVector);
 					return;
 				}

@@ -26,7 +26,6 @@
 #include "HitEffectShader.h"
 #include "BloomShader.h"
 #include "ToneCuveShader.h"
-
 //// Shader ////////////////////////// 
 
 #include "ShaderManager.h"

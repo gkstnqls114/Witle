@@ -47,8 +47,6 @@ MonsterMovement::~MonsterMovement()
 
 void MonsterMovement::Update(float fTimeElapsed)
 {
-	UpdateVelocity(fTimeElapsed); // State 상태에 따라 Velocity를 갱신(Set)한다.
-
 	Movement::Update(fTimeElapsed);
 }
 

@@ -20,7 +20,6 @@ class MonsterMovement
 	MonsterActionMgr* m_MonsterActionMgr { nullptr };
 	 
 private: 
-	void UpdateVelocity(float);
 
 public:
 	virtual void ReleaseObjects() override;
@@ -33,10 +32,12 @@ public:
 	// 설정된 가속도를 통해 이동합니다.
 	virtual void Update(float) override;
 
-	// 액션 매니저를 통해 현재 상태에 따라 가속도를 설정하고 액션을 관리합니다.
 	// Update 수행 이전 반드시 호출해야합니다.
 	 void UpdateState(float fElpasedTime);
 	 
+	 // 액션 매니저를 통해 현재 상태에 따라 가속도를 설정하고 액션을 관리합니다.
+	 void UpdateVelocity(float);
+
 	 // shift만큼 현재 가속도를 추가합니다. 
 	void MoveVelocity(const XMFLOAT3& shift);
 

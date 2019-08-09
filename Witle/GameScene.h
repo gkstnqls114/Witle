@@ -125,8 +125,7 @@ public:
 
 	QuadtreeTerrain* GetQuadtreeTerrain() const { return m_pQuadtreeTerrain; }
 
-public:
-	
+public: 
 	// 플레이어 관련 ////////////////////////////
 	
 	Player*                 m_pPlayer        { nullptr }; 
@@ -137,7 +136,7 @@ public:
 
 	// 몬스터 관련 ////////////////////////////
 
-	int						m_TestMonsterCount{ 107 }; //원래 107마리..
+	int						m_TestMonsterCount{ 1 }; //원래 107마리..
 	Monster**				m_TestMonster{ nullptr };
 	Monster*				m_AltarMonster{ nullptr };
 	
