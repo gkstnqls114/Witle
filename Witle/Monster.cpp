@@ -81,7 +81,7 @@ Monster::Monster(const std::string & entityID, float spawnRange, const XMFLOAT3&
 	m_MonsterHPUI = new UI3DImage(this, pd3dDevice, pd3dCommandList, POINT{0, 0},
 		100.F,
 		30.f,
-		"Red.dds"
+		IMAGE_RED
 	);
 
 	// 디버그용

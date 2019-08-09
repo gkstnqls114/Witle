@@ -104,10 +104,10 @@ void HitEffectMgr::Render(ID3D12GraphicsCommandList * pd3dCommandList)
 	for (int i = 0; i < m_MaxEffect; ++i)
 	{
 		m_MonsterHitEffectList[i].pEffect->Render(pd3dCommandList, m_MonsterHitEffectList[i].pos);
-		m_IceBallHitEffectList[i].pEffect->Render(pd3dCommandList, m_MonsterHitEffectList[i].pos);
-		m_FireBallHitEffectList[i].pEffect->Render(pd3dCommandList, m_MonsterHitEffectList[i].pos);
-		m_LightningBallHitEffectList[i].pEffect->Render(pd3dCommandList, m_MonsterHitEffectList[i].pos);
-		m_NormalHitEffectList[i].pEffect->Render(pd3dCommandList, m_MonsterHitEffectList[i].pos);
+		m_IceBallHitEffectList[i].pEffect->Render(pd3dCommandList, m_IceBallHitEffectList[i].pos);
+		m_FireBallHitEffectList[i].pEffect->Render(pd3dCommandList, m_FireBallHitEffectList[i].pos);
+		m_LightningBallHitEffectList[i].pEffect->Render(pd3dCommandList, m_LightningBallHitEffectList[i].pos);
+		m_NormalHitEffectList[i].pEffect->Render(pd3dCommandList, m_NormalHitEffectList[i].pos);
 	}
 }
 

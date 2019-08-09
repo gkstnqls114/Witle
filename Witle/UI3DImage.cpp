@@ -131,7 +131,7 @@ void UI3DImage::Update(float fElapsedTime)
 
 void UI3DImage::Render(ID3D12GraphicsCommandList *pd3dCommandList, const XMFLOAT4X4& world)
 {   
-	if(m_pTexture) m_pTexture->UpdateShaderVariables(pd3dCommandList);
+	m_pTexture->UpdateShaderVariables(pd3dCommandList);
 
 	// 월드행렬 설정
 	XMFLOAT4X4 xmf4x4World;

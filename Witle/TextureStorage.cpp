@@ -16,7 +16,9 @@ TextureStorage::~TextureStorage()
 }
 
 void TextureStorage::CreateModelTexture(const std::string & name, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList)
-{
+{ 
+	assert(m_TextureStorage.find(name) == m_TextureStorage.end());
+	
 	m_TextureStorage[name] = new Texture(ENUM_SCENE::SCENE_GAME, ROOTPARAMETER_INDEX(ROOTPARAMETER_TEXTURE), false, 1, RESOURCE_TEXTURE2D);
 	std::wstring path = { L"Model/Textures/" };
 	std::wstring wname;
@@ -29,6 +31,8 @@ void TextureStorage::CreateModelTexture(const std::string & name, ID3D12Device *
 
 void TextureStorage::CreateImageTexture(const std::string & name, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList)
 {
+	assert(m_TextureStorage.find(name) == m_TextureStorage.end());
+
 	m_TextureStorage[name] = new Texture(ENUM_SCENE::SCENE_GAME, ROOTPARAMETER_INDEX(ROOTPARAMETER_TEXTURE), false, 1, RESOURCE_TEXTURE2D);
 	std::wstring path = { L"Image/" };
 	std::wstring wname;
@@ -91,14 +95,17 @@ void TextureStorage::CreateTextures(ID3D12Device * pd3dDevice, ID3D12GraphicsCom
 	CreateModelTexture(SPACECAT_PINK, pd3dDevice, pd3dCommandList);
 
 	// 기본 이미지들
-	CreateImageTexture("sprite test2", pd3dDevice, pd3dCommandList);
-	CreateImageTexture("Red", pd3dDevice, pd3dCommandList);
+	CreateImageTexture(IMAGE_MONSTERATTACKHIT_SPRRITE, pd3dDevice, pd3dCommandList);
+	CreateImageTexture(IMAGE_RED, pd3dDevice, pd3dCommandList);
 
 }
  
 Texture * const TextureStorage::GetTexture(const std::string & name)
 {
-	if (m_TextureStorage.find(name) == m_TextureStorage.end()) return nullptr;
+	if (m_TextureStorage.find(name) == m_TextureStorage.end())
+	{
+		return nullptr;
+	}
 	return m_TextureStorage[name];
 }
  
