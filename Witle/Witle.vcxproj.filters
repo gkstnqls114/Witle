@@ -535,6 +535,9 @@
     <Filter Include="02.Component\10.HitEffect\NormalHitEffect">
       <UniqueIdentifier>{7b7cbc2c-f437-43fe-ad32-fe7bf37369d3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.Component\10.HitEffect\MonsterAttackHitEffect">
+      <UniqueIdentifier>{41412228-5e66-4a91-aa42-0bfc010eadff}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -1092,6 +1095,9 @@
     <ClInclude Include="NormalHitEffect.h">
       <Filter>02.Component\10.HitEffect\NormalHitEffect</Filter>
     </ClInclude>
+    <ClInclude Include="MonsterAttackHitEffect.h">
+      <Filter>02.Component\10.HitEffect\MonsterAttackHitEffect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1627,6 +1633,9 @@
     </ClCompile>
     <ClCompile Include="NormalHitEffect.cpp">
       <Filter>02.Component\10.HitEffect\NormalHitEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="MonsterAttackHitEffect.cpp">
+      <Filter>02.Component\10.HitEffect\MonsterAttackHitEffect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

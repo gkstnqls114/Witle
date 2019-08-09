@@ -163,6 +163,7 @@
     <ClInclude Include="BloomRevealShader.h" />
     <ClInclude Include="EffectMesh.h" />
     <ClInclude Include="EffectMgr.h" />
+    <ClInclude Include="MonsterAttackHitEffect.h" />
     <ClInclude Include="IceBallHitEffect.h" />
     <ClInclude Include="FireBallHitEffect.h" />
     <ClInclude Include="NormalHitEffect.h" />
@@ -350,6 +351,7 @@
     <ClCompile Include="BloomRevealShader.cpp" />
     <ClCompile Include="EffectMesh.cpp" />
     <ClCompile Include="EffectMgr.cpp" />
+    <ClCompile Include="MonsterAttackHitEffect.cpp" />
     <ClCompile Include="IceBallHitEffect.cpp" />
     <ClCompile Include="FireBallHitEffect.cpp" />
     <ClCompile Include="NormalHitEffect.cpp" />
