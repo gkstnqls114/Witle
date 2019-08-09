@@ -66,10 +66,10 @@ float3 ToneCurveAndBloom(PS_INPUT input)
     // Bloom 분포 추가
     Color += fBloomScale * gtxtTerrainBaseTexture.Sample(gssClamp, input.uv).xyz;
 
-    Color.r = quadraticBezier(Color.r, 0.5, 0.25); 
+    Color.r = quadraticBezier(Color.r, 0.48, 0.26); 
     Color.g = quadraticBezier(Color.g, 0.5, 0.25);
-    Color.b = quadraticBezier(Color.b, 0.5, 0.25);
-
+    Color.b = quadraticBezier(Color.b, 0.5, 0.28);
+    
     return Color; 
 }
 
