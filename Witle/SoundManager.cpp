@@ -1,9 +1,37 @@
+/*
+set3DAttributes 리스너의 위치를 얻어오기 위한 함수
+
+	매개변수
+		pos: 소리 증감을 위해 리스너의 위치를 받아와야한다. 그것을 위한 매개변수. (3d공간상의 위치)
+		vel: 3d 공간 fps의 속도
+		alt_pan_pos: ?? 구현되지 않음
+	반환값
+		함수 성공: FMOD_OK
+		함수 실패: FMOD_RESULT 열거 형에 정의 된 값 중 하나
+*/
+
+/*
+비고
+
+	거리 단위
+		system::set3DSettings에 의해 지정. 기본 단위 Meters 'm,미터'
+	스트레오 지정
+		ChannelControl :: set3DSpread를 사용하여 오른쪽과 왼쪽의 사운드를 조절 할 수 있다.
+*/
+
 #include "stdafx.h"
 #include "SoundManager.h"
 
 SoundManager* SoundManager::m_Instance;
 
 const static bool isUsing = false;
+
+// extern PlayerMovement gMoveMent;
+// extern Player * Player_Sound;
+
+// pChannel[SOUND_TYPE]->set3DAttributes(&Player_Sound.Temp_move, Player_Sound.Temp_move, 0); // -> 인자 (pos,vel,alt_pan_pos)
+// 	// pChannel[SOUND_TYPE]->setPriority(); // 
+// pChannel[SOUND_TYPE]->setVolume(volume); // -> 볼륨
 
 SoundManager::SoundManager()
 {
@@ -209,6 +237,8 @@ SoundManager::SoundManager()
 		, &pSound[(int)ENUM_SOUND::BOSS_DASH_SOUND]
 	);
 	// 보스 몬스터 //////////////////////////////////////////////////////////////////
+
+	// pChannel[SOUND_TYPE]->set3DMinMaxDistance(SOUND_MIN, SOUND_MAX);
 }
 
 
