@@ -8,9 +8,12 @@
 #include "BossMonsterActionMgr.h"
 #include "BossSkillAction0.h"
 
+#include "SoundManager.h"
 
 void BossSkillAction3::UpdateVelocity(float fElpasedTime, MonsterMovement * movement)
 {
+	SoundManager::GetInstance()->Play(ENUM_SOUND::BOSS_DASH_SOUND);
+
 	XMFLOAT3 toPlayer = Vector3::Normalize(
 		Vector3::Subtract(
 			PlayerManager::GetMainPlayer()->GetTransform().GetPosition(),

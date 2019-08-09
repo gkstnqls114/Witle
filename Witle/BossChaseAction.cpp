@@ -11,8 +11,12 @@
 #include "PlayerManager.h"
 #include "Collision.h"
 
+#include "SoundManager.h"
+
 void BossChaseAction::UpdateVelocity(float fElpasedTime, MonsterMovement * movement)
 {
+	SoundManager::GetInstance()->Play(ENUM_SOUND::BOSS_MOVE_SOUND);
+
 	XMFLOAT3 toPlayer = Vector3::Normalize(
 		Vector3::Subtract(PlayerManager::GetMainPlayer()->GetTransform().GetPosition(), m_pOwner->GetTransform().GetPosition())
 	);

@@ -13,7 +13,10 @@
 void MoveAction::UpdateVelocity(float fElpasedTime, MonsterMovement * movement)
 {
 	movement->m_xmf3Velocity = Vector3::ScalarProduct(m_Direction, movement->m_fDistance, false);
-	SoundManager::GetInstance()->Play(ENUM_SOUND::MUSHROOM_MOVE);
+
+	// 사운드 ///////////////////////////////////////////////////////////
+	SoundManager::GetInstance()->Play(ENUM_SOUND::MONSTER_MOVE_SOUND);
+	// 사운드 ///////////////////////////////////////////////////////////
 
 	XMFLOAT3 look(0.f, 0.f, 1.f);
 	float value = Vector3::AngleToRadian(look, m_Direction) * 180.f / 3.141592;

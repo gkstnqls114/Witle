@@ -31,7 +31,7 @@ enum ENUM_SELECTABLESKILL
 	SELECTABLESKILL_NONE = -1, // 반드시 -1
 	SELECTABLESKILL_FIREBALL,
 	SELECTABLESKILL_ICEBALL,
-	SELECTABLESKILL_LIGHTNINGBALL, 
+	SELECTABLESKILL_LIGHTNINGBALL,
 	SELECTABLESKILL_SHIELD,
 	SELECTABLESKILL_BLESSING,
 	SELECTABLESKILL_HEALING,
@@ -41,7 +41,7 @@ enum ENUM_SELECTABLESKILL
 	// 최대 8개까지... 더이상 증가 X
 	//SKILL_LIGHTNING,
 	//SKILL_LIGHTARROW
-}; 
+};
 
 enum ENUM_BALLEFFECT
 {
@@ -62,17 +62,41 @@ enum ENUM_MONSTER
 
 enum ENUM_SOUND
 {
-	SATRT,
-	TITLE,
+	// 장면 //////////////////////////////////////////////////////////////////
+	MAIN_SOUND, // 메인 사운드
+	SKILLPAGE_SOUND, // 스킬 페이지 사운드
+	GAME_SOUND, // 게임 사운드
+	WIN_SOUND, // 이김 사운드
+	LOSE_SOUND, // 짐 사운드
 
-	MAGIC_MISIL,
-	DAMAGE,
-	DEAD,
-	BROOM,
+	// 플레이어 //////////////////////////////////////////////////////////////////
+	PLAYER_MOVE, // 플레이어 이동
+	PLAYER_DAMAGE, // 플레이어 히트
+	PLAYER_DEAD, // 플레이어 죽음
 
-	MUSHROOM_MOVE,
-	SPACE_MOVE,
-	CREEEPY_MOVE
+	PLAYER_BROOM, // 플레이어 빗자루
+	PLAYER_MAGIC_MISIL, // 플레이어 매직 미사일
+	PLAYER_FIRE_SOUND, // 플레이어 파이어볼
+	PLAYER_ICE_SOUND, // 플레이어 아이스 볼
+	PLAYER_LIGHT_SOUND, // 플레이어 라이트닝 볼
+	PLAYER_BLESSING_SOUND, // 블레이어 블레싱
+	PLAYER_SHIELD_SOUND, // 플레이어 실드
+	PLAYER_HEALING_SOUND, // 플레이어 힐링
+
+	// 기본 몬스터 //////////////////////////////////////////////////////////////////
+	MONSTER_MOVE_SOUND, // 몬스터 이동
+	MONSTER_DAMAGE_SOUND, // 몬스터 히트
+	MONSTER_DEAD_SOUND, // 몬스터 죽음
+
+	// 보스 몬스터 //////////////////////////////////////////////////////////////////
+	BOSS_MOVE_SOUND, // 보스 몬스터 이동
+	BOSS_DAMAGE_SOUND, // 보스 몬스터 히트
+	BOSS_DEAD_SOUND, // 보스 몬스터 죽음
+
+	BOSS_BREATH_SOUND, // 보스 몬스터 브레스
+	BOSS_DOWNSTROKE_SOUND, // 보스 몬스터 다운스트록
+	BOSS_TAILATTACK_SOUND, // 보스 몬스터 테일어택
+	BOSS_DASH_SOUND // 보스 몬스터 대쉬
 };
 
 enum COLLIDER_TYPE

@@ -275,12 +275,12 @@ bool GameScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM w
 		case 'Z':
 			// 임시로 체력 100씩 닳게 설정
 			m_pPlayer->SubstractHP(100);
+			SoundManager::GetInstance()->Stop(ENUM_SOUND::PLAYER_DAMAGE);
 			break;
 
 		case '1': // 스킬 빗자루  
-			SoundManager::GetInstance()->Play(ENUM_SOUND::BROOM);
 			m_pPlayer->UseSkill_Broom();
-			// SoundManager::GetInstance()->Stop(ENUM_SOUND::BROOM);
+			SoundManager::GetInstance()->Play(ENUM_SOUND::PLAYER_BROOM);
 			break;
 
 		case '2':
@@ -938,6 +938,7 @@ void GameScene::LastUpdate(float fElapsedTime)
 	// 	if (Collision::isCollide(m_pPlayer->GetBOBox()->GetBOBox(), m_Dragon->GetBOBox()->GetBOBox()))
 	// 	{
 	// 		m_pPlayer->SubstractHP(5);
+	//		SoundManager::GetInstance()->Stop(ENUM_SOUND::PLAYER_PLAYER_DAMAGE);
 	// 	}
 	// }
 
@@ -949,6 +950,7 @@ void GameScene::LastUpdate(float fElapsedTime)
 	//		if (Collision::isCollide(m_pPlayer->GetBOBox()->GetBOBox(), m_TestMonster[i]->GetBOBox()->GetBOBox()))
 	//		{
 	//			m_pPlayer->SubstractHP(5);
+	//			SoundManager::GetInstance()->Stop(ENUM_SOUND::PLAYER_PLAYER_DAMAGE);
 	//		}
 	//	}
 	//}

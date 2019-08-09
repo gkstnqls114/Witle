@@ -2,8 +2,14 @@
 #include "MonsterMovement.h"
 #include "DeadAction.h"
 
+#include "SoundManager.h"
+
 void DeadAction::UpdateVelocity(float fElpasedTime, MonsterMovement * movement)
 {
+	SoundManager::GetInstance()->Stop(ENUM_SOUND::MONSTER_DAMAGE_SOUND);
+	SoundManager::GetInstance()->Stop(ENUM_SOUND::MONSTER_MOVE_SOUND);
+	SoundManager::GetInstance()->Play(ENUM_SOUND::MONSTER_DEAD_SOUND);
+
 	movement->m_xmf3Velocity = XMFLOAT3(0.f, 0.f, 0.f);
 }
 
