@@ -47,6 +47,7 @@ void ModelStorage::CreateModels(ID3D12Device * pd3dDevice, ID3D12GraphicsCommand
 	m_NameList.push_back(RUIN_BROKENPILLA);
 	m_NameList.push_back(RUIN_PILLAR);
 	m_NameList.push_back(RUIN_SQUARE);
+	m_NameList.push_back(RUIN_FLOOR);
 	m_NameList.push_back(SUNFLOWER); 
 	m_NameList.push_back(TREE_1);
 	m_NameList.push_back(TREE_BG_1);
@@ -88,10 +89,10 @@ void ModelStorage::CreateModels(ID3D12Device * pd3dDevice, ID3D12GraphicsCommand
 	m_ModelStorage[TREE_3].modelBOBox = new MyBOBox(test, pd3dDevice, pd3dCommandList, XMFLOAT3{ -13.F, 600.F / 2.f, -51.f }, XMFLOAT3{ 310.F/ 2.f, 600.F/ 2.f, 300.F/ 2.f });
 	m_ModelStorage[TREE_BG_3].modelBOBox = new MyBOBox(test, pd3dDevice, pd3dCommandList, XMFLOAT3{-18.F, 600.F / 2.f, -74.F},XMFLOAT3{ 450.F/ 2.f, 600.F/ 2.f, 450.F/ 2.f });	
 	
-	m_ModelStorage[RUIN_BROKENPILLA].modelBOBox = new MyBOBox(test, pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 1200.F / 2.f, 377.F }, XMFLOAT3{ 270.F / 2.f, 1200.F/ 2.f, 325.F/ 2.f });
-	m_ModelStorage[RUIN_ARCH].modelBOBox = new MyBOBox(test, pd3dDevice, pd3dCommandList, XMFLOAT3{ -34.f, 1500.F /2.f, -1080.f }, XMFLOAT3{ 1780.F / 2.f, 1500.F / 2.f, 760.F / 2.f });	
-	m_ModelStorage[RUIN_PILLAR].modelBOBox = new MyBOBox(test, pd3dDevice, pd3dCommandList, XMFLOAT3{ -352.f, 1500.f / 2.f, 1264.f }, XMFLOAT3{ 1500.F/ 2.f, 1500.F/ 2.f, 900.F/ 2.f });
-	m_ModelStorage[RUIN_SQUARE].modelBOBox = new MyBOBox(test, pd3dDevice, pd3dCommandList, XMFLOAT3{ 73.F, 1285.F / 2.f, -300.F }, XMFLOAT3{ 630.F/ 2.f, 1285.F/ 2.f, 870.f / 2.f });
+	m_ModelStorage[RUIN_BROKENPILLA].modelBOBox = new MyBOBox(test, pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 1200.F / 2.f, 0.F }, XMFLOAT3{ 270.F / 2.f, 1200.F/ 2.f, 325.F/ 2.f });
+	m_ModelStorage[RUIN_SQUARE].modelBOBox = new MyBOBox(test, pd3dDevice, pd3dCommandList, XMFLOAT3{ -373.F, 630.F / 2.f, -227.F }, XMFLOAT3{ 870.F/ 2.f, 630.F/ 2.f, 1285.f / 2.f });
+	m_ModelStorage[RUIN_ARCH].modelBOBox = new MyBOBox(test, pd3dDevice, pd3dCommandList, XMFLOAT3{ -33.f, 1500.F /2.f,  258.f }, XMFLOAT3{ 1800.F / 2.f, 1500.F / 2.f, 900.F / 2.f });	
+	m_ModelStorage[RUIN_PILLAR].modelBOBox = new MyBOBox(test, pd3dDevice, pd3dCommandList, XMFLOAT3{ -326.f, 1500.f / 2.f, -193.f }, XMFLOAT3{ 1600.F/ 2.f, 1500.F/ 2.f, 900.F/ 2.f });
 	
 	m_ModelStorage[ALTAR_IN].modelBOBox = new MyBOBox(test, pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 230.F, 0.F }, XMFLOAT3{ 660.F / 2.f, 460.F / 2.f, 580.F / 2.f});
 

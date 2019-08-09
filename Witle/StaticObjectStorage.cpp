@@ -170,7 +170,8 @@ void StaticObjectStorage::LoadNameAndPositionFromFile(ID3D12Device * pd3dDevice,
 			XMFLOAT4X4 rotate180Y = Matrix4x4::RotateMatrix(0.f, 0.f, 0.f);
 			XMFLOAT4X4 rotateInfo = Matrix4x4::RotateMatrix(0.f, rotationXYZ.z, 0.f);
 			
-			XMFLOAT4X4 transform = Matrix4x4::Multiply(rotate180Y, rotateInfo);
+			// XMFLOAT4X4 transform = Matrix4x4::Multiply(rotate180Y, rotateInfo);
+			XMFLOAT4X4 transform = Matrix4x4::Identity();
 			
 			// XMFLOAT4X4 transform = Matrix4x4::Identity();
 			transform._41 =  -(temp._41);
