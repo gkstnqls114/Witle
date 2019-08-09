@@ -91,6 +91,8 @@ void SceneMgr::ChangeSceneToGame()
 void SceneMgr::ChangeSceneToMain()
 {
 	// 사운드 ///////////////////////////////////////////////////////////
+	SoundManager::GetInstance()->Stop(ENUM_SOUND::SKILLPAGE_SOUND);
+	SoundManager::GetInstance()->Stop(ENUM_SOUND::GAME_SOUND);
 	SoundManager::GetInstance()->Play(ENUM_SOUND::MAIN_SOUND);
 	// 사운드 ///////////////////////////////////////////////////////////
 
