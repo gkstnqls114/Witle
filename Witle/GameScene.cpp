@@ -1232,8 +1232,7 @@ void GameScene::UpdateCollision(float fElapsedTime)
 	for (int x = 0; x < m_TestMonsterCount; ++x)
 	{
 		Collision::ProcessCollideTerrainObject(m_TestMonster[x], m_pQuadtreeTerrain, fElapsedTime);
-	}
-
+	} 
 	// 몬스터 충돌체크 ///////////////////////// 
 }
 

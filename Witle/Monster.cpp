@@ -73,8 +73,8 @@ XMFLOAT3 Monster::CalculateAlreadyPosition(float fTimeElapsed)
 }
 
 
-Monster::Monster(const std::string & entityID, float spawnRange, const XMFLOAT3& SpawnPoint, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, float HpBarY)
-	: m_SpawnRange(spawnRange), m_SpawnPoint(SpawnPoint), GameObject(entityID), m_HpBarY(HpBarY)
+Monster::Monster(const std::string & entityID, float spawnRange, const XMFLOAT3& SpawnPoint, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, float attackanimeTime, float HpBarY)
+	: m_SpawnRange(spawnRange), m_SpawnPoint(SpawnPoint), GameObject(entityID), m_FinishAttackUnlockTime(attackanimeTime), m_HpBarY(HpBarY)
 {
 	m_MonsterHPStatus = new MonsterStatus(this, pd3dDevice, pd3dCommandList);
 	

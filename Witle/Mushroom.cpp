@@ -28,7 +28,7 @@ void Mushroom::ReleaseMemberUploadBuffers()
 
 Mushroom::Mushroom(const std::string & entityID, const XMFLOAT3& SpawnPoint,
 	ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature)
-	: Monster(entityID, 100.f, SpawnPoint, pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature)
+	: Monster(entityID, 100.f, SpawnPoint, pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, ANI_MUSHROOM_ATTACK.EndTime - ANI_MUSHROOM_ATTACK.StartTime)
 {
 	m_RecognitionRange = new RecognitionRange(this, 500.f, 2.f);
 	m_RecognitionRange->CreateDebugMesh(pd3dDevice, pd3dCommandList);

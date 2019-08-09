@@ -88,7 +88,7 @@ public:
 	}
 
 	// float HpBarY: HP Bar UI의 Y 값 위치
-	Monster(const std::string& entityID, float spawnRange, const XMFLOAT3& SpwanPoint, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, float HpBarY = 200.f);
+	Monster(const std::string& entityID, float spawnRange, const XMFLOAT3& SpwanPoint, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, float attackanimeTime,float HpBarY = 200.f);
 	virtual ~Monster();
 
 	void RenderHpStatus(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers);
