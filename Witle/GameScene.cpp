@@ -911,12 +911,13 @@ void GameScene::LastUpdate(float fElapsedTime)
 			if (m_TestMonster[i]->GetStatus()->m_Guage <= 0.f) continue;
 
 			if (Collision::isCollide(m_TestMonster[i]->GetBOBox(), skill_collider))
-			{ 
-				auto playercenterpos = m_pPlayer->GetBOBox()->GetBOBox().Center;
-				auto monstercenterpos = m_TestMonster[i]->GetBOBox()->GetBOBox().Center;
-				auto effectpos = Vector3::Add(playercenterpos, Vector3::ScalarProduct(Vector3::Subtract(playercenterpos, monstercenterpos), 0.5, false));
+			{  
+				auto monstercenterpos = m_TestMonster[i]->GetBOBox()->GetBOBox().Center; 
+#ifdef _DEBUG
+				std::cout << PlayerSkillMgr::GetInstance()->GetpSelectableSkill(index)->GetName() << std::endl;
+#endif // _DEBUG
 
-				HitEffectMgr::GetInstance()->AddPlayerSkillHitEffectPosition(PlayerSkillMgr::GetInstance()->GetpSelectableSkill(index)->GetSelectableSkillType(), effectpos);
+				HitEffectMgr::GetInstance()->AddPlayerSkillHitEffectPosition(PlayerSkillMgr::GetInstance()->GetpSelectableSkill(index)->GetSelectableSkillType(), monstercenterpos);
 				m_TestMonster[i]->SubstractHP(5);
 				PlayerSkillMgr::GetInstance()->Deactive(index);
 			}

@@ -10,10 +10,10 @@ class BallSkill :
 public:
 	virtual void Active() override {};
 	virtual bool IsFinish() override;
-	virtual void UpdateActive(float fElapsedTime) override;
+	virtual void UpdateActive(float fElapsedTime) override {};
 
 public:
-	BallSkill(const std::string& entityID, float cooltime);
+	BallSkill(const std::string& entityID, ENUM_SELECTABLESKILL skilltype, float cooltime);
 	virtual ~BallSkill();
 
 };

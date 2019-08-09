@@ -7,13 +7,9 @@ bool BallSkill::IsFinish()
 {
 	return (Vector3::Length(spawnPosition, m_skillEffect->GetTransform().GetPosition()) > m_distance);
 }
-
-void BallSkill::UpdateActive(float fElapsedTime)
-{
-}
-
-BallSkill::BallSkill(const std::string& entityID, float cooltime)
-	:SelectableSkill(entityID, cooltime)
+ 
+BallSkill::BallSkill(const std::string& entityID, ENUM_SELECTABLESKILL skilltype, float cooltime)
+	:SelectableSkill(entityID, skilltype, cooltime)
 {
 }
 

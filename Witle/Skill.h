@@ -80,7 +80,8 @@ public:
 	virtual void Update(float fElapsedTime) override;
 
 public: 
-	SelectableSkill(const std::string& entityID, float cooltime) : ISkill(entityID) , m_CoolTime(cooltime) {};
+	SelectableSkill(const std::string& entityID, ENUM_SELECTABLESKILL skilltype, float cooltime)
+		: ISkill(entityID) , m_SelectableSkillType(skilltype), m_CoolTime(cooltime) {};
 	virtual ~SelectableSkill();
 
 	float GetCoolTime() const { return m_CoolTime; }
