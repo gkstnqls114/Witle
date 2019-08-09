@@ -32,6 +32,7 @@
 #include "PlayerManager.h"
 #include "MainCameraMgr.h"
 #include "SoundManager.h"
+#include "EffectMgr.h"
 //// 매니저 관련 헤더 //////////////////////////
 
 //// 몬스터 관련 헤더 //////////////////////////
@@ -802,6 +803,8 @@ void GameScene::UpdatePhysics(float fElapsedTime)
 // ProcessInput에 의한 right, up, look, pos 를 월드변환 행렬에 갱신한다.
 void GameScene::Update(float fElapsedTime)
 {
+	EffectMgr::GetInstance()->Update(fElapsedTime);
+
 	// 플레이어 공격 , 즉 플레이어와 몬스터 충돌 체크
 	if (GameInput::GetDragMode()) // 만약 드래그로 회전한다면...
 	{
@@ -942,6 +945,11 @@ void GameScene::LastUpdate(float fElapsedTime)
 		{
 			if (Collision::isCollide(m_pPlayer->GetBOBox()->GetBOBox(), m_TestMonster[i]->GetBOBox()->GetBOBox()))
 			{ 
+				auto playercenterpos = m_pPlayer->GetBOBox()->GetBOBox().Center;
+				auto monstercenterpos = m_TestMonster[i]->GetBOBox()->GetBOBox().Center;
+				auto effectpos = Vector3::Add(playercenterpos, Vector3::ScalarProduct(Vector3::Subtract(playercenterpos, monstercenterpos), 0.5, false));
+
+				EffectMgr::GetInstance()->AddEffectPosition(ENUM_EFFECT::EFFECT_TEST, effectpos);
 				m_pPlayer->SubstractHP(5);
 			}
 		}
@@ -1063,7 +1071,7 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 
  
 	PlayerSkillMgr::GetInstance()->Render(pd3dCommandList, isGBuffers);
-
+	EffectMgr::GetInstance()->Render(pd3dCommandList);
 
 	// 터레인
 	if (m_Terrain)

@@ -60,13 +60,20 @@ void HitEffect::Update(float fTimeElapsed)
 
 void HitEffect::Render(ID3D12GraphicsCommandList * pd3dCommandList, const XMFLOAT3& pos)
 {
+	if (!isActive) return;
+
 	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_HITEFFECT, false);
 
 	// set look at.... ºôº¸µå Ã³¸®...  
 	XMFLOAT4X4 mtxLookAt = Matrix4x4::LookAtLH(pos, MainCameraMgr::GetMainCamera()->GetTransform().GetPosition(), XMFLOAT3(0, 1.f, 0));
-	mtxLookAt._41 = pos.x;
-	mtxLookAt._42 = pos.y;
-	mtxLookAt._43 = pos.z;
+	XMFLOAT4X4 uiWorld = Matrix4x4::Identity();
+
+	uiWorld._11 = mtxLookAt._11; uiWorld._12 = mtxLookAt._21; uiWorld._13 = mtxLookAt._31;
+	uiWorld._21 = mtxLookAt._12; uiWorld._22 = mtxLookAt._22; uiWorld._23 = mtxLookAt._32;
+	uiWorld._31 = mtxLookAt._13; uiWorld._32 = mtxLookAt._23; uiWorld._33 = mtxLookAt._33; 
+	uiWorld._41 = pos.x;
+	uiWorld._42 = pos.y;
+	uiWorld._43 = pos.z;
 	// set look at....  
 
 	XMFLOAT2 Resol{ m_ResolX, m_ResolY };
@@ -74,6 +81,6 @@ void HitEffect::Render(ID3D12GraphicsCommandList * pd3dCommandList, const XMFLOA
 	pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_PICKINGPOINT, 2, &Resol, 0);
 	pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_HPPERCENTAGE, 1, &m_CurrIndex, 0);
 
-	m_HitEffect->Render(pd3dCommandList, mtxLookAt);
+	m_HitEffect->Render(pd3dCommandList, uiWorld);
 }
  

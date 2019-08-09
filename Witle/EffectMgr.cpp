@@ -15,45 +15,43 @@ void EffectMgr::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 {
 	m_GameObject = new EmptyGameObject("test");
 
-	for (auto& effect : m_EffectList)
+	for (int i = 0 ; i < m_MaxEffect ; ++i)
 	{
-		effect.pEffect = new HitEffect(m_GameObject, pd3dDevice, pd3dCommandList);
+		m_EffectList[i].pEffect = new HitEffect(m_GameObject, pd3dDevice, pd3dCommandList);
 	} 
 }
 
 void EffectMgr::ReleaseUploadBuffers()
 {
-	for (auto& effect : m_EffectList)
+	for (int i = 0; i < m_MaxEffect; ++i)
 	{
-		effect.pEffect->ReleaseUploadBuffers();
-		delete effect.pEffect;
-		effect.pEffect = nullptr;
+		m_EffectList[i].pEffect->ReleaseUploadBuffers(); 
 	} 
 }
 
 void EffectMgr::ReleaseObjects()
-{ 
-	for (auto& effect : m_EffectList)
+{
+	for (int i = 0; i < m_MaxEffect; ++i)
 	{
-		effect.pEffect->ReleaseObjects();
-		delete effect.pEffect;
-		effect.pEffect = nullptr;
+		m_EffectList[i].pEffect->ReleaseObjects();
+		delete m_EffectList[i].pEffect;
+		m_EffectList[i].pEffect = nullptr;
 	}
 }
 
 void EffectMgr::Update(float fElapsedTime)
-{ 
-	for (auto& effect : m_EffectList)
+{
+	for (int i = 0; i < m_MaxEffect; ++i)
 	{
-		effect.pEffect->Update(fElapsedTime);
+		m_EffectList[i].pEffect->Update(fElapsedTime);
 	}
 }
 
 void EffectMgr::Render(ID3D12GraphicsCommandList * pd3dCommandList)
-{ 
-	for (const auto& effect : m_EffectList)
-	{ 
-		effect.pEffect->Render(pd3dCommandList, effect.pos);
+{
+	for (int i = 0; i < m_MaxEffect; ++i)
+	{
+		m_EffectList[i].pEffect->Render(pd3dCommandList, m_EffectList[i].pos);
 	}
 }
 
@@ -65,12 +63,12 @@ void EffectMgr::AddEffectPosition(ENUM_EFFECT type, const XMFLOAT3 pos)
 
 		break;
 	case EFFECT_TEST:
-		for (auto& effect : m_EffectList)
+		for (int i = 0; i < m_MaxEffect; ++i)
 		{
-			if (effect.pEffect->IsActive()) continue;
+			if (m_EffectList[i].pEffect->IsActive()) continue;
 
-			effect.pos = pos;
-			effect.pEffect->Active();
+			m_EffectList[i].pos = pos;
+			m_EffectList[i].pEffect->Active();
 		}
 		break;
 	default:
