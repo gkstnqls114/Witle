@@ -66,10 +66,9 @@ float3 ToneMappingAndBloom(PS_INPUT input)
     // Bloom 분포 추가
     Color += fBloomScale * gtxtTerrainBaseTexture.Sample(gssClamp, input.uv).xyz;
 
-    Color.r = quadraticThroughAGivenPoint(Color.r, 0.3, 0.25);
-    Color.r = quadraticThroughAGivenPoint(Color.r, 0.27, 0.32);
-    Color.g = quadraticThroughAGivenPoint(Color.g, 0.3, 0.25);
-    Color.b = quadraticThroughAGivenPoint(Color.b, 0.3, 0.25);
+    Color.r = quadraticBezier(Color.r, 0.5, 0.25); 
+    Color.g = quadraticBezier(Color.g, 0.5, 0.25);
+    Color.b = quadraticBezier(Color.b, 0.5, 0.25);
 
     return Color;
     
