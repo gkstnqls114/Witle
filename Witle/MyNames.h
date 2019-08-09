@@ -17,6 +17,7 @@
 #define RUIN_BROKENPILLA "ruin_brokenPillar"
 #define RUIN_PILLAR "ruin_Pillar"
 #define RUIN_SQUARE "ruin_Square" 
+#define RUIN_FLOOR "ruin_Floor" 
 
 #define SUNFLOWER "Sunflower"
 
