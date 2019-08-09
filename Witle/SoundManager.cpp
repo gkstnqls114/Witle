@@ -50,7 +50,7 @@ SoundManager::SoundManager()
 	for (auto& p : pSound) p = nullptr;
 
 	pSystem->set3DSettings(1.0f, 10, 10000.0);
-	pChannel[SOUND_TYPE]->set3DAttributes((FMOD_VECTOR*)&PlayerManager::GetMainPlayer()->GetTransform().GetPosition(), 
+	pChannel[SOUND_TYPE]->set3DAttributes((FMOD_VECTOR*)&PlayerManager::GetMainPlayer()->GetTransform().GetPosition(),
 		(FMOD_VECTOR*)&PlayerManager::GetMainPlayer()->GetTransform().GetPosition(), 0); // -> ÀÎÀÚ (pos,vel,alt_pan_pos)
 	// pChannel[SOUND_TYPE]->setPriority(); // 
 	pChannel[SOUND_TYPE]->setVolume(Volume); // -> º¼·ý
