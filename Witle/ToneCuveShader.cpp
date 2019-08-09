@@ -1,29 +1,29 @@
 #include "stdafx.h"
-#include "TonemappingShader.h"
+#include "ToneCuveShader.h"
 
-D3D12_SHADER_BYTECODE TonemappingShader::CreateGeometryShader(ID3DBlob ** ppd3dShaderBlob)
+D3D12_SHADER_BYTECODE ToneCuveShader::CreateGeometryShader(ID3DBlob ** ppd3dShaderBlob)
 {
 	return D3D12_SHADER_BYTECODE();
 }
 
-TonemappingShader::TonemappingShader()
+ToneCuveShader::ToneCuveShader()
 {
 }
 
-TonemappingShader::~TonemappingShader()
+ToneCuveShader::~ToneCuveShader()
 {
 }
 
-void TonemappingShader::CreateShader(ID3D12Device * pd3dDevice, ID3D12RootSignature * const pd3dGraphicsRootSignature)
+void ToneCuveShader::CreateShader(ID3D12Device * pd3dDevice, ID3D12RootSignature * const pd3dGraphicsRootSignature)
 {
 	Shader::CreatePipelineState(pd3dDevice, pd3dGraphicsRootSignature);
 }
 
-void TonemappingShader::Update(float ElapsedTime)
+void ToneCuveShader::Update(float ElapsedTime)
 {
 }
 
-D3D12_INPUT_LAYOUT_DESC TonemappingShader::CreateInputLayout()
+D3D12_INPUT_LAYOUT_DESC ToneCuveShader::CreateInputLayout()
 {
 	D3D12_INPUT_LAYOUT_DESC d3dInputLayoutDesc;
 	d3dInputLayoutDesc.pInputElementDescs = nullptr;
@@ -32,7 +32,7 @@ D3D12_INPUT_LAYOUT_DESC TonemappingShader::CreateInputLayout()
 	return(d3dInputLayoutDesc);
 }
 
-D3D12_RASTERIZER_DESC TonemappingShader::CreateRasterizerState()
+D3D12_RASTERIZER_DESC ToneCuveShader::CreateRasterizerState()
 {
 	//래스터라이저 상태를 설정한다.
 	D3D12_RASTERIZER_DESC d3dRasterizerDesc;
@@ -52,7 +52,7 @@ D3D12_RASTERIZER_DESC TonemappingShader::CreateRasterizerState()
 	return(d3dRasterizerDesc);
 }
 
-D3D12_BLEND_DESC TonemappingShader::CreateBlendState()
+D3D12_BLEND_DESC ToneCuveShader::CreateBlendState()
 {
 	D3D12_BLEND_DESC d3dBlendDesc;
 	::ZeroMemory(&d3dBlendDesc, sizeof(D3D12_BLEND_DESC));
@@ -72,7 +72,7 @@ D3D12_BLEND_DESC TonemappingShader::CreateBlendState()
 	return d3dBlendDesc;
 }
 
-D3D12_DEPTH_STENCIL_DESC TonemappingShader::CreateDepthStencilState()
+D3D12_DEPTH_STENCIL_DESC ToneCuveShader::CreateDepthStencilState()
 {
 	D3D12_DEPTH_STENCIL_DESC d3dDepthStencilDesc;
 	::ZeroMemory(&d3dDepthStencilDesc, sizeof(D3D12_DEPTH_STENCIL_DESC));
@@ -94,22 +94,22 @@ D3D12_DEPTH_STENCIL_DESC TonemappingShader::CreateDepthStencilState()
 	return(d3dDepthStencilDesc);
 }
 
-D3D12_PRIMITIVE_TOPOLOGY_TYPE TonemappingShader::CreatePrimitiveTopologyType()
+D3D12_PRIMITIVE_TOPOLOGY_TYPE ToneCuveShader::CreatePrimitiveTopologyType()
 {
 	return D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
 }
 
-D3D12_SHADER_BYTECODE TonemappingShader::CreateVertexShader(ID3DBlob ** ppd3dShaderBlob)
+D3D12_SHADER_BYTECODE ToneCuveShader::CreateVertexShader(ID3DBlob ** ppd3dShaderBlob)
 {
-	return(Shader::CompileShaderFromFile(L"TonemappingShader.hlsl", "VSMain", "vs_5_1", ppd3dShaderBlob));
+	return(Shader::CompileShaderFromFile(L"ToneCuveAndBloomShader.hlsl", "VSMain", "vs_5_1", ppd3dShaderBlob));
 }
 
-D3D12_SHADER_BYTECODE TonemappingShader::CreatePixelShader(ID3DBlob ** ppd3dShaderBlob)
+D3D12_SHADER_BYTECODE ToneCuveShader::CreatePixelShader(ID3DBlob ** ppd3dShaderBlob)
 {
-	return(Shader::CompileShaderFromFile(L"TonemappingShader.hlsl", "PSMain", "ps_5_1", ppd3dShaderBlob));
+	return(Shader::CompileShaderFromFile(L"ToneCuveAndBloomShader.hlsl", "PSToneCurve", "ps_5_1", ppd3dShaderBlob));
 }
 
-D3D12_SHADER_BYTECODE TonemappingShader::CreatePixelShaderForGBuffers(ID3DBlob ** ppd3dShaderBlob)
+D3D12_SHADER_BYTECODE ToneCuveShader::CreatePixelShaderForGBuffers(ID3DBlob ** ppd3dShaderBlob)
 {
 	return D3D12_SHADER_BYTECODE();
 }

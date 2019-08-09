@@ -1,6 +1,7 @@
 #pragma once
 #include "Shader.h"
-class TonemappingShader :
+
+class BloomShader :
 	public Shader
 {
 	// PSO 를 생성할 때 필요한 인자들
@@ -23,8 +24,8 @@ class TonemappingShader :
 	};
 
 public:
-	TonemappingShader();
-	virtual ~TonemappingShader();
+	BloomShader();
+	virtual ~BloomShader();
 
 	virtual void						CreateShader(ID3D12Device *pd3dDevice, ID3D12RootSignature*const pd3dGraphicsRootSignature) override;
 	virtual void						Update(float ElapsedTime) override;

@@ -22,8 +22,11 @@
 #include "TerrainForShadow.h"
 #include "SkillIconShader.h"
 #include "BlendMeshShader.h" 
-#include "TonemappingShader.h"
+#include "ToneCuveAndBloomShader.h"
 #include "HitEffectShader.h"
+#include "BloomShader.h"
+#include "ToneCuveShader.h"
+
 //// Shader ////////////////////////// 
 
 #include "ShaderManager.h"
@@ -78,7 +81,7 @@ void ShaderManager::BuildShaders(ID3D12Device * pd3dDevice, ID3D12RootSignature 
 { 
 	Shader* pCubeShader = new CubeShader();
 	pCubeShader->CreateShader(pd3dDevice, pd3dGraphicsRootSignature);
-	InsertShader("Cube", pCubeShader);
+	InsertShader(SHADER_CUBE, pCubeShader);
 
 	Shader* pTerrainShader = new TerrainShader();
 	pTerrainShader->CreateShader(pd3dDevice, pd3dGraphicsRootSignature);
@@ -152,9 +155,17 @@ void ShaderManager::BuildShaders(ID3D12Device * pd3dDevice, ID3D12RootSignature 
 	pBlendMeshShader->CreateShader(pd3dDevice, pd3dGraphicsRootSignature);
 	InsertShader(SHADER_BLENDMESH, pBlendMeshShader);
 
-	TonemappingShader* pTonemappingShader = new TonemappingShader();
+	ToneCuveAndBloomShader* pTonemappingShader = new ToneCuveAndBloomShader();
 	pTonemappingShader->CreateShader(pd3dDevice, pd3dGraphicsRootSignature);
-	InsertShader(SHADER_TONEMAPPING, pTonemappingShader);
+	InsertShader(SHADER_TONECURVEANDBLOOM, pTonemappingShader);
+
+	ToneCuveShader* pToneCuveShader = new ToneCuveShader();
+	pToneCuveShader->CreateShader(pd3dDevice, pd3dGraphicsRootSignature);
+	InsertShader(SHADER_TONECURVEANDBLOOM, pToneCuveShader);
+
+	BloomShader* pBloomShader = new BloomShader();
+	pBloomShader->CreateShader(pd3dDevice, pd3dGraphicsRootSignature);
+	InsertShader(SHADER_BLOOM, pBloomShader);
 
 	HitEffectShader* pHitEffectShader = new HitEffectShader();
 	pHitEffectShader->CreateShader(pd3dDevice, pd3dGraphicsRootSignature);

@@ -59,7 +59,7 @@ float3 ToneMapping(float3 HDRColor)
 }
 
 // texturebase : bloom 위한 텍스쳐
-float3 ToneMappingAndBloom(PS_INPUT input)
+float3 ToneCurveAndBloom(PS_INPUT input)
 {
     float3 Color = gtxtTexture.Sample(gssClamp, input.uv).xyz;
 
@@ -70,25 +70,54 @@ float3 ToneMappingAndBloom(PS_INPUT input)
     Color.g = quadraticBezier(Color.g, 0.5, 0.25);
     Color.b = quadraticBezier(Color.b, 0.5, 0.25);
 
-    return Color;
-    
-    //// 현재 픽셀에 대한 휘도 스케일 계산 
-    // float LScale = dot(Color, LUM_FACTOR);
-    //LScale = float(MiddleGrey / gAverageLum[0]) * LScale;
-    //LScale = (LScale + (LScale * LScale / LumWhiteSqr)) / (1.0 + LScale);
+    return Color; 
+}
 
-    //// 휘도 스케일을 픽셀 색상에 적용
-    //return Color * LScale;
+ // texturebase : bloom 위한 텍스쳐
+float3 Bloom(PS_INPUT input)
+{
+    float3 Color = gtxtTexture.Sample(gssClamp, input.uv).xyz;
+
+    // Bloom 분포 추가
+    Color += fBloomScale * gtxtTerrainBaseTexture.Sample(gssClamp, input.uv).xyz;
+     
+    return Color;
+}
+
+// texturebase : bloom 위한 텍스쳐
+float3 ToneCurve(PS_INPUT input)
+{
+    float3 Color = gtxtTexture.Sample(gssClamp, input.uv).xyz;
+     
+    Color.r = quadraticBezier(Color.r, 0.5, 0.25);
+    Color.g = quadraticBezier(Color.g, 0.5, 0.25);
+    Color.b = quadraticBezier(Color.b, 0.5, 0.25);
+
+    return Color; 
 }
 
 //픽셀 셰이더를 정의한다.
-float4 PSMain(PS_INPUT input) : SV_TARGET
-{
-    //float3 cColor = gtxtTexture.Sample(gssClamp, input.uv).xyz;
-    //cColor = ToneMapping(cColor);
-
-    float3 cColor = ToneMappingAndBloom(input);
+float4 PSToneCurveAndBloom(PS_INPUT input) : SV_TARGET
+{ 
+    float3 cColor = ToneCurveAndBloom(input);
     
     return float4(cColor, 1.0);
 }
  
+
+//픽셀 셰이더를 정의한다.
+float4 PSBloom(PS_INPUT input) : SV_TARGET
+{
+    float3 cColor = Bloom(input);
+    
+    return float4(cColor, 1.0);
+}
+ 
+
+//픽셀 셰이더를 정의한다.
+float4 PSToneCurve(PS_INPUT input) : SV_TARGET
+{
+    float3 cColor = ToneCurve(input);
+    
+    return float4(cColor, 1.0);
+}

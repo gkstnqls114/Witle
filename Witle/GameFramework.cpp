@@ -1466,7 +1466,7 @@ void CGameFramework::RenderForPlayerShadow()
 void CGameFramework::ToneMapping()
 {
 	//////파이프라인 상태를 설정한다.
-	ShaderManager::GetInstance()->SetPSO(m_CommandList.Get(), SHADER_TONEMAPPING, false);
+	ShaderManager::GetInstance()->SetPSO(m_CommandList.Get(), SHADER_TONECURVEANDBLOOM, false);
 
 	m_GBufferHeap->UpdateShaderVariable(m_CommandList.Get());
 

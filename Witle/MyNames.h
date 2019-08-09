@@ -57,6 +57,8 @@
 #define SHADER_SKILLICON "SkillIcon"
 #define SHADER_EFFECTMESH "EffectMesh"
 #define SHADER_BLENDMESH "BlendMeshShader"
-#define SHADER_TONEMAPPING "ToneMapping" 
+#define SHADER_TONECURVEANDBLOOM "ToneCurveAndBloom" 
 #define SHADER_HITEFFECT "HitEffect"
+#define SHADER_BLOOM "Bloom"
+#define SHADER_TONECURVE "ToneCurve"
 

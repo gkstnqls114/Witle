@@ -167,7 +167,9 @@
     <ClInclude Include="HitEffectShader.h" />
     <ClInclude Include="LoseScene.h" />
     <ClInclude Include="Mushroom.h" />
-    <ClInclude Include="TonemappingShader.h" />
+    <ClInclude Include="ToneCuveShader.h" />
+    <ClInclude Include="BloomShader.h" />
+    <ClInclude Include="ToneCuveAndBloomShader.h" />
     <ClInclude Include="Healing.h" />
     <ClInclude Include="HealingEffect.h" />
     <ClInclude Include="BlessingEffect.h" />
@@ -349,7 +351,9 @@
     <ClCompile Include="LoseScene.cpp" />
     <ClCompile Include="MainScene.cpp" />
     <ClCompile Include="Mushroom.cpp" />
-    <ClCompile Include="TonemappingShader.cpp" />
+    <ClCompile Include="ToneCuveShader.cpp" />
+    <ClCompile Include="BloomShader.cpp" />
+    <ClCompile Include="ToneCuveAndBloomShader.cpp" />
     <ClCompile Include="Healing.cpp" />
     <ClCompile Include="HealingEffect.cpp" />
     <ClCompile Include="BlessingEffect.cpp" />
@@ -597,7 +601,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">VSHitEffect</EntryPointName>
     </FxCompile>
-    <FxCompile Include="TonemappingShader.hlsl">
+    <FxCompile Include="ToneCuveAndBloomShader.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compute</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compute</ShaderType>
