@@ -47,7 +47,7 @@ public:
 	// 해당 index에 해당하는 스킬 이펙트를 비활성화합니다.
 	void Deactive(int index);
 
-	SelectableSkill* GetSkillEffect(int index);
+	SelectableSkill* GetpSelectableSkill(int index);
 	
 	// 스킬 이펙트를 설정합니다.
 	void SetSkill(SelectableSkill* skilleffect, UINT index);

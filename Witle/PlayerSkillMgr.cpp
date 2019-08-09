@@ -76,7 +76,7 @@ void PlayerSkillMgr::Deactive(int index)
 	m_skill[index]->isActive = false;
 }
 
-SelectableSkill * PlayerSkillMgr::GetSkillEffect(int index)
+SelectableSkill * PlayerSkillMgr::GetpSelectableSkill(int index)
 {
 	return m_skill[index];
 }

@@ -123,6 +123,32 @@ void HitEffectMgr::AddMonsterHitEffectPosition(const XMFLOAT3 pos)
 	}
 }
 
+void HitEffectMgr::AddPlayerSkillHitEffectPosition(ENUM_SELECTABLESKILL skilltype, const XMFLOAT3 pos)
+{
+	switch (skilltype)
+	{
+	case SELECTABLESKILL_NONE:
+		break;
+	case SELECTABLESKILL_FIREBALL:
+		AddFireBallHitEffectPosition(pos);
+		break;
+	case SELECTABLESKILL_ICEBALL:
+		AddIceBallHitEffectPosition(pos);
+		break;
+	case SELECTABLESKILL_LIGHTNINGBALL:
+		AddLightningBallHitEffectPosition(pos);
+		break;
+	case SELECTABLESKILL_SHIELD:
+		break;
+	case SELECTABLESKILL_BLESSING:
+		break;
+	case SELECTABLESKILL_HEALING:
+		break;
+	default:
+		break;
+	}
+}
+
 void HitEffectMgr::AddIceBallHitEffectPosition(const XMFLOAT3 pos)
 {
 	for (int i = 0; i < m_MaxEffect; ++i)

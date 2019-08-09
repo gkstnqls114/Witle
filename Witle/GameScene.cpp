@@ -897,12 +897,12 @@ void GameScene::LastUpdate(float fElapsedTime)
 	for (int index = 0; index < SKILL_SELECTED; ++index)
 	{
 		// 스킬 활성화가 되어있지 않다면 넘어간다.
-		if (!PlayerSkillMgr::GetInstance()->GetSkillEffect(index)->isActive) continue;
+		if (!PlayerSkillMgr::GetInstance()->GetpSelectableSkill(index)->isActive) continue;
 		
 		// 만약 스킬이 ATTACK 타입이 아니라면 넘어간다.
-		if (PlayerSkillMgr::GetInstance()->GetSkillEffect(index)->m_skillEffect->m_Skilltype != SKILLTYPE_ATTACK) continue;
+		if (PlayerSkillMgr::GetInstance()->GetpSelectableSkill(index)->m_skillEffect->m_Skilltype != SKILLTYPE_ATTACK) continue;
 		 
-		MyCollider* skill_collider = PlayerSkillMgr::GetInstance()->GetSkillEffect(index)->m_skillEffect->GetCollier();
+		MyCollider* skill_collider = PlayerSkillMgr::GetInstance()->GetpSelectableSkill(index)->m_skillEffect->GetCollier();
 
 		// 모든 몬스터 끼리 충돌체크
 		for (int i = 0; i < m_TestMonsterCount; ++i)
@@ -912,6 +912,11 @@ void GameScene::LastUpdate(float fElapsedTime)
 
 			if (Collision::isCollide(m_TestMonster[i]->GetBOBox(), skill_collider))
 			{ 
+				auto playercenterpos = m_pPlayer->GetBOBox()->GetBOBox().Center;
+				auto monstercenterpos = m_TestMonster[i]->GetBOBox()->GetBOBox().Center;
+				auto effectpos = Vector3::Add(playercenterpos, Vector3::ScalarProduct(Vector3::Subtract(playercenterpos, monstercenterpos), 0.5, false));
+
+				HitEffectMgr::GetInstance()->AddPlayerSkillHitEffectPosition(PlayerSkillMgr::GetInstance()->GetpSelectableSkill(index)->GetSelectableSkillType(), effectpos);
 				m_TestMonster[i]->SubstractHP(5);
 				PlayerSkillMgr::GetInstance()->Deactive(index);
 			}
@@ -1115,23 +1120,23 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 	m_SampleUIMap->Render(pd3dCommandList);
 
 	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_SKILLICON, isGBuffers); 
-	float cooltime = PlayerSkillMgr::GetInstance()->GetSkillEffect(0)->RemainCoolTimePrecentage;
+	float cooltime = PlayerSkillMgr::GetInstance()->GetpSelectableSkill(0)->RemainCoolTimePrecentage;
 	pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_HPPERCENTAGE, 1, &cooltime, 0);
 	SkillSelectScene::m_pTexture->UpdateShaderVariable(pd3dCommandList, SkillSelectScene::m_SelectedIndex[0]);
 	m_SampleUISkill1->Render(pd3dCommandList);
 
 	SkillSelectScene::m_pTexture->UpdateShaderVariable(pd3dCommandList, SkillSelectScene::m_SelectedIndex[1]);  
-	cooltime = PlayerSkillMgr::GetInstance()->GetSkillEffect(1)->RemainCoolTimePrecentage;
+	cooltime = PlayerSkillMgr::GetInstance()->GetpSelectableSkill(1)->RemainCoolTimePrecentage;
 	pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_HPPERCENTAGE, 1, &cooltime, 0);
 	m_SampleUISkill2->Render(pd3dCommandList);
 
 	SkillSelectScene::m_pTexture->UpdateShaderVariable(pd3dCommandList, SkillSelectScene::m_SelectedIndex[2]);  
-	cooltime = PlayerSkillMgr::GetInstance()->GetSkillEffect(2)->RemainCoolTimePrecentage;
+	cooltime = PlayerSkillMgr::GetInstance()->GetpSelectableSkill(2)->RemainCoolTimePrecentage;
 	pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_HPPERCENTAGE, 1, &cooltime, 0);
 	m_SampleUISkill3->Render(pd3dCommandList);
 
 	SkillSelectScene::m_pTexture->UpdateShaderVariable(pd3dCommandList, SkillSelectScene::m_SelectedIndex[3]); 
-	cooltime = PlayerSkillMgr::GetInstance()->GetSkillEffect(3)->RemainCoolTimePrecentage;
+	cooltime = PlayerSkillMgr::GetInstance()->GetpSelectableSkill(3)->RemainCoolTimePrecentage;
 	pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_HPPERCENTAGE, 1, &cooltime, 0);
 	m_SampleUISkill4->Render(pd3dCommandList);
 }

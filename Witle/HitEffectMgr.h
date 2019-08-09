@@ -23,6 +23,11 @@ class HitEffectMgr
 
 	GameObject* m_GameObject{ nullptr };
 	 
+private: 
+	void AddIceBallHitEffectPosition(const XMFLOAT3 pos);
+	void AddFireBallHitEffectPosition(const XMFLOAT3 pos);
+	void AddLightningBallHitEffectPosition(const XMFLOAT3 pos);
+
 public:
 	HitEffectMgr() :
 		m_MonsterHitEffectList(m_MaxEffect),
@@ -62,8 +67,7 @@ public:
 	 
 	// 설정된 pos에 hit effect 위치 및 활성화
 	void AddMonsterHitEffectPosition(const XMFLOAT3 pos);
-	void AddIceBallHitEffectPosition(const XMFLOAT3 pos);
-	void AddFireBallHitEffectPosition(const XMFLOAT3 pos);
-	void AddLightningBallHitEffectPosition(const XMFLOAT3 pos);
+	void AddPlayerSkillHitEffectPosition(ENUM_SELECTABLESKILL skilltype, const XMFLOAT3 pos);
 	void AddNormalHitEffectPosition(const XMFLOAT3 pos);
+
 };
