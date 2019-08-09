@@ -66,9 +66,9 @@
 
 // 사용하는 이미지 텍스쳐 이름들 
 #define IMAGE_RED "Red"
-#define IMAGE_MONSTERATTACKHIT_SPRRITE "SpriteTest"
-#define IMAGE_FIREBALLHIT_SPRRITE "SpriteTest"
-#define IMAGE_ICEBALLHIT_SPRRITE "SpriteTest"
-#define IMAGE_LIGHTNINGBALLHIT_SPRRITE "SpriteTest"
-#define IMAGE_NORMAL_SPRRITE "SpriteTest"
+#define IMAGE_MONSTERATTACKHIT_SPRRITE "MonsterHit_Sprite"
+#define IMAGE_FIREBALLHIT_SPRRITE "FireBall_Sprite"
+#define IMAGE_ICEBALLHIT_SPRRITE "IceBall_Sprite"
+#define IMAGE_LIGHTNINGBALLHIT_SPRRITE "LightningBall_Sprite"
+#define IMAGE_NORMAL_SPRRITE "StandardAttack_Sprite"
 
