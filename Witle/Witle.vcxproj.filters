@@ -508,9 +508,6 @@
     <Filter Include="05.Shader\02.GraphicsShader\HitEffectShader">
       <UniqueIdentifier>{3c25fa64-0e54-48be-a924-dc00a0493edc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03.GameObject\HitEffect">
-      <UniqueIdentifier>{ec815beb-c83d-4d1d-a06e-af703512ee3a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="13.Storage/Manager\14.EffectMgr">
       <UniqueIdentifier>{50028e9e-0ba9-485a-b233-e05a4f46f278}</UniqueIdentifier>
     </Filter>
@@ -522,6 +519,21 @@
     </Filter>
     <Filter Include="05.Shader\02.GraphicsShader\BloomShader">
       <UniqueIdentifier>{23173965-0f44-407b-9a10-d959eba780f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\10.HitEffect">
+      <UniqueIdentifier>{ec815beb-c83d-4d1d-a06e-af703512ee3a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\10.HitEffect\IceBallHitEffect">
+      <UniqueIdentifier>{efd38837-8359-44dd-be4b-7f04bcbb6d41}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\10.HitEffect\FireBallHitEffect">
+      <UniqueIdentifier>{84e17a55-ed85-429b-a065-64ea77aefbd2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\10.HitEffect\LightningBallHitEffect">
+      <UniqueIdentifier>{08875fe6-54c0-4567-a886-618b3b96b480}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\10.HitEffect\NormalHitEffect">
+      <UniqueIdentifier>{7b7cbc2c-f437-43fe-ad32-fe7bf37369d3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1054,7 +1066,7 @@
       <Filter>05.Shader\02.GraphicsShader\HitEffectShader</Filter>
     </ClInclude>
     <ClInclude Include="HitEffect.h">
-      <Filter>03.GameObject\HitEffect</Filter>
+      <Filter>02.Component\10.HitEffect</Filter>
     </ClInclude>
     <ClInclude Include="EffectMgr.h">
       <Filter>13.Storage/Manager\14.EffectMgr</Filter>
@@ -1067,6 +1079,18 @@
     </ClInclude>
     <ClInclude Include="ToneCuveShader.h">
       <Filter>05.Shader\02.GraphicsShader\ToneCuveShader</Filter>
+    </ClInclude>
+    <ClInclude Include="IceBallHitEffect.h">
+      <Filter>02.Component\10.HitEffect\IceBallHitEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="FireBallHitEffect.h">
+      <Filter>02.Component\10.HitEffect\FireBallHitEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="LightningBallHitEffect.h">
+      <Filter>02.Component\10.HitEffect\LightningBallHitEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="NormalHitEffect.h">
+      <Filter>02.Component\10.HitEffect\NormalHitEffect</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1578,7 +1602,7 @@
       <Filter>05.Shader\02.GraphicsShader\HitEffectShader</Filter>
     </ClCompile>
     <ClCompile Include="HitEffect.cpp">
-      <Filter>03.GameObject\HitEffect</Filter>
+      <Filter>02.Component\10.HitEffect</Filter>
     </ClCompile>
     <ClCompile Include="EffectMgr.cpp">
       <Filter>13.Storage/Manager\14.EffectMgr</Filter>
@@ -1591,6 +1615,18 @@
     </ClCompile>
     <ClCompile Include="ToneCuveShader.cpp">
       <Filter>05.Shader\02.GraphicsShader\ToneCuveShader</Filter>
+    </ClCompile>
+    <ClCompile Include="IceBallHitEffect.cpp">
+      <Filter>02.Component\10.HitEffect\IceBallHitEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="FireBallHitEffect.cpp">
+      <Filter>02.Component\10.HitEffect\FireBallHitEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="LightningBallHitEffect.cpp">
+      <Filter>02.Component\10.HitEffect\LightningBallHitEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="NormalHitEffect.cpp">
+      <Filter>02.Component\10.HitEffect\NormalHitEffect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
