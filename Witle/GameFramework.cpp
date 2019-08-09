@@ -45,7 +45,8 @@
 #include "GameFramework.h"
 
 static const bool DefferedRendering = false;
-static const bool isBloom = true;
+static bool isBloom = false;
+static bool isToneCurve = false;
 
 void CGameFramework::Render()
 {
@@ -67,62 +68,41 @@ void CGameFramework::Render()
 		// RenderOnGbuffer(); // G Buffer 에 렌더링합니다.
 		RenderOnRTs(&CGameFramework::RenderOnGbuffer, m_GBuffersCountForRenderTarget, m_GBuffersForRenderTarget, m_GBufferCPUHandleForRenderTarget, m_GBufferCPUHandleForDepth[0]);
 
-		ToneMapping();
+		ToneCurveAndBloom();
 
 		DefferedRenderOnSwapchain(); 
 	}
 	else
 	{
-		if (isBloom)
-		{
-			// 쉐도우 맵을 그립니다.
-			d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_Shadowmap, D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_DEPTH_WRITE);
-			RenderOnRTs(&CGameFramework::RenderForShadow, 0, NULL, NULL, m_ShadowmapCPUHandle);
-			d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_Shadowmap, D3D12_RESOURCE_STATE_DEPTH_WRITE, D3D12_RESOURCE_STATE_GENERIC_READ);
-			// 쉐도우 맵을 그립니다.
+		// 쉐도우 맵을 그립니다.
+		d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_Shadowmap, D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_DEPTH_WRITE);
+		RenderOnRTs(&CGameFramework::RenderForShadow, 0, NULL, NULL, m_ShadowmapCPUHandle);
+		d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_Shadowmap, D3D12_RESOURCE_STATE_DEPTH_WRITE, D3D12_RESOURCE_STATE_GENERIC_READ);
+		// 쉐도우 맵을 그립니다.
 
-			// 플레이어 쉐도우 맵을 그립니다.
-			d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_PlayerShadowmap, D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_DEPTH_WRITE);
-			RenderOnRTs(&CGameFramework::RenderForPlayerShadow, 0, NULL, NULL, m_PlayerShadowmapCPUHandle);
-			d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_PlayerShadowmap, D3D12_RESOURCE_STATE_DEPTH_WRITE, D3D12_RESOURCE_STATE_GENERIC_READ);
-			// 쉐도우 맵을 그립니다.
-			 
-			// 조명처리된 화면을 GBuffer에 그립니다. 그립니다.
-			RenderOnRTs(&CGameFramework::RenderSwapChain, 1, m_GBuffersForRenderTarget, m_GBufferCPUHandleForRenderTarget, m_GBufferCPUHandleForDepth[0]);
+		// 플레이어 쉐도우 맵을 그립니다.
+		d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_PlayerShadowmap, D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_DEPTH_WRITE);
+		RenderOnRTs(&CGameFramework::RenderForPlayerShadow, 0, NULL, NULL, m_PlayerShadowmapCPUHandle);
+		d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_PlayerShadowmap, D3D12_RESOURCE_STATE_DEPTH_WRITE, D3D12_RESOURCE_STATE_GENERIC_READ);
+		// 쉐도우 맵을 그립니다.
 
-			// gbuffer heap을 설정합니다.
-			m_GBufferHeap->UpdateShaderVariable(m_CommandList.Get());
+		// 조명처리된 화면을 GBuffer에 그립니다. 그립니다.
+		RenderOnRTs(&CGameFramework::RenderSwapChain, 1, m_GBuffersForRenderTarget, m_GBufferCPUHandleForRenderTarget, m_GBufferCPUHandleForDepth[0]);
 
-			// 휘도를 구합니다.
-			DownScale();
+		// gbuffer heap을 설정합니다.
+		m_GBufferHeap->UpdateShaderVariable(m_CommandList.Get());
 
-			// bloom 을 위한 텍스쳐를 구합니다.
-			Bloom();
+		// 휘도를 구합니다.
+		DownScale();
 
-			// Bloom 텍스쳐를 blur 합니다.
-			Blur();
+		// bloom 을 위한 텍스쳐를 구합니다.
+		Bloom();
 
-			// 톤매핑을 합니다.
-			RenderOnRT(&CGameFramework::ToneMapping, m_RenderTargetBuffers[m_SwapChainBufferIndex], m_SwapChainCPUHandle[m_SwapChainBufferIndex], m_DepthStencilCPUHandle);
-			 
-		}
-		else
-		{
-			// 쉐도우 맵을 그립니다.
-			d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_Shadowmap, D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_DEPTH_WRITE);
-			RenderOnRTs(&CGameFramework::RenderForShadow, 0, NULL, NULL, m_ShadowmapCPUHandle);
-			d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_Shadowmap, D3D12_RESOURCE_STATE_DEPTH_WRITE, D3D12_RESOURCE_STATE_GENERIC_READ);
-			// 쉐도우 맵을 그립니다.
+		// Bloom 텍스쳐를 blur 합니다.
+		Blur();
 
-			// 플레이어 쉐도우 맵을 그립니다.
-			d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_PlayerShadowmap, D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_DEPTH_WRITE);
-			RenderOnRTs(&CGameFramework::RenderForPlayerShadow, 0, NULL, NULL, m_PlayerShadowmapCPUHandle);
-			d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_PlayerShadowmap, D3D12_RESOURCE_STATE_DEPTH_WRITE, D3D12_RESOURCE_STATE_GENERIC_READ);
-			// 쉐도우 맵을 그립니다.
-
-			// 조명처리된 화면을 그립니다.
-			RenderOnRT(&CGameFramework::RenderSwapChain, m_RenderTargetBuffers[m_SwapChainBufferIndex], m_SwapChainCPUHandle[m_SwapChainBufferIndex], m_DepthStencilCPUHandle);
-		}
+		// 톤매핑을 합니다.
+		RenderOnRT(&CGameFramework::ToneCurveAndBloom, m_RenderTargetBuffers[m_SwapChainBufferIndex], m_SwapChainCPUHandle[m_SwapChainBufferIndex], m_DepthStencilCPUHandle);
 	}
 
 	//// SwapChain에 Render //////////////////////////
@@ -1001,7 +981,36 @@ void CGameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPA
 	case WM_KEYDOWN:    
 		switch (wParam)
 		{
-		case VK_F5: // Main Scene 으로 전환
+
+		case MYVK_U: // 블룸과 톤 커브 모두 비활성화u
+		{
+			isBloom = false;
+			isToneCurve = false;
+			break;
+		}
+
+		case MYVK_I: // 블룸만 활성화
+		{
+			isBloom = true;
+			isToneCurve = false;
+			break;
+		}
+
+		case MYVK_O: // 톤커브만 활성화
+		{
+			isBloom = false;
+			isToneCurve = true;
+			break;
+		}
+
+		case MYVK_P: // 톤커브와 블룸 활성화
+		{
+			isBloom = true;
+			isToneCurve = true;
+			break;
+		}
+
+		case VK_F5: // 블룸과 톤커브 모두 활성화
 		{
 			isStateChange = true;
 			m_SceneMgr->ChangeSceneToMain();
@@ -1056,9 +1065,12 @@ void CGameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPA
 			} 
 			OnResizeBackBuffers();
 			break;
-		} 
-
-		case VK_F5:  
+		}  
+		case MYVK_U:
+		case MYVK_I:
+		case MYVK_O:
+		case MYVK_P:
+		case VK_F5:
 		case VK_F6:  
 		case VK_F7:  
 		case VK_F8:  
@@ -1463,30 +1475,52 @@ void CGameFramework::RenderForPlayerShadow()
 	}
 }
 
-void CGameFramework::ToneMapping()
+void CGameFramework::ToneCurveAndBloom()
 {
 	//////파이프라인 상태를 설정한다.
-	ShaderManager::GetInstance()->SetPSO(m_CommandList.Get(), SHADER_TONECURVEANDBLOOM, false);
+	if (isBloom && isToneCurve)
+	{
+		ShaderManager::GetInstance()->SetPSO(m_CommandList.Get(), SHADER_TONECURVEANDBLOOM, false);
+	}
+	else if (!isBloom && isToneCurve)
+	{
+		ShaderManager::GetInstance()->SetPSO(m_CommandList.Get(), SHADER_TONECURVE, false);
+	}
+	else if (isBloom && !isToneCurve)
+	{
+		ShaderManager::GetInstance()->SetPSO(m_CommandList.Get(), SHADER_BLOOM, false);
+	}
+	else
+	{
+		ShaderManager::GetInstance()->SetPSO(m_CommandList.Get(), SHADER_SHOWTEXTURE, false);
+	}
 
 	m_GBufferHeap->UpdateShaderVariable(m_CommandList.Get());
 
 	MainCameraMgr::GetMainCamera()->GetCamera()->SetViewportsAndScissorRects(m_CommandList.Get());
 	MainCameraMgr::GetMainCamera()->GetCamera()->UpdateShaderVariables(m_CommandList.Get(), ROOTPARAMETER_CAMERA);
 	MainCameraMgr::GetMainCamera()->GetCamera()->UpdateLightShaderVariables(m_CommandList.Get(), &LightManager::m_pLights->m_pLights[2]);
-	 
+
 	m_CommandList->SetGraphicsRootUnorderedAccessView(ROOTPARAMETER_MIDDLEAVGLUM, m_RWMiddleAvgLum->GetGPUVirtualAddress());
 	m_CommandList->SetGraphicsRootUnorderedAccessView(ROOTPARAMETER_AVGLUM, m_RWAvgLum->GetGPUVirtualAddress());
 
 	//// 리소스만 바꾼다.. 
-	
+
 	D3D12_VIEWPORT	Viewport{ 0.f, 0.f, GameScreen::GetWidth() , GameScreen::GetHeight(), 1.0f, 0.0f };
 	D3D12_RECT		ScissorRect{ 0, 0, GameScreen::GetWidth() , GameScreen::GetHeight() };
 
 	m_CommandList->RSSetViewports(1, &Viewport);
 	m_CommandList->RSSetScissorRects(1, &ScissorRect);
 
-	m_CommandList->SetGraphicsRootDescriptorTable(ROOTPARAMETER_TEXTURE, m_GBufferHeap->GetGPUSrvDescriptorHandle(0));
-	m_CommandList->SetGraphicsRootDescriptorTable(ROOTPARAMETER_TEXTUREBASE, m_GBufferHeap->GetGPUSrvDescriptorHandle(m_GBufferForBloom));
+	if (!isBloom && !isToneCurve)
+	{
+		m_CommandList->SetGraphicsRootDescriptorTable(ROOTPARAMETER_TEXTUREBASE, m_GBufferHeap->GetGPUSrvDescriptorHandle(0));
+	}
+	else
+	{ 
+		m_CommandList->SetGraphicsRootDescriptorTable(ROOTPARAMETER_TEXTURE, m_GBufferHeap->GetGPUSrvDescriptorHandle(0));
+		m_CommandList->SetGraphicsRootDescriptorTable(ROOTPARAMETER_TEXTUREBASE, m_GBufferHeap->GetGPUSrvDescriptorHandle(m_GBufferForBloom));
+	}
 
 	m_CommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	m_CommandList->DrawInstanced(6, 1, 0, 0);

@@ -161,7 +161,7 @@ void ShaderManager::BuildShaders(ID3D12Device * pd3dDevice, ID3D12RootSignature 
 
 	ToneCuveShader* pToneCuveShader = new ToneCuveShader();
 	pToneCuveShader->CreateShader(pd3dDevice, pd3dGraphicsRootSignature);
-	InsertShader(SHADER_TONECURVEANDBLOOM, pToneCuveShader);
+	InsertShader(SHADER_TONECURVE, pToneCuveShader);
 
 	BloomShader* pBloomShader = new BloomShader();
 	pBloomShader->CreateShader(pd3dDevice, pd3dGraphicsRootSignature);

@@ -207,7 +207,7 @@ private:
 	void RenderForPlayerShadow();
 
 	// Compute 쉐이더를 통해 hdr을 위한 텍스쳐를 계산합니다.
-	void ToneMapping();
+	void ToneCurveAndBloom();
 
 	// 키보드와 마우스 메시지를 처리하는 부분이다.
 	void OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam);
