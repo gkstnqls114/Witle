@@ -106,14 +106,15 @@ public:
 	void Move(const XMFLOAT3& xmf3Shift);
 	void MoveVelocity(const XMFLOAT3& xmf3Shift);
 	void Move(float fxOffset = 0.0f, float fyOffset = 0.0f, float fzOffset = 0.0f);
-	void Rotate(float x, float y, float z);
+	virtual void Rotate(float x, float y, float z);
 
 	//// Get /////////////////// 
+	virtual MyBOBox* GetBOBox() const { return m_pMyBOBox; }
+
 	MonsterMovement* GetMovement() { return m_MonsterMovement; }
 	MonsterStatus* GetStatus() { return m_MonsterHPStatus; }
 	RecognitionRange* GetRecognitionRange() const { return m_RecognitionRange; };
 	AXIS GetCoorAxis() const { return m_Transform.GetCoorAxis(); }
-	MyBOBox* GetBOBox() const { return m_pMyBOBox; }
 	XMFLOAT3 GetSpawnPoint() const { return m_SpawnPoint; }
 	float GetSpawnRange() const { return m_SpawnRange; }
 	LoadObject* GetpLoadObject() const { return m_pLoadObject; }

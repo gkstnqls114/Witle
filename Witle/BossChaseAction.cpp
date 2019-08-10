@@ -24,7 +24,7 @@ ENUM_BOSSSKILL BossChaseAction::GetRandomSkill()
 
 	if (hp > 70.f) // first phase 
 	{
-		std::uniform_int_distribution<> monstertype(3, 3);
+		std::uniform_int_distribution<> monstertype(2, 2);
 		/*
 		BOSSSKILL_BREATH,
 		BOSSSKILL_DOWNSTROKE Áß ÇÏ³ª

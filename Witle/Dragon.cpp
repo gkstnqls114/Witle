@@ -18,7 +18,11 @@
 
 void Dragon::Render(ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffers)
 { 
+#ifdef _DEBUG 
 	RenderDebug(pd3dCommandList, isGBuffers);
+	m_BOBoxForTailAttack->Render(pd3dCommandList);
+#endif // _DEBUG
+
 
 	if (m_isStone)
 	{
@@ -96,11 +100,20 @@ Dragon::Dragon(const std::string & entityID, const XMFLOAT3& SpawnPoint,
 	XMFLOAT3 extents{ 150.f, 100.f, 230.f };
 	m_pMyBOBox = new MyBOBox(this, pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 0.F, 0.F }, extents);
 
+	XMFLOAT3 extents_2{ 200.f, 200.f, 400.f };
+	m_BOBoxForTailAttack = new MyBOBox(this, pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 0.F, 0.F }, extents_2);
+
 	static_cast<BossMonsterActionMgr*>(m_MonsterMovement->GetMonsterActionMgr())->ChangeBossStateToStone();
 }
 
 Dragon::~Dragon()
 {
+}
+
+void Dragon::Rotate(float x, float y, float z)
+{
+	Monster::Rotate(x, y, z);
+	m_BOBoxForTailAttack->Rotate(m_MonsterMovement->m_fRoll, m_MonsterMovement->m_fYaw, m_MonsterMovement->m_fPitch);
 }
 
 void Dragon::Update(float fElapsedTime)
@@ -141,6 +154,18 @@ void Dragon::Animate(float fElapsedTime)
 
 	m_pMyBOBox->Rotate(0.f, m_MonsterMovement->m_fPitch, 0.f);
 	m_pMyBOBox->SetPosition(result_pos);
+	 
+	m_BOBoxForTailAttack->Rotate(0.f, m_MonsterMovement->m_fPitch, 0.f);
+	m_BOBoxForTailAttack->SetPosition(result_pos);
+}
+
+MyBOBox * Dragon::GetBOBox() const
+{
+	if (static_cast<BossMonsterActionMgr*>(m_MonsterMovement->GetMonsterActionMgr())->Is_BossSkillTailAttack())
+	{
+		return m_BOBoxForTailAttack;
+	}
+	return m_pMyBOBox;
 }
 
 void Dragon::IsStone()
