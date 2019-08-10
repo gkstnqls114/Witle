@@ -253,12 +253,10 @@ void BossChaseAction::UpdateState(float fElpasedTime, BossMonsterActionMgr * act
 		(actionMgr)->ChangeBossStateToIdle(); 
 	}
 	  
-	ENUM_BOSSSKILL skill = GetRandomSkill();
-	GetDistance(skill);
+	ENUM_BOSSSKILL skill = GetRandomSkill(); 
 	// 플레이어 스킬에 따른 이동 거리를 가져옵니다. 
 	// 만약 플레이어와 해당 거리 이하면 상태를 전환하지 않습니다.
-	if (!PlayerManager::IsNearPlayer(m_pOwner->GetTransform().GetPosition(), 1500)) return;
-
+	if (!PlayerManager::IsNearPlayer(m_pOwner->GetTransform().GetPosition(), GetDistance(skill))) return;
 
 	bool isFirst = UpdateFirstPhase(fElpasedTime, actionMgr);
 	if (isFirst) return;

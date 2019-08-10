@@ -915,8 +915,7 @@ void GameScene::LastUpdate(float fElapsedTime)
 				auto monstercenterpos = m_TestMonster[i]->GetBOBox()->GetBOBox().Center; 
 #ifdef _DEBUG
 				std::cout << PlayerSkillMgr::GetInstance()->GetpSelectableSkill(index)->GetName() << std::endl;
-#endif // _DEBUG
-
+#endif // _DEBUG 
 				HitEffectMgr::GetInstance()->AddPlayerSkillHitEffectPosition(PlayerSkillMgr::GetInstance()->GetpSelectableSkill(index)->GetSelectableSkillType(), monstercenterpos);
 				m_TestMonster[i]->SubstractHP(5);
 				PlayerSkillMgr::GetInstance()->Deactive(index);
@@ -1207,29 +1206,10 @@ void GameScene::UpdateCollision(float fElapsedTime)
 
 	// 플레이어와 지형지물 충돌을 확인한다. 
 	Collision::ProcessCollideTerrainObject(m_pPlayer, m_pQuadtreeTerrain, fElapsedTime);
-
-
-	// // 플레이어와 보스 충돌체크
-	// MyBOBox bossbox = result_pos;
-	// XMFLOAT3 slideVector{ 0.f, 0.f, 0.f };
-	// 
-	// // 이동한 박스를 통해 충돌한다.
-	// bool isSlide = Collision::ProcessCollision(
-	// 	AlreadyPlayerBBox,
-	// 	bossbox,
-	// 	m_pPlayer->GetTransform().GetPosition(),
-	// 	m_pPlayer->GetVelocity(),
-	// 	fElapsedTime,
-	// 	false,
-	// 	slideVector);
-	// 
-	// if (isSlide)
-	// {
-	// 	m_pPlayer->SetVelocity(slideVector);
-	// }
-	// // 플레이어와 보스 충돌체크
-
-
+	 
+	// 보스와 지형지물 충돌을 확인한다. 
+	Collision::ProcessCollideTerrainObject(m_Dragon, m_pQuadtreeTerrain, fElapsedTime);
+	  
 	// 몬스터 충돌체크 ///////////////////////// 
 	for (int x = 0; x < m_TestMonsterCount; ++x)
 	{
