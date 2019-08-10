@@ -6,10 +6,9 @@
 #include "Object.h"
 #include "MonsterMovement.h"
 #include "BossMonsterActionMgr.h"
-#include "BossSkillAction0.h"
+#include "BossSkillRush.h"
 
-
-void BossSkillAction3::UpdateVelocity(float fElpasedTime, MonsterMovement * movement)
+void BossSkillRush::UpdateVelocity(float fElpasedTime, MonsterMovement * movement)
 {
 	XMFLOAT3 toPlayer = Vector3::Normalize(
 		Vector3::Subtract(
@@ -35,10 +34,10 @@ void BossSkillAction3::UpdateVelocity(float fElpasedTime, MonsterMovement * move
 }
 
 
-void BossSkillAction3::UpdateState(float fElpasedTime, BossMonsterActionMgr * actionMgr)
+void BossSkillRush::UpdateState(float fElpasedTime, BossMonsterActionMgr * actionMgr)
 {
 	// Attack 애니메이션이 끝나지 않았을 경우 Chnage State 하지 않는다.
-	if (!static_cast<Monster*>(m_pOwner)->GetpLoadObject()->IsTrackAnimationSetFinish(0, BOSS_SKILL3.ID)) return;
+	if (!static_cast<Monster*>(m_pOwner)->GetpLoadObject()->IsTrackAnimationSetFinish(0, BOSS_RUSH.ID)) return;
 
 	actionMgr->ChangeBossStateToChase();
 }

@@ -53,10 +53,10 @@ Dragon::Dragon(const std::string & entityID, const XMFLOAT3& SpawnPoint,
 	infos[0] = BOSS_IDLE;
 	infos[1] = BOSS_MOVE;
 	infos[2] = BOSS_CHASE;
-	infos[3] = BOSS_SKILL0;
-	infos[4] = BOSS_SKILL1;
-	infos[5] = BOSS_SKILL2;
-	infos[6] = BOSS_SKILL3;
+	infos[3] = BOSS_BRETH;
+	infos[4] = BOSS_DOWNSTORK;
+	infos[5] = BOSS_TAILATTACK;
+	infos[6] = BOSS_RUSH;
 	infos[7] = BOSS_SKILL4;
 
 	infos[8] = BOSS_SKILL5;

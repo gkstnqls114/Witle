@@ -5,19 +5,18 @@
 #include "Object.h"
 #include "MonsterMovement.h"
 #include "BossMonsterActionMgr.h"
-#include "BossSkillAction0.h"
+#include "BossSkillBreath.h"
 
 
-void BossSkillAction2::UpdateVelocity(float fElpasedTime, MonsterMovement * movement)
+void BossSkillBreath::UpdateVelocity(float fElpasedTime, MonsterMovement * movement)
 {
 	movement->m_xmf3Velocity = XMFLOAT3(0.f, 0.f, 0.f);
 }
 
-
-void BossSkillAction2::UpdateState(float fElpasedTime, BossMonsterActionMgr * actionMgr)
+void BossSkillBreath::UpdateState(float fElpasedTime, BossMonsterActionMgr * actionMgr)
 {
 	// Attack 애니메이션이 끝나지 않았을 경우 Chnage State 하지 않는다.
-	if (!static_cast<Monster*>(m_pOwner)->GetpLoadObject()->IsTrackAnimationSetFinish(0, BOSS_SKILL2.ID)) return;
+	if (!static_cast<Monster*>(m_pOwner)->GetpLoadObject()->IsTrackAnimationSetFinish(0, BOSS_BRETH.ID)) return;
 
 	actionMgr->ChangeBossStateToChase();
 }

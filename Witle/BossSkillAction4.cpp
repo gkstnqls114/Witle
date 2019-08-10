@@ -5,7 +5,7 @@
 #include "Object.h"
 #include "MonsterMovement.h"
 #include "BossMonsterActionMgr.h"
-#include "BossSkillAction0.h"
+#include "BossSkillAction4.h"
 
 
 void BossSkillAction4::UpdateVelocity(float fElpasedTime, MonsterMovement * movement)

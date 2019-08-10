@@ -1,13 +1,11 @@
-#pragma once 
-#include "BossSampleAction_1.h"
-#include "BossSampleAction_2.h"
+#pragma once  
 #include "BossIdleAction.h"
 #include "BossMoveAction.h"
 #include "BossChaseAction.h"
-#include"BossSkillAction0.h"
-#include"BossSkillAction1.h"
-#include"BossSkillAction2.h"
-#include"BossSkillAction3.h"
+#include"BossSkillBreath.h"
+#include"BossSkillDownStroke.h"
+#include"BossSkillTailAttack.h"
+#include"BossSkillRush.h"
 #include"BossSkillAction4.h"
 #include "MonsterActionMgr.h"
 
@@ -20,16 +18,14 @@ class Player;
 class BossMonsterActionMgr
 	: public MonsterActionMgr
 {
-	// 현재 사용하는 액션(상태)들
-	BossSampleAction_1 m_BossSampleAction_1;
-	BossSampleAction_2 m_BossSampleAction_2;
+	// 현재 사용하는 액션(상태)들 
 	BossIdleAction m_BossIdleAction;
 	BossMoveAction m_BossMoveAction;
 	BossChaseAction m_BossChaseAction;
-	BossSkillAction0 m_BossSkillBreath;
-	BossSkillAction1 m_BossSkilldownstroke;
-	BossSkillAction2 m_BossSkIllTailAttack;
-	BossSkillAction3 m_BossSkIlldash;
+	BossSkillBreath m_BossSkillBreath;
+	BossSkillDownStroke m_BossSkilldownstroke;
+	BossSkillTailAttack m_BossSkIllTailAttack;
+	BossSkillRush m_BossSkIlldash;
 	BossSkillAction4 m_BossSkillAction4;
 	// 현재 사용하는 액션(상태)들
 
@@ -44,9 +40,7 @@ public:
 
 public:
 	BossMonsterActionMgr(GameObject* pOwner, float IdleTime, float MoveTime) :
-		MonsterActionMgr(pOwner),
-		m_BossSampleAction_1(pOwner),
-		m_BossSampleAction_2(pOwner),
+		MonsterActionMgr(pOwner), 
 		m_BossIdleAction(pOwner, IdleTime),
 		m_BossMoveAction(pOwner, MoveTime),
 		m_BossChaseAction(pOwner),
@@ -62,10 +56,7 @@ public:
 
 	float GetTotalTime() const { return m_TotalTime; }
 	void SetZeroTotalTime() { m_TotalTime = 0.f; }
-
-	void ChangeStateToSample_1();
-	void ChangeStateToSample_2();
-
+	 
 	bool Is_BossIdleAction() const { return (m_CurrMonsterAction == &m_BossIdleAction); } // 기본
 	bool Is_BossMoveAction() const { return (m_CurrMonsterAction == &m_BossMoveAction); } // 움직임
 	bool Is_BossChaseAction() const { return (m_CurrMonsterAction == &m_BossChaseAction); } // 추격
@@ -89,8 +80,8 @@ public:
 	void ChangeBossStateToSearch();
 	void ChangeBossStateToDead();
 	void ChangeBossStateToHit();
-	void ChangeBossStateToAction0();
-	void ChangeBossStateToAction1();
+	void ChangeBossStateToBreth();
+	void ChangeBossStateToDownStroke();
 	void ChangeBossStateToAction2();
 	void ChangeBossStateToAction3();
 	void ChangeBossStateToAction4();

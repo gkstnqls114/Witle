@@ -286,12 +286,6 @@
     <Filter Include="02.Component\ForMonster\BossMonsterAction">
       <UniqueIdentifier>{06c78cfb-4cf2-43da-9b15-e83cf878fb82}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.Component\ForMonster\BossMonsterAction\BossSampleAction_1">
-      <UniqueIdentifier>{471012f7-3ffd-4931-8dda-5f1279380a5f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.Component\ForMonster\BossMonsterAction\BossSampleAction_2">
-      <UniqueIdentifier>{1637f871-bbe2-4ab9-aaa0-948fe623de19}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.Component\ForMonster\MonsterActionMgr">
       <UniqueIdentifier>{087791ad-0703-44b8-a9f4-5b49840722d4}</UniqueIdentifier>
     </Filter>
@@ -475,18 +469,6 @@
     <Filter Include="02.Component\ForMonster\BossMonsterAction\BossSkillAction4">
       <UniqueIdentifier>{862d0e47-01df-45d9-b57f-2f8e60cecb4d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.Component\ForMonster\BossMonsterAction\BossSkillAction0%28브레스%29">
-      <UniqueIdentifier>{0911d8a6-6344-474c-80a0-259348c22573}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.Component\ForMonster\BossMonsterAction\BossSkillAction1%28내려찍기%29">
-      <UniqueIdentifier>{3b92d029-5876-47a6-97c0-de431aef144d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.Component\ForMonster\BossMonsterAction\BossSkillAction2%28꼬리회전%29">
-      <UniqueIdentifier>{3235d4ae-c9c9-4bee-8b7d-de77195efd9e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.Component\ForMonster\BossMonsterAction\BossSkillAction3%28돌진%29">
-      <UniqueIdentifier>{f7193322-ee24-4ff1-a2a4-8af43ec909c5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.Component\ForMonster\BossMonsterAction\BossSkillAction4">
       <UniqueIdentifier>{862d0e47-01df-45d9-b57f-2f8e60cecb4d}</UniqueIdentifier>
     </Filter>
@@ -537,6 +519,18 @@
     </Filter>
     <Filter Include="13.Storage/Manager\14.HitEffectMgr">
       <UniqueIdentifier>{50028e9e-0ba9-485a-b233-e05a4f46f278}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\ForMonster\BossMonsterAction\BossSkillBreath">
+      <UniqueIdentifier>{0911d8a6-6344-474c-80a0-259348c22573}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\ForMonster\BossMonsterAction\BossSkillDownStroke">
+      <UniqueIdentifier>{3b92d029-5876-47a6-97c0-de431aef144d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\ForMonster\BossMonsterAction\BossSkillTailAttack">
+      <UniqueIdentifier>{3235d4ae-c9c9-4bee-8b7d-de77195efd9e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\ForMonster\BossMonsterAction\BossSkillRush">
+      <UniqueIdentifier>{f7193322-ee24-4ff1-a2a4-8af43ec909c5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -921,12 +915,6 @@
     <ClInclude Include="DefferedShader.h">
       <Filter>05.Shader\02.GraphicsShader\DefferedShader</Filter>
     </ClInclude>
-    <ClInclude Include="BossSampleAction_1.h">
-      <Filter>02.Component\ForMonster\BossMonsterAction\BossSampleAction_1</Filter>
-    </ClInclude>
-    <ClInclude Include="BossSampleAction_2.h">
-      <Filter>02.Component\ForMonster\BossMonsterAction\BossSampleAction_2</Filter>
-    </ClInclude>
     <ClInclude Include="MonsterAction.h">
       <Filter>02.Component\ForMonster</Filter>
     </ClInclude>
@@ -1035,20 +1023,8 @@
     <ClInclude Include="DownScaleSecondPassShader.h">
       <Filter>05.Shader\01.ComputeShader\DownScaleSecondPassShader</Filter>
     </ClInclude>
-    <ClInclude Include="BossSkillAction0.h">
-      <Filter>02.Component\ForMonster\BossMonsterAction\BossSkillAction0%28브레스%29</Filter>
-    </ClInclude>
     <ClInclude Include="BossChaseAction.h">
       <Filter>02.Component\ForMonster\BossMonsterAction\BossChaseAction</Filter>
-    </ClInclude>
-    <ClInclude Include="BossSkillAction1.h">
-      <Filter>02.Component\ForMonster\BossMonsterAction\BossSkillAction1%28내려찍기%29</Filter>
-    </ClInclude>
-    <ClInclude Include="BossSkillAction2.h">
-      <Filter>02.Component\ForMonster\BossMonsterAction\BossSkillAction2%28꼬리회전%29</Filter>
-    </ClInclude>
-    <ClInclude Include="BossSkillAction3.h">
-      <Filter>02.Component\ForMonster\BossMonsterAction\BossSkillAction3%28돌진%29</Filter>
     </ClInclude>
     <ClInclude Include="BossSkillAction4.h">
       <Filter>02.Component\ForMonster\BossMonsterAction\BossSkillAction4</Filter>
@@ -1097,6 +1073,18 @@
     </ClInclude>
     <ClInclude Include="HitEffectMgr.h">
       <Filter>13.Storage/Manager\14.HitEffectMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="BossSkillBreath.h">
+      <Filter>02.Component\ForMonster\BossMonsterAction\BossSkillBreath</Filter>
+    </ClInclude>
+    <ClInclude Include="BossSkillDownStroke.h">
+      <Filter>02.Component\ForMonster\BossMonsterAction\BossSkillDownStroke</Filter>
+    </ClInclude>
+    <ClInclude Include="BossSkillTailAttack.h">
+      <Filter>02.Component\ForMonster\BossMonsterAction\BossSkillTailAttack</Filter>
+    </ClInclude>
+    <ClInclude Include="BossSkillRush.h">
+      <Filter>02.Component\ForMonster\BossMonsterAction\BossSkillRush</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1457,12 +1445,6 @@
     <ClCompile Include="DefferedShader.cpp">
       <Filter>05.Shader\02.GraphicsShader\DefferedShader</Filter>
     </ClCompile>
-    <ClCompile Include="BossSampleAction_1.cpp">
-      <Filter>02.Component\ForMonster\BossMonsterAction\BossSampleAction_1</Filter>
-    </ClCompile>
-    <ClCompile Include="BossSampleAction_2.cpp">
-      <Filter>02.Component\ForMonster\BossMonsterAction\BossSampleAction_2</Filter>
-    </ClCompile>
     <ClCompile Include="MonsterAction.cpp">
       <Filter>02.Component\ForMonster</Filter>
     </ClCompile>
@@ -1571,20 +1553,8 @@
     <ClCompile Include="DownScaleSecondPassShader.cpp">
       <Filter>05.Shader\01.ComputeShader\DownScaleSecondPassShader</Filter>
     </ClCompile>
-    <ClCompile Include="BossSkillAction0.cpp">
-      <Filter>02.Component\ForMonster\BossMonsterAction\BossSkillAction0%28브레스%29</Filter>
-    </ClCompile>
     <ClCompile Include="BossChaseAction.cpp">
       <Filter>02.Component\ForMonster\BossMonsterAction\BossChaseAction</Filter>
-    </ClCompile>
-    <ClCompile Include="BossSkillAction1.cpp">
-      <Filter>02.Component\ForMonster\BossMonsterAction\BossSkillAction1%28내려찍기%29</Filter>
-    </ClCompile>
-    <ClCompile Include="BossSkillAction2.cpp">
-      <Filter>02.Component\ForMonster\BossMonsterAction\BossSkillAction2%28꼬리회전%29</Filter>
-    </ClCompile>
-    <ClCompile Include="BossSkillAction3.cpp">
-      <Filter>02.Component\ForMonster\BossMonsterAction\BossSkillAction3%28돌진%29</Filter>
     </ClCompile>
     <ClCompile Include="BossSkillAction4.cpp">
       <Filter>02.Component\ForMonster\BossMonsterAction\BossSkillAction4</Filter>
@@ -1636,6 +1606,18 @@
     </ClCompile>
     <ClCompile Include="HitEffectMgr.cpp">
       <Filter>13.Storage/Manager\14.HitEffectMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="BossSkillBreath.cpp">
+      <Filter>02.Component\ForMonster\BossMonsterAction\BossSkillBreath</Filter>
+    </ClCompile>
+    <ClCompile Include="BossSkillDownStroke.cpp">
+      <Filter>02.Component\ForMonster\BossMonsterAction\BossSkillDownStroke</Filter>
+    </ClCompile>
+    <ClCompile Include="BossSkillTailAttack.cpp">
+      <Filter>02.Component\ForMonster\BossMonsterAction\BossSkillTailAttack</Filter>
+    </ClCompile>
+    <ClCompile Include="BossSkillRush.cpp">
+      <Filter>02.Component\ForMonster\BossMonsterAction\BossSkillRush</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

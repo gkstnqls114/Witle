@@ -3,13 +3,11 @@
 
 class MonsterMovement;
 
-// 보스몬스터용 샘플 액션 2입니다.
-// 플레이어를 따라갑니다.
-// 만약 UpdateState 시 , 플레이어와 거리가 500 밖으로 넘어가면 플레이어에게 따라갑니다.
-class BossSampleAction_2
+// MonsterMovement를 인자로 받아 가속도를 처리해주는 클래스.
+// 필드를 랜덤한 방향으로 돌아다닌다.
+class BossSkillBreath
 	: public BossMonsterAction
 {
-
 public:
 	// Update 수행 이전 반드시 호출
 	virtual void UpdateVelocity(float fElpasedTime, MonsterMovement* movement) override;
@@ -17,7 +15,10 @@ public:
 	virtual void UpdateState(float fElpasedTime, BossMonsterActionMgr* actionMgr) override;
 
 public:
-	BossSampleAction_2(GameObject* pOwner) : BossMonsterAction(pOwner) { };
-	virtual ~BossSampleAction_2() {};
+	virtual void ReleaseObjects() override {};
+	virtual void ReleaseUploadBuffers() override {};
 
+public:
+	BossSkillBreath(GameObject* pOwner) : BossMonsterAction(pOwner) {};
+	virtual ~BossSkillBreath() {};
 };

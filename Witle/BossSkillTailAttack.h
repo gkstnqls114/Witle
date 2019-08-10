@@ -5,7 +5,7 @@ class MonsterMovement;
 
 // MonsterMovement를 인자로 받아 가속도를 처리해주는 클래스.
 // 필드를 랜덤한 방향으로 돌아다닌다.
-class BossSkillAction0
+class BossSkillTailAttack
 	: public BossMonsterAction
 {
 public:
@@ -19,6 +19,6 @@ public:
 	virtual void ReleaseUploadBuffers() override {};
 
 public:
-	BossSkillAction0(GameObject* pOwner) : BossMonsterAction(pOwner) {};
-	virtual ~BossSkillAction0() {};
+	BossSkillTailAttack(GameObject* pOwner) : BossMonsterAction(pOwner) {};
+	virtual ~BossSkillTailAttack() {};
 };

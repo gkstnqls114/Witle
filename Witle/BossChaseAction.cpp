@@ -44,7 +44,7 @@ void BossChaseAction::UpdateState(float fElpasedTime, BossMonsterActionMgr * act
 		{
 			if (val == 0)
 			{
-				(actionMgr)->ChangeBossStateToAction0();
+				(actionMgr)->ChangeBossStateToBreth();
 
 				if (static_cast<Monster*>(m_pOwner)->GetisAttacking())
 				{
@@ -56,7 +56,7 @@ void BossChaseAction::UpdateState(float fElpasedTime, BossMonsterActionMgr * act
 			}
 			else if (val == 1)
 			{
-				(actionMgr)->ChangeBossStateToAction1();
+				(actionMgr)->ChangeBossStateToDownStroke();
 
 				if (static_cast<Monster*>(m_pOwner)->GetisAttacking())
 				{
@@ -72,7 +72,7 @@ void BossChaseAction::UpdateState(float fElpasedTime, BossMonsterActionMgr * act
 		{
 			if (val == 0)
 			{
-				(actionMgr)->ChangeBossStateToAction0();
+				(actionMgr)->ChangeBossStateToBreth();
 
 				if (static_cast<Monster*>(m_pOwner)->GetisAttacking())
 				{
@@ -84,7 +84,7 @@ void BossChaseAction::UpdateState(float fElpasedTime, BossMonsterActionMgr * act
 			}
 			else if (val == 1)
 			{
-				(actionMgr)->ChangeBossStateToAction1();
+				(actionMgr)->ChangeBossStateToDownStroke();
 
 				if (static_cast<Monster*>(m_pOwner)->GetisAttacking())
 				{
@@ -112,7 +112,7 @@ void BossChaseAction::UpdateState(float fElpasedTime, BossMonsterActionMgr * act
 		{
 			if (val == 0)
 			{
-				(actionMgr)->ChangeBossStateToAction0();
+				(actionMgr)->ChangeBossStateToBreth();
 
 				if (static_cast<Monster*>(m_pOwner)->GetisAttacking())
 				{
@@ -124,7 +124,7 @@ void BossChaseAction::UpdateState(float fElpasedTime, BossMonsterActionMgr * act
 			}
 			else if (val == 1)
 			{
-				(actionMgr)->ChangeBossStateToAction1();
+				(actionMgr)->ChangeBossStateToDownStroke();
 
 				if (static_cast<Monster*>(m_pOwner)->GetisAttacking())
 				{
