@@ -53,7 +53,7 @@ SoundManager::SoundManager()
 	// pChannel[SOUND_TYPE]->set3DAttributes((FMOD_VECTOR*)&PlayerManager::GetMainPlayer()->GetTransform().GetPosition(),
 	// 	(FMOD_VECTOR*)&PlayerManager::GetMainPlayer()->GetTransform().GetPosition(), 0); // -> 인자 (pos,vel,alt_pan_pos)
 	// pChannel[SOUND_TYPE]->setPriority(); // 
-	
+
 
 	// 사운드 추가
 
@@ -74,18 +74,18 @@ SoundManager::SoundManager()
 
 	pSystem->createStream( // 게임 배경음
 		"Sound/BGM/game_sound.mp3"
-		, FMOD_DEFAULT | FMOD_3D | FMOD_3D_LINEARROLLOFF
+		, FMOD_DEFAULT | FMOD_3D
 		, nullptr
 		, &pSound[(int)ENUM_SOUND::GAME_SOUND]
 	);
 
-	FMOD_VECTOR test;
-	test.x = 15000;
-	test.y = 0;
-	test.z = 15000;
-	pChannel[(int)ENUM_SOUND::GAME_SOUND]->set3DAttributes(&test, NULL); // -> 인자 (pos,vel,alt_pan_pos)
-	pChannel[(int)ENUM_SOUND::GAME_SOUND]->setVolume(10.f); // -> 볼륨 
-	pChannel[(int)ENUM_SOUND::GAME_SOUND]->set3DMinMaxDistance(SOUND_MIN, SOUND_MAX);
+	// FMOD_VECTOR test;
+	// test.x = 15000;
+	// test.y = 0;
+	// test.z = 15000;
+	// pChannel[(int)ENUM_SOUND::GAME_SOUND]->set3DAttributes(&test, NULL); // -> 인자 (pos,vel,alt_pan_pos)
+	// pChannel[(int)ENUM_SOUND::GAME_SOUND]->setVolume(10.f); // -> 볼륨 
+	// pChannel[(int)ENUM_SOUND::GAME_SOUND]->set3DMinMaxDistance(SOUND_MIN, SOUND_MAX);
 
 	pSystem->createStream( // Win
 		"Sound/BGM/win.mp3"
@@ -107,77 +107,77 @@ SoundManager::SoundManager()
 	// 플레이어 //////////////////////////////////////////////////////////////////
 	pSystem->createSound( // 플레이어 이동
 		"Sound/Effect/player_move.mp3"
-		, FMOD_LOOP_NORMAL | FMOD_LOOP_OFF
+		, FMOD_DEFAULT | FMOD_2D
 		, nullptr
 		, &pSound[(int)ENUM_SOUND::PLAYER_MOVE]
 	);
 
 	pSystem->createSound( // 플레이어 히트
 		"Sound/Effect/player_damage.mp3"
-		, FMOD_DEFAULT | FMOD_LOOP_OFF
+		, FMOD_DEFAULT | FMOD_2D
 		, nullptr
 		, &pSound[(int)ENUM_SOUND::PLAYER_DAMAGE]
 	);
 
 	pSystem->createSound( // 플레이어 죽음
 		"Sound/Effect/player_damage.mp3"
-		, FMOD_DEFAULT | FMOD_LOOP_OFF
+		, FMOD_DEFAULT | FMOD_2D
 		, nullptr
 		, &pSound[(int)ENUM_SOUND::PLAYER_DEAD]
 	);
 
 	pSystem->createSound( // 플레이어 빗자루
 		"Sound/Effect/Broom.mp3"
-		, FMOD_DEFAULT | FMOD_LOOP_OFF
+		, FMOD_DEFAULT | FMOD_2D
 		, nullptr
 		, &pSound[(int)ENUM_SOUND::PLAYER_BROOM]
 	);
 
 	pSystem->createSound( // 플레이어 매직 미사일
 		"Sound/Effect/magic_misil.mp3"
-		, FMOD_DEFAULT | FMOD_LOOP_OFF
+		, FMOD_DEFAULT | FMOD_2D
 		, nullptr
 		, &pSound[(int)ENUM_SOUND::PLAYER_MAGIC_MISIL]
 	);
-	// 9번 널값파일없음
+
 	pSystem->createSound( // 플레이어 파이어볼
-		"Sound/Effect/magic_misil.mp3"
-		, FMOD_DEFAULT | FMOD_LOOP_OFF
+		"Sound/Effect/fire.mp3"
+		, FMOD_DEFAULT | FMOD_2D
 		, nullptr
 		, &pSound[(int)ENUM_SOUND::PLAYER_FIRE_SOUND]
 	);
 
 	pSystem->createSound( // 플레이어 아이스 볼
-		"Sound/Effect/magic_misil.mp3"
-		, FMOD_DEFAULT | FMOD_LOOP_OFF
+		"Sound/Effect/ice.mp3"
+		, FMOD_DEFAULT | FMOD_2D
 		, nullptr
 		, &pSound[(int)ENUM_SOUND::PLAYER_ICE_SOUND]
 	);
 
 	pSystem->createSound( // 플레이어 라이트닐 볼
-		"Sound/Effect/magic_misil.mp3"
-		, FMOD_DEFAULT | FMOD_LOOP_OFF
+		"Sound/Effect/light.mp3"
+		, FMOD_DEFAULT | FMOD_2D
 		, nullptr
 		, &pSound[(int)ENUM_SOUND::PLAYER_LIGHT_SOUND]
 	);
 
 	pSystem->createSound( // 플레이어 블레싱
 		"Sound/Effect/shield.mp3"
-		, FMOD_DEFAULT | FMOD_LOOP_OFF
+		, FMOD_DEFAULT | FMOD_2D
 		, nullptr
 		, &pSound[(int)ENUM_SOUND::PLAYER_BLESSING_SOUND]
 	);
 
 	pSystem->createSound( // 플레이어 실드
 		"Sound/Effect/shield.mp3"
-		, FMOD_DEFAULT | FMOD_LOOP_OFF
+		, FMOD_DEFAULT | FMOD_2D
 		, nullptr
 		, &pSound[(int)ENUM_SOUND::PLAYER_SHIELD_SOUND]
 	);
 
 	pSystem->createSound( // 플레이어 힐링
 		"Sound/Effect/shield.mp3"
-		, FMOD_DEFAULT | FMOD_LOOP_OFF
+		, FMOD_DEFAULT | FMOD_2D
 		, nullptr
 		, &pSound[(int)ENUM_SOUND::PLAYER_HEALING_SOUND]
 	);
@@ -207,12 +207,23 @@ SoundManager::SoundManager()
 	//// 기본 몬스터 //////////////////////////////////////////////////////////////////
 
 	//// 보스 몬스터 //////////////////////////////////////////////////////////////////
-	//pSystem->createSound( // 보스 몬스터 이동
-	//	"Sound/Effect/monster_move.mp3"
-	//	, FMOD_DEFAULT | FMOD_3D | FMOD_3D_LINEARROLLOFF
-	//	, nullptr
-	//	, &pSound[(int)ENUM_SOUND::BOSS_MOVE_SOUND]
-	//);
+
+	FMOD_VECTOR test;
+	test.x = 15000;
+	test.y = 0;
+	test.z = 15000;
+	pChannel[(int)ENUM_SOUND::BOSS_MOVE_SOUND]->set3DAttributes(&test, NULL); // -> 인자 (pos,vel,alt_pan_pos
+	pChannel[(int)ENUM_SOUND::BOSS_MOVE_SOUND]->setVolume(10.f); // -> 볼륨 
+	pChannel[(int)ENUM_SOUND::BOSS_MOVE_SOUND]->set3DMinMaxDistance(SOUND_MIN, SOUND_MAX);
+
+	pSystem->createSound( // 보스 몬스터 이동
+		"Sound/Effect/monster_move.mp3"
+		, FMOD_3D | FMOD_3D_LINEARROLLOFF
+		, nullptr
+		, &pSound[(int)ENUM_SOUND::BOSS_MOVE_SOUND]
+	);
+
+	pChannel[(int)ENUM_SOUND::BOSS_MOVE_SOUND]->set3DMinMaxDistance(SOUND_MIN, SOUND_MAX);
 
 	//pSystem->createSound( // 보스 몬스터 히트
 	//	"Sound/Effect/monster_move.mp3"
@@ -257,7 +268,7 @@ SoundManager::SoundManager()
 	//);
 	// 보스 몬스터 //////////////////////////////////////////////////////////////////
 
-	pChannel[SOUND_TYPE]->set3DMinMaxDistance(SOUND_MIN, SOUND_MAX);
+	// pChannel[(int)ENUM_SOUND::GAME_SOUND]->set3DMinMaxDistance(SOUND_MIN, SOUND_MAX);
 }
 
 
@@ -318,6 +329,6 @@ void SoundManager::UpdateListenerPos(const Player* p)
 	player_velocity.y = p->GetVelocity().y;
 	player_velocity.z = p->GetVelocity().z;
 
-	pSystem->set3DListenerAttributes(0,  
+	pSystem->set3DListenerAttributes(0,
 		&player_pos, &player_velocity, &player_look, &player_up);
 }

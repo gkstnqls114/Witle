@@ -8,6 +8,8 @@
 
 #include "BallEffect.h"
 
+#include "SoundManager.h" 
+
 void BallEffect::Render(ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffers)
 { 
 	m_Texture->UpdateShaderVariable(pd3dCommandList, 1);
@@ -62,14 +64,17 @@ BallEffect::BallEffect(const std::string & entityID, ID3D12Device * pd3dDevice, 
 	case BALLEFFECT_FIRE:
 		m_Texture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Image/Red.dds", 0);
 		m_Texture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Image/Yellow.dds", 1);
+		// SoundManager::GetInstance()->Play(ENUM_SOUND::PLAYER_FIRE_SOUND);
 		break;
 	case BALLEFFECT_ICE:
 		m_Texture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Image/Blue.dds", 0); 
 		m_Texture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Image/Black.dds", 1);
+		// SoundManager::GetInstance()->Play(ENUM_SOUND::PLAYER_ICE_SOUND);
 		break;
 	case BALLEFFECT_LIGHTNING:
 		m_Texture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Image/Yellow.dds", 0);
 		m_Texture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Image/Black.dds", 1);
+		// SoundManager::GetInstance()->Play(ENUM_SOUND::PLAYER_LIGHT_SOUND);
 		break;
 	default:
 		break;

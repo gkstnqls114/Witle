@@ -15,7 +15,7 @@ void FireBall::ReleaseMembers()
 
 void FireBall::ReleaseMemberUploadBuffers()
 {
-	SoundManager::GetInstance()->Play(ENUM_SOUND::PLAYER_FIRE_SOUND);
+	// SoundManager::GetInstance()->Play(ENUM_SOUND::PLAYER_FIRE_SOUND);
 
 	BallEffect::ReleaseMemberUploadBuffers();
 }
