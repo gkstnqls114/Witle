@@ -206,8 +206,7 @@ void Monster::SubstractHP(int sub)
 	m_CurrAnimation = GetAnimationHitID();
 	m_pLoadObject->SetTrackAnimationSet(0, m_CurrAnimation);
 
-	m_MonsterHPStatus->m_Guage -= sub;
-	std::cout << m_MonsterHPStatus->m_Guage << std::endl;
+	m_MonsterHPStatus->m_Guage -= sub; 
 }
 
 void Monster::Animate(float fElapsedTime)

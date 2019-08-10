@@ -102,7 +102,7 @@ void BossMonsterActionMgr::ChangeBossStateToBreath()
 {
 	ChangeAction(&m_BossSkillBreath);
 	m_CurrMonsterAction->Init();
-	static_cast<Monster*>(m_pOwner)->SetAnimationState(BOSS_BRETH.ID);
+	static_cast<Monster*>(m_pOwner)->SetAnimationState(BOSS_BREATH.ID);
 	static_cast<Monster*>(m_pOwner)->SetisAttacking(true); 
 }
  
@@ -127,9 +127,9 @@ void BossMonsterActionMgr::ChangeBossStateToRush()
 	ChangeAction(&m_BossSkIlldash);
 	m_CurrMonsterAction->Init();
 	static_cast<Monster*>(m_pOwner)->SetAnimationState(BOSS_RUSH.ID);
-	static_cast<Monster*>(m_pOwner)->SetisAttacking(true);
-	 
+	static_cast<Monster*>(m_pOwner)->SetisAttacking(true);	 
 }
+
 void BossMonsterActionMgr::ChangeBossStateToStone()
 {
 	ChangeAction(&m_BossStone);

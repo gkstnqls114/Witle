@@ -56,6 +56,30 @@ void Dragon::ReleaseMemberUploadBuffers()
 	if (m_pTexture)m_pTexture->ReleaseUploadBuffers();
 }
 
+float Dragon::GetFinishAttackUnlockTime()
+{
+	BossMonsterActionMgr* actionmgr = static_cast<BossMonsterActionMgr*>(GetMovement()->GetMonsterActionMgr());
+
+	if (actionmgr->Is_BossSkillBreath())
+	{
+		return BOSS_BREATH.EndTime - BOSS_BREATH.StartTime;
+	}
+	else if (actionmgr->Is_BossSkillDownStroke())
+	{
+		return BOSS_DOWNSTORK.EndTime - BOSS_DOWNSTORK.StartTime;
+	}
+	else if (actionmgr->Is_BossSkillTailAttack())
+	{
+		return BOSS_TAILATTACK.EndTime - BOSS_TAILATTACK.StartTime;
+	}
+	else if (actionmgr->Is_BossSkillRush())
+	{ 
+		return BOSS_RUSH.EndTime - BOSS_RUSH.StartTime;
+	}
+
+	return 0.f;
+}
+
 Dragon::Dragon(const std::string & entityID, const XMFLOAT3& SpawnPoint,
 	ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature)
 	: Monster(entityID, 100.f, SpawnPoint, pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, 0.f ,400.f)
@@ -70,13 +94,13 @@ Dragon::Dragon(const std::string & entityID, const XMFLOAT3& SpawnPoint,
 	m_pStoneTexture = new Texture(ENUM_SCENE::SCENE_GAME, ROOTPARAMETER_INDEX(ROOTPARAMETER_TEXTURE), false, 1, RESOURCE_TEXTURE2D);
 	 
 	m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/Dragon.dds", 0);
-	m_pStoneTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/Dragon.dds", 0);
+	m_pStoneTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/Boss_rock.dds", 0);
 
 	ANIMATION_INFO infos[BOSSMONSTER_ANIMATIONE];
 	infos[0] = BOSS_IDLE;
 	infos[1] = BOSS_MOVE;
 	infos[2] = BOSS_CHASE;
-	infos[3] = BOSS_BRETH;
+	infos[3] = BOSS_BREATH;
 	infos[4] = BOSS_DOWNSTORK;
 	infos[5] = BOSS_TAILATTACK;
 	infos[6] = BOSS_RUSH;
@@ -119,8 +143,16 @@ void Dragon::Rotate(float x, float y, float z)
 void Dragon::Update(float fElapsedTime)
 { 
 	if (m_isStone) return;
-
-	Monster::Update(fElapsedTime);
+	 
+	if (m_isFinishAttack)
+	{
+		m_TotalTime += fElapsedTime;
+		if (m_TotalTime >= GetFinishAttackUnlockTime())
+		{
+			m_TotalTime = 0.f;
+			m_isFinishAttack = false;
+		}
+	}
 
 	// 이동량을 계산한다. 
 	m_MonsterMovement->Update(fElapsedTime);
