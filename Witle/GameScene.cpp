@@ -939,14 +939,7 @@ void GameScene::LastUpdate(float fElapsedTime)
 		}
 		//////////////////////////////////////////////////////// BOSS를 때림
 	}
-
-	// if (m_Dragon->GetisAttacking())
-	// {
-	// 	if (Collision::isCollide(m_pPlayer->GetBOBox()->GetBOBox(), m_Dragon->GetBOBox()->GetBOBox()))
-	// 	{
-	// 		m_pPlayer->SubstractHP(5);
-	// 	}
-	// }
+	  
 
 	// Update한 위치로 몬스터가 공격 시에 몬스터/플레이어충돌체크 확인 ///////////////////////////
 	for (int i = 0; i < m_TestMonsterCount; ++i)
@@ -964,16 +957,15 @@ void GameScene::LastUpdate(float fElapsedTime)
 
 			m_TestMonster[i]->FinishAttack();
 			m_pPlayer->SubstractHP(5);
-		}
-
+		} 
 	}
 
-	// 보스 부딫힘
-	if (Collision::isCollide(m_pPlayer->GetBOBox()->GetBOBox(), m_Dragon->GetBOBox()->GetBOBox()))
+	// 보스와 플레이 부딪힘
+	if (Collision::isCollide(m_pPlayer->GetBOBox() , m_Dragon->GetBOBox()) && m_Dragon->GetisAttacking())
 	{
-		// 드래곤과 플레이어 부딪히는 것 테스트
+
 	}
-	// 보스 부딫힘
+	// 보스와 플레이 부딪힘
 
 	// 카메라 프러스텀과 쿼드트리 지형 렌더링 체크
 	if (m_pMainCamera && m_pQuadtreeTerrain)

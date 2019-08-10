@@ -37,11 +37,5 @@ void BossDead::UpdateState(float fElpasedTime, BossMonsterActionMgr * actionMgr)
 	else
 	{
 		pMonsterOwner->GetRecognitionRange()->m_TotalTime = 0;
-	}
-
-	if (actionMgr->GetTotalTime() > m_IdleTime)
-	{
-		actionMgr->SetZeroTotalTime(); // 이거 왜 한거지.. ?
-		actionMgr->ChangeBossStateToMove();
-	}
+	} 
 }

@@ -39,19 +39,20 @@ void BossMonsterActionMgr::ChangeBossStateBefore()
 	else if (m_CurrMonsterAction == &m_BossChaseAction)
 	{
 		ChangeBossStateToChase();
+	} 
+	 else if (m_CurrMonsterAction == &m_BossBuf)
+	 {
+	 	ChangeBossStateToBuf();
+	 }
+	 else if (m_CurrMonsterAction == &m_BossDead)
+	 {
+		ChangeBossStateToDead();
+	 }
+
+	 else if (m_CurrMonsterAction == &m_BossStone)
+	{
+		ChangeBossStateToStone();
 	}
-	// else if (m_CurrMonsterAction == &m_BossSearchAction)
-	// {
-	// 	ChangeBossStateToSearch();
-	// }
-	// else if (m_CurrMonsterAction == &m_BossDeadAction)
-	// {
-	// 	ChangeBossStateToDead();
-	// }
-	// else if (m_CurrMonsterAction == &m_BossHitAction)
-	// {
-	// 	ChangeBossStateToHit();
-	// }
 	else if (m_CurrMonsterAction == &m_BossSkillBreath)
 	{
 		ChangeBossStateToBreth();
@@ -128,4 +129,24 @@ void BossMonsterActionMgr::ChangeBossStateToRush()
 	static_cast<Monster*>(m_pOwner)->SetAnimationState(BOSS_RUSH.ID);
 	static_cast<Monster*>(m_pOwner)->SetisAttacking(true);
 	 
-} 
+}
+void BossMonsterActionMgr::ChangeBossStateToStone()
+{
+	ChangeAction(&m_BossStone);
+	m_CurrMonsterAction->Init();
+	static_cast<Monster*>(m_pOwner)->SetAnimationState(BOSS_STONE.ID); 
+}
+
+void BossMonsterActionMgr::ChangeBossStateToDead()
+{
+	ChangeAction(&m_BossDead);
+	m_CurrMonsterAction->Init();
+	static_cast<Monster*>(m_pOwner)->SetAnimationState(BOSS_DEAD.ID);
+}
+
+void BossMonsterActionMgr::ChangeBossStateToBuf()
+{
+	ChangeAction(&m_BossBuf);
+	m_CurrMonsterAction->Init();
+	static_cast<Monster*>(m_pOwner)->SetAnimationState(BOSS_BUF.ID);
+}

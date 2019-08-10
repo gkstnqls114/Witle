@@ -6,6 +6,9 @@
 #include"BossSkillDownStroke.h"
 #include"BossSkillTailAttack.h"
 #include"BossSkillRush.h" 
+#include "BossStone.h"
+#include "BossDead.h"
+#include "BossBuf.h"
 #include "MonsterActionMgr.h"
 
 class MonsterAction;
@@ -24,7 +27,10 @@ class BossMonsterActionMgr
 	BossSkillBreath m_BossSkillBreath;
 	BossSkillDownStroke m_BossSkilldownstroke;
 	BossSkillTailAttack m_BossSkIllTailAttack;
-	BossSkillRush m_BossSkIlldash; 
+	BossSkillRush m_BossSkIlldash;
+	BossBuf m_BossBuf;
+	BossDead m_BossDead;
+	BossStone m_BossStone;
 	// 현재 사용하는 액션(상태)들
 
 	float m_TotalTime{ 0.f };
@@ -45,7 +51,10 @@ public:
 		m_BossSkillBreath(pOwner),
 		m_BossSkilldownstroke(pOwner),
 		m_BossSkIllTailAttack(pOwner),
-		m_BossSkIlldash(pOwner)
+		m_BossSkIlldash(pOwner),
+		m_BossBuf(pOwner),
+		m_BossDead(pOwner),
+		m_BossStone(pOwner)
 	{
 		m_CurrMonsterAction = &m_BossIdleAction;
 	};
@@ -69,5 +78,8 @@ public:
 	void ChangeBossStateToBreth();
 	void ChangeBossStateToDownStroke();
 	void ChangeBossStateToTailAttack();
-	void ChangeBossStateToRush(); 
+	void ChangeBossStateToRush();
+	void ChangeBossStateToStone();
+	void ChangeBossStateToDead();
+	void ChangeBossStateToBuf();
 };
