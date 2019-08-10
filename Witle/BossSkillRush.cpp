@@ -10,6 +10,13 @@
 
 void BossSkillRush::UpdateVelocity(float fElpasedTime, MonsterMovement * movement)
 {
+	movement->m_xmf3Velocity = XMFLOAT3(0, 0, 0);
+}
+
+void BossSkillRush::Init()
+{
+	// 바라보는 곳을 한번 지정한다.
+
 	XMFLOAT3 toPlayer = Vector3::Normalize(
 		Vector3::Subtract(
 			PlayerManager::GetMainPlayer()->GetTransform().GetPosition(),
@@ -17,9 +24,7 @@ void BossSkillRush::UpdateVelocity(float fElpasedTime, MonsterMovement * movemen
 		)
 	);
 
-	movement->m_xmf3Velocity = Vector3::ScalarProduct(toPlayer, movement->m_fDistance, false);
-
-	// movement->m_xmf3Velocity = XMFLOAT3(0.f, 0.f, 0.f);
+	MonsterMovement* movement = static_cast<Monster*>(m_pOwner)->GetMovement();
 
 	XMFLOAT3 look(0.f, 0.f, 1.f);
 	float value = Vector3::AngleToRadian(look, toPlayer) * 180.f / 3.141592;

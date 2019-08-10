@@ -10,6 +10,17 @@ class BossChaseAction
 	: public BossMonsterAction
 {
 private:
+	const float m_fBreathDistance = 1200.f;
+	const float m_fDownStrokeDistance = 500.f;
+	const float m_fTailAttackDistance = 500.f;
+	const float m_fRushDistance = 1500.f;
+
+	
+private:
+	// 체력에 따라 스킬을 랜덤으로 가져옵니다.
+	ENUM_BOSSSKILL GetRandomSkill();
+	float GetDistance(ENUM_BOSSSKILL skill);
+
 	// 모두 업데이트가 완료된다면 return true를 합니다.
 	bool UpdateFirstPhase(float fElpasedTime, BossMonsterActionMgr* actionMgr);
 	bool UpdateSecondPhase(float fElpasedTime, BossMonsterActionMgr* actionMgr);

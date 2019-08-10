@@ -76,8 +76,7 @@ void BossMonsterActionMgr::ChangeBossStateToIdle()
 	ChangeAction(&m_BossIdleAction);
 	m_CurrMonsterAction->Init();
 	static_cast<Monster*>(m_pOwner)->SetAnimationState(BOSS_IDLE.ID);
-	static_cast<Monster*>(m_pOwner)->SetisAttacking(false);
-	printf("보스 대기\n");
+	static_cast<Monster*>(m_pOwner)->SetisAttacking(false); 
 }
 
 // 이동
@@ -86,8 +85,7 @@ void BossMonsterActionMgr::ChangeBossStateToMove()
 	ChangeAction(&m_BossMoveAction);
 	m_CurrMonsterAction->Init();
 	static_cast<Monster*>(m_pOwner)->SetAnimationState(BOSS_MOVE.ID);
-	static_cast<Monster*>(m_pOwner)->SetisAttacking(false);
-	printf("보스 이동\n");
+	static_cast<Monster*>(m_pOwner)->SetisAttacking(false); 
 }
 
 // 추격
@@ -96,11 +94,9 @@ void BossMonsterActionMgr::ChangeBossStateToChase()
 	ChangeAction(&m_BossChaseAction);
 	m_CurrMonsterAction->Init();
 	static_cast<Monster*>(m_pOwner)->SetAnimationState(BOSS_CHASE.ID);
-	static_cast<Monster*>(m_pOwner)->SetisAttacking(false);
-	printf("보스 추적\n");
+	static_cast<Monster*>(m_pOwner)->SetisAttacking(false); 
 }
- 
-// 스킬 0
+  
 void BossMonsterActionMgr::ChangeBossStateToBreth()
 {
 	ChangeAction(&m_BossSkillBreath);
@@ -108,8 +104,7 @@ void BossMonsterActionMgr::ChangeBossStateToBreth()
 	static_cast<Monster*>(m_pOwner)->SetAnimationState(BOSS_BRETH.ID);
 	static_cast<Monster*>(m_pOwner)->SetisAttacking(true); 
 }
-
-// 스킬 1
+ 
 void BossMonsterActionMgr::ChangeBossStateToDownStroke()
 {
 	ChangeAction(&m_BossSkilldownstroke);
@@ -117,8 +112,7 @@ void BossMonsterActionMgr::ChangeBossStateToDownStroke()
 	static_cast<Monster*>(m_pOwner)->SetAnimationState(BOSS_DOWNSTORK.ID);
 	static_cast<Monster*>(m_pOwner)->SetisAttacking(true); 
 }
-
-// 스킬 2
+ 
 void BossMonsterActionMgr::ChangeBossStateToTailAttack()
 {
 	ChangeAction(&m_BossSkIllTailAttack);
@@ -126,8 +120,7 @@ void BossMonsterActionMgr::ChangeBossStateToTailAttack()
 	static_cast<Monster*>(m_pOwner)->SetAnimationState(BOSS_TAILATTACK.ID);
 	static_cast<Monster*>(m_pOwner)->SetisAttacking(true); 
 }
-
-// 스킬 3
+ 
 void BossMonsterActionMgr::ChangeBossStateToRush()
 {
 	ChangeAction(&m_BossSkIlldash);

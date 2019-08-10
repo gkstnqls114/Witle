@@ -11,6 +11,71 @@
 #include "PlayerManager.h"
 #include "Collision.h"
 
+
+ENUM_BOSSSKILL BossChaseAction::GetRandomSkill()
+{
+	ENUM_BOSSSKILL result;
+
+	float hp = static_cast<Monster*>(m_pOwner)->GetStatus()->m_Guage;
+	
+	if (hp > 70.f) // first phase 
+	{
+		/*
+		BOSSSKILL_BREATH,
+		BOSSSKILL_DOWNSTROKE 중 하나
+		*/
+		result = ENUM_BOSSSKILL(rand() % 2); // 0 혹은 1
+	}
+	else if (hp > 30.f)  // second phase
+	{
+		/*
+		BOSSSKILL_BREATH,
+		BOSSSKILL_DOWNSTROKE  
+		BOSSSKILL_TAILATTACK
+		*/
+		result = ENUM_BOSSSKILL(rand() % 3); // 0 혹은 1 
+	}
+	else  // last phase
+	{ 
+		/*
+		BOSSSKILL_BREATH,
+		BOSSSKILL_DOWNSTROKE 
+		BOSSSKILL_TAILATTACK
+		BOSSSKILL_RUSH
+		*/
+		result = ENUM_BOSSSKILL(rand() % 4); // 0 혹은 1
+	}
+
+	return result;
+}
+
+float BossChaseAction::GetDistance(ENUM_BOSSSKILL skill)
+{
+	float distance = 0.f;
+
+	switch (skill)
+	{
+	case BOSSSKILL_NONE:
+		break;
+	case BOSSSKILL_BREATH:
+		distance = m_fBreathDistance;
+		break;
+	case BOSSSKILL_DOWNSTROKE:
+		distance = m_fDownStrokeDistance;
+		break;
+	case BOSSSKILL_TAILATTACK:
+		distance = m_fTailAttackDistance;
+		break;
+	case BOSSSKILL_RUSH:
+		distance = m_fRushDistance;
+		break;
+	default:
+		break;
+	}
+
+	return 0.0f;
+}
+
 bool BossChaseAction::UpdateFirstPhase(float fElpasedTime, BossMonsterActionMgr * actionMgr)
 {
 	float hp = static_cast<Monster*>(m_pOwner)->GetStatus()->m_Guage;
@@ -21,13 +86,17 @@ bool BossChaseAction::UpdateFirstPhase(float fElpasedTime, BossMonsterActionMgr 
 	int val = rand() % 2;
 	Player* player = PlayerManager::GetMainPlayer();
 
+	(actionMgr)->ChangeBossStateToRush(); // 거리 700정도가 그럴듯해보일듯
+
+	// 테스트 위해 주석처리
+/*
 	if (val == 0)
 	{
 		(actionMgr)->ChangeBossStateToBreth();
 
 		if (static_cast<Monster*>(m_pOwner)->GetisAttacking())
 		{
-			if (Collision::isCollide(player->GetBOBox()->GetBOBox(), static_cast<Monster*>(m_pOwner)->GetBOBox()->GetBOBox()))
+			if (Collision::isCollide(player->GetBOBox(), static_cast<Monster*>(m_pOwner)->GetBOBox()))
 			{
 				player->SubstractHP(5);
 			}
@@ -39,12 +108,12 @@ bool BossChaseAction::UpdateFirstPhase(float fElpasedTime, BossMonsterActionMgr 
 
 		if (static_cast<Monster*>(m_pOwner)->GetisAttacking())
 		{
-			if (Collision::isCollide(player->GetBOBox()->GetBOBox(), static_cast<Monster*>(m_pOwner)->GetBOBox()->GetBOBox()))
+			if (Collision::isCollide(player->GetBOBox(), static_cast<Monster*>(m_pOwner)->GetBOBox()))
 			{
 				player->SubstractHP(10);
 			}
 		}
-	}
+	}*/
 
 	return true;
 }
@@ -65,7 +134,7 @@ bool BossChaseAction::UpdateSecondPhase(float fElpasedTime, BossMonsterActionMgr
 
 		if (static_cast<Monster*>(m_pOwner)->GetisAttacking())
 		{
-			if (Collision::isCollide(player->GetBOBox()->GetBOBox(), static_cast<Monster*>(m_pOwner)->GetBOBox()->GetBOBox()))
+			if (Collision::isCollide(player->GetBOBox(), static_cast<Monster*>(m_pOwner)->GetBOBox()))
 			{
 				player->SubstractHP(5);
 			}
@@ -77,7 +146,7 @@ bool BossChaseAction::UpdateSecondPhase(float fElpasedTime, BossMonsterActionMgr
 
 		if (static_cast<Monster*>(m_pOwner)->GetisAttacking())
 		{
-			if (Collision::isCollide(player->GetBOBox()->GetBOBox(), static_cast<Monster*>(m_pOwner)->GetBOBox()->GetBOBox()))
+			if (Collision::isCollide(player->GetBOBox(), static_cast<Monster*>(m_pOwner)->GetBOBox()))
 			{
 				player->SubstractHP(10);
 			}
@@ -89,7 +158,7 @@ bool BossChaseAction::UpdateSecondPhase(float fElpasedTime, BossMonsterActionMgr
 
 		if (static_cast<Monster*>(m_pOwner)->GetisAttacking())
 		{
-			if (Collision::isCollide(player->GetBOBox()->GetBOBox(), static_cast<Monster*>(m_pOwner)->GetBOBox()->GetBOBox()))
+			if (Collision::isCollide(player->GetBOBox(), static_cast<Monster*>(m_pOwner)->GetBOBox()))
 			{
 				player->SubstractHP(15);
 			}
@@ -110,7 +179,7 @@ bool BossChaseAction::UpdateLastPhase(float fElpasedTime, BossMonsterActionMgr *
 
 		if (static_cast<Monster*>(m_pOwner)->GetisAttacking())
 		{
-			if (Collision::isCollide(player->GetBOBox()->GetBOBox(), static_cast<Monster*>(m_pOwner)->GetBOBox()->GetBOBox()))
+			if (Collision::isCollide(player->GetBOBox(), static_cast<Monster*>(m_pOwner)->GetBOBox()))
 			{
 				player->SubstractHP(5);
 			}
@@ -122,7 +191,7 @@ bool BossChaseAction::UpdateLastPhase(float fElpasedTime, BossMonsterActionMgr *
 
 		if (static_cast<Monster*>(m_pOwner)->GetisAttacking())
 		{
-			if (Collision::isCollide(player->GetBOBox()->GetBOBox(), static_cast<Monster*>(m_pOwner)->GetBOBox()->GetBOBox()))
+			if (Collision::isCollide(player->GetBOBox(), static_cast<Monster*>(m_pOwner)->GetBOBox()))
 			{
 				player->SubstractHP(5);
 			}
@@ -134,7 +203,7 @@ bool BossChaseAction::UpdateLastPhase(float fElpasedTime, BossMonsterActionMgr *
 
 		if (static_cast<Monster*>(m_pOwner)->GetisAttacking())
 		{
-			if (Collision::isCollide(player->GetBOBox()->GetBOBox(), static_cast<Monster*>(m_pOwner)->GetBOBox()->GetBOBox()))
+			if (Collision::isCollide(player->GetBOBox(), static_cast<Monster*>(m_pOwner)->GetBOBox()))
 			{
 				player->SubstractHP(15);
 			}
@@ -146,12 +215,14 @@ bool BossChaseAction::UpdateLastPhase(float fElpasedTime, BossMonsterActionMgr *
 
 		if (static_cast<Monster*>(m_pOwner)->GetisAttacking())
 		{
-			if (Collision::isCollide(player->GetBOBox()->GetBOBox(), static_cast<Monster*>(m_pOwner)->GetBOBox()->GetBOBox()))
+			if (Collision::isCollide(player->GetBOBox(), static_cast<Monster*>(m_pOwner)->GetBOBox()))
 			{
 				player->SubstractHP(20);
 			}
 		}
 	} 
+
+	return true;
 }
 
 void BossChaseAction::UpdateVelocity(float fElpasedTime, MonsterMovement * movement)
@@ -181,9 +252,13 @@ void BossChaseAction::UpdateState(float fElpasedTime, BossMonsterActionMgr * act
 	{
 		(actionMgr)->ChangeBossStateToIdle(); 
 	}
-	 
-	// 만약 플레이어와 일정 거리 이하면 상태를 전환하지 않습니다.
-	if (!PlayerManager::IsNearPlayer(m_pOwner->GetTransform().GetPosition(), 150)) return;
+	  
+	ENUM_BOSSSKILL skill = GetRandomSkill();
+	GetDistance(skill);
+	// 플레이어 스킬에 따른 이동 거리를 가져옵니다. 
+	// 만약 플레이어와 해당 거리 이하면 상태를 전환하지 않습니다.
+	if (!PlayerManager::IsNearPlayer(m_pOwner->GetTransform().GetPosition(), 1500)) return;
+
 
 	bool isFirst = UpdateFirstPhase(fElpasedTime, actionMgr);
 	if (isFirst) return;

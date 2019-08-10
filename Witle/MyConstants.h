@@ -7,6 +7,15 @@
 
 
 //// Enum Type ////////////////////////////////////
+enum ENUM_BOSSSKILL
+{
+	BOSSSKILL_NONE = -1,
+	BOSSSKILL_BREATH,
+	BOSSSKILL_DOWNSTROKE,
+	BOSSSKILL_TAILATTACK,
+	BOSSSKILL_RUSH
+};
+
 enum ENUM_EFFECT
 {
 	EFFECT_NONE = -1,
