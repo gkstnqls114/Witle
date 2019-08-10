@@ -5,6 +5,8 @@
 #include "GameTimer.h" 
 #include "GameScreen.h"
 // GameBase //////////////
+
+#include "SoundManager.h"
  
 #include "Camera.h"
 #include "Collision.h"
@@ -280,6 +282,8 @@ void Player::SetAnimationState(int state)
 
 void Player::Update(float fElapsedTime)
 {  
+	SoundManager::GetInstance()->UpdateListenerPos(this);
+
 	m_Broom->Update(fElapsedTime);
 
 	// 이동량을 계산한다. 
