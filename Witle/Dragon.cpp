@@ -134,6 +134,12 @@ Dragon::~Dragon()
 {
 }
 
+void Dragon::SubstractHP(int sub)
+{
+	// hit 애니메이션 없음
+	m_MonsterHPStatus->m_Guage -= sub; 
+}
+
 void Dragon::Rotate(float x, float y, float z)
 {
 	Monster::Rotate(x, y, z);

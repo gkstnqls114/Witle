@@ -97,7 +97,7 @@ public:
 	BoundingOrientedBox CalculateAlreadyBoundingBox(float fTimeElapsed);
 	XMFLOAT3 CalculateAlreadyPosition(float fTimeElapsed);
 
-	void SubstractHP(int sub);
+	virtual void SubstractHP(int sub);
 	virtual void Animate(float fElapsedTime);
 
 	void RenderDebug(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers);

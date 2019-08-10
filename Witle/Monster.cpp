@@ -18,6 +18,7 @@
 #include "LineSphere.h"
 // DebugMesh /////////////////////
 
+#include "GeneralMonsterActionMgr.h"
 #include "CameraObject.h"
 #include "MainCameraMgr.h"
 #include "Texture.h"
@@ -203,9 +204,8 @@ void Monster::ReleaseMemberUploadBuffers()
 
 void Monster::SubstractHP(int sub)
 {
-	m_CurrAnimation = GetAnimationHitID();
-	m_pLoadObject->SetTrackAnimationSet(0, m_CurrAnimation);
-
+	static_cast<GeneralMonsterActionMgr*>(m_MonsterMovement->GetMonsterActionMgr())->ChangeStateToHit();
+ 
 	m_MonsterHPStatus->m_Guage -= sub; 
 }
 

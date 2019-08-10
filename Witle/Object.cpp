@@ -526,7 +526,11 @@ bool CAnimationController::IsTrackAnimationSetFinish(int nAnimationTrack, int nA
 			float fPos = m_pAnimationSets[0].m_ppAnimationSets[nAnimationSet]->m_fPosition;
 			float fEnd = m_pAnimationSets[0].m_ppAnimationSets[nAnimationSet]->m_fEndTime;
 			isEnd = fabsf(fPos - fEnd) < EPSILON;
-			if (isEnd) Accumulate = 0.f;
+			if (isEnd)
+			{
+				m_pAnimationSets[0].m_ppAnimationSets[nAnimationSet]->m_fPosition = m_pAnimationSets[0].m_ppAnimationSets[nAnimationSet]->m_fStartTime;
+				Accumulate = 0.f;
+			}
 		}
 
 		return isEnd;

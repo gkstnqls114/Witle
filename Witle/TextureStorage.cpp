@@ -97,6 +97,10 @@ void TextureStorage::CreateTextures(ID3D12Device * pd3dDevice, ID3D12GraphicsCom
 
 	// 기본 이미지들
 	CreateImageTexture(IMAGE_MONSTERATTACKHIT_SPRRITE, pd3dDevice, pd3dCommandList);
+	CreateImageTexture(IMAGE_FIREBALLHIT_SPRRITE, pd3dDevice, pd3dCommandList);
+	CreateImageTexture(IMAGE_ICEBALLHIT_SPRRITE, pd3dDevice, pd3dCommandList);
+	CreateImageTexture(IMAGE_LIGHTNINGBALLHIT_SPRRITE, pd3dDevice, pd3dCommandList);
+	CreateImageTexture(IMAGE_NORMAL_SPRRITE, pd3dDevice, pd3dCommandList);
 	CreateImageTexture(IMAGE_RED, pd3dDevice, pd3dCommandList);
 
 }
