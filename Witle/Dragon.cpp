@@ -142,3 +142,15 @@ void Dragon::Animate(float fElapsedTime)
 	m_pMyBOBox->Rotate(0.f, m_MonsterMovement->m_fPitch, 0.f);
 	m_pMyBOBox->SetPosition(result_pos);
 }
+
+void Dragon::IsStone()
+{
+	m_isStone = true;
+	static_cast<BossMonsterActionMgr*>(m_MonsterMovement->GetMonsterActionMgr())->ChangeBossStateToStone();
+}
+
+void Dragon::IsNotStone()
+{
+	m_isStone = false;
+	static_cast<BossMonsterActionMgr*>(m_MonsterMovement->GetMonsterActionMgr())->ChangeBossStateToIdle();
+}

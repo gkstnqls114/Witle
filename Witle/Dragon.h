@@ -28,6 +28,6 @@ public:
 	virtual void Animate(float fElapsedTime) override;
 
 	bool GetisStone() const { return m_isStone; }
-	void IsStone() { m_isStone = true; }
-	void IsNotStone() { m_isStone = false; }
+	void IsStone();
+	void IsNotStone();
 };

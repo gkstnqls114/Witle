@@ -299,9 +299,7 @@ bool GameScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM w
 			}
 			break;
 
-		case '3': // 스킬 광역 공격
-			// m_WideareaMagic->DoUse(); 
-			// m_WideareaMagic->SetPosition(m_pPlayer->GetTransform().GetPosition());
+		case '3': // 스킬 광역 공격 
 			break;
 
 		case VK_SPACE:
