@@ -1063,7 +1063,7 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 		}
 	}
 
-	// m_Dragon->Render(pd3dCommandList, isGBuffers);
+	m_Dragon->Render(pd3dCommandList, isGBuffers);
 	
 	for (int i = 0; i < m_TestMonsterCount; ++i)
 	{

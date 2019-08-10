@@ -322,12 +322,6 @@
     <Filter Include="04.Scene\SkillSelectScene">
       <UniqueIdentifier>{1d5afc8a-7dbd-4c15-af85-892cdf1338ec}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.Component\ForMonster\BossMonsterAction\BossIdleAction">
-      <UniqueIdentifier>{a90053a0-522f-4be7-b32e-01fa81133963}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.Component\ForMonster\BossMonsterAction\BossMoveAction">
-      <UniqueIdentifier>{686066ca-ff4f-4e03-8dc3-652a5e794e74}</UniqueIdentifier>
-    </Filter>
     <Filter Include="03.GameObject\06.SkillEffect\BallEffect">
       <UniqueIdentifier>{3aed64bc-49ae-4db7-a73a-2f6ad948697e}</UniqueIdentifier>
     </Filter>
@@ -463,9 +457,6 @@
     <Filter Include="05.Shader\01.ComputeShader\DownScaleSecondPassShader">
       <UniqueIdentifier>{1105c8d9-d374-48ab-ab6b-e19051a8f988}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.Component\ForMonster\BossMonsterAction\BossChaseAction">
-      <UniqueIdentifier>{63ad1399-2d7f-4f2f-aae3-4ed5db475841}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.Component\ForMonster\BossMonsterAction\BossSkillAction4">
       <UniqueIdentifier>{862d0e47-01df-45d9-b57f-2f8e60cecb4d}</UniqueIdentifier>
     </Filter>
@@ -517,17 +508,35 @@
     <Filter Include="13.Storage/Manager\14.HitEffectMgr">
       <UniqueIdentifier>{50028e9e-0ba9-485a-b233-e05a4f46f278}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.Component\ForMonster\BossMonsterAction\BossSkillBreath">
+    <Filter Include="02.Component\ForMonster\BossMonsterAction\01.BossIdleAction">
+      <UniqueIdentifier>{a90053a0-522f-4be7-b32e-01fa81133963}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\ForMonster\BossMonsterAction\02.BossMoveAction">
+      <UniqueIdentifier>{686066ca-ff4f-4e03-8dc3-652a5e794e74}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\ForMonster\BossMonsterAction\03.BossChaseAction">
+      <UniqueIdentifier>{63ad1399-2d7f-4f2f-aae3-4ed5db475841}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\ForMonster\BossMonsterAction\04.BossSkillBreath">
       <UniqueIdentifier>{0911d8a6-6344-474c-80a0-259348c22573}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.Component\ForMonster\BossMonsterAction\BossSkillDownStroke">
-      <UniqueIdentifier>{3b92d029-5876-47a6-97c0-de431aef144d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.Component\ForMonster\BossMonsterAction\BossSkillTailAttack">
+    <Filter Include="02.Component\ForMonster\BossMonsterAction\06.BossSkillTailAttack">
       <UniqueIdentifier>{3235d4ae-c9c9-4bee-8b7d-de77195efd9e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.Component\ForMonster\BossMonsterAction\BossSkillRush">
+    <Filter Include="02.Component\ForMonster\BossMonsterAction\07.BossSkillRush">
       <UniqueIdentifier>{f7193322-ee24-4ff1-a2a4-8af43ec909c5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\ForMonster\BossMonsterAction\05.BossSkillDownStroke">
+      <UniqueIdentifier>{3b92d029-5876-47a6-97c0-de431aef144d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\ForMonster\BossMonsterAction\08.BossBuf">
+      <UniqueIdentifier>{9276051e-f9e9-443e-951f-20cd982df636}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\ForMonster\BossMonsterAction\09.BossDead">
+      <UniqueIdentifier>{7d9e85e7-c3d6-4a84-b16f-5426b0537aca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\ForMonster\BossMonsterAction\10.BossStone">
+      <UniqueIdentifier>{ecf33ea0-3ad4-46ff-9387-fde92774b909}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -955,10 +964,10 @@
       <Filter>05.Shader\02.GraphicsShader\SkillIconShader</Filter>
     </ClInclude>
     <ClInclude Include="BossIdleAction.h">
-      <Filter>02.Component\ForMonster\BossMonsterAction\BossIdleAction</Filter>
+      <Filter>02.Component\ForMonster\BossMonsterAction\01.BossIdleAction</Filter>
     </ClInclude>
     <ClInclude Include="BossMoveAction.h">
-      <Filter>02.Component\ForMonster\BossMonsterAction\BossMoveAction</Filter>
+      <Filter>02.Component\ForMonster\BossMonsterAction\02.BossMoveAction</Filter>
     </ClInclude>
     <ClInclude Include="BallEffect.h">
       <Filter>03.GameObject\06.SkillEffect\BallEffect</Filter>
@@ -1021,7 +1030,7 @@
       <Filter>05.Shader\01.ComputeShader\DownScaleSecondPassShader</Filter>
     </ClInclude>
     <ClInclude Include="BossChaseAction.h">
-      <Filter>02.Component\ForMonster\BossMonsterAction\BossChaseAction</Filter>
+      <Filter>02.Component\ForMonster\BossMonsterAction\03.BossChaseAction</Filter>
     </ClInclude>
     <ClInclude Include="BloomRevealShader.h">
       <Filter>05.Shader\01.ComputeShader\BloomRevealShader</Filter>
@@ -1069,16 +1078,25 @@
       <Filter>13.Storage/Manager\14.HitEffectMgr</Filter>
     </ClInclude>
     <ClInclude Include="BossSkillBreath.h">
-      <Filter>02.Component\ForMonster\BossMonsterAction\BossSkillBreath</Filter>
+      <Filter>02.Component\ForMonster\BossMonsterAction\04.BossSkillBreath</Filter>
     </ClInclude>
     <ClInclude Include="BossSkillDownStroke.h">
-      <Filter>02.Component\ForMonster\BossMonsterAction\BossSkillDownStroke</Filter>
+      <Filter>02.Component\ForMonster\BossMonsterAction\05.BossSkillDownStroke</Filter>
     </ClInclude>
     <ClInclude Include="BossSkillTailAttack.h">
-      <Filter>02.Component\ForMonster\BossMonsterAction\BossSkillTailAttack</Filter>
+      <Filter>02.Component\ForMonster\BossMonsterAction\06.BossSkillTailAttack</Filter>
     </ClInclude>
     <ClInclude Include="BossSkillRush.h">
-      <Filter>02.Component\ForMonster\BossMonsterAction\BossSkillRush</Filter>
+      <Filter>02.Component\ForMonster\BossMonsterAction\07.BossSkillRush</Filter>
+    </ClInclude>
+    <ClInclude Include="BossStone.h">
+      <Filter>02.Component\ForMonster\BossMonsterAction\10.BossStone</Filter>
+    </ClInclude>
+    <ClInclude Include="BossDead.h">
+      <Filter>02.Component\ForMonster\BossMonsterAction\09.BossDead</Filter>
+    </ClInclude>
+    <ClInclude Include="BossBuf.h">
+      <Filter>02.Component\ForMonster\BossMonsterAction\08.BossBuf</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1446,10 +1464,10 @@
       <Filter>03.GameObject\02.Monster\Dragon</Filter>
     </ClCompile>
     <ClCompile Include="BossIdleAction.cpp">
-      <Filter>02.Component\ForMonster\BossMonsterAction\BossIdleAction</Filter>
+      <Filter>02.Component\ForMonster\BossMonsterAction\01.BossIdleAction</Filter>
     </ClCompile>
     <ClCompile Include="BossMoveAction.cpp">
-      <Filter>02.Component\ForMonster\BossMonsterAction\BossMoveAction</Filter>
+      <Filter>02.Component\ForMonster\BossMonsterAction\02.BossMoveAction</Filter>
     </ClCompile>
     <ClCompile Include="SkillEffect.cpp">
       <Filter>03.GameObject\06.SkillEffect</Filter>
@@ -1548,7 +1566,7 @@
       <Filter>05.Shader\01.ComputeShader\DownScaleSecondPassShader</Filter>
     </ClCompile>
     <ClCompile Include="BossChaseAction.cpp">
-      <Filter>02.Component\ForMonster\BossMonsterAction\BossChaseAction</Filter>
+      <Filter>02.Component\ForMonster\BossMonsterAction\03.BossChaseAction</Filter>
     </ClCompile>
     <ClCompile Include="BloomRevealShader.cpp">
       <Filter>05.Shader\01.ComputeShader\BloomRevealShader</Filter>
@@ -1599,16 +1617,25 @@
       <Filter>13.Storage/Manager\14.HitEffectMgr</Filter>
     </ClCompile>
     <ClCompile Include="BossSkillBreath.cpp">
-      <Filter>02.Component\ForMonster\BossMonsterAction\BossSkillBreath</Filter>
+      <Filter>02.Component\ForMonster\BossMonsterAction\04.BossSkillBreath</Filter>
     </ClCompile>
     <ClCompile Include="BossSkillDownStroke.cpp">
-      <Filter>02.Component\ForMonster\BossMonsterAction\BossSkillDownStroke</Filter>
+      <Filter>02.Component\ForMonster\BossMonsterAction\05.BossSkillDownStroke</Filter>
     </ClCompile>
     <ClCompile Include="BossSkillTailAttack.cpp">
-      <Filter>02.Component\ForMonster\BossMonsterAction\BossSkillTailAttack</Filter>
+      <Filter>02.Component\ForMonster\BossMonsterAction\06.BossSkillTailAttack</Filter>
     </ClCompile>
     <ClCompile Include="BossSkillRush.cpp">
-      <Filter>02.Component\ForMonster\BossMonsterAction\BossSkillRush</Filter>
+      <Filter>02.Component\ForMonster\BossMonsterAction\07.BossSkillRush</Filter>
+    </ClCompile>
+    <ClCompile Include="BossStone.cpp">
+      <Filter>02.Component\ForMonster\BossMonsterAction\10.BossStone</Filter>
+    </ClCompile>
+    <ClCompile Include="BossDead.cpp">
+      <Filter>02.Component\ForMonster\BossMonsterAction\09.BossDead</Filter>
+    </ClCompile>
+    <ClCompile Include="BossBuf.cpp">
+      <Filter>02.Component\ForMonster\BossMonsterAction\08.BossBuf</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
