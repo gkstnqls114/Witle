@@ -101,14 +101,7 @@ Monster::~Monster()
 
 void Monster::Render(ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffers)
 {
-#ifdef _DEBUG
-	if (RENDER_DEBUG)
-	{
-		m_pMyBOBox->Render(pd3dCommandList);
-		m_pDebugSpawnMesh->Render(pd3dCommandList, isGBuffers);
-		m_RecognitionRange->RenderDebug(pd3dCommandList);
-	}
-#endif // _DEBUG
+	RenderDebug(pd3dCommandList, isGBuffers);
 
 	m_pTexture->UpdateShaderVariable(pd3dCommandList, 0);
 	m_pLoadObject->Render(pd3dCommandList, isGBuffers);
@@ -228,6 +221,18 @@ void Monster::Animate(float fElapsedTime)
 	m_pLoadObject->m_xmf4x4ToParent = m_Transform.GetWorldMatrix();
 
 	m_pLoadObject->Animate(fElapsedTime);
+}
+
+void Monster::RenderDebug(ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffers)
+{
+#ifdef _DEBUG
+	if (RENDER_DEBUG)
+	{
+		m_pMyBOBox->Render(pd3dCommandList);
+		m_pDebugSpawnMesh->Render(pd3dCommandList, isGBuffers);
+		m_RecognitionRange->RenderDebug(pd3dCommandList);
+	}
+#endif // _DEBUG 
 }
 
 void Monster::RenderHpStatus(ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffers)

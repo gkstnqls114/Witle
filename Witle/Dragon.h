@@ -3,8 +3,13 @@
 class Dragon
 	: public Monster
 {
+public:
+	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers) override;
+	bool m_isStone{ true };
+
 private:
 	LoadObject* m_BOBoxFrame;
+	Texture* m_pStoneTexture{ nullptr };
 
 protected:
 	virtual void ReleaseMembers() override;
@@ -22,4 +27,7 @@ public:
 
 	virtual void Animate(float fElapsedTime) override;
 
+	bool GetisStone() const { return m_isStone; }
+	void IsStone() { m_isStone = true; }
+	void IsNotStone() { m_isStone = false; }
 };

@@ -338,6 +338,7 @@ bool GameScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM w
 			for (int x = 0; x < 5; ++x)
 			{
 				m_AltarSphere[x]->SetisActive(true);
+				m_Dragon->IsNotStone();
 			}
 			break;
 

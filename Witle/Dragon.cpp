@@ -16,6 +16,24 @@
 #include "Dragon.h"
 
 
+void Dragon::Render(ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffers)
+{ 
+	RenderDebug(pd3dCommandList, isGBuffers);
+
+	if (m_isStone)
+	{
+		m_pStoneTexture->UpdateShaderVariable(pd3dCommandList, 0); 
+	}
+	else
+	{
+		m_pTexture->UpdateShaderVariable(pd3dCommandList, 0);
+	}
+
+	m_pLoadObject->Render(pd3dCommandList, isGBuffers);
+
+	RenderHpStatus(pd3dCommandList, isGBuffers);
+}
+
 void Dragon::ReleaseMembers()
 {
 	Monster::ReleaseMembers();
@@ -37,8 +55,7 @@ void Dragon::ReleaseMemberUploadBuffers()
 Dragon::Dragon(const std::string & entityID, const XMFLOAT3& SpawnPoint,
 	ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature)
 	: Monster(entityID, 100.f, SpawnPoint, pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, 0.f ,400.f)
-{
-
+{ 
 	m_RecognitionRange = new RecognitionRange(this, 2000.f, 2.f);
 	m_RecognitionRange->CreateDebugMesh(pd3dDevice, pd3dCommandList);
 
@@ -46,9 +63,11 @@ Dragon::Dragon(const std::string & entityID, const XMFLOAT3& SpawnPoint,
 	m_MonsterMovement->m_fDistance = 100;
 	 
 	m_pTexture = new Texture(ENUM_SCENE::SCENE_GAME, ROOTPARAMETER_INDEX(ROOTPARAMETER_TEXTURE), false, 1, RESOURCE_TEXTURE2D);
-
-	m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/Dragon.dds", 0);
+	m_pStoneTexture = new Texture(ENUM_SCENE::SCENE_GAME, ROOTPARAMETER_INDEX(ROOTPARAMETER_TEXTURE), false, 1, RESOURCE_TEXTURE2D);
 	 
+	m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/Dragon.dds", 0);
+	m_pStoneTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/Dragon.dds", 0);
+
 	ANIMATION_INFO infos[BOSSMONSTER_ANIMATIONE];
 	infos[0] = BOSS_IDLE;
 	infos[1] = BOSS_MOVE;
@@ -77,14 +96,7 @@ Dragon::Dragon(const std::string & entityID, const XMFLOAT3& SpawnPoint,
 	XMFLOAT3 extents{ 150.f, 100.f, 230.f };
 	m_pMyBOBox = new MyBOBox(this, pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 0.F, 0.F }, extents);
 
-	if (rand() % 2)
-	{
-		static_cast<BossMonsterActionMgr*>(m_MonsterMovement->GetMonsterActionMgr())->ChangeBossStateToMove();
-	}
-	else
-	{
-		static_cast<BossMonsterActionMgr*>(m_MonsterMovement->GetMonsterActionMgr())->ChangeBossStateToIdle();
-	}
+	static_cast<BossMonsterActionMgr*>(m_MonsterMovement->GetMonsterActionMgr())->ChangeBossStateToStone();
 }
 
 Dragon::~Dragon()
@@ -93,6 +105,8 @@ Dragon::~Dragon()
 
 void Dragon::Update(float fElapsedTime)
 { 
+	if (m_isStone) return;
+
 	Monster::Update(fElapsedTime);
 
 	// 이동량을 계산한다. 
@@ -107,6 +121,8 @@ void Dragon::Update(float fElapsedTime)
 
 void Dragon::UpdateState(float fElapsedTime)
 {
+	if (m_isStone) return;
+
 	m_MonsterMovement->UpdateState(fElapsedTime);
 
 	m_MonsterMovement->UpdateVelocity(fElapsedTime); // State 상태에 따라 Velocity를 갱신(Set)한다.

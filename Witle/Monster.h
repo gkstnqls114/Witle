@@ -100,6 +100,8 @@ public:
 	void SubstractHP(int sub);
 	virtual void Animate(float fElapsedTime);
 
+	void RenderDebug(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers);
+
 	void Move(ULONG nDirection, float fDistance, bool bVelocity = false);
 	void Move(const XMFLOAT3& xmf3Shift);
 	void MoveVelocity(const XMFLOAT3& xmf3Shift);
