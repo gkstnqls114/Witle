@@ -57,16 +57,9 @@ Dragon::Dragon(const std::string & entityID, const XMFLOAT3& SpawnPoint,
 	infos[4] = BOSS_DOWNSTORK;
 	infos[5] = BOSS_TAILATTACK;
 	infos[6] = BOSS_RUSH;
-	infos[7] = BOSS_SKILL4;
-
-	infos[8] = BOSS_SKILL5;
-	infos[9] = BOSS_SKILL6;
-	infos[10] = BOSS_SKILL7;
-	infos[11] = BOSS_SKILL8;
-	infos[12] = BOSS_SKILL9;
-
-	infos[13] = BOSS_DEAD;
-	infos[14] = BOSS_HIT;
+	infos[7] = BOSS_BUF;
+	infos[8] = BOSS_DEAD;
+	infos[9] = BOSS_STONE;
 
 	m_MonsterModel = LoadObject::LoadGeometryAndAnimationFromFile_forMonster(
 		pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/Dragon.bin", NULL,

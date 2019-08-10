@@ -185,7 +185,6 @@
     <ClInclude Include="BossSkillDownStroke.h" />
     <ClInclude Include="BossSkillTailAttack.h" />
     <ClInclude Include="BossSkillRush.h" />
-    <ClInclude Include="BossSkillAction4.h" />
     <ClInclude Include="Broom.h" />
     <ClInclude Include="AttackAction.h" />
     <ClInclude Include="CreepyMonster.h" />
@@ -372,7 +371,6 @@
     <ClCompile Include="BossSkillDownStroke.cpp" />
     <ClCompile Include="BossSkillTailAttack.cpp" />
     <ClCompile Include="BossSkillRush.cpp" />
-    <ClCompile Include="BossSkillAction4.cpp" />
     <ClCompile Include="Broom.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="CameraObject.cpp" />

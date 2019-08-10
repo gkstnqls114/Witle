@@ -469,9 +469,6 @@
     <Filter Include="02.Component\ForMonster\BossMonsterAction\BossSkillAction4">
       <UniqueIdentifier>{862d0e47-01df-45d9-b57f-2f8e60cecb4d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.Component\ForMonster\BossMonsterAction\BossSkillAction4">
-      <UniqueIdentifier>{862d0e47-01df-45d9-b57f-2f8e60cecb4d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="05.Shader\01.ComputeShader\BloomRevealShader">
       <UniqueIdentifier>{e99d1fda-e0de-4f94-9850-57e70a3ddea0}</UniqueIdentifier>
     </Filter>
@@ -1026,9 +1023,6 @@
     <ClInclude Include="BossChaseAction.h">
       <Filter>02.Component\ForMonster\BossMonsterAction\BossChaseAction</Filter>
     </ClInclude>
-    <ClInclude Include="BossSkillAction4.h">
-      <Filter>02.Component\ForMonster\BossMonsterAction\BossSkillAction4</Filter>
-    </ClInclude>
     <ClInclude Include="BloomRevealShader.h">
       <Filter>05.Shader\01.ComputeShader\BloomRevealShader</Filter>
     </ClInclude>
@@ -1555,9 +1549,6 @@
     </ClCompile>
     <ClCompile Include="BossChaseAction.cpp">
       <Filter>02.Component\ForMonster\BossMonsterAction\BossChaseAction</Filter>
-    </ClCompile>
-    <ClCompile Include="BossSkillAction4.cpp">
-      <Filter>02.Component\ForMonster\BossMonsterAction\BossSkillAction4</Filter>
     </ClCompile>
     <ClCompile Include="BloomRevealShader.cpp">
       <Filter>05.Shader\01.ComputeShader\BloomRevealShader</Filter>

@@ -96,7 +96,7 @@ void BossChaseAction::UpdateState(float fElpasedTime, BossMonsterActionMgr * act
 			}
 			else if (val == 2)
 			{
-				(actionMgr)->ChangeBossStateToAction2();
+				(actionMgr)->ChangeBossStateToTailAttack();
 
 				if (static_cast<Monster*>(m_pOwner)->GetisAttacking())
 				{
@@ -136,7 +136,7 @@ void BossChaseAction::UpdateState(float fElpasedTime, BossMonsterActionMgr * act
 			}
 			else if (val == 2)
 			{
-				(actionMgr)->ChangeBossStateToAction2();
+				(actionMgr)->ChangeBossStateToTailAttack();
 
 				if (static_cast<Monster*>(m_pOwner)->GetisAttacking())
 				{
@@ -148,7 +148,7 @@ void BossChaseAction::UpdateState(float fElpasedTime, BossMonsterActionMgr * act
 			}
 			else if (val == 3)
 			{
-				(actionMgr)->ChangeBossStateToAction3();
+				(actionMgr)->ChangeBossStateToRush();
 
 				if (static_cast<Monster*>(m_pOwner)->GetisAttacking())
 				{
