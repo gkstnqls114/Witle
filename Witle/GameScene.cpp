@@ -41,6 +41,8 @@
 #include "Dragon.h"
 #include "CreepyMonster.h"
 #include "MonsterStatus.h"
+#include "MonsterMovement.h"
+#include "BossMonsterActionMgr.h"
 //// 몬스터 관련 헤더 //////////////////////////
 
 //// 플레이어 관련 헤더 //////////////////////////
@@ -960,9 +962,28 @@ void GameScene::LastUpdate(float fElapsedTime)
 	}
 
 	// 보스와 플레이 부딪힘
-	if (Collision::isCollide(m_pPlayer->GetBOBox() , m_Dragon->GetBOBox()) && m_Dragon->GetisAttacking())
+	if (Collision::isCollide(m_pPlayer->GetBOBox() , m_Dragon->GetBOBox()) && m_Dragon->GetisAttacking()
+		&& !m_Dragon->GetisFinishAttack())
 	{
+		m_Dragon->FinishAttack();
+		BossMonsterActionMgr* actionmgr = static_cast<BossMonsterActionMgr*>(m_Dragon->GetMovement()->GetMonsterActionMgr());
 
+		if(actionmgr->Is_BossSkillBreath())
+		{
+			m_pPlayer->SubstractHP(5);
+		}
+		else if (actionmgr->Is_BossSkillDownStroke())
+		{ 
+			m_pPlayer->SubstractHP(5);
+		}
+		else if (actionmgr->Is_BossSkillTailAttack())
+		{
+			m_pPlayer->SubstractHP(15);
+		}
+		else if (actionmgr->Is_BossSkillRush())
+		{
+			m_pPlayer->SubstractHP(20); 
+		}
 	}
 	// 보스와 플레이 부딪힘
 

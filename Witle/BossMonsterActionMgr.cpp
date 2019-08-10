@@ -55,7 +55,7 @@ void BossMonsterActionMgr::ChangeBossStateBefore()
 	}
 	else if (m_CurrMonsterAction == &m_BossSkillBreath)
 	{
-		ChangeBossStateToBreth();
+		ChangeBossStateToBreath();
 	}
 	else if (m_CurrMonsterAction == &m_BossSkilldownstroke)
 	{
@@ -98,7 +98,7 @@ void BossMonsterActionMgr::ChangeBossStateToChase()
 	static_cast<Monster*>(m_pOwner)->SetisAttacking(false); 
 }
   
-void BossMonsterActionMgr::ChangeBossStateToBreth()
+void BossMonsterActionMgr::ChangeBossStateToBreath()
 {
 	ChangeAction(&m_BossSkillBreath);
 	m_CurrMonsterAction->Init();

@@ -20,12 +20,7 @@ private:
 	// 체력에 따라 스킬을 랜덤으로 가져옵니다.
 	ENUM_BOSSSKILL GetRandomSkill();
 	float GetDistance(ENUM_BOSSSKILL skill);
-
-	// 모두 업데이트가 완료된다면 return true를 합니다.
-	bool UpdateFirstPhase(float fElpasedTime, BossMonsterActionMgr* actionMgr);
-	bool UpdateSecondPhase(float fElpasedTime, BossMonsterActionMgr* actionMgr);
-	bool UpdateLastPhase(float fElpasedTime, BossMonsterActionMgr* actionMgr);
-
+ 
 public:
 	// Update 수행 이전 반드시 호출
 	virtual void UpdateVelocity(float fElpasedTime, MonsterMovement* movement) override;

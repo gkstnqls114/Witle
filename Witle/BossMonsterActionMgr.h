@@ -66,16 +66,16 @@ public:
 	bool Is_BossIdleAction() const { return (m_CurrMonsterAction == &m_BossIdleAction); } // 기본
 	bool Is_BossMoveAction() const { return (m_CurrMonsterAction == &m_BossMoveAction); } // 움직임
 	bool Is_BossChaseAction() const { return (m_CurrMonsterAction == &m_BossChaseAction); } // 추격
-	bool Is_BossSkillActionBreath() const { return (m_CurrMonsterAction == &m_BossSkillBreath); }// 브레스
-	bool Is_BossSkillActionDownStroke() const { return (m_CurrMonsterAction == &m_BossSkilldownstroke); }// 내려찍기
-	bool Is_BossSkillActionTailAttack() const { return (m_CurrMonsterAction == &m_BossSkIllTailAttack); }// 꼬리회전
-	bool Is_BossSkillActiondash() const { return (m_CurrMonsterAction == &m_BossSkIlldash); }// 돌진
+	bool Is_BossSkillBreath() const { return (m_CurrMonsterAction == &m_BossSkillBreath); }// 브레스
+	bool Is_BossSkillDownStroke() const { return (m_CurrMonsterAction == &m_BossSkilldownstroke); }// 내려찍기
+	bool Is_BossSkillTailAttack() const { return (m_CurrMonsterAction == &m_BossSkIllTailAttack); }// 꼬리회전
+	bool Is_BossSkillRush() const { return (m_CurrMonsterAction == &m_BossSkIlldash); }// 돌진
 	
 	void ChangeBossStateBefore();
 	void ChangeBossStateToIdle();
 	void ChangeBossStateToMove();
 	void ChangeBossStateToChase(); 
-	void ChangeBossStateToBreth();
+	void ChangeBossStateToBreath();
 	void ChangeBossStateToDownStroke();
 	void ChangeBossStateToTailAttack();
 	void ChangeBossStateToRush();

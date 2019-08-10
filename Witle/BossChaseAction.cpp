@@ -17,33 +17,40 @@ ENUM_BOSSSKILL BossChaseAction::GetRandomSkill()
 	ENUM_BOSSSKILL result;
 
 	float hp = static_cast<Monster*>(m_pOwner)->GetStatus()->m_Guage;
-	
+
+	std::random_device rd;
+	std::mt19937 mersenne(rd());
+	std::uniform_int_distribution<> die(2000, 15000);
+
 	if (hp > 70.f) // first phase 
 	{
+		std::uniform_int_distribution<> monstertype(3, 3);
 		/*
 		BOSSSKILL_BREATH,
 		BOSSSKILL_DOWNSTROKE 중 하나
 		*/
-		result = ENUM_BOSSSKILL(rand() % 2); // 0 혹은 1
+		result = ENUM_BOSSSKILL(monstertype(mersenne)); // 0 혹은 1
 	}
 	else if (hp > 30.f)  // second phase
 	{
+		std::uniform_int_distribution<> monstertype(0, 2);
 		/*
 		BOSSSKILL_BREATH,
 		BOSSSKILL_DOWNSTROKE  
 		BOSSSKILL_TAILATTACK
 		*/
-		result = ENUM_BOSSSKILL(rand() % 3); // 0 혹은 1 
+		result = ENUM_BOSSSKILL(monstertype(mersenne)); // 0 혹은 1 
 	}
 	else  // last phase
-	{ 
+	{
+		std::uniform_int_distribution<> monstertype(0, 3);
 		/*
 		BOSSSKILL_BREATH,
 		BOSSSKILL_DOWNSTROKE 
 		BOSSSKILL_TAILATTACK
 		BOSSSKILL_RUSH
 		*/
-		result = ENUM_BOSSSKILL(rand() % 4); // 0 혹은 1
+		result = ENUM_BOSSSKILL(monstertype(mersenne)); // 0 혹은 1
 	}
 
 	return result;
@@ -73,158 +80,9 @@ float BossChaseAction::GetDistance(ENUM_BOSSSKILL skill)
 		break;
 	}
 
-	return 0.0f;
+	return distance;
 }
-
-bool BossChaseAction::UpdateFirstPhase(float fElpasedTime, BossMonsterActionMgr * actionMgr)
-{
-	float hp = static_cast<Monster*>(m_pOwner)->GetStatus()->m_Guage;
-
-	// hp가 70이상인 경우에는 1 페이즈
-	if (!(hp > 70.f)) return false;
-
-	int val = rand() % 2;
-	Player* player = PlayerManager::GetMainPlayer();
-
-	(actionMgr)->ChangeBossStateToRush(); // 거리 700정도가 그럴듯해보일듯
-
-	// 테스트 위해 주석처리
-/*
-	if (val == 0)
-	{
-		(actionMgr)->ChangeBossStateToBreth();
-
-		if (static_cast<Monster*>(m_pOwner)->GetisAttacking())
-		{
-			if (Collision::isCollide(player->GetBOBox(), static_cast<Monster*>(m_pOwner)->GetBOBox()))
-			{
-				player->SubstractHP(5);
-			}
-		}
-	}
-	else if (val == 1)
-	{
-		(actionMgr)->ChangeBossStateToDownStroke();
-
-		if (static_cast<Monster*>(m_pOwner)->GetisAttacking())
-		{
-			if (Collision::isCollide(player->GetBOBox(), static_cast<Monster*>(m_pOwner)->GetBOBox()))
-			{
-				player->SubstractHP(10);
-			}
-		}
-	}*/
-
-	return true;
-}
-
-bool BossChaseAction::UpdateSecondPhase(float fElpasedTime, BossMonsterActionMgr * actionMgr)
-{
-	float hp = static_cast<Monster*>(m_pOwner)->GetStatus()->m_Guage;
-
-	// hp가 30이상인 경우에는 1 페이즈
-	if (!(hp > 30.f)) return false;
-
-	int val = rand() % 2;
-	Player* player = PlayerManager::GetMainPlayer();
-
-	if (val == 0)
-	{
-		(actionMgr)->ChangeBossStateToBreth();
-
-		if (static_cast<Monster*>(m_pOwner)->GetisAttacking())
-		{
-			if (Collision::isCollide(player->GetBOBox(), static_cast<Monster*>(m_pOwner)->GetBOBox()))
-			{
-				player->SubstractHP(5);
-			}
-		}
-	}
-	else if (val == 1)
-	{
-		(actionMgr)->ChangeBossStateToDownStroke();
-
-		if (static_cast<Monster*>(m_pOwner)->GetisAttacking())
-		{
-			if (Collision::isCollide(player->GetBOBox(), static_cast<Monster*>(m_pOwner)->GetBOBox()))
-			{
-				player->SubstractHP(10);
-			}
-		}
-	}
-	else if (val == 2)
-	{
-		(actionMgr)->ChangeBossStateToTailAttack();
-
-		if (static_cast<Monster*>(m_pOwner)->GetisAttacking())
-		{
-			if (Collision::isCollide(player->GetBOBox(), static_cast<Monster*>(m_pOwner)->GetBOBox()))
-			{
-				player->SubstractHP(15);
-			}
-		}
-	}
-
-	return true;
-}
-
-bool BossChaseAction::UpdateLastPhase(float fElpasedTime, BossMonsterActionMgr * actionMgr)
-{
-	int val = rand() % 4;
-	Player* player = PlayerManager::GetMainPlayer();
-
-	if (val == 0)
-	{
-		(actionMgr)->ChangeBossStateToBreth();
-
-		if (static_cast<Monster*>(m_pOwner)->GetisAttacking())
-		{
-			if (Collision::isCollide(player->GetBOBox(), static_cast<Monster*>(m_pOwner)->GetBOBox()))
-			{
-				player->SubstractHP(5);
-			}
-		}
-	}
-	else if (val == 1)
-	{
-		(actionMgr)->ChangeBossStateToDownStroke();
-
-		if (static_cast<Monster*>(m_pOwner)->GetisAttacking())
-		{
-			if (Collision::isCollide(player->GetBOBox(), static_cast<Monster*>(m_pOwner)->GetBOBox()))
-			{
-				player->SubstractHP(5);
-			}
-		}
-	}
-	else if (val == 2)
-	{
-		(actionMgr)->ChangeBossStateToTailAttack();
-
-		if (static_cast<Monster*>(m_pOwner)->GetisAttacking())
-		{
-			if (Collision::isCollide(player->GetBOBox(), static_cast<Monster*>(m_pOwner)->GetBOBox()))
-			{
-				player->SubstractHP(15);
-			}
-		}
-	}
-	else if (val == 3)
-	{
-		(actionMgr)->ChangeBossStateToRush();
-
-		if (static_cast<Monster*>(m_pOwner)->GetisAttacking())
-		{
-			if (Collision::isCollide(player->GetBOBox(), static_cast<Monster*>(m_pOwner)->GetBOBox()))
-			{
-				player->SubstractHP(20);
-			}
-		}
-	} 
-
-	return true;
-}
-
+ 
 void BossChaseAction::UpdateVelocity(float fElpasedTime, MonsterMovement * movement)
 {
 	XMFLOAT3 toPlayer = Vector3::Normalize(
@@ -258,11 +116,23 @@ void BossChaseAction::UpdateState(float fElpasedTime, BossMonsterActionMgr * act
 	// 만약 플레이어와 해당 거리 이하면 상태를 전환하지 않습니다.
 	if (!PlayerManager::IsNearPlayer(m_pOwner->GetTransform().GetPosition(), GetDistance(skill))) return;
 
-	bool isFirst = UpdateFirstPhase(fElpasedTime, actionMgr);
-	if (isFirst) return;
-
-	bool isSecond = UpdateSecondPhase(fElpasedTime, actionMgr);
-	if (isSecond) return;
-
-	UpdateLastPhase(fElpasedTime, actionMgr); 
+	switch (skill)
+	{
+	case BOSSSKILL_NONE:
+		break;
+	case BOSSSKILL_BREATH:
+		(actionMgr)->ChangeBossStateToBreath();
+		break;
+	case BOSSSKILL_DOWNSTROKE:
+		(actionMgr)->ChangeBossStateToDownStroke();
+		break;
+	case BOSSSKILL_TAILATTACK:
+		(actionMgr)->ChangeBossStateToTailAttack();
+		break;
+	case BOSSSKILL_RUSH: 
+		(actionMgr)->ChangeBossStateToRush();
+		break;
+	default:
+		break;
+	} 
 }

@@ -16,6 +16,7 @@ class CameraObject;
 class Terrain;
 class QuadtreeTerrain;
 class AltarSphere;
+class Dragon;
 //// Objects ///////////////
 
 //// Componenet ///////////////
@@ -154,7 +155,7 @@ public:
 	
 	SkyBox*					m_SkyBox{ nullptr };
 	  
-	Monster*				m_Dragon{ nullptr };
+	Dragon*				m_Dragon{ nullptr };
 
 	AltarSphere*			m_AltarSphere[5];
 	 
