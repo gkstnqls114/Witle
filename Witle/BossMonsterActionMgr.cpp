@@ -30,13 +30,11 @@ void BossMonsterActionMgr::ChangeBossStateBefore()
 
 	if (m_CurrMonsterAction == &m_BossIdleAction)
 	{
-		ChangeBossStateToIdle();
-		//SoundManager::GetInstance()->Stop(ENUM_SOUND::MUSHROOM_MOVE);
+		ChangeBossStateToIdle(); 
 	}
 	else if (m_CurrMonsterAction == &m_BossMoveAction)
 	{
-		ChangeBossStateToMove();
-		//SoundManager::GetInstance()->Play(ENUM_SOUND::MUSHROOM_MOVE);
+		ChangeBossStateToMove(); 
 	}
 	else if (m_CurrMonsterAction == &m_BossChaseAction)
 	{

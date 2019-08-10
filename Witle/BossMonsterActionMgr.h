@@ -69,6 +69,5 @@ public:
 	void ChangeBossStateToBreth();
 	void ChangeBossStateToDownStroke();
 	void ChangeBossStateToTailAttack();
-	void ChangeBossStateToRush();
-	void ChangeBossStateToAction4();
+	void ChangeBossStateToRush(); 
 };
