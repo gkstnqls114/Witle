@@ -186,6 +186,7 @@ private:
 	UI2DImage* m_UIAltar_4{ nullptr }; // uimap 에서 제단 위치
 	UI2DImage* m_UIAltar_5{ nullptr }; // uimap 에서 제단 위치
 	UI2DImage* m_UIPlayer{ nullptr };  // uimap 에서 플레이어 위치
+	UI2DImage* m_UIBossMonster{ nullptr };  // uimap 에서 플레이어 위치
 
 	UI2DImage* m_SampleUISkill1{ nullptr }; // 스킬 1
 	UI2DImage* m_SampleUISkill2{ nullptr }; // 스킬 2

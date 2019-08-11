@@ -577,7 +577,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 		m_TESTGameObject, ENUM_SCENE::SCENE_GAME, pd3dDevice, pd3dCommandList,
 		POINT{ int(pos.x), int(pos.z) },
 		20, 20,
-		L"Image/Red.dds"
+		L"Image/Blue.dds"
 	);
 
 	tr = StaticObjectStorage::GetInstance()->GetAltarTransform(1, ALTAR_IN);
@@ -592,7 +592,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 		m_TESTGameObject, ENUM_SCENE::SCENE_GAME, pd3dDevice, pd3dCommandList,
 		POINT{ int(pos.x), int(pos.z) },
 		20, 20,
-		L"Image/Red.dds"
+		L"Image/Blue.dds"
 	);
 
 	tr = StaticObjectStorage::GetInstance()->GetAltarTransform(2, ALTAR_IN);
@@ -610,7 +610,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 		m_TESTGameObject, ENUM_SCENE::SCENE_GAME, pd3dDevice, pd3dCommandList,
 		POINT{ int(pos.x), int(pos.z) },
 		20, 20,
-		L"Image/Red.dds"
+		L"Image/Blue.dds"
 	);
 
 	tr = StaticObjectStorage::GetInstance()->GetAltarTransform(3, ALTAR_IN);
@@ -628,7 +628,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 		m_TESTGameObject, ENUM_SCENE::SCENE_GAME, pd3dDevice, pd3dCommandList,
 		POINT{ int(pos.x), int(pos.z) },
 		20, 20,
-		L"Image/Red.dds"
+		L"Image/Blue.dds"
 	);
 
 	tr = StaticObjectStorage::GetInstance()->GetAltarTransform(4, ALTAR_IN);
@@ -646,7 +646,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 		m_TESTGameObject, ENUM_SCENE::SCENE_GAME, pd3dDevice, pd3dCommandList,
 		POINT{ int(pos.x), int(pos.z) },
 		20, 20,
-		L"Image/Red.dds"
+		L"Image/Blue.dds"
 	);
 
 	m_UIPlayer = new UI2DImage(
@@ -656,6 +656,12 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 		L"Image/Red.dds"
 	);
 
+	m_UIBossMonster = new UI2DImage(
+		m_TESTGameObject, ENUM_SCENE::SCENE_GAME, pd3dDevice, pd3dCommandList,
+		POINT{ 0, 0 },
+		10, 10,
+		L"Image/Yellow.dds"
+	);
 }
 
 void GameScene::ReleaseObjects()
@@ -1114,6 +1120,21 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 
 	pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_PICKINGPOINT, 2, &playerpos, 0);
 	m_UIPlayer->Render(pd3dCommandList);
+
+	if (!m_Dragon->GetisStone())
+	{
+		XMFLOAT2 bossmonsterpos{ m_Dragon->GetTransform().GetPosition().x,  m_Dragon->GetTransform().GetPosition().z };
+
+		// ui map 포지션으로 변경하기 위해 크기 축소
+		bossmonsterpos.x = bossmonsterpos.x * (float(m_UIMapSize.x) / 30000.f);
+		bossmonsterpos.y = -bossmonsterpos.y * (float(m_UIMapSize.y) / 30000.f); // 스크린 좌표계로 이동하기 위해
+
+		// 스크린 좌표계 위치 이동
+		bossmonsterpos.x += m_SampleUIMap->getRect().left;
+		bossmonsterpos.y += m_SampleUIMap->getRect().bottom;
+		pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_PICKINGPOINT, 2, &bossmonsterpos, 0);
+		m_UIBossMonster->Render(pd3dCommandList);
+	}
 
 	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_UISCREEN, isGBuffers);
 
