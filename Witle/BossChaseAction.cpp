@@ -49,11 +49,20 @@ ENUM_BOSSSKILL BossChaseAction::GetRandomSkill()
 		if (val == 3) // 만약 돌진상태인데
 		{
 			// 브레스 차례라면
-			if (isBreath) val = 1;
+			if (isBreath)
+			{
+				isBreath = !isBreath;
+
+				val = 1;
+			}
 		}
 		else
 		{ 
-			if (!isBreath) val = 3;
+			if (!isBreath)
+			{
+				isBreath = !isBreath;
+				val = 3;
+			}
 		}
 		result = ENUM_BOSSSKILL(val); // 내려찍기를 제외한 전부
 	}
