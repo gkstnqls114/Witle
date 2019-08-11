@@ -1045,6 +1045,34 @@ void LoadObject::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuff
 	}
 }
 
+void LoadObject::Render(ID3D12GraphicsCommandList * pd3dCommandList, Shader * pShader)
+{
+	if (m_pSkinnedAnimationController) m_pSkinnedAnimationController->UpdateShaderVariables(pd3dCommandList, m_xmf4x4World);
+
+	if (m_pMesh)
+	{
+		UpdateShaderVariable(pd3dCommandList, &m_xmf4x4World);
+
+		if (m_nMaterials > 0)
+		{
+			for (int i = 0; i < m_nMaterials; i++)
+			{ 
+				pShader->OnPrepareRender(pd3dCommandList);    
+				m_pMesh->Render(pd3dCommandList, i);
+			}
+		}
+	}
+
+	if (m_pSibling)
+	{
+		m_pSibling->Render(pd3dCommandList, pShader);
+	}
+	if (m_pChild)
+	{
+		m_pChild->Render(pd3dCommandList, pShader);
+	}
+}
+
 void LoadObject::Render(ID3D12GraphicsCommandList * pd3dCommandList, CAnimationController * pSkinnedAnimationController, bool isGBuffers)
 {
 	if (pSkinnedAnimationController) pSkinnedAnimationController->UpdateShaderVariables(pd3dCommandList, m_xmf4x4World);

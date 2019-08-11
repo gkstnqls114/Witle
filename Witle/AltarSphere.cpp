@@ -16,6 +16,7 @@
 #include "LineSphere.h"
 // DebugMesh /////////////////////
 
+#include "TextureStorage.h"
 #include "PlayerStatus.h"
 #include "CameraObject.h"
 #include "MainCameraMgr.h"
@@ -42,9 +43,12 @@ bool AltarSphere::RENDER_DEBUG{ true };
 AltarSphere::AltarSphere(const std::string & entityID, const XMFLOAT3& SpawnPoint, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature)
 	: GameObject(entityID)
 {  
-	m_pTexture = new Texture(ENUM_SCENE::SCENE_GAME, ROOTPARAMETER_INDEX(ROOTPARAMETER_TEXTURE), false, 1, RESOURCE_TEXTURE2D);
-	m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/Altar_Sphere.dds", 0);
+	m_pDeactiveTexture = new Texture(ENUM_SCENE::SCENE_GAME, ROOTPARAMETER_INDEX(ROOTPARAMETER_TEXTURE), false, 1, RESOURCE_TEXTURE2D);
+	m_pDeactiveTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/Altar_Sphere_black.dds", 0);
 
+	m_pActiveTexture = new Texture(ENUM_SCENE::SCENE_GAME, ROOTPARAMETER_INDEX(ROOTPARAMETER_TEXTURE), false, 1, RESOURCE_TEXTURE2D);
+	m_pActiveTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/Altar_Sphere.dds", 0);
+	 
 	ANIMATION_INFO infos[ALTARSPHERE_ANIMATIONE];
 	infos[0] = ALTARSPHERE_FLOW;
 	infos[1] = ALTARSPHERE_IDLE;
@@ -82,8 +86,16 @@ void AltarSphere::Render(ID3D12GraphicsCommandList * pd3dCommandList, bool isGBu
 		m_pMyBOBox->Render(pd3dCommandList); 
 	}
 	 
-	m_pTexture->UpdateShaderVariables(pd3dCommandList);
-	m_pLoadObject->Render(pd3dCommandList, isGBuffers); 
+	if (m_isActive)
+	{
+		m_pActiveTexture->UpdateShaderVariables(pd3dCommandList);
+	}
+	else
+	{
+		m_pDeactiveTexture->UpdateShaderVariables(pd3dCommandList);
+
+	}
+	m_pLoadObject->Render(pd3dCommandList, ShaderManager::GetInstance()->GetShader(SHADER_ALTARSPHERE)); 
 
 	if (m_isEnguaged)
 	{
@@ -99,11 +111,11 @@ void AltarSphere::ReleaseMembers()
 		delete m_RecognitionRange;
 		m_RecognitionRange = nullptr;
 	} 
-	if (m_pTexture)
+	if (m_pDeactiveTexture)
 	{
-		m_pTexture->ReleaseObjects();
-		delete m_pTexture;
-		m_pTexture = nullptr;
+		m_pDeactiveTexture->ReleaseObjects();
+		delete m_pDeactiveTexture;
+		m_pDeactiveTexture = nullptr;
 	}
 	if (m_pLoadObject)
 	{
@@ -127,7 +139,8 @@ void AltarSphere::ReleaseMembers()
 
 void AltarSphere::ReleaseMemberUploadBuffers()
 { 
-	if (m_pTexture) m_pTexture->ReleaseUploadBuffers();
+	if (m_pDeactiveTexture) m_pDeactiveTexture->ReleaseUploadBuffers();
+	if (m_pActiveTexture) m_pActiveTexture->ReleaseUploadBuffers();
 	if (m_pLoadObject) m_pLoadObject->ReleaseUploadBuffers();
 	if (m_AltarSphereModel)m_AltarSphereModel->ReleaseUploadBuffers();
 	if (m_pMyBOBox)m_pMyBOBox->ReleaseUploadBuffers();

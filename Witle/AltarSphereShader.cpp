@@ -17,12 +17,12 @@ void AltarSphereShader::CreateShader(ID3D12Device * pd3dDevice, ID3D12RootSignat
 }
 
 void AltarSphereShader::Update(float ElapsedTime)
-{
+{ 
 }
 
 D3D12_INPUT_LAYOUT_DESC AltarSphereShader::CreateInputLayout()
 {
-	UINT nInputElementDescs = 5;
+	UINT nInputElementDescs = 7;
 	D3D12_INPUT_ELEMENT_DESC *pd3dInputElementDescs = new D3D12_INPUT_ELEMENT_DESC[nInputElementDescs];
 
 	pd3dInputElementDescs[0] = { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 };
@@ -30,6 +30,8 @@ D3D12_INPUT_LAYOUT_DESC AltarSphereShader::CreateInputLayout()
 	pd3dInputElementDescs[2] = { "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 2, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 };
 	pd3dInputElementDescs[3] = { "TANGENT", 0, DXGI_FORMAT_R32G32B32_FLOAT, 3, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 };
 	pd3dInputElementDescs[4] = { "BITANGENT", 0, DXGI_FORMAT_R32G32B32_FLOAT, 4, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 };
+	pd3dInputElementDescs[5] = { "BONEINDEX", 0, DXGI_FORMAT_R32G32B32A32_SINT, 5, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 };
+	pd3dInputElementDescs[6] = { "BONEWEIGHT", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 6, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 };
 
 	D3D12_INPUT_LAYOUT_DESC d3dInputLayoutDesc;
 	d3dInputLayoutDesc.pInputElementDescs = pd3dInputElementDescs;
@@ -43,7 +45,7 @@ D3D12_RASTERIZER_DESC AltarSphereShader::CreateRasterizerState()
 	D3D12_RASTERIZER_DESC d3dRasterizerDesc;
 	::ZeroMemory(&d3dRasterizerDesc, sizeof(D3D12_RASTERIZER_DESC));
 	d3dRasterizerDesc.FillMode = D3D12_FILL_MODE_SOLID;
-	d3dRasterizerDesc.CullMode = D3D12_CULL_MODE_BACK;
+	d3dRasterizerDesc.CullMode = D3D12_CULL_MODE_NONE;
 	d3dRasterizerDesc.FrontCounterClockwise = FALSE;
 	d3dRasterizerDesc.DepthBias = 0;
 	d3dRasterizerDesc.DepthBiasClamp = 0.0f;
@@ -106,17 +108,17 @@ D3D12_PRIMITIVE_TOPOLOGY_TYPE AltarSphereShader::CreatePrimitiveTopologyType()
 
 D3D12_SHADER_BYTECODE AltarSphereShader::CreateVertexShader(ID3DBlob ** ppd3dShaderBlob)
 {
-	return Shader::CompileShaderFromFile(L"AltarSphereShader.hlsl", "VSStandard", "vs_5_1", ppd3dShaderBlob);
-}
-
-D3D12_SHADER_BYTECODE AltarSphereShader::CreatePixelShaderForGBuffers(ID3DBlob ** ppd3dShaderBlob)
-{
-	return Shader::CompileShaderFromFile(L"AltarSphereShader.hlsl", "PSStandardForGBuffers", "ps_5_1", ppd3dShaderBlob);
+	return Shader::CompileShaderFromFile(L"SkinnedAnimationShader.hlsl", "VSSkinnedAnimationStandard", "vs_5_1", ppd3dShaderBlob);
 }
 
 D3D12_SHADER_BYTECODE AltarSphereShader::CreatePixelShader(ID3DBlob ** ppd3dShaderBlob)
 {
-	return Shader::CompileShaderFromFile(L"AltarSphereShader.hlsl", "PSStandard", "ps_5_1", ppd3dShaderBlob);
+	return Shader::CompileShaderFromFile(L"SkinnedAnimationShader.hlsl", "PSStandardNot", "ps_5_1", ppd3dShaderBlob);
+}
+
+D3D12_SHADER_BYTECODE AltarSphereShader::CreatePixelShaderForGBuffers(ID3DBlob ** ppd3dShaderBlob)
+{
+	return Shader::CompileShaderFromFile(L"SkinnedAnimationShader.hlsl", "PSStandardForGBuffers", "ps_5_1", ppd3dShaderBlob);
 }
 
 D3D12_SHADER_BYTECODE AltarSphereShader::CreateGeometryShader(ID3DBlob ** ppd3dShaderBlob)

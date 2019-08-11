@@ -26,6 +26,7 @@
 #include "HitEffectShader.h"
 #include "BloomShader.h"
 #include "ToneCuveShader.h"
+#include "AltarSphereShader.h"
 //// Shader ////////////////////////// 
 
 #include "ShaderManager.h"
@@ -169,6 +170,10 @@ void ShaderManager::BuildShaders(ID3D12Device * pd3dDevice, ID3D12RootSignature 
 	HitEffectShader* pHitEffectShader = new HitEffectShader();
 	pHitEffectShader->CreateShader(pd3dDevice, pd3dGraphicsRootSignature);
 	InsertShader(SHADER_HITEFFECT, pHitEffectShader);
+	 
+	AltarSphereShader* pAltarSphereShader = new AltarSphereShader();
+	pAltarSphereShader->CreateShader(pd3dDevice, pd3dGraphicsRootSignature);
+	InsertShader(SHADER_ALTARSPHERE, pAltarSphereShader);
 }
 
 bool ShaderManager::InsertShader(const std::string& s, Shader * pso)

@@ -82,6 +82,15 @@ VS_STANDARD_OUTPUT VSSkinnedAnimationStandard(VS_SKINNED_STANDARD_INPUT input)
 	return(output);
 }
 
+// 명암 처리 하지않는다.
+float4 PSStandardNot(VS_STANDARD_OUTPUT input) : SV_TARGET
+{
+    float4 TESTColor = gtxtTexture.Sample(gWrapSamplerState, input.uv);
+    
+    TESTColor *= 1.5;
+
+    return TESTColor;
+}
 
 float4 PSStandard(VS_STANDARD_OUTPUT input) : SV_TARGET
 {

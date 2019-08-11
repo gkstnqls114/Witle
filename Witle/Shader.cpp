@@ -220,7 +220,7 @@ void Shader::CreatePipelineStateForGBuffers(ID3D12Device * pd3dDevice, ID3D12Roo
 	d3dPipelineStateDesc.Flags = D3D12_PIPELINE_STATE_FLAG_NONE;
 
 	HRESULT hResult = pd3dDevice->CreateGraphicsPipelineState(&d3dPipelineStateDesc, IID_PPV_ARGS(&m_PipelineStateForGBuffers));
-	assert(hResult == S_OK);
+	// assert(hResult == S_OK);
 
 	if (pd3dVertexShaderBlob) pd3dVertexShaderBlob->Release();
 	if (pd3dPixelShaderBlob) pd3dPixelShaderBlob->Release();

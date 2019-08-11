@@ -33,7 +33,8 @@ protected:
 	RecognitionRange*   m_RecognitionRange{ nullptr }; 
 	MyBOBox*		   m_pMyBOBox{ nullptr };
 
-	Texture*			m_pTexture{ nullptr }; 
+	Texture*			m_pDeactiveTexture{ nullptr };
+	Texture*			m_pActiveTexture{ nullptr };
 
 	CLoadedModelInfo*  m_AltarSphereModel{ nullptr };
 	LoadObject*		   m_pLoadObject{ nullptr };

@@ -431,6 +431,7 @@ public:
 
 	virtual void OnPrepareRender() { }
 	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers);
+	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, Shader* pShader);
 	void RenderForShadow(ID3D12GraphicsCommandList *pd3dCommandList);
 	void RenderForPlayerShadow(ID3D12GraphicsCommandList *pd3dCommandList, Player* player);
 	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, CAnimationController* pSkinnedAnimationController, bool isGBuffers);

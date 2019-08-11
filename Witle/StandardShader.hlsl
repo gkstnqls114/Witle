@@ -62,6 +62,8 @@ PS_OUTPUT_FOR_GBUFFERS PSStandardForGBuffers(VS_STANDARD_OUTPUT input)
     return (output);
 }
 
+
+
 float4 PSStandard(VS_STANDARD_OUTPUT input) : SV_TARGET
 {
 	// 임시로 사용할 컬러 색깔
