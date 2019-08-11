@@ -1161,6 +1161,14 @@ void GameScene::Init()
 	m_pMainCamera->GetCamera()->SetScissorRect(0, 0, GameScreen::GetWidth(), GameScreen::GetHeight());
 	m_pMainCamera->GetCamera()->GenerateProjectionMatrix(0.01f, CAMERA_FAR, float(GameScreen::GetWidth()) / float(GameScreen::GetHeight()), 60.0f);
 
+	for (int x = 0; x < 5; ++x)
+	{
+		m_AltarSphere[x]->SetisActive(false);
+		m_AltarSphere[x]->SetisEnguaged(false);
+		m_AltarSphere[x]->SetGuage(0.f);
+		m_AltarSphere[x]->SetAnimationState(ALTARSPHERE_IDLE.ID);
+	}
+
 	m_pPlayer->Init();
 	m_Dragon->Init();
 	 
