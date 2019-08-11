@@ -24,35 +24,29 @@ ENUM_BOSSSKILL BossChaseAction::GetRandomSkill()
 	std::uniform_int_distribution<> die(2000, 15000);
 
 	if (hp > 70.f) // first phase 
-	{
-		std::uniform_int_distribution<> monstertype(2, 2);
-		/*
-		BOSSSKILL_BREATH,
-		BOSSSKILL_DOWNSTROKE 중 하나
-		*/
-		result = ENUM_BOSSSKILL::BOSSSKILL_TAILATTACK;
-		// result = ENUM_BOSSSKILL(monstertype(mersenne)); // 0 혹은 1
+	{ 
+		// 무조건 내려찍기
+		result = ENUM_BOSSSKILL::BOSSSKILL_DOWNSTROKE; 
 	}
-	else if (hp > 30.f)  // second phase
+	else if (hp > 40.f)  // second phase
 	{
-		std::uniform_int_distribution<> monstertype(0, 2);
+		std::uniform_int_distribution<> monstertype(0, 1);
 		/*
 		BOSSSKILL_BREATH,
-		BOSSSKILL_DOWNSTROKE  
-		BOSSSKILL_TAILATTACK
+		BOSSSKILL_DOWNSTROKE   
 		*/
-		result = ENUM_BOSSSKILL(monstertype(mersenne)); // 0 혹은 1 
+		result = ENUM_BOSSSKILL(monstertype(mersenne)); // 브레스 혹은 내려찍기
 	}
 	else  // last phase
 	{
-		std::uniform_int_distribution<> monstertype(0, 3);
+		std::uniform_int_distribution<> monstertype(1, 4);
 		/*
 		BOSSSKILL_BREATH,
 		BOSSSKILL_DOWNSTROKE 
 		BOSSSKILL_TAILATTACK
 		BOSSSKILL_RUSH
 		*/
-		result = ENUM_BOSSSKILL(monstertype(mersenne)); // 0 혹은 1
+		result = ENUM_BOSSSKILL(monstertype(mersenne)); // 내려찍기를 제외한 전부
 	}
 
 	return result;

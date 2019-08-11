@@ -27,7 +27,9 @@
 #include "Terrain.h"
 
 #include "Player.h"
-  
+
+static bool isHitAni = false;
+
 void Player::OnPlayerUpdateCallback(float fTimeElapsed)
 {
 	if (!m_pPlayerUpdatedContext) return;
@@ -303,23 +305,14 @@ void Player::Update(float fElapsedTime)
 		m_Transform.GetPosition().z)
 	);
 	
-	// 플레이어 콜백
-	// OnPlayerUpdateCallback(fElapsedTime);
-	 
-	 
-	// 이동량 줄어든다.
-	//fLength = Vector3::Length(m_xmf3Velocity);
-	//float fDeceleration = (m_fFriction * fElapsedTime); // 감소량
-	//if (fDeceleration > fLength) fDeceleration = fLength;
-	//m_xmf3Velocity = Vector3::Add(m_xmf3Velocity, Vector3::ScalarProduct(m_xmf3Velocity, -fDeceleration, true));
-
-	//m_pLoadObject->SetTrackAnimationSet(0, ::IsZero(fLength) ? 0 : 1); // 만약에 fLength가 0이 아니라면... 즉 움직인다면...
 }
 
 void Player::SubstractHP(int sub)
 { 
-	m_pPlayerHPStatus->m_Guage -= sub;  
+	if (m_CurrAnimation == ANIMATION_HIT.ID) return;
 
+	m_pPlayerHPStatus->m_Guage -= sub;  
+	
 	if (m_CurrAnimation == ANIMATION_BROOMIDLE.ID) return;
 	if (m_CurrAnimation == ANIMATION_BROOMFORWARD.ID) return;
 	if (m_CurrAnimation == ANIMATION_BROOMPREPARE.ID) return;
