@@ -18,7 +18,6 @@ SceneMgr::SceneMgr()
 	m_WinScene = new WinScene;
 	m_LoseScene = new LoseScene;
 
-	ChangeSceneToMain();
 }
 
 SceneMgr::~SceneMgr()
@@ -65,6 +64,8 @@ void SceneMgr::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList
 	m_SkillSelectScene->BuildObjects(pd3dDevice, pd3dCommandList);
 	m_WinScene->BuildObjects(pd3dDevice, pd3dCommandList);
 	m_LoseScene->BuildObjects(pd3dDevice, pd3dCommandList);
+
+	ChangeSceneToMain();
 }
 
 void SceneMgr::BuildHeap(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList)
