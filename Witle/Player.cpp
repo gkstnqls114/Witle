@@ -485,13 +485,23 @@ void Player::ProcessInputAI(float fTimeElapsed)
 }
 
 //  
-bool Player::Attack(Status* status, MyCollider* collider, XMFLOAT2 aimPoint, Camera* pMainCaemra)
+bool Player::Attack(Status* status, MyCollider* collider, XMFLOAT2 aimPoint, Camera* pMainCaemra, bool isDragon = false)
 {   
 	// 시행된다면..
+	bool isAttack = false;
+
 	bool isNearMonster = Vector3::Length(collider->GetpOwner()->GetTransform().GetPosition(), m_Transform.GetPosition()) < 100;
 	if (isNearMonster) // 몬스터와 가까운 경우 근접 공격
 	{   
-		status->Damage(500, ANIMATION_HIT.ID);
+		isAttack = true;
+		if (isDragon)
+		{ 
+			status->SubstractHP(10);
+		}
+		else
+		{
+			status->Damage(10, ANIMATION_HIT.ID);
+		}
 	}
 	else
 	{  
@@ -502,9 +512,17 @@ bool Player::Attack(Status* status, MyCollider* collider, XMFLOAT2 aimPoint, Cam
 		float Playerdist;
 		bool isCollide = Collision::isCollide(collider, pickRay.origin, pickRay.direction, Playerdist);
 
-		if (isCollide && Playerdist < 5000.f)
-		{ 
-			status->Damage(500, ANIMATION_HIT.ID);
+		if (isCollide && Playerdist < 3000.f)
+		{  
+			isAttack = true;
+			if (isDragon)
+			{
+				status->SubstractHP(10);
+			}
+			else
+			{
+				status->Damage(10, ANIMATION_HIT.ID); \
+			}
 		}
 
 	}
@@ -512,7 +530,7 @@ bool Player::Attack(Status* status, MyCollider* collider, XMFLOAT2 aimPoint, Cam
 	m_pPlayerMovement->m_xmf3Velocity = XMFLOAT3(0.F, 0.F, 0.F);
 	m_isAttacking = true;
 	m_CurrAnimation = ANIMATION_ATTACK.ID;
-	return true;
+	return isAttack;
 }
 
 void Player::UseSkill_Broom()

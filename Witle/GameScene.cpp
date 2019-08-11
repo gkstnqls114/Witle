@@ -258,6 +258,20 @@ bool GameScene::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM wPar
 		{
 			if (!m_pPlayer->IsAttacking() && !m_pPlayer->GetpBroom()->GetisUsing())
 			{
+				SoundManager::GetInstance()->Play(ENUM_SOUND::PLAYER_MAGIC_MISIL);
+
+				bool isAttackDragon = m_pPlayer->Attack(
+					static_cast<Status*>(
+						m_Dragon->GetStatus()),
+					m_Dragon->GetBOBox(),
+					m_AimPoint->GetPickingPoint(),
+					m_pMainCamera->GetCamera(), true);
+				if (isAttackDragon)
+				{
+					HitEffectMgr::GetInstance()->AddNormalHitEffectPosition(m_Dragon->GetBOBox()->GetBOBox().Center);
+					return false;
+				}
+
 				for (int i = 0; i < m_TestMonsterCount; ++i)
 				{
 					bool isAttack = m_pPlayer->Attack(
@@ -265,7 +279,7 @@ bool GameScene::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM wPar
 							m_TestMonster[i]->GetStatus()),
 						m_TestMonster[i]->GetBOBox(),
 						m_AimPoint->GetPickingPoint(),
-						m_pMainCamera->GetCamera());
+						m_pMainCamera->GetCamera(),false);
 					 
 					if (isAttack)
 					{
@@ -273,7 +287,6 @@ bool GameScene::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM wPar
 						break;
 					} 
 				}
-				SoundManager::GetInstance()->Play(ENUM_SOUND::PLAYER_MAGIC_MISIL);
 			}
 		}
 		break;
@@ -322,7 +335,21 @@ bool GameScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM w
 		case MYVK_Q: 
 			// 플레이어 공격
 			if (GameInput::GetDragMode())
-			{ 
+			{
+				SoundManager::GetInstance()->Play(ENUM_SOUND::PLAYER_MAGIC_MISIL);
+
+				bool isAttackDragon = m_pPlayer->Attack(
+					static_cast<Status*>(
+						m_Dragon->GetStatus()),
+					m_Dragon->GetBOBox(),
+					m_AimPoint->GetPickingPoint(),
+					m_pMainCamera->GetCamera(), true);
+				if (isAttackDragon)
+				{
+					HitEffectMgr::GetInstance()->AddNormalHitEffectPosition(m_Dragon->GetBOBox()->GetBOBox().Center);
+					return false;
+				}
+
 				if (!m_pPlayer->IsAttacking() && !m_pPlayer->GetpBroom()->GetisUsing())
 				{
 					for (int i = 0; i < m_TestMonsterCount; ++i)
@@ -332,16 +359,14 @@ bool GameScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM w
 								m_TestMonster[i]->GetStatus()),
 							m_TestMonster[i]->GetBOBox(),
 							m_AimPoint->GetPickingPoint(),
-							m_pMainCamera->GetCamera());
+							m_pMainCamera->GetCamera(), false);
 
 						if (isAttack)
 						{
 							HitEffectMgr::GetInstance()->AddNormalHitEffectPosition(m_TestMonster[i]->GetBOBox()->GetBOBox().Center);
 							break;
 						}
-					}
-
-					SoundManager::GetInstance()->Play(ENUM_SOUND::PLAYER_MAGIC_MISIL);
+					} 
 				}
 			}
 			break;

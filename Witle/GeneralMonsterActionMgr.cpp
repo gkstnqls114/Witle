@@ -130,6 +130,5 @@ void GeneralMonsterActionMgr::ChangeStateToAttack()
 	ChangeAction(&m_AttackAction);
 	m_CurrMonsterAction->Init();
 	static_cast<Monster*>(m_pOwner)->SetAnimationState(SPACECAT_ATTACK.ID);
-	static_cast<Monster*>(m_pOwner)->SetisAttacking(true);
-	printf("몬스터 어택\n");
+	static_cast<Monster*>(m_pOwner)->SetisAttacking(true); 
 }

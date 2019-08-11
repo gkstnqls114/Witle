@@ -99,7 +99,7 @@ public:
 	void ProcessInput(float fTimeElapsed);
 	void ProcessInputAI(float fTimeElapsed);
 
-	bool Attack(Status* status, MyCollider* collider, XMFLOAT2 aimPoint ,Camera* pMainCaemra);
+	bool Attack(Status* status, MyCollider* collider, XMFLOAT2 aimPoint ,Camera* pMainCaemra, bool);
 
 	/////////////////////// Skill
 	void UseSkill_Broom();
