@@ -37,7 +37,7 @@ void BlessingEffect::ReleaseMemberUploadBuffers()
 BlessingEffect::BlessingEffect(const std::string & entityID, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList)
 	:SkillEffect(entityID, 5.f, ENUM_SKILLTYPE::SKILLTYPE_BUFF)
 {
-	SoundManager::GetInstance()->Play(ENUM_SOUND::PLAYER_BLESSING_SOUND);
+	// SoundManager::GetInstance()->Play(ENUM_SOUND::PLAYER_BLESSING_SOUND);
 
 	m_BlessingEffectMesh = new SphereMesh(this, pd3dDevice, pd3dCommandList, 50, 50, 10, 10);
 	 
