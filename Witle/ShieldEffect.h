@@ -1,9 +1,10 @@
 #pragma once
 #include "SkillEffect.h"
 
+class Texture;
+class CLoadedModelInfo;
+class LoadObject;
 class SphereMesh;
-class Movement;
-class MyBSphere;
 
 class ShieldEffect :
 	public SkillEffect
@@ -16,9 +17,11 @@ protected:
 	virtual void ReleaseMembers() override;
 	virtual void ReleaseMemberUploadBuffers() override;
 
-private:
-	SphereMesh* m_ShieldEffectMesh{ nullptr };
-	
+private: 
+	CLoadedModelInfo*  m_ShieldEffectModelInfo{ nullptr };
+	LoadObject*		   m_ShieldEffectObject{ nullptr };
+	SphereMesh * m_ShieldEffectMesh{ nullptr};
+	Texture* m_ShiedlTexture{ nullptr };
 
 public:
 	ShieldEffect(const std::string& entityID, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
