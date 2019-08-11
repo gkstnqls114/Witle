@@ -54,6 +54,7 @@
 // 나중에 코드 수정 
 #include "SkillSelectScene.h"
 
+#include "MyBSphere.h"
 #include "HitEffect.h"
 #include "SkillEffect.h"
 #include "MyBOBox.h" 
@@ -924,12 +925,24 @@ void GameScene::LastUpdate(float fElapsedTime)
 			if (m_TestMonster[i]->GetStatus()->m_Guage <= 0.f) continue;
 
 			if (Collision::isCollide(m_TestMonster[i]->GetBOBox(), skill_collider))
-			{  
-				auto monstercenterpos = m_TestMonster[i]->GetBOBox()->GetBOBox().Center; 
-#ifdef _DEBUG
-				std::cout << PlayerSkillMgr::GetInstance()->GetpSelectableSkill(index)->GetName() << std::endl;
-#endif // _DEBUG 
-				HitEffectMgr::GetInstance()->AddPlayerSkillHitEffectPosition(PlayerSkillMgr::GetInstance()->GetpSelectableSkill(index)->GetSelectableSkillType(), monstercenterpos);
+			{
+				auto effect = PlayerSkillMgr::GetInstance()->GetpSelectableSkill(index)->m_skillEffect->GetCollier();
+
+				XMFLOAT3 pos{ -100, -100, -100 };
+				switch (effect->GetType())
+				{
+					case
+					BOUNDING_BOX:
+						pos = static_cast<MyBOBox*>(effect)->GetBOBox().Center;
+						break;
+					case BOUNDING_SPHERE:
+						pos = static_cast<MyBSphere*>(effect)->GetBSphere()->Center;
+						break;
+					default:
+						break;
+				}
+
+				HitEffectMgr::GetInstance()->AddPlayerSkillHitEffectPosition(PlayerSkillMgr::GetInstance()->GetpSelectableSkill(index)->GetSelectableSkillType(), pos);
 				m_TestMonster[i]->SubstractHP(5);
 				PlayerSkillMgr::GetInstance()->Deactive(index);
 			}
@@ -946,6 +959,25 @@ void GameScene::LastUpdate(float fElapsedTime)
 #ifdef _DEBUG
 			std::cout << "보스가 스킬에 맞음" << std::endl;
 #endif // _DEBUG
+			auto effect = PlayerSkillMgr::GetInstance()->GetpSelectableSkill(index)->m_skillEffect->GetCollier();
+			
+			XMFLOAT3 pos{ -100, -100, -100 };
+			switch (effect->GetType())
+			{
+			case
+			BOUNDING_BOX:
+				pos = static_cast<MyBOBox*>(effect)->GetBOBox().Center;
+				break;
+			case BOUNDING_SPHERE:
+				pos = static_cast<MyBSphere*>(effect)->GetBSphere()->Center;
+				break;
+			default:
+				break;
+			}
+
+			HitEffectMgr::GetInstance()->AddPlayerSkillHitEffectPosition(
+				PlayerSkillMgr::GetInstance()->GetpSelectableSkill(index)->GetSelectableSkillType(),
+				pos);
 			m_Dragon->SubstractHP(5);
 			PlayerSkillMgr::GetInstance()->Deactive(index);
 		}
@@ -979,20 +1011,25 @@ void GameScene::LastUpdate(float fElapsedTime)
 		m_Dragon->FinishAttack();
 		BossMonsterActionMgr* actionmgr = static_cast<BossMonsterActionMgr*>(m_Dragon->GetMovement()->GetMonsterActionMgr());
 
+		XMFLOAT3 effectpos = m_pPlayer->GetBOBox()->GetBOBox().Center;
+
 		if(actionmgr->Is_BossSkillBreath())
 		{
 			m_pPlayer->SubstractHP(5);
 		}
 		else if (actionmgr->Is_BossSkillDownStroke())
 		{ 
+			HitEffectMgr::GetInstance()->AddMonsterHitEffectPosition(effectpos);
 			m_pPlayer->SubstractHP(5);
 		}
 		else if (actionmgr->Is_BossSkillTailAttack())
-		{
+		{ 
+			HitEffectMgr::GetInstance()->AddMonsterHitEffectPosition(effectpos); 
 			m_pPlayer->SubstractHP(15);
 		}
 		else if (actionmgr->Is_BossSkillRush())
-		{
+		{ 
+			HitEffectMgr::GetInstance()->AddMonsterHitEffectPosition(effectpos); 
 			m_pPlayer->SubstractHP(20); 
 		}
 	}
