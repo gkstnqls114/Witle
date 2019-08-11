@@ -816,9 +816,7 @@ void CGameFramework::BuildObjects()
 	GraphicsRootSignatureMgr::BuildObject(m_d3dDevice.Get()); // 루트 시그니처 먼저 생성
 	BuildShaders(); // 생성된 루트 시그니처를 사용하는 쉐이더 생성
 	CreateRWBuffer(); // CommandList Reset된 이후에 해야함
-	
-	SkillStg::GetInstance()->BuildObjects(m_d3dDevice.Get(), m_CommandList.Get()); // 스킬 이펙트 생성
-	
+	 
 	m_SceneMgr = new SceneMgr; 
 
 	// 터레인 오브젝트에서 사용될 모든 텍스쳐과 모델을 가져온다.
@@ -827,6 +825,7 @@ void CGameFramework::BuildObjects()
 	// 반드시 텍스쳐를 생성하고 나서 호출해야한다.
 	ModelStorage::GetInstance()->CreateModels(m_d3dDevice.Get(), m_CommandList.Get(), GraphicsRootSignatureMgr::GetGraphicsRootSignature());
 	HitEffectMgr::GetInstance()->BuildObjects(m_d3dDevice.Get(), m_CommandList.Get());
+	SkillStg::GetInstance()->BuildObjects(m_d3dDevice.Get(), m_CommandList.Get()); // 스킬 이펙트 생성
 
 	// 모든 씬의 오브젝트 및 텍스쳐들을 빌드합니다.
 	m_SceneMgr->BuildObjects(m_d3dDevice.Get(), m_CommandList.Get());

@@ -102,6 +102,8 @@ void TextureStorage::CreateTextures(ID3D12Device * pd3dDevice, ID3D12GraphicsCom
 	CreateImageTexture(IMAGE_LIGHTNINGBALLHIT_SPRRITE, pd3dDevice, pd3dCommandList);
 	CreateImageTexture(IMAGE_NORMAL_SPRRITE, pd3dDevice, pd3dCommandList);
 	CreateImageTexture(IMAGE_RED, pd3dDevice, pd3dCommandList);
+	CreateImageTexture("Blue", pd3dDevice, pd3dCommandList);
+	CreateImageTexture("Yellow", pd3dDevice, pd3dCommandList);
 
 }
  

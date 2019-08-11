@@ -1094,7 +1094,6 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 	}
 
  
-	PlayerSkillMgr::GetInstance()->Render(pd3dCommandList, isGBuffers);
 	HitEffectMgr::GetInstance()->Render(pd3dCommandList);
 
 	// 터레인
@@ -1102,6 +1101,8 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 	{ 
 		m_pQuadtreeTerrain->Render(pd3dCommandList, m_Terrain, nullptr /*딱히 의미없음*/, isGBuffers);
 	}
+
+	PlayerSkillMgr::GetInstance()->Render(pd3dCommandList, isGBuffers);
 
 	/// ui map과 스킬 관련 렌더링..
 	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_UIMAPFORPLAYER, isGBuffers);

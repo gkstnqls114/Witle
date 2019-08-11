@@ -7,6 +7,7 @@
 #include "Player.h"
 #include "SphereMesh.h"
 #include "Texture.h"
+#include "TextureStorage.h"
 
 #include "ShieldEffect.h"
 
@@ -50,14 +51,12 @@ void ShieldEffect::ReleaseMemberUploadBuffers()
 ShieldEffect::ShieldEffect(const std::string & entityID, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList)
 	:SkillEffect(entityID, 5.f, ENUM_SKILLTYPE::SKILLTYPE_BUFF)
 {
-	m_ShieldEffectMesh = new SphereMesh(this, pd3dDevice, pd3dCommandList, true, 150, 150, 10, 10);
-	m_ShieldEffectMesh->CreateTexture(pd3dDevice, pd3dCommandList, L"Model/Textures/Shield.dds");
+	m_ShieldEffectMesh = new SphereMesh(this, pd3dDevice, pd3dCommandList, true, 150, 150, 10, 10); 
 
 		m_ShieldEffectModelInfo = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature(), "Model/Shield.bin", NULL);
 	m_ShieldEffectObject = m_ShieldEffectModelInfo->m_pModelRootObject;
 
-	m_ShiedlTexture = new Texture(ENUM_SCENE::SCENE_GAME, ROOTPARAMETER_INDEX(ROOTPARAMETER_TEXTURE), false, 1);
-	m_ShiedlTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/Shield.dds", 0);
+	m_ShiedlTexture = TextureStorage::GetInstance()->GetTexture("Red");
 }
 
 

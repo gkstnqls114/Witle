@@ -57,7 +57,8 @@ float4 PS(VertexOut input) : SV_TARGET
 //#else
     input.normalW = normalize(input.normalW);
     float4 cIllumination = Lighting(input.positionW, input.normalW);
-//#endif 
+//#endif
+    cColor.a = 0.5f;
 
 	return(cColor); 
 }

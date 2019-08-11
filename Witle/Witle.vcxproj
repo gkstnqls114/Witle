@@ -155,6 +155,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="AltarSphere.h" />
+    <ClInclude Include="AltarSphereShader.h" />
     <ClInclude Include="BallEffect.h" />
     <ClInclude Include="BallSkill.h" />
     <ClInclude Include="BasicCam.h" />
@@ -343,6 +344,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AltarSphere.cpp" />
+    <ClCompile Include="AltarSphereShader.cpp" />
     <ClCompile Include="BallEffect.cpp" />
     <ClCompile Include="BallSkill.cpp" />
     <ClCompile Include="BasicCam.cpp" />
