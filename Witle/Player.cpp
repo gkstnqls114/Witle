@@ -392,6 +392,8 @@ void Player::ProcessInput(float fTimeElapsed)
 		{
 			m_CurrAnimation = ANIMATION_IDLE.ID;
 			hittime = 0.f;
+			m_isAttacking = false;
+			return;
 		}
 	}
 

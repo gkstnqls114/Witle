@@ -1343,6 +1343,8 @@ void GameScene::RenderForShadow(ID3D12GraphicsCommandList * pd3dCommandList)
 		m_pMainCamera->GetCamera()->UpdateLightShaderVariables(pd3dCommandList, &LightManager::m_pLights->m_pLights[2]);
 	}
 
+	m_Dragon->RenderForShadow(pd3dCommandList);
+
 	for (int i = 0; i < m_TestMonsterCount; ++i)
 	{
 		if (m_TestMonster[i]) m_TestMonster[i]->RenderForShadow(pd3dCommandList);

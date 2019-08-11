@@ -13,6 +13,7 @@
 
 #include "SoundManager.h"
 
+static bool isBreath = false;
 ENUM_BOSSSKILL BossChaseAction::GetRandomSkill()
 {
 	ENUM_BOSSSKILL result;
@@ -31,22 +32,30 @@ ENUM_BOSSSKILL BossChaseAction::GetRandomSkill()
 	else if (hp > 40.f)  // second phase
 	{
 		std::uniform_int_distribution<> monstertype(0, 1);
-		/*
-		BOSSSKILL_BREATH,
-		BOSSSKILL_DOWNSTROKE   
-		*/
+
 		result = ENUM_BOSSSKILL(monstertype(mersenne)); // 브레스 혹은 내려찍기
 	}
 	else  // last phase
 	{
 		std::uniform_int_distribution<> monstertype(1, 4);
 		/*
-		BOSSSKILL_BREATH,
-		BOSSSKILL_DOWNSTROKE 
-		BOSSSKILL_TAILATTACK
-		BOSSSKILL_RUSH
+	BOSSSKILL_BREATH, 1
+	BOSSSKILL_TAILATTACK, 2
+	BOSSSKILL_RUSH 3
 		*/
-		result = ENUM_BOSSSKILL(monstertype(mersenne)); // 내려찍기를 제외한 전부
+
+		// 브레스, 러쉬 번갈아 나오도록 설정
+		int val = monstertype(mersenne);
+		if (val == 3) // 만약 돌진상태인데
+		{
+			// 브레스 차례라면
+			if (isBreath) val = 1;
+		}
+		else
+		{ 
+			if (!isBreath) val = 3;
+		}
+		result = ENUM_BOSSSKILL(val); // 내려찍기를 제외한 전부
 	}
 
 	return result;

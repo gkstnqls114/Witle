@@ -201,7 +201,9 @@ void Dragon::Animate(float fElapsedTime)
 MyBOBox * Dragon::GetBOBox() const
 {
 	if (static_cast<BossMonsterActionMgr*>(m_MonsterMovement->GetMonsterActionMgr())->Is_BossSkillTailAttack() 
-		|| static_cast<BossMonsterActionMgr*>(m_MonsterMovement->GetMonsterActionMgr())->Is_BossSkillDownStroke())
+		|| static_cast<BossMonsterActionMgr*>(m_MonsterMovement->GetMonsterActionMgr())->Is_BossSkillDownStroke()
+		|| static_cast<BossMonsterActionMgr*>(m_MonsterMovement->GetMonsterActionMgr())->Is_BossSkillRush()
+		)
 	{
 		return m_BOBoxForTailAttack;
 	}
