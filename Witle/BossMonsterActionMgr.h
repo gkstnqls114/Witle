@@ -70,6 +70,7 @@ public:
 	bool Is_BossSkillDownStroke() const { return (m_CurrMonsterAction == &m_BossSkilldownstroke); }// 내려찍기
 	bool Is_BossSkillTailAttack() const { return (m_CurrMonsterAction == &m_BossSkIllTailAttack); }// 꼬리회전
 	bool Is_BossSkillRush() const { return (m_CurrMonsterAction == &m_BossSkIlldash); }// 돌진
+	bool Is_BossDead() const { return (m_CurrMonsterAction == &m_BossDead); }// 돌진
 	
 	void ChangeBossStateBefore();
 	void ChangeBossStateToIdle();

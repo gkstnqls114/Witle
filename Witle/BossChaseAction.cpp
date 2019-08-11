@@ -106,13 +106,6 @@ void BossChaseAction::UpdateVelocity(float fElpasedTime, MonsterMovement * movem
 
 void BossChaseAction::UpdateState(float fElpasedTime, BossMonsterActionMgr * actionMgr)
 {
-	// 만약 체력이 0라면 상태를 
-	if (static_cast<Monster*>(m_pOwner)->GetStatus()->m_Guage <= 0.f)
-	{
-		(actionMgr)->ChangeBossStateToDead(); 
-		return;
-	}
-	  
 	ENUM_BOSSSKILL skill = GetRandomSkill(); 
 	// 플레이어 스킬에 따른 이동 거리를 가져옵니다. 
 	// 만약 플레이어와 해당 거리 이하면 상태를 전환하지 않습니다.
