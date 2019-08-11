@@ -35,7 +35,11 @@ void Dragon::Render(ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffers
 
 	m_pLoadObject->Render(pd3dCommandList, isGBuffers);
 
-	RenderHpStatus(pd3dCommandList, isGBuffers);
+
+	if (!m_isStone) 
+	{
+		RenderHpStatus(pd3dCommandList, isGBuffers);
+	}
 }
 
 void Dragon::ReleaseMembers()
@@ -137,6 +141,8 @@ Dragon::~Dragon()
 
 void Dragon::SubstractHP(int sub)
 {
+	if (m_isStone) return;
+
 	// hit 애니메이션 없음
 	m_MonsterHPStatus->m_Guage -= sub; 
 }
