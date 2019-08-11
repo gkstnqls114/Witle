@@ -245,7 +245,45 @@ D3D12_GPU_DESCRIPTOR_HANDLE GameScene::CreateConstantBufferViews(ID3D12Device * 
 }
 
 bool GameScene::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam)
-{
+{ 
+	switch (nMessageID)
+	{
+	case WM_MOUSEWHEEL:
+	case WM_MOUSEHWHEEL:
+		GameInput::RotateWheel(wParam);
+		break;
+	case WM_LBUTTONDOWN:
+		// 플레이어 공격
+		if (!GameInput::GetDragMode())
+		{
+			if (!m_pPlayer->IsAttacking() && !m_pPlayer->GetpBroom()->GetisUsing())
+			{
+				for (int i = 0; i < m_TestMonsterCount; ++i)
+				{
+					m_pPlayer->Attack(
+						static_cast<Status*>(
+							m_TestMonster[i]->GetStatus()),
+						m_TestMonster[i]->GetBOBox(),
+						m_AimPoint->GetPickingPoint(),
+						m_pMainCamera->GetCamera());
+				}
+				SoundManager::GetInstance()->Play(ENUM_SOUND::PLAYER_MAGIC_MISIL);
+			}
+		}
+		break;
+	case WM_RBUTTONDOWN:
+		break;
+	case WM_LBUTTONUP: 
+		break;
+	case WM_RBUTTONUP:
+		break;
+	case WM_MOUSEMOVE: 
+		break;
+
+	default:
+		break;
+	}
+
 	return false;
 }
 
@@ -275,7 +313,24 @@ bool GameScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM w
 			Monster::CHANGEMODE();
 			break;
 
-		case 'L':
+		case MYVK_Q: 
+			// 플레이어 공격
+			if (GameInput::GetDragMode())
+			{ 
+				if (!m_pPlayer->IsAttacking() && !m_pPlayer->GetpBroom()->GetisUsing())
+				{
+					for (int i = 0; i < m_TestMonsterCount; ++i)
+					{
+						m_pPlayer->Attack(
+							static_cast<Status*>(
+								m_TestMonster[i]->GetStatus()),
+							m_TestMonster[i]->GetBOBox(),
+							m_AimPoint->GetPickingPoint(),
+							m_pMainCamera->GetCamera());
+					}
+					SoundManager::GetInstance()->Play(ENUM_SOUND::PLAYER_MAGIC_MISIL);
+				}
+			}
 			break;
 
 		case 'Z':
@@ -822,31 +877,7 @@ void GameScene::UpdatePhysics(float fElapsedTime)
 void GameScene::Update(float fElapsedTime)
 {
 	HitEffectMgr::GetInstance()->Update(fElapsedTime);
-
-	// 플레이어 공격 , 즉 플레이어와 몬스터 충돌 체크
-	if (GameInput::GetDragMode()) // 만약 드래그로 회전한다면...
-	{
-		if (GameInput::IsKeydownE() && !m_pPlayer->IsAttacking() && !m_pPlayer->GetpBroom()->GetisUsing())
-		{
-			// 플레이어 일반 원거리 공격시 몬스터와 충돌체크 ///////////////////////
-			//for (int i = 0; i < m_TestMonsterCount; ++i) 
-			//{
-			//	m_pPlayer->Attack(
-			//		static_cast<Status*>(
-			//			m_TestMonster[i]->GetHPStatus()),
-			//		m_TestMonster[i]->GetBOBox(),
-			//		m_AimPoint->GetPickingPoint(),
-			//		m_pMainCamera->GetCamera());
-			//} 
-			// SoundManager::GetInstance()->Play(ENUM_SOUND::MAGIC_MISIL);
-			//
-		}
-	}
-	else // 드래그로 회전하지 않는다면...
-	{
-
-	}
-
+	 
 	if (GameInput::IsKeydownSpace())
 	{
 		for (int x = 0; x < 5; ++x)

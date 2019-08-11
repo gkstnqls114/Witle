@@ -490,8 +490,7 @@ bool Player::Attack(Status* status, MyCollider* collider, XMFLOAT2 aimPoint, Cam
 	// 시행된다면..
 	bool isNearMonster = Vector3::Length(collider->GetpOwner()->GetTransform().GetPosition(), m_Transform.GetPosition()) < 100;
 	if (isNearMonster) // 몬스터와 가까운 경우 근접 공격
-	{  
-		std::cout << "근접공격" << std::endl;
+	{   
 		status->Damage(500, ANIMATION_HIT.ID);
 	}
 	else
