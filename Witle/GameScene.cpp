@@ -324,9 +324,6 @@ bool GameScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM w
 		case '4':
 			break;
 
-		case '6':
-			break;
-
 		case '5':
 			// 모든 제단 활성화 시키는 치트
 			for (int x = 0; x < 5; ++x)
@@ -334,6 +331,11 @@ bool GameScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM w
 				m_AltarSphere[x]->SetisActive(true);
 				m_Dragon->IsNotStone();
 			}
+			break;
+
+		case '6':
+			// 보스 몬스터 죽는 치트
+			m_Dragon->SubstractHP(100);
 			break;
 
 		default:

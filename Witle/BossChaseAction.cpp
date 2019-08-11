@@ -108,7 +108,8 @@ void BossChaseAction::UpdateState(float fElpasedTime, BossMonsterActionMgr * act
 	// 만약 체력이 0라면 상태를 
 	if (static_cast<Monster*>(m_pOwner)->GetStatus()->m_Guage <= 0.f)
 	{
-		(actionMgr)->ChangeBossStateToIdle(); 
+		(actionMgr)->ChangeBossStateToDead(); 
+		return;
 	}
 	  
 	ENUM_BOSSSKILL skill = GetRandomSkill(); 
