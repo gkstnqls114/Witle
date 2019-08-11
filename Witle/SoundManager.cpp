@@ -71,9 +71,10 @@ SoundManager::SoundManager()
 		, &pSound[(int)ENUM_SOUND::SKILLPAGE_SOUND]
 	);
 
+	pChannel[(int)ENUM_SOUND::GAME_SOUND]->setVolume(0.2f); // -> 볼륨 
 	pSystem->createStream( // 게임 배경음
 		"Sound/BGM/game_sound.mp3"
-		, FMOD_DEFAULT | FMOD_3D
+		, FMOD_DEFAULT | FMOD_2D
 		, nullptr
 		, &pSound[(int)ENUM_SOUND::GAME_SOUND]
 	);
