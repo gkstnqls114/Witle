@@ -6,8 +6,8 @@
 using namespace FMOD;
 
 #define SOUND_TYPE 32
-#define SOUND_MIN 1
-#define SOUND_MAX 10000
+#define SOUND_MIN 50
+#define SOUND_MAX 5000
 
 class Player;
 
