@@ -368,14 +368,30 @@ void Player::Rotate(float x, float y, float z)
 	m_pMyBOBox->Rotate(m_pPlayerMovement->m_fRoll, m_pPlayerMovement->m_fYaw, m_pPlayerMovement->m_fPitch);
 }
  
+static float hittime = 0.f;
 void Player::ProcessInput(float fTimeElapsed)
 {   
+	//if (isDead) return;
+
+	//if (m_pPlayerHPStatus->m_Guage <= 0 && isDead == false)
+	//{
+	//	isDead = true;
+	//	m_CurrAnimation = ANIMATION_DEAD.ID;
+	//	return;
+	//}
+
 	if (m_CurrAnimation == ANIMATION_HIT.ID)
-	{
-		if (!m_pLoadObject_Cloth->IsTrackAnimationSetFinish(0, ANIMATION_HIT.ID) &&
-			!m_pLoadObject_Body->IsTrackAnimationSetFinish(0, ANIMATION_HIT.ID))
+	{  
+		hittime += fTimeElapsed;
+
+		if (hittime < (ANIMATION_HIT.EndTime - ANIMATION_HIT.StartTime))
 		{
 			return;
+		}
+		else
+		{
+			m_CurrAnimation = ANIMATION_IDLE.ID;
+			hittime = 0.f;
 		}
 	}
 
@@ -389,13 +405,6 @@ void Player::ProcessInput(float fTimeElapsed)
 	//		m_pPlayerHPStatus->m_Guage = 1000.F;
 	//		isDead = false;
 	//	}
-	//	return;
-	//}
-
-	//if (m_pPlayerHPStatus->m_Guage <= 0 && isDead == false)
-	//{
-	//	isDead = true;
-	//	m_CurrAnimation = ANIMATION_DEAD.ID;
 	//	return;
 	//}
 
@@ -480,6 +489,8 @@ void Player::ProcessInputAI(float fTimeElapsed)
 //  
 bool Player::Attack(Status* status, MyCollider* collider, XMFLOAT2 aimPoint, Camera* pMainCaemra, bool isDragon = false)
 {   
+	if (isDead) return false;
+
 	// 시행된다면..
 	bool isAttack = false;
 

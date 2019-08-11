@@ -137,7 +137,7 @@ public:
 
 	// 몬스터 관련 ////////////////////////////
 
-	int						m_TestMonsterCount{ 107 }; //원래 107마리..
+	int						m_TestMonsterCount{ 1 }; //원래 107마리..
 	Monster**				m_TestMonster{ nullptr };
 	Monster*				m_AltarMonster{ nullptr };
 	
