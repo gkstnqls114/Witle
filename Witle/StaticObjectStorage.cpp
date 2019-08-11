@@ -24,22 +24,22 @@ bool StaticObjectStorage::LoadTransform(char * name, const char * comp_name, con
 { 
 	bool result = false;
 	 
-	if (!strcmp(name, comp_name) || !strcmp(name, "Cylinder001") /*Floor때문에 하드코딩*/)
+	if (!strcmp(name, comp_name) || !strcmp(name, "Cylinder001") /*Floor때문에 하드코딩*/ || !strcmp(name, "Object001"))
 	{
 		// 만약 name이 절벽인 경우...
-		if (!strcmp(name, Cliff))
+		if (!strcmp(name, "Object001"))
 		{ 
 			XMFLOAT4X4 newXMFLOAT4X4 = tr;
 			newXMFLOAT4X4._42 = 50;
-			LoadObject* TestObject = ModelStorage::GetInstance()->GetRootObject(comp_name);
+			LoadObject* TestObject = ModelStorage::GetInstance()->GetRootObject(Cliff);
 			TestObject->SetTransform(newXMFLOAT4X4); // 여기서 Scale 과 다이렉트 X축에 대한 회전 일어나므로 절대 빼먹으면 안됨..
 			TestObject->UpdateTransform(NULL);
 
 			for (int x = 0; x < TerrainPieceCount; ++x)
 			{
-				m_StaticObjectStorage[comp_name][x].TerrainObjectCount += 1;
+				m_StaticObjectStorage[Cliff][x].TerrainObjectCount += 1;
 
-				m_StaticObjectStorage[comp_name][x].TransformList.emplace_back(TestObject->m_pChild->m_xmf4x4World);
+				m_StaticObjectStorage[Cliff][x].TransformList.emplace_back(TestObject->m_pChild->m_xmf4x4World);
 			}
 
 			delete TestObject;
@@ -72,8 +72,7 @@ bool StaticObjectStorage::LoadTransform(char * name, const char * comp_name, con
 				TestObject = nullptr;
 			}
 			else
-			{
-
+			{ 
 				m_StaticObjectStorage[comp_name][terrainIDs].TerrainObjectCount += 1;
 
 				LoadObject* TestObject = ModelStorage::GetInstance()->GetRootObject(comp_name);
