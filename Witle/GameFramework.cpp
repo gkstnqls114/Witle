@@ -1216,9 +1216,15 @@ LRESULT CGameFramework::OnProcessingWindowMessage(HWND hWnd, UINT nMessageID, WP
 	case WM_ACTIVATE:
 	{
 		if (LOWORD(wParam) == WA_INACTIVE)
+		{
 			CGameTimer::GetInstance()->Stop();
+			GameInput::Stop();
+		}
 		else
+		{
 			CGameTimer::GetInstance()->Start();
+			GameInput::Start();
+		}
 		break;
 	}
 

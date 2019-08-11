@@ -53,16 +53,18 @@ private:
 	GameInput();
 	~GameInput();
 
+	static bool m_gameActive;
+
 	static HWND m_hWnd;
 	  
 	static UCHAR m_pKeyBuffer[256]; // 키보드의 input(지속)을 위한 멤버 변수
 
-	static const bool m_DragMode;
+	static bool m_DragMode;
 
 	static RAY m_PickingRay;
 	static short m_WheelDelta; // 마우스 휠이 움직인 정도
-	static const float m_DeltaValueX; // 마우스 이동량 값
-	static const float m_DeltaValueY; // 마우스 이동량 값 
+	static float m_DeltaValueX; // 마우스 이동량 값
+	static float m_DeltaValueY; // 마우스 이동량 값 
 
 	static POINT m_downClickCursor; // 한번 클릭했을 때 위치
 	static POINT m_downOldCursor; // 이전 프레임에서의 마우스 위치 
@@ -88,6 +90,21 @@ public:
 
 	static void Reset();
 
+	static void ChagneDragMode() 
+	{
+		m_DeltaValueX = 10.f;
+		m_DeltaValueY = 10.f;
+		m_DragMode = true; 
+	};
+	static void ChagneMoveMode()
+	{
+		m_DeltaValueX = 5.f;
+		m_DeltaValueY = 5.f;
+		m_DragMode = false;
+	};
+
+	static void Stop();
+	static void Start();
 	static void SetHWND(HWND hwnd);
 	static void MouseMove(LPARAM lParam);
 	static void SetCapture(HWND hWnd);

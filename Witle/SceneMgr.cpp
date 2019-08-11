@@ -4,6 +4,7 @@
 #include "SkillSelectScene.h"
 #include "WinScene.h"
 #include "LoseScene.h"
+#include "GameInput.h"
 #include "SceneMgr.h"
 
 #include "SoundManager.h"
@@ -85,6 +86,7 @@ void SceneMgr::ChangeSceneToGame()
 	SoundManager::GetInstance()->Play(ENUM_SOUND::GAME_SOUND);
 	// 사운드 ///////////////////////////////////////////////////////////
 
+	GameInput::ChagneMoveMode();
 	m_SkillSelectScene->FinishSkillSelect(); // Skill Select에서 설정된 스킬 연결
 	m_pCurrScene = m_GameScene;
 	m_CurrSceneType = ENUM_SCENE::SCENE_GAME;
@@ -101,6 +103,7 @@ void SceneMgr::ChangeSceneToMain()
 	SoundManager::GetInstance()->Play(ENUM_SOUND::MAIN_SOUND);
 	// 사운드 ///////////////////////////////////////////////////////////
 
+	GameInput::ChagneDragMode();
 	m_pCurrScene = m_MainScene;
 	m_CurrSceneType = ENUM_SCENE::SCENE_MAIN;
 }
@@ -116,6 +119,7 @@ void SceneMgr::ChangeSceneToSkillSelect()
 	SoundManager::GetInstance()->Play(ENUM_SOUND::SKILLPAGE_SOUND);
 	// 사운드 ///////////////////////////////////////////////////////////
 
+	GameInput::ChagneDragMode();
 	m_pCurrScene = m_SkillSelectScene;
 	m_CurrSceneType = ENUM_SCENE::SCENE_SKILLSELECT;
 }
@@ -131,6 +135,7 @@ void SceneMgr::ChangeSceneToWin()
 	SoundManager::GetInstance()->Play(ENUM_SOUND::WIN_SOUND);
 	// 사운드 ///////////////////////////////////////////////////////////
 
+	GameInput::ChagneDragMode();
 	m_pCurrScene = m_WinScene;
 	m_CurrSceneType = ENUM_SCENE::SCENE_WIN;
 }
@@ -146,6 +151,7 @@ void SceneMgr::ChangeSceneToLose()
 	SoundManager::GetInstance()->Play(ENUM_SOUND::LOSE_SOUND);
 	// 사운드 ///////////////////////////////////////////////////////////
 
+	GameInput::ChagneDragMode();
 	m_pCurrScene = m_LoseScene;
 	m_CurrSceneType = ENUM_SCENE::SCENE_LOSE;
 }

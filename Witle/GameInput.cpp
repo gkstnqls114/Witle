@@ -12,20 +12,21 @@
 HWND GameInput::m_hWnd;
 
 UCHAR GameInput::m_pKeyBuffer[256]; 
-const bool GameInput::m_DragMode{ true };
- 
+bool GameInput::m_DragMode{ false };
+bool GameInput::m_gameActive{ false }; 
+
 POINT GameInput::m_moveCursor;        // 한번 클릭했을 때 위치
 POINT GameInput::m_moveOldCursor{ -1, -1};     // 이전 프레임에서의 마우스 위치 
-float GameInput::m_moveDeltaX = 0.0f; // 마우스를 누른 상태로 x축으로 움직인 마우스 이동량  
-float GameInput::m_moveDeltaY = 0.0f; // 마우스를 누른 상태로 y축으로 움직인 마우스 이동량
+float GameInput::m_moveDeltaX = 0.0f; // x축으로 움직인 마우스 이동량  
+float GameInput::m_moveDeltaY = 0.0f; // y축으로 움직인 마우스 이동량
 
 float GameInput::m_downDeltaX = 0.0f; // 마우스를 누른 상태로 x축으로 움직인 마우스 이동량  
 float GameInput::m_downDeltaY = 0.0f; // 마우스를 누른 상태로 y축으로 움직인 마우스 이동량
 POINT GameInput::m_downOldCursor; // 이전 프레임에서의 마우스 위치
 POINT GameInput::m_downClickCursor{ -1, -1 }; // 한번 클릭했을 때 위치
 
-const float GameInput::m_DeltaValueX = 10.0f; // 마우스 이동량 값 
-const float GameInput::m_DeltaValueY = 10.0f; // 마우스 이동량 값 
+float GameInput::m_DeltaValueX = 10.0f; // 마우스 이동량 값 
+float GameInput::m_DeltaValueY = 10.0f; // 마우스 이동량 값 
 short GameInput::m_WheelDelta; // 마우스 휠이 움직인 정도
 
 GameInput::GameInput()
@@ -92,6 +93,11 @@ void GameInput::Update(HWND hWnd)
 	{ 
 		UpdateMouseDragRotate(hWnd);
 	} 
+	else
+	{
+		//마우스 커서를 화면에서 없앤다(보이지 않게 한다).
+		::SetCursor(NULL);
+	}
 }
  
 void GameInput::Reset()
@@ -109,6 +115,16 @@ void GameInput::Reset()
 	}
 }
 
+void GameInput::Stop()
+{
+	m_gameActive = false;
+}
+
+void GameInput::Start()
+{
+	m_gameActive = true;
+}
+
 void GameInput::SetHWND(HWND hwnd)
 {
 	m_hWnd = hwnd;
@@ -116,6 +132,8 @@ void GameInput::SetHWND(HWND hwnd)
 
 void GameInput::MouseMove(LPARAM lParam)
 {     
+	if (!m_gameActive) return;
+
 	if (!m_DragMode)
 	{
 		::GetCursorPos(&m_moveCursor);
@@ -136,6 +154,8 @@ void GameInput::MouseMove(LPARAM lParam)
 
 void GameInput::SetCapture(HWND hWnd)
 {
+	if (!m_gameActive) return;
+
 	::SetCapture(hWnd);
 	::GetCursorPos(&m_downOldCursor);
 	::GetCursorPos(&m_downClickCursor);
