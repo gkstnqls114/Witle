@@ -52,7 +52,7 @@ SoundManager::SoundManager()
 
 	for (auto& p : pSound) p = nullptr;
 
-	pSystem->set3DSettings(1.0f, 10, 10000.0);
+	// pSystem->set3DSettings(1.0f, 10, 10000.0);
 
 	// 사운드 추가
 
@@ -71,7 +71,6 @@ SoundManager::SoundManager()
 		, &pSound[(int)ENUM_SOUND::SKILLPAGE_SOUND]
 	);
 
-	pChannel[(int)ENUM_SOUND::GAME_SOUND]->setVolume(0.2f); // -> 볼륨 
 	pSystem->createStream( // 게임 배경음
 		"Sound/BGM/game_sound.mp3"
 		, FMOD_DEFAULT | FMOD_2D
@@ -198,23 +197,6 @@ SoundManager::SoundManager()
 	//// 기본 몬스터 //////////////////////////////////////////////////////////////////
 
 	//// 보스 몬스터 //////////////////////////////////////////////////////////////////
-
-	FMOD_VECTOR Boss_pos;
-	Boss_pos.x = 15000.f;
-	Boss_pos.y = 0.f;
-	Boss_pos.z = 15000.f;
-	FMOD_VECTOR Boss_vel = { 0.f,0.f,0.f };
-
-	FMOD_VECTOR Player_pos;
-	Player_pos.x = (float)PlayerManager::GetMainPlayer()->GetTransform().GetPosition().x;
-	Player_pos.y = (float)PlayerManager::GetMainPlayer()->GetTransform().GetPosition().y;
-	Player_pos.z = (float)PlayerManager::GetMainPlayer()->GetTransform().GetPosition().z;
-	FMOD_VECTOR Player_vel = { 0.f,0.f,0.f };
-
-	pChannel[(int)ENUM_SOUND::BOSS_MOVE_SOUND]->setVolume(0.5f); // -> 볼륨 
-	pChannel[(int)ENUM_SOUND::BOSS_MOVE_SOUND]->set3DMinMaxDistance(SOUND_MIN, SOUND_MAX);
-	pChannel[(int)ENUM_SOUND::BOSS_MOVE_SOUND]->set3DAttributes(&Boss_pos, NULL); // -> 인자 (pos,vel,alt_pan_pos
-	pSystem->get3DListenerAttributes(0, &Player_pos, &Player_vel, 0, 0);
 	pSystem->createSound( // 보스 몬스터 이동
 		"Sound/Effect/dragon_cry.mp3"
 		, FMOD_3D | FMOD_DEFAULT
@@ -299,7 +281,31 @@ void SoundManager::Play(int type)
 	pSystem->playSound(pSound[(int)type]
 		, nullptr, false, &pChannel[(int)type]);
 
-	// pSystem->playSound(FMOD_CHANNEL_FREE)
+	// 보스 //////////////////////////////////////////////////////////////////////////
+	FMOD_VECTOR Boss_pos;
+	Boss_pos.x = 15000.f;
+	Boss_pos.y = 0.f;
+	Boss_pos.z = 15000.f;
+	FMOD_VECTOR Boss_vel = { 0.f,0.f,0.f };
+
+	FMOD_VECTOR Player_pos;
+	Player_pos.x = (float)PlayerManager::GetMainPlayer()->GetTransform().GetPosition().x;
+	Player_pos.y = (float)PlayerManager::GetMainPlayer()->GetTransform().GetPosition().y;
+	Player_pos.z = (float)PlayerManager::GetMainPlayer()->GetTransform().GetPosition().z;
+	FMOD_VECTOR Player_vel = { 0.f,0.f,0.f };
+
+	pSystem->get3DListenerAttributes(0, &Player_pos, &Player_vel, 0, 0);
+
+	pChannel[(int)ENUM_SOUND::BOSS_MOVE_SOUND]->set3DMinMaxDistance(SOUND_MIN, SOUND_MAX);
+	pChannel[(int)ENUM_SOUND::BOSS_MOVE_SOUND]->set3DAttributes(&Boss_pos, NULL); // -> 인자 (pos,vel,alt_pan_pos
+	// 보스 //////////////////////////////////////////////////////////////////////////
+
+	// 볼륨 //////////////////////////////////////////////////////////////////////////
+	pChannel[(int)ENUM_SOUND::BOSS_MOVE_SOUND]->setVolume(3.0f);
+	pChannel[(int)ENUM_SOUND::GAME_SOUND]->setVolume(0.1f);
+	pChannel[(int)ENUM_SOUND::PLAYER_MOVE]->setVolume(0.1f);
+	pChannel[(int)ENUM_SOUND::PLAYER_BROOM]->setVolume(0.1f);
+	// 볼륨 //////////////////////////////////////////////////////////////////////////
 }
 
 void SoundManager::Stop(int type)
