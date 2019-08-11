@@ -29,7 +29,7 @@ ENUM_BOSSSKILL BossChaseAction::GetRandomSkill()
 		BOSSSKILL_BREATH,
 		BOSSSKILL_DOWNSTROKE 중 하나
 		*/
-		result = ENUM_BOSSSKILL::BOSSSKILL_BREATH;
+		result = ENUM_BOSSSKILL::BOSSSKILL_DOWNSTROKE;
 		// result = ENUM_BOSSSKILL(monstertype(mersenne)); // 0 혹은 1
 	}
 	else if (hp > 30.f)  // second phase
@@ -90,7 +90,7 @@ void BossChaseAction::UpdateVelocity(float fElpasedTime, MonsterMovement * movem
 		Vector3::Subtract(PlayerManager::GetMainPlayer()->GetTransform().GetPosition(), m_pOwner->GetTransform().GetPosition())
 	);
 
-	movement->m_xmf3Velocity = Vector3::ScalarProduct(toPlayer, movement->m_fDistance, false);
+	movement->m_xmf3Velocity = Vector3::ScalarProduct(toPlayer, movement->m_fDistance * 2.5f, false);
 
 	XMFLOAT3 look(0.f, 0.f, 1.f);
 	float value = Vector3::AngleToRadian(look, toPlayer) * 180.f / 3.141592;
