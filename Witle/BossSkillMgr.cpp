@@ -11,6 +11,7 @@
 #include "Healing.h"
 // Selectable Skill 관련 ////////////////////////////
 
+#include "Dragon.h"
 #include "BossSkillMgr.h"
 
 BossSkillMgr* BossSkillMgr::m_Instance{ nullptr };
@@ -59,7 +60,7 @@ void BossSkillMgr::UpdatePhysics(float fElapsedTime)
 
 void BossSkillMgr::Update(float fElapsedTime)
 {
-	for (int x = 0; x < SKILL_SELECTED; ++x)
+	for (int x = 0; x < m_count; ++x)
 	{
 		m_SelectableSkills[x]->Update(fElapsedTime);
 	}
@@ -67,7 +68,7 @@ void BossSkillMgr::Update(float fElapsedTime)
 
 void BossSkillMgr::Render(ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffers)
 {
-	for (int x = 0; x < SKILL_SELECTED; ++x)
+	for (int x = 0; x < m_count; ++x)
 	{
 		if (!m_SelectableSkills[x]->isActive) continue;
 
@@ -78,25 +79,22 @@ void BossSkillMgr::Render(ID3D12GraphicsCommandList * pd3dCommandList, bool isGB
 	}
 }
 
-void BossSkillMgr::Activate(PlayerStatus* MPstaus, int index)
+void BossSkillMgr::Activate(Dragon* boss, int index)
 {
-	//if (m_SelectableSkills[index]->isActive) return;
-	//if (m_skill[index]->RemainCoolTime > 0.f) return;
-	//if ((MPstaus->m_Guage - m_skill[index]->m_UsingMp/*사용하는 마나 게이지*/) < 0.f) return;
+	if (m_SelectableSkills[index]->isActive) return;
 
-	//m_skill[index]->Active();
+	m_SelectableSkills[index]->isActive = true;
+	m_SelectableSkills[index]->Active();
+	  
+	m_SelectableSkills[index]->RemainCoolTime = m_SelectableSkills[index]->GetCoolTime();
+	m_SelectableSkills[index]->spawnPosition =
+		boss->GetTransform().GetPosition();
 
-	//MPstaus->m_Guage -= m_skill[index]->m_UsingMp;
-	//m_skill[index]->isActive = true;
-	//m_skill[index]->RemainCoolTime = m_skill[index]->GetCoolTime();
-	//m_skill[index]->spawnPosition =
-	//	PlayerManager::GetMainPlayer()->GetTransform().GetPosition();
-
-	//m_skill[index]->m_skillEffect->SetVelocity(
-	//	m_skill[index]->spawnPosition,
-	//	75,
-	//	PlayerManager::GetMainPlayer()->GetTransform().GetLook()
-	//);
+	m_SelectableSkills[index]->m_skillEffect->SetVelocity(
+		m_SelectableSkills[index]->spawnPosition,
+		75,
+		boss->GetTransform().GetLook()
+	);
 }
 
 void BossSkillMgr::Deactive(int index)
@@ -116,7 +114,7 @@ void BossSkillMgr::SetSkill(SelectableSkill * skilleffect, UINT index)
 
 bool BossSkillMgr::isActive(ENUM_SELECTABLESKILL type)
 {
-	for (int x = 0; x < SKILL_SELECTED; ++x)
+	for (int x = 0; x < m_count; ++x)
 	{
 		if (m_SelectableSkills[x]->GetSelectableSkillType() == type)
 		{

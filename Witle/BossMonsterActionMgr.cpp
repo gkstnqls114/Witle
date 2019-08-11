@@ -6,6 +6,7 @@
 #include "RecognitionRange.h"
 #include "MonsterStatus.h"
 #include "Monster.h"
+#include "BossSkillMgr.h"
 
 #include "BossMonsterActionMgr.h"
 

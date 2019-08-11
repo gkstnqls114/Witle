@@ -2,6 +2,7 @@
 
 class SelectableSkill;
 class SkillEffect;
+class Dragon;
 
 // 선택할수 있는 스킬인 SelectableSkill 클래스와 관련되는 인스턴스들을 저장하는 클래스입니다.
 // 단순하게 저장하고 꺼낼 수 만 있습니다.
@@ -9,6 +10,8 @@ class BossSkillMgr
 {
 	static BossSkillMgr* m_Instance;
 	
+	const float m_DeltaTime{ 1.f };
+
 	const int m_count{ 10 };
 	SelectableSkill** m_SelectableSkills;
 
@@ -40,9 +43,9 @@ public:
 	void Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers);
 
 	// 스킬 이펙트를 활성화합니다.
-	// playerStaus: 마나 . skilltype: 활성화 시킬 스킬 타입
+	// Dragon: 드래곤 자신의 정보를 갖고와 look 과 spawn을 설정합니다.
 	// 가속도를 설정하는 부분은 UpdatePhysics에서 수행됩니다.
-	void Activate(PlayerStatus* MPStaus, int index);
+	void Activate(Dragon* dragon, int index);
 
 	// 해당 index에 해당하는 스킬 이펙트를 비활성화합니다.
 	void Deactive(int index);

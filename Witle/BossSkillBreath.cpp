@@ -5,9 +5,12 @@
 #include "Object.h"
 #include "MonsterMovement.h"
 #include "BossMonsterActionMgr.h"
-#include "BossSkillBreath.h"
+#include "BossSkillMgr.h"
+#include "Dragon.h"
 
 #include "SoundManager.h"
+
+#include "BossSkillBreath.h"
 
 void BossSkillBreath::UpdateVelocity(float fElpasedTime, MonsterMovement * movement)
 {
@@ -18,6 +21,11 @@ void BossSkillBreath::UpdateVelocity(float fElpasedTime, MonsterMovement * movem
 
 void BossSkillBreath::UpdateState(float fElpasedTime, BossMonsterActionMgr * actionMgr)
 {
+	for (int x = 0; x < 10; ++x)
+	{
+		BossSkillMgr::GetInstance()->Activate(static_cast<Dragon*>(m_pOwner), x);
+	}
+
 	// Attack 애니메이션이 끝나지 않았을 경우 Chnage State 하지 않는다.
 	if (!static_cast<Monster*>(m_pOwner)->GetpLoadObject()->IsTrackAnimationSetFinish(0, BOSS_BREATH.ID)) return;
 

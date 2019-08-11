@@ -21,6 +21,7 @@
 //// GameObject header //////////////////////////
 
 //// 매니저 관련 헤더 //////////////////////////
+#include "BossSkillMgr.h"
 #include "MainCameraMgr.h"
 #include "GraphicsRootSignatureMgr.h"
 #include "MonsterTransformStorage.h"
@@ -802,8 +803,10 @@ bool GameScene::ProcessInput(HWND hWnd, float fElapsedTime)
 void GameScene::UpdatePhysics(float fElapsedTime)
 {
 	m_Dragon->UpdateState(fElapsedTime);
+
 	// 스킬 이펙트 가속도 처리
 	PlayerSkillMgr::GetInstance()->UpdatePhysics(fElapsedTime);
+	BossSkillMgr::GetInstance()->UpdatePhysics(fElapsedTime);
 
 	for (int i = 0; i < m_TestMonsterCount; ++i) 
 	{
@@ -880,7 +883,9 @@ void GameScene::Update(float fElapsedTime)
 
 	// 플레이어 스킬 이동 업데이트.. 플레이어 포지션에 맞춰야 하므로 반드시 Player Update이후에 호출해야함.
 	PlayerSkillMgr::GetInstance()->Update(fElapsedTime);
+
 	//// 순서 변경 X ////
+	BossSkillMgr::GetInstance()->Update(fElapsedTime); // 스킬 이펙트 이동
 
 	for (int x = 0; x < 5; ++x)
 	{
@@ -1151,6 +1156,7 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 		m_pQuadtreeTerrain->Render(pd3dCommandList, m_Terrain, nullptr /*딱히 의미없음*/, isGBuffers);
 	}
 
+	BossSkillMgr::GetInstance()->Render(pd3dCommandList, isGBuffers); // 스킬 이펙트 생성
 	PlayerSkillMgr::GetInstance()->Render(pd3dCommandList, isGBuffers);
 
 	/// ui map과 스킬 관련 렌더링..

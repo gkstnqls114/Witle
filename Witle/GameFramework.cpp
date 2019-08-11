@@ -9,6 +9,7 @@
 //// GameBase ////////////////////////// 
 
 //// Manager ////////////////////////// 
+#include "BossSkillMgr.h"
 #include "MainCameraMgr.h"
 #include "GraphicsRootSignatureMgr.h"
 #include "ShaderManager.h"
@@ -826,6 +827,7 @@ void CGameFramework::BuildObjects()
 	ModelStorage::GetInstance()->CreateModels(m_d3dDevice.Get(), m_CommandList.Get(), GraphicsRootSignatureMgr::GetGraphicsRootSignature());
 	HitEffectMgr::GetInstance()->BuildObjects(m_d3dDevice.Get(), m_CommandList.Get());
 	SkillStg::GetInstance()->BuildObjects(m_d3dDevice.Get(), m_CommandList.Get()); // 스킬 이펙트 생성
+	BossSkillMgr::GetInstance()->BuildObjects(m_d3dDevice.Get(), m_CommandList.Get()); // 스킬 이펙트 생성
 
 	// 모든 씬의 오브젝트 및 텍스쳐들을 빌드합니다.
 	m_SceneMgr->BuildObjects(m_d3dDevice.Get(), m_CommandList.Get());
