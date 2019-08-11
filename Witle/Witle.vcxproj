@@ -164,6 +164,7 @@
     <ClInclude Include="BloomRevealShader.h" />
     <ClInclude Include="BossBuf.h" />
     <ClInclude Include="BossDead.h" />
+    <ClInclude Include="BossSkillMgr.h" />
     <ClInclude Include="BossStone.h" />
     <ClInclude Include="EffectMesh.h" />
     <ClInclude Include="HitEffectMgr.h" />
@@ -353,6 +354,7 @@
     <ClCompile Include="BloomRevealShader.cpp" />
     <ClCompile Include="BossBuf.cpp" />
     <ClCompile Include="BossDead.cpp" />
+    <ClCompile Include="BossSkillMgr.cpp" />
     <ClCompile Include="BossStone.cpp" />
     <ClCompile Include="EffectMesh.cpp" />
     <ClCompile Include="HitEffectMgr.cpp" />

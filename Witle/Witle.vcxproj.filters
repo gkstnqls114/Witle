@@ -541,6 +541,9 @@
     <Filter Include="05.Shader\02.GraphicsShader\AltarSphereShader">
       <UniqueIdentifier>{62522ad1-08c1-4421-a837-3ea0f8338a1b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="13.Storage/Manager\15.BossSkillMgr">
+      <UniqueIdentifier>{5132c9c5-6bfd-4a5f-8833-47cae95002f4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -1104,6 +1107,9 @@
     <ClInclude Include="AltarSphereShader.h">
       <Filter>05.Shader\02.GraphicsShader\AltarSphereShader</Filter>
     </ClInclude>
+    <ClInclude Include="BossSkillMgr.h">
+      <Filter>13.Storage/Manager\15.BossSkillMgr</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1645,6 +1651,9 @@
     </ClCompile>
     <ClCompile Include="AltarSphereShader.cpp">
       <Filter>05.Shader\02.GraphicsShader\AltarSphereShader</Filter>
+    </ClCompile>
+    <ClCompile Include="BossSkillMgr.cpp">
+      <Filter>13.Storage/Manager\15.BossSkillMgr</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
