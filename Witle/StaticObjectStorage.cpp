@@ -399,6 +399,8 @@ void StaticObjectStorage::Render(ID3D12GraphicsCommandList * pd3dCommandList, in
 	for (auto& info : m_StaticObjectStorage)
 	{ 
 		if (info.second[index].TerrainObjectCount == 0) continue;
+		if (!strcmp(info.first.c_str(), Flower)) continue;
+		if (!strcmp(info.first.c_str(), RUIN_FLOOR)) continue;
 
 		pd3dCommandList->SetGraphicsRootShaderResourceView(ROOTPARAMETER_INSTANCING, info.second[index].m_pd3dcbGameObjects->GetGPUVirtualAddress()); // ¿ŒΩ∫≈œΩÃ Ω¶¿Ã¥ı ∏Æº“Ω∫ ∫‰
 		  
@@ -417,6 +419,7 @@ void StaticObjectStorage::RenderForShadow(ID3D12GraphicsCommandList * pd3dComman
 	{
 		if (info.second[index].TerrainObjectCount == 0) continue;
 		if (!strcmp(info.first.c_str(), Flower)) continue;
+		if (!strcmp(info.first.c_str(), RUIN_FLOOR)) continue;
 
 		pd3dCommandList->SetGraphicsRootShaderResourceView(ROOTPARAMETER_INSTANCING, info.second[index].m_pd3dcbGameObjects->GetGPUVirtualAddress()); // ¿ŒΩ∫≈œΩÃ Ω¶¿Ã¥ı ∏Æº“Ω∫ ∫‰
 
