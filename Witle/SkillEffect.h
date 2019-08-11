@@ -45,4 +45,5 @@ public:
 	// 현재 충돌체를 리턴합니다.
 	MyCollider* GetCollier() const { return m_MyCollider; }
 
+	Movement* GetpMovement() const { return m_Movement; };
 };

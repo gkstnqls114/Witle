@@ -10,7 +10,7 @@ class BossChaseAction
 	: public BossMonsterAction
 {
 private:
-	const float m_fBreathDistance = 1200.f;
+	const float m_fBreathDistance = 2000.f;
 	const float m_fDownStrokeDistance = 500.f;
 	const float m_fTailAttackDistance = 500.f;
 	const float m_fRushDistance = 1500.f;

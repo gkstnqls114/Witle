@@ -992,6 +992,8 @@ void GameScene::LastUpdate(float fElapsedTime)
 	// update한 위치로 보스의 스킬공격이 플레이어에게 접촉하는지 확인
 	for (int index = 0; index < 10; ++index)
 	{
+		if (m_pPlayer->GetHPStatus()->m_Guage <= 0.f) break;
+
 		// 스킬 활성화가 되어있지 않다면 넘어간다.
 		if (!BossSkillMgr::GetInstance()->GetpSelectableSkill(index)->isActive) continue;
 

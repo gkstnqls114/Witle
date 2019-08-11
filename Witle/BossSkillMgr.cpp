@@ -11,6 +11,7 @@
 #include "Healing.h"
 // Selectable Skill ฐüทร ////////////////////////////
 
+#include "Movement.h"
 #include "Object.h"
 #include "Dragon.h"
 #include "BossSkillMgr.h"
@@ -31,8 +32,8 @@ void BossSkillMgr::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommand
 	for (int i = 0; i < m_count; ++i)
 	{
 		m_SelectableSkills[i] = new FireBallSkill(pd3dDevice, pd3dCommandList);
-	}
-
+		m_SelectableSkills[i]->m_skillEffect->GetpMovement()->m_fDistance = 3000;
+	} 
 }
 
 void BossSkillMgr::ReleaseUploadBuffers()
@@ -98,7 +99,7 @@ void BossSkillMgr::Activate(Dragon* boss, int index)
 		m_SelectableSkills[index]->spawnPosition,
 		75,
 		boss->GetTransform().GetLook()
-	);
+	); 
 }
 
 void BossSkillMgr::Deactive(int index)
