@@ -33,7 +33,7 @@ Mushroom::Mushroom(const std::string & entityID, const XMFLOAT3& SpawnPoint,
 	m_RecognitionRange = new RecognitionRange(this, 500.f, 2.f);
 	m_RecognitionRange->CreateDebugMesh(pd3dDevice, pd3dCommandList);
 
-	m_MonsterMovement = new MonsterMovement(this, 1, 1);
+	m_MonsterMovement = new MonsterMovement(this, 1.f, 5.f);
 	m_MonsterMovement->m_fDistance = 100;
 
 	m_pTexture = TextureStorage::GetInstance()->GetTexture(MUSHROOM);
