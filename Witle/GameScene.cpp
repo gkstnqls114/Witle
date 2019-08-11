@@ -1047,12 +1047,7 @@ void GameScene::LastUpdate(float fElapsedTime)
 			m_pPlayer->SubstractHP(5);
 		} 
 	}
-
-	if (Collision::isCollide(m_pPlayer->GetBOBox(), m_Dragon->GetBOBox()))
-	{
-		std::cout << "테스트" << std::endl;
-	}
-
+	 
 	// 보스와 플레이 부딪힘
 	if (Collision::isCollide(m_pPlayer->GetBOBox() , m_Dragon->GetBOBox()) 
 		&& m_Dragon->GetisAttacking()

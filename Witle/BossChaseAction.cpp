@@ -29,7 +29,7 @@ ENUM_BOSSSKILL BossChaseAction::GetRandomSkill()
 		BOSSSKILL_BREATH,
 		BOSSSKILL_DOWNSTROKE 중 하나
 		*/
-		result = ENUM_BOSSSKILL::BOSSSKILL_DOWNSTROKE;
+		result = ENUM_BOSSSKILL::BOSSSKILL_TAILATTACK;
 		// result = ENUM_BOSSSKILL(monstertype(mersenne)); // 0 혹은 1
 	}
 	else if (hp > 30.f)  // second phase
