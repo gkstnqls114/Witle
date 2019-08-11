@@ -9,7 +9,8 @@ public:
 
 private:
 	LoadObject* m_BOBoxFrame{ nullptr };
-
+	LoadObject* m_HeadFrame{ nullptr };
+	
 	MyBOBox* m_BOBoxForTailAttack{ nullptr };
 	Texture* m_pStoneTexture{ nullptr };
 
@@ -37,4 +38,6 @@ public:
 	bool GetisStone() const { return m_isStone; }
 	void IsStone();
 	void IsNotStone();
+
+	const LoadObject* GetHeadFrame() const { return m_HeadFrame; }
 };

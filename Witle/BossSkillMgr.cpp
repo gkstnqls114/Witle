@@ -11,6 +11,7 @@
 #include "Healing.h"
 // Selectable Skill ฐüทร ////////////////////////////
 
+#include "Object.h"
 #include "Dragon.h"
 #include "BossSkillMgr.h"
 
@@ -88,7 +89,10 @@ void BossSkillMgr::Activate(Dragon* boss, int index)
 	  
 	m_SelectableSkills[index]->RemainCoolTime = m_SelectableSkills[index]->GetCoolTime();
 	m_SelectableSkills[index]->spawnPosition =
-		boss->GetTransform().GetPosition();
+		Vector3::Add(XMFLOAT3(boss->GetHeadFrame()->m_xmf4x4World._41,
+			boss->GetHeadFrame()->m_xmf4x4World._42- 50,
+			boss->GetHeadFrame()->m_xmf4x4World._43)
+			, Vector3::ScalarProduct(boss->GetTransform().GetLook(), 1.f, false));
 
 	m_SelectableSkills[index]->m_skillEffect->SetVelocity(
 		m_SelectableSkills[index]->spawnPosition,

@@ -118,7 +118,8 @@ Dragon::Dragon(const std::string & entityID, const XMFLOAT3& SpawnPoint,
 
 	// Bip001_Spine 프레임을 가져옵니다.
 	m_BOBoxFrame = m_pLoadObject->FindFrame("Bip001_Spine");
-
+	m_HeadFrame = m_pLoadObject->FindFrame("Bip001_Head");
+	
 	m_Transform.SetPosition(SpawnPoint);
 
 	XMFLOAT3 extents{ 150.f, 100.f, 230.f };

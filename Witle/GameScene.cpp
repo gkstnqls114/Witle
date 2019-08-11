@@ -989,6 +989,43 @@ void GameScene::LastUpdate(float fElapsedTime)
 		//////////////////////////////////////////////////////// BOSS를 때림
 	}
 	  
+	// update한 위치로 보스의 스킬공격이 플레이어에게 접촉하는지 확인
+	for (int index = 0; index < 10; ++index)
+	{
+		// 스킬 활성화가 되어있지 않다면 넘어간다.
+		if (!BossSkillMgr::GetInstance()->GetpSelectableSkill(index)->isActive) continue;
+
+		// 만약 스킬이 ATTACK 타입이 아니라면 넘어간다.
+		if (BossSkillMgr::GetInstance()->GetpSelectableSkill(index)->m_skillEffect->m_Skilltype != SKILLTYPE_ATTACK) continue;
+
+		MyCollider* skill_collider = BossSkillMgr::GetInstance()->GetpSelectableSkill(index)->m_skillEffect->GetCollier();
+
+		if (Collision::isCollide(m_pPlayer->GetBOBox(), skill_collider))
+		{
+			auto effect = BossSkillMgr::GetInstance()->GetpSelectableSkill(index)->m_skillEffect->GetCollier();
+
+			XMFLOAT3 pos{ -100, -100, -100 };
+			switch (effect->GetType())
+			{
+				case
+				BOUNDING_BOX:
+					pos = static_cast<MyBOBox*>(effect)->GetBOBox().Center;
+					break;
+				case BOUNDING_SPHERE:
+					pos = static_cast<MyBSphere*>(effect)->GetBSphere()->Center;
+					break;
+				default:
+					break;
+			}
+
+			HitEffectMgr::GetInstance()->AddPlayerSkillHitEffectPosition(
+				BossSkillMgr::GetInstance()->GetpSelectableSkill(index)->GetSelectableSkillType(),
+				pos);
+			m_pPlayer->SubstractHP(15);
+			BossSkillMgr::GetInstance()->Deactive(index);
+		}
+	}
+
 
 	// Update한 위치로 몬스터가 공격 시에 몬스터/플레이어충돌체크 확인 ///////////////////////////
 	for (int i = 0; i < m_TestMonsterCount; ++i)
