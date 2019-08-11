@@ -49,7 +49,10 @@ SoundManager::SoundManager()
 
 	for (auto& p : pSound) p = nullptr;
 
-	pSystem->set3DSettings(1.0f, 10, 10000.0);
+	// pSystem->set3DSettings(1.0f, 10, 10000.0);
+
+	pChannel[(int)ENUM_SOUND::BOSS_MOVE_SOUND]->setVolume(1.0f); // -> 볼륨 
+	pChannel[(int)ENUM_SOUND::BOSS_MOVE_SOUND]->set3DMinMaxDistance(SOUND_MIN, SOUND_MAX);
 
 	// 사운드 추가
 
@@ -195,87 +198,73 @@ SoundManager::SoundManager()
 
 	//// 보스 몬스터 //////////////////////////////////////////////////////////////////
 
-	FMOD_VECTOR test;
-	FMOD_VECTOR Player_pos_vel;
+	FMOD_VECTOR Boss_pos;
+	Boss_pos.x = 15000.f;
+	Boss_pos.y = 0.f;
+	Boss_pos.z = 15000.f;
 
-	test.x = 15000.f;
-	test.y = 0.f;
-	test.z = 15000.f;
+	FMOD_VECTOR Player_pos;
+	Player_pos.x = (float)PlayerManager::GetMainPlayer()->GetTransform().GetPosition().x;
+	Player_pos.y = (float)PlayerManager::GetMainPlayer()->GetTransform().GetPosition().y;
+	Player_pos.z = (float)PlayerManager::GetMainPlayer()->GetTransform().GetPosition().z;
+	FMOD_VECTOR Player_vel = { 0.f,0.f,0.f };
 
-	Player_pos_vel.x = (float)PlayerManager::GetMainPlayer()->GetTransform().GetPosition().x;
-	Player_pos_vel.y = (float)PlayerManager::GetMainPlayer()->GetTransform().GetPosition().y;
-	Player_pos_vel.z = (float)PlayerManager::GetMainPlayer()->GetTransform().GetPosition().z;
-
-	pChannel[(int)ENUM_SOUND::BOSS_MOVE_SOUND]->set3DAttributes(&test, NULL); // -> 인자 (pos,vel,alt_pan_pos
-	pChannel[(int)ENUM_SOUND::BOSS_MOVE_SOUND]->setVolume(5.0f); // -> 볼륨 
-	pChannel[(int)ENUM_SOUND::BOSS_MOVE_SOUND]->set3DMinMaxDistance(SOUND_MIN, SOUND_MAX);
-	pSystem->get3DListenerAttributes(0,&Player_pos_vel,&Player_pos_vel,0,0);
+	pChannel[(int)ENUM_SOUND::BOSS_MOVE_SOUND]->set3DAttributes(&Boss_pos, NULL); // -> 인자 (pos,vel,alt_pan_pos
+	pSystem->get3DListenerAttributes(0, &Player_pos, &Player_vel, 0, 0);
 	pSystem->createSound( // 보스 몬스터 이동
-		"Sound/Effect/monster_move.mp3"
-		, FMOD_3D | FMOD_3D_LINEARROLLOFF | FMOD_LOOP_NORMAL
+		"Sound/Effect/dragon_cry.mp3"
+		, FMOD_3D | FMOD_LOOP_OFF | FMOD_3D_LINEARROLLOFF
 		, nullptr
 		, &pSound[(int)ENUM_SOUND::BOSS_MOVE_SOUND]
 	);
 
-	pChannel[(int)ENUM_SOUND::BOSS_DAMAGE_SOUND]->set3DAttributes(&test, NULL); // -> 인자 (pos,vel,alt_pan_pos
-	pChannel[(int)ENUM_SOUND::BOSS_DAMAGE_SOUND]->setVolume(5.0f); // -> 볼륨 
-	pChannel[(int)ENUM_SOUND::BOSS_DAMAGE_SOUND]->set3DMinMaxDistance(SOUND_MIN, SOUND_MAX);
-	pSystem->createSound( // 보스 몬스터 히트
-		"Sound/Effect/monster_move.mp3"
-		, FMOD_DEFAULT | FMOD_3D | FMOD_3D_LINEARROLLOFF
-		, nullptr
-		, &pSound[(int)ENUM_SOUND::BOSS_DAMAGE_SOUND]
-	);
-
-	pChannel[(int)ENUM_SOUND::BOSS_DEAD_SOUND]->set3DAttributes(&test, NULL); // -> 인자 (pos,vel,alt_pan_pos
-	pChannel[(int)ENUM_SOUND::BOSS_DEAD_SOUND]->setVolume(5.0f); // -> 볼륨 
-	pChannel[(int)ENUM_SOUND::BOSS_DEAD_SOUND]->set3DMinMaxDistance(SOUND_MIN, SOUND_MAX);
-	pSystem->createSound( // 보스 몬스터 죽음
-		"Sound/Effect/monster_move.mp3"
-		, FMOD_DEFAULT | FMOD_3D | FMOD_3D_LINEARROLLOFF
-		, nullptr
-		, &pSound[(int)ENUM_SOUND::BOSS_DEAD_SOUND]
-	);
-
-	pChannel[(int)ENUM_SOUND::BOSS_BREATH_SOUND]->set3DAttributes(&test, NULL); // -> 인자 (pos,vel,alt_pan_pos
-	pChannel[(int)ENUM_SOUND::BOSS_BREATH_SOUND]->setVolume(5.0f); // -> 볼륨 
-	pChannel[(int)ENUM_SOUND::BOSS_BREATH_SOUND]->set3DMinMaxDistance(SOUND_MIN, SOUND_MAX);
-	pSystem->createSound( // 보스 몬스터 브레스
-		"Sound/Effect/monster_move.mp3"
-		, FMOD_DEFAULT | FMOD_3D | FMOD_3D_LINEARROLLOFF
-		, nullptr
-		, &pSound[(int)ENUM_SOUND::BOSS_BREATH_SOUND]
-	);
-
-	pChannel[(int)ENUM_SOUND::BOSS_DOWNSTROKE_SOUND]->set3DAttributes(&test, NULL); // -> 인자 (pos,vel,alt_pan_pos
-	pChannel[(int)ENUM_SOUND::BOSS_DOWNSTROKE_SOUND]->setVolume(5.0f); // -> 볼륨 
-	pChannel[(int)ENUM_SOUND::BOSS_DOWNSTROKE_SOUND]->set3DMinMaxDistance(SOUND_MIN, SOUND_MAX);
-	pSystem->createSound( // 보스 몬스터 다운스트록
-		"Sound/Effect/monster_move.mp3"
-		, FMOD_DEFAULT | FMOD_3D | FMOD_3D_LINEARROLLOFF
-		, nullptr
-		, &pSound[(int)ENUM_SOUND::BOSS_DOWNSTROKE_SOUND]
-	);
-
-	pChannel[(int)ENUM_SOUND::BOSS_TAILATTACK_SOUND]->set3DAttributes(&test, NULL); // -> 인자 (pos,vel,alt_pan_pos
-	pChannel[(int)ENUM_SOUND::BOSS_TAILATTACK_SOUND]->setVolume(5.0f); // -> 볼륨 
-	pChannel[(int)ENUM_SOUND::BOSS_TAILATTACK_SOUND]->set3DMinMaxDistance(SOUND_MIN, SOUND_MAX);
-	pSystem->createSound( // 보스 몬스터 테일어택
-		"Sound/Effect/monster_move.mp3"
-		, FMOD_DEFAULT | FMOD_3D | FMOD_3D_LINEARROLLOFF
-		, nullptr
-		, &pSound[(int)ENUM_SOUND::BOSS_TAILATTACK_SOUND]
-	);
-
-	pChannel[(int)ENUM_SOUND::BOSS_DASH_SOUND]->set3DAttributes(&test, NULL); // -> 인자 (pos,vel,alt_pan_pos
-	pChannel[(int)ENUM_SOUND::BOSS_DASH_SOUND]->setVolume(5.0f); // -> 볼륨 
-	pChannel[(int)ENUM_SOUND::BOSS_DASH_SOUND]->set3DMinMaxDistance(SOUND_MIN, SOUND_MAX);
-	pSystem->createSound( // 보스 몬스터 대쉬
-		"Sound/Effect/monster_move.mp3"
-		, FMOD_DEFAULT | FMOD_3D | FMOD_3D_LINEARROLLOFF
-		, nullptr
-		, &pSound[(int)ENUM_SOUND::BOSS_DASH_SOUND]
-	);
+	// pChannel[(int)ENUM_SOUND::BOSS_DAMAGE_SOUND]->set3DAttributes(&Boss_pos, NULL); // -> 인자 (pos,vel,alt_pan_pos
+	// pSystem->createSound( // 보스 몬스터 히트
+	// 	"Sound/Effect/monster_move.mp3"
+	// 	, FMOD_DEFAULT | FMOD_3D | FMOD_3D_LINEARROLLOFF
+	// 	, nullptr
+	// 	, &pSound[(int)ENUM_SOUND::BOSS_DAMAGE_SOUND]
+	// );
+	// 
+	// pChannel[(int)ENUM_SOUND::BOSS_DEAD_SOUND]->set3DAttributes(&Boss_pos, NULL); // -> 인자 (pos,vel,alt_pan_pos
+	// pSystem->createSound( // 보스 몬스터 죽음
+	// 	"Sound/Effect/monster_move.mp3"
+	// 	, FMOD_DEFAULT | FMOD_3D | FMOD_3D_LINEARROLLOFF
+	// 	, nullptr
+	// 	, &pSound[(int)ENUM_SOUND::BOSS_DEAD_SOUND]
+	// );
+	// 
+	// pChannel[(int)ENUM_SOUND::BOSS_BREATH_SOUND]->set3DAttributes(&Boss_pos, NULL); // -> 인자 (pos,vel,alt_pan_pos
+	// pSystem->createSound( // 보스 몬스터 브레스
+	// 	"Sound/Effect/monster_move.mp3"
+	// 	, FMOD_DEFAULT | FMOD_3D | FMOD_3D_LINEARROLLOFF
+	// 	, nullptr
+	// 	, &pSound[(int)ENUM_SOUND::BOSS_BREATH_SOUND]
+	// );
+	// 
+	// pChannel[(int)ENUM_SOUND::BOSS_DOWNSTROKE_SOUND]->set3DAttributes(&Boss_pos, NULL); // -> 인자 (pos,vel,alt_pan_pos
+	// pSystem->createSound( // 보스 몬스터 다운스트록
+	// 	"Sound/Effect/monster_move.mp3"
+	// 	, FMOD_DEFAULT | FMOD_3D | FMOD_3D_LINEARROLLOFF
+	// 	, nullptr
+	// 	, &pSound[(int)ENUM_SOUND::BOSS_DOWNSTROKE_SOUND]
+	// );
+	// 
+	// pChannel[(int)ENUM_SOUND::BOSS_TAILATTACK_SOUND]->set3DAttributes(&Boss_pos, NULL); // -> 인자 (pos,vel,alt_pan_pos
+	// pSystem->createSound( // 보스 몬스터 테일어택
+	// 	"Sound/Effect/monster_move.mp3"
+	// 	, FMOD_DEFAULT | FMOD_3D | FMOD_3D_LINEARROLLOFF
+	// 	, nullptr
+	// 	, &pSound[(int)ENUM_SOUND::BOSS_TAILATTACK_SOUND]
+	// );
+	// 
+	// pChannel[(int)ENUM_SOUND::BOSS_DASH_SOUND]->set3DAttributes(&Boss_pos, NULL); // -> 인자 (pos,vel,alt_pan_pos
+	// pSystem->createSound( // 보스 몬스터 대쉬
+	// 	"Sound/Effect/monster_move.mp3"
+	// 	, FMOD_DEFAULT | FMOD_3D | FMOD_3D_LINEARROLLOFF
+	// 	, nullptr
+	// 	, &pSound[(int)ENUM_SOUND::BOSS_DASH_SOUND]
+	// );
 	// 보스 몬스터 //////////////////////////////////////////////////////////////////
 
 	// pChannel[(int)ENUM_SOUND::GAME_SOUND]->set3DMinMaxDistance(SOUND_MIN, SOUND_MAX);
@@ -299,9 +288,9 @@ void SoundManager::Update(float fElapsedTime)
 {
 	pSystem->update();
 
-	(float)PlayerManager::GetMainPlayer()->GetTransform().GetPosition().x;
-	(float)PlayerManager::GetMainPlayer()->GetTransform().GetPosition().y;
-	(float)PlayerManager::GetMainPlayer()->GetTransform().GetPosition().z;
+	// (float)PlayerManager::GetMainPlayer()->GetTransform().GetPosition().x;
+	// (float)PlayerManager::GetMainPlayer()->GetTransform().GetPosition().y;
+	// (float)PlayerManager::GetMainPlayer()->GetTransform().GetPosition().z; 
 }
 
 void SoundManager::Play(int type)
