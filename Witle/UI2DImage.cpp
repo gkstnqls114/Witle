@@ -5,6 +5,8 @@
 #include "MyDescriptorHeap.h"
 #include "UI2DImage.h"
 
+#include "TextureStorage.h"
+
 #define RECTANGLE_VERTEX_COUNT 6
 
 void UI2DImage::ReleaseObjects()
@@ -15,16 +17,13 @@ void UI2DImage::ReleaseUploadBuffers()
 {
 }
 
-UI2DImage::UI2DImage(GameObject * pOwner, ENUM_SCENE Scenetype, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, RECT rect, const wchar_t * filepath)
+UI2DImage::UI2DImage(GameObject * pOwner, ENUM_SCENE Scenetype, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, RECT rect, const std::string& filepath)
 	:UI2D(pOwner)
 {   
 	m_ComponenetID = SHAPE_TYPE_ID::RECTANGLE_SHAPE;
 
-	if (filepath)
-	{ 
-		m_pTexture = new Texture(Scenetype, ROOTPARAMETER_INDEX(ROOTPARAMETER_TEXTURE), false, 1, RESOURCE_TEXTURE2D);
-		m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, filepath, 0); 
-	}
+
+	m_pTexture = TextureStorage::GetInstance()->GetTexture(filepath);
 
 	m_nVertexBufferViews = 1;
 	m_pVertexBufferViews = new D3D12_VERTEX_BUFFER_VIEW[m_nVertexBufferViews];
@@ -66,16 +65,16 @@ UI2DImage::UI2DImage(GameObject * pOwner, ENUM_SCENE Scenetype, ID3D12Device * p
 	m_pVertexBufferViews[0].SizeInBytes = m_nStride * m_vertexCount;
 }
 
-UI2DImage::UI2DImage(GameObject * pOwner, ENUM_SCENE Scenetype, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, POINT center, float width, float height, const wchar_t * filepath)
+UI2DImage::UI2DImage(GameObject * pOwner, ENUM_SCENE Scenetype, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, POINT center, float width, float height, const std::string& filepath)
 	: UI2D(pOwner)
 {
 	m_ComponenetID = SHAPE_TYPE_ID::RECTANGLE_SHAPE;
 
-	if (filepath)
-	{ 
-		m_pTexture = new Texture(Scenetype, ROOTPARAMETER_INDEX(ROOTPARAMETER_TEXTURE), false, 1, RESOURCE_TEXTURE2D);
-		m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, filepath, 0); 
+	if (strcmp(filepath.c_str(), ""))
+	{
+		m_pTexture = TextureStorage::GetInstance()->GetTexture(filepath);
 	}
+
 
 	m_nVertexBufferViews = 1;
 	m_pVertexBufferViews = new D3D12_VERTEX_BUFFER_VIEW[m_nVertexBufferViews];

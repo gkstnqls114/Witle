@@ -201,6 +201,12 @@ void GameScene::CreateSrvDescriptorHeapsForShadowmap(ID3D12Device * pd3dDevice, 
 	m_hGPUShadowmap = d3dSrvGPUDescriptorHandle;
 }
 
+void GameScene::SetDescriptorHeap(ID3D12GraphicsCommandList * pd3dCommandList)
+{
+	// 힙 설정
+	pd3dCommandList->SetDescriptorHeaps(1, &m_pd3dCbvSrUavDescriptorHeap);
+}
+
 void GameScene::CreateShaderResourceViewsForTextureBase(ID3D12Device * pd3dDevice, Texture * pTexture)
 {
 	pTexture->ShowPath();
@@ -634,35 +640,35 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 		POINT{ int(GameScreen::GetWidth()) / 2 + 500, int(GameScreen::GetHeight()) / 2 - 220 },
 		m_UIMapSize.x,
 		m_UIMapSize.y,
-		nullptr
+		""
 	);
 
 	// 스킬 1
 	m_SampleUISkill1 = new UI2DImage(
 		m_TESTGameObject, ENUM_SCENE::SCENE_GAME, pd3dDevice, pd3dCommandList,
 		POINT{ int(GameScreen::GetWidth()) / 2 - 300, int(GameScreen::GetHeight()) / 2 + 270 }, 100, 100,
-		nullptr
+		""
 	);
 
 	// 스킬 2
 	m_SampleUISkill2 = new UI2DImage(
 		m_TESTGameObject, ENUM_SCENE::SCENE_GAME, pd3dDevice, pd3dCommandList,
 		POINT{ int(GameScreen::GetWidth()) / 2 - 100, int(GameScreen::GetHeight()) / 2 + 270 }, 100, 100,
-		nullptr
+		""
 	);
 
 	// 스킬 3
 	m_SampleUISkill3 = new UI2DImage(
 		m_TESTGameObject, ENUM_SCENE::SCENE_GAME, pd3dDevice, pd3dCommandList,
 		POINT{ int(GameScreen::GetWidth()) / 2 + 100, int(GameScreen::GetHeight()) / 2 + 270 }, 100, 100,
-		nullptr
+		""
 	);
 
 	// 스킬 4
 	m_SampleUISkill4 = new UI2DImage(
 		m_TESTGameObject, ENUM_SCENE::SCENE_GAME, pd3dDevice, pd3dCommandList,
 		POINT{ int(GameScreen::GetWidth()) / 2 + 300, int(GameScreen::GetHeight()) / 2 + 270 }, 100, 100,
-		nullptr
+		""
 	);
 
 	XMFLOAT4X4 tr;
@@ -682,7 +688,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 		m_TESTGameObject, ENUM_SCENE::SCENE_GAME, pd3dDevice, pd3dCommandList,
 		POINT{ int(pos.x), int(pos.z) },
 		20, 20,
-		L"Image/Blue.dds"
+		"Blue"
 	);
 
 	tr = StaticObjectStorage::GetInstance()->GetAltarTransform(1, ALTAR_IN);
@@ -697,7 +703,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 		m_TESTGameObject, ENUM_SCENE::SCENE_GAME, pd3dDevice, pd3dCommandList,
 		POINT{ int(pos.x), int(pos.z) },
 		20, 20,
-		L"Image/Blue.dds"
+		"Blue"
 	);
 
 	tr = StaticObjectStorage::GetInstance()->GetAltarTransform(2, ALTAR_IN);
@@ -715,7 +721,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 		m_TESTGameObject, ENUM_SCENE::SCENE_GAME, pd3dDevice, pd3dCommandList,
 		POINT{ int(pos.x), int(pos.z) },
 		20, 20,
-		L"Image/Blue.dds"
+		"Blue"
 	);
 
 	tr = StaticObjectStorage::GetInstance()->GetAltarTransform(3, ALTAR_IN);
@@ -733,7 +739,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 		m_TESTGameObject, ENUM_SCENE::SCENE_GAME, pd3dDevice, pd3dCommandList,
 		POINT{ int(pos.x), int(pos.z) },
 		20, 20,
-		L"Image/Blue.dds"
+		"Blue"
 	);
 
 	tr = StaticObjectStorage::GetInstance()->GetAltarTransform(4, ALTAR_IN);
@@ -751,21 +757,21 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 		m_TESTGameObject, ENUM_SCENE::SCENE_GAME, pd3dDevice, pd3dCommandList,
 		POINT{ int(pos.x), int(pos.z) },
 		20, 20,
-		L"Image/Blue.dds"
+		"Blue"
 	);
 
 	m_UIPlayer = new UI2DImage(
 		m_TESTGameObject, ENUM_SCENE::SCENE_GAME, pd3dDevice, pd3dCommandList,
 		POINT{ 0, 0 },
 		10, 10,
-		L"Image/Red.dds"
+		"Red"
 	);
 
 	m_UIBossMonster = new UI2DImage(
 		m_TESTGameObject, ENUM_SCENE::SCENE_GAME, pd3dDevice, pd3dCommandList,
 		POINT{ 0, 0 },
 		10, 10,
-		L"Image/Yellow.dds"
+		"Yellow"
 	);
 }
 

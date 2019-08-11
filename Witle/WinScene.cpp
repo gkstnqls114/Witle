@@ -7,6 +7,7 @@
 #include "ShaderManager.h" 
 #include "GameObject.h"
 #include "Texture.h"
+#include "GameScene.h"
 
 #include "WinScene.h"
 
@@ -139,7 +140,7 @@ void WinScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList
 	m_Background = new UI2DImage(m_gameobject, ENUM_SCENE::SCENE_MAIN, pd3dDevice, pd3dCommandList, RECT{
 		0, 0,
 		static_cast<LONG>(GameScreen::GetWidth()), static_cast<LONG>(GameScreen::GetHeight()) },
-		L"Image/Win.dds"
+		"Win"
 		);
 
 	WinScene::CreateShaderResourceViews(pd3dDevice, m_Background->GetpTexture(), ROOTPARAMETER_TEXTURE, true);
@@ -183,8 +184,11 @@ void WinScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffer
 
 	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_UISCREEN, false);
 
-	pd3dCommandList->SetDescriptorHeaps(1, &m_pd3dCbvSrvDescriptorHeap);
-	m_Background->Render(pd3dCommandList);
+	GameScene::SetDescriptorHeap(pd3dCommandList);
+	for (int i = 0; i < 100; ++i)
+	{
+		m_Background->Render(pd3dCommandList);
+	}
 }
 
 void WinScene::RenderForShadow(ID3D12GraphicsCommandList * pd3dCommandList)
