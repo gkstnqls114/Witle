@@ -6,7 +6,7 @@
 
 
 WideareaMagic::WideareaMagic(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList)
-	:SelectableSkill("WideareaMagic", ENUM_SELECTABLESKILL::SELECTABLESKILL_NONE, 0.f)
+	:SelectableSkill("WideareaMagic", ENUM_SELECTABLESKILL::SELECTABLESKILL_NONE, 0.f, 10.f)
 { 
 	m_CylinderMesh = new CylinderMesh(this, pd3dDevice, pd3dCommandList, 100, 100, 300, 10, 10);
 	m_CylinderMesh->CreateTexture(pd3dDevice, pd3dCommandList, L"Image/CharacterAppearance1_OFF.dds");

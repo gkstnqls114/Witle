@@ -9,7 +9,7 @@ bool BallSkill::IsFinish()
 }
  
 BallSkill::BallSkill(const std::string& entityID, ENUM_SELECTABLESKILL skilltype, float cooltime)
-	:SelectableSkill(entityID, skilltype, cooltime)
+	:SelectableSkill(entityID, skilltype, cooltime, 10.f)
 {
 }
 

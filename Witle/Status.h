@@ -12,8 +12,8 @@ protected:
 	virtual void SetAnimationStateToHit() = 0;
 
 public:
-	int m_Guage{ 100 };
-	int m_MAXGuage{ 100 };
+	float m_Guage{ 100.f };
+	float m_MAXGuage{ 100.f };
 	
 public:
 	virtual void ReleaseObjects() override {};
@@ -24,6 +24,6 @@ public:
 	virtual ~Status(); 
 	virtual void Damage(int damage, int state) = 0;
 
-	void SubstractHP(UINT damage);
-	void AddHP(UINT damage);
+	void SubstractHP(float damage);
+	void AddHP(float damage);
 };

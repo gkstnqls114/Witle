@@ -80,8 +80,8 @@ public:
 	virtual void Update(float fElapsedTime) override;
 
 public: 
-	SelectableSkill(const std::string& entityID, ENUM_SELECTABLESKILL skilltype, float cooltime)
-		: ISkill(entityID) , m_SelectableSkillType(skilltype), m_CoolTime(cooltime) {};
+	SelectableSkill(const std::string& entityID, ENUM_SELECTABLESKILL skilltype, float cooltime, float mp)
+		: ISkill(entityID) , m_UsingMp(mp), m_SelectableSkillType(skilltype), m_CoolTime(cooltime) {};
 	virtual ~SelectableSkill();
 
 	float GetCoolTime() const { return m_CoolTime; }
@@ -94,6 +94,7 @@ private:
 public:
 	SkillEffect* m_skillEffect{ nullptr };
 	XMFLOAT3 spawnPosition; // 스킬 시작 지점
+	const float m_UsingMp{ 0.f };
 	bool isActive{ false }; // 활성화 여부
 	float RemainCoolTime; // 남은 쿨타임
 	float RemainCoolTimePrecentage; // 남은 쿨타임 .. 0이면 스킬 사용가능 1이면 막 스킬 사용함

@@ -54,11 +54,11 @@ void PlayerSkillMgr::Activate(PlayerStatus* MPstaus, int index)
 { 
 	if (m_skill[index]->isActive) return;
 	if (m_skill[index]->RemainCoolTime > 0.f) return;
-	if ((MPstaus->m_Guage - 10/*사용하는 마나 게이지*/) < 0.f) return;
+	if ((MPstaus->m_Guage - m_skill[index]->m_UsingMp/*사용하는 마나 게이지*/) < 0.f) return;
 
 	m_skill[index]->Active();
 
-	MPstaus->m_Guage -= 10.f;
+	MPstaus->m_Guage -= m_skill[index]->m_UsingMp;
 	m_skill[index]->isActive = true;
 	m_skill[index]->RemainCoolTime = m_skill[index]->GetCoolTime();
 	m_skill[index]->spawnPosition =

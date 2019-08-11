@@ -21,7 +21,7 @@ void Healing::UpdateActive(float fElapsedTime)
 }
 
 Healing::Healing(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList)
-	:SelectableSkill("Healing", ENUM_SELECTABLESKILL::SELECTABLESKILL_HEALING, COOLTIME_HEALING)
+	:SelectableSkill("Healing", ENUM_SELECTABLESKILL::SELECTABLESKILL_HEALING, COOLTIME_HEALING, 15.f)
 {
 	m_skillEffect = new HealingEffect("HealingEffect", pd3dDevice, pd3dCommandList);
 }

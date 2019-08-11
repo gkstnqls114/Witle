@@ -280,6 +280,10 @@ void Player::SetAnimationState(int state)
 
 void Player::Update(float fElapsedTime)
 {  
+	// 초당 hp, mp회복
+	m_pPlayerHPStatus->AddHP(5 * fElapsedTime);
+	m_pPlayerMPStatus->AddHP(10 * fElapsedTime);
+
 	m_Broom->Update(fElapsedTime);
 
 	// 이동량을 계산한다. 

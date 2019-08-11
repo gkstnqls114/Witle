@@ -5,13 +5,13 @@
 #include "GameObject.h"
 #include "Status.h"
   
-void Status::SubstractHP(UINT damage)
+void Status::SubstractHP(float damage)
 { 
 	m_Guage -= damage;
 	if (m_Guage < 0.f) { m_Guage = 0.f; };
 }
 
-void Status::AddHP(UINT damage)
+void Status::AddHP(float damage)
 {
 	m_Guage += damage;
 	if (m_Guage > m_MAXGuage) { m_Guage = m_MAXGuage; };

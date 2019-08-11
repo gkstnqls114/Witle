@@ -27,7 +27,7 @@ void Shield::UpdateActive(float fElapsedTime)
 }
 
 Shield::Shield(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList)
-	:SelectableSkill("Shield", ENUM_SELECTABLESKILL::SELECTABLESKILL_SHIELD, COOLTIME_SHIELD)
+	:SelectableSkill("Shield", ENUM_SELECTABLESKILL::SELECTABLESKILL_SHIELD, COOLTIME_SHIELD, 5.f)
 {
 	m_skillEffect = new ShieldEffect("ShieldEffect", pd3dDevice, pd3dCommandList);
 }

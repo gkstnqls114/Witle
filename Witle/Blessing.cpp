@@ -28,7 +28,7 @@ void Blessing::UpdateActive(float fElapsedTime)
 }
 
 Blessing::Blessing(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList)
-	:SelectableSkill("Blessing", ENUM_SELECTABLESKILL::SELECTABLESKILL_BLESSING, COOLTIME_BLESSING)
+	:SelectableSkill("Blessing", ENUM_SELECTABLESKILL::SELECTABLESKILL_BLESSING, COOLTIME_BLESSING, 15.f)
 {
 	m_skillEffect = new BlessingEffect("BlessingEffect", pd3dDevice, pd3dCommandList);
 }
