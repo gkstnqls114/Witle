@@ -50,10 +50,6 @@ SoundManager::SoundManager()
 	for (auto& p : pSound) p = nullptr;
 
 	pSystem->set3DSettings(1.0f, 10, 10000.0);
-	// pChannel[SOUND_TYPE]->set3DAttributes((FMOD_VECTOR*)&PlayerManager::GetMainPlayer()->GetTransform().GetPosition(),
-	// 	(FMOD_VECTOR*)&PlayerManager::GetMainPlayer()->GetTransform().GetPosition(), 0); // -> 인자 (pos,vel,alt_pan_pos)
-	// pChannel[SOUND_TYPE]->setPriority(); // 
-
 
 	// 사운드 추가
 
@@ -78,14 +74,6 @@ SoundManager::SoundManager()
 		, nullptr
 		, &pSound[(int)ENUM_SOUND::GAME_SOUND]
 	);
-
-	// FMOD_VECTOR test;
-	// test.x = 15000;
-	// test.y = 0;
-	// test.z = 15000;
-	// pChannel[(int)ENUM_SOUND::GAME_SOUND]->set3DAttributes(&test, NULL); // -> 인자 (pos,vel,alt_pan_pos)
-	// pChannel[(int)ENUM_SOUND::GAME_SOUND]->setVolume(10.f); // -> 볼륨 
-	// pChannel[(int)ENUM_SOUND::GAME_SOUND]->set3DMinMaxDistance(SOUND_MIN, SOUND_MAX);
 
 	pSystem->createStream( // Win
 		"Sound/BGM/win.mp3"
