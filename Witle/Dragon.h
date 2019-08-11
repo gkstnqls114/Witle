@@ -25,6 +25,8 @@ public:
 	Dragon(const std::string& entityID, const XMFLOAT3& SpawnPoint, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature);
 	virtual ~Dragon();
 
+	void Init();
+
 	virtual void SubstractHP(int sub) override;
 	virtual void Rotate(float x, float y, float z) override;
 	virtual void Update(float) override;

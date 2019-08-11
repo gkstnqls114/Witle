@@ -86,6 +86,11 @@ SpaceCat::~SpaceCat()
 {
 }
 
+void SpaceCat::Init()
+{
+	Monster::Init(false);
+}
+
 void SpaceCat::Update(float fElapsedTime)
 {
 	Monster::Update(fElapsedTime);

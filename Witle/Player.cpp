@@ -148,12 +148,23 @@ Player::~Player()
 	m_pPlayerUpdatedContext = nullptr;
 	m_pCameraUpdatedContext = nullptr;
 }
+
+void Player::Init()
+{
+	m_Transform.SetIdentity();
+	m_Transform.SetPosition(15000, 0, 15000);
+	
+	SetAnimationState(ANIMATION_IDLE.ID);
+	
+	m_pPlayerMovement->RunMode();
+	m_pPlayerMPStatus->m_Guage = 100.f;
+	m_pPlayerHPStatus->m_Guage = 100.f;
+}
  
 void Player::Render(ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffers)
 {
 	if (m_pSniping) m_pSniping->Render(pd3dCommandList, isGBuffers);
-	// m_pMyBOBox->Render(pd3dCommandList);
-
+	
 	if (!m_isRendering) return; //만약 스나이핑 모드라면 플레이어를 렌더링하지 않는다.
 
 	m_pTexture_Cloth->UpdateShaderVariable(pd3dCommandList, 0);

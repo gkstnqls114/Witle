@@ -74,6 +74,12 @@ Mushroom::~Mushroom()
 {
 }
 
+void Mushroom::Init()
+{
+	Monster::Init(false);
+
+}
+
 void Mushroom::Update(float fElapsedTime)
 {
 	Monster::Update(fElapsedTime);

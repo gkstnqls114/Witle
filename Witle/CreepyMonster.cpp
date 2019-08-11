@@ -76,6 +76,12 @@ CreepyMonster::~CreepyMonster()
 {
 }
 
+void CreepyMonster::Init()
+{
+	Monster::Init(false);
+
+}
+
 void CreepyMonster::Update(float fElapsedTime)
 {
 	Monster::Update(fElapsedTime);

@@ -80,6 +80,7 @@ protected:
 	virtual void ReleaseMembers() override;
 	virtual void ReleaseMemberUploadBuffers() override;
 	void SetTrackAnimationSet();
+	void Init(bool isBoss);
 
 public:
 	static void CHANGEMODE()
@@ -90,7 +91,9 @@ public:
 	// float HpBarY: HP Bar UI의 Y 값 위치
 	Monster(const std::string& entityID, float spawnRange, const XMFLOAT3& SpwanPoint, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, float attackanimeTime,float HpBarY = 200.f);
 	virtual ~Monster();
-
+	
+	virtual void Init() = 0;
+	 
 	void RenderHpStatus(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers);
 
 	XMFLOAT3 CalculateAlreadyVelocity(float fTimeElapsed);

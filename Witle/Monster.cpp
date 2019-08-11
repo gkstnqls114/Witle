@@ -19,6 +19,7 @@
 // DebugMesh /////////////////////
 
 #include "GeneralMonsterActionMgr.h"
+#include "BossMonsterActionMgr.h"
 #include "CameraObject.h"
 #include "MainCameraMgr.h"
 #include "Texture.h"
@@ -97,6 +98,31 @@ Monster::Monster(const std::string & entityID, float spawnRange, const XMFLOAT3&
 
 Monster::~Monster()
 {
+	 
+}
+
+void Monster::Init(bool isBoss)
+{
+	m_MonsterHPStatus->m_Guage = 100.f;
+
+	m_pLoadObject->m_pSkinnedAnimationController->SetTrackAnimationSet(0, 0);
+	m_Transform.SetPosition(m_SpawnPoint);
+
+	if (isBoss)
+	{
+		static_cast<BossMonsterActionMgr*>(m_MonsterMovement->GetMonsterActionMgr())->ChangeBossStateToStone();
+	}
+	else
+	{
+		if (rand() % 2)
+		{
+			static_cast<GeneralMonsterActionMgr*>(m_MonsterMovement->GetMonsterActionMgr())->ChangeStateToMove();
+		}
+		else
+		{
+		static_cast<GeneralMonsterActionMgr*>(m_MonsterMovement->GetMonsterActionMgr())->ChangeStateToIdle();
+		}
+	}
 
 }
 
