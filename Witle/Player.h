@@ -117,6 +117,9 @@ public:
 	/////////////////////// Get
 
 	/////////////////////// Set	
+	void isAttacking()  {
+		m_isAttacking = true; }
+
 	void SetVelocity(const XMFLOAT3& velocity);
 	void SetUpdatedContext(LPVOID pContext)
 	{ 

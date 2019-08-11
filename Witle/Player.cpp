@@ -500,8 +500,7 @@ bool Player::Attack(Status* status, MyCollider* collider, XMFLOAT2 aimPoint, Cam
 		bool isCollide = Collision::isCollide(collider, pickRay.origin, pickRay.direction, Playerdist);
 
 		if (isCollide && Playerdist < 5000.f)
-		{
-			std::cout << "원거리공격" << std::endl;
+		{ 
 			status->Damage(500, ANIMATION_HIT.ID);
 		}
 
