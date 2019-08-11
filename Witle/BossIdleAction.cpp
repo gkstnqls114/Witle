@@ -7,8 +7,12 @@
 #include "BossMonsterActionMgr.h"
 #include "BossIdleAction.h"
 
+#include "SoundManager.h"
+
 void BossIdleAction::UpdateVelocity(float fElpasedTime, MonsterMovement * movement)
 {
+	SoundManager::GetInstance()->Stop(ENUM_SOUND::BOSS_MOVE_SOUND);
+
 	// 움직이지 않도록 고정
 	movement->m_xmf3Velocity = XMFLOAT3(0.f, 0.f, 0.f);
 }

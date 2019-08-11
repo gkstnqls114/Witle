@@ -6,6 +6,10 @@
 using namespace FMOD;
 
 #define SOUND_TYPE 32
+#define SOUND_MIN 1
+#define SOUND_MAX 10000
+
+class Player;
 
 class SoundManager
 {
@@ -21,14 +25,20 @@ public:
 	~SoundManager();
 
 	static SoundManager* GetInstance()
-	{ 
+	{
 		if (!m_Instance)
 		{
 			m_Instance = new SoundManager();
-		} 
+		}
 		return m_Instance;
 	}
 
+	int Volume = 10; // 볼륨
+	int Dropper; // 진동수. 얼마나 멀리가나!
+	int Distance; // 진동세기.
+
+	void Update(float fElapsedTime);
 	void Play(int type);
 	void Stop(int type);
+	void UpdateListenerPos(const Player* p);
 };

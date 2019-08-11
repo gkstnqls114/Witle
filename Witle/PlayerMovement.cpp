@@ -2,6 +2,8 @@
 #include "GameObject.h"
 #include "PlayerMovement.h"
 
+#include "SoundManager.h"
+
 #define RUN_MAX_VELOCITY 950.F
 
 void PlayerMovement::MoveVelocity(const XMFLOAT3 & xmf3Shift)
@@ -22,6 +24,10 @@ PlayerMovement::~PlayerMovement()
  
 void PlayerMovement::MoveVelocity(DWORD dwDirection, float fTimeElapsed)
 {
+	// 사운드 ///////////////////////////////////////////////////////////
+	SoundManager::GetInstance()->Play(ENUM_SOUND::PLAYER_MOVE);
+	// 사운드 ///////////////////////////////////////////////////////////
+
 	AXIS axis = AXIS{ m_pOwner->GetTransform().GetCoorAxis() };
 
 	XMFLOAT3 xmf3Shift = XMFLOAT3(0.f, 0.f, 0.f); // 이동량
@@ -32,6 +38,8 @@ void PlayerMovement::MoveVelocity(DWORD dwDirection, float fTimeElapsed)
 
 	if (m_isBroomMode) // 만약 빗자루 모드일 경우...
 	{ 
+		SoundManager::GetInstance()->Stop(ENUM_SOUND::PLAYER_MOVE);
+
 		if (dwDirection & DIR_FORWARD) xmf3Shift = Vector3::Add(xmf3Shift, axis.look, fDistance);
 		if (dwDirection & DIR_BACKWARD) xmf3Shift = Vector3::Add(xmf3Shift, axis.look, -fDistance);
 		if (dwDirection & DIR_RIGHT) xmf3Shift = Vector3::Add(xmf3Shift, axis.right, fDistance);
@@ -41,6 +49,8 @@ void PlayerMovement::MoveVelocity(DWORD dwDirection, float fTimeElapsed)
 	}
 	else
 	{ 
+		SoundManager::GetInstance()->Stop(ENUM_SOUND::PLAYER_MOVE);
+
 		if (dwDirection & DIR_FORWARD) xmf3Shift = Vector3::Add(xmf3Shift, axis.look, m_fMaxVelocityXZ - 500);
 		if (dwDirection & DIR_BACKWARD) xmf3Shift = Vector3::Add(xmf3Shift, axis.look, -m_fMaxVelocityXZ + 500);
 		if (dwDirection & DIR_RIGHT) xmf3Shift = Vector3::Add(xmf3Shift, axis.right, m_fMaxVelocityXZ - 500);

@@ -11,6 +11,8 @@
 
 #include "ShieldEffect.h"
 
+#include "SoundManager.h"
+
 void ShieldEffect::Render(ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffers)
 {
 	m_ShiedlTexture->UpdateShaderVariable(pd3dCommandList, 0);
@@ -51,7 +53,10 @@ void ShieldEffect::ReleaseMemberUploadBuffers()
 ShieldEffect::ShieldEffect(const std::string & entityID, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList)
 	:SkillEffect(entityID, 5.f, ENUM_SKILLTYPE::SKILLTYPE_BUFF)
 {
-	m_ShieldEffectMesh = new SphereMesh(this, pd3dDevice, pd3dCommandList, true, 150, 150, 10, 10); 
+	SoundManager::GetInstance()->Play(ENUM_SOUND::PLAYER_SHIELD_SOUND);
+
+	m_ShieldEffectMesh = new SphereMesh(this, pd3dDevice, pd3dCommandList, true, 150, 150, 10, 10);
+	// m_ShieldEffectMesh->CreateTexture(pd3dDevice, pd3dCommandList, L"Image/Shield.dds"); 
 
 		m_ShieldEffectModelInfo = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature(), "Model/Shield.bin", NULL);
 	m_ShieldEffectObject = m_ShieldEffectModelInfo->m_pModelRootObject;

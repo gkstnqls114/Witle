@@ -5,6 +5,8 @@
 #include "MyBSphere.h"
 
 #include "FireBall.h"
+
+#include "SoundManager.h"
   
 void FireBall::ReleaseMembers()
 {
@@ -13,6 +15,8 @@ void FireBall::ReleaseMembers()
 
 void FireBall::ReleaseMemberUploadBuffers()
 {
+	SoundManager::GetInstance()->Play(ENUM_SOUND::PLAYER_FIRE_SOUND);
+
 	BallEffect::ReleaseMemberUploadBuffers();
 }
 

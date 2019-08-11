@@ -8,6 +8,7 @@
 #include "BossMonsterActionMgr.h"
 #include "BossSkillRush.h"
 
+#include "SoundManager.h"
 void BossSkillRush::UpdateVelocity(float fElpasedTime, MonsterMovement * movement)
 {
 	movement->m_xmf3Velocity = XMFLOAT3(0, 0, 0);
@@ -15,7 +16,7 @@ void BossSkillRush::UpdateVelocity(float fElpasedTime, MonsterMovement * movemen
 
 void BossSkillRush::Init()
 {
-	// 바라보는 곳을 한번 지정한다.
+	SoundManager::GetInstance()->Play(ENUM_SOUND::BOSS_DASH_SOUND);
 
 	XMFLOAT3 toPlayer = Vector3::Normalize(
 		Vector3::Subtract(

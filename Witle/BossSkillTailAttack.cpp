@@ -7,9 +7,12 @@
 #include "BossMonsterActionMgr.h"
 #include "BossSkillTailAttack.h"
 
+#include "SoundManager.h"
 
 void BossSkillTailAttack::UpdateVelocity(float fElpasedTime, MonsterMovement * movement)
 {
+	SoundManager::GetInstance()->Play(ENUM_SOUND::BOSS_TAILATTACK_SOUND);
+
 	movement->m_xmf3Velocity = XMFLOAT3(0.f, 0.f, 0.f);
 }
 

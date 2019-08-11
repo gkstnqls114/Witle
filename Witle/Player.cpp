@@ -5,6 +5,8 @@
 #include "GameTimer.h" 
 #include "GameScreen.h"
 // GameBase //////////////
+
+#include "SoundManager.h"
  
 #include "Camera.h"
 #include "Collision.h"
@@ -280,6 +282,8 @@ void Player::SetAnimationState(int state)
 
 void Player::Update(float fElapsedTime)
 {  
+	SoundManager::GetInstance()->UpdateListenerPos(this);
+
 	// 초당 hp, mp회복
 	m_pPlayerHPStatus->AddHP(5 * fElapsedTime);
 	m_pPlayerMPStatus->AddHP(10 * fElapsedTime);
