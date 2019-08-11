@@ -100,7 +100,6 @@ SoundManager::SoundManager()
 		, nullptr
 		, &pSound[(int)ENUM_SOUND::LOSE_SOUND]
 	);
-	//4번 널값 들어가는거
 
 	// 장면 //////////////////////////////////////////////////////////////////
 
@@ -209,13 +208,14 @@ SoundManager::SoundManager()
 	//// 보스 몬스터 //////////////////////////////////////////////////////////////////
 
 	FMOD_VECTOR test;
-	// test.x = (float)PlayerManager::GetMainPlayer()->GetTransform().GetPosition().x;
-	// test.y = (float)PlayerManager::GetMainPlayer()->GetTransform().GetPosition().y;
-	// test.z = (float)PlayerManager::GetMainPlayer()->GetTransform().GetPosition().z;
 
-	test.x = 15000.f;
-	test.y = 0.f;
-	test.z = 15000.f;
+	// test.x = 15000.f;
+	// test.y = 0.f;
+	// test.z = 15000.f;
+
+	test.x = (float)PlayerManager::GetMainPlayer()->GetTransform().GetPosition().x;
+	test.y = (float)PlayerManager::GetMainPlayer()->GetTransform().GetPosition().y;
+	test.z = (float)PlayerManager::GetMainPlayer()->GetTransform().GetPosition().z;
 
 	pChannel[(int)ENUM_SOUND::BOSS_MOVE_SOUND]->set3DAttributes(&test, NULL); // -> 인자 (pos,vel,alt_pan_pos
 	pChannel[(int)ENUM_SOUND::BOSS_MOVE_SOUND]->setVolume(10.f); // -> 볼륨 
