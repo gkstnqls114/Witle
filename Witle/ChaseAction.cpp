@@ -11,7 +11,8 @@ void ChaseAction::UpdateVelocity(float fElpasedTime, MonsterMovement * movement)
 		Vector3::Subtract(PlayerManager::GetMainPlayer()->GetTransform().GetPosition(), m_pOwner->GetTransform().GetPosition())
 	);
 
-	movement->m_xmf3Velocity = Vector3::ScalarProduct(toPlayer, movement->m_fDistance, false);
+	// chase 인 경우 2배 빠른 이동
+	movement->m_xmf3Velocity = Vector3::ScalarProduct(toPlayer, movement->m_fDistance * 1.7f, false);
 
 	XMFLOAT3 look(0.f, 0.f, 1.f);
 	float value = Vector3::AngleToRadian(look, toPlayer) * 180.f / 3.141592;
