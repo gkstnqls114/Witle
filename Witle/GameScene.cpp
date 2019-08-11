@@ -260,12 +260,18 @@ bool GameScene::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM wPar
 			{
 				for (int i = 0; i < m_TestMonsterCount; ++i)
 				{
-					m_pPlayer->Attack(
+					bool isAttack = m_pPlayer->Attack(
 						static_cast<Status*>(
 							m_TestMonster[i]->GetStatus()),
 						m_TestMonster[i]->GetBOBox(),
 						m_AimPoint->GetPickingPoint(),
 						m_pMainCamera->GetCamera());
+					 
+					if (isAttack)
+					{
+						HitEffectMgr::GetInstance()->AddNormalHitEffectPosition(m_TestMonster[i]->GetBOBox()->GetBOBox().Center);
+						break;
+					} 
 				}
 				SoundManager::GetInstance()->Play(ENUM_SOUND::PLAYER_MAGIC_MISIL);
 			}
@@ -321,13 +327,20 @@ bool GameScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM w
 				{
 					for (int i = 0; i < m_TestMonsterCount; ++i)
 					{
-						m_pPlayer->Attack(
+						bool isAttack = m_pPlayer->Attack(
 							static_cast<Status*>(
 								m_TestMonster[i]->GetStatus()),
 							m_TestMonster[i]->GetBOBox(),
 							m_AimPoint->GetPickingPoint(),
 							m_pMainCamera->GetCamera());
+
+						if (isAttack)
+						{
+							HitEffectMgr::GetInstance()->AddNormalHitEffectPosition(m_TestMonster[i]->GetBOBox()->GetBOBox().Center);
+							break;
+						}
 					}
+
 					SoundManager::GetInstance()->Play(ENUM_SOUND::PLAYER_MAGIC_MISIL);
 				}
 			}
