@@ -385,6 +385,10 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 		XMFLOAT3(15000, 0, 15000),
 		pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
 
+	// m_Dragon = new Dragon("Dragon",
+	// 	XMFLOAT3(0, 0, 0),
+	// 	pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
+
 	m_TestMonster = new Monster*[m_TestMonsterCount];
 
 	int spacecatblue_count = 0;

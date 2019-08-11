@@ -209,9 +209,14 @@ SoundManager::SoundManager()
 	//// 보스 몬스터 //////////////////////////////////////////////////////////////////
 
 	FMOD_VECTOR test;
-	test.x = 15000;
-	test.y = 0;
-	test.z = 15000;
+	// test.x = (float)PlayerManager::GetMainPlayer()->GetTransform().GetPosition().x;
+	// test.y = (float)PlayerManager::GetMainPlayer()->GetTransform().GetPosition().y;
+	// test.z = (float)PlayerManager::GetMainPlayer()->GetTransform().GetPosition().z;
+
+	test.x = 15000.f;
+	test.y = 0.f;
+	test.z = 15000.f;
+
 	pChannel[(int)ENUM_SOUND::BOSS_MOVE_SOUND]->set3DAttributes(&test, NULL); // -> 인자 (pos,vel,alt_pan_pos
 	pChannel[(int)ENUM_SOUND::BOSS_MOVE_SOUND]->setVolume(10.f); // -> 볼륨 
 	pChannel[(int)ENUM_SOUND::BOSS_MOVE_SOUND]->set3DMinMaxDistance(SOUND_MIN, SOUND_MAX);
