@@ -88,7 +88,7 @@ Dragon::Dragon(const std::string & entityID, const XMFLOAT3& SpawnPoint,
 	m_RecognitionRange->CreateDebugMesh(pd3dDevice, pd3dCommandList);
 
 	m_MonsterMovement = new MonsterMovement(this, 1, 1, true);
-	m_MonsterMovement->m_fDistance = 100;
+	m_MonsterMovement->m_fDistance = 150;
 	 
 	m_pTexture = new Texture(ENUM_SCENE::SCENE_GAME, ROOTPARAMETER_INDEX(ROOTPARAMETER_TEXTURE), false, 1, RESOURCE_TEXTURE2D);
 	m_pStoneTexture = new Texture(ENUM_SCENE::SCENE_GAME, ROOTPARAMETER_INDEX(ROOTPARAMETER_TEXTURE), false, 1, RESOURCE_TEXTURE2D);
