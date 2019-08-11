@@ -5,11 +5,14 @@
 #include "Object.h"
 #include "MonsterMovement.h"
 #include "BossMonsterActionMgr.h"
+#include "SoundManager.h"
 #include "BossSkillDownStroke.h"
 
 
 void BossSkillDownStroke::UpdateVelocity(float fElpasedTime, MonsterMovement * movement)
 {
+	SoundManager::GetInstance()->Play(ENUM_SOUND::BOSS_DOWNSTROKE_SOUND);
+
 	movement->m_xmf3Velocity = XMFLOAT3(0.f, 0.f, 0.f);
 }
 
