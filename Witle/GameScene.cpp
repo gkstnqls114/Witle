@@ -1048,20 +1048,22 @@ void GameScene::LastUpdate(float fElapsedTime)
 		} 
 	}
 
-	// º¸½º¿Í ÇÃ·¹ÀÌ ºÎµúÈû
-	if (Collision::isCollide(m_pPlayer->GetBOBox() , m_Dragon->GetBOBox()) && m_Dragon->GetisAttacking()
-		&& !m_Dragon->GetisFinishAttack())
+	if (Collision::isCollide(m_pPlayer->GetBOBox(), m_Dragon->GetBOBox()))
 	{
+		std::cout << "Å×½ºÆ®" << std::endl;
+	}
+
+	// º¸½º¿Í ÇÃ·¹ÀÌ ºÎµúÈû
+	if (Collision::isCollide(m_pPlayer->GetBOBox() , m_Dragon->GetBOBox()) 
+		&& m_Dragon->GetisAttacking()
+		&& !m_Dragon->GetisFinishAttack())
+	{ 
 		m_Dragon->FinishAttack();
 		BossMonsterActionMgr* actionmgr = static_cast<BossMonsterActionMgr*>(m_Dragon->GetMovement()->GetMonsterActionMgr());
 
 		XMFLOAT3 effectpos = m_pPlayer->GetBOBox()->GetBOBox().Center;
-
-		if(actionmgr->Is_BossSkillBreath())
-		{
-			m_pPlayer->SubstractHP(5);
-		}
-		else if (actionmgr->Is_BossSkillDownStroke())
+		 
+		if (actionmgr->Is_BossSkillDownStroke())
 		{ 
 			HitEffectMgr::GetInstance()->AddMonsterHitEffectPosition(effectpos);
 			m_pPlayer->SubstractHP(5);

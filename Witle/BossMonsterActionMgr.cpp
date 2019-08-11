@@ -136,6 +136,7 @@ void BossMonsterActionMgr::ChangeBossStateToStone()
 	ChangeAction(&m_BossStone);
 	m_CurrMonsterAction->Init();
 	static_cast<Monster*>(m_pOwner)->SetAnimationState(BOSS_STONE.ID); 
+	static_cast<Monster*>(m_pOwner)->SetisAttacking(false);
 }
 
 void BossMonsterActionMgr::ChangeBossStateToDead()

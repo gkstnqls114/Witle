@@ -122,7 +122,7 @@ void BossChaseAction::UpdateState(float fElpasedTime, BossMonsterActionMgr * act
 	{
 	case BOSSSKILL_NONE:
 		break;
-	case BOSSSKILL_BREATH:
+	case BOSSSKILL_BREATH: 
 		(actionMgr)->ChangeBossStateToBreath();
 		break;
 	case BOSSSKILL_DOWNSTROKE:

@@ -125,7 +125,7 @@ Dragon::Dragon(const std::string & entityID, const XMFLOAT3& SpawnPoint,
 	XMFLOAT3 extents{ 150.f, 100.f, 230.f };
 	m_pMyBOBox = new MyBOBox(this, pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 0.F, 0.F }, extents);
 
-	XMFLOAT3 extents_2{ 200.f, 200.f, 400.f };
+	XMFLOAT3 extents_2{ 200.f, 200.f, 500.f };
 	m_BOBoxForTailAttack = new MyBOBox(this, pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 0.F, 0.F }, extents_2);
 
 	static_cast<BossMonsterActionMgr*>(m_MonsterMovement->GetMonsterActionMgr())->ChangeBossStateToStone();
@@ -200,7 +200,8 @@ void Dragon::Animate(float fElapsedTime)
 
 MyBOBox * Dragon::GetBOBox() const
 {
-	if (static_cast<BossMonsterActionMgr*>(m_MonsterMovement->GetMonsterActionMgr())->Is_BossSkillTailAttack())
+	if (static_cast<BossMonsterActionMgr*>(m_MonsterMovement->GetMonsterActionMgr())->Is_BossSkillTailAttack() 
+		|| static_cast<BossMonsterActionMgr*>(m_MonsterMovement->GetMonsterActionMgr())->Is_BossSkillDownStroke())
 	{
 		return m_BOBoxForTailAttack;
 	}
