@@ -107,6 +107,8 @@ void BossChaseAction::UpdateVelocity(float fElpasedTime, MonsterMovement * movem
 	SoundManager::GetInstance()->Stop(ENUM_SOUND::BOSS_DEAD_SOUND);
 	SoundManager::GetInstance()->Stop(ENUM_SOUND::BOSS_DOWNSTROKE_SOUND);
 
+	// SoundManager::GetInstance()->Play(ENUM_SOUND::PLAYER_MOVE);
+
 	XMFLOAT3 toPlayer = Vector3::Normalize(
 		Vector3::Subtract(PlayerManager::GetMainPlayer()->GetTransform().GetPosition(), m_pOwner->GetTransform().GetPosition())
 	);
