@@ -28,7 +28,7 @@ void ChaseAction::UpdateVelocity(float fElpasedTime, MonsterMovement * movement)
 
 		for (int i = 0; i < 5; i++)
 		{
-			//SoundManager::pChannel[(int)ENUM_SOUND::MONSTER_MOVE_SOUND]->setVolume(i);
+			// pChannel[(int)ENUM_SOUND::MONSTER_MOVE_SOUND]->setVolume(i);
 		}
 	}
 	else
@@ -37,7 +37,7 @@ void ChaseAction::UpdateVelocity(float fElpasedTime, MonsterMovement * movement)
 
 		for (int i = 0; i < 5; i--)
 		{
-			//pChannel[(int)ENUM_SOUND::MONSTER_MOVE_SOUND]->setVolume(i);
+			// pChannel[(int)ENUM_SOUND::MONSTER_MOVE_SOUND]->setVolume(i);
 		}
 	}
 }
