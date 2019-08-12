@@ -1098,6 +1098,7 @@ void GameScene::LastUpdate(float fElapsedTime)
 			HitEffectMgr::GetInstance()->AddPlayerSkillHitEffectPosition(
 				BossSkillMgr::GetInstance()->GetpSelectableSkill(index)->GetSelectableSkillType(),
 				pos);
+
 			m_pPlayer->SubstractHP(15);
 			BossSkillMgr::GetInstance()->Deactive(index);
 		}

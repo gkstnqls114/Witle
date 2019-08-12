@@ -358,17 +358,32 @@ void Player::Update(float fElapsedTime)
 	);
 	
 }
-
+ 
+static bool isBrooming = false;
 void Player::SubstractHP(int sub)
-{ 
+{  
+	if (isBrooming) return;
 	if (m_CurrAnimation == ANIMATION_HIT.ID) return;
-
-	m_pPlayerHPStatus->SubstractHP (sub);  
 	
-	if (m_CurrAnimation == ANIMATION_BROOMIDLE.ID) return;
-	if (m_CurrAnimation == ANIMATION_BROOMFORWARD.ID) return;
-	if (m_CurrAnimation == ANIMATION_BROOMPREPARE.ID) return;
-
+	float prevDamage = m_pPlayerHPStatus->GetGuage();
+	m_pPlayerHPStatus->SubstractHP(sub);
+	
+	if (m_CurrAnimation == ANIMATION_BROOMIDLE.ID)
+	{
+		isBrooming = true; 
+		return;
+	}
+	if (m_CurrAnimation == ANIMATION_BROOMFORWARD.ID)
+	{
+		isBrooming = true; 
+		return;
+	}
+	if (m_CurrAnimation == ANIMATION_BROOMPREPARE.ID)
+	{
+		isBrooming = true; 
+		return;
+	}
+	 
 	if (m_CurrAnimation != ANIMATION_HIT.ID)
 	{
 		m_CurrAnimation = ANIMATION_HIT.ID;
@@ -437,7 +452,7 @@ void Player::ProcessInput(float fTimeElapsed)
 		return;
 	}
 
-	if (m_CurrAnimation == ANIMATION_HIT.ID)
+	if (m_CurrAnimation == ANIMATION_HIT.ID || isBrooming)
 	{  
 		hittime += fTimeElapsed;
 
@@ -447,9 +462,10 @@ void Player::ProcessInput(float fTimeElapsed)
 		}
 		else
 		{
-			m_CurrAnimation = ANIMATION_IDLE.ID;
+			m_CurrAnimation = ANIMATION_IDLE.ID; 
 			hittime = 0.f;
 			m_isAttacking = false;
+			isBrooming = false;
 			return;
 		}
 	}
