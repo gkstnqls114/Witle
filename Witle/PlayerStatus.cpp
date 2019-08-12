@@ -42,9 +42,16 @@ void PlayerStatus::Update(float fTimeElapsed)
 
 }
 
+
 void PlayerStatus::Render(ID3D12GraphicsCommandList * pd3dCommandList)
 { 
 	float percentageHp = float(m_Guage) / float(m_MAXGuage) * 100.f;
 	pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_HPPERCENTAGE, 1, &percentageHp, 0);
 	m_GuageBar->Render(pd3dCommandList, m_pGuageBarShader); 
+}
+
+void PlayerStatus::SubstractHP(float damage)
+{
+	m_Guage -= (damage - static_cast<Player*>(m_pOwner)->shield);
+	if (m_Guage < 0.f) { m_Guage = 0.f; };
 }

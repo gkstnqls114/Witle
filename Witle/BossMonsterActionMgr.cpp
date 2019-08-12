@@ -17,7 +17,7 @@ void BossMonsterActionMgr::UpdateState(float fElpasedTime)
 	// 만약 무조건 체력이 0라면 상태를 전환하고 죽는다.
 	if (Is_BossDead()) return;
 
-	if (static_cast<Monster*>(m_pOwner)->GetStatus()->m_Guage <= 0.f)
+	if (static_cast<Monster*>(m_pOwner)->GetStatus()->GetGuage() <= 0.f)
 	{
 		ChangeBossStateToDead();
 		return;

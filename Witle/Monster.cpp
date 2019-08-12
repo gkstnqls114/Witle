@@ -103,7 +103,7 @@ Monster::~Monster()
 
 void Monster::Init(bool isBoss)
 {
-	m_MonsterHPStatus->m_Guage = 100.f;
+	m_MonsterHPStatus->SetGuage(100.f);
 
 	m_pLoadObject->m_pSkinnedAnimationController->SetTrackAnimationSet(0, 0);
 	m_Transform.SetPosition(m_SpawnPoint);
@@ -232,7 +232,7 @@ void Monster::SubstractHP(int sub)
 {
 	static_cast<GeneralMonsterActionMgr*>(m_MonsterMovement->GetMonsterActionMgr())->ChangeStateToHit();
  
-	m_MonsterHPStatus->m_Guage -= sub; 
+	m_MonsterHPStatus->SubstractHP(sub); 
 }
 
 void Monster::Animate(float fElapsedTime)
@@ -276,7 +276,7 @@ void Monster::RenderHpStatus(ID3D12GraphicsCommandList * pd3dCommandList, bool i
 	uiWorld._31 = mtxLookAt._13; uiWorld._32 = mtxLookAt._23; uiWorld._33 = mtxLookAt._33;
 	// set look at....
 
-	float percentage = float(m_MonsterHPStatus->m_Guage) / float(m_MonsterHPStatus->m_MAXGuage) * 100.f;
+	float percentage = float(m_MonsterHPStatus->GetGuage()) / float(m_MonsterHPStatus->m_MAXGuage) * 100.f;
 	pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_HPPERCENTAGE, 1, &percentage, 0);
 
 	m_MonsterHPUI->Render(pd3dCommandList, uiWorld);

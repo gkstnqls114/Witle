@@ -54,6 +54,10 @@ private:
 	LPVOID m_pPlayerUpdatedContext { nullptr };
 	LPVOID m_pCameraUpdatedContext { nullptr };
 
+public:
+	float shield = 0.f; // 경감데미지 
+	float blessing = 1.f; // n배의속도
+
 protected:
 	virtual void ReleaseMembers() override;
 	virtual void ReleaseMemberUploadBuffers() override;
@@ -75,6 +79,12 @@ public:
 	virtual ~Player();
 
 	void Init();
+
+	void ActiveShield();
+	void DeactiveShield();
+
+	void ActiveBlessing();
+	void DeactiveBlessing();
 
 	void LastUpdate(float);
 

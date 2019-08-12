@@ -18,7 +18,7 @@ ENUM_BOSSSKILL BossChaseAction::GetRandomSkill()
 {
 	ENUM_BOSSSKILL result;
 
-	float hp = static_cast<Monster*>(m_pOwner)->GetStatus()->m_Guage;
+	float hp = static_cast<Monster*>(m_pOwner)->GetStatus()->GetGuage();
 
 	std::random_device rd;
 	std::mt19937 mersenne(rd());

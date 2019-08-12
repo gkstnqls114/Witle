@@ -71,7 +71,7 @@ AltarSphere::AltarSphere(const std::string & entityID, const XMFLOAT3& SpawnPoin
 		POINT{ LONG(GameScreen::GetClientWidth() / 2), 100 },
 		400, 30, L"Image/Red.dds"
 	);
-	m_ActiveGuageBar->m_Guage = 0.f;
+	m_ActiveGuageBar->SetGuage(0.f);
 }
 
 AltarSphere::~AltarSphere()
@@ -208,7 +208,7 @@ void AltarSphere::AddGuage(float time)
 	if (m_isActive) return;
 
 	m_guage = m_guage + add_guage * time;
-	m_ActiveGuageBar->m_Guage = m_guage;
+	m_ActiveGuageBar->SetGuage(m_guage);
 }
 
 void AltarSphere::SetAnimationState(int state)

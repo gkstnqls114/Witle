@@ -26,7 +26,6 @@ Healing::Healing(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dComm
 	m_skillEffect = new HealingEffect("HealingEffect", pd3dDevice, pd3dCommandList);
 }
 
-
 Healing::~Healing()
 {
 }

@@ -2,12 +2,14 @@
 #include "Monster.h"
 #include "GeneralMonsterActionMgr.h"
 #include "MonsterMovement.h"
+#include "Player.h"
 #include "GameObject.h"
+
 #include "Status.h"
   
 void Status::SubstractHP(float damage)
 { 
-	m_Guage -= damage;
+	m_Guage -= (damage);
 	if (m_Guage < 0.f) { m_Guage = 0.f; };
 }
 

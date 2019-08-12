@@ -161,8 +161,28 @@ void Player::Init()
 	SetAnimationState(ANIMATION_IDLE.ID);
 	isDead = false;
 	m_pPlayerMovement->RunMode();
-	m_pPlayerMPStatus->m_Guage = 100.f;
-	m_pPlayerHPStatus->m_Guage = 100.f;
+	m_pPlayerMPStatus->SetGuage(100.f);
+	m_pPlayerHPStatus->SetGuage(100.f);
+}
+
+void Player::ActiveShield()
+{
+	shield = 5.f;
+}
+
+void Player::DeactiveShield()
+{
+	shield = 0.f;
+}
+
+void Player::ActiveBlessing()
+{
+	blessing = 1.2f;
+}
+
+void Player::DeactiveBlessing()
+{
+	blessing = 1.f;
 }
  
 void Player::Render(ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffers)
@@ -327,7 +347,7 @@ void Player::SubstractHP(int sub)
 { 
 	if (m_CurrAnimation == ANIMATION_HIT.ID) return;
 
-	m_pPlayerHPStatus->m_Guage -= sub;  
+	m_pPlayerHPStatus->SubstractHP (sub);  
 	
 	if (m_CurrAnimation == ANIMATION_BROOMIDLE.ID) return;
 	if (m_CurrAnimation == ANIMATION_BROOMFORWARD.ID) return;
@@ -394,7 +414,7 @@ void Player::ProcessInput(float fTimeElapsed)
 	}
 	if (isDead) return;
 
-	if (m_pPlayerHPStatus->m_Guage <= 0 && isDead == false)
+	if (m_pPlayerHPStatus->GetGuage() <= 0 && isDead == false)
 	{
 		isDead = true;
 		m_CurrAnimation = ANIMATION_DEAD.ID;
@@ -548,7 +568,7 @@ bool Player::Attack(Status* status, MyCollider* collider, XMFLOAT2 aimPoint, Cam
 			}
 			else
 			{
-				status->Damage(10, ANIMATION_HIT.ID); \
+				status->Damage(10, ANIMATION_HIT.ID);
 			}
 		}
 

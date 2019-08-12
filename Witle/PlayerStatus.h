@@ -27,5 +27,6 @@ public:
 	virtual void Update(float) override;
 	void Render(ID3D12GraphicsCommandList *pd3dCommandList);
 
+	virtual void SubstractHP(float damage) override;
 	virtual void Damage(int damage, int state) {};
 };
