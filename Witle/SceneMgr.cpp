@@ -90,6 +90,7 @@ void SceneMgr::ChangeSceneToGame()
 	GameInput::ChagneDragMode();
 	m_SkillSelectScene->FinishSkillSelect(); // Skill Select에서 설정된 스킬 연결
 	m_pCurrScene = m_GameScene;
+	m_GameScene->Init(); //테스트
 	m_CurrSceneType = ENUM_SCENE::SCENE_GAME;
 }
 

@@ -1160,6 +1160,36 @@ void GameScene::LastUpdate(float fElapsedTime)
 	// 순서변경X  
 }
 
+void GameScene::Init()
+{   
+	m_pMainCamera->GetTransform().SetIdentity();
+
+	m_pMainCamera->GetCamera()->SetAt(XMFLOAT3(15000.f, 0.f, 1500.f));
+	m_pMainCamera->GetCamera()->SetOffset(XMFLOAT3(0.f, -100.f, 500.f));
+	m_pMainCamera->GetCamera()->SetViewport(0, 0, GameScreen::GetWidth(), GameScreen::GetHeight(), 0.0f, 1.0f);
+	m_pMainCamera->GetCamera()->SetScissorRect(0, 0, GameScreen::GetWidth(), GameScreen::GetHeight());
+	m_pMainCamera->GetCamera()->GenerateProjectionMatrix(0.01f, CAMERA_FAR, float(GameScreen::GetWidth()) / float(GameScreen::GetHeight()), 60.0f);
+
+	m_pMainCamera->GetCamera()->GenerateViewMatrix();
+	m_pMainCamera->GetCamera()->RegenerateViewMatrix();
+
+	for (int x = 0; x < 5; ++x)
+	{
+		m_AltarSphere[x]->SetisActive(false);
+		m_AltarSphere[x]->SetisEnguaged(false);
+		m_AltarSphere[x]->SetGuage(0.f);
+		m_AltarSphere[x]->SetAnimationState(ALTARSPHERE_IDLE.ID);
+	}
+
+	m_pPlayer->Init();
+	m_Dragon->Init();
+	 
+	for (int i = 0; i < m_TestMonsterCount; ++i)
+	{ 
+		m_TestMonster[i]->Init();
+	} 
+}
+
 void GameScene::AnimateObjects(float fTimeElapsed)
 {
 	if (m_pPlayer) m_pPlayer->Animate(fTimeElapsed);

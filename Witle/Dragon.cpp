@@ -36,7 +36,11 @@ void Dragon::Render(ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffers
 
 	m_pLoadObject->Render(pd3dCommandList, isGBuffers);
 
-	RenderHpStatus(pd3dCommandList, isGBuffers);
+
+	if (!m_isStone) 
+	{
+		RenderHpStatus(pd3dCommandList, isGBuffers);
+	}
 }
 
 void Dragon::ReleaseMembers()
@@ -115,29 +119,35 @@ Dragon::Dragon(const std::string & entityID, const XMFLOAT3& SpawnPoint,
 
 	m_pLoadObject = m_MonsterModel->m_pModelRootObject;
 	m_pLoadObject->m_pSkinnedAnimationController = new CAnimationController(pd3dDevice, pd3dCommandList, 1, m_MonsterModel);
-	m_pLoadObject->m_pSkinnedAnimationController->SetTrackAnimationSet(0, 0);
-
+	
 	// Bip001_Spine 프레임을 가져옵니다.
 	m_BOBoxFrame = m_pLoadObject->FindFrame("Bip001_Spine");
 	m_HeadFrame = m_pLoadObject->FindFrame("Bip001_Head");
-	
-	m_Transform.SetPosition(SpawnPoint);
-
+	 
 	XMFLOAT3 extents{ 150.f, 100.f, 230.f };
 	m_pMyBOBox = new MyBOBox(this, pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 0.F, 0.F }, extents);
 
 	XMFLOAT3 extents_2{ 200.f, 200.f, 500.f };
 	m_BOBoxForTailAttack = new MyBOBox(this, pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 0.F, 0.F }, extents_2);
-
-	static_cast<BossMonsterActionMgr*>(m_MonsterMovement->GetMonsterActionMgr())->ChangeBossStateToStone();
+	 
+	Init();
 }
 
 Dragon::~Dragon()
 {
 }
 
+void Dragon::Init()
+{    
+	Monster::Init(true);
+
+	IsStone(); 
+}
+
 void Dragon::SubstractHP(int sub)
 {
+	if (m_isStone) return;
+
 	// hit 애니메이션 없음
 	m_MonsterHPStatus->m_Guage -= sub; 
 }

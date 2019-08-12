@@ -106,7 +106,7 @@ protected:
 public:
 	GameScene();
 	virtual ~GameScene();
-
+	 
 	virtual bool OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam) override;
 	virtual bool OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam, float ElapsedTime) override;
 
@@ -125,6 +125,8 @@ public:
 	virtual void Update(float ElapsedTime) override;
 	virtual void AnimateObjects(float fTimeElapsed) override;
 	virtual void LastUpdate(float ElapsedTime) override;
+
+	void Init();
 
 	QuadtreeTerrain* GetQuadtreeTerrain() const { return m_pQuadtreeTerrain; }
 
