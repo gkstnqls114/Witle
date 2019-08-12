@@ -79,6 +79,16 @@ void SceneMgr::BuildHeap(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * 
 // 게임
 void SceneMgr::ChangeSceneToGame()
 {
+	bool isNot = false;
+	for (int i = 0; i < 4; ++i)
+	{
+		if (m_SkillSelectScene->m_SelectedIndex[i] == 6)
+		{
+			isNot = true;
+		}
+	}
+
+	if (isNot)return;
 	// 사운드 ///////////////////////////////////////////////////////////
 	SoundManager::GetInstance()->Stop(ENUM_SOUND::MAIN_SOUND);
 	SoundManager::GetInstance()->Stop(ENUM_SOUND::WIN_SOUND);
