@@ -159,7 +159,7 @@ void Player::Init()
 	m_Transform.SetPosition(15000, 0, 15000);
 	
 	SetAnimationState(ANIMATION_IDLE.ID);
-	
+	isDead = false;
 	m_pPlayerMovement->RunMode();
 	m_pPlayerMPStatus->m_Guage = 100.f;
 	m_pPlayerHPStatus->m_Guage = 100.f;
@@ -300,8 +300,11 @@ void Player::Update(float fElapsedTime)
 	SoundManager::GetInstance()->UpdateListenerPos(this);
 
 	// 초당 hp, mp회복
+	if (!isDead)
+	{ 
 	m_pPlayerHPStatus->AddHP(5 * fElapsedTime);
 	m_pPlayerMPStatus->AddHP(10 * fElapsedTime);
+	}
 
 	m_Broom->Update(fElapsedTime);
 
@@ -385,9 +388,7 @@ static float hittime = 0.f;
 void Player::ProcessInput(float fTimeElapsed)
 {   
 	if (isDead && m_pLoadObject_Cloth->IsTrackAnimationSetFinish(0, ANIMATION_DEAD.ID))
-	{
-		isDead = false;
-		m_CurrAnimation = ANIMATION_IDLE.ID;
+	{ 
 		SceneMgr::GetInstacne()->ChangeSceneToLose();
 		return;
 	}
