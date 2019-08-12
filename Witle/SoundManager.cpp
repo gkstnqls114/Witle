@@ -95,12 +95,12 @@ SoundManager::SoundManager()
 	// 장면 //////////////////////////////////////////////////////////////////
 
 	// 플레이어 //////////////////////////////////////////////////////////////////
-	 pSystem->createSound( // 플레이어 이동
-	 	"Sound/Effect/player_move.mp3"
-	 	, FMOD_DEFAULT | FMOD_2D
-	 	, nullptr
-	 	, &pSound[(int)ENUM_SOUND::PLAYER_MOVE]
-	 );
+	pSystem->createSound( // 플레이어 이동
+		"Sound/Effect/player_move.mp3"
+		, FMOD_DEFAULT | FMOD_2D
+		, nullptr
+		, &pSound[(int)ENUM_SOUND::PLAYER_MOVE]
+	);
 
 	pSystem->createSound( // 플레이어 히트
 		"Sound/Effect/player_damage.mp3"
@@ -173,45 +173,45 @@ SoundManager::SoundManager()
 	);
 	// 플레이어 //////////////////////////////////////////////////////////////////
 
-	// 기본 몬스터 //////////////////////////////////////////////////////////////////
-	//pSystem->createSound( // 기본 몬스터 이동
-	//	"Sound/Effect/monster_move.mp3"
-	//	, FMOD_DEFAULT | FMOD_3D | FMOD_3D_LINEARROLLOFF
-	//	, nullptr
-	//	, &pSound[(int)ENUM_SOUND::MONSTER_MOVE_SOUND]
-	//);
+	 // 기본 몬스터 //////////////////////////////////////////////////////////////////
+	pSystem->createSound( // 기본 몬스터 이동
+		"Sound/Effect/monster_move.mp3"
+		, FMOD_DEFAULT | FMOD_3D
+		, nullptr
+		, &pSound[(int)ENUM_SOUND::MONSTER_MOVE_SOUND]
+	);
 
-	//pSystem->createSound( // 기본 몬스터 히트
-	//	"Sound/Effect/monster_move.mp3"
-	//	, FMOD_DEFAULT | FMOD_3D | FMOD_3D_LINEARROLLOFF
-	//	, nullptr
-	//	, &pSound[(int)ENUM_SOUND::MONSTER_DAMAGE_SOUND]
-	//);
+	pSystem->createSound( // 기본 몬스터 히트
+		"Sound/Effect/monster_damage.mp3"
+		, FMOD_DEFAULT | FMOD_3D
+		, nullptr
+		, &pSound[(int)ENUM_SOUND::MONSTER_DAMAGE_SOUND]
+	);
 
-	//pSystem->createSound( // 기본 몬스터 죽음
-	//	"Sound/Effect/monster_move.mp3"
-	//	, FMOD_DEFAULT | FMOD_3D | FMOD_3D_LINEARROLLOFF
-	//	, nullptr
-	//	, &pSound[(int)ENUM_SOUND::MONSTER_DEAD_SOUND]
-	//);
-	//// 기본 몬스터 //////////////////////////////////////////////////////////////////
+	pSystem->createSound( // 기본 몬스터 죽음
+		"Sound/Effect/monster_move.mp3"
+		, FMOD_DEFAULT | FMOD_3D
+		, nullptr
+		, &pSound[(int)ENUM_SOUND::MONSTER_DEAD_SOUND]
+	);
+	// //// 기본 몬스터 //////////////////////////////////////////////////////////////////
 
 	//// 보스 몬스터 //////////////////////////////////////////////////////////////////
 	pSystem->createSound( // 보스 몬스터 이동
 		"Sound/Effect/dragon_cry.mp3"
-		, FMOD_3D | FMOD_DEFAULT
+		, FMOD_DEFAULT | FMOD_3D
 		, nullptr
 		, &pSound[(int)ENUM_SOUND::BOSS_MOVE_SOUND]
 	);
 
 	// pChannel[(int)ENUM_SOUND::BOSS_DAMAGE_SOUND]->set3DAttributes(&Boss_pos, NULL); // -> 인자 (pos,vel,alt_pan_pos
-	// pSystem->createSound( // 보스 몬스터 히트
-	// 	"Sound/Effect/monster_move.mp3"
-	// 	, FMOD_DEFAULT | FMOD_3D | FMOD_3D_LINEARROLLOFF
-	// 	, nullptr
-	// 	, &pSound[(int)ENUM_SOUND::BOSS_DAMAGE_SOUND]
-	// );
-	// 
+	pSystem->createSound( // 보스 몬스터 히트
+		"Sound/Effect/monster_damage.mp3"
+		, FMOD_DEFAULT | FMOD_2D
+		, nullptr
+		, &pSound[(int)ENUM_SOUND::BOSS_DAMAGE_SOUND]
+	);
+
 	// pChannel[(int)ENUM_SOUND::BOSS_DEAD_SOUND]->set3DAttributes(&Boss_pos, NULL); // -> 인자 (pos,vel,alt_pan_pos
 	// pSystem->createSound( // 보스 몬스터 죽음
 	// 	"Sound/Effect/monster_move.mp3"
@@ -296,15 +296,29 @@ void SoundManager::Play(int type)
 
 	pSystem->get3DListenerAttributes(0, &Player_pos, &Player_vel, 0, 0);
 
+	// 주체 //////////////////////////////////////////////////////////////////////////
 	pChannel[(int)ENUM_SOUND::BOSS_MOVE_SOUND]->set3DMinMaxDistance(SOUND_MIN, SOUND_MAX);
 	pChannel[(int)ENUM_SOUND::BOSS_MOVE_SOUND]->set3DAttributes(&Boss_pos, NULL); // -> 인자 (pos,vel,alt_pan_pos
-	// 보스 //////////////////////////////////////////////////////////////////////////
+	pChannel[(int)ENUM_SOUND::MONSTER_MOVE_SOUND]->set3DMinMaxDistance(SOUND_MIN, SOUND_MAX);
+	pChannel[(int)ENUM_SOUND::MONSTER_MOVE_SOUND]->set3DAttributes(&Boss_pos, NULL); // -> 인자 (pos,vel,alt_pan_pos
+	// 주체 //////////////////////////////s////////////////////////////////////////////
 
 	// 볼륨 //////////////////////////////////////////////////////////////////////////
-	pChannel[(int)ENUM_SOUND::BOSS_MOVE_SOUND]->setVolume(3.0f);
+	pChannel[(int)ENUM_SOUND::MAIN_SOUND]->setVolume(0.1f);
 	pChannel[(int)ENUM_SOUND::GAME_SOUND]->setVolume(0.1f);
+	pChannel[(int)ENUM_SOUND::SKILLPAGE_SOUND]->setVolume(0.1f);
+	pChannel[(int)ENUM_SOUND::WIN_SOUND]->setVolume(0.1f);
+	pChannel[(int)ENUM_SOUND::LOSE_SOUND]->setVolume(0.1f);
+
 	pChannel[(int)ENUM_SOUND::PLAYER_MOVE]->setVolume(0.1f);
 	pChannel[(int)ENUM_SOUND::PLAYER_BROOM]->setVolume(0.1f);
+
+	pChannel[(int)ENUM_SOUND::BOSS_MOVE_SOUND]->setVolume(3.0f);
+	pChannel[(int)ENUM_SOUND::BOSS_DAMAGE_SOUND]->setVolume(3.0f);
+
+	pChannel[(int)ENUM_SOUND::MONSTER_MOVE_SOUND]->setVolume(2.0f);
+	pChannel[(int)ENUM_SOUND::MONSTER_DAMAGE_SOUND]->setVolume(2.0f);
+	pChannel[(int)ENUM_SOUND::MONSTER_DEAD_SOUND]->setVolume(2.0f);
 	// 볼륨 //////////////////////////////////////////////////////////////////////////
 }
 
