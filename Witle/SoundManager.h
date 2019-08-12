@@ -7,9 +7,10 @@ using namespace FMOD;
 
 #define SOUND_TYPE 32
 #define SOUND_MIN 1.0f
-#define SOUND_MAX 50.f
+#define SOUND_MAX 100.f
 
 class Player;
+class  Monster;
 
 class SoundManager
 {
@@ -41,4 +42,5 @@ public:
 	void Play(int type);
 	void Stop(int type);
 	void UpdateListenerPos(const Player* p);
+	void UpdatesetAttributesPos(const Monster* m);
 };

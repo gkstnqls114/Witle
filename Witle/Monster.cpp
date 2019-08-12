@@ -143,6 +143,8 @@ void Monster::RenderForShadow(ID3D12GraphicsCommandList * pd3dCommandList)
 
 void Monster::Update(float fElapsedTime)
 {
+	SoundManager::GetInstance()->UpdatesetAttributesPos(this);
+
 	if (m_isFinishAttack)
 	{
 		m_TotalTime += fElapsedTime;

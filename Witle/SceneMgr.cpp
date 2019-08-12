@@ -94,7 +94,7 @@ void SceneMgr::ChangeSceneToGame()
 	SoundManager::GetInstance()->Stop(ENUM_SOUND::WIN_SOUND);
 	SoundManager::GetInstance()->Stop(ENUM_SOUND::LOSE_SOUND);
 	SoundManager::GetInstance()->Stop(ENUM_SOUND::SKILLPAGE_SOUND);
-	SoundManager::GetInstance()->Play(ENUM_SOUND::GAME_SOUND);
+	// SoundManager::GetInstance()->Play(ENUM_SOUND::GAME_SOUND);
 	// »ç¿îµå ///////////////////////////////////////////////////////////
 
 	GameInput::ChagneMoveMode();

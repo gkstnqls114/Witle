@@ -176,12 +176,12 @@ SoundManager::SoundManager()
 	// 플레이어 //////////////////////////////////////////////////////////////////
 
 	 // 기본 몬스터 //////////////////////////////////////////////////////////////////
-	// pSystem->createSound( // 기본 몬스터 이동
-	// 	"Sound/Effect/monster_move.mp3"
-	// 	, FMOD_DEFAULT | FMOD_3D
-	// 	, nullptr
-	// 	, &pSound[(int)ENUM_SOUND::MONSTER_MOVE_SOUND]
-	// );
+	pSystem->createSound( // 기본 몬스터 이동
+		"Sound/Effect/monster_move.mp3"
+		, FMOD_DEFAULT | FMOD_3D
+		, nullptr
+		, &pSound[(int)ENUM_SOUND::MONSTER_MOVE_SOUND]
+	);
 	// 
 	// pSystem->createSound( // 기본 몬스터 히트
 	// 	"Sound/Effect/monster_damage.mp3"
@@ -290,12 +290,17 @@ void SoundManager::Play(int type)
 	Boss_pos.y = 0.f;
 	Boss_pos.z = 15000.f;
 	FMOD_VECTOR Boss_vel = { 0.f,0.f,0.f };
-
+	// 보스 //////////////////////////////////////////////////////////////////////////
+	// 플레이어 //////////////////////////////////////////////////////////////////////////
 	FMOD_VECTOR Player_pos;
 	Player_pos.x = (float)PlayerManager::GetMainPlayer()->GetTransform().GetPosition().x;
 	Player_pos.y = (float)PlayerManager::GetMainPlayer()->GetTransform().GetPosition().y;
 	Player_pos.z = (float)PlayerManager::GetMainPlayer()->GetTransform().GetPosition().z;
 	FMOD_VECTOR Player_vel = { 0.f,0.f,0.f };
+	// 플레이어 //////////////////////////////////////////////////////////////////////////
+	// 기본 몬스터 //////////////////////////////////////////////////////////////////////////
+	pChannel[(int)ENUM_SOUND::MONSTER_MOVE_SOUND]->set3DMinMaxDistance(SOUND_MIN, SOUND_MAX);
+	// 기본 몬스터 //////////////////////////////////////////////////////////////////////////
 
 	pSystem->get3DListenerAttributes(0, &Player_pos, &Player_vel, 0, 0);
 
@@ -305,10 +310,6 @@ void SoundManager::Play(int type)
 	pChannel[(int)ENUM_SOUND::BOSS_MOVE_SOUND]->set3DAttributes(&Boss_pos, NULL); // -> 인자 (pos,vel,alt_pan_pos
 	pChannel[(int)ENUM_SOUND::BOSS_BREATH_SOUND]->set3DMinMaxDistance(SOUND_MIN, SOUND_MAX);
 	pChannel[(int)ENUM_SOUND::BOSS_BREATH_SOUND]->set3DAttributes(&Boss_pos, NULL); // -> 인자 (pos,vel,alt_pan_pos
-
-	// 기본 몬스터
-	// pChannel[(int)ENUM_SOUND::MONSTER_MOVE_SOUND]->set3DMinMaxDistance(SOUND_MIN, SOUND_MAX);
-	// pChannel[(int)ENUM_SOUND::MONSTER_MOVE_SOUND]->set3DAttributes(&Boss_pos, NULL); // -> 인자 (pos,vel,alt_pan_pos
 	// 주체 //////////////////////////////s////////////////////////////////////////////
 
 	// 볼륨 //////////////////////////////////////////////////////////////////////////
@@ -325,9 +326,9 @@ void SoundManager::Play(int type)
 	pChannel[(int)ENUM_SOUND::BOSS_DAMAGE_SOUND]->setVolume(3.0f);
 	pChannel[(int)ENUM_SOUND::BOSS_BREATH_SOUND]->setVolume(3.0f);
 
-	pChannel[(int)ENUM_SOUND::MONSTER_MOVE_SOUND]->setVolume(2.0f);
-	pChannel[(int)ENUM_SOUND::MONSTER_DAMAGE_SOUND]->setVolume(2.0f);
-	pChannel[(int)ENUM_SOUND::MONSTER_DEAD_SOUND]->setVolume(2.0f);
+	pChannel[(int)ENUM_SOUND::MONSTER_MOVE_SOUND]->setVolume(1.0f);
+	pChannel[(int)ENUM_SOUND::MONSTER_DAMAGE_SOUND]->setVolume(1.0f);
+	pChannel[(int)ENUM_SOUND::MONSTER_DEAD_SOUND]->setVolume(1.0f);
 	// 볼륨 //////////////////////////////////////////////////////////////////////////
 }
 
@@ -363,4 +364,31 @@ void SoundManager::UpdateListenerPos(const Player* p)
 
 	pSystem->set3DListenerAttributes(0,
 		&player_pos, &player_velocity, &player_look, &player_up);
+}
+
+void SoundManager::UpdatesetAttributesPos(const Monster* m)
+{
+	FMOD_VECTOR monster_pos;
+	FMOD_VECTOR monster_up;
+	FMOD_VECTOR monster_look;
+	FMOD_VECTOR monster_velocity;
+
+	monster_pos.x = m->GetTransform().GetPosition().x;
+	monster_pos.y = m->GetTransform().GetPosition().y;
+	monster_pos.z = m->GetTransform().GetPosition().z;
+
+	monster_up.x = m->GetTransform().GetUp().x;
+	monster_up.y = m->GetTransform().GetUp().y;
+	monster_up.z = m->GetTransform().GetUp().z;
+
+	monster_look.x = m->GetTransform().GetLook().x;
+	monster_look.y = m->GetTransform().GetLook().y;
+	monster_look.z = m->GetTransform().GetLook().z;
+
+	monster_velocity.x = m->GetVelocity().x;
+	monster_velocity.y = m->GetVelocity().y;
+	monster_velocity.z = m->GetVelocity().z;
+
+	pChannel[(int)ENUM_SOUND::MONSTER_MOVE_SOUND]->set3DAttributes(
+		&monster_pos, &monster_velocity,0);
 }
