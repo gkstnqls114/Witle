@@ -174,3 +174,15 @@ bool SceneMgr::IsSkillSelectScene() const
 {
 	return m_CurrSceneType == ENUM_SCENE::SCENE_SKILLSELECT;
 }
+
+bool SceneMgr::IsWinScene() const
+{
+	return m_CurrSceneType == ENUM_SCENE::SCENE_WIN;
+
+}
+
+bool SceneMgr::IsLoseScene() const
+{
+	return m_CurrSceneType == ENUM_SCENE::SCENE_LOSE;
+
+}

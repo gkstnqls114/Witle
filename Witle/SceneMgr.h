@@ -60,6 +60,8 @@ public:
 	bool IsGameScene() const;
 	bool IsMainScene() const;
 	bool IsSkillSelectScene() const;
+	bool IsWinScene() const;
+	bool IsLoseScene() const;
 
 	// 현재 장면이 해당 장면이 맞는지 bool 로 확인하는 함수
 

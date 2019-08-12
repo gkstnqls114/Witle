@@ -966,7 +966,26 @@ void CGameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPA
 	bool isStateChange = false;
 	switch (nMessageID)
 	{
-	case WM_KEYDOWN:    
+	case WM_KEYDOWN:  
+
+		// 만약 아무키나 누르면 장면 전환 ///////////////////
+		if (SceneMgr::GetInstacne()->IsMainScene())
+		{
+			SceneMgr::GetInstacne()->ChangeSceneToSkillSelect();
+		}
+		else if (SceneMgr::GetInstacne()->IsSkillSelectScene())
+		{
+			SceneMgr::GetInstacne()->ChangeSceneToGame();
+		} 
+		else if (SceneMgr::GetInstacne()->IsWinScene())
+		{
+			SceneMgr::GetInstacne()->ChangeSceneToMain();
+		}
+		else if (SceneMgr::GetInstacne()->IsLoseScene())
+		{
+			SceneMgr::GetInstacne()->ChangeSceneToMain();
+		} 
+
 		switch (wParam)
 		{
 
@@ -1078,15 +1097,6 @@ void CGameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPA
 	// 만약 F8 ~ F12로 장면 전환한 경우 아래는 적용하지 않는다.
 	if (isStateChange) return;
 
-	// 만약 아무키나 누르면 장면 전환 ///////////////////
-	if (SceneMgr::GetInstacne()->IsMainScene())
-	{
-		SceneMgr::GetInstacne()->ChangeSceneToSkillSelect();
-	}
-	else if (SceneMgr::GetInstacne()->IsSkillSelectScene())
-	{
-		SceneMgr::GetInstacne()->ChangeSceneToGame();
-	}
 }
  
 void CGameFramework::DefferedRenderOnSwapchain()

@@ -10,6 +10,7 @@
 #include "MyRectangle.h"
 #include "GraphicsRootSignatureMgr.h"
 #include "GameScene.h"
+ 
 #include "MainScene.h"
  
 MainScene::MainScene()
@@ -28,7 +29,7 @@ bool MainScene::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM wPar
 }
 
 bool MainScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam, float ElapsedTime)
-{
+{ 
 	switch (nMessageID)
 	{
 	case WM_KEYUP:
