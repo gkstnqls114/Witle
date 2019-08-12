@@ -177,12 +177,28 @@ void Player::DeactiveShield()
 
 void Player::ActiveBlessing()
 {
-	blessing = 1.2f;
+	blessing = 1.7f;
+	if (m_Broom->GetisUsing())
+	{
+		m_pPlayerMovement->BroomMode();
+	}
+	else
+	{ 
+		m_pPlayerMovement->RunMode();
+	}
 }
 
 void Player::DeactiveBlessing()
 {
 	blessing = 1.f;
+	if (m_Broom->GetisUsing())
+	{
+		m_pPlayerMovement->BroomMode();
+	}
+	else
+	{
+		m_pPlayerMovement->RunMode();
+	}
 }
  
 void Player::Render(ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffers)

@@ -1,17 +1,25 @@
 #include "stdafx.h"
 #include "BlessingEffect.h"
+
+#include "PlayerManager.h"
+#include "Player.h"
+
 #include "Blessing.h"
 
 
 void Blessing::Active()
-{
-	
+{ 
+	PlayerManager::GetMainPlayer()->ActiveBlessing();
 }
 
 bool Blessing::IsFinish()
 {
 	bool isfinish =  (m_UsingTime >= m_MAXUsingTime);
-	if (isfinish) m_UsingTime = 0.f;
+	if (isfinish)
+	{
+		PlayerManager::GetMainPlayer()->DeactiveBlessing();
+		m_UsingTime = 0.f;
+	}
 	return isfinish;
 }
 

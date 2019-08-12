@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "GameObject.h"
+#include "Player.h"
 #include "PlayerMovement.h"
 
 #include "SoundManager.h"
@@ -85,7 +86,7 @@ void PlayerMovement::ReduceVelocity(float fTimeElapsed)
 void PlayerMovement::BroomMode()
 {
 	m_isBroomMode = true;
-	m_fMaxVelocityXZ = 5000.0f;
+	m_fMaxVelocityXZ = 5000.0f * static_cast<Player*>(m_pOwner)->blessing;
 	m_fFriction = 3000.0f;
 	m_fDistance = 5000.f;
 }
@@ -93,7 +94,7 @@ void PlayerMovement::BroomMode()
 void PlayerMovement::RunMode()
 {
 	m_isBroomMode = false;
-	m_fMaxVelocityXZ = RUN_MAX_VELOCITY;
+	m_fMaxVelocityXZ = RUN_MAX_VELOCITY * static_cast<Player*>(m_pOwner)->blessing;
 	m_fFriction = 100000.0f;
 	m_fDistance = 0.f;
 }
