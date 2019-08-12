@@ -26,7 +26,10 @@
 #include "PlayerStatus.h"
 #include "FollowCam.h"
 #include "Broom.h"
+#include"GameObject.h"
 #include "Terrain.h"
+
+#include "Dragon.h"
 
 #include "Player.h"
 
@@ -574,12 +577,12 @@ bool Player::Attack(Status* status, MyCollider* collider, XMFLOAT2 aimPoint, Cam
 	{   
 		isAttack = true;
 		if (isDragon)
-		{ 
+		{  
 			status->SubstractHP(10);
 		}
 		else
 		{
-			status->Damage(10, ANIMATION_HIT.ID);
+			status->Damage(30, ANIMATION_HIT.ID);
 		}
 	}
 	else
@@ -600,7 +603,7 @@ bool Player::Attack(Status* status, MyCollider* collider, XMFLOAT2 aimPoint, Cam
 			}
 			else
 			{
-				status->Damage(10, ANIMATION_HIT.ID);
+				status->Damage(30, ANIMATION_HIT.ID);
 			}
 		}
 

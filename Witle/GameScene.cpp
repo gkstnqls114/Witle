@@ -272,6 +272,7 @@ bool GameScene::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM wPar
 					m_Dragon->GetBOBox(),
 					m_AimPoint->GetPickingPoint(),
 					m_pMainCamera->GetCamera(), true);
+
 				if (isAttackDragon)
 				{
 					HitEffectMgr::GetInstance()->AddNormalHitEffectPosition(m_Dragon->GetBOBox()->GetBOBox().Center);
@@ -493,7 +494,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	std::uniform_int_distribution<> monstertype(0, 5);
 
 	m_Dragon = new Dragon("Dragon",
-		XMFLOAT3(15000, 0, 15000),
+		XMFLOAT3(14500, 0, 15000),
 		pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
 
 	m_TestMonster = new Monster*[m_TestMonsterCount];

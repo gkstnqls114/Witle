@@ -968,23 +968,27 @@ void CGameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPA
 	{
 	case WM_KEYDOWN:  
 
-		// 만약 아무키나 누르면 장면 전환 ///////////////////
-		if (SceneMgr::GetInstacne()->IsMainScene())
+		if (wParam != VK_F1)
 		{
-			SceneMgr::GetInstacne()->ChangeSceneToSkillSelect();
+
+			// 만약 아무키나 누르면 장면 전환 ///////////////////
+			if (SceneMgr::GetInstacne()->IsMainScene())
+			{
+				SceneMgr::GetInstacne()->ChangeSceneToSkillSelect();
+			}
+			else if (SceneMgr::GetInstacne()->IsSkillSelectScene())
+			{
+				SceneMgr::GetInstacne()->ChangeSceneToGame();
+			}
+			else if (SceneMgr::GetInstacne()->IsWinScene())
+			{
+				SceneMgr::GetInstacne()->ChangeSceneToMain();
+			}
+			else if (SceneMgr::GetInstacne()->IsLoseScene())
+			{
+				SceneMgr::GetInstacne()->ChangeSceneToMain();
+			}
 		}
-		else if (SceneMgr::GetInstacne()->IsSkillSelectScene())
-		{
-			SceneMgr::GetInstacne()->ChangeSceneToGame();
-		} 
-		else if (SceneMgr::GetInstacne()->IsWinScene())
-		{
-			SceneMgr::GetInstacne()->ChangeSceneToMain();
-		}
-		else if (SceneMgr::GetInstacne()->IsLoseScene())
-		{
-			SceneMgr::GetInstacne()->ChangeSceneToMain();
-		} 
 
 		switch (wParam)
 		{
@@ -1070,7 +1074,7 @@ void CGameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPA
 				is_fullscreen = FALSE;
 				GameScreen::ChangeWindowScreen(GameScreen::GetWidth(), GameScreen::GetHeight());
 			} 
-			OnResizeBackBuffers();
+			OnResizeBackBuffers(); 
 			break;
 		}  
 		case MYVK_U:

@@ -88,7 +88,8 @@ void SceneMgr::ChangeSceneToGame()
 		}
 	}
 
-	if (isNot)return;
+	if (isNot) return;
+	
 	// »ç¿îµå ///////////////////////////////////////////////////////////
 	SoundManager::GetInstance()->Stop(ENUM_SOUND::MAIN_SOUND);
 	SoundManager::GetInstance()->Stop(ENUM_SOUND::WIN_SOUND);
