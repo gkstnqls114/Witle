@@ -6,6 +6,8 @@
 #include "GameScreen.h"
 // GameBase //////////////
 
+#include "SceneMgr.h"
+
 #include "SoundManager.h"
  
 #include "Camera.h"
@@ -371,14 +373,21 @@ void Player::Rotate(float x, float y, float z)
 static float hittime = 0.f;
 void Player::ProcessInput(float fTimeElapsed)
 {   
-	//if (isDead) return;
+	if (isDead && m_pLoadObject_Cloth->IsTrackAnimationSetFinish(0, ANIMATION_DEAD.ID))
+	{
+		isDead = false;
+		m_CurrAnimation = ANIMATION_IDLE.ID;
+		SceneMgr::GetInstacne()->ChangeSceneToLose();
+		return;
+	}
+	if (isDead) return;
 
-	//if (m_pPlayerHPStatus->m_Guage <= 0 && isDead == false)
-	//{
-	//	isDead = true;
-	//	m_CurrAnimation = ANIMATION_DEAD.ID;
-	//	return;
-	//}
+	if (m_pPlayerHPStatus->m_Guage <= 0 && isDead == false)
+	{
+		isDead = true;
+		m_CurrAnimation = ANIMATION_DEAD.ID;
+		return;
+	}
 
 	if (m_CurrAnimation == ANIMATION_HIT.ID)
 	{  

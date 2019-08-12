@@ -14,28 +14,5 @@ void BossDead::UpdateVelocity(float fElpasedTime, MonsterMovement * movement)
 }
 
 void BossDead::UpdateState(float fElpasedTime, BossMonsterActionMgr * actionMgr)
-{
-	Monster* pMonsterOwner = static_cast<Monster*>(m_pOwner);
-
-	bool isNearPlayer = PlayerManager::IsNearPlayer(m_pOwner->GetTransform().GetPosition(), 500);
-
-
-	if (isNearPlayer)
-	{
-		actionMgr->SetZeroTotalTime(); // 이거 왜 한거지.. ?
-
-		pMonsterOwner->GetRecognitionRange()->m_TotalTime += fElpasedTime;
-
-		// 만약 인식시간이 되었을 경우...
-		if (pMonsterOwner->GetRecognitionRange()->m_TotalTime >= pMonsterOwner->GetRecognitionRange()->m_RecognitionTime)
-		{
-			pMonsterOwner->GetRecognitionRange()->m_TotalTime = 0;
-			actionMgr->ChangeBossStateToChase();
-		}
-		return;
-	}
-	else
-	{
-		pMonsterOwner->GetRecognitionRange()->m_TotalTime = 0;
-	} 
+{ 
 }

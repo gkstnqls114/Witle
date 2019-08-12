@@ -24,10 +24,10 @@ class SceneMgr
 
 	// 사용하는 장면 목록들 //////////////////
 
-public:
 	SceneMgr();
 	~SceneMgr();
 
+public:
 	static SceneMgr* GetInstacne()
 	{
 		if (m_Instace == nullptr)

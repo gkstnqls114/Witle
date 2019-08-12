@@ -8,6 +8,7 @@
 #include "BossMonsterActionMgr.h"
 // For Monster ///////////////
 
+#include "SceneMgr.h"
 #include "ModelStorage.h"
 #include "MyDescriptorHeap.h"
 #include "Object.h"
@@ -148,7 +149,16 @@ void Dragon::Rotate(float x, float y, float z)
 }
 
 void Dragon::Update(float fElapsedTime)
-{ 
+{
+	bool isDead = static_cast<BossMonsterActionMgr*>(m_MonsterMovement->GetMonsterActionMgr())->Is_BossDead();
+	if (isDead && m_pLoadObject->IsTrackAnimationSetFinish(0, BOSS_DEAD.ID))
+	{ 
+		static_cast<BossMonsterActionMgr*>(m_MonsterMovement->GetMonsterActionMgr())->ChangeBossStateToStone();
+		SceneMgr::GetInstacne()->ChangeSceneToWin();
+		return;
+	}
+	if (isDead) return;
+
 	if (m_isStone) return;
 	 
 	if (m_isFinishAttack)

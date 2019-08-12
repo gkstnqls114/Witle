@@ -9,7 +9,7 @@
 
 #include "SoundManager.h"
 
-static SceneMgr* m_Instace{ nullptr };
+SceneMgr* SceneMgr::m_Instace{ nullptr };
 
 SceneMgr::SceneMgr()
 {

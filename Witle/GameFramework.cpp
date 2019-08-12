@@ -818,8 +818,8 @@ void CGameFramework::BuildObjects()
 	BuildShaders(); // 생성된 루트 시그니처를 사용하는 쉐이더 생성
 	CreateRWBuffer(); // CommandList Reset된 이후에 해야함
 	 
-	m_SceneMgr = new SceneMgr; 
-
+	SceneMgr::GetInstacne();
+	
 	// 터레인 오브젝트에서 사용될 모든 텍스쳐과 모델을 가져온다.
 	TextureStorage::GetInstance()->CreateTextures(m_d3dDevice.Get(), m_CommandList.Get());
 
@@ -830,10 +830,10 @@ void CGameFramework::BuildObjects()
 	BossSkillMgr::GetInstance()->BuildObjects(m_d3dDevice.Get(), m_CommandList.Get()); // 스킬 이펙트 생성
 
 	// 모든 씬의 오브젝트 및 텍스쳐들을 빌드합니다.
-	m_SceneMgr->BuildObjects(m_d3dDevice.Get(), m_CommandList.Get());
+	SceneMgr::GetInstacne()->BuildObjects(m_d3dDevice.Get(), m_CommandList.Get());
 
 	// 빌드되고 연결된 텍스쳐 개수만큼 SRV 힙을 생성하고, 각 모든 텍스쳐들을 연결합니다.
-	m_SceneMgr->BuildHeap(m_d3dDevice.Get(), m_CommandList.Get());
+	SceneMgr::GetInstacne()->BuildHeap(m_d3dDevice.Get(), m_CommandList.Get());
 
 	// 터레인을 위한 쉐도우 맵과 힙 연결...
 	GameScene::CreateSrvDescriptorHeapsForShadowmap(m_d3dDevice.Get(), m_CommandList.Get(), m_Shadowmap);
@@ -850,7 +850,7 @@ void CGameFramework::BuildObjects()
 	WaitForGpuComplete();
 
 	//// 업로드 힙 릴리즈 ///////////////////////////////////////////////////////////////////////// 
-	if (m_SceneMgr) m_SceneMgr->ReleaseUploadBuffers();
+	SceneMgr::GetInstacne()->ReleaseUploadBuffers();
 
 	SkillStg::GetInstance()->ReleaseUploadBuffers();
 	TextureStorage::GetInstance()->ReleaseUploadBuffers();
@@ -863,14 +863,7 @@ void CGameFramework::BuildObjects()
 }
 
 void CGameFramework::ReleaseObjects()
-{ 
-	if (m_SceneMgr)
-	{ 
-		m_SceneMgr->ReleaseObjects();
-		delete m_SceneMgr;
-		m_SceneMgr = nullptr;
-	}
-
+{  
 	m_verticalShader->ReleaseObjects();
 	delete m_verticalShader;
 	m_verticalShader = nullptr;
@@ -894,20 +887,18 @@ void CGameFramework::ReleaseObjects()
 	ModelStorage::ReleaseInstance();
 	HitEffectMgr::ReleaseInstance();
 
+	SceneMgr::GetInstacne()->ReleaseObjects();
 }
 
 void CGameFramework::UpdateGamelogic(float fElapsedTime)
 {
-	if (m_SceneMgr)
-	{
-		GameInput::Update(m_hWnd);
-		m_SceneMgr->GetCurrScene()->ProcessInput(m_hWnd, fElapsedTime);
-		m_SceneMgr->GetCurrScene()->UpdatePhysics(fElapsedTime);
-		m_SceneMgr->GetCurrScene()->Update(fElapsedTime);
-		m_SceneMgr->GetCurrScene()->AnimateObjects(fElapsedTime);
-		m_SceneMgr->GetCurrScene()->LastUpdate(fElapsedTime); 
-		GameInput::Reset();
-	}
+	GameInput::Update(m_hWnd);
+	SceneMgr::GetInstacne()->GetCurrScene()->ProcessInput(m_hWnd, fElapsedTime);
+	SceneMgr::GetInstacne()->GetCurrScene()->UpdatePhysics(fElapsedTime);
+	SceneMgr::GetInstacne()->GetCurrScene()->Update(fElapsedTime);
+	SceneMgr::GetInstacne()->GetCurrScene()->AnimateObjects(fElapsedTime);
+	SceneMgr::GetInstacne()->GetCurrScene()->LastUpdate(fElapsedTime);
+	GameInput::Reset();
 }
 
 void CGameFramework::WaitForGpuComplete()
@@ -937,12 +928,9 @@ void CGameFramework::MoveToNextFrame()
 }
 
 void CGameFramework::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam)
-{
-	if (m_SceneMgr) 
-	{
-		m_SceneMgr->GetCurrScene()->OnProcessingMouseMessage(hWnd, nMessageID, wParam, lParam);
-	}
-
+{ 
+		SceneMgr::GetInstacne()->GetCurrScene()->OnProcessingMouseMessage(hWnd, nMessageID, wParam, lParam);
+	 
 	switch (nMessageID)
 	{
 	case WM_MOUSEWHEEL:
@@ -972,12 +960,9 @@ void CGameFramework::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM
 
 static BOOL is_fullscreen = FALSE;
 void CGameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam)
-{
-	if (m_SceneMgr) 
-	{
-		m_SceneMgr->GetCurrScene()->OnProcessingKeyboardMessage(hWnd, nMessageID, wParam, lParam, 0.f);
-	}
-
+{ 
+		SceneMgr::GetInstacne()->GetCurrScene()->OnProcessingKeyboardMessage(hWnd, nMessageID, wParam, lParam, 0.f);
+	 
 	bool isStateChange = false;
 	switch (nMessageID)
 	{
@@ -1016,31 +1001,31 @@ void CGameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPA
 		case VK_F5: // 블룸과 톤커브 모두 활성화
 		{
 			isStateChange = true;
-			m_SceneMgr->ChangeSceneToMain();
+			SceneMgr::GetInstacne()->ChangeSceneToMain();
 			break;
 		}
 		case VK_F6: // Skill Select Scene 으로 전환
 		{
 			isStateChange = true;
-			m_SceneMgr->ChangeSceneToSkillSelect();
+			SceneMgr::GetInstacne()->ChangeSceneToSkillSelect();
 			break;
 		}
 		case VK_F7: // Game Scene 으로 전환
 		{
 			isStateChange = true;
-			m_SceneMgr->ChangeSceneToGame();
+			SceneMgr::GetInstacne()->ChangeSceneToGame();
 			break;
 		}
 		case VK_F8: // Win Scene 으로 전환
 		{
 			isStateChange = true;
-			m_SceneMgr->ChangeSceneToWin();
+			SceneMgr::GetInstacne()->ChangeSceneToWin();
 			break;
 		}
 		case VK_F9: // Lose Scene 으로 전환
 		{
 			isStateChange = true;
-			m_SceneMgr->ChangeSceneToLose();
+			SceneMgr::GetInstacne()->ChangeSceneToLose();
 			break;
 		}
 		default:
@@ -1094,13 +1079,13 @@ void CGameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPA
 	if (isStateChange) return;
 
 	// 만약 아무키나 누르면 장면 전환 ///////////////////
-	if (m_SceneMgr->IsMainScene())
+	if (SceneMgr::GetInstacne()->IsMainScene())
 	{
-		m_SceneMgr->ChangeSceneToSkillSelect();
+		SceneMgr::GetInstacne()->ChangeSceneToSkillSelect();
 	}
-	else if (m_SceneMgr->IsSkillSelectScene())
+	else if (SceneMgr::GetInstacne()->IsSkillSelectScene())
 	{
-		m_SceneMgr->ChangeSceneToGame();
+		SceneMgr::GetInstacne()->ChangeSceneToGame();
 	}
 }
  
@@ -1202,9 +1187,9 @@ void CGameFramework::RenderOnRTs(renderFuncPtr renderPtr, UINT RenderTargetCount
 
 void CGameFramework::RenderOnGbuffer()
 {  
-	if (m_SceneMgr)
+	if (SceneMgr::GetInstacne())
 	{
-		m_SceneMgr->GetCurrScene()->Render(m_CommandList.Get(), true);
+		SceneMgr::GetInstacne()->GetCurrScene()->Render(m_CommandList.Get(), true);
 	} 
 }
  
@@ -1402,9 +1387,9 @@ void CGameFramework::DownScale()
 void CGameFramework::RenderSwapChain()
 {  
 	// 장면을 렌더합니다.
-	if (m_SceneMgr->GetCurrScene())
+	if (SceneMgr::GetInstacne()->GetCurrScene())
 	{ 
-		m_SceneMgr->GetCurrScene()->Render(m_CommandList.Get(), false);
+		SceneMgr::GetInstacne()->GetCurrScene()->Render(m_CommandList.Get(), false);
 	}
 
 }
@@ -1470,17 +1455,17 @@ void CGameFramework::RenderToTexture()
 
 void CGameFramework::RenderForShadow()
 {  
-	if (m_SceneMgr->GetCurrScene())
+	if (SceneMgr::GetInstacne()->GetCurrScene())
 	{
-		m_SceneMgr->GetCurrScene()->RenderForShadow(m_CommandList.Get()); 
+		SceneMgr::GetInstacne()->GetCurrScene()->RenderForShadow(m_CommandList.Get());
 	} 
 }
 
 void CGameFramework::RenderForPlayerShadow()
 {
-	if (m_SceneMgr->GetCurrScene())
+	if (SceneMgr::GetInstacne()->GetCurrScene())
 	{
-		m_SceneMgr->GetCurrScene()->RenderForPlayerShadow(m_CommandList.Get());
+		SceneMgr::GetInstacne()->GetCurrScene()->RenderForPlayerShadow(m_CommandList.Get());
 	}
 }
 

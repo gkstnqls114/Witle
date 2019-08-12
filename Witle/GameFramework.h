@@ -254,8 +254,6 @@ public:
 	// 윈도우의 메시지(키보드, 마우스 입력)를 처리하는 함수입니다.
 	LRESULT CALLBACK OnProcessingWindowMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam);
 	
-private: 
-	// 현재 사용하는 장면을 관리하는 매니저입니다
-	SceneMgr *m_SceneMgr{ nullptr }; 
+private:  
 };
 
