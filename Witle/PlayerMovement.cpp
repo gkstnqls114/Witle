@@ -44,12 +44,11 @@ void PlayerMovement::MoveVelocity(DWORD dwDirection, float fTimeElapsed)
 		if (dwDirection & DIR_LEFT) xmf3Shift = Vector3::Add(xmf3Shift, axis.right, -fDistance);
 
 		MoveVelocity(xmf3Shift);
-
 	}
 	else
 	{
-		SoundManager::GetInstance()->Stop(ENUM_SOUND::PLAYER_BROOM);
 		SoundManager::GetInstance()->Play(ENUM_SOUND::PLAYER_MOVE);
+		SoundManager::GetInstance()->Stop(ENUM_SOUND::PLAYER_BROOM);
 
 		if (dwDirection & DIR_FORWARD) xmf3Shift = Vector3::Add(xmf3Shift, axis.look, m_fMaxVelocityXZ - 500);
 		if (dwDirection & DIR_BACKWARD) xmf3Shift = Vector3::Add(xmf3Shift, axis.look, -m_fMaxVelocityXZ + 500);

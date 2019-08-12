@@ -1021,7 +1021,7 @@ void CGameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPA
 			break;
 		}
 
-		case VK_F5: // 블룸과 톤커브 모두 활성화
+		case VK_F5: // Main 으로 전환
 		{
 			isStateChange = true;
 			SceneMgr::GetInstacne()->ChangeSceneToMain();

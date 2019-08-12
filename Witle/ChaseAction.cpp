@@ -5,8 +5,14 @@
 #include "PlayerManager.h"
 #include "ChaseAction.h"
 
+#include "SoundManager.h"
+
 void ChaseAction::UpdateVelocity(float fElpasedTime, MonsterMovement * movement)
 {
+	// 사운드 ///////////////////////////////////////////////////////////
+	SoundManager::GetInstance()->Play(ENUM_SOUND::MONSTER_MOVE_SOUND);
+	// 사운드 ///////////////////////////////////////////////////////////
+
 	XMFLOAT3 toPlayer = Vector3::Normalize(
 		Vector3::Subtract(PlayerManager::GetMainPlayer()->GetTransform().GetPosition(), m_pOwner->GetTransform().GetPosition())
 	);
@@ -19,10 +25,20 @@ void ChaseAction::UpdateVelocity(float fElpasedTime, MonsterMovement * movement)
 	if (Vector3::CrossProduct(look, toPlayer).y >= 0)
 	{
 		movement->m_fPitch = value;
+
+		for (int i = 0; i < 5; i++)
+		{
+			// pChannel[(int)ENUM_SOUND::MONSTER_MOVE_SOUND]->setVolume(i);
+		}
 	}
 	else
 	{
 		movement->m_fPitch = -value;
+
+		for (int i = 0; i < 5; i--)
+		{
+			// pChannel[(int)ENUM_SOUND::MONSTER_MOVE_SOUND]->setVolume(i);
+		}
 	}
 }
 
