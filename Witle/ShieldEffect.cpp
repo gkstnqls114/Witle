@@ -61,7 +61,7 @@ ShieldEffect::ShieldEffect(const std::string & entityID, ID3D12Device * pd3dDevi
 		m_ShieldEffectModelInfo = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature(), "Model/Shield.bin", NULL);
 	m_ShieldEffectObject = m_ShieldEffectModelInfo->m_pModelRootObject;
 
-	m_ShiedlTexture = TextureStorage::GetInstance()->GetTexture("Red");
+	m_ShiedlTexture = TextureStorage::GetInstance()->GetTexture("Shield");
 }
 
 
@@ -72,7 +72,9 @@ ShieldEffect::~ShieldEffect()
 
 void ShieldEffect::Update(float fElapsedTime)
 {
-	m_Transform.SetIdentity();
+	m_Transform.SetLook(Vector3::ScalarProduct(PlayerManager::GetMainPlayer()->GetTransform().GetLook(), -1)); 
+	m_Transform.SetUp(PlayerManager::GetMainPlayer()->GetTransform().GetUp());
+	m_Transform.SetRight(PlayerManager::GetMainPlayer()->GetTransform().GetRight());
 	m_Transform.SetPosition(Vector3::Add(PlayerManager::GetMainPlayer()->GetTransform().GetPosition(), Vector3::ScalarProduct(XMFLOAT3(0, 1, 0), 75.f, false)));
 	m_Transform.Update(0.f);
 

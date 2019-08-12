@@ -94,7 +94,8 @@ void TextureStorage::CreateTextures(ID3D12Device * pd3dDevice, ID3D12GraphicsCom
 	CreateModelTexture(SPACECAT_GREEN, pd3dDevice, pd3dCommandList);
 	CreateModelTexture(SPACECAT_BLUE, pd3dDevice, pd3dCommandList);
 	CreateModelTexture(SPACECAT_PINK, pd3dDevice, pd3dCommandList);
-
+	CreateModelTexture("Shield", pd3dDevice, pd3dCommandList);
+	
 	// 기본 이미지들
 	CreateImageTexture(IMAGE_MONSTERATTACKHIT_SPRRITE, pd3dDevice, pd3dCommandList);
 	CreateImageTexture(IMAGE_FIREBALLHIT_SPRRITE, pd3dDevice, pd3dCommandList);
