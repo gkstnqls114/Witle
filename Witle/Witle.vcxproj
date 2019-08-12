@@ -171,6 +171,7 @@
     <ClInclude Include="MonsterAttackHitEffect.h" />
     <ClInclude Include="IceBallHitEffect.h" />
     <ClInclude Include="FireBallHitEffect.h" />
+    <ClInclude Include="MonsterManage.h" />
     <ClInclude Include="NormalHitEffect.h" />
     <ClInclude Include="LightningBallHitEffect.h" />
     <ClInclude Include="HitEffect.h" />
@@ -361,6 +362,7 @@
     <ClCompile Include="MonsterAttackHitEffect.cpp" />
     <ClCompile Include="IceBallHitEffect.cpp" />
     <ClCompile Include="FireBallHitEffect.cpp" />
+    <ClCompile Include="MonsterManage.cpp" />
     <ClCompile Include="NormalHitEffect.cpp" />
     <ClCompile Include="LightningBallHitEffect.cpp" />
     <ClCompile Include="HitEffect.cpp" />

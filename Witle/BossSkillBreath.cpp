@@ -15,6 +15,7 @@
 
 void BossSkillBreath::UpdateVelocity(float fElpasedTime, MonsterMovement * movement)
 {
+	SoundManager::GetInstance()->Stop(ENUM_SOUND::BOSS_MOVE_SOUND);
 	SoundManager::GetInstance()->Play(ENUM_SOUND::BOSS_BREATH_SOUND);
 
 	movement->m_xmf3Velocity = XMFLOAT3(0.f, 0.f, 0.f);
