@@ -553,6 +553,24 @@
     <Filter Include="02.Component\ForPlayer\PlayerAction">
       <UniqueIdentifier>{3f55ebe4-a888-4606-89ea-f2499b458027}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.Component\ForPlayer\PlayerAction\01.PlayerIdleAction">
+      <UniqueIdentifier>{e9cfd760-cf14-4d1b-8b40-ffd4810cae95}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\ForPlayer\PlayerAction\02.PlayerLeftWalkAction">
+      <UniqueIdentifier>{c14a4819-4809-4be7-aea2-fe221913cebd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\ForPlayer\PlayerAction\03.PlayerRightWalkAction">
+      <UniqueIdentifier>{a755f35a-1923-4b60-872e-7acaa5c9b4d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\ForPlayer\PlayerAction\04.PlayerForwardWalkAction">
+      <UniqueIdentifier>{4fe6d071-3b44-4250-a166-354b6bbfb295}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\ForPlayer\PlayerAction\05.PlayerBackwordWalkAction">
+      <UniqueIdentifier>{d88c4902-e7c8-4d72-b5b4-5ef4678f5ae5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\ForPlayer\PlayerActionMgr">
+      <UniqueIdentifier>{5bdf49bb-3f7f-438f-9138-3cd0a5163284}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -1125,6 +1143,12 @@
     <ClInclude Include="PlayerAction.h">
       <Filter>02.Component\ForPlayer\PlayerAction</Filter>
     </ClInclude>
+    <ClInclude Include="PlayerIdleAction.h">
+      <Filter>02.Component\ForPlayer\PlayerAction\01.PlayerIdleAction</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerActionMgr.h">
+      <Filter>02.Component\ForPlayer\PlayerActionMgr</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1675,6 +1699,12 @@
     </ClCompile>
     <ClCompile Include="PlayerAction.cpp">
       <Filter>02.Component\ForPlayer\PlayerAction</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerIdleAction.cpp">
+      <Filter>02.Component\ForPlayer\PlayerAction\01.PlayerIdleAction</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerActionMgr.cpp">
+      <Filter>02.Component\ForPlayer\PlayerActionMgr</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
