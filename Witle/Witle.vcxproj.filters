@@ -547,6 +547,12 @@
     <Filter Include="13.Storage/Manager\16.MonsterManage">
       <UniqueIdentifier>{eb253a5d-e7f3-43a5-bf05-e7f209a21d8c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.Component\ForPlayer">
+      <UniqueIdentifier>{b0af8321-09bf-45e8-aae1-b56db57d1123}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\ForPlayer\PlayerAction">
+      <UniqueIdentifier>{3f55ebe4-a888-4606-89ea-f2499b458027}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -1116,6 +1122,9 @@
     <ClInclude Include="MonsterManage.h">
       <Filter>13.Storage/Manager\16.MonsterManage</Filter>
     </ClInclude>
+    <ClInclude Include="PlayerAction.h">
+      <Filter>02.Component\ForPlayer\PlayerAction</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1663,6 +1672,9 @@
     </ClCompile>
     <ClCompile Include="MonsterManage.cpp">
       <Filter>13.Storage/Manager\16.MonsterManage</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerAction.cpp">
+      <Filter>02.Component\ForPlayer\PlayerAction</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -178,6 +178,7 @@
     <ClInclude Include="HitEffectShader.h" />
     <ClInclude Include="LoseScene.h" />
     <ClInclude Include="Mushroom.h" />
+    <ClInclude Include="PlayerAction.h" />
     <ClInclude Include="ToneCuveShader.h" />
     <ClInclude Include="BloomShader.h" />
     <ClInclude Include="ToneCuveAndBloomShader.h" />
@@ -370,6 +371,7 @@
     <ClCompile Include="LoseScene.cpp" />
     <ClCompile Include="MainScene.cpp" />
     <ClCompile Include="Mushroom.cpp" />
+    <ClCompile Include="PlayerAction.cpp" />
     <ClCompile Include="ToneCuveShader.cpp" />
     <ClCompile Include="BloomShader.cpp" />
     <ClCompile Include="ToneCuveAndBloomShader.cpp" />
