@@ -49,15 +49,6 @@
     <Filter Include="02.Component\MyRigidbody">
       <UniqueIdentifier>{ea387169-77ab-4066-8583-c032c53a4038}</UniqueIdentifier>
     </Filter>
-    <Filter Include="10.Renderer">
-      <UniqueIdentifier>{3173eb9f-8d38-40a1-b848-5fcb8f1eeeef}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="10.Renderer\MeshRenderer">
-      <UniqueIdentifier>{2faec5fb-2ba0-4730-9e70-8fb653e6274c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="10.Renderer\SkinnedMeshRenderer">
-      <UniqueIdentifier>{46b1a7bc-5c15-44dd-883d-2897ca51d750}</UniqueIdentifier>
-    </Filter>
     <Filter Include="11.Event">
       <UniqueIdentifier>{3f9358d8-bf33-46cb-8896-0fad7507622f}</UniqueIdentifier>
     </Filter>
@@ -571,6 +562,33 @@
     <Filter Include="02.Component\ForPlayer\PlayerActionMgr">
       <UniqueIdentifier>{5bdf49bb-3f7f-438f-9138-3cd0a5163284}</UniqueIdentifier>
     </Filter>
+    <Filter Include="11.Event\10.Renderer">
+      <UniqueIdentifier>{3173eb9f-8d38-40a1-b848-5fcb8f1eeeef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="11.Event\10.Renderer\MeshRenderer">
+      <UniqueIdentifier>{2faec5fb-2ba0-4730-9e70-8fb653e6274c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="11.Event\10.Renderer\SkinnedMeshRenderer">
+      <UniqueIdentifier>{46b1a7bc-5c15-44dd-883d-2897ca51d750}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\ForPlayer\PlayerAction\06.PlayerStandardattackAction">
+      <UniqueIdentifier>{432486ee-a1ce-45bd-b2e4-3d05ad01877a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\ForPlayer\PlayerAction\07.PlayerBroomprepareAction">
+      <UniqueIdentifier>{ca6bd134-8613-46b8-ad57-d57ec3cbe1c5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\ForPlayer\PlayerAction\08.PlayerBroomidleAction">
+      <UniqueIdentifier>{ea10541f-f1b8-447f-8842-c273473e3b0b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\ForPlayer\PlayerAction\09.PlayerBroomforwardAction">
+      <UniqueIdentifier>{f9af6ef7-7744-4b8d-b8a9-df74174f2afe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\ForPlayer\PlayerAction\10.PlayerDeadAction">
+      <UniqueIdentifier>{cbe05dda-d1ec-4359-8ae6-2469149785dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\ForPlayer\PlayerAction\11.PlayerHitAction">
+      <UniqueIdentifier>{271a4c92-b634-423a-bca5-f0607e16e8f2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -592,7 +610,7 @@
       <Filter>02.Component\03.Mesh</Filter>
     </ClInclude>
     <ClInclude Include="Renderer.h">
-      <Filter>10.Renderer</Filter>
+      <Filter>11.Event\10.Renderer</Filter>
     </ClInclude>
     <ClInclude Include="ComponentBase.h">
       <Filter>02.Component</Filter>
@@ -646,10 +664,10 @@
       <Filter>02.Component\03.Mesh\TerrainMesh</Filter>
     </ClInclude>
     <ClInclude Include="MeshRenderer.h">
-      <Filter>10.Renderer\MeshRenderer</Filter>
+      <Filter>11.Event\10.Renderer\MeshRenderer</Filter>
     </ClInclude>
     <ClInclude Include="SkinnedMeshRenderer.h">
-      <Filter>10.Renderer\SkinnedMeshRenderer</Filter>
+      <Filter>11.Event\10.Renderer\SkinnedMeshRenderer</Filter>
     </ClInclude>
     <ClInclude Include="Texture.h">
       <Filter>07.Resource\Texture</Filter>
@@ -1149,6 +1167,18 @@
     <ClInclude Include="PlayerActionMgr.h">
       <Filter>02.Component\ForPlayer\PlayerActionMgr</Filter>
     </ClInclude>
+    <ClInclude Include="PlayerBackwordWalkAction.h">
+      <Filter>02.Component\ForPlayer\PlayerAction\05.PlayerBackwordWalkAction</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerForwardWalkAction.h">
+      <Filter>02.Component\ForPlayer\PlayerAction\04.PlayerForwardWalkAction</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerRightWalkAction.h">
+      <Filter>02.Component\ForPlayer\PlayerAction\03.PlayerRightWalkAction</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerLeftWalkAction.h">
+      <Filter>02.Component\ForPlayer\PlayerAction\02.PlayerLeftWalkAction</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1173,7 +1203,7 @@
       <Filter>03.GameObject</Filter>
     </ClCompile>
     <ClCompile Include="Renderer.cpp">
-      <Filter>10.Renderer</Filter>
+      <Filter>11.Event\10.Renderer</Filter>
     </ClCompile>
     <ClCompile Include="Shader.cpp">
       <Filter>05.Shader</Filter>
@@ -1212,10 +1242,10 @@
       <Filter>02.Component\03.Mesh\TerrainMesh</Filter>
     </ClCompile>
     <ClCompile Include="MeshRenderer.cpp">
-      <Filter>10.Renderer\MeshRenderer</Filter>
+      <Filter>11.Event\10.Renderer\MeshRenderer</Filter>
     </ClCompile>
     <ClCompile Include="SkinnedMeshRenderer.cpp">
-      <Filter>10.Renderer\SkinnedMeshRenderer</Filter>
+      <Filter>11.Event\10.Renderer\SkinnedMeshRenderer</Filter>
     </ClCompile>
     <ClCompile Include="Texture.cpp">
       <Filter>07.Resource\Texture</Filter>
@@ -1705,6 +1735,18 @@
     </ClCompile>
     <ClCompile Include="PlayerActionMgr.cpp">
       <Filter>02.Component\ForPlayer\PlayerActionMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerBackwordWalkAction.cpp">
+      <Filter>02.Component\ForPlayer\PlayerAction\05.PlayerBackwordWalkAction</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerForwardWalkAction.cpp">
+      <Filter>02.Component\ForPlayer\PlayerAction\04.PlayerForwardWalkAction</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerRightWalkAction.cpp">
+      <Filter>02.Component\ForPlayer\PlayerAction\03.PlayerRightWalkAction</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerLeftWalkAction.cpp">
+      <Filter>02.Component\ForPlayer\PlayerAction\02.PlayerLeftWalkAction</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
