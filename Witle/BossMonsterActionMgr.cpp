@@ -33,7 +33,7 @@ void BossMonsterActionMgr::ChangeBossStateBefore()
 	// 상태가 이전하고 다른 경우에만 서로 변경한다.
 	if (m_CurrMonsterAction != m_BeforeMonsterAction)
 	{
-		MonsterAction* temp = m_CurrMonsterAction;
+		Action* temp = m_CurrMonsterAction;
 		m_CurrMonsterAction = m_BeforeMonsterAction;
 		m_BeforeMonsterAction = temp;
 	}

@@ -52,7 +52,7 @@ void MonsterStatus::Render(ID3D12GraphicsCommandList * pd3dCommandList)
 
 void MonsterStatus::Damage(int damage, int state)
 {
-	MonsterActionMgr* pMonsterActionMgr = static_cast<Monster*>(m_pOwner)->GetMovement()->GetMonsterActionMgr();
+	ActionMgr* pMonsterActionMgr = static_cast<Monster*>(m_pOwner)->GetMovement()->GetMonsterActionMgr();
 	GeneralMonsterActionMgr* pGeneralMonsterActionMgr = static_cast<GeneralMonsterActionMgr*>(pMonsterActionMgr);
 	if (pGeneralMonsterActionMgr->isDead()) return; // 만약에 죽은 경우 리턴한다.
 

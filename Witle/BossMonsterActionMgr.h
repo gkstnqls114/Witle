@@ -11,14 +11,14 @@
 #include "BossBuf.h"
 #include "MonsterActionMgr.h"
 
-class MonsterAction;
+class Action;
 class MonsterMovement;
 class Player;
 
 // 보스 몬스터용 액션 매니저입니다.
-// MonsterActionMgr를 상속받아 현재 액션상태를 관리합니다. 
+// ActionMgr를 상속받아 현재 액션상태를 관리합니다. 
 class BossMonsterActionMgr
-	: public MonsterActionMgr
+	: public ActionMgr
 {
 	// 현재 사용하는 액션(상태)들 
 	BossIdleAction m_BossIdleAction;
@@ -44,7 +44,7 @@ public:
 
 public:
 	BossMonsterActionMgr(GameObject* pOwner, float IdleTime, float MoveTime) :
-		MonsterActionMgr(pOwner), 
+		ActionMgr(pOwner), 
 		m_BossIdleAction(pOwner, IdleTime),
 		m_BossMoveAction(pOwner, MoveTime),
 		m_BossChaseAction(pOwner),

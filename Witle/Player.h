@@ -15,6 +15,7 @@ class Texture;
 class MyDescriptorHeap; 
 class BroomEffectRect;
 class MyRectangle;
+class PlayerActionMgr;
 
 // CHeightMapTerrain 입니다.
 class Player :
@@ -23,8 +24,10 @@ class Player :
 public:
 	// 임시
 	int m_CurrAnimation{ 0 }; // 현재 사용하는 애니메이션
-
+	 
 private:
+	PlayerActionMgr* m_PlayerActionMgr{ nullptr }; // Player의 액션(모델의 동작)을 관리
+
 	bool isDead{ false };
 
 	bool m_isRendering{ true };
@@ -39,12 +42,16 @@ private:
 
 	Texture*			m_pTexture_Cloth{ nullptr };
 	Texture*			m_pTexture_Body{ nullptr };
-	 
+
+	// Player 모델 정보
+
 	CLoadedModelInfo*  m_PlayerModel_Cloth{ nullptr };
 	CLoadedModelInfo*  m_PlayerModel_Body{nullptr };
 	LoadObject*		   m_pLoadObject_Cloth{ nullptr };
 	LoadObject*		   m_pLoadObject_Body{ nullptr };
-	 
+
+	// Player 모델 정보
+
 	Broom* m_Broom{ nullptr };
 	Sniping* m_pSniping{ nullptr };
 
@@ -102,10 +109,8 @@ public:
 	void RenderForShadow(ID3D12GraphicsCommandList *pd3dCommandList);
 	void RenderStatus(ID3D12GraphicsCommandList *pd3dCommandList, bool); // 체력
 	
-	void Move(ULONG nDirection, float fDistance, bool bVelocity = false);
 	void Move(const XMFLOAT3& xmf3Shift);
-	void MoveVelocity(const XMFLOAT3& xmf3Shift);
-	void Move(float fxOffset = 0.0f, float fyOffset = 0.0f, float fzOffset = 0.0f);
+	void Move(const XMFLOAT3& xmf3Shift, DWORD dir);
 	void Rotate(float x, float y, float z);
 
 	void ProcessInput(float fTimeElapsed);

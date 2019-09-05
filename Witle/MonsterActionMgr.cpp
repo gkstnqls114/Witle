@@ -10,7 +10,7 @@
 #include "MonsterActionMgr.h"
   
 
-void MonsterActionMgr::ChangeAction(MonsterAction * action)
+void ActionMgr::ChangeAction(Action * action)
 {
 	// 현재 상태와 동일하다면 바꾸지 않는다.
 	if (m_CurrMonsterAction == action) return;
@@ -19,7 +19,7 @@ void MonsterActionMgr::ChangeAction(MonsterAction * action)
 	m_CurrMonsterAction = action;
 }
 
-void MonsterActionMgr::UpdateVelocity(float fElpasedTime, MonsterMovement * movement)
+void ActionMgr::UpdateVelocity(float fElpasedTime, MonsterMovement * movement)
 {
 	m_CurrMonsterAction->UpdateVelocity(fElpasedTime, movement);
 }

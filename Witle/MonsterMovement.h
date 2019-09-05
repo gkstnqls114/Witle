@@ -4,7 +4,7 @@
 
 class Player;
 
-class MonsterAction;
+class Action;
 
 class IdleAction;
 class MoveAction;
@@ -12,12 +12,12 @@ class ChaseAction;
 class SearchAction;
 class DeadAction;
 	
-// 몬스터 액션 매니저를 통해 현재 상태를 통해 (MonsterActionMgr 클래스 참고)
+// 몬스터 액션 매니저를 통해 현재 상태를 통해 (ActionMgr 클래스 참고)
 // Movement가 갖고 있는 가속도를 설정합니다.
 class MonsterMovement
 	: public Movement
 {
-	MonsterActionMgr* m_MonsterActionMgr { nullptr };
+	ActionMgr* m_MonsterActionMgr { nullptr };
 	 
 private: 
 
@@ -46,5 +46,5 @@ public:
 	void ReduceVelocity(float);
 
 	// 현재 사용하고 있는 액션 매니저 포인터를 가져옵니다.
-	MonsterActionMgr* GetMonsterActionMgr() const { return m_MonsterActionMgr; }
+	ActionMgr* GetMonsterActionMgr() const { return m_MonsterActionMgr; }
 };

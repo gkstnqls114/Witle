@@ -589,6 +589,9 @@
     <Filter Include="02.Component\ForPlayer\PlayerAction\06.PlayerStandardAttackAction">
       <UniqueIdentifier>{432486ee-a1ce-45bd-b2e4-3d05ad01877a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.Component\Action">
+      <UniqueIdentifier>{04d4a42b-e6b6-43fe-95d3-96c0c9b192c2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -1197,6 +1200,9 @@
     <ClInclude Include="PlayerStandardAttackAction.h">
       <Filter>02.Component\ForPlayer\PlayerAction\06.PlayerStandardAttackAction</Filter>
     </ClInclude>
+    <ClInclude Include="Action.h">
+      <Filter>02.Component\Action</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1783,6 +1789,9 @@
     </ClCompile>
     <ClCompile Include="PlayerStandardAttackAction.cpp">
       <Filter>02.Component\ForPlayer\PlayerAction\06.PlayerStandardAttackAction</Filter>
+    </ClCompile>
+    <ClCompile Include="Action.cpp">
+      <Filter>02.Component\Action</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

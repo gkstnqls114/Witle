@@ -9,13 +9,13 @@
 
 #include "MonsterActionMgr.h"
 
-class MonsterAction;
+class Action;
 class MonsterMovement;
 class Player;
 
 // MonsterMovement를 인자로 받아 가속도를 처리해주는 클래스.
 class GeneralMonsterActionMgr
-	: public MonsterActionMgr
+	: public ActionMgr
 { 
 	IdleAction      m_IdleAction;
 	MoveAction      m_MoveAction;
@@ -36,7 +36,7 @@ public:
 
 public:
 	GeneralMonsterActionMgr(GameObject* pOwner, float idleTime, float moveTime) : 
-		MonsterActionMgr(pOwner) ,
+		ActionMgr(pOwner) ,
 		m_IdleAction(pOwner, idleTime),
 		m_MoveAction(pOwner, moveTime),
 		m_ChaseAction(pOwner),

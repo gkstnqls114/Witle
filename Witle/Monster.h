@@ -45,8 +45,8 @@ protected:
 	UI3DImage*			m_MonsterHPUI{ nullptr };
 	RecognitionRange*   m_RecognitionRange{ nullptr };
 	MonsterMovement*    m_MonsterMovement{ nullptr };
-	MonsterStatus*	   m_MonsterHPStatus{ nullptr };
-	MyBOBox*		   m_pMyBOBox{ nullptr };
+	MonsterStatus*	    m_MonsterHPStatus{ nullptr };
+	MyBOBox*		    m_pMyBOBox{ nullptr };
 	 
 	Texture*			m_pTexture{ nullptr }; 
 

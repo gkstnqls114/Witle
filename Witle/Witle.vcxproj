@@ -154,6 +154,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Action.h" />
     <ClInclude Include="AltarSphere.h" />
     <ClInclude Include="AltarSphereShader.h" />
     <ClInclude Include="BallEffect.h" />
@@ -358,6 +359,7 @@
     <ClInclude Include="ModelStorage.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Action.cpp" />
     <ClCompile Include="AltarSphere.cpp" />
     <ClCompile Include="AltarSphereShader.cpp" />
     <ClCompile Include="BallEffect.cpp" />

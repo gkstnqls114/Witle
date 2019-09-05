@@ -28,6 +28,7 @@
 #include "Broom.h"
 #include"GameObject.h"
 #include "Terrain.h"
+#include "PlayerActionMgr.h"
 
 #include "Dragon.h"
 
