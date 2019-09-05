@@ -37,5 +37,5 @@ public:
 
 	// Scene의 Update 수행 이전 반드시 호출해야합니다.
 	// movement에게서 가속도를 가져와 설정합니다.
-	void UpdateVelocity(float fElpasedTime, MonsterMovement* movement);
+	void UpdateVelocity(float fElpasedTime, Movement* movement);
 };
