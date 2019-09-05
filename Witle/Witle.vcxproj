@@ -165,6 +165,12 @@
     <ClInclude Include="BossBuf.h" />
     <ClInclude Include="BossDead.h" />
     <ClInclude Include="PlayerActionMgr.h" />
+    <ClInclude Include="PlayerStandardAttackAction.h" />
+    <ClInclude Include="PlayerBroomPrepareAction.h" />
+    <ClInclude Include="PlayerBroomForwardAction.h" />
+    <ClInclude Include="PlayerDeadAction.h" />
+    <ClInclude Include="PlayerHitAction.h" />
+    <ClInclude Include="PlayerBroomIdleAction.h" />
     <ClInclude Include="PlayerLeftWalkAction.h" />
     <ClInclude Include="PlayerRightWalkAction.h" />
     <ClInclude Include="PlayerForwardWalkAction.h" />
@@ -363,6 +369,12 @@
     <ClCompile Include="BossBuf.cpp" />
     <ClCompile Include="BossDead.cpp" />
     <ClCompile Include="PlayerActionMgr.cpp" />
+    <ClCompile Include="PlayerStandardAttackAction.cpp" />
+    <ClCompile Include="PlayerBroomPrepareAction.cpp" />
+    <ClCompile Include="PlayerBroomForwardAction.cpp" />
+    <ClCompile Include="PlayerDeadAction.cpp" />
+    <ClCompile Include="PlayerHitAction.cpp" />
+    <ClCompile Include="PlayerBroomIdleAction.cpp" />
     <ClCompile Include="PlayerLeftWalkAction.cpp" />
     <ClCompile Include="PlayerRightWalkAction.cpp" />
     <ClCompile Include="PlayerForwardWalkAction.cpp" />

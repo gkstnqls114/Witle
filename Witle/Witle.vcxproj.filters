@@ -571,23 +571,23 @@
     <Filter Include="11.Event\10.Renderer\SkinnedMeshRenderer">
       <UniqueIdentifier>{46b1a7bc-5c15-44dd-883d-2897ca51d750}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.Component\ForPlayer\PlayerAction\06.PlayerStandardattackAction">
-      <UniqueIdentifier>{432486ee-a1ce-45bd-b2e4-3d05ad01877a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.Component\ForPlayer\PlayerAction\07.PlayerBroomprepareAction">
-      <UniqueIdentifier>{ca6bd134-8613-46b8-ad57-d57ec3cbe1c5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.Component\ForPlayer\PlayerAction\08.PlayerBroomidleAction">
-      <UniqueIdentifier>{ea10541f-f1b8-447f-8842-c273473e3b0b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.Component\ForPlayer\PlayerAction\09.PlayerBroomforwardAction">
-      <UniqueIdentifier>{f9af6ef7-7744-4b8d-b8a9-df74174f2afe}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.Component\ForPlayer\PlayerAction\10.PlayerDeadAction">
       <UniqueIdentifier>{cbe05dda-d1ec-4359-8ae6-2469149785dc}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.Component\ForPlayer\PlayerAction\11.PlayerHitAction">
       <UniqueIdentifier>{271a4c92-b634-423a-bca5-f0607e16e8f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\ForPlayer\PlayerAction\07.PlayerBroomPrepareAction">
+      <UniqueIdentifier>{ca6bd134-8613-46b8-ad57-d57ec3cbe1c5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\ForPlayer\PlayerAction\08.PlayerBroomIdleAction">
+      <UniqueIdentifier>{ea10541f-f1b8-447f-8842-c273473e3b0b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\ForPlayer\PlayerAction\09.PlayerBroomForwardAction">
+      <UniqueIdentifier>{f9af6ef7-7744-4b8d-b8a9-df74174f2afe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\ForPlayer\PlayerAction\06.PlayerStandardAttackAction">
+      <UniqueIdentifier>{432486ee-a1ce-45bd-b2e4-3d05ad01877a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1179,6 +1179,24 @@
     <ClInclude Include="PlayerLeftWalkAction.h">
       <Filter>02.Component\ForPlayer\PlayerAction\02.PlayerLeftWalkAction</Filter>
     </ClInclude>
+    <ClInclude Include="PlayerBroomPrepareAction.h">
+      <Filter>02.Component\ForPlayer\PlayerAction\07.PlayerBroomPrepareAction</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerBroomIdleAction.h">
+      <Filter>02.Component\ForPlayer\PlayerAction\08.PlayerBroomIdleAction</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerBroomForwardAction.h">
+      <Filter>02.Component\ForPlayer\PlayerAction\09.PlayerBroomForwardAction</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerDeadAction.h">
+      <Filter>02.Component\ForPlayer\PlayerAction\10.PlayerDeadAction</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerHitAction.h">
+      <Filter>02.Component\ForPlayer\PlayerAction\11.PlayerHitAction</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerStandardAttackAction.h">
+      <Filter>02.Component\ForPlayer\PlayerAction\06.PlayerStandardAttackAction</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1747,6 +1765,24 @@
     </ClCompile>
     <ClCompile Include="PlayerLeftWalkAction.cpp">
       <Filter>02.Component\ForPlayer\PlayerAction\02.PlayerLeftWalkAction</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerBroomPrepareAction.cpp">
+      <Filter>02.Component\ForPlayer\PlayerAction\07.PlayerBroomPrepareAction</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerBroomIdleAction.cpp">
+      <Filter>02.Component\ForPlayer\PlayerAction\08.PlayerBroomIdleAction</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerBroomForwardAction.cpp">
+      <Filter>02.Component\ForPlayer\PlayerAction\09.PlayerBroomForwardAction</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerDeadAction.cpp">
+      <Filter>02.Component\ForPlayer\PlayerAction\10.PlayerDeadAction</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerHitAction.cpp">
+      <Filter>02.Component\ForPlayer\PlayerAction\11.PlayerHitAction</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerStandardAttackAction.cpp">
+      <Filter>02.Component\ForPlayer\PlayerAction\06.PlayerStandardAttackAction</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
