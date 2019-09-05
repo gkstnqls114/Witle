@@ -97,7 +97,7 @@ float BossChaseAction::GetDistance(ENUM_BOSSSKILL skill)
 	return distance;
 }
  
-void BossChaseAction::UpdateVelocity(float fElpasedTime, MonsterMovement * movement)
+void BossChaseAction::UpdateVelocity(float fElpasedTime, Movement * movement)
 {
 	SoundManager::GetInstance()->Play(ENUM_SOUND::BOSS_MOVE_SOUND);
 	SoundManager::GetInstance()->Stop(ENUM_SOUND::BOSS_DAMAGE_SOUND);

@@ -9,7 +9,7 @@
 
 #include "SoundManager.h"
 
-void IdleAction::UpdateVelocity(float fElpasedTime, MonsterMovement * movement)
+void IdleAction::UpdateVelocity(float fElpasedTime, Movement * movement)
 {
 	// »ç¿îµå ///////////////////////////////////////////////////////////
 	SoundManager::GetInstance()->Stop(ENUM_SOUND::MONSTER_MOVE_SOUND);

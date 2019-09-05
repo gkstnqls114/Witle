@@ -10,7 +10,7 @@
 #include "MonsterActionMgr.h"
 
 class Action;
-class MonsterMovement;
+class Movement;
 class Player;
 
 // MonsterMovement를 인자로 받아 가속도를 처리해주는 클래스.

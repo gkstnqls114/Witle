@@ -13,7 +13,7 @@
 
 #include "BossSkillBreath.h"
 
-void BossSkillBreath::UpdateVelocity(float fElpasedTime, MonsterMovement * movement)
+void BossSkillBreath::UpdateVelocity(float fElpasedTime, Movement * movement)
 {
 	SoundManager::GetInstance()->Stop(ENUM_SOUND::BOSS_MOVE_SOUND);
 	SoundManager::GetInstance()->Stop(ENUM_SOUND::BOSS_DAMAGE_SOUND);

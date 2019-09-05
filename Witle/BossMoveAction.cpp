@@ -9,7 +9,7 @@
 
 #include "SoundManager.h"
 
-void BossMoveAction::UpdateVelocity(float fElpasedTime, MonsterMovement * movement)
+void BossMoveAction::UpdateVelocity(float fElpasedTime, Movement * movement)
 {
 	XMFLOAT3 toPlayer = Vector3::Normalize(
 		Vector3::Subtract(

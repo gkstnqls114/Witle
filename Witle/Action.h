@@ -1,7 +1,7 @@
 #pragma once
 #include "ComponentBase.h"
  
-class MonsterMovement;
+class Movement;
 
 // 액션의 부모 클래스.
 class Action
@@ -13,7 +13,7 @@ public:
 
 	// 가속도를 설정.
 	// Scene에서 Update 수행 이전 반드시 호출해야합니다.
-	virtual void UpdateVelocity(float fElpasedTime, MonsterMovement* movement) = 0;
+	virtual void UpdateVelocity(float fElpasedTime, Movement* movement) = 0;
 
 public:
 	virtual void ReleaseObjects() override {};

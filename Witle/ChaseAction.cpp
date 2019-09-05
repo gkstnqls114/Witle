@@ -7,7 +7,7 @@
 
 #include "SoundManager.h"
 
-void ChaseAction::UpdateVelocity(float fElpasedTime, MonsterMovement * movement)
+void ChaseAction::UpdateVelocity(float fElpasedTime, Movement * movement)
 {
 	// »ç¿îµå ///////////////////////////////////////////////////////////
 	SoundManager::GetInstance()->Play(ENUM_SOUND::MONSTER_MOVE_SOUND);

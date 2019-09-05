@@ -8,7 +8,7 @@
 #include "BossDead.h"
 #include "SoundManager.h"
 
-void BossDead::UpdateVelocity(float fElpasedTime, MonsterMovement * movement)
+void BossDead::UpdateVelocity(float fElpasedTime, Movement * movement)
 {
 	// 움직이지 않도록 고정
 	movement->m_xmf3Velocity = XMFLOAT3(0.f, 0.f, 0.f);

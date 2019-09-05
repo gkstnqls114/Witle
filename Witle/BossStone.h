@@ -11,7 +11,7 @@ class BossStone
 { 
 
 public:
-	virtual void UpdateVelocity(float fElpasedTime, MonsterMovement* movement) override;
+	virtual void UpdateVelocity(float fElpasedTime, Movement* movement) override;
 	virtual void Init() override {};
 	virtual void UpdateState(float fElpasedTime, BossMonsterActionMgr* actionMgr) override;
 

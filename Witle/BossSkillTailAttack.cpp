@@ -9,7 +9,7 @@
 
 #include "SoundManager.h"
 
-void BossSkillTailAttack::UpdateVelocity(float fElpasedTime, MonsterMovement * movement)
+void BossSkillTailAttack::UpdateVelocity(float fElpasedTime, Movement * movement)
 {
 	SoundManager::GetInstance()->Stop(ENUM_SOUND::BOSS_MOVE_SOUND);
 	SoundManager::GetInstance()->Stop(ENUM_SOUND::BOSS_DAMAGE_SOUND);

@@ -4,7 +4,7 @@
 
 #include "SoundManager.h"
 
-void DeadAction::UpdateVelocity(float fElpasedTime, MonsterMovement * movement)
+void DeadAction::UpdateVelocity(float fElpasedTime, Movement * movement)
 {
 	SoundManager::GetInstance()->Stop(ENUM_SOUND::MONSTER_DAMAGE_SOUND);
 	SoundManager::GetInstance()->Stop(ENUM_SOUND::MONSTER_MOVE_SOUND);

@@ -241,30 +241,6 @@
     <Filter Include="03.GameObject\02.Monster\CreepyMonster">
       <UniqueIdentifier>{21fe2a35-bb86-477f-84d9-5520a418f295}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.Component\ForMonster\GeneralMonsterAction">
-      <UniqueIdentifier>{7af56684-3251-42e9-8b80-d6e616723689}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.Component\ForMonster\GeneralMonsterAction\01.IdleAction">
-      <UniqueIdentifier>{602963d6-a3df-499b-acb2-efa1792d6833}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.Component\ForMonster\GeneralMonsterAction\02.MoveAction">
-      <UniqueIdentifier>{064dbc3b-3bac-4ac7-b13a-fa2f75bf7617}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.Component\ForMonster\GeneralMonsterAction\03.ChaseAction">
-      <UniqueIdentifier>{9b4fd1be-3609-4380-8add-bd721aa9baa8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.Component\ForMonster\GeneralMonsterAction\04.SearchAction">
-      <UniqueIdentifier>{1c69dd90-bcd3-4fcb-9239-46163349daca}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.Component\ForMonster\GeneralMonsterAction\05.DeadAction">
-      <UniqueIdentifier>{f34ded6a-1a2a-4110-a759-a0c457ba548d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.Component\ForMonster\GeneralMonsterAction\06.HitAction">
-      <UniqueIdentifier>{0c76bd52-ef44-43bd-a692-c57b5c707524}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.Component\ForMonster\GeneralMonsterAction\07.AttackAction">
-      <UniqueIdentifier>{8a32609d-af34-4af2-9db9-7a448ff56fc9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="13.Storage/Manager\10.MonsterTransformStorage">
       <UniqueIdentifier>{a87f6d33-f8a8-4182-aa6c-6d902932608f}</UniqueIdentifier>
     </Filter>
@@ -273,18 +249,6 @@
     </Filter>
     <Filter Include="03.GameObject\04.AltarSphere">
       <UniqueIdentifier>{fd56c41d-2d83-4b30-94ca-bf0c73064041}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.Component\ForMonster\BossMonsterAction">
-      <UniqueIdentifier>{06c78cfb-4cf2-43da-9b15-e83cf878fb82}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.Component\ForMonster\MonsterActionMgr">
-      <UniqueIdentifier>{087791ad-0703-44b8-a9f4-5b49840722d4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.Component\ForMonster\MonsterActionMgr\GeneralMonsterActionMgr">
-      <UniqueIdentifier>{a77c9baf-aee2-4841-a2c1-dcb4a62970aa}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.Component\ForMonster\MonsterActionMgr\BossMonsterActionMgr">
-      <UniqueIdentifier>{31ceca84-3670-4740-a04e-9919c7d8f659}</UniqueIdentifier>
     </Filter>
     <Filter Include="03.GameObject\02.Monster\Dragon">
       <UniqueIdentifier>{6c980b48-edba-4766-9723-cb5900aa0986}</UniqueIdentifier>
@@ -448,9 +412,6 @@
     <Filter Include="05.Shader\01.ComputeShader\DownScaleSecondPassShader">
       <UniqueIdentifier>{1105c8d9-d374-48ab-ab6b-e19051a8f988}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.Component\ForMonster\BossMonsterAction\BossSkillAction4">
-      <UniqueIdentifier>{862d0e47-01df-45d9-b57f-2f8e60cecb4d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="05.Shader\01.ComputeShader\BloomRevealShader">
       <UniqueIdentifier>{e99d1fda-e0de-4f94-9850-57e70a3ddea0}</UniqueIdentifier>
     </Filter>
@@ -498,36 +459,6 @@
     </Filter>
     <Filter Include="13.Storage/Manager\14.HitEffectMgr">
       <UniqueIdentifier>{50028e9e-0ba9-485a-b233-e05a4f46f278}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.Component\ForMonster\BossMonsterAction\01.BossIdleAction">
-      <UniqueIdentifier>{a90053a0-522f-4be7-b32e-01fa81133963}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.Component\ForMonster\BossMonsterAction\02.BossMoveAction">
-      <UniqueIdentifier>{686066ca-ff4f-4e03-8dc3-652a5e794e74}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.Component\ForMonster\BossMonsterAction\03.BossChaseAction">
-      <UniqueIdentifier>{63ad1399-2d7f-4f2f-aae3-4ed5db475841}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.Component\ForMonster\BossMonsterAction\04.BossSkillBreath">
-      <UniqueIdentifier>{0911d8a6-6344-474c-80a0-259348c22573}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.Component\ForMonster\BossMonsterAction\06.BossSkillTailAttack">
-      <UniqueIdentifier>{3235d4ae-c9c9-4bee-8b7d-de77195efd9e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.Component\ForMonster\BossMonsterAction\07.BossSkillRush">
-      <UniqueIdentifier>{f7193322-ee24-4ff1-a2a4-8af43ec909c5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.Component\ForMonster\BossMonsterAction\05.BossSkillDownStroke">
-      <UniqueIdentifier>{3b92d029-5876-47a6-97c0-de431aef144d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.Component\ForMonster\BossMonsterAction\08.BossBuf">
-      <UniqueIdentifier>{9276051e-f9e9-443e-951f-20cd982df636}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.Component\ForMonster\BossMonsterAction\09.BossDead">
-      <UniqueIdentifier>{7d9e85e7-c3d6-4a84-b16f-5426b0537aca}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.Component\ForMonster\BossMonsterAction\10.BossStone">
-      <UniqueIdentifier>{ecf33ea0-3ad4-46ff-9387-fde92774b909}</UniqueIdentifier>
     </Filter>
     <Filter Include="05.Shader\02.GraphicsShader\AltarSphereShader">
       <UniqueIdentifier>{62522ad1-08c1-4421-a837-3ea0f8338a1b}</UniqueIdentifier>
@@ -591,6 +522,87 @@
     </Filter>
     <Filter Include="02.Component\Action">
       <UniqueIdentifier>{04d4a42b-e6b6-43fe-95d3-96c0c9b192c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\ActionMgr">
+      <UniqueIdentifier>{c542a41b-5007-4b01-a654-e69ca8b81380}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\ActionMgr\MonsterActionMgr">
+      <UniqueIdentifier>{087791ad-0703-44b8-a9f4-5b49840722d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\ActionMgr\MonsterActionMgr\GeneralMonsterActionMgr">
+      <UniqueIdentifier>{a77c9baf-aee2-4841-a2c1-dcb4a62970aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\ActionMgr\MonsterActionMgr\BossMonsterActionMgr">
+      <UniqueIdentifier>{31ceca84-3670-4740-a04e-9919c7d8f659}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\ActionMgr\PlayerActionMgr">
+      <UniqueIdentifier>{19aae6b6-35d2-4267-b0db-d26e6bdc2e91}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\Action\MonsterAction">
+      <UniqueIdentifier>{6946e3df-6973-42d2-862e-96c91266f99e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\Action\MonsterAction\GeneralMonsterAction">
+      <UniqueIdentifier>{7af56684-3251-42e9-8b80-d6e616723689}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\Action\MonsterAction\GeneralMonsterAction\01.IdleAction">
+      <UniqueIdentifier>{602963d6-a3df-499b-acb2-efa1792d6833}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\Action\MonsterAction\GeneralMonsterAction\02.MoveAction">
+      <UniqueIdentifier>{064dbc3b-3bac-4ac7-b13a-fa2f75bf7617}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\Action\MonsterAction\GeneralMonsterAction\03.ChaseAction">
+      <UniqueIdentifier>{9b4fd1be-3609-4380-8add-bd721aa9baa8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\Action\MonsterAction\GeneralMonsterAction\04.SearchAction">
+      <UniqueIdentifier>{1c69dd90-bcd3-4fcb-9239-46163349daca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\Action\MonsterAction\GeneralMonsterAction\05.DeadAction">
+      <UniqueIdentifier>{f34ded6a-1a2a-4110-a759-a0c457ba548d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\Action\MonsterAction\GeneralMonsterAction\06.HitAction">
+      <UniqueIdentifier>{0c76bd52-ef44-43bd-a692-c57b5c707524}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\Action\MonsterAction\GeneralMonsterAction\07.AttackAction">
+      <UniqueIdentifier>{8a32609d-af34-4af2-9db9-7a448ff56fc9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\Action\MonsterAction\BossMonsterAction">
+      <UniqueIdentifier>{06c78cfb-4cf2-43da-9b15-e83cf878fb82}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\Action\MonsterAction\BossMonsterAction\BossSkillAction4">
+      <UniqueIdentifier>{862d0e47-01df-45d9-b57f-2f8e60cecb4d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\Action\MonsterAction\BossMonsterAction\01.BossIdleAction">
+      <UniqueIdentifier>{a90053a0-522f-4be7-b32e-01fa81133963}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\Action\MonsterAction\BossMonsterAction\02.BossMoveAction">
+      <UniqueIdentifier>{686066ca-ff4f-4e03-8dc3-652a5e794e74}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\Action\MonsterAction\BossMonsterAction\03.BossChaseAction">
+      <UniqueIdentifier>{63ad1399-2d7f-4f2f-aae3-4ed5db475841}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\Action\MonsterAction\BossMonsterAction\04.BossSkillBreath">
+      <UniqueIdentifier>{0911d8a6-6344-474c-80a0-259348c22573}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\Action\MonsterAction\BossMonsterAction\06.BossSkillTailAttack">
+      <UniqueIdentifier>{3235d4ae-c9c9-4bee-8b7d-de77195efd9e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\Action\MonsterAction\BossMonsterAction\07.BossSkillRush">
+      <UniqueIdentifier>{f7193322-ee24-4ff1-a2a4-8af43ec909c5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\Action\MonsterAction\BossMonsterAction\05.BossSkillDownStroke">
+      <UniqueIdentifier>{3b92d029-5876-47a6-97c0-de431aef144d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\Action\MonsterAction\BossMonsterAction\08.BossBuf">
+      <UniqueIdentifier>{9276051e-f9e9-443e-951f-20cd982df636}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\Action\MonsterAction\BossMonsterAction\09.BossDead">
+      <UniqueIdentifier>{7d9e85e7-c3d6-4a84-b16f-5426b0537aca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\Action\MonsterAction\BossMonsterAction\10.BossStone">
+      <UniqueIdentifier>{ecf33ea0-3ad4-46ff-9387-fde92774b909}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\Action\PlayerAction">
+      <UniqueIdentifier>{682001c4-332f-487b-ae9a-91a29f30c7c7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -877,19 +889,19 @@
       <Filter>02.Component\ForMonster\RecognitionRange</Filter>
     </ClInclude>
     <ClInclude Include="IdleAction.h">
-      <Filter>02.Component\ForMonster\GeneralMonsterAction\01.IdleAction</Filter>
+      <Filter>02.Component\Action\MonsterAction\GeneralMonsterAction\01.IdleAction</Filter>
     </ClInclude>
     <ClInclude Include="MoveAction.h">
-      <Filter>02.Component\ForMonster\GeneralMonsterAction\02.MoveAction</Filter>
+      <Filter>02.Component\Action\MonsterAction\GeneralMonsterAction\02.MoveAction</Filter>
     </ClInclude>
     <ClInclude Include="ChaseAction.h">
-      <Filter>02.Component\ForMonster\GeneralMonsterAction\03.ChaseAction</Filter>
+      <Filter>02.Component\Action\MonsterAction\GeneralMonsterAction\03.ChaseAction</Filter>
     </ClInclude>
     <ClInclude Include="SearchAction.h">
-      <Filter>02.Component\ForMonster\GeneralMonsterAction\04.SearchAction</Filter>
+      <Filter>02.Component\Action\MonsterAction\GeneralMonsterAction\04.SearchAction</Filter>
     </ClInclude>
     <ClInclude Include="DeadAction.h">
-      <Filter>02.Component\ForMonster\GeneralMonsterAction\05.DeadAction</Filter>
+      <Filter>02.Component\Action\MonsterAction\GeneralMonsterAction\05.DeadAction</Filter>
     </ClInclude>
     <ClInclude Include="PlayerManager.h">
       <Filter>13.Storage/Manager\05.PlayerManager</Filter>
@@ -940,22 +952,22 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="MonsterActionMgr.h">
-      <Filter>02.Component\ForMonster\MonsterActionMgr</Filter>
+      <Filter>02.Component\ActionMgr\MonsterActionMgr</Filter>
     </ClInclude>
     <ClInclude Include="HitAction.h">
-      <Filter>02.Component\ForMonster\GeneralMonsterAction\06.HitAction</Filter>
+      <Filter>02.Component\Action\MonsterAction\GeneralMonsterAction\06.HitAction</Filter>
     </ClInclude>
     <ClInclude Include="AttackAction.h">
-      <Filter>02.Component\ForMonster\GeneralMonsterAction\07.AttackAction</Filter>
+      <Filter>02.Component\Action\MonsterAction\GeneralMonsterAction\07.AttackAction</Filter>
     </ClInclude>
     <ClInclude Include="CreepyMonster.h">
       <Filter>03.GameObject\02.Monster\CreepyMonster</Filter>
     </ClInclude>
     <ClInclude Include="BossMonsterActionMgr.h">
-      <Filter>02.Component\ForMonster\MonsterActionMgr\BossMonsterActionMgr</Filter>
+      <Filter>02.Component\ActionMgr\MonsterActionMgr\BossMonsterActionMgr</Filter>
     </ClInclude>
     <ClInclude Include="GeneralMonsterActionMgr.h">
-      <Filter>02.Component\ForMonster\MonsterActionMgr\GeneralMonsterActionMgr</Filter>
+      <Filter>02.Component\ActionMgr\MonsterActionMgr\GeneralMonsterActionMgr</Filter>
     </ClInclude>
     <ClInclude Include="ShowTextureShader.h">
       <Filter>05.Shader\02.GraphicsShader\ShowTextureShader</Filter>
@@ -974,9 +986,6 @@
     </ClInclude>
     <ClInclude Include="DefferedShader.h">
       <Filter>05.Shader\02.GraphicsShader\DefferedShader</Filter>
-    </ClInclude>
-    <ClInclude Include="MonsterAction.h">
-      <Filter>02.Component\ForMonster</Filter>
     </ClInclude>
     <ClInclude Include="Dragon.h">
       <Filter>03.GameObject\02.Monster\Dragon</Filter>
@@ -1018,10 +1027,10 @@
       <Filter>05.Shader\02.GraphicsShader\SkillIconShader</Filter>
     </ClInclude>
     <ClInclude Include="BossIdleAction.h">
-      <Filter>02.Component\ForMonster\BossMonsterAction\01.BossIdleAction</Filter>
+      <Filter>02.Component\Action\MonsterAction\BossMonsterAction\01.BossIdleAction</Filter>
     </ClInclude>
     <ClInclude Include="BossMoveAction.h">
-      <Filter>02.Component\ForMonster\BossMonsterAction\02.BossMoveAction</Filter>
+      <Filter>02.Component\Action\MonsterAction\BossMonsterAction\02.BossMoveAction</Filter>
     </ClInclude>
     <ClInclude Include="BallEffect.h">
       <Filter>03.GameObject\06.SkillEffect\BallEffect</Filter>
@@ -1084,7 +1093,7 @@
       <Filter>05.Shader\01.ComputeShader\DownScaleSecondPassShader</Filter>
     </ClInclude>
     <ClInclude Include="BossChaseAction.h">
-      <Filter>02.Component\ForMonster\BossMonsterAction\03.BossChaseAction</Filter>
+      <Filter>02.Component\Action\MonsterAction\BossMonsterAction\03.BossChaseAction</Filter>
     </ClInclude>
     <ClInclude Include="BloomRevealShader.h">
       <Filter>05.Shader\01.ComputeShader\BloomRevealShader</Filter>
@@ -1132,25 +1141,25 @@
       <Filter>13.Storage/Manager\14.HitEffectMgr</Filter>
     </ClInclude>
     <ClInclude Include="BossSkillBreath.h">
-      <Filter>02.Component\ForMonster\BossMonsterAction\04.BossSkillBreath</Filter>
+      <Filter>02.Component\Action\MonsterAction\BossMonsterAction\04.BossSkillBreath</Filter>
     </ClInclude>
     <ClInclude Include="BossSkillDownStroke.h">
-      <Filter>02.Component\ForMonster\BossMonsterAction\05.BossSkillDownStroke</Filter>
+      <Filter>02.Component\Action\MonsterAction\BossMonsterAction\05.BossSkillDownStroke</Filter>
     </ClInclude>
     <ClInclude Include="BossSkillTailAttack.h">
-      <Filter>02.Component\ForMonster\BossMonsterAction\06.BossSkillTailAttack</Filter>
+      <Filter>02.Component\Action\MonsterAction\BossMonsterAction\06.BossSkillTailAttack</Filter>
     </ClInclude>
     <ClInclude Include="BossSkillRush.h">
-      <Filter>02.Component\ForMonster\BossMonsterAction\07.BossSkillRush</Filter>
+      <Filter>02.Component\Action\MonsterAction\BossMonsterAction\07.BossSkillRush</Filter>
     </ClInclude>
     <ClInclude Include="BossStone.h">
-      <Filter>02.Component\ForMonster\BossMonsterAction\10.BossStone</Filter>
+      <Filter>02.Component\Action\MonsterAction\BossMonsterAction\10.BossStone</Filter>
     </ClInclude>
     <ClInclude Include="BossDead.h">
-      <Filter>02.Component\ForMonster\BossMonsterAction\09.BossDead</Filter>
+      <Filter>02.Component\Action\MonsterAction\BossMonsterAction\09.BossDead</Filter>
     </ClInclude>
     <ClInclude Include="BossBuf.h">
-      <Filter>02.Component\ForMonster\BossMonsterAction\08.BossBuf</Filter>
+      <Filter>02.Component\Action\MonsterAction\BossMonsterAction\08.BossBuf</Filter>
     </ClInclude>
     <ClInclude Include="AltarSphereShader.h">
       <Filter>05.Shader\02.GraphicsShader\AltarSphereShader</Filter>
@@ -1202,6 +1211,9 @@
     </ClInclude>
     <ClInclude Include="Action.h">
       <Filter>02.Component\Action</Filter>
+    </ClInclude>
+    <ClInclude Include="MonsterAction.h">
+      <Filter>02.Component\Action\MonsterAction</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1467,19 +1479,19 @@
       <Filter>02.Component\ForMonster\RecognitionRange</Filter>
     </ClCompile>
     <ClCompile Include="IdleAction.cpp">
-      <Filter>02.Component\ForMonster\GeneralMonsterAction\01.IdleAction</Filter>
+      <Filter>02.Component\Action\MonsterAction\GeneralMonsterAction\01.IdleAction</Filter>
     </ClCompile>
     <ClCompile Include="MoveAction.cpp">
-      <Filter>02.Component\ForMonster\GeneralMonsterAction\02.MoveAction</Filter>
+      <Filter>02.Component\Action\MonsterAction\GeneralMonsterAction\02.MoveAction</Filter>
     </ClCompile>
     <ClCompile Include="ChaseAction.cpp">
-      <Filter>02.Component\ForMonster\GeneralMonsterAction\03.ChaseAction</Filter>
+      <Filter>02.Component\Action\MonsterAction\GeneralMonsterAction\03.ChaseAction</Filter>
     </ClCompile>
     <ClCompile Include="SearchAction.cpp">
-      <Filter>02.Component\ForMonster\GeneralMonsterAction\04.SearchAction</Filter>
+      <Filter>02.Component\Action\MonsterAction\GeneralMonsterAction\04.SearchAction</Filter>
     </ClCompile>
     <ClCompile Include="DeadAction.cpp">
-      <Filter>02.Component\ForMonster\GeneralMonsterAction\05.DeadAction</Filter>
+      <Filter>02.Component\Action\MonsterAction\GeneralMonsterAction\05.DeadAction</Filter>
     </ClCompile>
     <ClCompile Include="PlayerManager.cpp">
       <Filter>13.Storage/Manager\05.PlayerManager</Filter>
@@ -1527,22 +1539,22 @@
       <Filter>03.GameObject\02.Monster\SpaceCat</Filter>
     </ClCompile>
     <ClCompile Include="MonsterActionMgr.cpp">
-      <Filter>02.Component\ForMonster\MonsterActionMgr</Filter>
+      <Filter>02.Component\ActionMgr\MonsterActionMgr</Filter>
     </ClCompile>
     <ClCompile Include="HitAction.cpp">
-      <Filter>02.Component\ForMonster\GeneralMonsterAction\06.HitAction</Filter>
+      <Filter>02.Component\Action\MonsterAction\GeneralMonsterAction\06.HitAction</Filter>
     </ClCompile>
     <ClCompile Include="AttackAction.cpp">
-      <Filter>02.Component\ForMonster\GeneralMonsterAction\07.AttackAction</Filter>
+      <Filter>02.Component\Action\MonsterAction\GeneralMonsterAction\07.AttackAction</Filter>
     </ClCompile>
     <ClCompile Include="CreepyMonster.cpp">
       <Filter>03.GameObject\02.Monster\CreepyMonster</Filter>
     </ClCompile>
     <ClCompile Include="BossMonsterActionMgr.cpp">
-      <Filter>02.Component\ForMonster\MonsterActionMgr\BossMonsterActionMgr</Filter>
+      <Filter>02.Component\ActionMgr\MonsterActionMgr\BossMonsterActionMgr</Filter>
     </ClCompile>
     <ClCompile Include="GeneralMonsterActionMgr.cpp">
-      <Filter>02.Component\ForMonster\MonsterActionMgr\GeneralMonsterActionMgr</Filter>
+      <Filter>02.Component\ActionMgr\MonsterActionMgr\GeneralMonsterActionMgr</Filter>
     </ClCompile>
     <ClCompile Include="ShowTextureShader.cpp">
       <Filter>05.Shader\02.GraphicsShader\ShowTextureShader</Filter>
@@ -1562,17 +1574,14 @@
     <ClCompile Include="DefferedShader.cpp">
       <Filter>05.Shader\02.GraphicsShader\DefferedShader</Filter>
     </ClCompile>
-    <ClCompile Include="MonsterAction.cpp">
-      <Filter>02.Component\ForMonster</Filter>
-    </ClCompile>
     <ClCompile Include="Dragon.cpp">
       <Filter>03.GameObject\02.Monster\Dragon</Filter>
     </ClCompile>
     <ClCompile Include="BossIdleAction.cpp">
-      <Filter>02.Component\ForMonster\BossMonsterAction\01.BossIdleAction</Filter>
+      <Filter>02.Component\Action\MonsterAction\BossMonsterAction\01.BossIdleAction</Filter>
     </ClCompile>
     <ClCompile Include="BossMoveAction.cpp">
-      <Filter>02.Component\ForMonster\BossMonsterAction\02.BossMoveAction</Filter>
+      <Filter>02.Component\Action\MonsterAction\BossMonsterAction\02.BossMoveAction</Filter>
     </ClCompile>
     <ClCompile Include="SkillEffect.cpp">
       <Filter>03.GameObject\06.SkillEffect</Filter>
@@ -1671,7 +1680,7 @@
       <Filter>05.Shader\01.ComputeShader\DownScaleSecondPassShader</Filter>
     </ClCompile>
     <ClCompile Include="BossChaseAction.cpp">
-      <Filter>02.Component\ForMonster\BossMonsterAction\03.BossChaseAction</Filter>
+      <Filter>02.Component\Action\MonsterAction\BossMonsterAction\03.BossChaseAction</Filter>
     </ClCompile>
     <ClCompile Include="BloomRevealShader.cpp">
       <Filter>05.Shader\01.ComputeShader\BloomRevealShader</Filter>
@@ -1722,25 +1731,25 @@
       <Filter>13.Storage/Manager\14.HitEffectMgr</Filter>
     </ClCompile>
     <ClCompile Include="BossSkillBreath.cpp">
-      <Filter>02.Component\ForMonster\BossMonsterAction\04.BossSkillBreath</Filter>
+      <Filter>02.Component\Action\MonsterAction\BossMonsterAction\04.BossSkillBreath</Filter>
     </ClCompile>
     <ClCompile Include="BossSkillDownStroke.cpp">
-      <Filter>02.Component\ForMonster\BossMonsterAction\05.BossSkillDownStroke</Filter>
+      <Filter>02.Component\Action\MonsterAction\BossMonsterAction\05.BossSkillDownStroke</Filter>
     </ClCompile>
     <ClCompile Include="BossSkillTailAttack.cpp">
-      <Filter>02.Component\ForMonster\BossMonsterAction\06.BossSkillTailAttack</Filter>
+      <Filter>02.Component\Action\MonsterAction\BossMonsterAction\06.BossSkillTailAttack</Filter>
     </ClCompile>
     <ClCompile Include="BossSkillRush.cpp">
-      <Filter>02.Component\ForMonster\BossMonsterAction\07.BossSkillRush</Filter>
+      <Filter>02.Component\Action\MonsterAction\BossMonsterAction\07.BossSkillRush</Filter>
     </ClCompile>
     <ClCompile Include="BossStone.cpp">
-      <Filter>02.Component\ForMonster\BossMonsterAction\10.BossStone</Filter>
+      <Filter>02.Component\Action\MonsterAction\BossMonsterAction\10.BossStone</Filter>
     </ClCompile>
     <ClCompile Include="BossDead.cpp">
-      <Filter>02.Component\ForMonster\BossMonsterAction\09.BossDead</Filter>
+      <Filter>02.Component\Action\MonsterAction\BossMonsterAction\09.BossDead</Filter>
     </ClCompile>
     <ClCompile Include="BossBuf.cpp">
-      <Filter>02.Component\ForMonster\BossMonsterAction\08.BossBuf</Filter>
+      <Filter>02.Component\Action\MonsterAction\BossMonsterAction\08.BossBuf</Filter>
     </ClCompile>
     <ClCompile Include="AltarSphereShader.cpp">
       <Filter>05.Shader\02.GraphicsShader\AltarSphereShader</Filter>
@@ -1792,6 +1801,9 @@
     </ClCompile>
     <ClCompile Include="Action.cpp">
       <Filter>02.Component\Action</Filter>
+    </ClCompile>
+    <ClCompile Include="MonsterAction.cpp">
+      <Filter>02.Component\Action\MonsterAction</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

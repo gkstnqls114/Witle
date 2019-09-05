@@ -3,11 +3,11 @@
 #include "PlayerManager.h"
 #include "Monster.h"
 #include "Object.h"
-#include "MonsterMovement.h"
+#include "Movement.h"
 #include "GeneralMonsterActionMgr.h"
 #include "AttackAction.h"
 
-void AttackAction::UpdateVelocity(float fElpasedTime, MonsterMovement * movement)
+void AttackAction::UpdateVelocity(float fElpasedTime, Movement * movement)
 {
 	movement->m_xmf3Velocity = XMFLOAT3(0.f, 0.f, 0.f);
 }

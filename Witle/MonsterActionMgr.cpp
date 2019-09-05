@@ -6,6 +6,7 @@
 #include "RecognitionRange.h"
 #include "MonsterStatus.h"
 #include "Monster.h"
+#include "Action.h"
 
 #include "MonsterActionMgr.h"
   
@@ -21,6 +22,7 @@ void ActionMgr::ChangeAction(Action * action)
 
 void ActionMgr::UpdateVelocity(float fElpasedTime, MonsterMovement * movement)
 {
-	m_CurrMonsterAction->UpdateVelocity(fElpasedTime, movement);
+	// 강제 형변환. 반드시 수정할것.
+	m_CurrMonsterAction->UpdateVelocity(fElpasedTime, (Movement*)(movement));
 }
  

@@ -10,7 +10,7 @@
 
 #include "SoundManager.h"
 
-void MoveAction::UpdateVelocity(float fElpasedTime, MonsterMovement * movement)
+void MoveAction::UpdateVelocity(float fElpasedTime, Movement * movement)
 {
 	movement->m_xmf3Velocity = Vector3::ScalarProduct(m_Direction, movement->m_fDistance, false);
 

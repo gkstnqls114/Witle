@@ -17,7 +17,7 @@ public:
 
 	// 가속도를 설정.
 	// Scene에서 Update 수행 이전 반드시 호출해야합니다.
-	virtual void UpdateVelocity(float fElpasedTime, MonsterMovement* movement) override = 0;
+	virtual void UpdateVelocity(float fElpasedTime, Movement* movement) override = 0;
 
 	// 해당 액션상태일 때, 조건을 만족하면 actionMgr을 호출하여 상태를 전환합니다.
 	virtual void UpdateState(float fElpasedTime, BossMonsterActionMgr* actionMgr) = 0;
@@ -39,7 +39,7 @@ public:
 
 	// 가속도를 설정.
 	// Scene에서 Update 수행 이전 반드시 호출해야합니다.
-	virtual void UpdateVelocity(float fElpasedTime, MonsterMovement* movement) override  = 0;
+	virtual void UpdateVelocity(float fElpasedTime, Movement* movement) override  = 0;
 
 	// 해당 액션상태일 때, 조건을 만족하면 actionMgr을 호출하여 상태를 전환합니다.
 	virtual void UpdateState(float fElpasedTime, GeneralMonsterActionMgr* actionMgr) = 0;

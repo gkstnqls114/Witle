@@ -9,7 +9,8 @@
 #include "BossSkillRush.h"
 
 #include "SoundManager.h"
-void BossSkillRush::UpdateVelocity(float fElpasedTime, MonsterMovement * movement)
+
+void BossSkillRush::UpdateVelocity(float fElpasedTime, Movement * movement)
 {
 	movement->m_xmf3Velocity = XMFLOAT3(0, 0, 0);
 }
