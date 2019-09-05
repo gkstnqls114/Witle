@@ -175,7 +175,7 @@
     <ClInclude Include="PlayerLeftWalkAction.h" />
     <ClInclude Include="PlayerRightWalkAction.h" />
     <ClInclude Include="PlayerForwardWalkAction.h" />
-    <ClInclude Include="PlayerBackwordWalkAction.h" />
+    <ClInclude Include="PlayerBackwardWalkAction.h" />
     <ClInclude Include="PlayerIdleAction.h" />
     <ClInclude Include="BossSkillMgr.h" />
     <ClInclude Include="BossStone.h" />
@@ -380,7 +380,7 @@
     <ClCompile Include="PlayerLeftWalkAction.cpp" />
     <ClCompile Include="PlayerRightWalkAction.cpp" />
     <ClCompile Include="PlayerForwardWalkAction.cpp" />
-    <ClCompile Include="PlayerBackwordWalkAction.cpp" />
+    <ClCompile Include="PlayerBackwardWalkAction.cpp" />
     <ClCompile Include="PlayerIdleAction.cpp" />
     <ClCompile Include="BossSkillMgr.cpp" />
     <ClCompile Include="BossStone.cpp" />

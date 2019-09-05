@@ -12,4 +12,5 @@
    
 void PlayerActionMgr::UpdateState(float fElpasedTime)
 {
+	static_cast<PlayerAction*>(m_CurrMonsterAction)->UpdateState(fElpasedTime, this);
 }

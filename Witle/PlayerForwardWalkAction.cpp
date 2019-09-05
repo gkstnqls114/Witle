@@ -10,7 +10,7 @@
 
 #include "PlayerForwardWalkAction.h"
 
-void PlayerForwardWalkAction::UpdateVelocity(float fElpasedTime, PlayerMovement * movement)
+void PlayerForwardWalkAction::UpdateVelocity(float fElpasedTime, Movement * movement)
 {
 	SoundManager::GetInstance()->Stop(ENUM_SOUND::BOSS_MOVE_SOUND);
 	SoundManager::GetInstance()->Stop(ENUM_SOUND::BOSS_DAMAGE_SOUND);

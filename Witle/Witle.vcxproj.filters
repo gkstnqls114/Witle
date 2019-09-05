@@ -562,9 +562,6 @@
     <Filter Include="02.Component\Action\02.PlayerAction\04.PlayerForwardWalkAction">
       <UniqueIdentifier>{4fe6d071-3b44-4250-a166-354b6bbfb295}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.Component\Action\02.PlayerAction\05.PlayerBackwordWalkAction">
-      <UniqueIdentifier>{d88c4902-e7c8-4d72-b5b4-5ef4678f5ae5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.Component\Action\02.PlayerAction\10.PlayerDeadAction">
       <UniqueIdentifier>{cbe05dda-d1ec-4359-8ae6-2469149785dc}</UniqueIdentifier>
     </Filter>
@@ -594,6 +591,9 @@
     </Filter>
     <Filter Include="02.Component\ActionMgr\02.PlayerActionMgr">
       <UniqueIdentifier>{5bdf49bb-3f7f-438f-9138-3cd0a5163284}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\Action\02.PlayerAction\05.PlayerBackwardWalkAction">
+      <UniqueIdentifier>{d88c4902-e7c8-4d72-b5b4-5ef4678f5ae5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1167,9 +1167,6 @@
     <ClInclude Include="PlayerActionMgr.h">
       <Filter>02.Component\ActionMgr\02.PlayerActionMgr</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerBackwordWalkAction.h">
-      <Filter>02.Component\Action\02.PlayerAction\05.PlayerBackwordWalkAction</Filter>
-    </ClInclude>
     <ClInclude Include="PlayerForwardWalkAction.h">
       <Filter>02.Component\Action\02.PlayerAction\04.PlayerForwardWalkAction</Filter>
     </ClInclude>
@@ -1205,6 +1202,9 @@
     </ClInclude>
     <ClInclude Include="ActionMgr.h">
       <Filter>02.Component\ActionMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerBackwardWalkAction.h">
+      <Filter>02.Component\Action\02.PlayerAction\05.PlayerBackwardWalkAction</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1757,9 +1757,6 @@
     <ClCompile Include="PlayerActionMgr.cpp">
       <Filter>02.Component\ActionMgr\02.PlayerActionMgr</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerBackwordWalkAction.cpp">
-      <Filter>02.Component\Action\02.PlayerAction\05.PlayerBackwordWalkAction</Filter>
-    </ClCompile>
     <ClCompile Include="PlayerForwardWalkAction.cpp">
       <Filter>02.Component\Action\02.PlayerAction\04.PlayerForwardWalkAction</Filter>
     </ClCompile>
@@ -1795,6 +1792,9 @@
     </ClCompile>
     <ClCompile Include="ActionMgr.cpp">
       <Filter>02.Component\ActionMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerBackwardWalkAction.cpp">
+      <Filter>02.Component\Action\02.PlayerAction\05.PlayerBackwardWalkAction</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -1,12 +1,12 @@
 #pragma once
-#include "ComponentBase.h"
+#include "Action.h"
 
 class PlayerMovement;
 class PlayerActionMgr;
 
 // 몬스터 액션의 부모 클래스.
 class PlayerAction
-	: public ComponentBase
+	: public Action
 {
 public:
 	// 초기화 함수.
@@ -14,7 +14,7 @@ public:
 
 	// 가속도를 설정.
 	// Scene에서 Update 수행 이전 반드시 호출해야합니다.
-	virtual void UpdateVelocity(float fElpasedTime, PlayerMovement* movement) = 0;
+	virtual void UpdateVelocity(float fElpasedTime, Movement* movement) override = 0;
 	  
 	virtual void UpdateState(float fElpasedTime, PlayerActionMgr* actionMgr) = 0;
 
@@ -23,7 +23,7 @@ public:
 	virtual void ReleaseUploadBuffers() override {};
 
 public:
-	PlayerAction(GameObject* pOwner) : ComponentBase(pOwner) {};
+	PlayerAction(GameObject* pOwner) : Action(pOwner) {};
 	virtual ~PlayerAction() {};
 
 };

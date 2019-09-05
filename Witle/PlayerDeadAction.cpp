@@ -10,7 +10,7 @@
 
 #include "PlayerDeadAction.h"
 
-void PlayerDeadAction::UpdateVelocity(float fElpasedTime, PlayerMovement * movement)
+void PlayerDeadAction::UpdateVelocity(float fElpasedTime, Movement * movement)
 {
 	SoundManager::GetInstance()->Stop(ENUM_SOUND::BOSS_MOVE_SOUND);
 	SoundManager::GetInstance()->Stop(ENUM_SOUND::BOSS_DAMAGE_SOUND);
