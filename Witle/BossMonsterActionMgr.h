@@ -9,7 +9,7 @@
 #include "BossStone.h"
 #include "BossDead.h"
 #include "BossBuf.h"
-#include "MonsterActionMgr.h"
+#include "ActionMgr.h"
 
 class Action;
 class MonsterMovement;

@@ -7,7 +7,7 @@
 #include "HitAction.h"
 #include "AttackAction.h"
 
-#include "MonsterActionMgr.h"
+#include "ActionMgr.h"
 
 class Action;
 class Movement;
