@@ -37,6 +37,10 @@ class PlayerActionMgr
 public:
 	virtual void UpdateState(float fElpasedTime) override;
 	 
+public: 
+	virtual void ReleaseObjects() override {};
+	virtual void ReleaseUploadBuffers() override {};
+
 public:
 	PlayerActionMgr(GameObject* pOwner) : ActionMgr(pOwner) 
 	 , m_IdleAction(pOwner, 0) 
@@ -51,7 +55,7 @@ public:
 		, m_DeadAction(pOwner, 0)
 		, m_HitAction(pOwner, 0)
 	{
-
+		ChangeActionToIdle();
 	};
 	virtual ~PlayerActionMgr() {}; 
 

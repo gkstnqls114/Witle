@@ -149,6 +149,10 @@ Player::Player(const std::string & entityID, ID3D12Device * pd3dDevice, ID3D12Gr
 		, L"Image/EffectLine.dds");
 
 	SetUpdatedContext(pContext); 
+
+	m_PlayerActionMgr = new PlayerActionMgr(this);
+
+	Init();
 }
 
 Player::~Player()
@@ -159,6 +163,8 @@ Player::~Player()
 
 void Player::Init()
 {
+	m_PlayerActionMgr->ChangeActionToIdle();
+
 	m_Transform.SetIdentity();
 	m_Transform.SetPosition(15000, 0, 15000);
 	
@@ -235,6 +241,12 @@ void Player::ReleaseMembers()
 	m_pPlayerUpdatedContext = nullptr;
 	m_pCameraUpdatedContext = nullptr;
 	 
+	if (m_PlayerActionMgr)
+	{
+		m_PlayerActionMgr->ReleaseObjects();
+		delete m_PlayerActionMgr;
+		m_PlayerActionMgr = nullptr;
+	}
 	if (m_BroomEffectRect)
 	{
 		m_BroomEffectRect->ReleaseObjects();
