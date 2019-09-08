@@ -12,7 +12,7 @@
 HWND GameInput::m_hWnd;
 
 UCHAR GameInput::m_pKeyBuffer[256]; 
-bool GameInput::m_DragMode{ false };
+bool GameInput::m_DragMode{ true };
 bool GameInput::m_gameActive{ false }; 
 
 POINT GameInput::m_moveCursor;        // 한번 클릭했을 때 위치

@@ -29,7 +29,7 @@ public:
 protected:
 	// 액션을 변경합니다.
 	// 만약 이전 액션과 현재 액션이 동일하다면 변경하지 않습니다.
-	void ChangeAction(Action* );
+	bool ChangeAction(Action* );
 
 public:
 	ActionMgr(GameObject* pOwner) : ComponentBase(pOwner) { };

@@ -17,7 +17,8 @@ void PlayerActionMgr::UpdateState(float fElpasedTime)
 
 void PlayerActionMgr::ChangeActionToIdle()
 {
-	ChangeAction(&m_IdleAction);
+	bool isChanged = ChangeAction(&m_IdleAction);
+	if (!isChanged) return;
 	m_CurrMonsterAction->Init();
 	static_cast<Player*>(m_pOwner)->SetAnimationState(ANIMATION_IDLE.ID);
 	// static_cast<Player*>(m_pOwner)->SetisAttacking(false);
@@ -25,7 +26,8 @@ void PlayerActionMgr::ChangeActionToIdle()
 
 void PlayerActionMgr::ChangeActionToRightWalk()
 {
-	ChangeAction(&m_RightWalkAction);
+	bool isChanged = ChangeAction(&m_RightWalkAction);
+	if (!isChanged) return;
 	m_CurrMonsterAction->Init();
 	static_cast<Player*>(m_pOwner)->SetAnimationState(ANIMATION_RIGHT.ID);
 	// static_cast<Player*>(m_pOwner)->SetisAttacking(false);
@@ -33,7 +35,8 @@ void PlayerActionMgr::ChangeActionToRightWalk()
 
 void PlayerActionMgr::ChangeActionToLeftWalk()
 {
-	ChangeAction(&m_LeftWalkAction);
+	bool isChanged = ChangeAction(&m_LeftWalkAction);
+	if (!isChanged) return;
 	m_CurrMonsterAction->Init();
 	static_cast<Player*>(m_pOwner)->SetAnimationState(ANIMATION_LEFT.ID);
 	// static_cast<Player*>(m_pOwner)->SetisAttacking(false);
@@ -41,7 +44,8 @@ void PlayerActionMgr::ChangeActionToLeftWalk()
 
 void PlayerActionMgr::ChangeActionToForwardWalk()
 {
-	ChangeAction(&m_ForwardWalkAction);
+	bool isChanged = ChangeAction(&m_ForwardWalkAction);
+	if (!isChanged) return;
 	m_CurrMonsterAction->Init();
 	static_cast<Player*>(m_pOwner)->SetAnimationState(ANIMATION_FORWARD.ID);
 	// static_cast<Player*>(m_pOwner)->SetisAttacking(false);
@@ -49,7 +53,8 @@ void PlayerActionMgr::ChangeActionToForwardWalk()
 
 void PlayerActionMgr::ChangeActionToBackwardWalk()
 {
-	ChangeAction(&m_BackwardWalkAction);
+	bool isChanged = ChangeAction(&m_BackwardWalkAction);
+	if (!isChanged) return;
 	m_CurrMonsterAction->Init();
 	static_cast<Player*>(m_pOwner)->SetAnimationState(ANIMATION_BACKWARD.ID);
 	// static_cast<Player*>(m_pOwner)->SetisAttacking(false);
@@ -57,7 +62,8 @@ void PlayerActionMgr::ChangeActionToBackwardWalk()
 
 void PlayerActionMgr::ChangeActionToStandardAttack()
 {
-	ChangeAction(&m_StandardAttackAction);
+	bool isChanged = ChangeAction(&m_StandardAttackAction);
+	if (!isChanged) return;
 	m_CurrMonsterAction->Init();
 	static_cast<Player*>(m_pOwner)->SetAnimationState(ANIMATION_ATTACK.ID);
 	// static_cast<Player*>(m_pOwner)->SetisAttacking(false);
@@ -65,15 +71,26 @@ void PlayerActionMgr::ChangeActionToStandardAttack()
 
 void PlayerActionMgr::ChangeActionToBroomPrepare()
 {
-	ChangeAction(&m_BroomPrepareAction);
+	bool isChanged = ChangeAction(&m_BroomPrepareAction);
+	if (!isChanged) return;
 	m_CurrMonsterAction->Init();
 	static_cast<Player*>(m_pOwner)->SetAnimationState(ANIMATION_BROOMPREPARE.ID);
 	// static_cast<Player*>(m_pOwner)->SetisAttacking(false);
 }
 
+void PlayerActionMgr::ChangeActionToBroomIdle()
+{
+	bool isChanged = ChangeAction(&m_BroomIdleAction);
+	if (!isChanged) return;
+	m_CurrMonsterAction->Init();
+	static_cast<Player*>(m_pOwner)->SetAnimationState(ANIMATION_BROOMIDLE.ID);
+	// static_cast<Player*>(m_pOwner)->SetisAttacking(false);
+}
+
 void PlayerActionMgr::ChangeActionToBroomForward()
 {
-	ChangeAction(&m_BroomForwardAction);
+	bool isChanged = ChangeAction(&m_BroomForwardAction);
+	if (!isChanged) return;
 	m_CurrMonsterAction->Init();
 	static_cast<Player*>(m_pOwner)->SetAnimationState(ANIMATION_BROOMFORWARD.ID);
 	// static_cast<Player*>(m_pOwner)->SetisAttacking(false);
@@ -81,7 +98,8 @@ void PlayerActionMgr::ChangeActionToBroomForward()
 
 void PlayerActionMgr::ChangeActionToDead()
 {
-	ChangeAction(&m_DeadAction);
+	bool isChanged = ChangeAction(&m_DeadAction);
+	if (!isChanged) return;
 	m_CurrMonsterAction->Init();
 	static_cast<Player*>(m_pOwner)->SetAnimationState(ANIMATION_DEAD.ID);
 	// static_cast<Player*>(m_pOwner)->SetisAttacking(false);
@@ -89,7 +107,8 @@ void PlayerActionMgr::ChangeActionToDead()
 
 void PlayerActionMgr::ChangeActionToHit()
 {
-	ChangeAction(&m_HitAction);
+	bool isChanged = ChangeAction(&m_HitAction);
+	if (!isChanged) return;
 	m_CurrMonsterAction->Init();
 	static_cast<Player*>(m_pOwner)->SetAnimationState(ANIMATION_HIT.ID);
 	// static_cast<Player*>(m_pOwner)->SetisAttacking(false);

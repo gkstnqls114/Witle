@@ -346,11 +346,12 @@ void Player::ReleaseMemberUploadBuffers()
 }
  
 void Player::SetAnimationState(int state)
-{
+{ 
 	m_CurrAnimation = state;
 	m_pLoadObject_Cloth->SetTrackAnimationSet(0, m_CurrAnimation);
 	m_pLoadObject_Body->SetTrackAnimationSet(0, m_CurrAnimation);
 
+	std::cout << "SetAnimationState : " << state << std::endl;
 }
 
 void Player::Update(float fElapsedTime)
@@ -515,17 +516,22 @@ void Player::ProcessInput(float fTimeElapsed)
 	//	return;
 	//}
 
-	//if (m_Broom->GetisPrepare())
-	//{
-	//	m_CurrAnimation = ANIMATION_BROOMPREPARE.ID;
+	if (m_Broom->GetisPrepare())
+	{
+		m_PlayerActionMgr->ChangeActionToBroomPrepare();
 
-	//	if (m_pLoadObject_Cloth->IsTrackAnimationSetFinish(0, ANIMATION_BROOMPREPARE.ID) &&
-	//		m_pLoadObject_Body->IsTrackAnimationSetFinish(0, ANIMATION_BROOMPREPARE.ID))
-	//	{
-	//		m_Broom->DoUse();
-	//	}
-	//	return;
-	//}
+		std::cout << "broom prepare" << std::endl;
+
+		if (m_pLoadObject_Cloth->IsTrackAnimationSetFinish(0, ANIMATION_BROOMPREPARE.ID) &&
+			m_pLoadObject_Body->IsTrackAnimationSetFinish(0, ANIMATION_BROOMPREPARE.ID))
+		{
+			m_Broom->DoUse();
+
+			std::cout << "do use" << std::endl;
+
+		}
+		return;
+	}
 
 	DWORD dwDirection = 0;
 	m_PlayerActionMgr->ChangeActionToIdle();
@@ -555,16 +561,16 @@ void Player::ProcessInput(float fTimeElapsed)
 		m_PlayerActionMgr->ChangeActionToRightWalk();
 		dwDirection |= DIR_RIGHT;
 	}
-/*
+
 	if (isMove && m_Broom->GetisUsing())
-	{
-		m_CurrAnimation = ANIMATION_BROOMFORWARD.ID;
+	{ 
+		m_PlayerActionMgr->ChangeActionToBroomForward(); 
 	}
 	else if (!isMove && m_Broom->GetisUsing())
 	{
-		m_CurrAnimation = ANIMATION_BROOMIDLE.ID;
+		m_PlayerActionMgr->ChangeActionToBroomIdle(); 
 	}
- */
+ 
 	// 만약 키보드 상하좌우 움직인다면...
 	if (dwDirection != 0)
 	{  

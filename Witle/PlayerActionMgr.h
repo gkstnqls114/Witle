@@ -29,7 +29,7 @@ class PlayerActionMgr
 
 	PlayerStandardAttackAction m_StandardAttackAction;
 	PlayerBroomPrepareAction   m_BroomPrepareAction;
-	PlayerBroomIdleAction      m_BroomIdleActionAction;
+	PlayerBroomIdleAction      m_BroomIdleAction;
 	PlayerBroomForwardAction   m_BroomForwardAction;
 	PlayerDeadAction           m_DeadAction;
 	PlayerHitAction            m_HitAction;
@@ -50,7 +50,7 @@ public:
 		, m_BackwardWalkAction(pOwner, 0) 
 		, m_StandardAttackAction(pOwner, 0)
 		, m_BroomPrepareAction(pOwner, 0)
-		, m_BroomIdleActionAction(pOwner, 0)
+		, m_BroomIdleAction(pOwner, 0)
 		, m_BroomForwardAction(pOwner, 0)
 		, m_DeadAction(pOwner, 0)
 		, m_HitAction(pOwner, 0)
@@ -66,6 +66,7 @@ public:
 	bool Is_BackwardWalkAction() const { return (m_CurrMonsterAction == &m_BackwardWalkAction); }
 	bool Is_StandardAttackAction() const { return (m_CurrMonsterAction == &m_StandardAttackAction); }
 	bool Is_BroomPrepareAction() const { return (m_CurrMonsterAction == &m_BroomPrepareAction); }
+	bool Is_BroomIdleAction() const { return (m_CurrMonsterAction == &m_BroomIdleAction); }
 	bool Is_BroomForwardAction() const { return (m_CurrMonsterAction == &m_BroomForwardAction); }
 	bool Is_DeadAction() const { return (m_CurrMonsterAction == &m_DeadAction); }
 	bool Is_HitAction() const { return (m_CurrMonsterAction == &m_HitAction); }
@@ -77,6 +78,7 @@ public:
 	void ChangeActionToBackwardWalk();
 	void ChangeActionToStandardAttack();
 	void ChangeActionToBroomPrepare();
+	void ChangeActionToBroomIdle();
 	void ChangeActionToBroomForward();
 	void ChangeActionToDead();
 	void ChangeActionToHit(); 
