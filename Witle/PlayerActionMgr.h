@@ -43,8 +43,7 @@ public:
 		, m_RightWalkAction(pOwner, 0)
 		, m_LeftWalkAction(pOwner, 0)
 		, m_ForwardWalkAction(pOwner, 0)
-		, m_BackwardWalkAction(pOwner, 0)
-
+		, m_BackwardWalkAction(pOwner, 0) 
 		, m_StandardAttackAction(pOwner, 0)
 		, m_BroomPrepareAction(pOwner, 0)
 		, m_BroomIdleActionAction(pOwner, 0)
@@ -64,18 +63,17 @@ public:
 	bool Is_StandardAttackAction() const { return (m_CurrMonsterAction == &m_StandardAttackAction); }
 	bool Is_BroomPrepareAction() const { return (m_CurrMonsterAction == &m_BroomPrepareAction); }
 	bool Is_BroomForwardAction() const { return (m_CurrMonsterAction == &m_BroomForwardAction); }
-
 	bool Is_DeadAction() const { return (m_CurrMonsterAction == &m_DeadAction); }
 	bool Is_HitAction() const { return (m_CurrMonsterAction == &m_HitAction); }
 
 	void ChangeActionToIdle();
-	void ChangeActionToMove();
-	void ChangeActionToChase();
-	void ChangeActionToBreath();
-	void ChangeActionToDownStroke();
-	void ChangeActionToTailAttack();
-	void ChangeActionToRush();
-	void ChangeActionToStone();
+	void ChangeActionToRightWalk();
+	void ChangeActionToLeftWalk();
+	void ChangeActionToForwardWalk();
+	void ChangeActionToBackwardWalk();
+	void ChangeActionToStandardAttack();
+	void ChangeActionToBroomPrepare();
+	void ChangeActionToBroomForward();
 	void ChangeActionToDead();
-	void ChangeActionToBuf();
+	void ChangeActionToHit(); 
 };
