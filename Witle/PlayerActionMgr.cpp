@@ -94,3 +94,4 @@ void PlayerActionMgr::ChangeActionToHit()
 	static_cast<Player*>(m_pOwner)->SetAnimationState(ANIMATION_HIT.ID);
 	// static_cast<Player*>(m_pOwner)->SetisAttacking(false);
 }
+ 

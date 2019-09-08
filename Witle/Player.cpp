@@ -167,8 +167,13 @@ void Player::Init()
 
 	m_Transform.SetIdentity();
 	m_Transform.SetPosition(15000, 0, 15000);
-	
-	SetAnimationState(ANIMATION_IDLE.ID);
+	 
+	// 애니메이션 정보 초기화
+	m_PrevAnimation = 0;
+	m_CurrAnimation = 0; 
+	m_pLoadObject_Cloth->SetTrackAnimationSet(0, 0);
+	m_pLoadObject_Body->SetTrackAnimationSet(0, 0);
+
 	isDead = false;
 	m_pPlayerMovement->RunMode();
 	m_pPlayerMPStatus->SetGuage(100.f);
@@ -339,12 +344,13 @@ void Player::ReleaseMemberUploadBuffers()
 	if (m_PlayerModel_Body)m_PlayerModel_Body->ReleaseUploadBuffers();
 	if (m_pMyBOBox)m_pMyBOBox->ReleaseUploadBuffers();
 }
-
+ 
 void Player::SetAnimationState(int state)
-{ 
+{
 	m_CurrAnimation = state;
 	m_pLoadObject_Cloth->SetTrackAnimationSet(0, m_CurrAnimation);
 	m_pLoadObject_Body->SetTrackAnimationSet(0, m_CurrAnimation);
+
 }
 
 void Player::Update(float fElapsedTime)
@@ -454,102 +460,102 @@ void Player::Rotate(float x, float y, float z)
 static float hittime = 0.f;
 void Player::ProcessInput(float fTimeElapsed)
 {   
-	if (isDead && m_pLoadObject_Cloth->IsTrackAnimationSetFinish(0, ANIMATION_DEAD.ID))
-	{ 
-		SceneMgr::GetInstacne()->ChangeSceneToLose();
-		return;
-	}
-	if (isDead) return;
+	//if (isDead && m_pLoadObject_Cloth->IsTrackAnimationSetFinish(0, ANIMATION_DEAD.ID))
+	//{ 
+	//	SceneMgr::GetInstacne()->ChangeSceneToLose();
+	//	return;
+	//}
+	//if (isDead) return;
 
-	if (m_pPlayerHPStatus->GetGuage() <= 0 && isDead == false)
-	{
-		isDead = true;
-		m_CurrAnimation = ANIMATION_DEAD.ID;
-		return;
-	}
-
-	if (m_CurrAnimation == ANIMATION_HIT.ID || isBrooming)
-	{  
-		hittime += fTimeElapsed;
-
-		if (hittime < (ANIMATION_HIT.EndTime - ANIMATION_HIT.StartTime))
-		{
-			return;
-		}
-		else
-		{
-			m_CurrAnimation = ANIMATION_IDLE.ID; 
-			hittime = 0.f;
-			m_isAttacking = false;
-			isBrooming = false;
-			return;
-		}
-	}
-
-	//if (isDead)
+	//if (m_pPlayerHPStatus->GetGuage() <= 0 && isDead == false)
 	//{
-	//	m_pPlayerHPStatus->m_Guage += 10.f; 
-	//	if (m_pPlayerHPStatus->m_Guage > 1000.F)
-	//	{ 
-	//		m_CurrAnimation = ANIMATION_IDLE.ID;
-	//		m_Broom->DoNotUse();
-	//		m_pPlayerHPStatus->m_Guage = 1000.F;
-	//		isDead = false;
+	//	isDead = true;
+	//	m_CurrAnimation = ANIMATION_DEAD.ID;
+	//	return;
+	//}
+
+	//if (m_CurrAnimation == ANIMATION_HIT.ID || isBrooming)
+	//{  
+	//	hittime += fTimeElapsed;
+
+	//	if (hittime < (ANIMATION_HIT.EndTime - ANIMATION_HIT.StartTime))
+	//	{
+	//		return;
+	//	}
+	//	else
+	//	{
+	//		m_CurrAnimation = ANIMATION_IDLE.ID; 
+	//		hittime = 0.f;
+	//		m_isAttacking = false;
+	//		isBrooming = false;
+	//		return;
+	//	}
+	//}
+
+	////if (isDead)
+	////{
+	////	m_pPlayerHPStatus->m_Guage += 10.f; 
+	////	if (m_pPlayerHPStatus->m_Guage > 1000.F)
+	////	{ 
+	////		m_CurrAnimation = ANIMATION_IDLE.ID;
+	////		m_Broom->DoNotUse();
+	////		m_pPlayerHPStatus->m_Guage = 1000.F;
+	////		isDead = false;
+	////	}
+	////	return;
+	////}
+
+	//if (m_isAttacking)
+	//{
+	//	if (m_pLoadObject_Cloth->IsTrackAnimationSetFinish(0, ANIMATION_ATTACK.ID) && 
+	//		m_pLoadObject_Body->IsTrackAnimationSetFinish(0, ANIMATION_ATTACK.ID))
+	//	{
+	//		m_isAttacking = false;
+	//	} 
+	//	return;
+	//}
+
+	//if (m_Broom->GetisPrepare())
+	//{
+	//	m_CurrAnimation = ANIMATION_BROOMPREPARE.ID;
+
+	//	if (m_pLoadObject_Cloth->IsTrackAnimationSetFinish(0, ANIMATION_BROOMPREPARE.ID) &&
+	//		m_pLoadObject_Body->IsTrackAnimationSetFinish(0, ANIMATION_BROOMPREPARE.ID))
+	//	{
+	//		m_Broom->DoUse();
 	//	}
 	//	return;
 	//}
 
-	if (m_isAttacking)
-	{
-		if (m_pLoadObject_Cloth->IsTrackAnimationSetFinish(0, ANIMATION_ATTACK.ID) && 
-			m_pLoadObject_Body->IsTrackAnimationSetFinish(0, ANIMATION_ATTACK.ID))
-		{
-			m_isAttacking = false;
-		} 
-		return;
-	}
-
-	if (m_Broom->GetisPrepare())
-	{
-		m_CurrAnimation = ANIMATION_BROOMPREPARE.ID;
-
-		if (m_pLoadObject_Cloth->IsTrackAnimationSetFinish(0, ANIMATION_BROOMPREPARE.ID) &&
-			m_pLoadObject_Body->IsTrackAnimationSetFinish(0, ANIMATION_BROOMPREPARE.ID))
-		{
-			m_Broom->DoUse();
-		}
-		return;
-	}
-
 	DWORD dwDirection = 0;
-	m_CurrAnimation = ANIMATION_IDLE.ID; 
+	m_PlayerActionMgr->ChangeActionToIdle();
 	 
 	bool isMove = false;
 	if (GameInput::IsKeydownW())
 	{
 		isMove = true;
-		m_CurrAnimation = ANIMATION_FORWARD.ID;
+		m_PlayerActionMgr->ChangeActionToForwardWalk();
 		dwDirection |= DIR_FORWARD;
 	}
 	if (GameInput::IsKeydownS())
 	{
 		isMove = true;
-		m_CurrAnimation = ANIMATION_BACKWARD.ID;
+		m_PlayerActionMgr->ChangeActionToBackwardWalk();
 		dwDirection |= DIR_BACKWARD;
 	}
 	if (GameInput::IsKeydownA())
 	{
 		isMove = true;
-		m_CurrAnimation = ANIMATION_LEFT.ID;
+		m_PlayerActionMgr->ChangeActionToLeftWalk();
 		dwDirection |= DIR_LEFT;
 	}
 	if (GameInput::IsKeydownD())
 	{
 		isMove = true;
-		m_CurrAnimation = ANIMATION_RIGHT.ID;
+		m_PlayerActionMgr->ChangeActionToRightWalk();
 		dwDirection |= DIR_RIGHT;
 	}
-
+/*
 	if (isMove && m_Broom->GetisUsing())
 	{
 		m_CurrAnimation = ANIMATION_BROOMFORWARD.ID;
@@ -558,7 +564,7 @@ void Player::ProcessInput(float fTimeElapsed)
 	{
 		m_CurrAnimation = ANIMATION_BROOMIDLE.ID;
 	}
- 
+ */
 	// 만약 키보드 상하좌우 움직인다면...
 	if (dwDirection != 0)
 	{  

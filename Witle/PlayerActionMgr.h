@@ -80,4 +80,5 @@ public:
 	void ChangeActionToBroomForward();
 	void ChangeActionToDead();
 	void ChangeActionToHit(); 
+	 
 };
