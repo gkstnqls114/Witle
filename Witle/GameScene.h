@@ -141,7 +141,12 @@ public:
 
 	// 몬스터 관련 ////////////////////////////
 
+#ifdef _DEBUG
+	int						m_TestMonsterCount{ 1 }; //원래 107마리..
+#else
 	int						m_TestMonsterCount{ 100 }; //원래 107마리..
+#endif // DEBUG
+
 	Monster**				m_TestMonster{ nullptr };
 	Monster*				m_AltarMonster{ nullptr };
 	

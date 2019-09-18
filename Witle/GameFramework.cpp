@@ -811,6 +811,9 @@ void CGameFramework::BuildObjects()
 
 	m_CommandList->Reset(m_CommandAllocator.Get(), NULL);
 	
+	//GameInput::ChagneMoveMode();
+	GameInput::ChagneDragMode();
+
 	///////////////////////////////////////////////////////////////////////////// 리소스 생성
 	// 순서 변경 X /////////////
 
@@ -819,7 +822,8 @@ void CGameFramework::BuildObjects()
 	CreateRWBuffer(); // CommandList Reset된 이후에 해야함
 	 
 	SceneMgr::GetInstacne();
-	
+
+
 	// 터레인 오브젝트에서 사용될 모든 텍스쳐과 모델을 가져온다.
 	TextureStorage::GetInstance()->CreateTextures(m_d3dDevice.Get(), m_CommandList.Get());
 

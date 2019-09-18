@@ -21,6 +21,9 @@ class Player;
 class PlayerActionMgr
 	: public ActionMgr
 { 
+	int m_PrevActionID{ 0 }; // 현재 사용하는 애니메이션
+	int m_CurrActionID{ 0 }; // 현재 사용하는 애니메이션
+
 	PlayerIdleAction           m_IdleAction;
 	PlayerRightWalkAction      m_RightWalkAction;
 	PlayerLeftWalkAction       m_LeftWalkAction;
@@ -70,6 +73,8 @@ public:
 	bool Is_BroomForwardAction() const { return (m_CurrMonsterAction == &m_BroomForwardAction); }
 	bool Is_DeadAction() const { return (m_CurrMonsterAction == &m_DeadAction); }
 	bool Is_HitAction() const { return (m_CurrMonsterAction == &m_HitAction); }
+
+	int GetCurrActionID() const { return m_CurrAnimation; }
 
 	void ChangeActionToIdle();
 	void ChangeActionToRightWalk();

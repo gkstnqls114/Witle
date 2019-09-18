@@ -349,9 +349,7 @@ void Player::SetAnimationState(int state)
 { 
 	m_CurrAnimation = state;
 	m_pLoadObject_Cloth->SetTrackAnimationSet(0, m_CurrAnimation);
-	m_pLoadObject_Body->SetTrackAnimationSet(0, m_CurrAnimation);
-
-	std::cout << "SetAnimationState : " << state << std::endl;
+	m_pLoadObject_Body->SetTrackAnimationSet(0, m_CurrAnimation); 
 }
 
 void Player::Update(float fElapsedTime)
@@ -460,61 +458,61 @@ void Player::Rotate(float x, float y, float z)
  
 static float hittime = 0.f;
 void Player::ProcessInput(float fTimeElapsed)
-{   
-	//if (isDead && m_pLoadObject_Cloth->IsTrackAnimationSetFinish(0, ANIMATION_DEAD.ID))
-	//{ 
-	//	SceneMgr::GetInstacne()->ChangeSceneToLose();
-	//	return;
-	//}
-	//if (isDead) return;
+{    
+	if (isDead && m_pLoadObject_Cloth->IsTrackAnimationSetFinish(0, ANIMATION_DEAD.ID))
+	{ 
+		SceneMgr::GetInstacne()->ChangeSceneToLose();
+		return;
+	}
+	if (isDead) return;
 
-	//if (m_pPlayerHPStatus->GetGuage() <= 0 && isDead == false)
+	if (m_pPlayerHPStatus->GetGuage() <= 0 && isDead == false)
+	{
+		isDead = true;
+		m_CurrAnimation = ANIMATION_DEAD.ID;
+		return;
+	}
+
+	if (m_CurrAnimation == ANIMATION_HIT.ID || isBrooming)
+	{  
+		hittime += fTimeElapsed;
+
+		if (hittime < (ANIMATION_HIT.EndTime - ANIMATION_HIT.StartTime))
+		{
+			return;
+		}
+		else
+		{
+			m_CurrAnimation = ANIMATION_IDLE.ID; 
+			hittime = 0.f;
+			m_isAttacking = false;
+			isBrooming = false;
+			return;
+		}
+	}
+
+	//if (isDead)
 	//{
-	//	isDead = true;
-	//	m_CurrAnimation = ANIMATION_DEAD.ID;
+	//	m_pPlayerHPStatus->m_Guage += 10.f; 
+	//	if (m_pPlayerHPStatus->m_Guage > 1000.F)
+	//	{ 
+	//		m_CurrAnimation = ANIMATION_IDLE.ID;
+	//		m_Broom->DoNotUse();
+	//		m_pPlayerHPStatus->m_Guage = 1000.F;
+	//		isDead = false;
+	//	}
 	//	return;
 	//}
 
-	//if (m_CurrAnimation == ANIMATION_HIT.ID || isBrooming)
-	//{  
-	//	hittime += fTimeElapsed;
-
-	//	if (hittime < (ANIMATION_HIT.EndTime - ANIMATION_HIT.StartTime))
-	//	{
-	//		return;
-	//	}
-	//	else
-	//	{
-	//		m_CurrAnimation = ANIMATION_IDLE.ID; 
-	//		hittime = 0.f;
-	//		m_isAttacking = false;
-	//		isBrooming = false;
-	//		return;
-	//	}
-	//}
-
-	////if (isDead)
-	////{
-	////	m_pPlayerHPStatus->m_Guage += 10.f; 
-	////	if (m_pPlayerHPStatus->m_Guage > 1000.F)
-	////	{ 
-	////		m_CurrAnimation = ANIMATION_IDLE.ID;
-	////		m_Broom->DoNotUse();
-	////		m_pPlayerHPStatus->m_Guage = 1000.F;
-	////		isDead = false;
-	////	}
-	////	return;
-	////}
-
-	//if (m_isAttacking)
-	//{
-	//	if (m_pLoadObject_Cloth->IsTrackAnimationSetFinish(0, ANIMATION_ATTACK.ID) && 
-	//		m_pLoadObject_Body->IsTrackAnimationSetFinish(0, ANIMATION_ATTACK.ID))
-	//	{
-	//		m_isAttacking = false;
-	//	} 
-	//	return;
-	//}
+	if (m_isAttacking)
+	{
+		if (m_pLoadObject_Cloth->IsTrackAnimationSetFinish(0, ANIMATION_ATTACK.ID) && 
+			m_pLoadObject_Body->IsTrackAnimationSetFinish(0, ANIMATION_ATTACK.ID))
+		{
+			m_isAttacking = false;
+		} 
+		return;
+	}
 
 	if (m_Broom->GetisPrepare())
 	{

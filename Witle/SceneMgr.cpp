@@ -98,7 +98,6 @@ void SceneMgr::ChangeSceneToGame()
 	SoundManager::GetInstance()->Play(ENUM_SOUND::GAME_SOUND);
 	// 사운드 ///////////////////////////////////////////////////////////
 
-	GameInput::ChagneMoveMode();
 	m_SkillSelectScene->FinishSkillSelect(); // Skill Select에서 설정된 스킬 연결
 	m_pCurrScene = m_GameScene;
 	m_GameScene->Init(); //테스트
