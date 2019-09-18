@@ -163,14 +163,12 @@ Player::~Player()
 
 void Player::Init()
 {
-	m_PlayerActionMgr->ChangeActionToIdle();
+	m_PlayerActionMgr->Init();
 
 	m_Transform.SetIdentity();
 	m_Transform.SetPosition(15000, 0, 15000);
 	 
-	// 애니메이션 정보 초기화
-	m_PrevAnimation = 0;
-	m_CurrAnimation = 0; 
+	// 애니메이션 정보 초기화 
 	m_pLoadObject_Cloth->SetTrackAnimationSet(0, 0);
 	m_pLoadObject_Body->SetTrackAnimationSet(0, 0);
 
@@ -346,10 +344,9 @@ void Player::ReleaseMemberUploadBuffers()
 }
  
 void Player::SetAnimationState(int state)
-{ 
-	m_CurrAnimation = state;
-	m_pLoadObject_Cloth->SetTrackAnimationSet(0, m_CurrAnimation);
-	m_pLoadObject_Body->SetTrackAnimationSet(0, m_CurrAnimation); 
+{  
+	m_pLoadObject_Cloth->SetTrackAnimationSet(0, m_PlayerActionMgr->GetCurrActionID());
+	m_pLoadObject_Body->SetTrackAnimationSet(0, m_PlayerActionMgr->GetCurrActionID());
 }
 
 void Player::Update(float fElapsedTime)
@@ -384,32 +381,32 @@ static bool isBrooming = false;
 void Player::SubstractHP(int sub)
 {  
 	if (isBrooming) return;
-	if (m_CurrAnimation == ANIMATION_HIT.ID) return;
+	if (m_PlayerActionMgr->Is_HitAction()) return;
 	
 	float prevDamage = m_pPlayerHPStatus->GetGuage();
 	m_pPlayerHPStatus->SubstractHP(sub);
 	
-	if (m_CurrAnimation == ANIMATION_BROOMIDLE.ID)
+	if (m_PlayerActionMgr->Is_BroomIdleAction())
 	{
 		isBrooming = true; 
 		return;
 	}
-	if (m_CurrAnimation == ANIMATION_BROOMFORWARD.ID)
+	if (m_PlayerActionMgr->Is_BroomForwardAction())
 	{
 		isBrooming = true; 
 		return;
 	}
-	if (m_CurrAnimation == ANIMATION_BROOMPREPARE.ID)
+	if (m_PlayerActionMgr->Is_BroomPrepareAction())
 	{
 		isBrooming = true; 
 		return;
 	}
 	 
-	if (m_CurrAnimation != ANIMATION_HIT.ID)
+	if (m_PlayerActionMgr->Is_HitAction())
 	{
-		m_CurrAnimation = ANIMATION_HIT.ID;
-		m_pLoadObject_Body->SetTrackAnimationSet(0, m_CurrAnimation);
-		m_pLoadObject_Cloth->SetTrackAnimationSet(0, m_CurrAnimation);
+		m_PlayerActionMgr->ChangeActionToHit();
+		m_pLoadObject_Body->SetTrackAnimationSet(0, m_PlayerActionMgr->GetCurrActionID());
+		m_pLoadObject_Cloth->SetTrackAnimationSet(0, m_PlayerActionMgr->GetCurrActionID());
 	}
 
 }
@@ -437,11 +434,12 @@ void Player::RenderStatus(ID3D12GraphicsCommandList * pd3dCommandList, bool isGB
  
 void Player::SetTrackAnimationSet()
 { 
-	if (m_CurrAnimation != m_PrevAnimation)
-	{
-		m_pLoadObject_Cloth->SetTrackAnimationSet(0, m_CurrAnimation);
-		m_pLoadObject_Body->SetTrackAnimationSet(0, m_CurrAnimation);
-		m_PrevAnimation = m_CurrAnimation;
+	if (m_PlayerActionMgr->isDifferAction())
+	{ 
+		std::cout << m_PlayerActionMgr->GetCurrActionID() << std::endl;
+		m_PlayerActionMgr->SetUpPrevActionID();
+		m_pLoadObject_Cloth->SetTrackAnimationSet(0, m_PlayerActionMgr->GetCurrActionID());
+		m_pLoadObject_Body->SetTrackAnimationSet(0, m_PlayerActionMgr->GetCurrActionID());
 	}
 }
 
@@ -469,11 +467,11 @@ void Player::ProcessInput(float fTimeElapsed)
 	if (m_pPlayerHPStatus->GetGuage() <= 0 && isDead == false)
 	{
 		isDead = true;
-		m_CurrAnimation = ANIMATION_DEAD.ID;
+		m_PlayerActionMgr->Is_DeadAction();
 		return;
 	}
 
-	if (m_CurrAnimation == ANIMATION_HIT.ID || isBrooming)
+	if (m_PlayerActionMgr->Is_HitAction() || isBrooming)
 	{  
 		hittime += fTimeElapsed;
 
@@ -483,7 +481,7 @@ void Player::ProcessInput(float fTimeElapsed)
 		}
 		else
 		{
-			m_CurrAnimation = ANIMATION_IDLE.ID; 
+			m_PlayerActionMgr->Is_IdleAction();
 			hittime = 0.f;
 			m_isAttacking = false;
 			isBrooming = false;
@@ -518,15 +516,10 @@ void Player::ProcessInput(float fTimeElapsed)
 	{
 		m_PlayerActionMgr->ChangeActionToBroomPrepare();
 
-		std::cout << "broom prepare" << std::endl;
-
 		if (m_pLoadObject_Cloth->IsTrackAnimationSetFinish(0, ANIMATION_BROOMPREPARE.ID) &&
 			m_pLoadObject_Body->IsTrackAnimationSetFinish(0, ANIMATION_BROOMPREPARE.ID))
 		{
 			m_Broom->DoUse();
-
-			std::cout << "do use" << std::endl;
-
 		}
 		return;
 	}
@@ -633,8 +626,8 @@ bool Player::Attack(Status* status, MyCollider* collider, XMFLOAT2 aimPoint, Cam
 	}
 
 	m_pPlayerMovement->m_xmf3Velocity = XMFLOAT3(0.F, 0.F, 0.F);
-	m_isAttacking = true;
-	m_CurrAnimation = ANIMATION_ATTACK.ID;
+	m_isAttacking = true; 
+	m_PlayerActionMgr->ChangeActionToStandardAttack();
 	return isAttack;
 }
 

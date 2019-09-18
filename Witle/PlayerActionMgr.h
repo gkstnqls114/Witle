@@ -21,7 +21,7 @@ class Player;
 class PlayerActionMgr
 	: public ActionMgr
 { 
-	int m_PrevActionID{ 0 }; // 현재 사용하는 애니메이션
+	int m_PrevActionID{ -1 }; // 현재 사용하는 애니메이션
 	int m_CurrActionID{ 0 }; // 현재 사용하는 애니메이션
 
 	PlayerIdleAction           m_IdleAction;
@@ -58,9 +58,11 @@ public:
 		, m_DeadAction(pOwner, 0)
 		, m_HitAction(pOwner, 0)
 	{
-		ChangeActionToIdle();
+
 	};
 	virtual ~PlayerActionMgr() {}; 
+
+	void Init();
 
 	bool Is_IdleAction() const { return (m_CurrMonsterAction == &m_IdleAction); }
 	bool Is_RightWalkAction() const { return (m_CurrMonsterAction == &m_RightWalkAction); }
@@ -74,8 +76,6 @@ public:
 	bool Is_DeadAction() const { return (m_CurrMonsterAction == &m_DeadAction); }
 	bool Is_HitAction() const { return (m_CurrMonsterAction == &m_HitAction); }
 
-	int GetCurrActionID() const { return m_CurrAnimation; }
-
 	void ChangeActionToIdle();
 	void ChangeActionToRightWalk();
 	void ChangeActionToLeftWalk();
@@ -88,4 +88,10 @@ public:
 	void ChangeActionToDead();
 	void ChangeActionToHit(); 
 	 
+	int GetCurrActionID() const { return m_CurrActionID; }
+	bool isDifferAction() const { return m_PrevActionID != m_CurrActionID; }
+	void SetUpPrevActionID() 
+	{
+		m_PrevActionID = m_CurrActionID;
+	}
 };

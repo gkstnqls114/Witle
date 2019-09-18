@@ -20,13 +20,11 @@ class PlayerActionMgr;
 // CHeightMapTerrain 입니다.
 class Player :
 	public GameObject
-{
+{  
 public:
-	int m_PrevAnimation{ 0 }; // 현재 사용하는 애니메이션
-	int m_CurrAnimation{ 0 }; // 현재 사용하는 애니메이션
-	 
-private:
 	PlayerActionMgr* m_PlayerActionMgr{ nullptr }; // Player의 액션(모델의 동작)을 관리
+
+private:
 
 	bool isDead{ false };
 
