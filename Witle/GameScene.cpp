@@ -410,25 +410,25 @@ bool GameScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM w
 			break;
 
 		case MYVK_E: 
-			m_pPlayer->m_PlayerActionMgr->ChangeActionToStandardAttack();
+			m_pPlayer->GetPlayerActionMgr()->ChangeActionToStandardAttack();
 			m_pPlayer->isAttacking(); 
 			PlayerSkillMgr::GetInstance()->Activate(m_pPlayer->GetMPStatus(), 0);
 			break;
 
 		case MYVK_R:
-			m_pPlayer->m_PlayerActionMgr->ChangeActionToStandardAttack();
+			m_pPlayer->GetPlayerActionMgr()->ChangeActionToStandardAttack();
 			m_pPlayer->isAttacking();
 			PlayerSkillMgr::GetInstance()->Activate(m_pPlayer->GetMPStatus(), 1);
 			break;
 
 		case MYVK_T:
-			m_pPlayer->m_PlayerActionMgr->ChangeActionToStandardAttack();
+			m_pPlayer->GetPlayerActionMgr()->ChangeActionToStandardAttack();
 			m_pPlayer->isAttacking();
 			PlayerSkillMgr::GetInstance()->Activate(m_pPlayer->GetMPStatus(), 2);
 			break;
 
 		case MYVK_Y: 			
-			m_pPlayer->m_PlayerActionMgr->ChangeActionToStandardAttack();
+			m_pPlayer->GetPlayerActionMgr()->ChangeActionToStandardAttack();
 			m_pPlayer->isAttacking();
 			PlayerSkillMgr::GetInstance()->Activate(m_pPlayer->GetMPStatus(), 3);
 			break;

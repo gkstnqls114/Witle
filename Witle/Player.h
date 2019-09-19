@@ -20,11 +20,9 @@ class PlayerActionMgr;
 // CHeightMapTerrain 입니다.
 class Player :
 	public GameObject
-{  
-public:
-	PlayerActionMgr* m_PlayerActionMgr{ nullptr }; // Player의 액션(모델의 동작)을 관리
-
+{   
 private:
+	PlayerActionMgr* m_PlayerActionMgr{ nullptr }; // Player의 액션(모델의 동작)을 관리
 
 	bool isDead{ false };
 
@@ -126,6 +124,7 @@ public:
 	MyBOBox* GetBOBox() { return m_pMyBOBox; }
 	const Broom* GetBroom() const { return m_Broom; }
 	bool IsAttacking() const { return m_isAttacking; }
+	PlayerActionMgr * const GetPlayerActionMgr() const { return m_PlayerActionMgr; }
 	/////////////////////// Get
 
 	/////////////////////// Set	
