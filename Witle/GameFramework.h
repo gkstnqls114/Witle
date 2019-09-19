@@ -14,9 +14,9 @@ class DownScaleFirstPassShader;
 class DownScaleSecondPassShader;
 class BloomRevealShader;
 
-class CGameFramework
+class GameFramework
 { 
-	typedef void (CGameFramework::*renderFuncPtr)(); // 게임프레임워크의 렌더링 함수 포인터
+	typedef void (GameFramework::*renderFuncPtr)(); // 게임프레임워크의 렌더링 함수 포인터
 
 private:
 	HINSTANCE m_hInstance;
@@ -233,8 +233,8 @@ private:
 	void BuildShaders(); 
 	 
 public:
-	CGameFramework();
-	~CGameFramework();
+	GameFramework();
+	~GameFramework();
 
 	// 프레임워크를 초기화하는 함수입니다 (주 윈도우가 생성되면 호출)
 	bool OnCreate(HINSTANCE hInstance, HWND hMainWnd);

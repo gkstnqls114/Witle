@@ -595,6 +595,18 @@
     <Filter Include="02.Component\Action\02.PlayerAction\05.PlayerBackwardWalkAction">
       <UniqueIdentifier>{d88c4902-e7c8-4d72-b5b4-5ef4678f5ae5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.GameBase\GameFramework">
+      <UniqueIdentifier>{bc158b1f-1b20-4ae2-b27e-94a8c1b941cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.GameBase\GameInput">
+      <UniqueIdentifier>{0ecc99d9-0526-48b3-8c16-94b9770f9957}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.GameBase\GameScreen">
+      <UniqueIdentifier>{27bdf0f1-3e1f-469d-ad1c-b51b58d9e4a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.GameBase\GameTimer">
+      <UniqueIdentifier>{75556a0e-e018-4691-bb1c-1523085f9ad8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -620,12 +632,6 @@
     </ClInclude>
     <ClInclude Include="ComponentBase.h">
       <Filter>02.Component</Filter>
-    </ClInclude>
-    <ClInclude Include="GameFramework.h">
-      <Filter>01.GameBase</Filter>
-    </ClInclude>
-    <ClInclude Include="GameTimer.h">
-      <Filter>01.GameBase</Filter>
     </ClInclude>
     <ClInclude Include="GameObject.h">
       <Filter>03.GameObject</Filter>
@@ -684,9 +690,6 @@
     <ClInclude Include="Player.h">
       <Filter>03.GameObject\01.Player</Filter>
     </ClInclude>
-    <ClInclude Include="GameInput.h">
-      <Filter>01.GameBase</Filter>
-    </ClInclude>
     <ClInclude Include="MyRigidbody.h">
       <Filter>02.Component\MyRigidbody</Filter>
     </ClInclude>
@@ -710,9 +713,6 @@
     </ClInclude>
     <ClInclude Include="MyFrustum.h">
       <Filter>02.Component\05.MyCollider\MyFrustum</Filter>
-    </ClInclude>
-    <ClInclude Include="GameScreen.h">
-      <Filter>01.GameBase</Filter>
     </ClInclude>
     <ClInclude Include="Light.h">
       <Filter>02.Component\Light</Filter>
@@ -1206,6 +1206,18 @@
     <ClInclude Include="PlayerBackwardWalkAction.h">
       <Filter>02.Component\Action\02.PlayerAction\05.PlayerBackwardWalkAction</Filter>
     </ClInclude>
+    <ClInclude Include="GameFramework.h">
+      <Filter>01.GameBase\GameFramework</Filter>
+    </ClInclude>
+    <ClInclude Include="GameInput.h">
+      <Filter>01.GameBase\GameInput</Filter>
+    </ClInclude>
+    <ClInclude Include="GameScreen.h">
+      <Filter>01.GameBase\GameScreen</Filter>
+    </ClInclude>
+    <ClInclude Include="GameTimer.h">
+      <Filter>01.GameBase\GameTimer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1237,12 +1249,6 @@
     </ClCompile>
     <ClCompile Include="Mesh.cpp">
       <Filter>02.Component\03.Mesh</Filter>
-    </ClCompile>
-    <ClCompile Include="GameFramework.cpp">
-      <Filter>01.GameBase</Filter>
-    </ClCompile>
-    <ClCompile Include="GameTimer.cpp">
-      <Filter>01.GameBase</Filter>
     </ClCompile>
     <ClCompile Include="Camera.cpp">
       <Filter>02.Component\02.Camera</Filter>
@@ -1283,9 +1289,6 @@
     <ClCompile Include="Player.cpp">
       <Filter>03.GameObject\01.Player</Filter>
     </ClCompile>
-    <ClCompile Include="GameInput.cpp">
-      <Filter>01.GameBase</Filter>
-    </ClCompile>
     <ClCompile Include="MyRigidbody.cpp">
       <Filter>02.Component\MyRigidbody</Filter>
     </ClCompile>
@@ -1303,9 +1306,6 @@
     </ClCompile>
     <ClCompile Include="MyFrustum.cpp">
       <Filter>02.Component\05.MyCollider\MyFrustum</Filter>
-    </ClCompile>
-    <ClCompile Include="GameScreen.cpp">
-      <Filter>01.GameBase</Filter>
     </ClCompile>
     <ClCompile Include="Light.cpp">
       <Filter>02.Component\Light</Filter>
@@ -1795,6 +1795,18 @@
     </ClCompile>
     <ClCompile Include="PlayerBackwardWalkAction.cpp">
       <Filter>02.Component\Action\02.PlayerAction\05.PlayerBackwardWalkAction</Filter>
+    </ClCompile>
+    <ClCompile Include="GameFramework.cpp">
+      <Filter>01.GameBase\GameFramework</Filter>
+    </ClCompile>
+    <ClCompile Include="GameInput.cpp">
+      <Filter>01.GameBase\GameInput</Filter>
+    </ClCompile>
+    <ClCompile Include="GameScreen.cpp">
+      <Filter>01.GameBase\GameScreen</Filter>
+    </ClCompile>
+    <ClCompile Include="GameTimer.cpp">
+      <Filter>01.GameBase\GameTimer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
