@@ -21,10 +21,6 @@ class Player;
 class PlayerActionMgr
 	: public ActionMgr
 { 
-	// 이 둘의 ID는 서로 반드시 달라야한다.
-	int m_BeforeActionID{ -1 }; // 이전에 사용했던 애니메이션 아이디
-	int m_CurrActionID{ 0 }; // 현재 사용하는 애니메이션 아이디
-
 	PlayerIdleAction           m_IdleAction;
 	PlayerRightWalkAction      m_RightWalkAction;
 	PlayerLeftWalkAction       m_LeftWalkAction;
@@ -89,15 +85,4 @@ public:
 	void ChangeActionToDead();
 	void ChangeActionToHit(); 
 	 
-	int GetCurrActionID() const { return m_CurrActionID; }
-	int GetPrevActionID() const { return m_BeforeActionID; }
-
-	// 이전과 현재의 ID 상태가 달라졌는지 알아낸다. 만약 다르다면 true
-	bool isDifferAction() const { return m_BeforeActionID != m_CurrActionID; }
-
-	// m_BeforeActionID 를 m_CurrActionID로 설정하는 함수
-	void SetUpPrevActionID() 
-	{
-		m_BeforeActionID = m_CurrActionID;
-	}
 };

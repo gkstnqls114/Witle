@@ -173,6 +173,7 @@ void Player::Init()
 	m_pLoadObject_Body->SetTrackAnimationSet(0, 0);
 
 	isDead = false;
+	m_isAttacking = false;
 	m_pPlayerMovement->RunMode();
 	m_pPlayerMPStatus->SetGuage(100.f);
 	m_pPlayerHPStatus->SetGuage(100.f);

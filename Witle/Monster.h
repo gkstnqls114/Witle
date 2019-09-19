@@ -72,9 +72,9 @@ protected:
 	LineMesh* m_pDebugSpawnMesh{ nullptr };
 #endif
 
-private:
-	int m_CurrAnimation{ 0 }; // 현재 사용하는 애니메이션
-	int m_PrevAnimation{ 0 }; // 현재 사용하는 애니메이션
+//private:
+//	int m_CurrAnimation{ 0 }; // 현재 사용하는 애니메이션
+//	int m_PrevAnimation{ 0 }; // 현재 사용하는 애니메이션
 
 protected:
 	virtual void ReleaseMembers() override;

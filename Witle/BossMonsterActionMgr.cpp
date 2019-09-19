@@ -83,81 +83,101 @@ void BossMonsterActionMgr::ChangeBossStateBefore()
  
 // 기본
 void BossMonsterActionMgr::ChangeBossStateToIdle()
-{
-	ChangeAction(&m_BossIdleAction);
+{ 
+	bool isChanged = ChangeAction(&m_BossIdleAction);
+	if (!isChanged) return;
 	m_CurrAction->Init();
+	m_CurrActionID = BOSS_IDLE.ID;
 	static_cast<Monster*>(m_pOwner)->SetAnimationState(BOSS_IDLE.ID);
 	static_cast<Monster*>(m_pOwner)->SetisAttacking(false); 
 }
 
 // 이동
 void BossMonsterActionMgr::ChangeBossStateToMove()
-{
-	ChangeAction(&m_BossMoveAction);
+{ 
+	bool isChanged = ChangeAction(&m_BossMoveAction);
+	if (!isChanged) return;
 	m_CurrAction->Init();
+	m_CurrActionID = BOSS_MOVE.ID;
 	static_cast<Monster*>(m_pOwner)->SetAnimationState(BOSS_MOVE.ID);
 	static_cast<Monster*>(m_pOwner)->SetisAttacking(false); 
 }
 
 // 추격
 void BossMonsterActionMgr::ChangeBossStateToChase()
-{
-	ChangeAction(&m_BossChaseAction);
+{ 
+	bool isChanged = ChangeAction(&m_BossChaseAction);
+	if (!isChanged) return;
 	m_CurrAction->Init();
+	m_CurrActionID = BOSS_CHASE.ID;
 	static_cast<Monster*>(m_pOwner)->SetAnimationState(BOSS_CHASE.ID);
 	static_cast<Monster*>(m_pOwner)->SetisAttacking(false); 
 }
   
 void BossMonsterActionMgr::ChangeBossStateToBreath()
-{
-	ChangeAction(&m_BossSkillBreath);
+{ 
+	bool isChanged = ChangeAction(&m_BossSkillBreath);
+	if (!isChanged) return;
 	m_CurrAction->Init();
+	m_CurrActionID = BOSS_BREATH.ID;
 	static_cast<Monster*>(m_pOwner)->SetAnimationState(BOSS_BREATH.ID);
 	static_cast<Monster*>(m_pOwner)->SetisAttacking(true); 
 }
  
 void BossMonsterActionMgr::ChangeBossStateToDownStroke()
-{
-	ChangeAction(&m_BossSkilldownstroke);
+{ 
+	bool isChanged = ChangeAction(&m_BossSkilldownstroke);
+	if (!isChanged) return;
 	m_CurrAction->Init();
+	m_CurrActionID = BOSS_DOWNSTORK.ID;
 	static_cast<Monster*>(m_pOwner)->SetAnimationState(BOSS_DOWNSTORK.ID);
 	static_cast<Monster*>(m_pOwner)->SetisAttacking(true); 
 }
  
 void BossMonsterActionMgr::ChangeBossStateToTailAttack()
-{
-	ChangeAction(&m_BossSkIllTailAttack);
+{ 
+	bool isChanged = ChangeAction(&m_BossSkIllTailAttack);
+	if (!isChanged) return;
 	m_CurrAction->Init();
+	m_CurrActionID = BOSS_TAILATTACK.ID;
 	static_cast<Monster*>(m_pOwner)->SetAnimationState(BOSS_TAILATTACK.ID);
 	static_cast<Monster*>(m_pOwner)->SetisAttacking(true); 
 }
  
 void BossMonsterActionMgr::ChangeBossStateToRush()
-{
-	ChangeAction(&m_BossSkIlldash);
+{ 
+	bool isChanged = ChangeAction(&m_BossSkIlldash);
+	if (!isChanged) return;
 	m_CurrAction->Init();
+	m_CurrActionID = BOSS_RUSH.ID;
 	static_cast<Monster*>(m_pOwner)->SetAnimationState(BOSS_RUSH.ID);
 	static_cast<Monster*>(m_pOwner)->SetisAttacking(true);	 
 }
 
 void BossMonsterActionMgr::ChangeBossStateToStone()
-{
-	ChangeAction(&m_BossStone);
+{ 
+	bool isChanged = ChangeAction(&m_BossStone);
+	if (!isChanged) return;
 	m_CurrAction->Init();
+	m_CurrActionID = BOSS_STONE.ID;
 	static_cast<Monster*>(m_pOwner)->SetAnimationState(BOSS_STONE.ID); 
 	static_cast<Monster*>(m_pOwner)->SetisAttacking(false);
 }
 
 void BossMonsterActionMgr::ChangeBossStateToDead()
-{
-	ChangeAction(&m_BossDead);
+{ 
+	bool isChanged = ChangeAction(&m_BossDead);
+	if (!isChanged) return;
 	m_CurrAction->Init();
+	m_CurrActionID = BOSS_DEAD.ID;
 	static_cast<Monster*>(m_pOwner)->SetAnimationState(BOSS_DEAD.ID);
 }
 
 void BossMonsterActionMgr::ChangeBossStateToBuf()
-{
-	ChangeAction(&m_BossBuf);
+{ 
+	bool isChanged = ChangeAction(&m_BossBuf);
+	if (!isChanged) return;
 	m_CurrAction->Init();
+	m_CurrActionID = BOSS_BUF.ID;
 	static_cast<Monster*>(m_pOwner)->SetAnimationState(BOSS_BUF.ID);
 }

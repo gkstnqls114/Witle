@@ -286,10 +286,10 @@ void Monster::RenderHpStatus(ID3D12GraphicsCommandList * pd3dCommandList, bool i
 
 void Monster::SetTrackAnimationSet()
 {
-	if (m_CurrAnimation != m_PrevAnimation)
+	if (m_MonsterMovement->GetMonsterActionMgr()->isDifferAction())
 	{
-		m_pLoadObject->SetTrackAnimationSet(0, m_CurrAnimation);
-		m_PrevAnimation = m_CurrAnimation;
+		m_pLoadObject->SetTrackAnimationSet(0, m_MonsterMovement->GetMonsterActionMgr()->GetCurrActionID());
+		m_MonsterMovement->GetMonsterActionMgr()->SetUpPrevActionID();
 	}
 }
 
@@ -316,7 +316,6 @@ void Monster::SetVelocity(const XMFLOAT3 & velocity)
 }
 
 void Monster::SetAnimationState(int state)
-{
-	m_CurrAnimation = state;
-	m_pLoadObject->SetTrackAnimationSet(0, m_CurrAnimation);
+{ 
+	m_pLoadObject->SetTrackAnimationSet(0, state);
 }
