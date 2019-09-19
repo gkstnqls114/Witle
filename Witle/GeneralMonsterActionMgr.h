@@ -45,7 +45,7 @@ public:
 		m_HitAction(pOwner),
 		m_AttackAction(pOwner)
 	{
-		m_CurrMonsterAction = &m_IdleAction;
+		m_CurrAction = &m_IdleAction;
 	};
 	virtual ~GeneralMonsterActionMgr() {};
 	 
@@ -56,13 +56,13 @@ public:
 
 	// State Check //////////////////////////////////////
 
-	bool isIdle() const { return (m_CurrMonsterAction == &m_IdleAction); }
-	bool isMove() const { return (m_CurrMonsterAction == &m_MoveAction); }
-	bool isChase() const { return (m_CurrMonsterAction == &m_ChaseAction); }
-	bool isSearch() const { return (m_CurrMonsterAction == &m_SearchAction); }
-	bool isDead() const { return (m_CurrMonsterAction == &m_DeadAction); }
-	bool isHit() const { return (m_CurrMonsterAction == &m_HitAction); }
-	bool isAttack() const { return (m_CurrMonsterAction == &m_AttackAction); }
+	bool isIdle() const { return (m_CurrAction == &m_IdleAction); }
+	bool isMove() const { return (m_CurrAction == &m_MoveAction); }
+	bool isChase() const { return (m_CurrAction == &m_ChaseAction); }
+	bool isSearch() const { return (m_CurrAction == &m_SearchAction); }
+	bool isDead() const { return (m_CurrAction == &m_DeadAction); }
+	bool isHit() const { return (m_CurrAction == &m_HitAction); }
+	bool isAttack() const { return (m_CurrAction == &m_AttackAction); }
 	
 	// State Check //////////////////////////////////////
 

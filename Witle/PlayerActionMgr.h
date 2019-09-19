@@ -22,7 +22,7 @@ class PlayerActionMgr
 	: public ActionMgr
 { 
 	// 이 둘의 ID는 서로 반드시 달라야한다.
-	int m_PrevActionID{ -1 }; // 이전에 사용했던 애니메이션 아이디
+	int m_BeforeActionID{ -1 }; // 이전에 사용했던 애니메이션 아이디
 	int m_CurrActionID{ 0 }; // 현재 사용하는 애니메이션 아이디
 
 	PlayerIdleAction           m_IdleAction;
@@ -65,17 +65,17 @@ public:
 
 	void Init();
 
-	bool Is_IdleAction() const { return (m_CurrMonsterAction == &m_IdleAction); }
-	bool Is_RightWalkAction() const { return (m_CurrMonsterAction == &m_RightWalkAction); }
-	bool Is_LeftWalkAction() const { return (m_CurrMonsterAction == &m_LeftWalkAction); }
-	bool Is_ForwardWalkAction() const { return (m_CurrMonsterAction == &m_ForwardWalkAction); }
-	bool Is_BackwardWalkAction() const { return (m_CurrMonsterAction == &m_BackwardWalkAction); }
-	bool Is_StandardAttackAction() const { return (m_CurrMonsterAction == &m_StandardAttackAction); }
-	bool Is_BroomPrepareAction() const { return (m_CurrMonsterAction == &m_BroomPrepareAction); }
-	bool Is_BroomIdleAction() const { return (m_CurrMonsterAction == &m_BroomIdleAction); }
-	bool Is_BroomForwardAction() const { return (m_CurrMonsterAction == &m_BroomForwardAction); }
-	bool Is_DeadAction() const { return (m_CurrMonsterAction == &m_DeadAction); }
-	bool Is_HitAction() const { return (m_CurrMonsterAction == &m_HitAction); }
+	bool Is_IdleAction() const { return (m_CurrAction == &m_IdleAction); }
+	bool Is_RightWalkAction() const { return (m_CurrAction == &m_RightWalkAction); }
+	bool Is_LeftWalkAction() const { return (m_CurrAction == &m_LeftWalkAction); }
+	bool Is_ForwardWalkAction() const { return (m_CurrAction == &m_ForwardWalkAction); }
+	bool Is_BackwardWalkAction() const { return (m_CurrAction == &m_BackwardWalkAction); }
+	bool Is_StandardAttackAction() const { return (m_CurrAction == &m_StandardAttackAction); }
+	bool Is_BroomPrepareAction() const { return (m_CurrAction == &m_BroomPrepareAction); }
+	bool Is_BroomIdleAction() const { return (m_CurrAction == &m_BroomIdleAction); }
+	bool Is_BroomForwardAction() const { return (m_CurrAction == &m_BroomForwardAction); }
+	bool Is_DeadAction() const { return (m_CurrAction == &m_DeadAction); }
+	bool Is_HitAction() const { return (m_CurrAction == &m_HitAction); }
 
 	void ChangeActionToIdle();
 	void ChangeActionToRightWalk();
@@ -90,14 +90,14 @@ public:
 	void ChangeActionToHit(); 
 	 
 	int GetCurrActionID() const { return m_CurrActionID; }
-	int GetPrevActionID() const { return m_PrevActionID; }
+	int GetPrevActionID() const { return m_BeforeActionID; }
 
 	// 이전과 현재의 ID 상태가 달라졌는지 알아낸다. 만약 다르다면 true
-	bool isDifferAction() const { return m_PrevActionID != m_CurrActionID; }
+	bool isDifferAction() const { return m_BeforeActionID != m_CurrActionID; }
 
-	// m_PrevActionID 를 m_CurrActionID로 설정하는 함수
+	// m_BeforeActionID 를 m_CurrActionID로 설정하는 함수
 	void SetUpPrevActionID() 
 	{
-		m_PrevActionID = m_CurrActionID;
+		m_BeforeActionID = m_CurrActionID;
 	}
 };

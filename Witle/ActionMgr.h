@@ -18,10 +18,10 @@ class ActionMgr
 {
 protected:
 	// 현재 사용하고 있는 액션
-	Action*  m_CurrMonsterAction{ nullptr };
+	Action*  m_CurrAction{ nullptr };
 
 	// 이전에 사용했던 액션
-	Action*  m_BeforeMonsterAction{ nullptr };
+	Action*  m_BeforeAction{ nullptr };
 	 
 public:
 	virtual void UpdateState(float fElpasedTime) = 0;
