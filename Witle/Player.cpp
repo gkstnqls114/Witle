@@ -467,7 +467,7 @@ void Player::ProcessInput(float fTimeElapsed)
 	if (m_pPlayerHPStatus->GetGuage() <= 0 && isDead == false)
 	{
 		isDead = true;
-		m_PlayerActionMgr->Is_DeadAction();
+		m_PlayerActionMgr->ChangeActionToDead();
 		return;
 	}
 
@@ -481,7 +481,7 @@ void Player::ProcessInput(float fTimeElapsed)
 		}
 		else
 		{
-			m_PlayerActionMgr->Is_IdleAction();
+			m_PlayerActionMgr->ChangeActionToIdle();
 			hittime = 0.f;
 			m_isAttacking = false;
 			isBrooming = false;
