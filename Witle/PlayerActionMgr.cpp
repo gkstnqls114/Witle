@@ -17,8 +17,8 @@ void PlayerActionMgr::UpdateState(float fElpasedTime)
 
 void PlayerActionMgr::Init()
 {
-	m_PrevActionID = -1 ; // 현재 사용하는 애니메이션
-	m_CurrActionID = 0 ; // 현재 사용하는 애니메이션
+	m_PrevActionID = -1 ;
+	m_CurrActionID = 0 ;
 	ChangeActionToIdle();
 }
 
