@@ -5,16 +5,16 @@ class Camera;
 class CLoadedModelInfo;
 class LoadObject;
 class MyBOBox;
-class MonsterStatus;
-class MonsterMovement;
-class Texture;
+class RecognitionRange;
 class MyDescriptorHeap;
-
+class Texture;
 class LineMesh;
 class UI3DImage;
-
-class RecognitionRange;
 class MyRectangle;
+
+class MonsterStatus;
+class MonsterMovement;
+class ActionMgr;
 
 enum MONSTER_STATE
 {
@@ -39,9 +39,11 @@ private:
 
 public:
 	virtual void Update(float fElapsedTime);
-	virtual void UpdateState(float fElapsedTime) = 0;
+	virtual void UpdateState(float fElapsedTime);
 
-protected:
+protected: 
+	ActionMgr*   m_MonsterActionMgr{ nullptr };
+
 	UI3DImage*			m_MonsterHPUI{ nullptr };
 	RecognitionRange*   m_RecognitionRange{ nullptr };
 	MonsterMovement*    m_MonsterMovement{ nullptr };
@@ -71,10 +73,6 @@ protected:
 	// Spawn Point 주위로 Range를 확인하기 위해 임시로 설정
 	LineMesh* m_pDebugSpawnMesh{ nullptr };
 #endif
-
-//private:
-//	int m_CurrAnimation{ 0 }; // 현재 사용하는 애니메이션
-//	int m_PrevAnimation{ 0 }; // 현재 사용하는 애니메이션
 
 protected:
 	virtual void ReleaseMembers() override;
@@ -113,7 +111,7 @@ public:
 
 	//// Get /////////////////// 
 	virtual MyBOBox* GetBOBox() const { return m_pMyBOBox; }
-
+	ActionMgr* GetActionMgr() const { return m_MonsterActionMgr; }
 	MonsterMovement* GetMovement() { return m_MonsterMovement; }
 	MonsterStatus* GetStatus() { return m_MonsterHPStatus; }
 	RecognitionRange* GetRecognitionRange() const { return m_RecognitionRange; };

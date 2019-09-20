@@ -35,9 +35,11 @@ CreepyMonster::CreepyMonster(const std::string & entityID, const XMFLOAT3& Spawn
 	m_RecognitionRange = new RecognitionRange(this, 1000.f, 2.f);
 	m_RecognitionRange->CreateDebugMesh(pd3dDevice, pd3dCommandList);
 
-	m_MonsterMovement = new MonsterMovement(this, 3.f, 7.f);
+	m_MonsterMovement = new MonsterMovement(this);
 	m_MonsterMovement->m_fDistance = 100;
 	 
+	m_MonsterActionMgr = new GeneralMonsterActionMgr(this, 3.f, 7.f);
+
 	m_pTexture = TextureStorage::GetInstance()->GetTexture(CREEPYMONSTER);
 
 	ANIMATION_INFO infos[CREEPYMONSTER_ANIMATIONE];
@@ -61,14 +63,13 @@ CreepyMonster::CreepyMonster(const std::string & entityID, const XMFLOAT3& Spawn
 	XMFLOAT3 extents{ 50.f, 50.f, 50.f };
 	m_pMyBOBox = new MyBOBox(this, pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 0.F, 0.F }, extents);
 
-
 	if (rand() % 2)
 	{
-		static_cast<GeneralMonsterActionMgr*>(m_MonsterMovement->GetMonsterActionMgr())->ChangeStateToMove();
+		static_cast<GeneralMonsterActionMgr*>(m_MonsterActionMgr)->ChangeStateToMove();
 	}
 	else
 	{
-		static_cast<GeneralMonsterActionMgr*>(m_MonsterMovement->GetMonsterActionMgr())->ChangeStateToIdle();
+		static_cast<GeneralMonsterActionMgr*>(m_MonsterActionMgr)->ChangeStateToIdle();
 	}
 }
 
@@ -96,14 +97,7 @@ void CreepyMonster::Update(float fElapsedTime)
 	Move(Vector3::ScalarProduct(m_MonsterMovement->m_xmf3Velocity, fElapsedTime, false));
 
 }
-
-void CreepyMonster::UpdateState(float fElapsedTime)
-{
-	m_MonsterMovement->UpdateState(fElapsedTime);
-
-	m_MonsterMovement->UpdateVelocity(fElapsedTime); // State 상태에 따라 Velocity를 갱신(Set)한다.
-}
-
+ 
 void CreepyMonster::Animate(float fElapsedTime)
 {
 	Monster::Animate(fElapsedTime);

@@ -17,10 +17,7 @@ public:
 	virtual void Init() override;
 
 	virtual void Update(float) override;
-
-	// 현재 수행할 액션(가속도관리하는클래스)를 관리합니다.
-	virtual void UpdateState(float fElapsedTime) override;
-
+	 
 	virtual void Animate(float fElapsedTime) override;
 
 };

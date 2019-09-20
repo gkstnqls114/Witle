@@ -33,8 +33,10 @@ Mushroom::Mushroom(const std::string & entityID, const XMFLOAT3& SpawnPoint,
 	m_RecognitionRange = new RecognitionRange(this, 500.f, 2.f);
 	m_RecognitionRange->CreateDebugMesh(pd3dDevice, pd3dCommandList);
 
-	m_MonsterMovement = new MonsterMovement(this, 1.f, 5.f);
+	m_MonsterMovement = new MonsterMovement(this);
 	m_MonsterMovement->m_fDistance = 100;
+
+	m_MonsterActionMgr = new GeneralMonsterActionMgr(this, 1.f, 5.f);
 
 	m_pTexture = TextureStorage::GetInstance()->GetTexture(MUSHROOM);
 
@@ -62,11 +64,11 @@ Mushroom::Mushroom(const std::string & entityID, const XMFLOAT3& SpawnPoint,
 
 	if (rand() % 2)
 	{
-		static_cast<GeneralMonsterActionMgr*>(m_MonsterMovement->GetMonsterActionMgr())->ChangeStateToMove();
+		static_cast<GeneralMonsterActionMgr*>(m_MonsterActionMgr)->ChangeStateToMove();
 	}
 	else
 	{
-		static_cast<GeneralMonsterActionMgr*>(m_MonsterMovement->GetMonsterActionMgr())->ChangeStateToIdle();
+		static_cast<GeneralMonsterActionMgr*>(m_MonsterActionMgr)->ChangeStateToIdle();
 	}
 }
 
@@ -94,14 +96,7 @@ void Mushroom::Update(float fElapsedTime)
 	Move(Vector3::ScalarProduct(m_MonsterMovement->m_xmf3Velocity, fElapsedTime, false));
 
 }
-
-void Mushroom::UpdateState(float fElapsedTime)
-{
-	m_MonsterMovement->UpdateState(fElapsedTime);
-
-	m_MonsterMovement->UpdateVelocity(fElapsedTime); // State 상태에 따라 Velocity를 갱신(Set)한다.
-}
-
+ 
 void Mushroom::Animate(float fElapsedTime)
 {
 	Monster::Animate(fElapsedTime);

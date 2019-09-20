@@ -10,15 +10,9 @@
 
 #include "SoundManager.h"
 
-
-void MonsterMovement::UpdateVelocity(float fTimeElapsed)
-{
-	m_MonsterActionMgr->UpdateVelocity(fTimeElapsed, this);
-}
-
+ 
 void MonsterMovement::ReleaseObjects()
-{
-	if (m_MonsterActionMgr)        delete m_MonsterActionMgr;
+{ 
 }
 
 void MonsterMovement::MoveVelocity(const XMFLOAT3 & xmf3Shift)
@@ -26,18 +20,10 @@ void MonsterMovement::MoveVelocity(const XMFLOAT3 & xmf3Shift)
 	m_xmf3Velocity = Vector3::Add(m_xmf3Velocity, xmf3Shift);
 }
 
-MonsterMovement::MonsterMovement(GameObject * pOwner, float idleTime, float moveTime, bool isBoss)
+MonsterMovement::MonsterMovement(GameObject * pOwner)
 	:Movement(pOwner)
 {
-	if (!isBoss)
-	{
-		m_MonsterActionMgr = new GeneralMonsterActionMgr(pOwner, idleTime, moveTime);
 
-	}
-	else
-	{
-		m_MonsterActionMgr = new BossMonsterActionMgr(pOwner, idleTime, moveTime);
-	}
 }
 
 MonsterMovement::~MonsterMovement()
@@ -49,12 +35,7 @@ void MonsterMovement::Update(float fTimeElapsed)
 {
 	Movement::Update(fTimeElapsed);
 }
-
-void MonsterMovement::UpdateState(float fElpasedTime)
-{
-	m_MonsterActionMgr->UpdateState(fElpasedTime);
-}
-
+ 
 void MonsterMovement::ReduceVelocity(float fTimeElapsed)
 {
 	if (Vector3::Length(m_xmf3Velocity) <= 0.f)

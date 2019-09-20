@@ -1132,7 +1132,7 @@ void GameScene::LastUpdate(float fElapsedTime)
 		&& !m_Dragon->GetisFinishAttack())
 	{ 
 		m_Dragon->FinishAttack();
-		BossMonsterActionMgr* actionmgr = static_cast<BossMonsterActionMgr*>(m_Dragon->GetMovement()->GetMonsterActionMgr());
+		BossMonsterActionMgr* actionmgr = static_cast<BossMonsterActionMgr*>(m_Dragon->GetActionMgr());
 
 		XMFLOAT3 effectpos = m_pPlayer->GetBOBox()->GetBOBox().Center;
 		 

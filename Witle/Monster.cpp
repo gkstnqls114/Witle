@@ -85,7 +85,7 @@ Monster::Monster(const std::string & entityID, float spawnRange, const XMFLOAT3&
 		30.f,
 		IMAGE_RED
 	);
-
+	 
 	// 디버그용
 #ifdef _DEBUG 
 	m_pDebugObject = new EmptyGameObject("SpawnPosition");
@@ -110,17 +110,17 @@ void Monster::Init(bool isBoss)
 
 	if (isBoss)
 	{
-		static_cast<BossMonsterActionMgr*>(m_MonsterMovement->GetMonsterActionMgr())->ChangeBossStateToStone();
+		static_cast<BossMonsterActionMgr*>(m_MonsterActionMgr)->ChangeBossStateToStone();
 	}
 	else
 	{
 		if (rand() % 2)
 		{
-			static_cast<GeneralMonsterActionMgr*>(m_MonsterMovement->GetMonsterActionMgr())->ChangeStateToMove();
+			static_cast<GeneralMonsterActionMgr*>(m_MonsterActionMgr)->ChangeStateToMove();
 		}
 		else
 		{
-		static_cast<GeneralMonsterActionMgr*>(m_MonsterMovement->GetMonsterActionMgr())->ChangeStateToIdle();
+		static_cast<GeneralMonsterActionMgr*>(m_MonsterActionMgr)->ChangeStateToIdle();
 		}
 	}
 
@@ -154,6 +154,12 @@ void Monster::Update(float fElapsedTime)
 			m_isFinishAttack = false;
 		}
 	}
+}
+
+void Monster::UpdateState(float fElapsedTime)
+{
+	m_MonsterActionMgr->UpdateState(fElapsedTime);
+	m_MonsterActionMgr->UpdateVelocity(fElapsedTime, m_MonsterMovement); // State 상태에 따라 Velocity를 설정한다.
 }
 
 void Monster::ReleaseMembers()
@@ -232,7 +238,7 @@ void Monster::ReleaseMemberUploadBuffers()
 
 void Monster::SubstractHP(int sub)
 {
-	static_cast<GeneralMonsterActionMgr*>(m_MonsterMovement->GetMonsterActionMgr())->ChangeStateToHit();
+	static_cast<GeneralMonsterActionMgr*>(m_MonsterActionMgr)->ChangeStateToHit();
  
 	m_MonsterHPStatus->SubstractHP(sub); 
 }
@@ -286,10 +292,10 @@ void Monster::RenderHpStatus(ID3D12GraphicsCommandList * pd3dCommandList, bool i
 
 void Monster::SetTrackAnimationSet()
 {
-	if (m_MonsterMovement->GetMonsterActionMgr()->isDifferAction())
+	if (m_MonsterActionMgr->isDifferAction())
 	{
-		m_pLoadObject->SetTrackAnimationSet(0, m_MonsterMovement->GetMonsterActionMgr()->GetCurrActionID());
-		m_MonsterMovement->GetMonsterActionMgr()->SetUpPrevActionID();
+		m_pLoadObject->SetTrackAnimationSet(0, m_MonsterActionMgr->GetCurrActionID());
+		m_MonsterActionMgr->SetUpPrevActionID();
 	}
 }
 

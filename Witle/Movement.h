@@ -1,8 +1,8 @@
 #pragma once
 #include "ComponentBase.h"
 
-// 플레이어에 이동에 필요한 가속도, 회전량에 대한 설정
-// 이동에 필요한 가속도, 중력가속도, 최대
+// 게임 오브젝트 이동에 필요한 가속도, 회전량에 대한 변수값을 지니고 있습니다.
+// 이동에 필요한 가속도, 중력가속도, 최대 가속도, 마찰력 등을 설정합니다.
 class Movement
 	: public ComponentBase
 {

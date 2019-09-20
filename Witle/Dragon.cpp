@@ -63,7 +63,7 @@ void Dragon::ReleaseMemberUploadBuffers()
 
 float Dragon::GetFinishAttackUnlockTime()
 {
-	BossMonsterActionMgr* actionmgr = static_cast<BossMonsterActionMgr*>(GetMovement()->GetMonsterActionMgr());
+	BossMonsterActionMgr* actionmgr = static_cast<BossMonsterActionMgr*>(m_MonsterActionMgr);
 
 	if (actionmgr->Is_BossSkillBreath())
 	{
@@ -92,9 +92,11 @@ Dragon::Dragon(const std::string & entityID, const XMFLOAT3& SpawnPoint,
 	m_RecognitionRange = new RecognitionRange(this, 2000.f, 2.f);
 	m_RecognitionRange->CreateDebugMesh(pd3dDevice, pd3dCommandList);
 
-	m_MonsterMovement = new MonsterMovement(this, 1, 1, true);
+	m_MonsterMovement = new MonsterMovement(this);
 	m_MonsterMovement->m_fDistance = 150;
-	 
+
+	m_MonsterActionMgr = new BossMonsterActionMgr(this, 1, 1);
+
 	m_pTexture = new Texture(ENUM_SCENE::SCENE_GAME, ROOTPARAMETER_INDEX(ROOTPARAMETER_TEXTURE), false, 1, RESOURCE_TEXTURE2D);
 	m_pStoneTexture = new Texture(ENUM_SCENE::SCENE_GAME, ROOTPARAMETER_INDEX(ROOTPARAMETER_TEXTURE), false, 1, RESOURCE_TEXTURE2D);
 	 
@@ -160,10 +162,10 @@ void Dragon::Rotate(float x, float y, float z)
 
 void Dragon::Update(float fElapsedTime)
 {
-	bool isDead = static_cast<BossMonsterActionMgr*>(m_MonsterMovement->GetMonsterActionMgr())->Is_BossDead();
+	bool isDead = static_cast<BossMonsterActionMgr*>(m_MonsterActionMgr)->Is_BossDead();
 	if (isDead && m_pLoadObject->IsTrackAnimationSetFinish(0, BOSS_DEAD.ID))
 	{ 
-		static_cast<BossMonsterActionMgr*>(m_MonsterMovement->GetMonsterActionMgr())->ChangeBossStateToStone();
+		static_cast<BossMonsterActionMgr*>(m_MonsterActionMgr)->ChangeBossStateToStone();
 		SceneMgr::GetInstacne()->ChangeSceneToWin();
 		return;
 	}
@@ -195,9 +197,8 @@ void Dragon::UpdateState(float fElapsedTime)
 {
 	if (m_isStone) return;
 
-	m_MonsterMovement->UpdateState(fElapsedTime);
-
-	m_MonsterMovement->UpdateVelocity(fElapsedTime); // State 상태에 따라 Velocity를 갱신(Set)한다.
+	m_MonsterActionMgr->UpdateState(fElapsedTime);
+	m_MonsterActionMgr->UpdateVelocity(fElapsedTime, m_MonsterMovement); // State 상태에 따라 Velocity를 설정한다.
 }
 
 void Dragon::Animate(float fElapsedTime)
@@ -220,9 +221,9 @@ void Dragon::Animate(float fElapsedTime)
 
 MyBOBox * Dragon::GetBOBox() const
 {
-	if (static_cast<BossMonsterActionMgr*>(m_MonsterMovement->GetMonsterActionMgr())->Is_BossSkillTailAttack() 
-		|| static_cast<BossMonsterActionMgr*>(m_MonsterMovement->GetMonsterActionMgr())->Is_BossSkillDownStroke()
-		|| static_cast<BossMonsterActionMgr*>(m_MonsterMovement->GetMonsterActionMgr())->Is_BossSkillRush()
+	if (static_cast<BossMonsterActionMgr*>(m_MonsterActionMgr)->Is_BossSkillTailAttack() 
+		|| static_cast<BossMonsterActionMgr*>(m_MonsterActionMgr)->Is_BossSkillDownStroke()
+		|| static_cast<BossMonsterActionMgr*>(m_MonsterActionMgr)->Is_BossSkillRush()
 		)
 	{
 		return m_BOBoxForTailAttack;
@@ -233,11 +234,11 @@ MyBOBox * Dragon::GetBOBox() const
 void Dragon::IsStone()
 {
 	m_isStone = true;
-	static_cast<BossMonsterActionMgr*>(m_MonsterMovement->GetMonsterActionMgr())->ChangeBossStateToStone();
+	static_cast<BossMonsterActionMgr*>(m_MonsterActionMgr)->ChangeBossStateToStone();
 }
 
 void Dragon::IsNotStone()
 {
 	m_isStone = false;
-	static_cast<BossMonsterActionMgr*>(m_MonsterMovement->GetMonsterActionMgr())->ChangeBossStateToIdle();
+	static_cast<BossMonsterActionMgr*>(m_MonsterActionMgr)->ChangeBossStateToIdle();
 }

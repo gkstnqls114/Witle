@@ -33,9 +33,11 @@ SpaceCat::SpaceCat(const std::string & entityID, const XMFLOAT3& SpawnPoint,
 	m_RecognitionRange = new RecognitionRange(this, 500.f, 2.f);
 	m_RecognitionRange->CreateDebugMesh(pd3dDevice, pd3dCommandList);
 
-	m_MonsterMovement = new MonsterMovement(this, 3.f, 10.f);
+	m_MonsterMovement = new MonsterMovement(this);
 	m_MonsterMovement->m_fDistance = 100;
-	
+
+	m_MonsterActionMgr = new GeneralMonsterActionMgr(this, 3.f, 10.f);
+
 	int val = rand() % 3;
 	if (val == 0)
 	{
@@ -60,9 +62,7 @@ SpaceCat::SpaceCat(const std::string & entityID, const XMFLOAT3& SpawnPoint,
 	m_MonsterModel = LoadObject::LoadGeometryAndAnimationFromFile_forMonster(
 		pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/SpaceCat.bin", NULL,
 		SPACECAT_ANIMATIONE, infos);
-
-	// m_MonsterModel = ModelStorage::GetInstance()->GetModelInfo(SPACECAT);
-
+	 
 	m_pLoadObject = m_MonsterModel->m_pModelRootObject;
 	m_pLoadObject->m_pSkinnedAnimationController = new CAnimationController(pd3dDevice, pd3dCommandList, 1, m_MonsterModel);
 	m_pLoadObject->m_pSkinnedAnimationController->SetTrackAnimationSet(0, 0);
@@ -74,11 +74,11 @@ SpaceCat::SpaceCat(const std::string & entityID, const XMFLOAT3& SpawnPoint,
 
 	if (rand() % 2)
 	{
-		static_cast<GeneralMonsterActionMgr*>(m_MonsterMovement->GetMonsterActionMgr())->ChangeStateToMove();
+		static_cast<GeneralMonsterActionMgr*>(m_MonsterActionMgr)->ChangeStateToMove();
 	}
 	else
 	{
-		static_cast<GeneralMonsterActionMgr*>(m_MonsterMovement->GetMonsterActionMgr())->ChangeStateToIdle();
+		static_cast<GeneralMonsterActionMgr*>(m_MonsterActionMgr)->ChangeStateToIdle();
 	}
 }
 
@@ -105,14 +105,7 @@ void SpaceCat::Update(float fElapsedTime)
 	Move(Vector3::ScalarProduct(m_MonsterMovement->m_xmf3Velocity, fElapsedTime, false));
 
 }
-
-void SpaceCat::UpdateState(float fElapsedTime)
-{
-	m_MonsterMovement->UpdateState(fElapsedTime);
-
-	m_MonsterMovement->UpdateVelocity(fElapsedTime); // State 상태에 따라 Velocity를 갱신(Set)한다.
-}
-
+ 
 void SpaceCat::Animate(float fElapsedTime)
 {
 	Monster::Animate(fElapsedTime);
