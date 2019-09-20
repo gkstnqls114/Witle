@@ -16,7 +16,7 @@ public:
 	virtual void UpdateState(float fElpasedTime, BossMonsterActionMgr* actionMgr) override;
 
 public:
-	BossStone(GameObject* pOwner ) : BossMonsterAction(pOwner)  { };
+	BossStone(GameObject* pOwner ) : BossMonsterAction(pOwner, BOSSMONSTER_ACTIONID_STONE, BOSSMONSTER_ANIMATIONID_STONE)  { };
 	virtual ~BossStone() {};
 
 };

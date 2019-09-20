@@ -9,6 +9,9 @@ class PlayerAction
 	: public Action
 {
 public:
+	const ENUM_PLAYER_ACTIONID m_ActionID{ PLAYER_ACTIONID_ERROR };
+
+public:
 	// 초기화 함수.
 	virtual void Init() = 0;
 
@@ -23,7 +26,8 @@ public:
 	virtual void ReleaseUploadBuffers() override {};
 
 public:
-	PlayerAction(GameObject* pOwner) : Action(pOwner) {};
+	PlayerAction(GameObject* pOwner, ENUM_PLAYER_ACTIONID actionID, ENUM_ANIMATIONID animeID)
+		: Action(pOwner, animeID), m_ActionID(actionID) {};
 	virtual ~PlayerAction() {};
 
 };

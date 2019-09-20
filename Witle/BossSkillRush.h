@@ -19,6 +19,6 @@ public:
 	virtual void ReleaseUploadBuffers() override {};
 
 public:
-	BossSkillRush(GameObject* pOwner) : BossMonsterAction(pOwner) {};
+	BossSkillRush(GameObject* pOwner) : BossMonsterAction(pOwner, BOSSMONSTER_ACTIONID_RUSH, BOSSMONSTER_ANIMATIONID_RUSH) {};
 	virtual ~BossSkillRush() {};
 };

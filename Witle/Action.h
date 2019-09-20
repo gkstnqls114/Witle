@@ -8,6 +8,9 @@ class Action
 	: public ComponentBase
 {
 public:
+	const ENUM_ANIMATIONID m_AnimationID{ ANIMATIONID_ERROR };
+
+public:
 	// 초기화 함수.
 	virtual void Init() = 0;
 
@@ -20,6 +23,7 @@ public:
 	virtual void ReleaseUploadBuffers() override {};
 
 public:
-	Action(GameObject* pOwner) : ComponentBase(pOwner) {};
+	explicit Action(GameObject* pOwner, ENUM_ANIMATIONID animeID) :
+		ComponentBase(pOwner), m_AnimationID(animeID) {};
 	virtual ~Action() {};
 };

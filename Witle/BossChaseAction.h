@@ -32,6 +32,6 @@ public:
 	virtual void ReleaseUploadBuffers() override {};
 
 public:
-	BossChaseAction(GameObject* pOwner) : BossMonsterAction(pOwner) {};
+	BossChaseAction(GameObject* pOwner) : BossMonsterAction(pOwner, BOSSMONSTER_ACTIONID_CHASE, BOSSMONSTER_ANIMATIONID_CHASE) {};
 	virtual ~BossChaseAction() {};
 };

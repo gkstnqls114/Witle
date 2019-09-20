@@ -19,7 +19,7 @@ public:
 	virtual void ReleaseUploadBuffers() override {};
 
 public:
-	SearchAction(GameObject* pOwner) : GeneralMonsterAction(pOwner) {};
+	SearchAction(GameObject* pOwner) : GeneralMonsterAction(pOwner, GENERALMONSTER_ACTIONID_SEARCH, GENERALMONSTER_ANIMATIONID_MOVE) {};
 	virtual ~SearchAction() {};
 
 };

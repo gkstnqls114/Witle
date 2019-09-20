@@ -5,7 +5,7 @@
 #pragma once
 
 #include "CMesh.h" 
-#pragma warning(disable:4996);
+#pragma warning(disable:4996)
 
 #define DIR_FORWARD					0x01
 #define DIR_BACKWARD				0x02

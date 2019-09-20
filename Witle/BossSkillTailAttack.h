@@ -19,6 +19,6 @@ public:
 	virtual void ReleaseUploadBuffers() override {};
 
 public:
-	BossSkillTailAttack(GameObject* pOwner) : BossMonsterAction(pOwner) {};
+	BossSkillTailAttack(GameObject* pOwner) : BossMonsterAction(pOwner, BOSSMONSTER_ACTIONID_TAILATTACK, BOSSMONSTER_ANIMATIONID_TAILATTACK) {};
 	virtual ~BossSkillTailAttack() {};
 };

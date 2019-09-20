@@ -19,6 +19,6 @@ public:
 	virtual void ReleaseUploadBuffers() override {};
 
 public:
-	AttackAction(GameObject* pOwner) : GeneralMonsterAction( pOwner) {};
+	AttackAction(GameObject* pOwner) : GeneralMonsterAction(pOwner, GENERALMONSTER_ACTIONID_ATTACK, GENERALMONSTER_ANIMATIONID_ATTACK) {};
 	virtual ~AttackAction() {};
 };

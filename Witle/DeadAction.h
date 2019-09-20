@@ -19,6 +19,6 @@ public:
 	virtual void ReleaseUploadBuffers() override {};
 
 public:
-	DeadAction(GameObject* pOwner) : GeneralMonsterAction( pOwner) {};
+	DeadAction(GameObject* pOwner) : GeneralMonsterAction(pOwner, GENERALMONSTER_ACTIONID_DEAD, GENERALMONSTER_ANIMATIONID_DEAD) {};
 	virtual ~DeadAction() {}; 
 };

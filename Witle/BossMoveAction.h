@@ -23,7 +23,7 @@ public:
 	virtual void ReleaseUploadBuffers() override {};
 
 public:
-	BossMoveAction(GameObject* pOwner, float idleTime) : BossMonsterAction(pOwner), m_MoveTime(idleTime) { };
+	BossMoveAction(GameObject* pOwner, float idleTime) : BossMonsterAction(pOwner, BOSSMONSTER_ACTIONID_MOVE, BOSSMONSTER_ANIMATIONID_MOVE), m_MoveTime(idleTime) { };
 	virtual ~BossMoveAction() {};
 
 	void SetDirection(const XMFLOAT3& direction) { m_Direction = direction; }

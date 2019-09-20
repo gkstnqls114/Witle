@@ -15,7 +15,7 @@ public:
 	virtual void UpdateState(float fElpasedTime, BossMonsterActionMgr* actionMgr) override;
 
 public:
-	BossDead(GameObject* pOwner ) : BossMonsterAction(pOwner)  { };
+	BossDead(GameObject* pOwner ) : BossMonsterAction(pOwner, BOSSMONSTER_ACTIONID_DEAD, BOSSMONSTER_ANIMATIONID_DEAD)  { };
 	virtual ~BossDead() {};
 
 };

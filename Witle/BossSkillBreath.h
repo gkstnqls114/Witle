@@ -19,6 +19,6 @@ public:
 	virtual void ReleaseUploadBuffers() override {};
 
 public:
-	BossSkillBreath(GameObject* pOwner) : BossMonsterAction(pOwner) {};
+	BossSkillBreath(GameObject* pOwner) : BossMonsterAction(pOwner, BOSSMONSTER_ACTIONID_BREATH, BOSSMONSTER_ANIMATIONID_BREATH) {};
 	virtual ~BossSkillBreath() {};
 };

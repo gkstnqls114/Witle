@@ -17,7 +17,7 @@ public:
 	virtual void UpdateState(float fElpasedTime, GeneralMonsterActionMgr* actionMgr) override;
 
 public:
-	IdleAction(GameObject* pOwner, float idleTime) : GeneralMonsterAction(pOwner), m_IdleTime(idleTime) { };
+	IdleAction(GameObject* pOwner, float idleTime) : GeneralMonsterAction(pOwner, GENERALMONSTER_ACTIONID_IDLE, GENERALMONSTER_ANIMATIONID_IDLE), m_IdleTime(idleTime) { };
 	virtual ~IdleAction() {};
 
 };

@@ -19,6 +19,6 @@ public:
 	virtual void ReleaseUploadBuffers() override {};
 
 public:
-	BossSkillDownStroke(GameObject* pOwner) : BossMonsterAction(pOwner) {};
+	BossSkillDownStroke(GameObject* pOwner) : BossMonsterAction(pOwner, BOSSMONSTER_ACTIONID_DOWNSTROKE, BOSSMONSTER_ANIMATIONID_DOWNSTROKE) {};
 	virtual ~BossSkillDownStroke() {};
 };
