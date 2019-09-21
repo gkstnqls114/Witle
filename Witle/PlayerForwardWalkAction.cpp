@@ -12,13 +12,13 @@
 
 void PlayerForwardWalkAction::UpdateVelocity(float fElpasedTime, Movement * movement)
 {
-	SoundManager::GetInstance()->Stop(ENUM_SOUND::BOSS_MOVE_SOUND);
-	SoundManager::GetInstance()->Stop(ENUM_SOUND::BOSS_DAMAGE_SOUND);
-	SoundManager::GetInstance()->Stop(ENUM_SOUND::BOSS_DASH_SOUND);
-	SoundManager::GetInstance()->Stop(ENUM_SOUND::BOSS_TAILATTACK_SOUND);
-	SoundManager::GetInstance()->Stop(ENUM_SOUND::BOSS_BREATH_SOUND);
-	SoundManager::GetInstance()->Stop(ENUM_SOUND::BOSS_DEAD_SOUND);
-	SoundManager::GetInstance()->Stop(ENUM_SOUND::BOSS_DOWNSTROKE_SOUND);
+	//SoundManager::GetInstance()->Stop(ENUM_SOUND::BOSS_MOVE_SOUND);
+	//SoundManager::GetInstance()->Stop(ENUM_SOUND::BOSS_DAMAGE_SOUND);
+	//SoundManager::GetInstance()->Stop(ENUM_SOUND::BOSS_DASH_SOUND);
+	//SoundManager::GetInstance()->Stop(ENUM_SOUND::BOSS_TAILATTACK_SOUND);
+	//SoundManager::GetInstance()->Stop(ENUM_SOUND::BOSS_BREATH_SOUND);
+	//SoundManager::GetInstance()->Stop(ENUM_SOUND::BOSS_DEAD_SOUND);
+	//SoundManager::GetInstance()->Stop(ENUM_SOUND::BOSS_DOWNSTROKE_SOUND);
 
 	// 움직이지 않도록 고정
 	movement->m_xmf3Velocity = XMFLOAT3(0.f, 0.f, 0.f);
@@ -29,8 +29,7 @@ void PlayerForwardWalkAction::UpdateState(float fElpasedTime, PlayerActionMgr * 
 	Player* pMonsterOwner = static_cast<Player*>(m_pOwner);
 
 	bool isNearPlayer = PlayerManager::IsNearPlayer(m_pOwner->GetTransform().GetPosition(), 500);
-
-
+	 
 	//if (isNearPlayer)
 	//{
 	//	actionMgr->SetZeroTotalTime(); // 이거 왜 한거지.. ?

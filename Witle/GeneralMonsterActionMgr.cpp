@@ -46,7 +46,7 @@ void GeneralMonsterActionMgr::Init()
 }
 
 void GeneralMonsterActionMgr::ChangeStateBefore()
-{
+{ 
 	// 상태가 이전하고 다른 경우에만 서로 변경한다.
 	if (m_CurrAction != m_BeforeAction)
 	{

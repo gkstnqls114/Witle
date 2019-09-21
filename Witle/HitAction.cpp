@@ -9,8 +9,8 @@
 void HitAction::UpdateVelocity(float fElpasedTime, Movement * movement)
 {
 	// 사운드 ///////////////////////////////////////////////////////////
-	SoundManager::GetInstance()->Stop(ENUM_SOUND::MONSTER_MOVE_SOUND);
-	SoundManager::GetInstance()->Play(ENUM_SOUND::MONSTER_DAMAGE_SOUND);
+	// SoundManager::GetInstance()->Stop(ENUM_SOUND::MONSTER_MOVE_SOUND);
+	// SoundManager::GetInstance()->Play(ENUM_SOUND::MONSTER_DAMAGE_SOUND);
 	// 사운드 ///////////////////////////////////////////////////////////
 
 	movement->m_xmf3Velocity = XMFLOAT3(0.f, 0.f, 0.f);

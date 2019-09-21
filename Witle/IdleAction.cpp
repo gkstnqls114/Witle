@@ -12,7 +12,7 @@
 void IdleAction::UpdateVelocity(float fElpasedTime, Movement * movement)
 {
 	// 사운드 ///////////////////////////////////////////////////////////
-	SoundManager::GetInstance()->Stop(ENUM_SOUND::MONSTER_MOVE_SOUND);
+	// SoundManager::GetInstance()->Stop(ENUM_SOUND::MONSTER_MOVE_SOUND);
 	// 사운드 ///////////////////////////////////////////////////////////
 
 	// 움직이지 않도록 고정

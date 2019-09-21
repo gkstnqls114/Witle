@@ -10,7 +10,7 @@
 void ChaseAction::UpdateVelocity(float fElpasedTime, Movement * movement)
 {
 	// 사운드 ///////////////////////////////////////////////////////////
-	SoundManager::GetInstance()->Play(ENUM_SOUND::MONSTER_MOVE_SOUND);
+	// SoundManager::GetInstance()->Play(ENUM_SOUND::MONSTER_MOVE_SOUND);
 	// 사운드 ///////////////////////////////////////////////////////////
 
 	XMFLOAT3 toPlayer = Vector3::Normalize(
@@ -26,19 +26,20 @@ void ChaseAction::UpdateVelocity(float fElpasedTime, Movement * movement)
 	{
 		movement->m_fPitch = value;
 
-		for (int i = 0; i < 5; i++)
-		{
-			// pChannel[(int)ENUM_SOUND::MONSTER_MOVE_SOUND]->setVolume(i);
-		}
+		//for (int i = 0; i < 5; i++)
+		//{
+		//	// pChannel[(int)ENUM_SOUND::MONSTER_MOVE_SOUND]->setVolume(i);
+		//}
 	}
 	else
 	{
 		movement->m_fPitch = -value;
 
-		for (int i = 0; i < 5; i--)
-		{
-			// pChannel[(int)ENUM_SOUND::MONSTER_MOVE_SOUND]->setVolume(i);
-		}
+		// 해당 부분에서 -- 로 감소하기 때문에 int 값이 +로 넘어갈때까지 아무것도 못함
+		//for (int i = 0; i < 5; i--)
+		//{
+		//	// pChannel[(int)ENUM_SOUND::MONSTER_MOVE_SOUND]->setVolume(i);
+		//}
 	}
 }
 
