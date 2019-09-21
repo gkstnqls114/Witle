@@ -145,8 +145,7 @@ void GeneralMonsterActionMgr::ChangeStateToDead()
 	m_AfterAction->Init();
 
 	static_cast<Monster*>(m_pOwner)->SetAnimationID(m_DeadAction.m_AnimationID);
-	static_cast<Monster*>(m_pOwner)->SetisAttacking(false);
-	//SoundManager::GetInstance()->Stop(ENUM_SOUND::SPACE_MOVE);
+	static_cast<Monster*>(m_pOwner)->SetisAttacking(false); 
 }
 
 void GeneralMonsterActionMgr::ChangeStateToHit()

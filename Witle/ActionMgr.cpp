@@ -13,8 +13,7 @@
 
 bool ActionMgr::ChangeAction(Action * action)
 { 
-	if (!IsPossibleChangeAction(action)) return false;
-	m_BeforeAction = m_AfterAction;
+	if (!IsPossibleChangeAction(action)) return false; 
 	m_AfterAction = action;
 	return true;
 }

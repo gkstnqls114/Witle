@@ -38,8 +38,7 @@ void PlayerActionMgr::ChangeActionToIdle()
 	if (!isChanged) return;
 	m_AfterAction->Init(); 
 
-	static_cast<Player*>(m_pOwner)->SetAnimationID(m_IdleAction.m_AnimationID);
-	// static_cast<Player*>(m_pOwner)->SetisAttacking(false);
+	static_cast<Player*>(m_pOwner)->SetAnimationID(m_IdleAction.m_AnimationID); 
 }
 
 void PlayerActionMgr::ChangeActionToRightWalk()

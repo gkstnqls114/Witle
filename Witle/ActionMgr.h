@@ -58,6 +58,7 @@ public:
 	void SetUpPrevActionID()
 	{
 		if (isDifferAfterAndCurrent()) return;
+
 		m_BeforeAction = m_CurrAction;
 		m_CurrAction = m_AfterAction;
 	}
