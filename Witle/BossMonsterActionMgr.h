@@ -9,6 +9,9 @@
 #include "BossStone.h"
 #include "BossDead.h"
 #include "BossBuf.h"
+
+#include "ErrorAction.h"
+
 #include "ActionMgr.h"
 
 class Action;
@@ -21,6 +24,8 @@ class BossMonsterActionMgr
 	: public ActionMgr
 {
 	// 현재 사용하는 액션(상태)들 
+	BossMonsterErrorAction m_BossMonsterErrorAction;
+
 	BossIdleAction m_BossIdleAction;
 	BossMoveAction m_BossMoveAction;
 	BossChaseAction m_BossChaseAction;
@@ -38,6 +43,11 @@ class BossMonsterActionMgr
 public:
 	virtual void UpdateState(float fElpasedTime) override;
 
+	// 이전과 현재의 Action ID 상태가 달라졌는지 알아낸다. 만약 다르다면 true
+	virtual bool isDifferAction() const override;
+
+	virtual void Init() override;
+
 public:
 	virtual void ReleaseObjects() override {};
 	virtual void ReleaseUploadBuffers() override {};
@@ -45,6 +55,7 @@ public:
 public:
 	BossMonsterActionMgr(GameObject* pOwner, float IdleTime, float MoveTime) :
 		ActionMgr(pOwner), 
+		m_BossMonsterErrorAction(pOwner),
 		m_BossIdleAction(pOwner, IdleTime),
 		m_BossMoveAction(pOwner, MoveTime),
 		m_BossChaseAction(pOwner),
@@ -56,7 +67,7 @@ public:
 		m_BossDead(pOwner),
 		m_BossStone(pOwner)
 	{
-		m_CurrAction = &m_BossIdleAction;
+		Init();
 	};
 	virtual ~BossMonsterActionMgr() {};
 

@@ -27,3 +27,4 @@ public:
 		ComponentBase(pOwner), m_AnimationID(animeID) {};
 	virtual ~Action() {};
 };
+ 

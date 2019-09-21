@@ -344,8 +344,9 @@ void Player::ReleaseMemberUploadBuffers()
 	if (m_pMyBOBox)m_pMyBOBox->ReleaseUploadBuffers();
 }
  
-void Player::SetAnimationState(int state)
+void Player::SetAnimationID(int state)
 {  
+	m_PlayerActionMgr->SetUpPrevActionID();
 	m_pLoadObject_Cloth->SetTrackAnimationSet(0, m_PlayerActionMgr->GetCurrActionID());
 	m_pLoadObject_Body->SetTrackAnimationSet(0, m_PlayerActionMgr->GetCurrActionID());
 }
@@ -413,10 +414,7 @@ void Player::SubstractHP(int sub)
 }
 
 void Player::Animate(float fElapsedTime)
-{
-	// animate 이전에 현재 설정된 애니메이션 수행하도록 설정
-	SetTrackAnimationSet();
-
+{ 
 	// 반드시 트랜스폼 업데이트..! 
 	m_Transform.Update(fElapsedTime);
 	 
@@ -432,18 +430,7 @@ void Player::RenderStatus(ID3D12GraphicsCommandList * pd3dCommandList, bool isGB
 	m_pPlayerHPStatus->Render(pd3dCommandList);
 	m_pPlayerMPStatus->Render(pd3dCommandList);
 }
- 
-void Player::SetTrackAnimationSet()
-{ 
-	if (m_PlayerActionMgr->isDifferAction())
-	{ 
-		std::cout << m_PlayerActionMgr->GetCurrActionID() << std::endl;
-		m_PlayerActionMgr->SetUpPrevActionID();
-		m_pLoadObject_Cloth->SetTrackAnimationSet(0, m_PlayerActionMgr->GetCurrActionID());
-		m_pLoadObject_Body->SetTrackAnimationSet(0, m_PlayerActionMgr->GetCurrActionID());
-	}
-}
-
+  
 void Player::Move(const XMFLOAT3 & xmf3Shift)
 {
 	m_Transform.Move(xmf3Shift);

@@ -65,15 +65,14 @@ protected:
 	virtual void ReleaseMemberUploadBuffers() override;
 
 public:
-	void SetAnimationState(int state);
+	void SetAnimationID(int state);
 
 	virtual void Update(float fElapsedTime) override;
 
 private:
 	void OnPlayerUpdateCallback(float fTimeElapsed);
 	void OnCameraUpdateCallback(float fTimeElapsed, Camera* camera);
-	void SetTrackAnimationSet();
-
+	
 public:
 	Player(const std::string& entityID, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext = NULL);
 	virtual ~Player();

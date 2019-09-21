@@ -15,11 +15,17 @@ void PlayerActionMgr::UpdateState(float fElpasedTime)
 	static_cast<PlayerAction*>(m_CurrAction)->UpdateState(fElpasedTime, this);
 }
 
+bool PlayerActionMgr::isDifferAction() const
+{
+	return ((static_cast<PlayerAction*>(m_BeforeAction)->m_ActionID) != (static_cast<PlayerAction*>(m_CurrAction)->m_ActionID));
+}
+
 void PlayerActionMgr::Init()
 {
-	m_BeforeActionID = -1 ;
+	m_BeforeActionID = -1;
 	m_CurrActionID = 0 ;
-	ChangeActionToIdle();
+	m_BeforeAction = &m_PlayerErrorAction;
+	m_CurrAction = &m_IdleAction; 
 }
 
 void PlayerActionMgr::ChangeActionToIdle()
@@ -28,7 +34,7 @@ void PlayerActionMgr::ChangeActionToIdle()
 	if (!isChanged) return;
 	m_CurrAction->Init(); 
 	m_CurrActionID = ANIMATION_IDLE.ID;
-	static_cast<Player*>(m_pOwner)->SetAnimationState(ANIMATION_IDLE.ID);
+	static_cast<Player*>(m_pOwner)->SetAnimationID(ANIMATION_IDLE.ID);
 	// static_cast<Player*>(m_pOwner)->SetisAttacking(false);
 }
 
@@ -38,7 +44,7 @@ void PlayerActionMgr::ChangeActionToRightWalk()
 	if (!isChanged) return;
 	m_CurrAction->Init(); 
 	m_CurrActionID = ANIMATION_RIGHT.ID;
-	static_cast<Player*>(m_pOwner)->SetAnimationState(ANIMATION_RIGHT.ID);
+	static_cast<Player*>(m_pOwner)->SetAnimationID(ANIMATION_RIGHT.ID);
 }
 
 void PlayerActionMgr::ChangeActionToLeftWalk()
@@ -47,7 +53,7 @@ void PlayerActionMgr::ChangeActionToLeftWalk()
 	if (!isChanged) return;
 	m_CurrAction->Init(); 
 	m_CurrActionID = ANIMATION_LEFT.ID;
-	static_cast<Player*>(m_pOwner)->SetAnimationState(ANIMATION_LEFT.ID);
+	static_cast<Player*>(m_pOwner)->SetAnimationID(ANIMATION_LEFT.ID);
 }
 
 void PlayerActionMgr::ChangeActionToForwardWalk()
@@ -56,7 +62,7 @@ void PlayerActionMgr::ChangeActionToForwardWalk()
 	if (!isChanged) return;
 	m_CurrAction->Init(); 
 	m_CurrActionID = ANIMATION_FORWARD.ID;
-	static_cast<Player*>(m_pOwner)->SetAnimationState(ANIMATION_FORWARD.ID);
+	static_cast<Player*>(m_pOwner)->SetAnimationID(ANIMATION_FORWARD.ID);
 }
 
 void PlayerActionMgr::ChangeActionToBackwardWalk()
@@ -65,7 +71,7 @@ void PlayerActionMgr::ChangeActionToBackwardWalk()
 	if (!isChanged) return;
 	m_CurrAction->Init(); 
 	m_CurrActionID = ANIMATION_BACKWARD.ID;
-	static_cast<Player*>(m_pOwner)->SetAnimationState(ANIMATION_BACKWARD.ID);
+	static_cast<Player*>(m_pOwner)->SetAnimationID(ANIMATION_BACKWARD.ID);
 }
 
 void PlayerActionMgr::ChangeActionToStandardAttack()
@@ -74,7 +80,7 @@ void PlayerActionMgr::ChangeActionToStandardAttack()
 	if (!isChanged) return; 
 	m_CurrAction->Init(); 
 	m_CurrActionID = ANIMATION_ATTACK.ID;
-	static_cast<Player*>(m_pOwner)->SetAnimationState(ANIMATION_ATTACK.ID);
+	static_cast<Player*>(m_pOwner)->SetAnimationID(ANIMATION_ATTACK.ID);
 }
 
 void PlayerActionMgr::ChangeActionToBroomPrepare()
@@ -83,7 +89,7 @@ void PlayerActionMgr::ChangeActionToBroomPrepare()
 	if (!isChanged) return; 
 	m_CurrAction->Init(); 
 	m_CurrActionID = ANIMATION_BROOMPREPARE.ID;
-	static_cast<Player*>(m_pOwner)->SetAnimationState(ANIMATION_BROOMPREPARE.ID);
+	static_cast<Player*>(m_pOwner)->SetAnimationID(ANIMATION_BROOMPREPARE.ID);
 }
 
 void PlayerActionMgr::ChangeActionToBroomIdle()
@@ -92,7 +98,7 @@ void PlayerActionMgr::ChangeActionToBroomIdle()
 	if (!isChanged) return;
 	m_CurrAction->Init(); 
 	m_CurrActionID = ANIMATION_BROOMIDLE.ID;
-	static_cast<Player*>(m_pOwner)->SetAnimationState(ANIMATION_BROOMIDLE.ID);
+	static_cast<Player*>(m_pOwner)->SetAnimationID(ANIMATION_BROOMIDLE.ID);
 }
 
 void PlayerActionMgr::ChangeActionToBroomForward()
@@ -101,7 +107,7 @@ void PlayerActionMgr::ChangeActionToBroomForward()
 	if (!isChanged) return;
 	m_CurrAction->Init(); 
 	m_CurrActionID = ANIMATION_BROOMFORWARD.ID;
-	static_cast<Player*>(m_pOwner)->SetAnimationState(ANIMATION_BROOMFORWARD.ID);
+	static_cast<Player*>(m_pOwner)->SetAnimationID(ANIMATION_BROOMFORWARD.ID);
 }
 
 void PlayerActionMgr::ChangeActionToDead()
@@ -110,7 +116,7 @@ void PlayerActionMgr::ChangeActionToDead()
 	if (!isChanged) return;
 	m_CurrAction->Init(); 
 	m_CurrActionID = ANIMATION_DEAD.ID;
-	static_cast<Player*>(m_pOwner)->SetAnimationState(ANIMATION_DEAD.ID); 
+	static_cast<Player*>(m_pOwner)->SetAnimationID(ANIMATION_DEAD.ID); 
 }
 
 void PlayerActionMgr::ChangeActionToHit()
@@ -119,6 +125,6 @@ void PlayerActionMgr::ChangeActionToHit()
 	if (!isChanged) return;
 	m_CurrAction->Init(); 
 	m_CurrActionID = ANIMATION_HIT.ID;
-	static_cast<Player*>(m_pOwner)->SetAnimationState(ANIMATION_HIT.ID); 
+	static_cast<Player*>(m_pOwner)->SetAnimationID(ANIMATION_HIT.ID); 
 }
  

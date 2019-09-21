@@ -12,6 +12,8 @@
 #include "PlayerDeadAction.h"
 #include "PlayerHitAction.h"
 
+#include "ErrorAction.h"
+
 #include "ActionMgr.h"
 
 class PlayerAction;
@@ -21,6 +23,8 @@ class Player;
 class PlayerActionMgr
 	: public ActionMgr
 { 
+	PlayerErrorAction	       m_PlayerErrorAction;
+
 	PlayerIdleAction           m_IdleAction;
 	PlayerRightWalkAction      m_RightWalkAction;
 	PlayerLeftWalkAction       m_LeftWalkAction;
@@ -36,14 +40,18 @@ class PlayerActionMgr
 
 public:
 	virtual void UpdateState(float fElpasedTime) override;
-	 
+
+	// 이전과 현재의 Action ID 상태가 달라졌는지 알아낸다. 만약 다르다면 true
+	virtual bool isDifferAction() const override;
+
 public: 
 	virtual void ReleaseObjects() override {};
 	virtual void ReleaseUploadBuffers() override {};
 
 public:
 	PlayerActionMgr(GameObject* pOwner) : ActionMgr(pOwner) 
-	 , m_IdleAction(pOwner, 0) 
+		, m_PlayerErrorAction(pOwner)
+	    , m_IdleAction(pOwner, 0) 
 		, m_RightWalkAction(pOwner, 0)
 		, m_LeftWalkAction(pOwner, 0)
 		, m_ForwardWalkAction(pOwner, 0)
@@ -55,11 +63,11 @@ public:
 		, m_DeadAction(pOwner, 0)
 		, m_HitAction(pOwner, 0)
 	{
-
+		Init();
 	};
 	virtual ~PlayerActionMgr() {}; 
 
-	void Init();
+	virtual void Init() override;
 
 	bool Is_IdleAction() const { return (m_CurrAction == &m_IdleAction); }
 	bool Is_RightWalkAction() const { return (m_CurrAction == &m_RightWalkAction); }

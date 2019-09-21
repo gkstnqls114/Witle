@@ -244,10 +244,7 @@ void Monster::SubstractHP(int sub)
 }
 
 void Monster::Animate(float fElapsedTime)
-{
-	// animate 이전에 현재 설정된 애니메이션 수행하도록 설정
-	SetTrackAnimationSet();
-
+{ 
 	// 반드시 트랜스폼 업데이트..! 
 	m_Transform.Update(fElapsedTime);
 
@@ -290,15 +287,6 @@ void Monster::RenderHpStatus(ID3D12GraphicsCommandList * pd3dCommandList, bool i
 	m_MonsterHPUI->Render(pd3dCommandList, uiWorld);
 }
 
-void Monster::SetTrackAnimationSet()
-{
-	if (m_MonsterActionMgr->isDifferAction())
-	{
-		m_pLoadObject->SetTrackAnimationSet(0, m_MonsterActionMgr->GetCurrActionID());
-		m_MonsterActionMgr->SetUpPrevActionID();
-	}
-}
-
 void Monster::Move(const XMFLOAT3 & xmf3Shift)
 {
 	m_Transform.Move(xmf3Shift);
@@ -321,7 +309,8 @@ void Monster::SetVelocity(const XMFLOAT3 & velocity)
 	m_MonsterMovement->m_xmf3Velocity = velocity;
 }
 
-void Monster::SetAnimationState(int state)
+void Monster::SetAnimationID(int state)
 { 
+	m_MonsterActionMgr->SetUpPrevActionID();
 	m_pLoadObject->SetTrackAnimationSet(0, state);
 }

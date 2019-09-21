@@ -7,6 +7,8 @@
 #include "HitAction.h"
 #include "AttackAction.h"
 
+#include "ErrorAction.h"
+
 #include "ActionMgr.h"
 
 class Action;
@@ -16,7 +18,9 @@ class Player;
 // MonsterMovement를 인자로 받아 가속도를 처리해주는 클래스.
 class GeneralMonsterActionMgr
 	: public ActionMgr
-{ 
+{
+	GeneralMonsterErrorAction	       m_GeneralMonsterErrorAction;
+
 	IdleAction      m_IdleAction;
 	MoveAction      m_MoveAction;
 	ChaseAction	    m_ChaseAction;
@@ -30,6 +34,11 @@ class GeneralMonsterActionMgr
 public:
 	virtual void UpdateState(float fElpasedTime) override;
 
+	// 이전과 현재의 Action ID 상태가 달라졌는지 알아낸다. 만약 다르다면 true
+	virtual bool isDifferAction() const override;
+
+	virtual void Init() override;
+
 public:
 	virtual void ReleaseObjects() override {};
 	virtual void ReleaseUploadBuffers() override {};
@@ -37,6 +46,7 @@ public:
 public:
 	GeneralMonsterActionMgr(GameObject* pOwner, float idleTime, float moveTime) : 
 		ActionMgr(pOwner) ,
+		m_GeneralMonsterErrorAction(pOwner),
 		m_IdleAction(pOwner, idleTime),
 		m_MoveAction(pOwner, moveTime),
 		m_ChaseAction(pOwner),
@@ -44,8 +54,8 @@ public:
 		m_DeadAction(pOwner),
 		m_HitAction(pOwner),
 		m_AttackAction(pOwner)
-	{
-		m_CurrAction = &m_IdleAction;
+	{ 
+		Init();
 	};
 	virtual ~GeneralMonsterActionMgr() {};
 	 

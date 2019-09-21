@@ -87,7 +87,7 @@ public:
 	//// Get /////////////////// 
 
 	//// Set /////////////////// 
-	void SetAnimationState(int state);
+	void SetAnimationID(int state);
 	void SetisActive(bool b) { m_isActive = b; }
 	void SetisEnguaged(bool b) { m_isEnguaged = b; }
 	void SetGuage(float g) { m_guage = g; }

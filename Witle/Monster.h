@@ -76,8 +76,7 @@ protected:
 
 protected:
 	virtual void ReleaseMembers() override;
-	virtual void ReleaseMemberUploadBuffers() override;
-	void SetTrackAnimationSet();
+	virtual void ReleaseMemberUploadBuffers() override; 
 	void Init(bool isBoss);
 
 public:
@@ -126,7 +125,7 @@ public:
 
 	//// Set /////////////////// 
 	void SetVelocity(const XMFLOAT3& velocity);
-	void SetAnimationState(int state);
+	void SetAnimationID(int state);
 	void SetisAttacking(bool b) { m_isAttacking = b; }
 	void FinishAttack() { m_isFinishAttack = true; }
 	//// Set /////////////////// 

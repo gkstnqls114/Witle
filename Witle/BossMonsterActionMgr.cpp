@@ -28,6 +28,17 @@ void BossMonsterActionMgr::UpdateState(float fElpasedTime)
 	static_cast<BossMonsterAction*>(m_CurrAction)->UpdateState(fElpasedTime, this);
 }
 
+bool BossMonsterActionMgr::isDifferAction() const
+{
+	return ((static_cast<BossMonsterAction*>(m_BeforeAction)->m_ActionID != static_cast<BossMonsterAction*>(m_CurrAction)->m_ActionID));
+}
+
+void BossMonsterActionMgr::Init()
+{
+	m_CurrAction = &m_BossIdleAction;
+	m_BeforeAction = &m_BossMonsterErrorAction;
+}
+
 void BossMonsterActionMgr::ChangeBossStateBefore()
 {
 	// 상태가 이전하고 다른 경우에만 서로 변경한다.
@@ -88,7 +99,7 @@ void BossMonsterActionMgr::ChangeBossStateToIdle()
 	if (!isChanged) return;
 	m_CurrAction->Init();
 	m_CurrActionID = BOSS_IDLE.ID;
-	static_cast<Monster*>(m_pOwner)->SetAnimationState(BOSS_IDLE.ID);
+	static_cast<Monster*>(m_pOwner)->SetAnimationID(BOSS_IDLE.ID);
 	static_cast<Monster*>(m_pOwner)->SetisAttacking(false); 
 }
 
@@ -99,7 +110,7 @@ void BossMonsterActionMgr::ChangeBossStateToMove()
 	if (!isChanged) return;
 	m_CurrAction->Init();
 	m_CurrActionID = BOSS_MOVE.ID;
-	static_cast<Monster*>(m_pOwner)->SetAnimationState(BOSS_MOVE.ID);
+	static_cast<Monster*>(m_pOwner)->SetAnimationID(BOSS_MOVE.ID);
 	static_cast<Monster*>(m_pOwner)->SetisAttacking(false); 
 }
 
@@ -110,7 +121,7 @@ void BossMonsterActionMgr::ChangeBossStateToChase()
 	if (!isChanged) return;
 	m_CurrAction->Init();
 	m_CurrActionID = BOSS_CHASE.ID;
-	static_cast<Monster*>(m_pOwner)->SetAnimationState(BOSS_CHASE.ID);
+	static_cast<Monster*>(m_pOwner)->SetAnimationID(BOSS_CHASE.ID);
 	static_cast<Monster*>(m_pOwner)->SetisAttacking(false); 
 }
   
@@ -120,7 +131,7 @@ void BossMonsterActionMgr::ChangeBossStateToBreath()
 	if (!isChanged) return;
 	m_CurrAction->Init();
 	m_CurrActionID = BOSS_BREATH.ID;
-	static_cast<Monster*>(m_pOwner)->SetAnimationState(BOSS_BREATH.ID);
+	static_cast<Monster*>(m_pOwner)->SetAnimationID(BOSS_BREATH.ID);
 	static_cast<Monster*>(m_pOwner)->SetisAttacking(true); 
 }
  
@@ -130,7 +141,7 @@ void BossMonsterActionMgr::ChangeBossStateToDownStroke()
 	if (!isChanged) return;
 	m_CurrAction->Init();
 	m_CurrActionID = BOSS_DOWNSTORK.ID;
-	static_cast<Monster*>(m_pOwner)->SetAnimationState(BOSS_DOWNSTORK.ID);
+	static_cast<Monster*>(m_pOwner)->SetAnimationID(BOSS_DOWNSTORK.ID);
 	static_cast<Monster*>(m_pOwner)->SetisAttacking(true); 
 }
  
@@ -140,7 +151,7 @@ void BossMonsterActionMgr::ChangeBossStateToTailAttack()
 	if (!isChanged) return;
 	m_CurrAction->Init();
 	m_CurrActionID = BOSS_TAILATTACK.ID;
-	static_cast<Monster*>(m_pOwner)->SetAnimationState(BOSS_TAILATTACK.ID);
+	static_cast<Monster*>(m_pOwner)->SetAnimationID(BOSS_TAILATTACK.ID);
 	static_cast<Monster*>(m_pOwner)->SetisAttacking(true); 
 }
  
@@ -150,7 +161,7 @@ void BossMonsterActionMgr::ChangeBossStateToRush()
 	if (!isChanged) return;
 	m_CurrAction->Init();
 	m_CurrActionID = BOSS_RUSH.ID;
-	static_cast<Monster*>(m_pOwner)->SetAnimationState(BOSS_RUSH.ID);
+	static_cast<Monster*>(m_pOwner)->SetAnimationID(BOSS_RUSH.ID);
 	static_cast<Monster*>(m_pOwner)->SetisAttacking(true);	 
 }
 
@@ -160,7 +171,7 @@ void BossMonsterActionMgr::ChangeBossStateToStone()
 	if (!isChanged) return;
 	m_CurrAction->Init();
 	m_CurrActionID = BOSS_STONE.ID;
-	static_cast<Monster*>(m_pOwner)->SetAnimationState(BOSS_STONE.ID); 
+	static_cast<Monster*>(m_pOwner)->SetAnimationID(BOSS_STONE.ID); 
 	static_cast<Monster*>(m_pOwner)->SetisAttacking(false);
 }
 
@@ -170,7 +181,7 @@ void BossMonsterActionMgr::ChangeBossStateToDead()
 	if (!isChanged) return;
 	m_CurrAction->Init();
 	m_CurrActionID = BOSS_DEAD.ID;
-	static_cast<Monster*>(m_pOwner)->SetAnimationState(BOSS_DEAD.ID);
+	static_cast<Monster*>(m_pOwner)->SetAnimationID(BOSS_DEAD.ID);
 }
 
 void BossMonsterActionMgr::ChangeBossStateToBuf()
@@ -179,5 +190,5 @@ void BossMonsterActionMgr::ChangeBossStateToBuf()
 	if (!isChanged) return;
 	m_CurrAction->Init();
 	m_CurrActionID = BOSS_BUF.ID;
-	static_cast<Monster*>(m_pOwner)->SetAnimationState(BOSS_BUF.ID);
+	static_cast<Monster*>(m_pOwner)->SetAnimationID(BOSS_BUF.ID);
 }

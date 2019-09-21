@@ -172,7 +172,7 @@ void AltarSphere::Update(float fElapsedTime)
 	if (m_pLoadObject->IsTrackAnimationSetFinish(0, ALTARSPHERE_FLOW.ID))
 	{
 		m_isFinishFlow = true;
-		SetAnimationState(ALTARSPHERE_IDLE.ID);
+		SetAnimationID(ALTARSPHERE_IDLE.ID);
 	}
 }
  
@@ -211,7 +211,7 @@ void AltarSphere::AddGuage(float time)
 	m_ActiveGuageBar->SetGuage(m_guage);
 }
 
-void AltarSphere::SetAnimationState(int state)
+void AltarSphere::SetAnimationID(int state)
 {
 	m_CurrAnimation = state;
 	m_pLoadObject->SetTrackAnimationSet(0, m_CurrAnimation);

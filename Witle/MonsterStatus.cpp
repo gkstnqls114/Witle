@@ -12,7 +12,7 @@
 
 void MonsterStatus::SetAnimationStateToHit()
 { 
-	static_cast<Monster*>(m_pOwner)->SetAnimationState(SPACECAT_HIT.ID);
+	static_cast<Monster*>(m_pOwner)->SetAnimationID(SPACECAT_HIT.ID);
 }
 
 void MonsterStatus::ReleaseObjects()

@@ -27,11 +27,22 @@ void GeneralMonsterActionMgr::UpdateState(float fElpasedTime)
 	//if (m_CurrAction == &m_ChaseAction
 	//	&& !IsNearPlayer(PlayerManager::GetMainPlayer(), pMonsterOwner->GetRecognitionRange()->m_RecognitionRange))
 	//{
-	//	static_cast<Monster*>(m_pOwner)->SetAnimationState(SPACECAT_IDLE.ID); 
+	//	static_cast<Monster*>(m_pOwner)->SetAnimationID(SPACECAT_IDLE.ID); 
 	//	m_TotalTime = 0.f;
 	//	m_CurrAction = &m_IdleAction;
 	//	return;
 	//} 
+}
+
+bool GeneralMonsterActionMgr::isDifferAction() const
+{
+	return ((static_cast<GeneralMonsterAction*>(m_BeforeAction)->m_ActionID) != (static_cast<GeneralMonsterAction*>(m_CurrAction)->m_ActionID));
+}
+
+void GeneralMonsterActionMgr::Init()
+{
+	m_BeforeAction = &m_GeneralMonsterErrorAction;
+	m_CurrAction = &m_IdleAction;
 }
 
 void GeneralMonsterActionMgr::ChangeStateBefore()
@@ -80,7 +91,7 @@ void GeneralMonsterActionMgr::ChangeStateToIdle()
 	if (!isChanged) return;
 	m_CurrAction->Init();
 	m_CurrActionID = SPACECAT_IDLE.ID;
-	static_cast<Monster*>(m_pOwner)->SetAnimationState(SPACECAT_IDLE.ID);
+	static_cast<Monster*>(m_pOwner)->SetAnimationID(SPACECAT_IDLE.ID);
 	static_cast<Monster*>(m_pOwner)->SetisAttacking(false);
 }
 
@@ -90,7 +101,7 @@ void GeneralMonsterActionMgr::ChangeStateToMove()
 	if (!isChanged) return;
 	m_CurrAction->Init();
 	m_CurrActionID = SPACECAT_MOVE.ID;
-	static_cast<Monster*>(m_pOwner)->SetAnimationState(SPACECAT_MOVE.ID);
+	static_cast<Monster*>(m_pOwner)->SetAnimationID(SPACECAT_MOVE.ID);
 	static_cast<Monster*>(m_pOwner)->SetisAttacking(false);
 }
 
@@ -100,7 +111,7 @@ void GeneralMonsterActionMgr::ChangeStateToChase()
 	if (!isChanged) return;
 	m_CurrAction->Init();
 	m_CurrActionID = SPACECAT_MOVE.ID;
-	static_cast<Monster*>(m_pOwner)->SetAnimationState(SPACECAT_MOVE.ID);
+	static_cast<Monster*>(m_pOwner)->SetAnimationID(SPACECAT_MOVE.ID);
 	static_cast<Monster*>(m_pOwner)->SetisAttacking(false);
 }
 
@@ -110,7 +121,7 @@ void GeneralMonsterActionMgr::ChangeStateToSearch()
 	if (!isChanged) return;
 	m_CurrAction->Init();
 	m_CurrActionID = SPACECAT_MOVE.ID;
-	static_cast<Monster*>(m_pOwner)->SetAnimationState(SPACECAT_MOVE.ID);
+	static_cast<Monster*>(m_pOwner)->SetAnimationID(SPACECAT_MOVE.ID);
 	static_cast<Monster*>(m_pOwner)->SetisAttacking(false);
 }
 
@@ -120,7 +131,7 @@ void GeneralMonsterActionMgr::ChangeStateToDead()
 	if (!isChanged) return;
 	m_CurrAction->Init();
 	m_CurrActionID = SPACECAT_DEAD.ID;
-	static_cast<Monster*>(m_pOwner)->SetAnimationState(SPACECAT_DEAD.ID);
+	static_cast<Monster*>(m_pOwner)->SetAnimationID(SPACECAT_DEAD.ID);
 	static_cast<Monster*>(m_pOwner)->SetisAttacking(false);
 	//SoundManager::GetInstance()->Stop(ENUM_SOUND::SPACE_MOVE);
 }
@@ -131,7 +142,7 @@ void GeneralMonsterActionMgr::ChangeStateToHit()
 	if (!isChanged) return;
 	m_CurrAction->Init();
 	m_CurrActionID = SPACECAT_HIT.ID;
-	static_cast<Monster*>(m_pOwner)->SetAnimationState(SPACECAT_HIT.ID);
+	static_cast<Monster*>(m_pOwner)->SetAnimationID(SPACECAT_HIT.ID);
 	static_cast<Monster*>(m_pOwner)->SetisAttacking(false);
 }
 
@@ -141,6 +152,6 @@ void GeneralMonsterActionMgr::ChangeStateToAttack()
 	if (!isChanged) return;
 	m_CurrAction->Init();
 	m_CurrActionID = SPACECAT_ATTACK.ID;
-	static_cast<Monster*>(m_pOwner)->SetAnimationState(SPACECAT_ATTACK.ID);
+	static_cast<Monster*>(m_pOwner)->SetAnimationID(SPACECAT_ATTACK.ID);
 	static_cast<Monster*>(m_pOwner)->SetisAttacking(true); 
 }
