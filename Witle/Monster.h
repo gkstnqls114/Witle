@@ -125,7 +125,7 @@ public:
 
 	//// Set /////////////////// 
 	void SetVelocity(const XMFLOAT3& velocity);
-	void SetAnimationID(int state);
+	void SetAnimationID(ENUM_ANIMATIONID state);
 	void SetisAttacking(bool b) { m_isAttacking = b; }
 	void FinishAttack() { m_isFinishAttack = true; }
 	//// Set /////////////////// 

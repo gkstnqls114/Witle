@@ -65,7 +65,7 @@ protected:
 	virtual void ReleaseMemberUploadBuffers() override;
 
 public:
-	void SetAnimationID(int state);
+	void SetAnimationID(ENUM_ANIMATIONID state);
 
 	virtual void Update(float fElapsedTime) override;
 

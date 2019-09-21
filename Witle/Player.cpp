@@ -344,11 +344,11 @@ void Player::ReleaseMemberUploadBuffers()
 	if (m_pMyBOBox)m_pMyBOBox->ReleaseUploadBuffers();
 }
  
-void Player::SetAnimationID(int state)
+void Player::SetAnimationID(ENUM_ANIMATIONID state)
 {  
 	m_PlayerActionMgr->SetUpPrevActionID();
-	m_pLoadObject_Cloth->SetTrackAnimationSet(0, m_PlayerActionMgr->GetCurrActionID());
-	m_pLoadObject_Body->SetTrackAnimationSet(0, m_PlayerActionMgr->GetCurrActionID());
+	m_pLoadObject_Cloth->SetTrackAnimationSet(0, state);
+	m_pLoadObject_Body->SetTrackAnimationSet(0, state);
 }
 
 void Player::Update(float fElapsedTime)
@@ -407,8 +407,8 @@ void Player::SubstractHP(int sub)
 	if (m_PlayerActionMgr->Is_HitAction())
 	{
 		m_PlayerActionMgr->ChangeActionToHit();
-		m_pLoadObject_Body->SetTrackAnimationSet(0, m_PlayerActionMgr->GetCurrActionID());
-		m_pLoadObject_Cloth->SetTrackAnimationSet(0, m_PlayerActionMgr->GetCurrActionID());
+		m_pLoadObject_Body->SetTrackAnimationSet(0, m_PlayerActionMgr->GetCurrPlayerAction()->m_AnimationID);
+		m_pLoadObject_Cloth->SetTrackAnimationSet(0, m_PlayerActionMgr->GetCurrPlayerAction()->m_AnimationID);
 	}
 
 }

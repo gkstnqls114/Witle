@@ -309,7 +309,7 @@ void Monster::SetVelocity(const XMFLOAT3 & velocity)
 	m_MonsterMovement->m_xmf3Velocity = velocity;
 }
 
-void Monster::SetAnimationID(int state)
+void Monster::SetAnimationID(ENUM_ANIMATIONID state)
 { 
 	m_MonsterActionMgr->SetUpPrevActionID();
 	m_pLoadObject->SetTrackAnimationSet(0, state);

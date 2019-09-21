@@ -37,6 +37,9 @@ public:
 	// 이전과 현재의 Action ID 상태가 달라졌는지 알아낸다. 만약 다르다면 true
 	virtual bool isDifferAction() const override;
 
+	// 이후에 사용할 액션 ID와 현재 사용하는 액션 ID 다른지 알아낸다. 다르다면 true
+	virtual bool isDifferAfterAndCurrent() const override;
+
 	virtual void Init() override;
 
 public:
@@ -66,13 +69,13 @@ public:
 
 	// State Check //////////////////////////////////////
 
-	bool isIdle() const { return (m_CurrAction == &m_IdleAction); }
-	bool isMove() const { return (m_CurrAction == &m_MoveAction); }
-	bool isChase() const { return (m_CurrAction == &m_ChaseAction); }
-	bool isSearch() const { return (m_CurrAction == &m_SearchAction); }
-	bool isDead() const { return (m_CurrAction == &m_DeadAction); }
-	bool isHit() const { return (m_CurrAction == &m_HitAction); }
-	bool isAttack() const { return (m_CurrAction == &m_AttackAction); }
+	bool isIdle() const { return (m_AfterAction == &m_IdleAction); }
+	bool isMove() const { return (m_AfterAction == &m_MoveAction); }
+	bool isChase() const { return (m_AfterAction == &m_ChaseAction); }
+	bool isSearch() const { return (m_AfterAction == &m_SearchAction); }
+	bool isDead() const { return (m_AfterAction == &m_DeadAction); }
+	bool isHit() const { return (m_AfterAction == &m_HitAction); }
+	bool isAttack() const { return (m_AfterAction == &m_AttackAction); }
 	
 	// State Check //////////////////////////////////////
 

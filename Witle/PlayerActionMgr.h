@@ -44,6 +44,9 @@ public:
 	// 이전과 현재의 Action ID 상태가 달라졌는지 알아낸다. 만약 다르다면 true
 	virtual bool isDifferAction() const override;
 
+	// 이후에 사용할 액션 ID와 현재 사용하는 액션 ID 다른지 알아낸다. 다르다면 true
+	virtual bool isDifferAfterAndCurrent() const override;
+
 public: 
 	virtual void ReleaseObjects() override {};
 	virtual void ReleaseUploadBuffers() override {};
@@ -69,17 +72,17 @@ public:
 
 	virtual void Init() override;
 
-	bool Is_IdleAction() const { return (m_CurrAction == &m_IdleAction); }
-	bool Is_RightWalkAction() const { return (m_CurrAction == &m_RightWalkAction); }
-	bool Is_LeftWalkAction() const { return (m_CurrAction == &m_LeftWalkAction); }
-	bool Is_ForwardWalkAction() const { return (m_CurrAction == &m_ForwardWalkAction); }
-	bool Is_BackwardWalkAction() const { return (m_CurrAction == &m_BackwardWalkAction); }
-	bool Is_StandardAttackAction() const { return (m_CurrAction == &m_StandardAttackAction); }
-	bool Is_BroomPrepareAction() const { return (m_CurrAction == &m_BroomPrepareAction); }
-	bool Is_BroomIdleAction() const { return (m_CurrAction == &m_BroomIdleAction); }
-	bool Is_BroomForwardAction() const { return (m_CurrAction == &m_BroomForwardAction); }
-	bool Is_DeadAction() const { return (m_CurrAction == &m_DeadAction); }
-	bool Is_HitAction() const { return (m_CurrAction == &m_HitAction); }
+	bool Is_IdleAction() const { return (m_AfterAction == &m_IdleAction); }
+	bool Is_RightWalkAction() const { return (m_AfterAction == &m_RightWalkAction); }
+	bool Is_LeftWalkAction() const { return (m_AfterAction == &m_LeftWalkAction); }
+	bool Is_ForwardWalkAction() const { return (m_AfterAction == &m_ForwardWalkAction); }
+	bool Is_BackwardWalkAction() const { return (m_AfterAction == &m_BackwardWalkAction); }
+	bool Is_StandardAttackAction() const { return (m_AfterAction == &m_StandardAttackAction); }
+	bool Is_BroomPrepareAction() const { return (m_AfterAction == &m_BroomPrepareAction); }
+	bool Is_BroomIdleAction() const { return (m_AfterAction == &m_BroomIdleAction); }
+	bool Is_BroomForwardAction() const { return (m_AfterAction == &m_BroomForwardAction); }
+	bool Is_DeadAction() const { return (m_AfterAction == &m_DeadAction); }
+	bool Is_HitAction() const { return (m_AfterAction == &m_HitAction); }
 
 	void ChangeActionToIdle();
 	void ChangeActionToRightWalk();
@@ -93,4 +96,13 @@ public:
 	void ChangeActionToDead();
 	void ChangeActionToHit(); 
 	 
+	PlayerAction* GetCurrPlayerAction() const 
+	{
+		return static_cast<PlayerAction*>(m_AfterAction); 
+	};
+	
+	PlayerAction* GetBeforePlayerAction() const 
+	{
+		return static_cast<PlayerAction*>(m_BeforeAction);
+	};
 };
