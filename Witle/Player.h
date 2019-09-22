@@ -30,7 +30,7 @@ private:
 	bool m_isAttacking{ false };
 	
 
-	PlayerMovement*    m_pPlayerMovement{ nullptr };
+	PlayerMovement*    m_PlayerMovement{ nullptr };
 	PlayerStatus*	   m_pPlayerHPStatus{ nullptr };
 	PlayerStatus*	   m_pPlayerMPStatus{ nullptr };
 	MyBOBox*		   m_pMyBOBox{ nullptr };

@@ -51,24 +51,24 @@ void Player::OnPlayerUpdateCallback(float fTimeElapsed)
 	{
 		XMFLOAT3 xmf3PlayerVelocity = GetVelocity();
 		xmf3PlayerVelocity.y = 0.0f;
-		m_pPlayerMovement->m_xmf3Velocity = xmf3PlayerVelocity;
+		m_PlayerMovement->m_xmf3Velocity = xmf3PlayerVelocity;
 		xmf3PlayerPosition.y = fHeight;
 		m_Transform.SetPosition(xmf3PlayerPosition);
 	}
 }
 XMFLOAT3 Player::CalculateAlreadyVelocity(float fTimeElapsed)
 {
-	XMFLOAT3 AlreadyVelocity = Vector3::Add(m_pPlayerMovement->m_xmf3Velocity, m_pPlayerMovement->m_xmf3Gravity);
+	XMFLOAT3 AlreadyVelocity = Vector3::Add(m_PlayerMovement->m_xmf3Velocity, m_PlayerMovement->m_xmf3Gravity);
 	float fLength = sqrtf(AlreadyVelocity.x * AlreadyVelocity.x + AlreadyVelocity.z * AlreadyVelocity.z);
-	float fMaxVelocityXZ = m_pPlayerMovement->m_fMaxVelocityXZ;
-	if (fLength > m_pPlayerMovement->m_fMaxVelocityXZ)
+	float fMaxVelocityXZ = m_PlayerMovement->m_fMaxVelocityXZ;
+	if (fLength > m_PlayerMovement->m_fMaxVelocityXZ)
 	{
 		AlreadyVelocity.x *= (fMaxVelocityXZ / fLength);
 		AlreadyVelocity.z *= (fMaxVelocityXZ / fLength);
 	}
-	float fMaxVelocityY = m_pPlayerMovement->m_fMaxVelocityY;
+	float fMaxVelocityY = m_PlayerMovement->m_fMaxVelocityY;
 	fLength = sqrtf(AlreadyVelocity.y * AlreadyVelocity.y);
-	if (fLength > m_pPlayerMovement->m_fMaxVelocityY) AlreadyVelocity.y *= (fMaxVelocityY / fLength);
+	if (fLength > m_PlayerMovement->m_fMaxVelocityY) AlreadyVelocity.y *= (fMaxVelocityY / fLength);
 
 	XMFLOAT3 xmf3Velocity = Vector3::ScalarProduct(AlreadyVelocity, fTimeElapsed, false);
 
@@ -76,14 +76,14 @@ XMFLOAT3 Player::CalculateAlreadyVelocity(float fTimeElapsed)
 }
 BoundingOrientedBox Player::CalculateAlreadyBoundingBox(float fTimeElapsed)
 {
-	XMFLOAT3 AlreadyPosition = Vector3::Add(m_Transform.GetPosition(), m_pPlayerMovement->AlreadyUpdate(fTimeElapsed));
+	XMFLOAT3 AlreadyPosition = Vector3::Add(m_Transform.GetPosition(), m_PlayerMovement->AlreadyUpdate(fTimeElapsed));
 	BoundingOrientedBox AlreadyBBox = m_pMyBOBox->GetBOBox();
 	AlreadyBBox.Center = AlreadyPosition;
 	return AlreadyBBox;
 }
 XMFLOAT3 Player::CalculateAlreadyPosition(float fTimeElapsed)
 {
-	XMFLOAT3 AlreadyPosition = Vector3::Add(m_Transform.GetPosition(), m_pPlayerMovement->AlreadyUpdate(fTimeElapsed));
+	XMFLOAT3 AlreadyPosition = Vector3::Add(m_Transform.GetPosition(), m_PlayerMovement->AlreadyUpdate(fTimeElapsed));
 	return AlreadyPosition;
 }
 
@@ -134,9 +134,9 @@ Player::Player(const std::string & entityID, ID3D12Device * pd3dDevice, ID3D12Gr
 	m_pPlayerMPStatus = new PlayerStatus(this, pd3dDevice, pd3dCommandList, 
 		POINT{ int(GameScreen::GetWidth()) - 1100, int(GameScreen::GetHeight()) - 620 }, 300.f, 30.f, L"Image/Blue.dds");
 
-	m_pPlayerMovement = new PlayerMovement(this);
+	m_PlayerMovement = new PlayerMovement(this);
 	 
-	m_Broom = new Broom(m_pPlayerMovement);
+	m_Broom = new Broom(m_PlayerMovement);
 
 	m_Transform.SetPosition(15000.f, 0.f, 15000.f);// 맵 중앙에 위치
 	// m_Transform.SetPosition(0.f, 0.f, 0.f);// 맵 왼쪽 하단에 위치
@@ -170,7 +170,7 @@ void Player::Init()
 	  
 	isDead = false;
 	m_isAttacking = false;
-	m_pPlayerMovement->RunMode();
+	m_PlayerMovement->RunMode();
 	m_pPlayerMPStatus->SetGuage(100.f);
 	m_pPlayerHPStatus->SetGuage(100.f);
 }
@@ -190,11 +190,11 @@ void Player::ActiveBlessing()
 	blessing = 1.7f;
 	if (m_Broom->GetisUsing())
 	{
-		m_pPlayerMovement->BroomMode();
+		m_PlayerMovement->BroomMode();
 	}
 	else
 	{ 
-		m_pPlayerMovement->RunMode();
+		m_PlayerMovement->RunMode();
 	}
 }
 
@@ -203,11 +203,11 @@ void Player::DeactiveBlessing()
 	blessing = 1.f;
 	if (m_Broom->GetisUsing())
 	{
-		m_pPlayerMovement->BroomMode();
+		m_PlayerMovement->BroomMode();
 	}
 	else
 	{
-		m_pPlayerMovement->RunMode();
+		m_PlayerMovement->RunMode();
 	}
 }
  
@@ -319,11 +319,11 @@ void Player::ReleaseMembers()
 		delete m_pPlayerMPStatus;
 		m_pPlayerMPStatus = nullptr;
 	}
-	if (m_pPlayerMovement)
+	if (m_PlayerMovement)
 	{
-		m_pPlayerMovement->ReleaseObjects();
-		delete m_pPlayerMovement;
-		m_pPlayerMovement = nullptr;
+		m_PlayerMovement->ReleaseObjects();
+		delete m_PlayerMovement;
+		m_PlayerMovement = nullptr;
 	}
 }
 
@@ -361,10 +361,10 @@ void Player::Update(float fElapsedTime)
 	m_Broom->Update(fElapsedTime);
 
 	// 이동량을 계산한다. 
-	m_pPlayerMovement->Update(fElapsedTime);
+	m_PlayerMovement->Update(fElapsedTime);
 	
 	// 이동량만큼 움직인다. 
-	Move(Vector3::ScalarProduct(m_pPlayerMovement->m_xmf3Velocity, fElapsedTime, false));
+	Move(Vector3::ScalarProduct(m_PlayerMovement->m_xmf3Velocity, fElapsedTime, false));
 
 	m_pMyBOBox->SetPosition(
 		XMFLOAT3(
@@ -435,12 +435,15 @@ void Player::Move(const XMFLOAT3 & xmf3Shift)
 void Player::Rotate(float x, float y, float z) 
 { 
 	m_Transform.Rotate(x, y, z); 
-	m_pMyBOBox->Rotate(m_pPlayerMovement->m_fRoll, m_pPlayerMovement->m_fYaw, m_pPlayerMovement->m_fPitch);
+	m_pMyBOBox->Rotate(m_PlayerMovement->m_fRoll, m_PlayerMovement->m_fYaw, m_PlayerMovement->m_fPitch);
 }
  
 static float hittime = 0.f;
 void Player::ProcessInput(float fTimeElapsed)
 {    
+	//m_PlayerActionMgr->UpdateState(fTimeElapsed);
+	//m_PlayerActionMgr->UpdateVelocity(fTimeElapsed, m_PlayerMovement);
+
 	if (isDead && m_pLoadObject_Cloth->IsTrackAnimationSetFinish(0, ANIMATION_DEAD.ID))
 	{ 
 		SceneMgr::GetInstacne()->ChangeSceneToLose();
@@ -550,11 +553,11 @@ void Player::ProcessInput(float fTimeElapsed)
 	if (dwDirection != 0)
 	{  
 		//플레이어의 이동량 벡터를 xmf3Shift 벡터만큼 더한다. 
-		m_pPlayerMovement->MoveVelocity(dwDirection, fTimeElapsed);
+		m_PlayerMovement->MoveVelocity(dwDirection, fTimeElapsed);
 	}
 	else
 	{
-		m_pPlayerMovement->ReduceVelocity(fTimeElapsed);
+		m_PlayerMovement->ReduceVelocity(fTimeElapsed);
 	}
 
 }
@@ -609,7 +612,7 @@ bool Player::Attack(Status* status, MyCollider* collider, XMFLOAT2 aimPoint, Cam
 
 	}
 
-	m_pPlayerMovement->m_xmf3Velocity = XMFLOAT3(0.F, 0.F, 0.F);
+	m_PlayerMovement->m_xmf3Velocity = XMFLOAT3(0.F, 0.F, 0.F);
 	m_isAttacking = true; 
 	m_PlayerActionMgr->ChangeActionToStandardAttack();
 	return isAttack;
@@ -626,10 +629,10 @@ void Player::UseSkill_Broom()
 
 XMFLOAT3 Player::GetVelocity() const
 {
-	return m_pPlayerMovement->m_xmf3Velocity;
+	return m_PlayerMovement->m_xmf3Velocity;
 }
 
 void Player::SetVelocity(const XMFLOAT3 & velocity)
 {
-	m_pPlayerMovement->m_xmf3Velocity = velocity;
+	m_PlayerMovement->m_xmf3Velocity = velocity;
 }

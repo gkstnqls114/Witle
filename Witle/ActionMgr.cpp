@@ -42,9 +42,8 @@ bool ActionMgr::isSameCurrAction(const Action * const action) const
 }
 
 void ActionMgr::UpdateVelocity(float fElpasedTime, Movement * movement)
-{
-	// 강제 형변환. 반드시 수정할것.
-	m_AfterAction->UpdateVelocity(fElpasedTime, movement);
+{ 
+	m_CurrAction->UpdateVelocity(fElpasedTime, movement);
 }
 
 void ActionMgr::SetUpPrevActionID()

@@ -12,7 +12,7 @@ void Broom::ReleaseMemberUploadBuffers()
 
 void Broom::PrepareMember()
 {
-	m_pPlayerMovement->m_xmf3Velocity = XMFLOAT3(0.F, 0.F, 0.F);
+	m_PlayerMovement->m_xmf3Velocity = XMFLOAT3(0.F, 0.F, 0.F);
 }
 
 void Broom::DoNotUse()
@@ -20,13 +20,13 @@ void Broom::DoNotUse()
 	m_SkillTime = 0.f;
 	m_isUsing = false;
 	m_isPrepare = false;
-	m_pPlayerMovement->RunMode();
+	m_PlayerMovement->RunMode();
 }
 
 Broom::Broom(PlayerMovement* playerStatus)
 	: FixedSkill("Broom")
 {
-	m_pPlayerMovement = playerStatus;
+	m_PlayerMovement = playerStatus;
  	m_UsingTime = 5.f; // 사용 시간
 }
 
@@ -38,5 +38,5 @@ void Broom::DoUse()
 {
 	m_isUsing = true;
 	m_isPrepare = false;
-	m_pPlayerMovement->BroomMode();
+	m_PlayerMovement->BroomMode();
 }

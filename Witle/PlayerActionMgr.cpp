@@ -12,7 +12,7 @@
    
 void PlayerActionMgr::UpdateState(float fElpasedTime)
 {
-	static_cast<PlayerAction*>(m_AfterAction)->UpdateState(fElpasedTime, this);
+	static_cast<PlayerAction*>(m_CurrAction)->UpdateState(fElpasedTime, this);
 }
  
 bool PlayerActionMgr::isDifferAfterAndCurrent() const
