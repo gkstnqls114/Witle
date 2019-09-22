@@ -10,7 +10,7 @@
 #include "BossDead.h"
 #include "BossBuf.h"
 
-#include "ErrorAction.h"
+#include "NoneAction.h"
 
 #include "ActionMgr.h"
 
@@ -24,7 +24,7 @@ class BossMonsterActionMgr
 	: public ActionMgr
 {
 	// 현재 사용하는 액션(상태)들 
-	BossMonsterErrorAction m_BossMonsterErrorAction;
+	BossMonsterNoneAction m_BossMonsterErrorAction;
 
 	BossIdleAction m_BossIdleAction;
 	BossMoveAction m_BossMoveAction;
@@ -42,12 +42,15 @@ class BossMonsterActionMgr
 
 public:
 	virtual void UpdateState(float fElpasedTime) override;
-
-	// 이전과 현재의 Action ID 상태가 달라졌는지 알아낸다. 만약 다르다면 true
-	virtual bool isDifferAction() const override;
-
+	 
 	// 이후에 사용할 액션 ID와 현재 사용하는 액션 ID 다른지 알아낸다. 다르다면 true
 	virtual bool isDifferAfterAndCurrent() const override;
+
+	// AfterAction을 각 클래스에 맞는 NoneAction으로 설정한다.
+	virtual void SetUpAfterAction() override;
+
+	// AfterAction이 각 클래스에 맞는 NoneAction이라면 true를 반환한다.
+	virtual bool isAfterNoneAction() override;
 
 	virtual void Init() override;
 
@@ -69,8 +72,10 @@ public:
 		m_BossBuf(pOwner),
 		m_BossDead(pOwner),
 		m_BossStone(pOwner)
-	{
-		Init();
+	{ 
+		m_BeforeAction = &m_BossMonsterErrorAction;
+		m_AfterAction = &m_BossMonsterErrorAction;
+		m_CurrAction = &m_BossMonsterErrorAction;
 	};
 	virtual ~BossMonsterActionMgr() {};
 

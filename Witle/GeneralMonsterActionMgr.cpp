@@ -33,66 +33,59 @@ void GeneralMonsterActionMgr::UpdateState(float fElpasedTime)
 	//	return;
 	//} 
 }
-
-bool GeneralMonsterActionMgr::isDifferAction() const
-{
-	return ((static_cast<GeneralMonsterAction*>(m_BeforeAction)->m_ActionID) != (static_cast<GeneralMonsterAction*>(m_AfterAction)->m_ActionID));
-}
-
+ 
 bool GeneralMonsterActionMgr::isDifferAfterAndCurrent() const
 {
-	return ((static_cast<GeneralMonsterAction*>(m_AfterAction)->m_ActionID) != (static_cast<GeneralMonsterAction*>(m_CurrAction)->m_ActionID));
+	if ((static_cast<GeneralMonsterAction*>(m_AfterAction)->m_ActionID == ENUM_GENERALMONSTER_ACTIONID::GENERALMONSTER_ACTIONID_ERROR) && (static_cast<GeneralMonsterAction*>(m_CurrAction)->m_ActionID == ENUM_GENERALMONSTER_ACTIONID::GENERALMONSTER_ACTIONID_ERROR)) return true;
+	if ((static_cast<GeneralMonsterAction*>(m_AfterAction)->m_ActionID) != (static_cast<GeneralMonsterAction*>(m_CurrAction)->m_ActionID)) return true;
+	else return false; 
+}
+
+void GeneralMonsterActionMgr::SetUpAfterAction()
+{
+	m_AfterAction = &m_GeneralMonsterErrorAction;
+}
+
+bool GeneralMonsterActionMgr::isAfterNoneAction()
+{
+	return isSameAfterAction(&m_GeneralMonsterErrorAction);
 }
 
 void GeneralMonsterActionMgr::Init()
 {
 	m_BeforeAction = &m_GeneralMonsterErrorAction;
 	m_CurrAction = &m_GeneralMonsterErrorAction;
-	m_AfterAction = &m_IdleAction;
+	m_AfterAction = &m_GeneralMonsterErrorAction;
+	ChangeStateToIdle();
 }
 
 void GeneralMonsterActionMgr::ChangeStateBefore()
-{ 
-	// 이전 액션과 현재 액션이 같다면..
-	if (static_cast<GeneralMonsterAction*>(m_AfterAction)->m_ActionID
-		== static_cast<GeneralMonsterAction*>(m_BeforeAction)->m_ActionID)
-	{
-		assert(false);
-	}
-
-	// 상태가 이전하고 다른 경우에만 서로 변경한다.
-	if (m_AfterAction != m_BeforeAction)
-	{
-		Action* temp = m_AfterAction;
-		m_AfterAction = m_BeforeAction;
-		m_BeforeAction = temp;
-	}
-
-	if (m_AfterAction == &m_IdleAction)
+{   
+	if (m_BeforeAction == &m_IdleAction)
 	{
 		ChangeStateToIdle();
 	}
-	else if (m_AfterAction == &m_MoveAction)
+	else if (m_BeforeAction == &m_MoveAction)
 	{
 		ChangeStateToMove();
 	}
-	else if (m_AfterAction == &m_ChaseAction)
+	else if (m_BeforeAction == &m_ChaseAction)
 	{
 		ChangeStateToChase();
 	}
-	else if (m_AfterAction == &m_SearchAction)
+	else if (m_BeforeAction == &m_SearchAction)
 	{
 		ChangeStateToSearch();
 	}
-	else if (m_AfterAction == &m_DeadAction)
+	else if (m_BeforeAction == &m_DeadAction)
 	{
 		ChangeStateToDead();
 	}
-	else if (m_AfterAction == &m_HitAction)
+	else if (m_BeforeAction == &m_HitAction)
 	{
 		ChangeStateToHit();
 	}
-	else if (m_AfterAction == &m_AttackAction)
+	else if (m_BeforeAction == &m_AttackAction)
 	{
 		ChangeStateToAttack();
 	}

@@ -14,26 +14,34 @@ void PlayerActionMgr::UpdateState(float fElpasedTime)
 {
 	static_cast<PlayerAction*>(m_AfterAction)->UpdateState(fElpasedTime, this);
 }
-
-bool PlayerActionMgr::isDifferAction() const
-{
-	return ((static_cast<PlayerAction*>(m_BeforeAction)->m_ActionID) != (static_cast<PlayerAction*>(m_AfterAction)->m_ActionID));
+ 
+bool PlayerActionMgr::isDifferAfterAndCurrent() const
+{  
+	if ((static_cast<PlayerAction*>(m_AfterAction)->m_ActionID == ENUM_PLAYER_ACTIONID::PLAYER_ACTIONID_ERROR) && (static_cast<PlayerAction*>(m_CurrAction)->m_ActionID == ENUM_PLAYER_ACTIONID::PLAYER_ACTIONID_ERROR)) return true;
+	if ((static_cast<PlayerAction*>(m_AfterAction)->m_ActionID) != (static_cast<PlayerAction*>(m_CurrAction)->m_ActionID)) return true;
+	else return false;
 }
 
-bool PlayerActionMgr::isDifferAfterAndCurrent() const
+void PlayerActionMgr::SetUpAfterAction()
 {
-	return ((static_cast<PlayerAction*>(m_AfterAction)->m_ActionID) != (static_cast<PlayerAction*>(m_CurrAction)->m_ActionID));
+	m_AfterAction = &m_PlayerErrorAction; 
+}
+
+bool PlayerActionMgr::isAfterNoneAction()
+{
+	return isSameAfterAction(&m_PlayerErrorAction);
 }
 
 void PlayerActionMgr::Init()
 { 
 	m_BeforeAction = &m_PlayerErrorAction;
-	m_AfterAction = &m_IdleAction; 
+	m_AfterAction = &m_PlayerErrorAction;
 	m_CurrAction = &m_PlayerErrorAction;
+	ChangeActionToIdle();
 }
 
 void PlayerActionMgr::ChangeActionToIdle()
-{ 
+{
 	bool isChanged = ChangeAction(&m_IdleAction);
 	if (!isChanged) return;
 	m_AfterAction->Init(); 

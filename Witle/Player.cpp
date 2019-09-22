@@ -167,11 +167,7 @@ void Player::Init()
 
 	m_Transform.SetIdentity();
 	m_Transform.SetPosition(15000, 0, 15000);
-	 
-	// 애니메이션 정보 초기화 
-	m_pLoadObject_Cloth->SetTrackAnimationSet(0, 0);
-	m_pLoadObject_Body->SetTrackAnimationSet(0, 0);
-
+	  
 	isDead = false;
 	m_isAttacking = false;
 	m_pPlayerMovement->RunMode();

@@ -1218,7 +1218,7 @@
     <ClInclude Include="GameTimer.h">
       <Filter>01.GameBase\GameTimer</Filter>
     </ClInclude>
-    <ClInclude Include="ErrorAction.h">
+    <ClInclude Include="NoneAction.h">
       <Filter>02.Component\Action</Filter>
     </ClInclude>
   </ItemGroup>
@@ -1811,7 +1811,7 @@
     <ClCompile Include="GameTimer.cpp">
       <Filter>01.GameBase\GameTimer</Filter>
     </ClCompile>
-    <ClCompile Include="ErrorAction.cpp">
+    <ClCompile Include="NoneAction.cpp">
       <Filter>02.Component\Action</Filter>
     </ClCompile>
   </ItemGroup>

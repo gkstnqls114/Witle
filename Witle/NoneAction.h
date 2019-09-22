@@ -3,7 +3,7 @@
 #include "MonsterAction.h"
  
 //// 플레이어 액션 에러 전용 클래스 ////////////////////////////////
-class PlayerErrorAction
+class PlayerNoneAction
 	: public PlayerAction
 {
 public:
@@ -16,16 +16,16 @@ public:
 	virtual void UpdateState(float fElpasedTime, PlayerActionMgr* actionMgr) override {};
 
 public: 
-	PlayerErrorAction(GameObject* pOwner) :
+	PlayerNoneAction(GameObject* pOwner) :
 		PlayerAction(pOwner, ENUM_PLAYER_ACTIONID::PLAYER_ACTIONID_ERROR, ENUM_ANIMATIONID::ANIMATIONID_ERROR) {};
-	virtual ~PlayerErrorAction() {};
+	virtual ~PlayerNoneAction() {};
 };
 //// 플레이어 액션 에러 전용 클래스 ////////////////////////////////
 
 
 
 //// 기본 몬스터 액션 에러 전용 클래스 ////////////////////////////////
-class GeneralMonsterErrorAction
+class GeneralMonsterNoneAction
 	: public GeneralMonsterAction
 {
 public:
@@ -39,16 +39,16 @@ public:
 	virtual void UpdateState(float fElpasedTime, GeneralMonsterActionMgr* actionMgr) override {};
 
 public:
-	GeneralMonsterErrorAction(GameObject* pOwner) :
+	GeneralMonsterNoneAction(GameObject* pOwner) :
 		GeneralMonsterAction(pOwner, ENUM_GENERALMONSTER_ACTIONID::GENERALMONSTER_ACTIONID_ERROR, ENUM_ANIMATIONID::ANIMATIONID_ERROR) {};
-	virtual ~GeneralMonsterErrorAction() {};
+	virtual ~GeneralMonsterNoneAction() {};
 };
 //// 기본 몬스터 액션 에러 전용 클래스 ////////////////////////////////
 
 
 
 //// 보스 몬스터 액션 에러 전용 클래스 ////////////////////////////////
-class BossMonsterErrorAction
+class BossMonsterNoneAction
 	: public BossMonsterAction
 {
 public:
@@ -62,8 +62,8 @@ public:
 	virtual void UpdateState(float fElpasedTime, BossMonsterActionMgr* actionMgr) override {};
 
 public:
-	BossMonsterErrorAction(GameObject* pOwner) :
+	BossMonsterNoneAction(GameObject* pOwner) :
 		BossMonsterAction(pOwner, ENUM_BOSSMONSTER_ACTIONID::BOSSMONSTER_ACTIONID_ERROR, ENUM_ANIMATIONID::ANIMATIONID_ERROR) {};
-	virtual ~BossMonsterErrorAction() {};
+	virtual ~BossMonsterNoneAction() {};
 };
 //// 기본 몬스터 액션 에러 전용 클래스 ////////////////////////////////

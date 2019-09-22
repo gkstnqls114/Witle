@@ -27,22 +27,30 @@ void BossMonsterActionMgr::UpdateState(float fElpasedTime)
 
 	static_cast<BossMonsterAction*>(m_AfterAction)->UpdateState(fElpasedTime, this);
 }
-
-bool BossMonsterActionMgr::isDifferAction() const
-{
-	return ((static_cast<BossMonsterAction*>(m_BeforeAction)->m_ActionID != static_cast<BossMonsterAction*>(m_AfterAction)->m_ActionID));
-}
-
+ 
 bool BossMonsterActionMgr::isDifferAfterAndCurrent() const
 { 
-	return ((static_cast<BossMonsterAction*>(m_AfterAction)->m_ActionID) != (static_cast<BossMonsterAction*>(m_CurrAction)->m_ActionID));
+	if ((static_cast<BossMonsterAction*>(m_AfterAction)->m_ActionID == ENUM_BOSSMONSTER_ACTIONID::BOSSMONSTER_ACTIONID_ERROR) && (static_cast<BossMonsterAction*>(m_CurrAction)->m_ActionID == ENUM_BOSSMONSTER_ACTIONID::BOSSMONSTER_ACTIONID_ERROR)) return true;
+	if ((static_cast<BossMonsterAction*>(m_AfterAction)->m_ActionID) != (static_cast<BossMonsterAction*>(m_CurrAction)->m_ActionID)) return true;
+	else return false;
+}
+
+void BossMonsterActionMgr::SetUpAfterAction()
+{
+	m_AfterAction = &m_BossMonsterErrorAction;
+}
+
+bool BossMonsterActionMgr::isAfterNoneAction()
+{
+	return isSameAfterAction(&m_BossMonsterErrorAction);
 }
 
 void BossMonsterActionMgr::Init()
 {
-	m_AfterAction = &m_BossIdleAction;
+	m_AfterAction = &m_BossMonsterErrorAction;
 	m_CurrAction = &m_BossMonsterErrorAction;
 	m_BeforeAction = &m_BossMonsterErrorAction;
+	ChangeBossStateToStone();
 }
 
 void BossMonsterActionMgr::ChangeBossStateBefore()

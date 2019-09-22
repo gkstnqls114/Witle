@@ -96,7 +96,7 @@ Dragon::Dragon(const std::string & entityID, const XMFLOAT3& SpawnPoint,
 	m_MonsterMovement->m_fDistance = 150;
 
 	m_MonsterActionMgr = new BossMonsterActionMgr(this, 1, 1);
-
+	
 	m_pTexture = new Texture(ENUM_SCENE::SCENE_GAME, ROOTPARAMETER_INDEX(ROOTPARAMETER_TEXTURE), false, 1, RESOURCE_TEXTURE2D);
 	m_pStoneTexture = new Texture(ENUM_SCENE::SCENE_GAME, ROOTPARAMETER_INDEX(ROOTPARAMETER_TEXTURE), false, 1, RESOURCE_TEXTURE2D);
 	 
@@ -142,6 +142,7 @@ Dragon::~Dragon()
 void Dragon::Init()
 {    
 	Monster::Init(true);
+	m_MonsterActionMgr->Init();
 
 	IsStone(); 
 }

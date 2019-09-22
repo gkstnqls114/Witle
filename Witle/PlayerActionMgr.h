@@ -12,7 +12,7 @@
 #include "PlayerDeadAction.h"
 #include "PlayerHitAction.h"
 
-#include "ErrorAction.h"
+#include "NoneAction.h"
 
 #include "ActionMgr.h"
 
@@ -23,7 +23,7 @@ class Player;
 class PlayerActionMgr
 	: public ActionMgr
 { 
-	PlayerErrorAction	       m_PlayerErrorAction;
+	PlayerNoneAction	       m_PlayerErrorAction;
 
 	PlayerIdleAction           m_IdleAction;
 	PlayerRightWalkAction      m_RightWalkAction;
@@ -40,12 +40,18 @@ class PlayerActionMgr
 
 public:
 	virtual void UpdateState(float fElpasedTime) override;
-
-	// 이전과 현재의 Action ID 상태가 달라졌는지 알아낸다. 만약 다르다면 true
-	virtual bool isDifferAction() const override;
-
+	 
 	// 이후에 사용할 액션 ID와 현재 사용하는 액션 ID 다른지 알아낸다. 다르다면 true
 	virtual bool isDifferAfterAndCurrent() const override;
+
+	// AfterAction을 각 클래스에 맞는 NoneAction으로 설정한다.
+	virtual void SetUpAfterAction() override;
+
+	// AfterAction이 각 클래스에 맞는 NoneAction이라면 true를 반환한다.
+	virtual bool isAfterNoneAction() override;
+
+	virtual void Init() override;
+
 
 public: 
 	virtual void ReleaseObjects() override {};
@@ -66,11 +72,11 @@ public:
 		, m_DeadAction(pOwner, 0)
 		, m_HitAction(pOwner, 0)
 	{
-		Init();
+		m_BeforeAction = &m_PlayerErrorAction;
+		m_AfterAction = &m_PlayerErrorAction;
+		m_CurrAction = &m_PlayerErrorAction; 
 	};
 	virtual ~PlayerActionMgr() {}; 
-
-	virtual void Init() override;
 
 	bool Is_IdleAction() const { return (m_AfterAction == &m_IdleAction); }
 	bool Is_RightWalkAction() const { return (m_AfterAction == &m_RightWalkAction); }

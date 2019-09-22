@@ -11,21 +11,50 @@
 #include "ActionMgr.h"
   
 
-bool ActionMgr::ChangeAction(Action * action)
+bool ActionMgr::ChangeAction(Action * const action)
 { 
-	if (!IsPossibleChangeAction(action)) return false; 
-	m_AfterAction = action;
+	if (isPossibleChangeAction(action))
+	{
+		m_AfterAction = action; 
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+bool ActionMgr::isPossibleChangeAction(const Action * const action) const
+{
+	if (isSameAfterAction(action)) return false; 
+	if (isSameCurrAction(action)) return false;
 	return true;
 }
 
-bool ActionMgr::IsPossibleChangeAction(Action * action) const
+bool ActionMgr::isSameAfterAction(const Action * const action) const
 {
-	if (m_AfterAction == action) return false;
-	return true;
+	return m_AfterAction == action;
+}
+
+bool ActionMgr::isSameCurrAction(const Action * const action) const
+{
+	return m_CurrAction == action;
 }
 
 void ActionMgr::UpdateVelocity(float fElpasedTime, Movement * movement)
 {
 	// 강제 형변환. 반드시 수정할것.
 	m_AfterAction->UpdateVelocity(fElpasedTime, movement);
+}
+
+void ActionMgr::SetUpPrevActionID()
+{
+	if (isAfterNoneAction()) return;
+	if (!isDifferAfterAndCurrent()) return;
+
+	// 이전 상태와 현재상태가 다른 경우에만 호출한다.
+	if(m_BeforeAction != m_CurrAction) m_BeforeAction = m_CurrAction;
+	m_CurrAction = m_AfterAction; 
+
+	m_CurrAction->Init();
 }

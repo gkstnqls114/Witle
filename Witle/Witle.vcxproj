@@ -165,7 +165,7 @@
     <ClInclude Include="BloomRevealShader.h" />
     <ClInclude Include="BossBuf.h" />
     <ClInclude Include="BossDead.h" />
-    <ClInclude Include="ErrorAction.h" />
+    <ClInclude Include="NoneAction.h" />
     <ClInclude Include="PlayerActionMgr.h" />
     <ClInclude Include="PlayerStandardAttackAction.h" />
     <ClInclude Include="PlayerBroomPrepareAction.h" />
@@ -371,7 +371,7 @@
     <ClCompile Include="BloomRevealShader.cpp" />
     <ClCompile Include="BossBuf.cpp" />
     <ClCompile Include="BossDead.cpp" />
-    <ClCompile Include="ErrorAction.cpp" />
+    <ClCompile Include="NoneAction.cpp" />
     <ClCompile Include="PlayerActionMgr.cpp" />
     <ClCompile Include="PlayerStandardAttackAction.cpp" />
     <ClCompile Include="PlayerBroomPrepareAction.cpp" />

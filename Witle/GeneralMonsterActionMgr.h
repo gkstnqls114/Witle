@@ -7,7 +7,7 @@
 #include "HitAction.h"
 #include "AttackAction.h"
 
-#include "ErrorAction.h"
+#include "NoneAction.h"
 
 #include "ActionMgr.h"
 
@@ -19,7 +19,7 @@ class Player;
 class GeneralMonsterActionMgr
 	: public ActionMgr
 {
-	GeneralMonsterErrorAction	       m_GeneralMonsterErrorAction;
+	GeneralMonsterNoneAction	       m_GeneralMonsterErrorAction;
 
 	IdleAction      m_IdleAction;
 	MoveAction      m_MoveAction;
@@ -33,12 +33,16 @@ class GeneralMonsterActionMgr
 
 public:
 	virtual void UpdateState(float fElpasedTime) override;
-
-	// 이전과 현재의 Action ID 상태가 달라졌는지 알아낸다. 만약 다르다면 true
-	virtual bool isDifferAction() const override;
-
+	 
 	// 이후에 사용할 액션 ID와 현재 사용하는 액션 ID 다른지 알아낸다. 다르다면 true
 	virtual bool isDifferAfterAndCurrent() const override;
+
+	// AfterAction을 각 클래스에 맞는 NoneAction으로 설정한다.
+	virtual void SetUpAfterAction() override;
+
+	// AfterAction이 각 클래스에 맞는 NoneAction이라면 true를 반환한다.
+	virtual bool isAfterNoneAction() override;
+;
 
 	virtual void Init() override;
 
@@ -57,8 +61,10 @@ public:
 		m_DeadAction(pOwner),
 		m_HitAction(pOwner),
 		m_AttackAction(pOwner)
-	{ 
-		Init();
+	{  
+		m_BeforeAction = &m_GeneralMonsterErrorAction;
+		m_CurrAction = &m_GeneralMonsterErrorAction;
+		m_AfterAction = &m_GeneralMonsterErrorAction;
 	};
 	virtual ~GeneralMonsterActionMgr() {};
 	 
