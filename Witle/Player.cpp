@@ -441,14 +441,9 @@ void Player::Rotate(float x, float y, float z)
 static float hittime = 0.f;
 void Player::ProcessInput(float fTimeElapsed)
 {    
-	//m_PlayerActionMgr->UpdateState(fTimeElapsed);
-	//m_PlayerActionMgr->UpdateVelocity(fTimeElapsed, m_PlayerMovement);
-
-	if (isDead && m_pLoadObject_Cloth->IsTrackAnimationSetFinish(0, ANIMATION_DEAD.ID))
-	{ 
-		SceneMgr::GetInstacne()->ChangeSceneToLose();
-		return;
-	}
+	m_PlayerActionMgr->UpdateState(fTimeElapsed);
+	m_PlayerActionMgr->UpdateVelocity(fTimeElapsed, m_PlayerMovement);
+	 
 	if (isDead) return;
 
 	if (m_pPlayerHPStatus->GetGuage() <= 0 && isDead == false)
@@ -630,6 +625,11 @@ void Player::UseSkill_Broom()
 XMFLOAT3 Player::GetVelocity() const
 {
 	return m_PlayerMovement->m_xmf3Velocity;
+}
+
+bool Player::IsTrackAnimationSetFinish(ENUM_ANIMATIONID id) const
+{
+	return (m_pLoadObject_Cloth->IsTrackAnimationSetFinish(0, id) && m_pLoadObject_Body->IsTrackAnimationSetFinish(0, id));
 }
 
 void Player::SetVelocity(const XMFLOAT3 & velocity)

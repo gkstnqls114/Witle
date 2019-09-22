@@ -58,24 +58,7 @@ public:
 	virtual void ReleaseUploadBuffers() override {};
 
 public:
-	PlayerActionMgr(GameObject* pOwner) : ActionMgr(pOwner) 
-		, m_PlayerErrorAction(pOwner)
-	    , m_IdleAction(pOwner, 0) 
-		, m_RightWalkAction(pOwner, 0)
-		, m_LeftWalkAction(pOwner, 0)
-		, m_ForwardWalkAction(pOwner, 0)
-		, m_BackwardWalkAction(pOwner, 0) 
-		, m_StandardAttackAction(pOwner, 0)
-		, m_BroomPrepareAction(pOwner, 0)
-		, m_BroomIdleAction(pOwner, 0)
-		, m_BroomForwardAction(pOwner, 0)
-		, m_DeadAction(pOwner, 0)
-		, m_HitAction(pOwner, 0)
-	{
-		m_BeforeAction = &m_PlayerErrorAction;
-		m_AfterAction = &m_PlayerErrorAction;
-		m_CurrAction = &m_PlayerErrorAction; 
-	};
+	PlayerActionMgr(Player* pOwner);
 	virtual ~PlayerActionMgr() {}; 
 
 	bool Is_IdleAction() const { return (m_AfterAction == &m_IdleAction); }

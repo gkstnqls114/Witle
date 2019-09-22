@@ -3,6 +3,7 @@
 
 class PlayerMovement;
 class PlayerActionMgr;
+class Player;
 
 // 몬스터 액션의 부모 클래스.
 class PlayerAction
@@ -26,8 +27,7 @@ public:
 	virtual void ReleaseUploadBuffers() override {};
 
 public:
-	PlayerAction(GameObject* pOwner, ENUM_PLAYER_ACTIONID actionID, ENUM_ANIMATIONID animeID)
-		: Action(pOwner, animeID), m_ActionID(actionID) {};
+	PlayerAction(Player* pOwner, ENUM_PLAYER_ACTIONID actionID, ENUM_ANIMATIONID animeID);
 	virtual ~PlayerAction() {};
 
 };

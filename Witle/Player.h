@@ -124,11 +124,15 @@ public:
 	const Broom* GetBroom() const { return m_Broom; }
 	bool IsAttacking() const { return m_isAttacking; }
 	PlayerActionMgr * const GetPlayerActionMgr() const { return m_PlayerActionMgr; }
+
+	bool IsTrackAnimationSetFinish(ENUM_ANIMATIONID) const;
 	/////////////////////// Get
 
 	/////////////////////// Set	
-	void isAttacking()  {
-		m_isAttacking = true; }
+	void isAttacking()  
+	{
+		m_isAttacking = true; 
+	}
 
 	void SetVelocity(const XMFLOAT3& velocity);
 	void SetUpdatedContext(LPVOID pContext)

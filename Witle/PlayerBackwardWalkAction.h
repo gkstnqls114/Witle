@@ -18,7 +18,7 @@ public:
 	virtual void UpdateState(float fElpasedTime, PlayerActionMgr* actionMgr) override;
 
 public:
-	PlayerBackwardWalkAction(GameObject* pOwner, float idleTime) : PlayerAction(pOwner, PLAYER_ACTIONID_BACKWARD, PLAYER_ANIMATIONID_BACKWARD), m_IdleTime(idleTime) { };
+	PlayerBackwardWalkAction(Player* pOwner, float idleTime) : PlayerAction(pOwner, PLAYER_ACTIONID_BACKWARD, PLAYER_ANIMATIONID_BACKWARD), m_IdleTime(idleTime) { };
 	virtual ~PlayerBackwardWalkAction() {};
 
 };

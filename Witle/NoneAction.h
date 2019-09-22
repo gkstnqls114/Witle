@@ -16,7 +16,7 @@ public:
 	virtual void UpdateState(float fElpasedTime, PlayerActionMgr* actionMgr) override {};
 
 public: 
-	PlayerNoneAction(GameObject* pOwner) :
+	PlayerNoneAction(Player* pOwner) :
 		PlayerAction(pOwner, ENUM_PLAYER_ACTIONID::PLAYER_ACTIONID_ERROR, ENUM_ANIMATIONID::ANIMATIONID_ERROR) {};
 	virtual ~PlayerNoneAction() {};
 };

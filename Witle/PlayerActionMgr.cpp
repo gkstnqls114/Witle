@@ -40,6 +40,26 @@ void PlayerActionMgr::Init()
 	ChangeActionToIdle();
 }
 
+PlayerActionMgr::PlayerActionMgr(Player * pOwner)
+	: ActionMgr(static_cast<GameObject*>(pOwner))
+	, m_PlayerErrorAction(pOwner)
+	, m_IdleAction(pOwner, 0)
+	, m_RightWalkAction(pOwner, 0)
+	, m_LeftWalkAction(pOwner, 0)
+	, m_ForwardWalkAction(pOwner, 0)
+	, m_BackwardWalkAction(pOwner, 0)
+	, m_StandardAttackAction(pOwner, 0)
+	, m_BroomPrepareAction(pOwner, 0)
+	, m_BroomIdleAction(pOwner, 0)
+	, m_BroomForwardAction(pOwner, 0)
+	, m_DeadAction(pOwner, 0)
+	, m_HitAction(pOwner, 0)
+{
+	m_BeforeAction = &m_PlayerErrorAction;
+	m_AfterAction = &m_PlayerErrorAction;
+	m_CurrAction = &m_PlayerErrorAction;
+}
+
 void PlayerActionMgr::ChangeActionToIdle()
 {
 	bool isChanged = ChangeAction(&m_IdleAction);
