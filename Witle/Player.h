@@ -23,13 +23,10 @@ class Player :
 {   
 private:
 	PlayerActionMgr* m_PlayerActionMgr{ nullptr }; // Player의 액션(모델의 동작)을 관리
-
-	bool isDead{ false };
-
+	 
 	bool m_isRendering{ true };
 	bool m_isAttacking{ false };
 	
-
 	PlayerMovement*    m_PlayerMovement{ nullptr };
 	PlayerStatus*	   m_pPlayerHPStatus{ nullptr };
 	PlayerStatus*	   m_pPlayerMPStatus{ nullptr };
@@ -64,15 +61,16 @@ protected:
 	virtual void ReleaseMembers() override;
 	virtual void ReleaseMemberUploadBuffers() override;
 
-public:
-	void SetAnimationID(ENUM_ANIMATIONID state);
-
+public: 
 	virtual void Update(float fElapsedTime) override;
 
 private:
 	void OnPlayerUpdateCallback(float fTimeElapsed);
 	void OnCameraUpdateCallback(float fTimeElapsed, Camera* camera);
-	
+
+	// Animate 과정에서 ActionMgr이 갖고있는 After와 Curr Action이 다르다면 설정합니다.
+	void SetCurrActionAnimation();
+
 public:
 	Player(const std::string& entityID, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, void *pContext = NULL);
 	virtual ~Player();
@@ -125,6 +123,7 @@ public:
 	PlayerActionMgr * const GetPlayerActionMgr() const { return m_PlayerActionMgr; }
 
 	bool IsTrackAnimationSetFinish(ENUM_ANIMATIONID) const;
+	void SetTrackAnimationSet(ENUM_ANIMATIONID);
 	/////////////////////// Get
 
 	/////////////////////// Set	

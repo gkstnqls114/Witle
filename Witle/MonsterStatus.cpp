@@ -10,7 +10,7 @@
 #include "GameObject.h"
 #include "MonsterStatus.h"
 
-void MonsterStatus::SetAnimationStateToHit()
+void MonsterStatus::ChangeAfterActionToHit()
 { 
 	static_cast<Monster*>(m_pOwner)->SetAnimationID(SPACECAT_HIT.ID);
 }

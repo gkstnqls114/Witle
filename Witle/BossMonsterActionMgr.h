@@ -52,6 +52,9 @@ public:
 	// AfterAction이 각 클래스에 맞는 NoneAction이라면 true를 반환한다.
 	virtual bool isAfterNoneAction() override;
 
+	// m_pOwner의 SetTrackAnimationSet 함수를 호출합니다.
+	virtual void SetTrackAnimationSet() const override;
+
 	virtual void Init() override;
 
 public:

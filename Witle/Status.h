@@ -9,7 +9,7 @@ class Status
 	: public ComponentBase
 { 
 protected:
-	virtual void SetAnimationStateToHit() = 0;
+	virtual void ChangeAfterActionToHit() = 0;
 	 
 	float m_Guage{ 100.f };
 	

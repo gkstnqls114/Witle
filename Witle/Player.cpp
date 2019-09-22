@@ -167,8 +167,7 @@ void Player::Init()
 
 	m_Transform.SetIdentity();
 	m_Transform.SetPosition(15000, 0, 15000);
-	  
-	isDead = false;
+	   
 	m_isAttacking = false;
 	m_PlayerMovement->RunMode();
 	m_pPlayerMPStatus->SetGuage(100.f);
@@ -339,20 +338,13 @@ void Player::ReleaseMemberUploadBuffers()
 	if (m_PlayerModel_Body)m_PlayerModel_Body->ReleaseUploadBuffers();
 	if (m_pMyBOBox)m_pMyBOBox->ReleaseUploadBuffers();
 }
- 
-void Player::SetAnimationID(ENUM_ANIMATIONID state)
-{  
-	m_PlayerActionMgr->SetUpPrevActionID();
-	m_pLoadObject_Cloth->SetTrackAnimationSet(0, state);
-	m_pLoadObject_Body->SetTrackAnimationSet(0, state);
-}
 
 void Player::Update(float fElapsedTime)
 {  
 	SoundManager::GetInstance()->UpdateListenerPos(this);
 
 	// 초당 hp, mp회복
-	if (!isDead)
+	if (!m_PlayerActionMgr->Is_DeadAction())
 	{ 
 	m_pPlayerHPStatus->AddHP(5 * fElapsedTime);
 	m_pPlayerMPStatus->AddHP(10 * fElapsedTime);
@@ -384,33 +376,17 @@ void Player::SubstractHP(int sub)
 	float prevDamage = m_pPlayerHPStatus->GetGuage();
 	m_pPlayerHPStatus->SubstractHP(sub);
 	
-	if (m_PlayerActionMgr->Is_BroomIdleAction())
-	{
-		isBrooming = true; 
-		return;
-	}
-	if (m_PlayerActionMgr->Is_BroomForwardAction())
-	{
-		isBrooming = true; 
-		return;
-	}
-	if (m_PlayerActionMgr->Is_BroomPrepareAction())
-	{
-		isBrooming = true; 
-		return;
-	}
-	 
-	if (m_PlayerActionMgr->Is_HitAction())
+	if (!m_PlayerActionMgr->Is_HitAction())
 	{
 		m_PlayerActionMgr->ChangeActionToHit();
-		m_pLoadObject_Body->SetTrackAnimationSet(0, m_PlayerActionMgr->GetCurrPlayerAction()->m_AnimationID);
-		m_pLoadObject_Cloth->SetTrackAnimationSet(0, m_PlayerActionMgr->GetCurrPlayerAction()->m_AnimationID);
 	}
-
 }
 
 void Player::Animate(float fElapsedTime)
 { 
+	// AfterAction을 CurrAction으로 설정하고 애니메이션 정보를 Set합니다.
+	SetCurrActionAnimation();
+
 	// 반드시 트랜스폼 업데이트..! 
 	m_Transform.Update(fElapsedTime);
 	 
@@ -444,9 +420,21 @@ void Player::ProcessInput(float fTimeElapsed)
 	m_PlayerActionMgr->UpdateVelocity(fTimeElapsed, m_PlayerMovement);
 }
  
+void Player::SetCurrActionAnimation()
+{ 
+	// none action이면 return
+	if (m_PlayerActionMgr->isAfterNoneAction()) return;
+	// 현재와 이후에 적용할 액션이 같다면 return
+	if (!m_PlayerActionMgr->isDifferAfterAndCurrent()) return;
+	 
+	m_PlayerActionMgr->ProcessActions();
+	m_pLoadObject_Cloth->SetTrackAnimationSet(0, m_PlayerActionMgr->GetCurrPlayerAction()->m_AnimationID);
+	m_pLoadObject_Body->SetTrackAnimationSet(0, m_PlayerActionMgr->GetCurrPlayerAction()->m_AnimationID);
+}
+
 bool Player::Attack(Status* status, MyCollider* collider, XMFLOAT2 aimPoint, Camera* pMainCaemra, bool isDragon = false)
 {   
-	if (isDead) return false;
+	if (m_PlayerActionMgr->Is_DeadAction()) return false;
 
 	// 시행된다면..
 	bool isAttack = false;
@@ -511,6 +499,12 @@ XMFLOAT3 Player::GetVelocity() const
 bool Player::IsTrackAnimationSetFinish(ENUM_ANIMATIONID id) const
 {
 	return (m_pLoadObject_Cloth->IsTrackAnimationSetFinish(0, id) && m_pLoadObject_Body->IsTrackAnimationSetFinish(0, id));
+}
+
+void Player::SetTrackAnimationSet(ENUM_ANIMATIONID animeID)
+{
+	m_pLoadObject_Cloth->SetTrackAnimationSet(0, animeID);
+	m_pLoadObject_Body->SetTrackAnimationSet(0, animeID);
 }
 
 void Player::SetVelocity(const XMFLOAT3 & velocity)

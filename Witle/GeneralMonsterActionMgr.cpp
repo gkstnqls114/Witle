@@ -51,6 +51,11 @@ bool GeneralMonsterActionMgr::isAfterNoneAction()
 	return isSameAfterAction(&m_GeneralMonsterErrorAction);
 }
 
+void GeneralMonsterActionMgr::SetTrackAnimationSet() const
+{
+	static_cast<Monster*>(m_pOwner)->SetAnimationID(m_CurrAction->m_AnimationID);
+}
+
 void GeneralMonsterActionMgr::Init()
 {
 	m_BeforeAction = &m_GeneralMonsterErrorAction;
@@ -93,7 +98,7 @@ void GeneralMonsterActionMgr::ChangeStateBefore()
 
 void GeneralMonsterActionMgr::ChangeStateToIdle()
 {
-	bool isChanged = ChangeAction(&m_IdleAction);
+	bool isChanged = ChangeAfterAction(&m_IdleAction);
 	if (!isChanged) return;
 	m_AfterAction->Init();
 
@@ -103,7 +108,7 @@ void GeneralMonsterActionMgr::ChangeStateToIdle()
 
 void GeneralMonsterActionMgr::ChangeStateToMove()
 { 
-	bool isChanged = ChangeAction(&m_MoveAction);
+	bool isChanged = ChangeAfterAction(&m_MoveAction);
 	if (!isChanged) return;
 	m_AfterAction->Init();
 
@@ -113,7 +118,7 @@ void GeneralMonsterActionMgr::ChangeStateToMove()
 
 void GeneralMonsterActionMgr::ChangeStateToChase()
 { 
-	bool isChanged = ChangeAction(&m_ChaseAction);
+	bool isChanged = ChangeAfterAction(&m_ChaseAction);
 	if (!isChanged) return;
 	m_AfterAction->Init();
 
@@ -123,7 +128,7 @@ void GeneralMonsterActionMgr::ChangeStateToChase()
 
 void GeneralMonsterActionMgr::ChangeStateToSearch()
 { 
-	bool isChanged = ChangeAction(&m_SearchAction);
+	bool isChanged = ChangeAfterAction(&m_SearchAction);
 	if (!isChanged) return;
 	m_AfterAction->Init();
 
@@ -133,7 +138,7 @@ void GeneralMonsterActionMgr::ChangeStateToSearch()
 
 void GeneralMonsterActionMgr::ChangeStateToDead()
 { 
-	bool isChanged = ChangeAction(&m_DeadAction);
+	bool isChanged = ChangeAfterAction(&m_DeadAction);
 	if (!isChanged) return;
 	m_AfterAction->Init();
 
@@ -143,7 +148,7 @@ void GeneralMonsterActionMgr::ChangeStateToDead()
 
 void GeneralMonsterActionMgr::ChangeStateToHit()
 { 
-	bool isChanged = ChangeAction(&m_HitAction);
+	bool isChanged = ChangeAfterAction(&m_HitAction);
 	if (!isChanged) return;
 	m_AfterAction->Init();
 
@@ -153,7 +158,7 @@ void GeneralMonsterActionMgr::ChangeStateToHit()
 
 void GeneralMonsterActionMgr::ChangeStateToAttack()
 { 
-	bool isChanged = ChangeAction(&m_AttackAction);
+	bool isChanged = ChangeAfterAction(&m_AttackAction);
 	if (!isChanged) return;
 	m_AfterAction->Init();
 

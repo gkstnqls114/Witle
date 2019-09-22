@@ -54,6 +54,9 @@ public:
 	// AfterAction이 각 클래스에 맞는 NoneAction이라면 true를 반환한다.
 	virtual bool isAfterNoneAction() override;
 
+	// m_pOwner의 SetTrackAnimationSet 함수를 호출합니다.
+	virtual void SetTrackAnimationSet() const override;
+
 	virtual void Init() override;
 
 private:
@@ -88,8 +91,11 @@ public:
 	void ChangeActionToLeftWalk();
 	void ChangeActionToForwardWalk();
 	void ChangeActionToBackwardWalk();
+
 	void ChangeActionToStandardAttack();
+
 	void ChangeActionToBroomPrepare();
+
 	void ChangeActionToBroomIdle();
 	void ChangeActionToBroomForward();
 	void ChangeActionToDead();
@@ -97,11 +103,16 @@ public:
 	 
 	PlayerAction* GetCurrPlayerAction() const 
 	{
-		return static_cast<PlayerAction*>(m_AfterAction); 
+		return static_cast<PlayerAction*>(m_CurrAction); 
 	};
 	
 	PlayerAction* GetBeforePlayerAction() const 
 	{
 		return static_cast<PlayerAction*>(m_BeforeAction);
+	};
+
+	PlayerAction* GetAfterPlayerAction() const
+	{
+		return static_cast<PlayerAction*>(m_AfterAction);
 	};
 };

@@ -11,17 +11,17 @@
 #include "ActionMgr.h"
   
 
-bool ActionMgr::ChangeAction(Action * const action)
+bool ActionMgr::ChangeAfterAction(Action * const action)
 { 
-	if (isPossibleChangeAction(action))
-	{
-		m_AfterAction = action; 
-		return true;
-	}
-	else
-	{
-		return false;
-	}
+	m_AfterAction = action; 
+	return true;
+}
+
+void ActionMgr::ChangeImmediatelyAction(Action * const action)
+{
+	ChangeAfterAction(action);
+	ProcessActions();
+	SetTrackAnimationSet();
 }
 
 bool ActionMgr::isPossibleChangeAction(const Action * const action) const
@@ -40,20 +40,20 @@ bool ActionMgr::isSameCurrAction(const Action * const action) const
 {
 	return m_CurrAction == action;
 }
-
+ 
 void ActionMgr::UpdateVelocity(float fElpasedTime, Movement * movement)
 { 
 	m_CurrAction->UpdateVelocity(fElpasedTime, movement);
 }
 
-void ActionMgr::SetUpPrevActionID()
+void ActionMgr::ProcessActions()
 {
 	if (isAfterNoneAction()) return;
 	if (!isDifferAfterAndCurrent()) return;
 
 	// 이전 상태와 현재상태가 다른 경우에만 호출한다.
 	if(m_BeforeAction != m_CurrAction) m_BeforeAction = m_CurrAction;
-	m_CurrAction = m_AfterAction; 
 
-	m_CurrAction->Init();
+	m_CurrAction = m_AfterAction; 
+	m_CurrAction->Init(); 
 }

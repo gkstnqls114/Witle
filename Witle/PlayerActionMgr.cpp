@@ -44,7 +44,9 @@ void PlayerActionMgr::UpdateState(float fElpasedTime)
 		if (GameInput::IsKeydownD())
 		{
 			ChangeActionToRightWalk(); 
-		} 
+		}
+		std::cout << std::endl;
+
 	}
 	else if (isBroomMode())
 	{
@@ -84,6 +86,11 @@ void PlayerActionMgr::SetUpAfterAction()
 bool PlayerActionMgr::isAfterNoneAction()
 {
 	return isSameAfterAction(&m_PlayerErrorAction);
+}
+
+void PlayerActionMgr::SetTrackAnimationSet() const
+{
+	static_cast<Player*>(m_pOwner)->SetTrackAnimationSet(m_CurrAction->m_AnimationID);
 }
 
 void PlayerActionMgr::Init()
@@ -168,100 +175,75 @@ void PlayerActionMgr::UpdateVelocity(float fElpasedTime, Movement * const moveme
 
 void PlayerActionMgr::ChangeActionToIdle()
 {
-	bool isChanged = ChangeAction(&m_IdleAction);
+	bool isChanged = ChangeAfterAction(&m_IdleAction);
 	if (!isChanged) return;
 	m_AfterAction->Init(); 
 
-	static_cast<Player*>(m_pOwner)->SetAnimationID(m_IdleAction.m_AnimationID); 
 }
 
 void PlayerActionMgr::ChangeActionToRightWalk()
 { 
-	bool isChanged = ChangeAction(&m_RightWalkAction);
+	bool isChanged = ChangeAfterAction(&m_RightWalkAction);
 	if (!isChanged) return;
-	m_AfterAction->Init(); 
 
-	static_cast<Player*>(m_pOwner)->SetAnimationID(m_RightWalkAction.m_AnimationID);
 }
 
 void PlayerActionMgr::ChangeActionToLeftWalk()
 { 
-	bool isChanged = ChangeAction(&m_LeftWalkAction);
+	bool isChanged = ChangeAfterAction(&m_LeftWalkAction);
 	if (!isChanged) return;
-	m_AfterAction->Init(); 
-
-	static_cast<Player*>(m_pOwner)->SetAnimationID(m_LeftWalkAction.m_AnimationID);
 }
 
 void PlayerActionMgr::ChangeActionToForwardWalk()
 { 
-	bool isChanged = ChangeAction(&m_ForwardWalkAction);
+	bool isChanged = ChangeAfterAction(&m_ForwardWalkAction);
 	if (!isChanged) return;
-	m_AfterAction->Init(); 
 
-	static_cast<Player*>(m_pOwner)->SetAnimationID(m_ForwardWalkAction.m_AnimationID);
 }
 
 void PlayerActionMgr::ChangeActionToBackwardWalk()
 { 
-	bool isChanged = ChangeAction(&m_BackwardWalkAction);
+	bool isChanged = ChangeAfterAction(&m_BackwardWalkAction);
 	if (!isChanged) return;
-	m_AfterAction->Init(); 
 
-	static_cast<Player*>(m_pOwner)->SetAnimationID(m_BackwardWalkAction.m_AnimationID);
 }
 
 void PlayerActionMgr::ChangeActionToStandardAttack()
 { 
-	bool isChanged = ChangeAction(&m_StandardAttackAction);
-	if (!isChanged) return; 
-	m_AfterAction->Init(); 
+	// 빗자루 모드일 경우 액션 변경하지 않는다.
+	if (isBroomMode() || Is_BroomPrepareAction()) return;
 
-	static_cast<Player*>(m_pOwner)->SetAnimationID(m_StandardAttackAction.m_AnimationID);
+	ChangeImmediatelyAction(&m_StandardAttackAction);
 }
 
 void PlayerActionMgr::ChangeActionToBroomPrepare()
 { 
-	bool isChanged = ChangeAction(&m_BroomPrepareAction);
-	if (!isChanged) return; 
-	m_AfterAction->Init(); 
+	// 빗자루 모드일 경우 액션 변경하지 않는다.
+	if (isBroomMode() || Is_BroomPrepareAction()) return;
 
-	static_cast<Player*>(m_pOwner)->SetAnimationID(m_BroomPrepareAction.m_AnimationID);
+	ChangeImmediatelyAction(&m_BroomPrepareAction);
 }
 
 void PlayerActionMgr::ChangeActionToBroomIdle()
 { 
-	bool isChanged = ChangeAction(&m_BroomIdleAction);
-	if (!isChanged) return;
-	m_AfterAction->Init(); 
-
-	static_cast<Player*>(m_pOwner)->SetAnimationID(m_BroomIdleAction.m_AnimationID);
+	ChangeAfterAction(&m_BroomIdleAction);
 }
 
 void PlayerActionMgr::ChangeActionToBroomForward()
 { 
-	bool isChanged = ChangeAction(&m_BroomForwardAction);
-	if (!isChanged) return;
-	m_AfterAction->Init(); 
-
-	static_cast<Player*>(m_pOwner)->SetAnimationID(m_BroomForwardAction.m_AnimationID);
+	ChangeAfterAction(&m_BroomForwardAction);
 }
 
 void PlayerActionMgr::ChangeActionToDead()
 { 
-	bool isChanged = ChangeAction(&m_DeadAction);
-	if (!isChanged) return;
-	m_AfterAction->Init(); 
-
-	static_cast<Player*>(m_pOwner)->SetAnimationID(m_DeadAction.m_AnimationID);
+	ChangeAfterAction(&m_DeadAction); 
 }
 
 void PlayerActionMgr::ChangeActionToHit()
 {
-	bool isChanged = ChangeAction(&m_HitAction);
-	if (!isChanged) return;
-	m_AfterAction->Init(); 
+	// 빗자루 모드일 경우 액션 변경하지 않는다.
+	if (isBroomMode() || Is_BroomPrepareAction()) return;
 
-	static_cast<Player*>(m_pOwner)->SetAnimationID(m_DeadAction.m_AnimationID);
+	ChangeImmediatelyAction(&m_HitAction);
 }
  

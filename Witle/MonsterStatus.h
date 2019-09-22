@@ -8,7 +8,7 @@ class MonsterStatus
 	: public Status
 { 
 private:
-	virtual void SetAnimationStateToHit() override;
+	virtual void ChangeAfterActionToHit() override;
 	 
 private:
 	MyRectangle* m_HpBar{ nullptr };

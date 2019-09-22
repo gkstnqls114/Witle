@@ -3,11 +3,12 @@
 #include "MyRectangle.h"
 #include "Player.h"
 #include "ShaderManager.h"
+#include "PlayerActionMgr.h"
 #include "PlayerStatus.h"
 
-void PlayerStatus::SetAnimationStateToHit()
+void PlayerStatus::ChangeAfterActionToHit()
 { 
-	static_cast<Player*>(m_pOwner)->SetAnimationID(ANIMATION_HIT.ID);
+	static_cast<Player*>(m_pOwner)->GetPlayerActionMgr()->ChangeActionToHit();
 }
 
 void PlayerStatus::ReleaseObjects()

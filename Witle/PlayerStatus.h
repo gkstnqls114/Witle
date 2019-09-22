@@ -9,7 +9,7 @@ class PlayerStatus
 	: public Status
 {
 private:
-	virtual void SetAnimationStateToHit() override;
+	virtual void ChangeAfterActionToHit() override;
 
 private:
 	Shader* m_pGuageBarShader{ nullptr }; 

@@ -8,6 +8,8 @@
 #include "Monster.h"
 #include "BossSkillMgr.h"
 
+#include "Dragon.h"
+
 #include "BossMonsterActionMgr.h"
 
 #include "SoundManager.h"
@@ -43,6 +45,11 @@ void BossMonsterActionMgr::SetUpAfterAction()
 bool BossMonsterActionMgr::isAfterNoneAction()
 {
 	return isSameAfterAction(&m_BossMonsterErrorAction);
+}
+
+void BossMonsterActionMgr::SetTrackAnimationSet() const
+{
+	static_cast<Dragon*>(m_pOwner)->SetAnimationID(m_CurrAction->m_AnimationID);
 }
 
 void BossMonsterActionMgr::Init()
@@ -109,7 +116,7 @@ void BossMonsterActionMgr::ChangeBossStateBefore()
 // 기본
 void BossMonsterActionMgr::ChangeBossStateToIdle()
 { 
-	bool isChanged = ChangeAction(&m_BossIdleAction);
+	bool isChanged = ChangeAfterAction(&m_BossIdleAction);
 	if (!isChanged) return;
 
 	m_AfterAction->Init(); 
@@ -120,7 +127,7 @@ void BossMonsterActionMgr::ChangeBossStateToIdle()
 // 이동
 void BossMonsterActionMgr::ChangeBossStateToMove()
 { 
-	bool isChanged = ChangeAction(&m_BossMoveAction);
+	bool isChanged = ChangeAfterAction(&m_BossMoveAction);
 	if (!isChanged) return;
 
 	m_AfterAction->Init(); 
@@ -131,7 +138,7 @@ void BossMonsterActionMgr::ChangeBossStateToMove()
 // 추격
 void BossMonsterActionMgr::ChangeBossStateToChase()
 { 
-	bool isChanged = ChangeAction(&m_BossChaseAction);
+	bool isChanged = ChangeAfterAction(&m_BossChaseAction);
 	if (!isChanged) return;
 	m_AfterAction->Init();
 
@@ -141,7 +148,7 @@ void BossMonsterActionMgr::ChangeBossStateToChase()
   
 void BossMonsterActionMgr::ChangeBossStateToBreath()
 { 
-	bool isChanged = ChangeAction(&m_BossSkillBreath);
+	bool isChanged = ChangeAfterAction(&m_BossSkillBreath);
 	if (!isChanged) return;
 	m_AfterAction->Init();
 
@@ -151,7 +158,7 @@ void BossMonsterActionMgr::ChangeBossStateToBreath()
  
 void BossMonsterActionMgr::ChangeBossStateToDownStroke()
 { 
-	bool isChanged = ChangeAction(&m_BossSkilldownstroke);
+	bool isChanged = ChangeAfterAction(&m_BossSkilldownstroke);
 	if (!isChanged) return;
 	m_AfterAction->Init();
 
@@ -161,7 +168,7 @@ void BossMonsterActionMgr::ChangeBossStateToDownStroke()
  
 void BossMonsterActionMgr::ChangeBossStateToTailAttack()
 { 
-	bool isChanged = ChangeAction(&m_BossSkIllTailAttack);
+	bool isChanged = ChangeAfterAction(&m_BossSkIllTailAttack);
 	if (!isChanged) return;
 	m_AfterAction->Init();
 
@@ -171,7 +178,7 @@ void BossMonsterActionMgr::ChangeBossStateToTailAttack()
  
 void BossMonsterActionMgr::ChangeBossStateToRush()
 { 
-	bool isChanged = ChangeAction(&m_BossSkIllRush);
+	bool isChanged = ChangeAfterAction(&m_BossSkIllRush);
 	if (!isChanged) return;
 	m_AfterAction->Init();
 
@@ -181,7 +188,7 @@ void BossMonsterActionMgr::ChangeBossStateToRush()
 
 void BossMonsterActionMgr::ChangeBossStateToStone()
 { 
-	bool isChanged = ChangeAction(&m_BossStone);
+	bool isChanged = ChangeAfterAction(&m_BossStone);
 	if (!isChanged) return;
 	m_AfterAction->Init();
 
@@ -191,7 +198,7 @@ void BossMonsterActionMgr::ChangeBossStateToStone()
 
 void BossMonsterActionMgr::ChangeBossStateToDead()
 { 
-	bool isChanged = ChangeAction(&m_BossDead);
+	bool isChanged = ChangeAfterAction(&m_BossDead);
 	if (!isChanged) return;
 	m_AfterAction->Init();
 
@@ -200,7 +207,7 @@ void BossMonsterActionMgr::ChangeBossStateToDead()
 
 void BossMonsterActionMgr::ChangeBossStateToBuf()
 { 
-	bool isChanged = ChangeAction(&m_BossBuf);
+	bool isChanged = ChangeAfterAction(&m_BossBuf);
 	if (!isChanged) return;
 	m_AfterAction->Init();
 
