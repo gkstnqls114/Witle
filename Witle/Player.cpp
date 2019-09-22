@@ -437,132 +437,13 @@ void Player::Rotate(float x, float y, float z)
 	m_Transform.Rotate(x, y, z); 
 	m_pMyBOBox->Rotate(m_PlayerMovement->m_fRoll, m_PlayerMovement->m_fYaw, m_PlayerMovement->m_fPitch);
 }
- 
-static float hittime = 0.f;
+  
 void Player::ProcessInput(float fTimeElapsed)
 {    
 	m_PlayerActionMgr->UpdateState(fTimeElapsed);
 	m_PlayerActionMgr->UpdateVelocity(fTimeElapsed, m_PlayerMovement);
-	 
-	if (isDead) return;
-
-	if (m_pPlayerHPStatus->GetGuage() <= 0 && isDead == false)
-	{
-		isDead = true;
-		m_PlayerActionMgr->ChangeActionToDead();
-		return;
-	}
-
-	if (m_PlayerActionMgr->Is_HitAction() || isBrooming)
-	{  
-		hittime += fTimeElapsed;
-
-		if (hittime < (ANIMATION_HIT.EndTime - ANIMATION_HIT.StartTime))
-		{
-			return;
-		}
-		else
-		{
-			m_PlayerActionMgr->ChangeActionToIdle();
-			hittime = 0.f;
-			m_isAttacking = false;
-			isBrooming = false;
-			return;
-		}
-	}
-
-	//if (isDead)
-	//{
-	//	m_pPlayerHPStatus->m_Guage += 10.f; 
-	//	if (m_pPlayerHPStatus->m_Guage > 1000.F)
-	//	{ 
-	//		m_CurrAnimation = ANIMATION_IDLE.ID;
-	//		m_Broom->DoNotUse();
-	//		m_pPlayerHPStatus->m_Guage = 1000.F;
-	//		isDead = false;
-	//	}
-	//	return;
-	//}
-
-	if (m_isAttacking)
-	{
-		if (m_pLoadObject_Cloth->IsTrackAnimationSetFinish(0, ANIMATION_ATTACK.ID) && 
-			m_pLoadObject_Body->IsTrackAnimationSetFinish(0, ANIMATION_ATTACK.ID))
-		{
-			m_isAttacking = false;
-		} 
-		return;
-	}
-
-	if (m_Broom->GetisPrepare())
-	{
-		m_PlayerActionMgr->ChangeActionToBroomPrepare();
-
-		if (m_pLoadObject_Cloth->IsTrackAnimationSetFinish(0, ANIMATION_BROOMPREPARE.ID) &&
-			m_pLoadObject_Body->IsTrackAnimationSetFinish(0, ANIMATION_BROOMPREPARE.ID))
-		{
-			m_Broom->DoUse();
-		}
-		return;
-	}
-
-	DWORD dwDirection = 0;
-	m_PlayerActionMgr->ChangeActionToIdle();
-	 
-	bool isMove = false;
-	if (GameInput::IsKeydownW())
-	{
-		isMove = true;
-		m_PlayerActionMgr->ChangeActionToForwardWalk();
-		dwDirection |= DIR_FORWARD;
-	}
-	if (GameInput::IsKeydownS())
-	{
-		isMove = true;
-		m_PlayerActionMgr->ChangeActionToBackwardWalk();
-		dwDirection |= DIR_BACKWARD;
-	}
-	if (GameInput::IsKeydownA())
-	{
-		isMove = true;
-		m_PlayerActionMgr->ChangeActionToLeftWalk();
-		dwDirection |= DIR_LEFT;
-	}
-	if (GameInput::IsKeydownD())
-	{
-		isMove = true;
-		m_PlayerActionMgr->ChangeActionToRightWalk();
-		dwDirection |= DIR_RIGHT;
-	}
-
-	if (isMove && m_Broom->GetisUsing())
-	{ 
-		m_PlayerActionMgr->ChangeActionToBroomForward(); 
-	}
-	else if (!isMove && m_Broom->GetisUsing())
-	{
-		m_PlayerActionMgr->ChangeActionToBroomIdle(); 
-	}
+}
  
-	// 만약 키보드 상하좌우 움직인다면...
-	if (dwDirection != 0)
-	{  
-		//플레이어의 이동량 벡터를 xmf3Shift 벡터만큼 더한다. 
-		m_PlayerMovement->MoveVelocity(dwDirection, fTimeElapsed);
-	}
-	else
-	{
-		m_PlayerMovement->ReduceVelocity(fTimeElapsed);
-	}
-
-}
-
-void Player::ProcessInputAI(float fTimeElapsed)
-{  
-
-}
-
-//  
 bool Player::Attack(Status* status, MyCollider* collider, XMFLOAT2 aimPoint, Camera* pMainCaemra, bool isDragon = false)
 {   
 	if (isDead) return false;

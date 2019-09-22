@@ -105,8 +105,7 @@ public:
 	void Move(const XMFLOAT3& xmf3Shift, DWORD dir);
 	void Rotate(float x, float y, float z);
 
-	void ProcessInput(float fTimeElapsed);
-	void ProcessInputAI(float fTimeElapsed);
+	void ProcessInput(float fTimeElapsed); 
 
 	bool Attack(Status* status, MyCollider* collider, XMFLOAT2 aimPoint ,Camera* pMainCaemra, bool);
 
@@ -121,7 +120,7 @@ public:
 	AXIS GetCoorAxis() { return m_Transform.GetCoorAxis(); }
 	XMFLOAT3 GetVelocity() const;
 	MyBOBox* GetBOBox() { return m_pMyBOBox; }
-	const Broom* GetBroom() const { return m_Broom; }
+	Broom* const GetBroom() const { return m_Broom; }
 	bool IsAttacking() const { return m_isAttacking; }
 	PlayerActionMgr * const GetPlayerActionMgr() const { return m_PlayerActionMgr; }
 

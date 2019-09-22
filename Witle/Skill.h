@@ -44,7 +44,6 @@ public:
 	FixedSkill(const std::string& entityID) : ISkill(entityID) {};
 	virtual ~FixedSkill();
 
-	bool GetisUsing() const { return m_isUsing; }
 	virtual void Update(float fTimeElapsed);
 	virtual void DoNotUse() override = 0;
 	virtual void DoUse() override = 0;
@@ -54,7 +53,11 @@ public:
 		m_isPrepare = true; 
 		PrepareMember();
 	}
-	bool GetisPrepare() const { return m_isPrepare; }
+
+	//// Get //////////////////////////////////////////////
+	bool GetisPrepare() const { return m_isPrepare; }  
+	bool GetisUsing() const { return m_isUsing; }
+	//// Get //////////////////////////////////////////////
 
 };
 

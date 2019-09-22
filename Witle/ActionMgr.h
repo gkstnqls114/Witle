@@ -53,7 +53,7 @@ public:
 	 
 	// Scene의 Update 수행 이전 반드시 호출해야합니다.
 	// movement에게서 가속도를 가져와 설정합니다.
-	void UpdateVelocity(float fElpasedTime, Movement* movement);
+	virtual void UpdateVelocity(float fElpasedTime, Movement* const movement);
 	 
 	// m_BeforeAction 를 m_CurrAction로 설정한 후
 	// m_AfterAction을 m_CurrAction 설정.

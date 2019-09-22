@@ -10,15 +10,16 @@ class PlayerActionMgr;
 class PlayerHitAction
 	: public PlayerAction
 {
-	const float m_IdleTime{ 3.f }; //Idle 상태로 있는 시간
+	const float m_HitFullTime{ ANIMATION_HIT.EndTime - ANIMATION_HIT.StartTime }; //Hit 상태로 있는 시간
+	float m_HitElapsedTime{ 0.f };
 
 public:
 	virtual void UpdateVelocity(float fElpasedTime, Movement* movement) override;
-	virtual void Init() override {};
+	virtual void Init() override { m_HitElapsedTime = 0.f; };
 	virtual void UpdateState(float fElpasedTime, PlayerActionMgr* actionMgr) override;
 
 public:
-	PlayerHitAction(Player* pOwner, float idleTime) : PlayerAction(pOwner, PLAYER_ACTIONID_HIT, PLAYER_ANIMATIONID_HIT), m_IdleTime(idleTime) { };
+	PlayerHitAction(Player* pOwner) : PlayerAction(pOwner, PLAYER_ACTIONID_HIT, PLAYER_ANIMATIONID_HIT), m_HitFullTime(ANIMATION_HIT.EndTime - ANIMATION_HIT.StartTime) { };
 	virtual ~PlayerHitAction() {};
 
 };

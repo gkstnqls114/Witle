@@ -386,7 +386,8 @@ bool GameScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM w
 			break;
 
 		case '1': // ½ºÅ³ ºøÀÚ·ç  
-			m_pPlayer->UseSkill_Broom();
+			m_pPlayer->UseSkill_Broom(); 
+			m_pPlayer->GetPlayerActionMgr()->ChangeActionToBroomPrepare();
 			// SoundManager::GetInstance()->Play(ENUM_SOUND::PLAYER_BROOM);
 			break;
 

@@ -1,5 +1,6 @@
 #include "stdafx.h"
 
+#include "Broom.h"
 #include "Object.h"
 #include "PlayerMovement.h"
 #include "Player.h"
@@ -7,12 +8,65 @@
 #include "PlayerAction.h"
 #include "PlayerStatus.h"
 #include "Player.h"
+#include "GameInput.h"
 
 #include "PlayerActionMgr.h"
    
 void PlayerActionMgr::UpdateState(float fElpasedTime)
 {
-	static_cast<PlayerAction*>(m_CurrAction)->UpdateState(fElpasedTime, this);
+	if (static_cast<Player*>(m_pOwner)->GetHPStatus()->GetGuage() <= 0 && !m_isDead)
+	{
+		// 곧바로 Dead 상태로 전환
+		ChangeActionToDead();
+		m_isDead = true;
+		return;
+	}
+
+	if (isRunMode())
+	{ 
+		// WASD 아무것도 누르지 않는 경우
+		if (!GameInput::IsKeydownW() && !GameInput::IsKeydownS() && !GameInput::IsKeydownA() && !GameInput::IsKeydownD())
+		{
+			ChangeActionToIdle();
+		} 
+		if (GameInput::IsKeydownW())
+		{
+			ChangeActionToForwardWalk(); 
+		}
+		if (GameInput::IsKeydownS())
+		{
+			ChangeActionToBackwardWalk(); 
+		}
+		if (GameInput::IsKeydownA())
+		{
+			ChangeActionToLeftWalk(); 
+		}
+		if (GameInput::IsKeydownD())
+		{
+			ChangeActionToRightWalk(); 
+		} 
+	}
+	else if (isBroomMode())
+	{
+		// WASD 아무것도 누르지 않는 경우
+		if (!GameInput::IsKeydownW() && !GameInput::IsKeydownS() && !GameInput::IsKeydownA() && !GameInput::IsKeydownD())
+		{
+			ChangeActionToBroomIdle();
+		}
+		else
+		{ 
+			ChangeActionToBroomForward();
+		} 
+
+		if (!static_cast<Player*>(m_pOwner)->GetBroom()->GetisUsing())
+		{ 
+			ChangeActionToIdle();
+		}
+	}
+	else
+	{
+ 		static_cast<PlayerAction*>(m_CurrAction)->UpdateState(fElpasedTime, this);
+	}
 }
  
 bool PlayerActionMgr::isDifferAfterAndCurrent() const
@@ -34,10 +88,21 @@ bool PlayerActionMgr::isAfterNoneAction()
 
 void PlayerActionMgr::Init()
 { 
+	m_isDead = false;
 	m_BeforeAction = &m_PlayerErrorAction;
 	m_AfterAction = &m_PlayerErrorAction;
 	m_CurrAction = &m_PlayerErrorAction;
 	ChangeActionToIdle();
+}
+
+bool PlayerActionMgr::isRunMode() const
+{
+	return Is_IdleAction() || Is_RightWalkAction() || Is_LeftWalkAction() || Is_BackwardWalkAction() || Is_ForwardWalkAction();
+}
+
+bool PlayerActionMgr::isBroomMode() const
+{
+	return Is_BroomIdleAction() || Is_BroomForwardAction();
 }
 
 PlayerActionMgr::PlayerActionMgr(Player * pOwner)
@@ -53,11 +118,52 @@ PlayerActionMgr::PlayerActionMgr(Player * pOwner)
 	, m_BroomIdleAction(pOwner, 0)
 	, m_BroomForwardAction(pOwner, 0)
 	, m_DeadAction(pOwner, 0)
-	, m_HitAction(pOwner, 0)
+	, m_HitAction(pOwner)
 {
 	m_BeforeAction = &m_PlayerErrorAction;
 	m_AfterAction = &m_PlayerErrorAction;
 	m_CurrAction = &m_PlayerErrorAction;
+}
+
+void PlayerActionMgr::UpdateVelocity(float fElpasedTime, Movement * const movement)
+{
+	// 빗자루를 사용하지않고 서있거나, 상하좌우 이동하는 경우
+	if (isRunMode() || isBroomMode())
+	{
+		DWORD dwDirection = 0;
+		 
+		if (GameInput::IsKeydownW())
+		{ 
+			dwDirection |= DIR_FORWARD;
+		}
+		if (GameInput::IsKeydownS())
+		{ 
+			dwDirection |= DIR_BACKWARD;
+		}
+		if (GameInput::IsKeydownA())
+		{ 
+			dwDirection |= DIR_LEFT;
+		}
+		if (GameInput::IsKeydownD())
+		{ 
+			dwDirection |= DIR_RIGHT;
+		}
+
+		// 만약 키보드 상하좌우 움직인다면...
+		if (dwDirection != 0)
+		{
+			//플레이어의 이동량 벡터를 xmf3Shift 벡터만큼 더한다. 
+			static_cast<PlayerMovement*>(movement)->MoveVelocity(dwDirection, fElpasedTime);
+		}
+		else
+		{
+			static_cast<PlayerMovement*>(movement)->ReduceVelocity(fElpasedTime);
+		}
+	} 
+	else
+	{
+		m_CurrAction->UpdateVelocity(fElpasedTime, movement);
+	}
 }
 
 void PlayerActionMgr::ChangeActionToIdle()

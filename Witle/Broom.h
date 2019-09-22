@@ -9,7 +9,7 @@ public:
 	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers) override {};
 
 private:
-	PlayerMovement* m_PlayerMovement{ nullptr };
+	PlayerMovement* m_pPlayerMovement{ nullptr };
 
 protected:
 	virtual void ReleaseMembers() override;
