@@ -44,8 +44,7 @@ void PlayerActionMgr::UpdateState(float fElpasedTime)
 		if (GameInput::IsKeydownD())
 		{
 			ChangeActionToRightWalk(); 
-		}
-		std::cout << std::endl;
+		} 
 
 	}
 	else if (isBroomMode())
