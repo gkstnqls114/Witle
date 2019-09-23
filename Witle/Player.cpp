@@ -433,7 +433,10 @@ void Player::SetCurrActionAnimation()
 
 bool Player::Attack(Status* status, MyCollider* collider, XMFLOAT2 aimPoint, Camera* pMainCaemra, bool isDragon = false)
 {   
+	// 죽은 혹은 맞는, 때리는 액션 중이라면 넘어간다.
 	if (m_PlayerActionMgr->Is_DeadAction()) return false;
+	if (m_PlayerActionMgr->Is_HitAction()) return false;
+	if (m_PlayerActionMgr->Is_StandardAttackAction()) return false;
 
 	// 시행된다면..
 	bool isAttack = false;
