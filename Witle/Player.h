@@ -25,7 +25,7 @@ private:
 	PlayerActionMgr* m_PlayerActionMgr{ nullptr }; // Player의 액션(모델의 동작)을 관리
 	 
 	bool m_isRendering{ true };
-	bool m_isAttacking{ false };
+	//bool m_isAttacking{ false };
 	
 	PlayerMovement*    m_PlayerMovement{ nullptr };
 	PlayerStatus*	   m_pPlayerHPStatus{ nullptr };
@@ -119,19 +119,13 @@ public:
 	XMFLOAT3 GetVelocity() const;
 	MyBOBox* GetBOBox() { return m_pMyBOBox; }
 	Broom* const GetBroom() const { return m_Broom; }
-	bool IsAttacking() const { return m_isAttacking; }
 	PlayerActionMgr * const GetPlayerActionMgr() const { return m_PlayerActionMgr; }
 
 	bool IsTrackAnimationSetFinish(ENUM_ANIMATIONID) const;
 	void SetTrackAnimationSet(ENUM_ANIMATIONID);
 	/////////////////////// Get
 
-	/////////////////////// Set	
-	void isAttacking()  
-	{
-		m_isAttacking = true; 
-	}
-
+	/////////////////////// Set	 
 	void SetVelocity(const XMFLOAT3& velocity);
 	void SetUpdatedContext(LPVOID pContext)
 	{ 

@@ -18,8 +18,7 @@ void PlayerActionMgr::UpdateState(float fElpasedTime)
 	{
 		// 곧바로 Dead 상태로 전환
 		ChangeActionToDead();
-		m_isDead = true;
-		return;
+		m_isDead = true; 
 	}
 
 	if (isRunMode())
@@ -235,7 +234,7 @@ void PlayerActionMgr::ChangeActionToBroomForward()
 
 void PlayerActionMgr::ChangeActionToDead()
 { 
-	ChangeAfterAction(&m_DeadAction); 
+	ChangeImmediatelyAction(&m_DeadAction);
 }
 
 void PlayerActionMgr::ChangeActionToHit()

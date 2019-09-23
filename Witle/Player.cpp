@@ -167,8 +167,7 @@ void Player::Init()
 
 	m_Transform.SetIdentity();
 	m_Transform.SetPosition(15000, 0, 15000);
-	   
-	m_isAttacking = false;
+	    
 	m_PlayerMovement->RunMode();
 	m_pPlayerMPStatus->SetGuage(100.f);
 	m_pPlayerHPStatus->SetGuage(100.f);
@@ -476,8 +475,7 @@ bool Player::Attack(Status* status, MyCollider* collider, XMFLOAT2 aimPoint, Cam
 
 	}
 
-	m_PlayerMovement->m_xmf3Velocity = XMFLOAT3(0.F, 0.F, 0.F);
-	m_isAttacking = true; 
+	m_PlayerMovement->m_xmf3Velocity = XMFLOAT3(0.F, 0.F, 0.F); 
 	m_PlayerActionMgr->ChangeActionToStandardAttack();
 	return isAttack;
 }
