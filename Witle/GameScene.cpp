@@ -263,7 +263,7 @@ bool GameScene::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM wPar
 		// 플레이어 공격
 		if (!GameInput::GetDragMode())
 		{
-			if (!m_pPlayer->IsAttacking() && !m_pPlayer->GetpBroom()->GetisUsing())
+			if (!m_pPlayer->GetPlayerActionMgr()->Is_StandardAttackAction() && !m_pPlayer->GetPlayerActionMgr()->isBroomMode() && !m_pPlayer->GetPlayerActionMgr()->Is_BroomPrepareAction())
 			{
 				SoundManager::GetInstance()->Play(ENUM_SOUND::PLAYER_MAGIC_MISIL);
 
@@ -344,8 +344,41 @@ bool GameScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM w
 			// 플레이어 공격
 			if (GameInput::GetDragMode())
 			{
-				SoundManager::GetInstance()->Play(ENUM_SOUND::PLAYER_MAGIC_MISIL);
+				 
+				if (!m_pPlayer->GetPlayerActionMgr()->Is_StandardAttackAction() && !m_pPlayer->GetPlayerActionMgr()->isBroomMode() && !m_pPlayer->GetPlayerActionMgr()->Is_BroomPrepareAction())
+				{
+					SoundManager::GetInstance()->Play(ENUM_SOUND::PLAYER_MAGIC_MISIL);
 
+					bool isAttackDragon = m_pPlayer->Attack(
+						static_cast<Status*>(
+							m_Dragon->GetStatus()),
+						m_Dragon->GetBOBox(),
+						m_AimPoint->GetPickingPoint(),
+						m_pMainCamera->GetCamera(), true);
+
+					if (isAttackDragon)
+					{
+						HitEffectMgr::GetInstance()->AddNormalHitEffectPosition(m_Dragon->GetBOBox()->GetBOBox().Center);
+						return false;
+					}
+
+					for (int i = 0; i < m_TestMonsterCount; ++i)
+					{
+						bool isAttack = m_pPlayer->Attack(
+							static_cast<Status*>(
+								m_TestMonster[i]->GetStatus()),
+							m_TestMonster[i]->GetBOBox(),
+							m_AimPoint->GetPickingPoint(),
+							m_pMainCamera->GetCamera(), false);
+
+						if (isAttack)
+						{
+							HitEffectMgr::GetInstance()->AddNormalHitEffectPosition(m_TestMonster[i]->GetBOBox()->GetBOBox().Center);
+							break;
+						}
+					}
+				}
+/*
 				bool isAttackDragon = m_pPlayer->Attack(
 					static_cast<Status*>(
 						m_Dragon->GetStatus()),
@@ -358,7 +391,7 @@ bool GameScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM w
 					return false;
 				}
 
-				if (!m_pPlayer->IsAttacking() && !m_pPlayer->GetpBroom()->GetisUsing())
+				if (!m_pPlayer->GetPlayerActionMgr()->Is_StandardAttackAction() && !m_pPlayer->GetpBroom()->GetisUsing())
 				{
 					for (int i = 0; i < m_TestMonsterCount; ++i)
 					{
@@ -375,7 +408,7 @@ bool GameScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM w
 							break;
 						}
 					} 
-				}
+				}*/
 			}
 			break;
 
@@ -411,26 +444,22 @@ bool GameScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM w
 			break;
 
 		case MYVK_E: 
-			m_pPlayer->GetPlayerActionMgr()->ChangeActionToStandardAttack();
-			m_pPlayer->isAttacking(); 
+			m_pPlayer->GetPlayerActionMgr()->ChangeActionToStandardAttack(); 
 			PlayerSkillMgr::GetInstance()->Activate(m_pPlayer->GetMPStatus(), 0);
 			break;
 
 		case MYVK_R:
-			m_pPlayer->GetPlayerActionMgr()->ChangeActionToStandardAttack();
-			m_pPlayer->isAttacking();
+			m_pPlayer->GetPlayerActionMgr()->ChangeActionToStandardAttack(); 
 			PlayerSkillMgr::GetInstance()->Activate(m_pPlayer->GetMPStatus(), 1);
 			break;
 
 		case MYVK_T:
-			m_pPlayer->GetPlayerActionMgr()->ChangeActionToStandardAttack();
-			m_pPlayer->isAttacking();
+			m_pPlayer->GetPlayerActionMgr()->ChangeActionToStandardAttack(); 
 			PlayerSkillMgr::GetInstance()->Activate(m_pPlayer->GetMPStatus(), 2);
 			break;
 
 		case MYVK_Y: 			
-			m_pPlayer->GetPlayerActionMgr()->ChangeActionToStandardAttack();
-			m_pPlayer->isAttacking();
+			m_pPlayer->GetPlayerActionMgr()->ChangeActionToStandardAttack(); 
 			PlayerSkillMgr::GetInstance()->Activate(m_pPlayer->GetMPStatus(), 3);
 			break;
 		case '4':

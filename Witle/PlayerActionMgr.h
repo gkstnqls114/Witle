@@ -58,12 +58,7 @@ public:
 	virtual void SetTrackAnimationSet() const override;
 
 	virtual void Init() override;
-
-private:
-	// 빗자루나 스킬을 사용하지 않고 달리거나 서있는 상태
-	bool isRunMode() const;
-	bool isBroomMode() const;
-	
+	 
 public: 
 	virtual void ReleaseObjects() override {};
 	virtual void ReleaseUploadBuffers() override {};
@@ -73,6 +68,12 @@ public:
 	virtual ~PlayerActionMgr() {}; 
 
 	virtual void UpdateVelocity(float fElpasedTime, Movement* const movement)override;
+
+	// 빗자루나 스킬을 사용하지 않고 달리거나 서있는 상태
+	bool isRunMode() const;
+
+	// 빗자루 준비과정을 제외한, idle, forward 상태
+	bool isBroomMode() const;
 
 	bool Is_IdleAction() const { return (m_CurrAction == &m_IdleAction); }
 	bool Is_RightWalkAction() const { return (m_CurrAction == &m_RightWalkAction); }
