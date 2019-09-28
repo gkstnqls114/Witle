@@ -105,18 +105,31 @@ void AltarSphere::Render(ID3D12GraphicsCommandList * pd3dCommandList, bool isGBu
 
 void AltarSphere::ReleaseMembers()
 { 
+	if (m_pDeactiveTexture)
+	{ 
+		delete m_pDeactiveTexture;
+		m_pDeactiveTexture = nullptr;
+	}
+
+	if (m_pActiveTexture)
+	{ 
+		delete m_pActiveTexture;
+		m_pActiveTexture = nullptr;
+	}
+
 	if (m_RecognitionRange)
 	{
 		m_RecognitionRange->ReleaseObjects();
 		delete m_RecognitionRange;
 		m_RecognitionRange = nullptr;
 	} 
-	if (m_pDeactiveTexture)
+	if (m_ActiveGuageBar)
 	{
-		m_pDeactiveTexture->ReleaseObjects();
-		delete m_pDeactiveTexture;
-		m_pDeactiveTexture = nullptr;
+		m_ActiveGuageBar->ReleaseObjects();
+		delete m_ActiveGuageBar;
+		m_ActiveGuageBar = nullptr;
 	}
+
 	if (m_pLoadObject)
 	{
 		m_pLoadObject->ReleaseObjects();
@@ -139,6 +152,7 @@ void AltarSphere::ReleaseMembers()
 
 void AltarSphere::ReleaseMemberUploadBuffers()
 { 
+	if (m_ActiveGuageBar) m_ActiveGuageBar->ReleaseUploadBuffers();
 	if (m_pDeactiveTexture) m_pDeactiveTexture->ReleaseUploadBuffers();
 	if (m_pActiveTexture) m_pActiveTexture->ReleaseUploadBuffers();
 	if (m_pLoadObject) m_pLoadObject->ReleaseUploadBuffers();

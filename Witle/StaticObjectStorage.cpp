@@ -84,7 +84,7 @@ bool StaticObjectStorage::LoadTransform(char * name, const char * comp_name, con
 				{
 					m_AltarTransformStorage.emplace_back(tr);
 				}
-
+				 
 				delete TestObject;
 				TestObject = nullptr;
 			}
@@ -109,7 +109,7 @@ void StaticObjectStorage::LoadTerrainObjectFromFile(ID3D12Device * pd3dDevice, I
 	 
 	for (const auto& name : ModelStorage::GetInstance()->m_NameList)
 	{
-		m_StaticObjectStorage[name ] = new TerrainObjectInfo[TerrainPieceCount];
+		m_StaticObjectStorage[name] = new TerrainObjectInfo[TerrainPieceCount];
 	}
 
 	for (; ; )
@@ -302,6 +302,7 @@ void StaticObjectStorage::ReleaseInstance()
 {
 	if (m_Instance)
 	{ 
+		m_Instance->ReleaseObjects();
 		delete m_Instance;
 		m_Instance = nullptr;
 	}
@@ -318,28 +319,30 @@ void StaticObjectStorage::ReleaseObjects()
 	 
 	for (auto& loadobj : m_StaticObjectStorage)
 	{ 
-		// loadobj.first는 이름입니다.
+		// loadobj.first는 이름입니다. 
 
 		if (loadobj.second->m_pd3dcbGameObjects)
-		{
-			loadobj.second->m_pd3dcbGameObjects->Unmap(0, NULL);
+		{ 
+			loadobj.second->m_pd3dcbGameObjects->Release();
 			loadobj.second->m_pd3dcbGameObjects = nullptr;
 		}
-
-		//if (loadobj.second->m_pcbMappedGameObjects)
-		//{
-		//	delete[] loadobj.second->m_pcbMappedGameObjects;
-		//	loadobj.second->m_pcbMappedGameObjects = nullptr; 
-		//}
-
+		 
 		loadobj.second->TransformList.clear();
 
 		if (loadobj.second)
-		{
+		{  
 			delete[] loadobj.second;
 			loadobj.second = nullptr;
 		}
+		 
 	}
+
+	for (const auto& name : ModelStorage::GetInstance()->m_NameList)
+	{ 
+		delete[] m_StaticObjectStorage[name];
+		m_StaticObjectStorage[name] = nullptr;
+	}
+
 	m_StaticObjectStorage.clear();
 }
 

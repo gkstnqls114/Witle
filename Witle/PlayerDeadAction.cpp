@@ -31,7 +31,7 @@ void PlayerDeadAction::UpdateState(float fElpasedTime, PlayerActionMgr * actionM
 {
 	if (static_cast<Player*>(m_pOwner)->IsTrackAnimationSetFinish(m_AnimationID))
 	{
-		SceneMgr::GetInstacne()->ChangeSceneToLose();
+		SceneMgr::GetInstance()->ChangeSceneToLose();
 		return;
 	}
 

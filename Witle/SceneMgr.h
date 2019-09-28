@@ -28,13 +28,23 @@ class SceneMgr
 	~SceneMgr();
 
 public:
-	static SceneMgr* GetInstacne()
+	static SceneMgr* GetInstance()
 	{
 		if (m_Instace == nullptr)
 		{
 			m_Instace = new SceneMgr;
 		}
 		return m_Instace;
+	}
+
+	static void ReleaseInstance()
+	{
+		if (m_Instace)
+		{
+			m_Instace->ReleaseObjects();
+			delete m_Instace;
+			m_Instace = nullptr;
+		}
 	}
 
 	void ReleaseObjects();

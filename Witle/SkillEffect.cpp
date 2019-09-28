@@ -1,17 +1,30 @@
 #include "stdafx.h"
 
+#include "MyCollider.h"
 #include "Movement.h"
 
 #include "SkillEffect.h"
 
 void SkillEffect::ReleaseMembers()
 {
-	delete m_Movement;
-	m_Movement = nullptr;
+	if (m_Movement)
+	{
+		m_Movement->ReleaseObjects();
+		delete m_Movement;
+	    m_Movement = nullptr;
+	}
+
+	if (m_MyCollider)
+	{
+		m_MyCollider->ReleaseObjects();
+		delete m_MyCollider;
+		m_MyCollider = nullptr;
+	}
 }
 
 void SkillEffect::ReleaseMemberUploadBuffers()
 {
+	if (m_MyCollider)m_MyCollider->ReleaseUploadBuffers();
 }
 
 void SkillEffect::UpdateMovement()
@@ -28,6 +41,7 @@ SkillEffect::SkillEffect(const std::string & entityID, float cooltime, ENUM_SKIL
 
 SkillEffect::~SkillEffect()
 {
+
 }
 
 // 위치를 업데이트합니다.

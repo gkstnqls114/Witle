@@ -10,17 +10,12 @@
 
 void UI3DImage::ReleaseObjects()
 { 
-	if (m_pTexture)
-	{
-		m_pTexture->ReleaseObjects();
-		delete m_pTexture;
-		m_pTexture = nullptr;
-	}
+
 }
 
 void UI3DImage::ReleaseUploadBuffers()
 {
-	if (m_pTexture) m_pTexture->ReleaseUploadBuffers();
+
 }
 
 UI3DImage::UI3DImage(GameObject * pOwner, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, RECT rect, const std::string& texture_name)

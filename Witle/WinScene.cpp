@@ -148,7 +148,17 @@ void WinScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList
 
 void WinScene::ReleaseObjects()
 {
-
+	if (m_gameobject)
+	{
+		m_gameobject->ReleaseObjects();
+		delete m_gameobject;
+		m_gameobject = nullptr;
+	}
+	if (m_Background)
+	{ 
+		delete m_Background;
+		m_Background = nullptr;
+	}
 }
 
 bool WinScene::ProcessInput(HWND hWnd, float ElapsedTime)

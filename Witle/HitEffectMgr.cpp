@@ -85,6 +85,13 @@ void HitEffectMgr::ReleaseObjects()
 		delete m_NormalHitEffectList[i].pEffect;
 		m_NormalHitEffectList[i].pEffect = nullptr; 
 	}
+
+	if (m_GameObject)
+	{
+		m_GameObject->ReleaseObjects();
+		delete m_GameObject;
+		m_GameObject = nullptr;
+	}
 }
 
 void HitEffectMgr::Update(float fElapsedTime)

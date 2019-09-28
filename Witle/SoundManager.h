@@ -34,6 +34,15 @@ public:
 		return m_Instance;
 	}
 
+	static void ReleaseInstance()
+	{
+		if (m_Instance)
+		{
+			delete m_Instance;
+			m_Instance = nullptr;
+		}
+
+	}
 	int Volume = 10; // 볼륨
 	int Dropper; // 진동수. 얼마나 멀리가나!
 	int Distance; // 진동세기.

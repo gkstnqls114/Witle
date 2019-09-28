@@ -32,26 +32,29 @@ void SkillStg::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList
 	m_SelectableSkills[ENUM_SELECTABLESKILL::SELECTABLESKILL_SHIELD] = new Shield(pd3dDevice, pd3dCommandList);
 	m_SelectableSkills[ENUM_SELECTABLESKILL::SELECTABLESKILL_BLESSING] = new Blessing(pd3dDevice, pd3dCommandList);
 	m_SelectableSkills[ENUM_SELECTABLESKILL::SELECTABLESKILL_HEALING] = new Healing(pd3dDevice, pd3dCommandList);
-
-	//m_SelectableSkills[ENUM_SELECTABLESKILL::SELECTABLESKILL_METEOR] = new FireBallSkill(pd3dDevice, pd3dCommandList);
-	//m_SelectableSkills[ENUM_SELECTABLESKILL::SELECTABLESKILL_ICESPEAR] = new LightningBallSkill(pd3dDevice, pd3dCommandList);
-}
+ }
 
 void SkillStg::ReleaseUploadBuffers()
 {
-	for (auto& se : m_SelectableSkills)
-	{
-		se->ReleaseUploadBuffers();
+	for (int index = 0; index < SKILL_TO_CHOOSE; ++index)
+	{ 
+		if (m_SelectableSkills[index])
+		{
+			m_SelectableSkills[index]->ReleaseUploadBuffers();
+		}
 	}
 }
 
 void SkillStg::ReleaseObjects()
 {
-	for (auto& se : m_SelectableSkills)
+	for (int index = 0; index < SKILL_TO_CHOOSE; ++index)
 	{
-		se->ReleaseObjects();
-		delete se;
-		se = nullptr;
+		if (m_SelectableSkills[index])
+		{
+			m_SelectableSkills[index]->ReleaseObjects();
+			delete m_SelectableSkills[index];
+			m_SelectableSkills[index] = nullptr;
+		}
 	}
 }
 

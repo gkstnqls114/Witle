@@ -529,6 +529,10 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 		pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
 
 	m_TestMonster = new Monster*[m_TestMonsterCount];
+	for (int x = 0; x < m_TestMonsterCount; ++x)
+	{
+		m_TestMonster[x] = nullptr;
+	}
 
 	int spacecatblue_count = 0;
 	int spacecatgreen_count = 0;
@@ -537,7 +541,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	int mushroom_count = 0;
 	int boss_count = 0;
 
-	MonsterTransformStorage* instance = MonsterTransformStorage::GetInstance();
+	MonsterTransformStorage*const instance = MonsterTransformStorage::GetInstance();
 	instance->CreateInfo(pd3dDevice, pd3dCommandList);
 
 	for (int i = 0; i < m_TestMonsterCount; )
@@ -808,7 +812,9 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 }
 
 void GameScene::ReleaseObjects()
-{
+{ 
+	MonsterTransformStorage::ReleaseInstance();
+
 	if (m_pd3dCbvSrUavDescriptorHeap)
 	{
 		m_pd3dCbvSrUavDescriptorHeap->Release();
@@ -864,6 +870,12 @@ void GameScene::ReleaseObjects()
 		delete m_AimPoint;
 		m_AimPoint = nullptr;
 	}
+	if (m_Dragon)
+	{ 
+		m_Dragon->ReleaseObjects();
+		delete m_Dragon;
+		m_Dragon = nullptr;
+	}
 	if (m_pPlayer)
 	{
 		m_pPlayer->ReleaseObjects();
@@ -896,17 +908,95 @@ void GameScene::ReleaseObjects()
 		delete m_pQuadtreeTerrain;
 		m_pQuadtreeTerrain = nullptr;
 	}
+	if (m_TESTGameObject)
+	{
+		m_TESTGameObject->ReleaseObjects();
+		delete m_TESTGameObject;
+		m_TESTGameObject = nullptr;
+	}
+	if (m_SampleUIMap)
+	{  
+		delete m_SampleUIMap;
+		m_SampleUIMap = nullptr;
+	}
+	if (m_UIAltar_1)
+	{ 
+		delete m_UIAltar_1;
+		m_UIAltar_1 = nullptr;
+	} 
+	if (m_UIAltar_2)
+	{ 
+		delete m_UIAltar_2;
+		m_UIAltar_2 = nullptr;
+	} 
+	if (m_UIAltar_3)
+	{ 
+		delete m_UIAltar_3;
+		m_UIAltar_3 = nullptr;
+	} 
+	if (m_UIAltar_4)
+	{ 
+		delete m_UIAltar_4;
+		m_UIAltar_4 = nullptr;
+	}
+	if (m_UIAltar_5)
+	{ 
+		delete m_UIAltar_5;
+		m_UIAltar_5 = nullptr;
+	}
+	if (m_UIPlayer)
+	{ 
+		delete m_UIPlayer;
+		m_UIPlayer = nullptr;
+	} 
+	if (m_UIBossMonster)
+	{ 
+		delete m_UIBossMonster;
+		m_UIBossMonster = nullptr;
+	}
+	if (m_SampleUISkill1)
+	{ 
+		delete m_SampleUISkill1;
+		m_SampleUISkill1 = nullptr;
+	}
+	if (m_SampleUISkill2)
+	{ 
+		delete m_SampleUISkill2;
+		m_SampleUISkill2 = nullptr;
+	}
+	if (m_SampleUISkill3)
+	{ 
+		delete m_SampleUISkill3;
+		m_SampleUISkill3 = nullptr;
+	}
+	if (m_SampleUISkill4)
+	{ 
+		delete m_SampleUISkill4;
+		m_SampleUISkill4 = nullptr;
+	} 
+	for (int x = 0; x < 5; ++x)
+	{
+		if (m_AltarSphere[x])
+		{
+			m_AltarSphere[x]->ReleaseObjects();
+			delete m_AltarSphere[x];
+			m_AltarSphere[x] = nullptr;
+		}
+	}
 
 	if (m_TestMonster)
 	{
 		for (int i = 0; i < m_TestMonsterCount; ++i)
 		{
-			m_TestMonster[i]->ReleaseObjects();
-			delete m_TestMonster[i];
-			m_TestMonster[i] = nullptr;
+			if (m_TestMonster[i])
+			{
+				m_TestMonster[i]->ReleaseObjects();
+				delete m_TestMonster[i];
+				m_TestMonster[i] = nullptr;
+			}
 		}
 
-		delete m_TestMonster;
+		delete[] m_TestMonster;
 		m_TestMonster = nullptr;
 	}
 }
@@ -941,7 +1031,7 @@ void GameScene::UpdatePhysics(float fElapsedTime)
 
 	for (int i = 0; i < m_TestMonsterCount; ++i) 
 	{
-		m_TestMonster[i]->UpdateState(fElapsedTime); // State와 업데이트 처리...
+		if(m_TestMonster[i]) m_TestMonster[i]->UpdateState(fElapsedTime); // State와 업데이트 처리...
 	}
 
 	// 반드시 UpdatePhysics 마지막에 충돌 처리를 해야함.
@@ -1219,7 +1309,7 @@ void GameScene::Init()
 	 
 	for (int i = 0; i < m_TestMonsterCount; ++i)
 	{ 
-		m_TestMonster[i]->Init();
+		if(m_TestMonster[i]) m_TestMonster[i]->Init();
 	} 
 }
 
@@ -1454,8 +1544,13 @@ void GameScene::ReleaseUploadBuffers()
 	if (m_pQuadtreeTerrain) m_pQuadtreeTerrain->ReleaseUploadBuffers();
 	for (int i = 0; i < m_TestMonsterCount; ++i)
 	{
-		m_TestMonster[i]->ReleaseUploadBuffers();
+		if(m_TestMonster[i]) m_TestMonster[i]->ReleaseUploadBuffers();
 	}
+	for (int i = 0; i < 5; ++i)
+	{
+		if (m_AltarSphere[i]) m_AltarSphere[i]->ReleaseUploadBuffers();
+	}
+	 
 }
 
 void GameScene::UpdateCollision(float fElapsedTime)

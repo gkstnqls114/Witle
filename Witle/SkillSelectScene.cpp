@@ -170,7 +170,40 @@ void SkillSelectScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCom
 
 void SkillSelectScene::ReleaseObjects()
 {
+	if (m_pHeap)
+	{
+		m_pHeap->ReleaseObjects();
+		delete m_pHeap;
+		m_pHeap = nullptr; 
+	}
+	if (m_pTexture)
+	{
+		delete m_pTexture;
+		m_pTexture = nullptr;
+	}
+	if (m_TESTGameObject)
+	{
+		m_TESTGameObject->ReleaseObjects();
+		delete m_TESTGameObject;
+		m_TESTGameObject = nullptr;
+	}
 
+	for (int x = 0; x < SKILL_TO_CHOOSE; ++x)
+	{
+		if (m_UISkillToChoose[x])
+		{
+			delete m_UISkillToChoose[x];
+			m_UISkillToChoose[x] = nullptr;
+		}
+	}
+	for (int x = 0; x < SKILL_SELECTED; ++x)
+	{
+		if (m_UISkillSelected[x])
+		{
+			delete m_UISkillSelected[x];
+			m_UISkillSelected[x] = nullptr;
+		}
+	}
 }
 
 bool SkillSelectScene::ProcessInput(HWND hWnd, float ElapsedTime)

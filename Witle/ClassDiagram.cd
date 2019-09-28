@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="GameFramework" Collapsed="true">
+    <Position X="3.25" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>LT8JtgRgEmESCKyhQACgBGb2giFjA5DJ7BYA1oCiME0=</HashCode>
+      <FileName>GameFramework.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GameInput" Collapsed="true">
+    <Position X="1.25" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IASIAGoJAiBABIABKAECBgYgRICCkAAQIgiihACQBAQ=</HashCode>
+      <FileName>GameInput.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="RAY" Collapsed="true">
+    <Position X="1.25" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAAAAAAAAAAIAAAAAAAAAAAAAEAAAAAAAAAAAAAAQA=</HashCode>
+      <FileName>GameInput.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Font Name="맑은 고딕" Size="9" />
+</ClassDiagram>

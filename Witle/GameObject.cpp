@@ -4,11 +4,15 @@
 #include "GameObject.h"
  
 void GameObject::ReleaseComponents()
-{ 
+{  
 	for (auto& component : m_Components)
 	{
-		delete component.second;
-		component.second = nullptr;
+		if (component.second)
+		{
+			component.second->ReleaseObjects();
+			delete component.second;
+			component.second = nullptr;
+		}
 	}
 
 	m_Components.clear();

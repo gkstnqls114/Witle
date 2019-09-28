@@ -27,25 +27,27 @@ void ShieldEffect::UpdateCollider()
 void ShieldEffect::ReleaseMembers()
 {
 	SkillEffect::ReleaseMembers();
-
-	if (m_ShieldEffectObject)
+	 
+	if (m_ShieldEffectModelInfo)
 	{ 
-	m_ShieldEffectObject->ReleaseObjects();
-	delete m_ShieldEffectObject;
-	m_ShieldEffectObject = nullptr;
+		delete m_ShieldEffectModelInfo;
+		m_ShieldEffectModelInfo = nullptr;
 	}
 
-	m_ShieldEffectMesh->ReleaseObjects();
-	delete m_ShieldEffectMesh;
-	m_ShieldEffectMesh = nullptr;
+	if (m_ShieldEffectMesh)
+	{
+		m_ShieldEffectMesh->ReleaseObjects();
+		delete m_ShieldEffectMesh;
+		m_ShieldEffectMesh = nullptr;
+	}
 
 }
 
 void ShieldEffect::ReleaseMemberUploadBuffers()
 {
 	SkillEffect::ReleaseMemberUploadBuffers();
-
-	if (m_ShieldEffectObject) m_ShieldEffectObject->ReleaseUploadBuffers();
+	 
+	if (m_ShieldEffectModelInfo) m_ShieldEffectModelInfo->ReleaseUploadBuffers(); 
 	if (m_ShieldEffectMesh) m_ShieldEffectMesh->ReleaseUploadBuffers();
 
 }
@@ -58,7 +60,7 @@ ShieldEffect::ShieldEffect(const std::string & entityID, ID3D12Device * pd3dDevi
 	m_ShieldEffectMesh = new SphereMesh(this, pd3dDevice, pd3dCommandList, true, 150, 150, 10, 10);
 	// m_ShieldEffectMesh->CreateTexture(pd3dDevice, pd3dCommandList, L"Image/Shield.dds"); 
 
-		m_ShieldEffectModelInfo = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature(), "Model/Shield.bin", NULL);
+	m_ShieldEffectModelInfo = LoadObject::LoadGeometryAndAnimationFromFile(pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature(), "Model/Shield.bin", NULL);
 	m_ShieldEffectObject = m_ShieldEffectModelInfo->m_pModelRootObject;
 
 	m_ShiedlTexture = TextureStorage::GetInstance()->GetTexture("Shield");

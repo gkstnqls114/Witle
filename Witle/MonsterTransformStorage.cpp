@@ -225,6 +225,7 @@ void MonsterTransformStorage::ReleaseInstance()
 {
 	if (m_Instance)
 	{ 
+		m_Instance->ReleaseObjects();
 		delete m_Instance;
 		m_Instance = nullptr;
 	}

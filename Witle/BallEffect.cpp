@@ -26,6 +26,13 @@ void BallEffect::ReleaseMembers()
 {
 	SkillEffect::ReleaseMembers();
 
+	if (m_Texture)
+	{
+		m_Texture->ReleaseObjects();
+		delete m_Texture;
+		m_Texture = nullptr;
+	}
+
 	if (m_BallEffectMesh)
 	{
 		m_BallEffectMesh->ReleaseObjects();
@@ -38,13 +45,14 @@ void BallEffect::ReleaseMembers()
 		m_InBallEffectMesh->ReleaseObjects();
 		delete m_InBallEffectMesh;
 		m_InBallEffectMesh = nullptr;
-	}
+	} 
 }
 
 void BallEffect::ReleaseMemberUploadBuffers()
 {
 	SkillEffect::ReleaseMemberUploadBuffers();
-
+	
+	if (m_Texture) m_Texture->ReleaseUploadBuffers();
 	if (m_BallEffectMesh) m_BallEffectMesh->ReleaseUploadBuffers();
 	if (m_InBallEffectMesh) m_InBallEffectMesh->ReleaseUploadBuffers();
 }

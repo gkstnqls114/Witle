@@ -47,6 +47,20 @@ void SceneMgr::ReleaseObjects()
 		delete m_SkillSelectScene;
 		m_SkillSelectScene = nullptr;
 	}
+
+	if (m_WinScene)
+	{
+		m_WinScene->ReleaseObjects();
+		delete m_WinScene;
+		m_WinScene = nullptr;
+	}
+
+	if (m_LoseScene)
+	{
+		m_LoseScene->ReleaseObjects();
+		delete m_LoseScene;
+		m_LoseScene = nullptr;
+	}
 }
 
 void SceneMgr::ReleaseUploadBuffers()

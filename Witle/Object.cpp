@@ -177,6 +177,34 @@ void CMaterial::ReleaseShaders()
 		delete m_pSkinnedAnimationWireFrameShader;
 		m_pSkinnedAnimationWireFrameShader = nullptr;
 	}
+	 
+	if (m_pWireFrameShader_ForShadow)
+	{
+		m_pWireFrameShader_ForShadow->ReleaseObjects();
+		delete m_pWireFrameShader_ForShadow;
+		m_pWireFrameShader_ForShadow = nullptr;
+	}
+
+	if (m_pSkinnedShader_ForShadow)
+	{
+		m_pSkinnedShader_ForShadow->ReleaseObjects();
+		delete m_pSkinnedShader_ForShadow;
+		m_pSkinnedShader_ForShadow = nullptr;
+	}
+
+	if (m_pWireFrameShader_ForPlayerShadow)
+	{
+		m_pWireFrameShader_ForPlayerShadow->ReleaseObjects();
+		delete m_pWireFrameShader_ForPlayerShadow;
+		m_pWireFrameShader_ForPlayerShadow = nullptr;
+	}
+
+	if (m_pSkinnedShader_ForPlayerShadow)
+	{
+		m_pSkinnedShader_ForPlayerShadow->ReleaseObjects();
+		delete m_pSkinnedShader_ForPlayerShadow;
+		m_pSkinnedShader_ForPlayerShadow = nullptr;
+	}  
 }
 
 void CMaterial::PrepareShaders(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature)
@@ -276,10 +304,18 @@ CAnimationLayer::~CAnimationLayer()
 	{
 		for (int j = 0; j < 9; j++)
 		{
-			if (m_ppAnimationCurves[i][j]) delete m_ppAnimationCurves[i][j];
+			if (m_ppAnimationCurves[i][j])
+			{
+				delete m_ppAnimationCurves[i][j];
+				m_ppAnimationCurves[i][j];
+			}
 		}
 	}
-	if (m_ppAnimationCurves) delete[] m_ppAnimationCurves;
+	if (m_ppAnimationCurves)
+	{
+		delete[] m_ppAnimationCurves;
+		m_ppAnimationCurves = nullptr;
+	}
 
 	if (m_ppAnimatedBoneFrameCaches) delete[] m_ppAnimatedBoneFrameCaches;
 }
@@ -338,7 +374,6 @@ CAnimationSet::~CAnimationSet()
 void CAnimationSet::ReleaseObject()
 {
 	if (m_pAnimationLayers) delete[] m_pAnimationLayers;
-
 	if (m_pCallbackKeys) delete[] m_pCallbackKeys;
 	if (m_pAnimationCallbackHandler) delete m_pAnimationCallbackHandler;
 }

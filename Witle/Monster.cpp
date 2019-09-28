@@ -170,6 +170,12 @@ void Monster::ReleaseMembers()
 		delete m_MonsterHPUI;
 		m_MonsterHPUI = nullptr;
 	}
+	if (m_MonsterActionMgr)
+	{ 
+		m_MonsterActionMgr->ReleaseObjects();
+		delete m_MonsterActionMgr;
+		m_MonsterActionMgr = nullptr;
+	}
 	if (m_RecognitionRange)
 	{
 		m_RecognitionRange->ReleaseObjects();

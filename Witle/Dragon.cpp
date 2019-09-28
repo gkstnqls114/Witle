@@ -46,13 +46,27 @@ void Dragon::Render(ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffers
 void Dragon::ReleaseMembers()
 {
 	Monster::ReleaseMembers();
-
+	 
 	if (m_pTexture)
 	{
 		m_pTexture->ReleaseObjects();
 		delete m_pTexture;
 		m_pTexture = nullptr;
 	}
+	if (m_pStoneTexture)
+	{ 
+		m_pStoneTexture->ReleaseObjects();
+		delete m_pStoneTexture;
+		m_pStoneTexture = nullptr;
+	}
+
+	if (m_BOBoxForTailAttack)
+	{
+		m_BOBoxForTailAttack->ReleaseObjects();
+		delete m_BOBoxForTailAttack;
+		m_BOBoxForTailAttack = nullptr;
+	}
+	
 }
 
 void Dragon::ReleaseMemberUploadBuffers()
@@ -123,8 +137,8 @@ Dragon::Dragon(const std::string & entityID, const XMFLOAT3& SpawnPoint,
 	m_pLoadObject->m_pSkinnedAnimationController = new CAnimationController(pd3dDevice, pd3dCommandList, 1, m_MonsterModel);
 	
 	// Bip001_Spine 프레임을 가져옵니다.
-	m_BOBoxFrame = m_pLoadObject->FindFrame("Bip001_Spine");
-	m_HeadFrame = m_pLoadObject->FindFrame("Bip001_Head");
+	m_pBOBoxFrame = m_pLoadObject->FindFrame("Bip001_Spine");
+	m_pHeadFrame = m_pLoadObject->FindFrame("Bip001_Head");
 	 
 	XMFLOAT3 extents{ 150.f, 100.f, 230.f };
 	m_pMyBOBox = new MyBOBox(this, pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 0.F, 0.F }, extents);
@@ -167,7 +181,7 @@ void Dragon::Update(float fElapsedTime)
 	if (isDead && m_pLoadObject->IsTrackAnimationSetFinish(0, BOSS_DEAD.ID))
 	{ 
 		static_cast<BossMonsterActionMgr*>(m_MonsterActionMgr)->ChangeBossStateToStone();
-		SceneMgr::GetInstacne()->ChangeSceneToWin();
+		SceneMgr::GetInstance()->ChangeSceneToWin();
 		return;
 	}
 	if (isDead) return;
@@ -207,9 +221,9 @@ void Dragon::Animate(float fElapsedTime)
 	// 몬스터 애니메이션에 대한 행렬을 업데이트합니다.
 	Monster::Animate(fElapsedTime);
 
-	// m_BOBoxFrame은 Bip001_Spine 상의 월드행렬을 가져옵니다.
+	// m_pBOBoxFrame은 Bip001_Spine 상의 월드행렬을 가져옵니다.
 	// 해당 프레임에 맞추어 바운딩 박스 위치와 회전을 재설정 합니다.
-	XMFLOAT3 pos = XMFLOAT3(m_BOBoxFrame->m_xmf4x4World._41, m_BOBoxFrame->m_xmf4x4World._42, m_BOBoxFrame->m_xmf4x4World._43);
+	XMFLOAT3 pos = XMFLOAT3(m_pBOBoxFrame->m_xmf4x4World._41, m_pBOBoxFrame->m_xmf4x4World._42, m_pBOBoxFrame->m_xmf4x4World._43);
 	XMFLOAT3 offset = Vector3::ScalarProduct(m_Transform.GetLook(), 100.f, false);
 	XMFLOAT3 result_pos = Vector3::Add(pos, offset);
 

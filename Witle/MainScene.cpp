@@ -80,7 +80,17 @@ void MainScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 
 void MainScene::ReleaseObjects()
 {
-
+	if (m_gameobject)
+	{
+		m_gameobject->ReleaseObjects();
+		delete m_gameobject;
+		m_gameobject = nullptr;
+	}
+	if (m_Background)
+	{ 
+		delete m_Background;
+		m_Background = nullptr;
+	}
 }
 
 bool MainScene::ProcessInput(HWND hWnd, float ElapsedTime)

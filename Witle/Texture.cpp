@@ -67,6 +67,18 @@ Texture::~Texture()
 		delete[] m_ppd3dTextures;
 	}
 
+	if (m_ppd3dTextureUploadBuffers)
+	{
+		for (int i = 0; i < m_nTextures; ++i)
+		{
+			if (m_ppd3dTextureUploadBuffers[i])
+			{
+				m_ppd3dTextureUploadBuffers[i]->Release(); 
+			}
+		}
+		delete[] m_ppd3dTextureUploadBuffers; 
+	}
+
 	if (m_pRootArgumentInfos)
 	{
 		delete[] m_pRootArgumentInfos;
