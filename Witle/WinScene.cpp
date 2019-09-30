@@ -47,6 +47,15 @@ void WinScene::CreateCbvSrvDescriptorHeaps(ID3D12Device * pd3dDevice, ID3D12Grap
 	m_d3dSrvGPUDescriptorNextHandle.ptr = m_d3dSrvGPUDescriptorStartHandle.ptr = m_d3dCbvGPUDescriptorStartHandle.ptr + (d3dUtil::gnCbvSrvDescriptorIncrementSize * nConstantBufferViews);
 }
 
+void WinScene::ReleaseHeaps()
+{
+	if (m_pd3dCbvSrvDescriptorHeap)
+	{
+		m_pd3dCbvSrvDescriptorHeap->Release();
+		m_pd3dCbvSrvDescriptorHeap = nullptr;
+	}
+}
+
 D3D12_GPU_DESCRIPTOR_HANDLE WinScene::CreateConstantBufferViews(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, int nConstantBufferViews, ID3D12Resource * pd3dConstantBuffers, UINT nStride)
 {
 	D3D12_GPU_DESCRIPTOR_HANDLE d3dCbvGPUDescriptorHandle = m_d3dCbvGPUDescriptorNextHandle;
@@ -148,6 +157,7 @@ void WinScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList
 
 void WinScene::ReleaseObjects()
 {
+	ReleaseHeaps();
 	if (m_gameobject)
 	{
 		m_gameobject->ReleaseObjects();
@@ -156,6 +166,7 @@ void WinScene::ReleaseObjects()
 	}
 	if (m_Background)
 	{ 
+		m_Background->ReleaseObjects();
 		delete m_Background;
 		m_Background = nullptr;
 	}
@@ -211,7 +222,8 @@ void WinScene::RenderForPlayerShadow(ID3D12GraphicsCommandList * pd3dCommandList
 
 void WinScene::ReleaseUploadBuffers()
 {
-	// if (m_SampleUIImage) m_SampleUIImage->ReleaseUploadBuffers();
+	if (m_gameobject) m_gameobject->ReleaseUploadBuffers();
+	if (m_Background) m_Background->ReleaseUploadBuffers();
 }
 
 void WinScene::BuildLightsAndMaterials(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList)

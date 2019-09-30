@@ -7,17 +7,7 @@
 #include "UI3DImage.h"
 
 #define RECTANGLE_VERTEX_COUNT 6
-
-void UI3DImage::ReleaseObjects()
-{ 
-
-}
-
-void UI3DImage::ReleaseUploadBuffers()
-{
-
-}
-
+ 
 UI3DImage::UI3DImage(GameObject * pOwner, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, RECT rect, const std::string& texture_name)
 	:UI3D(pOwner)
 {   

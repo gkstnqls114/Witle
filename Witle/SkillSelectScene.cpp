@@ -178,6 +178,7 @@ void SkillSelectScene::ReleaseObjects()
 	}
 	if (m_pTexture)
 	{
+		m_pTexture->ReleaseObjects();
 		delete m_pTexture;
 		m_pTexture = nullptr;
 	}
@@ -191,7 +192,8 @@ void SkillSelectScene::ReleaseObjects()
 	for (int x = 0; x < SKILL_TO_CHOOSE; ++x)
 	{
 		if (m_UISkillToChoose[x])
-		{
+		{ 
+			m_UISkillToChoose[x]->ReleaseObjects();
 			delete m_UISkillToChoose[x];
 			m_UISkillToChoose[x] = nullptr;
 		}
@@ -200,6 +202,7 @@ void SkillSelectScene::ReleaseObjects()
 	{
 		if (m_UISkillSelected[x])
 		{
+			m_UISkillSelected[x]->ReleaseObjects();
 			delete m_UISkillSelected[x];
 			m_UISkillSelected[x] = nullptr;
 		}
@@ -272,8 +275,24 @@ void SkillSelectScene::RenderForShadow(ID3D12GraphicsCommandList * pd3dCommandLi
 }
 
 void SkillSelectScene::ReleaseUploadBuffers()
-{
+{  
+	if(m_pTexture) m_pTexture->ReleaseUploadBuffers();
+	
 
+	for (int x = 0; x < SKILL_TO_CHOOSE; ++x)
+	{
+		if (m_UISkillToChoose[x])
+		{
+			m_UISkillToChoose[x]->ReleaseUploadBuffers();
+		}
+	}
+	for (int x = 0; x < SKILL_SELECTED; ++x)
+	{
+		if (m_UISkillSelected[x])
+		{
+			m_UISkillSelected[x]->ReleaseUploadBuffers();
+		}
+	}
 }
 void SkillSelectScene::BuildLightsAndMaterials(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList)
 {

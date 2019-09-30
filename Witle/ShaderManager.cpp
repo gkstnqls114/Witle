@@ -55,21 +55,17 @@ void ShaderManager::ReleaseInstance()
 	if (!m_ShaderManagerInstance) return;
 
 	// 순회하며 메모리 할당 제거.
-	for (auto& pso : m_ShaderManagerInstance->m_Shaders) {
-		delete pso.second;
-		pso.second = nullptr;
-	}
+	m_ShaderManagerInstance->ReleaseObjects(); 
 
-	if (m_ShaderManagerInstance) {
-		delete m_ShaderManagerInstance;
-		m_ShaderManagerInstance = nullptr;
-	}
+	delete m_ShaderManagerInstance;
+	m_ShaderManagerInstance = nullptr;
+
 }
 
 void ShaderManager::ReleaseObjects()
 {
 	for (auto& shader : m_Shaders)
-	{ 
+	{  
 		shader.second->ReleaseObjects();
 		delete shader.second;
 		shader.second = nullptr;
@@ -176,7 +172,7 @@ void ShaderManager::BuildShaders(ID3D12Device * pd3dDevice, ID3D12RootSignature 
 	InsertShader(SHADER_ALTARSPHERE, pAltarSphereShader);
 }
 
-bool ShaderManager::InsertShader(const std::string& s, Shader * pso)
+bool ShaderManager::InsertShader(std::string&& s, Shader * pso)
 {
 	auto pair = m_Shaders.insert(std::pair<std::string, Shader*>(s, pso));
 	if (pair.second) {
@@ -187,12 +183,17 @@ bool ShaderManager::InsertShader(const std::string& s, Shader * pso)
 	}
 }
 
-Shader * ShaderManager::GetShader(const std::string & s) const
+Shader * ShaderManager::GetShader(const std::string& s) const
 {
 	return (*(m_Shaders.find(s))).second;
 }
 
-void ShaderManager::SetPSO(ID3D12GraphicsCommandList * pd3dCommandList, const std::string& name, bool isGBuffers) const
+Shader * ShaderManager::GetShader(std::string && s) const
+{
+	return (*(m_Shaders.find(s))).second;
+}
+
+void ShaderManager::SetPSO(ID3D12GraphicsCommandList * pd3dCommandList, std::string&& name, bool isGBuffers) const
 {
 	if (isGBuffers) SetPSOForGBuffers(pd3dCommandList, name);
 	else SetPSOForSwapChain(pd3dCommandList, name);

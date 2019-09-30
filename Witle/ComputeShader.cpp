@@ -7,10 +7,7 @@ ComputeShader::ComputeShader()
 
 ComputeShader::~ComputeShader()
 {
-	if (m_PipelineState)
-	{
-		m_PipelineState->Release();
-	}
+
 }
 
 D3D12_SHADER_BYTECODE ComputeShader::CompileShaderFromFile(const WCHAR * pszFileName, LPCSTR pszShaderName, ID3DBlob ** ppd3dShaderBlob)
@@ -66,5 +63,10 @@ void ComputeShader::ReleaseObjects()
 	{
 		m_PipelineState->Release();
 		m_PipelineState = nullptr;
+	}
+	if (m_pd3dGraphicsRootSignature)
+	{
+		m_pd3dGraphicsRootSignature->Release();
+		m_pd3dGraphicsRootSignature = nullptr;
 	}
 }

@@ -8,6 +8,7 @@
 #include "Texture.h"
 #include "UI2DImage.h"
 #include "MyRectangle.h"
+#include "Shader.h"
 #include "GraphicsRootSignatureMgr.h"
 #include "GameScene.h"
  
@@ -76,6 +77,9 @@ void MainScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 		"Wittle_1280x720"
 		);
 	 
+
+	m_pSceneShader = ShaderManager::GetInstance()->GetShader(SHADER_UISCREEN);
+	
 }
 
 void MainScene::ReleaseObjects()
@@ -88,6 +92,7 @@ void MainScene::ReleaseObjects()
 	}
 	if (m_Background)
 	{ 
+		m_Background->ReleaseObjects();
 		delete m_Background;
 		m_Background = nullptr;
 	}
@@ -126,8 +131,8 @@ void MainScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 	pd3dCommandList->RSSetViewports(1, &m_d3dViewport);
 	pd3dCommandList->RSSetScissorRects(1, &m_d3dScissorRect);
 
-	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_UISCREEN, false);
-
+	pd3dCommandList->SetPipelineState(m_pSceneShader->GetPSO());
+	
 	GameScene::SetDescriptorHeap(pd3dCommandList);
 	for (int i = 0; i < 100; ++i)
 	{
@@ -140,8 +145,15 @@ void MainScene::RenderForShadow(ID3D12GraphicsCommandList * pd3dCommandList)
 }
 
 void MainScene::ReleaseUploadBuffers()
-{
-
+{ 
+	if (m_gameobject)
+	{
+		m_gameobject->ReleaseUploadBuffers(); 
+	} 
+	if (m_Background)
+	{
+		m_Background->ReleaseUploadBuffers();
+	}
 } 
 void MainScene::BuildLightsAndMaterials(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList)
 {

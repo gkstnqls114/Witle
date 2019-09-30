@@ -6,6 +6,7 @@ class Texture;
 class MyRectangle;
 class GameObject;
 class UI2DImage;
+class Shader;
 
 class MainScene
 	: public Scene
@@ -44,6 +45,7 @@ private:
 	D3D12_VIEWPORT	m_d3dViewport;
 	D3D12_RECT		m_d3dScissorRect;
 
+	Shader* m_pSceneShader{ nullptr };
 	GameObject* m_gameobject{ nullptr };
 	UI2DImage* m_Background{ nullptr }; 
 };

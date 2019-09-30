@@ -12,6 +12,7 @@ private:
 	static ID3D12RootSignature* CreateGraphicsRootSignature(ID3D12Device *pd3dDevice);
 public:
 	static void BuildObject(ID3D12Device *pd3dDevice);
+	static void ReleaseObjects();
 
 	static ID3D12RootSignature* GetGraphicsRootSignature() { return m_d3dGraphicsRootSignature; }
 };

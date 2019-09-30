@@ -13,12 +13,11 @@ SceneMgr* SceneMgr::m_Instace{ nullptr };
 
 SceneMgr::SceneMgr()
 {
-	m_GameScene = new GameScene;
 	m_MainScene = new MainScene;
 	m_SkillSelectScene = new SkillSelectScene;
+	m_GameScene = new GameScene;
 	m_WinScene = new WinScene;
 	m_LoseScene = new LoseScene;
-
 }
 
 SceneMgr::~SceneMgr()
@@ -74,11 +73,11 @@ void SceneMgr::ReleaseUploadBuffers()
 
 void SceneMgr::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList)
 {
-	m_GameScene->BuildObjects(pd3dDevice, pd3dCommandList);
-	m_MainScene->BuildObjects(pd3dDevice, pd3dCommandList);
-	m_SkillSelectScene->BuildObjects(pd3dDevice, pd3dCommandList);
-	m_WinScene->BuildObjects(pd3dDevice, pd3dCommandList);
-	m_LoseScene->BuildObjects(pd3dDevice, pd3dCommandList);
+	if (m_GameScene) m_GameScene->BuildObjects(pd3dDevice, pd3dCommandList);
+	if (m_MainScene) m_MainScene->BuildObjects(pd3dDevice, pd3dCommandList);
+	if (m_SkillSelectScene) m_SkillSelectScene->BuildObjects(pd3dDevice, pd3dCommandList);
+	if (m_WinScene) m_WinScene->BuildObjects(pd3dDevice, pd3dCommandList);
+	if (m_LoseScene) m_LoseScene->BuildObjects(pd3dDevice, pd3dCommandList);
 
 	ChangeSceneToMain();
 }
@@ -93,6 +92,8 @@ void SceneMgr::BuildHeap(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * 
 // 게임
 void SceneMgr::ChangeSceneToGame()
 {
+	if (!m_GameScene) return;
+
 	bool isNot = false;
 	for (int i = 0; i < 4; ++i)
 	{
@@ -121,6 +122,8 @@ void SceneMgr::ChangeSceneToGame()
 // 메인
 void SceneMgr::ChangeSceneToMain()
 {
+	if (!m_MainScene) return;
+
 	// 사운드 ///////////////////////////////////////////////////////////
 	SoundManager::GetInstance()->Stop(ENUM_SOUND::WIN_SOUND);
 	SoundManager::GetInstance()->Stop(ENUM_SOUND::LOSE_SOUND);
@@ -137,6 +140,8 @@ void SceneMgr::ChangeSceneToMain()
 // 스킬 선택
 void SceneMgr::ChangeSceneToSkillSelect()
 {
+	if (!m_SkillSelectScene) return;
+
 	// 사운드 ///////////////////////////////////////////////////////////
 	SoundManager::GetInstance()->Stop(ENUM_SOUND::WIN_SOUND);
 	SoundManager::GetInstance()->Stop(ENUM_SOUND::LOSE_SOUND);
@@ -153,6 +158,8 @@ void SceneMgr::ChangeSceneToSkillSelect()
 // 이김
 void SceneMgr::ChangeSceneToWin()
 {
+	if (!m_WinScene) return;
+
 	// 사운드 ///////////////////////////////////////////////////////////
 	SoundManager::GetInstance()->Stop(ENUM_SOUND::LOSE_SOUND);
 	SoundManager::GetInstance()->Stop(ENUM_SOUND::GAME_SOUND);
@@ -169,6 +176,8 @@ void SceneMgr::ChangeSceneToWin()
 // 짐
 void SceneMgr::ChangeSceneToLose()
 {
+	if (!m_LoseScene) return;
+
 	// 사운드 ///////////////////////////////////////////////////////////
 	SoundManager::GetInstance()->Stop(ENUM_SOUND::GAME_SOUND);
 	SoundManager::GetInstance()->Stop(ENUM_SOUND::MAIN_SOUND);

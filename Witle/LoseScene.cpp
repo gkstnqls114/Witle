@@ -86,6 +86,7 @@ void LoseScene::ReleaseObjects()
 	}
 	if (m_Background)
 	{
+		m_Background->ReleaseObjects();
 		delete m_Background;
 		m_Background = nullptr;
 	} 
@@ -141,7 +142,8 @@ void LoseScene::RenderForPlayerShadow(ID3D12GraphicsCommandList * pd3dCommandLis
 
 void LoseScene::ReleaseUploadBuffers()
 {
-
+	if (m_gameobject) m_gameobject->ReleaseUploadBuffers();
+	if (m_Background) m_Background->ReleaseUploadBuffers();
 }
 
 void LoseScene::BuildLightsAndMaterials(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList)

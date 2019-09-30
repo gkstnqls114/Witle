@@ -10,9 +10,7 @@ class UI3DImage
 {
 public:
 	virtual void Render(ID3D12GraphicsCommandList * pd3dCommandList, const Shader* shader) override {};
-	virtual void ReleaseObjects() override;
-	virtual void ReleaseUploadBuffers() override;
-
+	 
 private:
 	struct UIVertex
 	{

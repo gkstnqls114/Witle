@@ -5,6 +5,7 @@
  
 void GameObject::ReleaseComponents()
 {  
+	if (m_Components.empty()) return;
 	for (auto& component : m_Components)
 	{
 		if (component.second)
@@ -19,7 +20,8 @@ void GameObject::ReleaseComponents()
 }
 
 void GameObject::ReleaseComponentUploadBuffers()
-{ 
+{
+	if (m_Components.empty()) return;
 	for (auto& component : m_Components)
 	{
 		if (component.second->GetFamilyID().isMesh())

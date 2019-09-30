@@ -198,21 +198,8 @@ void GameFramework::OnDestroy()
 	if (m_DepthStencilBuffer)
 	{
 		m_DepthStencilBuffer->Release();
-	}
+	} 
 
-	//if (m_pShadowMap)
-	//{
-	//	m_pShadowMap->Release();
-	//}
-
-	if (m_horizenShader)
-	{
-		delete m_horizenShader;
-	}
-	if (m_verticalShader)
-	{
-		delete m_verticalShader;
-	}
 }
 
 void GameFramework::RenderGBuffers()
@@ -333,11 +320,13 @@ void GameFramework::CreateRWBuffer()
 }
 
 void GameFramework::ReleaseSwapChainBuffer()
-{
-	for (int i = 0; i < m_SwapChainBuffersCount; i++) {
+{ 
+	for (int i = 0; i < m_SwapChainBuffersCount; ++i) 
+	{
 		if (m_RenderTargetBuffers[i])
 		{
 			m_RenderTargetBuffers[i]->Release();
+			m_RenderTargetBuffers[i] = nullptr;
 		}
 	}
 }
@@ -353,29 +342,32 @@ void GameFramework::ReleaseGBuffers()
 
 	for (int i = 0; i < m_GBuffersCountForRenderTarget; ++i)
 	{
-		if(m_GBuffersForRenderTarget[i]) m_GBuffersForRenderTarget[i]->Release();
+		if (m_GBuffersForRenderTarget[i])
+		{
+			m_GBuffersForRenderTarget[i]->Release();
+			m_GBuffersForRenderTarget[i] = nullptr;
+		}
 	}
 }
 
 void GameFramework::ReleaseDepthStencilBuffer()
-{
-	if (m_DepthStencilBuffer) {
-		m_DepthStencilBuffer->Release();
-	}
-}
-
-void GameFramework::ReleaseShadowmap()
-{
-	if (m_GBufferHeap)
+{ 
+	for (int i = 0; i < m_GBuffersCountForDepth; ++i)
 	{
-		m_GBufferHeap->ReleaseObjects();
-		delete m_GBufferHeap;
-		m_GBufferHeap = nullptr;
-	}
+		if (m_GBuffersForDepth[i])
+		{
+			m_GBuffersForDepth[i]->Release();
+			m_GBuffersForDepth[i] = nullptr;
+		}
+	} 
 
-	m_Shadowmap->Release();
+	if (m_DepthStencilBuffer)
+	{
+		m_DepthStencilBuffer->Release();
+		m_DepthStencilBuffer = nullptr;
+	} 
 }
-
+ 
 void GameFramework::CreateSwapChain()
 {
 	DXGI_SWAP_CHAIN_DESC SwapChainDesc;
@@ -776,7 +768,7 @@ void GameFramework::CreateGBufferView()
 		// 디바이스에 렌더타겟뷰를 해당 텍스쳐로 설정된다...
 		m_d3dDevice->CreateRenderTargetView(m_GBuffersForRenderTarget[i], &d3dRenderTargetViewDesc, m_GBufferCPUHandleForRenderTarget[i]);
 	}
-
+	
 	if (!m_GBufferHeap)
 	{
 		m_GBufferHeap = new MyDescriptorHeap();
@@ -822,13 +814,10 @@ void GameFramework::BuildObjects()
 	BuildShaders(); // 생성된 루트 시그니처를 사용하는 쉐이더 생성
 	CreateRWBuffer(); // CommandList Reset된 이후에 해야함
 	 
-	SceneMgr::GetInstance();
-
-
 	// 터레인 오브젝트에서 사용될 모든 텍스쳐과 모델을 가져온다.
-	TextureStorage::GetInstance()->CreateTextures(m_d3dDevice.Get(), m_CommandList.Get());
+	 TextureStorage::GetInstance()->CreateTextures(m_d3dDevice.Get(), m_CommandList.Get());
 
-	// 반드시 텍스쳐를 생성하고 나서 호출해야한다.
+	//// 반드시 텍스쳐를 생성하고 나서 호출해야한다.
 	ModelStorage::GetInstance()->CreateModels(m_d3dDevice.Get(), m_CommandList.Get(), GraphicsRootSignatureMgr::GetGraphicsRootSignature());
 	HitEffectMgr::GetInstance()->BuildObjects(m_d3dDevice.Get(), m_CommandList.Get());
 	SkillStg::GetInstance()->BuildObjects(m_d3dDevice.Get(), m_CommandList.Get()); // 스킬 이펙트 생성
@@ -855,12 +844,13 @@ void GameFramework::BuildObjects()
 	WaitForGpuComplete();
 
 	//// 업로드 힙 릴리즈 ///////////////////////////////////////////////////////////////////////// 
-	SceneMgr::GetInstance()->ReleaseUploadBuffers();
-
-	SkillStg::GetInstance()->ReleaseUploadBuffers();
+	SceneMgr::GetInstance()->ReleaseUploadBuffers(); 
 	TextureStorage::GetInstance()->ReleaseUploadBuffers();
 	ModelStorage::GetInstance()->ReleaseUploadBuffers();
-	HitEffectMgr::GetInstance()->ReleaseUploadBuffers();
+	HitEffectMgr::GetInstance()->ReleaseUploadBuffers(); 
+	BossSkillMgr::GetInstance()->ReleaseUploadBuffers(); 
+	SkillStg::GetInstance()->ReleaseUploadBuffers();
+
 	//// 업로드 힙 릴리즈 ///////////////////////////////////////////////////////////////////////// 
 
 
@@ -868,12 +858,66 @@ void GameFramework::BuildObjects()
 }
 
 void GameFramework::ReleaseObjects()
-{  
+{   
+	GraphicsRootSignatureMgr::ReleaseObjects(); // 루트 시그니처 먼저 생성
+	GameScene::ReleaseHeaps();
+
 	if (m_GBufferHeap)
 	{
 		m_GBufferHeap->ReleaseObjects();
 		delete m_GBufferHeap;
 		m_GBufferHeap = nullptr;
+	}
+
+	for (int x = 0; x < m_GBuffersCountForRenderTarget; ++x)
+	{
+		if (m_GBuffersForRenderTarget[x])
+		{
+			m_GBuffersForRenderTarget[x]->Release();
+		}
+	}
+	for (int x = 0; x < m_GBuffersCountForDepth; ++x)
+	{
+		if (m_GBuffersForDepth[x])
+		{
+			m_GBuffersForDepth[x]->Release();
+		}
+	}
+	if (m_RWAvgLum)
+	{
+		m_RWAvgLum->Release();
+	}
+	if (m_RWMiddleAvgLum)
+	{
+		m_RWMiddleAvgLum->Release();
+	}
+	if (m_ReadBackAvgLumBuffer)
+	{
+		m_ReadBackAvgLumBuffer->Release();
+	}
+	if (m_ReadBackMiddleAvgLumBuffer)
+	{
+		m_ReadBackMiddleAvgLumBuffer->Release();
+	}
+	if (m_Shadowmap)
+	{
+		m_Shadowmap->Release();
+	}
+	if (m_PlayerShadowmap)
+	{
+		m_PlayerShadowmap->Release();
+	}
+	if (m_RWHDRTex_1_16)
+	{
+		m_RWHDRTex_1_16->Release();
+	}
+	if (m_RWBloomTex)
+	{
+		m_RWBloomTex->Release();
+	}
+	if (m_RWMiddleBloomTex)
+	{
+		m_RWMiddleBloomTex->Release();
 	}
 
 	if (m_ShadowmapHeap)
@@ -917,9 +961,9 @@ void GameFramework::ReleaseObjects()
 		delete m_BloomRevealShader;
 		m_BloomRevealShader = nullptr;
 	}
-
-
+	  
 	CMaterial::ReleaseShaders(); 
+
 	SkillStg::GetInstance()->ReleaseObjects();
 	StaticObjectStorage::GetInstance()->ReleaseObjects();
 	TextureStorage::GetInstance()->ReleaseObjects();
@@ -938,17 +982,20 @@ void GameFramework::ReleaseObjects()
 	BossSkillMgr::ReleaseInstance();
 	SoundManager::ReleaseInstance();
 
-	SceneMgr::GetInstance()->ReleaseObjects();
 }
 
 void GameFramework::UpdateGamelogic(float fElapsedTime)
 {
 	GameInput::Update(m_hWnd);
-	SceneMgr::GetInstance()->GetCurrScene()->ProcessInput(m_hWnd, fElapsedTime);
-	SceneMgr::GetInstance()->GetCurrScene()->UpdatePhysics(fElapsedTime);
-	SceneMgr::GetInstance()->GetCurrScene()->Update(fElapsedTime);
-	SceneMgr::GetInstance()->GetCurrScene()->AnimateObjects(fElapsedTime);
-	SceneMgr::GetInstance()->GetCurrScene()->LastUpdate(fElapsedTime);
+	Scene* pCurrScene = SceneMgr::GetInstance()->GetCurrScene();
+	if (pCurrScene)
+	{
+		pCurrScene->ProcessInput(m_hWnd, fElapsedTime);
+		pCurrScene->UpdatePhysics(fElapsedTime);
+		pCurrScene->Update(fElapsedTime);
+		pCurrScene->AnimateObjects(fElapsedTime);
+		pCurrScene->LastUpdate(fElapsedTime);
+	}
 	GameInput::Reset();
 }
 
@@ -979,8 +1026,9 @@ void GameFramework::MoveToNextFrame()
 }
 
 void GameFramework::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam)
-{ 
-		SceneMgr::GetInstance()->GetCurrScene()->OnProcessingMouseMessage(hWnd, nMessageID, wParam, lParam);
+{
+	Scene* pCurrScene = SceneMgr::GetInstance()->GetCurrScene();
+	if(pCurrScene)	pCurrScene->OnProcessingMouseMessage(hWnd, nMessageID, wParam, lParam);
 	 
 	switch (nMessageID)
 	{
@@ -1011,8 +1059,9 @@ void GameFramework::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM 
 
 static BOOL is_fullscreen = FALSE;
 void GameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam)
-{ 
-		SceneMgr::GetInstance()->GetCurrScene()->OnProcessingKeyboardMessage(hWnd, nMessageID, wParam, lParam, 0.f);
+{
+	Scene* pCurrScene = SceneMgr::GetInstance()->GetCurrScene();
+	if(pCurrScene) pCurrScene->OnProcessingKeyboardMessage(hWnd, nMessageID, wParam, lParam, 0.f);
 	 
 	bool isStateChange = false;
 	switch (nMessageID)
@@ -1148,10 +1197,7 @@ void GameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPAR
 	default:
 		break;
 	}
-
-	// 만약 F8 ~ F12로 장면 전환한 경우 아래는 적용하지 않는다.
-	if (isStateChange) return;
-
+	 
 }
  
 void GameFramework::DefferedRenderOnSwapchain()
@@ -1251,10 +1297,11 @@ void GameFramework::RenderOnRTs(renderFuncPtr renderPtr, UINT RenderTargetCount,
 }
 
 void GameFramework::RenderOnGbuffer()
-{  
-	if (SceneMgr::GetInstance())
+{
+	Scene* pCurrScene = SceneMgr::GetInstance()->GetCurrScene();
+	if (pCurrScene)
 	{
-		SceneMgr::GetInstance()->GetCurrScene()->Render(m_CommandList.Get(), true);
+		pCurrScene->Render(m_CommandList.Get(), true);
 	} 
 }
  
@@ -1452,9 +1499,10 @@ void GameFramework::DownScale()
 void GameFramework::RenderSwapChain()
 {  
 	// 장면을 렌더합니다.
-	if (SceneMgr::GetInstance()->GetCurrScene())
+	Scene* pCurrScene = SceneMgr::GetInstance()->GetCurrScene();
+	if (pCurrScene)
 	{ 
-		SceneMgr::GetInstance()->GetCurrScene()->Render(m_CommandList.Get(), false);
+		pCurrScene->Render(m_CommandList.Get(), false);
 	}
 
 }
@@ -1519,18 +1567,20 @@ void GameFramework::RenderToTexture()
 }
 
 void GameFramework::RenderForShadow()
-{  
-	if (SceneMgr::GetInstance()->GetCurrScene())
+{
+	Scene* pCurrScene = SceneMgr::GetInstance()->GetCurrScene();
+	if (pCurrScene)
 	{
-		SceneMgr::GetInstance()->GetCurrScene()->RenderForShadow(m_CommandList.Get());
+		pCurrScene->RenderForShadow(m_CommandList.Get());
 	} 
 }
 
 void GameFramework::RenderForPlayerShadow()
 {
-	if (SceneMgr::GetInstance()->GetCurrScene())
+	Scene* pCurrScene = SceneMgr::GetInstance()->GetCurrScene();
+	if (pCurrScene)
 	{
-		SceneMgr::GetInstance()->GetCurrScene()->RenderForPlayerShadow(m_CommandList.Get());
+		pCurrScene->RenderForPlayerShadow(m_CommandList.Get());
 	}
 }
 
@@ -1556,9 +1606,12 @@ void GameFramework::ToneCurveAndBloom()
 
 	m_GBufferHeap->UpdateShaderVariable(m_CommandList.Get());
 
-	MainCameraMgr::GetMainCamera()->GetCamera()->SetViewportsAndScissorRects(m_CommandList.Get());
-	MainCameraMgr::GetMainCamera()->GetCamera()->UpdateShaderVariables(m_CommandList.Get(), ROOTPARAMETER_CAMERA);
-	MainCameraMgr::GetMainCamera()->GetCamera()->UpdateLightShaderVariables(m_CommandList.Get(), &LightManager::m_pLights->m_pLights[2]);
+	if (MainCameraMgr::GetMainCamera())
+	{
+		MainCameraMgr::GetMainCamera()->GetCamera()->SetViewportsAndScissorRects(m_CommandList.Get());
+		MainCameraMgr::GetMainCamera()->GetCamera()->UpdateShaderVariables(m_CommandList.Get(), ROOTPARAMETER_CAMERA);
+		MainCameraMgr::GetMainCamera()->GetCamera()->UpdateLightShaderVariables(m_CommandList.Get(), &LightManager::m_pLights->m_pLights[2]);
+	}
 
 	m_CommandList->SetGraphicsRootUnorderedAccessView(ROOTPARAMETER_MIDDLEAVGLUM, m_RWMiddleAvgLum->GetGPUVirtualAddress());
 	m_CommandList->SetGraphicsRootUnorderedAccessView(ROOTPARAMETER_AVGLUM, m_RWAvgLum->GetGPUVirtualAddress());

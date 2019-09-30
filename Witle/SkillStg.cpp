@@ -17,6 +17,10 @@ SkillStg* SkillStg::m_Instance{ nullptr };
 
 SkillStg::SkillStg()
 {
+	for (int index = 0; index < SKILL_TO_CHOOSE; ++index)
+	{
+		m_SelectableSkills[index] = nullptr;
+	}
 }
 
 SkillStg::~SkillStg()

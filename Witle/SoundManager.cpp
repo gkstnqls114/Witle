@@ -293,9 +293,12 @@ void SoundManager::Play(int type)
 	// 보스 //////////////////////////////////////////////////////////////////////////
 	// 플레이어 //////////////////////////////////////////////////////////////////////////
 	FMOD_VECTOR Player_pos;
-	Player_pos.x = (float)PlayerManager::GetMainPlayer()->GetTransform().GetPosition().x;
-	Player_pos.y = (float)PlayerManager::GetMainPlayer()->GetTransform().GetPosition().y;
-	Player_pos.z = (float)PlayerManager::GetMainPlayer()->GetTransform().GetPosition().z;
+	if (PlayerManager::GetMainPlayer())
+	{ 
+		Player_pos.x = (float)PlayerManager::GetMainPlayer()->GetTransform().GetPosition().x;
+		Player_pos.y = (float)PlayerManager::GetMainPlayer()->GetTransform().GetPosition().y;
+		Player_pos.z = (float)PlayerManager::GetMainPlayer()->GetTransform().GetPosition().z;
+	}
 	FMOD_VECTOR Player_vel = { 0.f,0.f,0.f };
 	// 플레이어 //////////////////////////////////////////////////////////////////////////
 	// 기본 몬스터 //////////////////////////////////////////////////////////////////////////

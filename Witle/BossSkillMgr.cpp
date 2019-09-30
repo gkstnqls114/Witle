@@ -38,22 +38,31 @@ void BossSkillMgr::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommand
 
 void BossSkillMgr::ReleaseUploadBuffers()
 {
-	for (int i = 0; i < m_count; ++i)
+	if (m_SelectableSkills)
 	{
-		m_SelectableSkills[i]->ReleaseUploadBuffers();
+		for (int i = 0; i < m_count; ++i)
+		{
+			if (m_SelectableSkills[i]) m_SelectableSkills[i]->ReleaseUploadBuffers();
+		}
 	} 
 }
 
 void BossSkillMgr::ReleaseObjects()
 {
-	for (int i = 0; i < m_count; ++i)
-	{
-		m_SelectableSkills[i]->ReleaseObjects();
-		delete m_SelectableSkills[i];
-		m_SelectableSkills[i] = nullptr;
-	} 
-	delete[] m_SelectableSkills;
-	m_SelectableSkills = nullptr;
+	if (m_SelectableSkills)
+	{ 
+		for (int i = 0; i < m_count; ++i)
+		{
+			if (m_SelectableSkills[i])
+			{
+				m_SelectableSkills[i]->ReleaseObjects();
+				delete m_SelectableSkills[i];
+				m_SelectableSkills[i] = nullptr;
+			}
+		}
+		delete[] m_SelectableSkills;
+		m_SelectableSkills = nullptr;
+	}
 }
 void BossSkillMgr::UpdatePhysics(float fElapsedTime)
 {

@@ -248,5 +248,10 @@ void Shader::ReleaseObjects()
 		m_PipelineState->Release(); 
 		m_PipelineState = nullptr;
 	} 
+	if (m_PipelineStateForGBuffers)
+	{
+		m_PipelineStateForGBuffers->Release();
+		m_PipelineStateForGBuffers = nullptr;
+	}
 }
    

@@ -53,11 +53,11 @@ void HitEffectMgr::ReleaseUploadBuffers()
 {
 	for (int i = 0; i < m_MaxEffect; ++i)
 	{
-		m_MonsterHitEffectList[i].pEffect->ReleaseUploadBuffers();
-		m_IceBallHitEffectList[i].pEffect->ReleaseUploadBuffers();
-		m_FireBallHitEffectList[i].pEffect->ReleaseUploadBuffers();
-		m_LightningBallHitEffectList[i].pEffect->ReleaseUploadBuffers();
-		m_NormalHitEffectList[i].pEffect->ReleaseUploadBuffers();
+		if (m_MonsterHitEffectList[i].pEffect) m_MonsterHitEffectList[i].pEffect->ReleaseUploadBuffers();
+		if (m_IceBallHitEffectList[i].pEffect) m_IceBallHitEffectList[i].pEffect->ReleaseUploadBuffers();
+		if (m_FireBallHitEffectList[i].pEffect) m_FireBallHitEffectList[i].pEffect->ReleaseUploadBuffers();
+		if (m_LightningBallHitEffectList[i].pEffect) m_LightningBallHitEffectList[i].pEffect->ReleaseUploadBuffers();
+		if (m_NormalHitEffectList[i].pEffect) m_NormalHitEffectList[i].pEffect->ReleaseUploadBuffers();
 	} 
 }
 
@@ -65,25 +65,40 @@ void HitEffectMgr::ReleaseObjects()
 {
 	for (int i = 0; i < m_MaxEffect; ++i)
 	{
-		m_MonsterHitEffectList[i].pEffect->ReleaseObjects();
-		delete m_MonsterHitEffectList[i].pEffect;
-		m_MonsterHitEffectList[i].pEffect = nullptr;
+		if (m_MonsterHitEffectList[i].pEffect)
+		{ 
+			m_MonsterHitEffectList[i].pEffect->ReleaseObjects();
+			delete m_MonsterHitEffectList[i].pEffect;
+			m_MonsterHitEffectList[i].pEffect = nullptr;
+		}
 		 
-		m_IceBallHitEffectList[i].pEffect->ReleaseObjects();
-		delete m_IceBallHitEffectList[i].pEffect;
-		m_IceBallHitEffectList[i].pEffect = nullptr;
+		if (m_IceBallHitEffectList[i].pEffect)
+		{ 
+			m_IceBallHitEffectList[i].pEffect->ReleaseObjects();
+			delete m_IceBallHitEffectList[i].pEffect;
+			m_IceBallHitEffectList[i].pEffect = nullptr;
+		}
 
-		m_FireBallHitEffectList[i].pEffect->ReleaseObjects();
-		delete m_FireBallHitEffectList[i].pEffect;
-		m_FireBallHitEffectList[i].pEffect = nullptr;
+		if (m_FireBallHitEffectList[i].pEffect)
+		{ 
+			m_FireBallHitEffectList[i].pEffect->ReleaseObjects();
+			delete m_FireBallHitEffectList[i].pEffect;
+			m_FireBallHitEffectList[i].pEffect = nullptr;
+		}
 
-		m_LightningBallHitEffectList[i].pEffect->ReleaseObjects();
-		delete m_LightningBallHitEffectList[i].pEffect;
-		m_LightningBallHitEffectList[i].pEffect = nullptr;
+		if (m_LightningBallHitEffectList[i].pEffect)
+		{ 
+			m_LightningBallHitEffectList[i].pEffect->ReleaseObjects();
+			delete m_LightningBallHitEffectList[i].pEffect;
+			m_LightningBallHitEffectList[i].pEffect = nullptr;
+		}
 
-		m_NormalHitEffectList[i].pEffect->ReleaseObjects();
-		delete m_NormalHitEffectList[i].pEffect;
-		m_NormalHitEffectList[i].pEffect = nullptr; 
+		if (m_NormalHitEffectList[i].pEffect)
+		{ 
+			m_NormalHitEffectList[i].pEffect->ReleaseObjects();
+			delete m_NormalHitEffectList[i].pEffect;
+			m_NormalHitEffectList[i].pEffect = nullptr;
+		}
 	}
 
 	if (m_GameObject)

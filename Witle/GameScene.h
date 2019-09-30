@@ -84,6 +84,8 @@ public:
 	
 	static void SetDescriptorHeap(ID3D12GraphicsCommandList *pd3dCommandList);
 
+	static void ReleaseHeaps();
+
 protected:
 	static void CreateShaderResourceViewsForTextureBase(ID3D12Device * pd3dDevice, Texture * pTexture);
 

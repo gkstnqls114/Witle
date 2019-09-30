@@ -25,11 +25,7 @@ private:
 	Texture* m_pTexture{ nullptr };
 	
 	RECT m_rect;
-
-private:
-	virtual void ReleaseObjects() override;
-	virtual void ReleaseUploadBuffers() override;
-
+	 
 public:
 	UI2DImage(GameObject* pOwner, ENUM_SCENE Scenetype, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, RECT rect, const std::string& filepath);
 	UI2DImage(GameObject* pOwner, ENUM_SCENE Scenetype, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, POINT center, float width, float height, const std::string& filepath);

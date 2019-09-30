@@ -8,14 +8,7 @@
 #include "TextureStorage.h"
 
 #define RECTANGLE_VERTEX_COUNT 6
-
-void UI2DImage::ReleaseObjects()
-{
-}
-
-void UI2DImage::ReleaseUploadBuffers()
-{
-}
+ 
 
 UI2DImage::UI2DImage(GameObject * pOwner, ENUM_SCENE Scenetype, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, RECT rect, const std::string& filepath)
 	:UI2D(pOwner)

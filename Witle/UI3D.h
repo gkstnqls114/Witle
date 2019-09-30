@@ -6,13 +6,7 @@ class Texture;
 
 class UI3D
 	: public Shape
-{
-
-
-private:
-	virtual void ReleaseObjects() = 0;
-	virtual void ReleaseUploadBuffers() = 0;
-
+{ 
 public:
 	UI3D(GameObject* pOwner);
 	virtual ~UI3D();

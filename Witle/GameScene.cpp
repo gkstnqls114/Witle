@@ -208,6 +208,15 @@ void GameScene::SetDescriptorHeap(ID3D12GraphicsCommandList * pd3dCommandList)
 	pd3dCommandList->SetDescriptorHeaps(1, &m_pd3dCbvSrUavDescriptorHeap);
 }
 
+void GameScene::ReleaseHeaps()
+{
+	if (m_pd3dCbvSrUavDescriptorHeap)
+	{
+		m_pd3dCbvSrUavDescriptorHeap->Release();
+		m_pd3dCbvSrUavDescriptorHeap = nullptr;
+	}
+}
+
 void GameScene::CreateShaderResourceViewsForTextureBase(ID3D12Device * pd3dDevice, Texture * pTexture)
 {
 	pTexture->ShowPath();
@@ -812,15 +821,11 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 }
 
 void GameScene::ReleaseObjects()
-{ 
+{  
 	MonsterTransformStorage::ReleaseInstance();
-
-	if (m_pd3dCbvSrUavDescriptorHeap)
-	{
-		m_pd3dCbvSrUavDescriptorHeap->Release();
-		m_pd3dCbvSrUavDescriptorHeap = nullptr;
-	}
-
+	
+	ReleaseHeaps();
+	 
 	delete LightManager::m_pLights;
 	LightManager::m_pLights = nullptr;
 

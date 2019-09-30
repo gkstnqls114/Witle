@@ -151,3 +151,8 @@ void GraphicsRootSignatureMgr::BuildObject(ID3D12Device * pd3dDevice)
 {
 	m_d3dGraphicsRootSignature = CreateGraphicsRootSignature(pd3dDevice);
 }
+
+void GraphicsRootSignatureMgr::ReleaseObjects()
+{
+	if(m_d3dGraphicsRootSignature) m_d3dGraphicsRootSignature->Release();
+}
