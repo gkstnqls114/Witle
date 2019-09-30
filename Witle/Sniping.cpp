@@ -25,7 +25,8 @@ void Sniping::ReleaseMembers()
 }
 
 void Sniping::ReleaseMemberUploadBuffers()
-{ if (m_pBaseCameraComponent) m_pBaseCameraComponent->ReleaseUploadBuffers();
+{
+	if (m_pBaseCameraComponent) m_pBaseCameraComponent->ReleaseUploadBuffers();
 	if (m_pSnipingCameraComponent) m_pSnipingCameraComponent->ReleaseUploadBuffers();
 }
 

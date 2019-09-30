@@ -60,6 +60,12 @@ void Dragon::ReleaseMembers()
 		m_pStoneTexture = nullptr;
 	}
 
+	if (m_pMyBOBox)
+	{
+		m_pMyBOBox->ReleaseObjects();
+		delete m_pMyBOBox;
+		m_pMyBOBox = nullptr;
+	}
 	if (m_BOBoxForTailAttack)
 	{
 		m_BOBoxForTailAttack->ReleaseObjects();
@@ -73,6 +79,9 @@ void Dragon::ReleaseMemberUploadBuffers()
 {
 	Monster::ReleaseMemberUploadBuffers();
 	if (m_pTexture)m_pTexture->ReleaseUploadBuffers();
+	if (m_pStoneTexture)m_pStoneTexture->ReleaseUploadBuffers();
+	if (m_pMyBOBox) m_pMyBOBox->ReleaseUploadBuffers();
+	if (m_BOBoxForTailAttack) m_BOBoxForTailAttack->ReleaseUploadBuffers();
 }
 
 float Dragon::GetFinishAttackUnlockTime()
@@ -105,7 +114,7 @@ Dragon::Dragon(const std::string & entityID, const XMFLOAT3& SpawnPoint,
 { 
 	m_RecognitionRange = new RecognitionRange(this, 2000.f, 2.f);
 	m_RecognitionRange->CreateDebugMesh(pd3dDevice, pd3dCommandList);
-
+	 
 	m_MonsterMovement = new MonsterMovement(this);
 	m_MonsterMovement->m_fDistance = 150;
 
@@ -116,7 +125,7 @@ Dragon::Dragon(const std::string & entityID, const XMFLOAT3& SpawnPoint,
 	 
 	m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/Dragon.dds", 0);
 	m_pStoneTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Model/Textures/Boss_rock.dds", 0);
-
+	  
 	ANIMATION_INFO infos[BOSSMONSTER_ANIMATIONE];
 	infos[0] = BOSS_IDLE;
 	infos[1] = BOSS_MOVE;

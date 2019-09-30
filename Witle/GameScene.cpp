@@ -500,10 +500,10 @@ bool GameScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM w
 void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList)
 {
 	BuildLightsAndMaterials(pd3dDevice, pd3dCommandList);
+	 
 
 	m_AimPoint = new AimPoint("AimPoint", pd3dDevice, pd3dCommandList, POINT{ int(GameScreen::GetWidth()) / 2, int(GameScreen::GetHeight()) / 2 }, 100.f, 100.f, L"Image/AimPoint.dds");
-	// m_WideareaMagic = new WideareaMagic(pd3dDevice, pd3dCommandList);
-
+	
 	// 시작 음악 -> 나중에 시작씬으로 옮기기
 	// SoundManager::GetInstance()->Play(ENUM_SOUND::SATRT);
 	//SoundManager::GetInstance()->Stop(ENUM_SOUND::SATRT);
@@ -513,7 +513,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	//// 스카이 박스 생성
 	m_SkyBox = new SkyBox(pd3dDevice, pd3dCommandList, 3000.F, 3000.F, 3000.F);
 	// 스카이 박스 생성 ///////////////////////////////////
-
+	 
 	// 터레인 생성 ////////////////////////////////////////
 	XMFLOAT3 xmf3Scale(39.0625f * 3.f, 1.0f, 39.0625f * 3.f);
 	// XMFLOAT3 xmf3Scale(1.f, 1.0f, 1.f);
@@ -532,11 +532,11 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	std::mt19937 mersenne(rd());
 	std::uniform_int_distribution<> die(2000, 15000);
 	std::uniform_int_distribution<> monstertype(0, 5);
-
+	 
 	m_Dragon = new Dragon("Dragon",
 		XMFLOAT3(14500, 0, 15000),
 		pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
-
+	 
 	m_TestMonster = new Monster*[m_TestMonsterCount];
 	for (int x = 0; x < m_TestMonsterCount; ++x)
 	{
@@ -617,19 +617,19 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 		}
 		else if (value == ENUM_MONSTER::MONSTER_BOSSMONSTER)
 		{
-#ifdef _DEBUG
-			std::cout << instance->Count(DRAGON) << "마리가 최대입니다. 현재 " << boss_count << "마리 " << std::endl;
-#endif // _DEBUG
-			if (instance->Count(DRAGON) <= boss_count)continue;
-			m_TestMonster[i] = new Dragon("Dragon",
-				instance->GetPosition(boss_count, DRAGON),
-				pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
-			boss_count += 1;
-
-			if (boss_count == 1)
-			{
-				continue;
-			}
+//#ifdef _DEBUG
+//			std::cout << instance->Count(DRAGON) << "마리가 최대입니다. 현재 " << boss_count << "마리 " << std::endl;
+//#endif // _DEBUG
+//			if (instance->Count(DRAGON) <= boss_count)continue;
+//			m_TestMonster[i] = new Dragon("Dragon",
+//				instance->GetPosition(boss_count, DRAGON),
+//				pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
+//			boss_count += 1;
+//
+//			if (boss_count == 1)
+//			{
+//				continue;
+//			}
 		}
 		else
 		{
@@ -638,10 +638,10 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 
 		i += 1;
 	}
-
+	 
 	//// 테스트 쿼드트리 터레인 생성 
 	m_pQuadtreeTerrain = new QuadtreeTerrain(pd3dDevice, pd3dCommandList, 257, 257, xmf3Scale, xmf4Color, m_Terrain->GetHeightMapImage());
-
+	 
 	// 카메라
 	m_pMainCamera = new CameraObject("Camera");
 	m_Sniping = new Sniping(m_pMainCamera, m_pPlayer, pd3dDevice, pd3dCommandList);
@@ -826,24 +826,28 @@ void GameScene::ReleaseObjects()
 	
 	ReleaseHeaps();
 	 
-	delete LightManager::m_pLights;
-	LightManager::m_pLights = nullptr;
-
-	delete m_pMaterials;
-	m_pMaterials = nullptr;
-
+	if (LightManager::m_pLights)
+	{
+		delete LightManager::m_pLights;
+		LightManager::m_pLights = nullptr;
+	}  
+	if (m_pMaterials)
+	{ 
+		delete m_pMaterials;
+		m_pMaterials = nullptr;
+	} 
 	if (m_pd3dcbLights)
 	{
 		m_pd3dcbLights->Unmap(0, NULL);
 		m_pd3dcbLights->Release();
-		m_pd3dcbLights = NULL;
+		m_pd3dcbLights = nullptr;
 	}
 
 	if (m_pd3dcbMaterials)
 	{
 		m_pd3dcbMaterials->Unmap(0, NULL);
 		m_pd3dcbMaterials->Release();
-		m_pd3dcbMaterials = NULL;
+		m_pd3dcbMaterials = nullptr;
 	}
 	if (m_pSkyCamera)
 	{
@@ -921,61 +925,73 @@ void GameScene::ReleaseObjects()
 	}
 	if (m_SampleUIMap)
 	{  
+		m_SampleUIMap->ReleaseObjects();
 		delete m_SampleUIMap;
 		m_SampleUIMap = nullptr;
 	}
 	if (m_UIAltar_1)
 	{ 
+		m_UIAltar_1->ReleaseObjects();
 		delete m_UIAltar_1;
 		m_UIAltar_1 = nullptr;
 	} 
 	if (m_UIAltar_2)
 	{ 
+		m_UIAltar_2->ReleaseObjects();
 		delete m_UIAltar_2;
 		m_UIAltar_2 = nullptr;
 	} 
 	if (m_UIAltar_3)
 	{ 
+		m_UIAltar_3->ReleaseObjects();
 		delete m_UIAltar_3;
 		m_UIAltar_3 = nullptr;
 	} 
 	if (m_UIAltar_4)
 	{ 
+		m_UIAltar_4->ReleaseObjects();
 		delete m_UIAltar_4;
 		m_UIAltar_4 = nullptr;
 	}
 	if (m_UIAltar_5)
 	{ 
+		m_UIAltar_5->ReleaseObjects();
 		delete m_UIAltar_5;
 		m_UIAltar_5 = nullptr;
 	}
 	if (m_UIPlayer)
 	{ 
+		m_UIPlayer->ReleaseObjects();
 		delete m_UIPlayer;
 		m_UIPlayer = nullptr;
 	} 
 	if (m_UIBossMonster)
 	{ 
+		m_UIBossMonster->ReleaseObjects();
 		delete m_UIBossMonster;
 		m_UIBossMonster = nullptr;
 	}
 	if (m_SampleUISkill1)
 	{ 
+		m_SampleUISkill1->ReleaseObjects();
 		delete m_SampleUISkill1;
 		m_SampleUISkill1 = nullptr;
 	}
 	if (m_SampleUISkill2)
 	{ 
+		m_SampleUISkill2->ReleaseObjects();
 		delete m_SampleUISkill2;
 		m_SampleUISkill2 = nullptr;
 	}
 	if (m_SampleUISkill3)
 	{ 
+		m_SampleUISkill3->ReleaseObjects();
 		delete m_SampleUISkill3;
 		m_SampleUISkill3 = nullptr;
 	}
 	if (m_SampleUISkill4)
 	{ 
+		m_SampleUISkill4->ReleaseObjects();
 		delete m_SampleUISkill4;
 		m_SampleUISkill4 = nullptr;
 	} 
@@ -1097,7 +1113,7 @@ void GameScene::Update(float fElapsedTime)
 	// light update
 	if (m_pcbMappedLights) ::memcpy(m_pcbMappedLights, LightManager::m_pLights, sizeof(LIGHTS));
 	// material update
-	::memcpy(m_pcbMappedMaterials, m_pMaterials, sizeof(MATERIAL));
+	if (m_pcbMappedMaterials) ::memcpy(m_pcbMappedMaterials, m_pMaterials, sizeof(MATERIAL));
 }
 
 void GameScene::LastUpdate(float fElapsedTime)
@@ -1547,10 +1563,28 @@ void GameScene::ReleaseUploadBuffers()
 	if (m_pPlayer) m_pPlayer->ReleaseUploadBuffers();
 	if (m_Terrain) m_Terrain->ReleaseUploadBuffers();
 	if (m_pQuadtreeTerrain) m_pQuadtreeTerrain->ReleaseUploadBuffers();
-	for (int i = 0; i < m_TestMonsterCount; ++i)
+	if (m_Dragon) m_Dragon->ReleaseUploadBuffers();
+	if (m_SampleUIMap) m_SampleUIMap->ReleaseUploadBuffers(); 
+	if (m_UIAltar_1) m_UIAltar_1->ReleaseUploadBuffers(); 
+	if (m_UIAltar_2) m_UIAltar_2->ReleaseUploadBuffers(); 
+	if (m_UIAltar_3) m_UIAltar_3->ReleaseUploadBuffers();
+	if (m_UIAltar_4) m_UIAltar_4->ReleaseUploadBuffers(); 
+	if (m_UIAltar_5)  m_UIAltar_5->ReleaseUploadBuffers(); 
+	if (m_UIPlayer) m_UIPlayer->ReleaseUploadBuffers();
+	if (m_UIBossMonster) m_UIBossMonster->ReleaseUploadBuffers(); 
+	if (m_SampleUISkill1) m_SampleUISkill1->ReleaseUploadBuffers();
+	if (m_SampleUISkill2) m_SampleUISkill2->ReleaseUploadBuffers();
+	if (m_SampleUISkill3) m_SampleUISkill3->ReleaseUploadBuffers();
+	if (m_SampleUISkill4) m_SampleUISkill4->ReleaseUploadBuffers();
+	 
+	if (m_TestMonster)
 	{
-		if(m_TestMonster[i]) m_TestMonster[i]->ReleaseUploadBuffers();
+		for (int i = 0; i < m_TestMonsterCount; ++i)
+		{
+			if (m_TestMonster[i]) m_TestMonster[i]->ReleaseUploadBuffers();
+		}
 	}
+
 	for (int i = 0; i < 5; ++i)
 	{
 		if (m_AltarSphere[i]) m_AltarSphere[i]->ReleaseUploadBuffers();
@@ -1640,8 +1674,7 @@ void GameScene::BuildLightsAndMaterials(ID3D12Device *pd3dDevice, ID3D12Graphics
 	LightManager::m_pLights->m_pLights[3].fFalloff = 8.0f;
 	LightManager::m_pLights->m_pLights[3].fPhi = (float)cos(XMConvertToRadians(90.0f));
 	LightManager::m_pLights->m_pLights[3].fTheta = (float)cos(XMConvertToRadians(30.0f));
-
-
+	 
 	UINT ncbElementBytes = ((sizeof(LIGHTS) + 255) & ~255); //256의 배수
 	m_pd3dcbLights = d3dUtil::CreateBufferResource(pd3dDevice, pd3dCommandList, NULL, ncbElementBytes, D3D12_HEAP_TYPE_UPLOAD, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, NULL);
 
@@ -1654,7 +1687,7 @@ void GameScene::BuildLightsAndMaterials(ID3D12Device *pd3dDevice, ID3D12Graphics
 
 	*m_pMaterials = { XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 5.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f) };
 
-	CreateConstantBuffer(pd3dDevice, pd3dCommandList, m_pd3dcbMaterials, sizeof(MATERIAL), (void **)&m_pcbMappedMaterials);
+	//CreateConstantBuffer(pd3dDevice, pd3dCommandList, m_pd3dcbMaterials, sizeof(MATERIAL), (void **)&m_pcbMappedMaterials);
 
 	UINT ncbMaterialBytes = ((sizeof(MATERIAL) + 255) & ~255); //256의 배수
 	m_pd3dcbMaterials = d3dUtil::CreateBufferResource(pd3dDevice, pd3dCommandList, NULL, ncbMaterialBytes, D3D12_HEAP_TYPE_UPLOAD, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, NULL);

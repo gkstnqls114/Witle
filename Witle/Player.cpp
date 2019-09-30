@@ -124,10 +124,10 @@ Player::Player(const std::string & entityID, ID3D12Device * pd3dDevice, ID3D12Gr
 	m_pLoadObject_Cloth->m_pSkinnedAnimationController->SetTrackAnimationSet(0, 0);
 	m_pLoadObject_Body->m_pSkinnedAnimationController = new CAnimationController(pd3dDevice, pd3dCommandList, 1, m_PlayerModel_Body);
 	m_pLoadObject_Body->m_pSkinnedAnimationController->SetTrackAnimationSet(0, 0);
-	 
+
 	XMFLOAT3 extents{ 25.f, 75.f, 25.f };
 	m_pMyBOBox = new MyBOBox(this, pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 75.F, 0.F }, extents);
-	
+
 	m_pPlayerHPStatus = new PlayerStatus(this, pd3dDevice, pd3dCommandList, 
 		POINT{ int(GameScreen::GetWidth()) - 1100, int(GameScreen::GetHeight()) - 670 }, 300.f, 30.f, L"Image/Red.dds");
 
@@ -322,7 +322,7 @@ void Player::ReleaseMembers()
 		m_PlayerMovement->ReleaseObjects();
 		delete m_PlayerMovement;
 		m_PlayerMovement = nullptr;
-	}
+	} 
 }
 
 void Player::ReleaseMemberUploadBuffers()
@@ -336,6 +336,10 @@ void Player::ReleaseMemberUploadBuffers()
 	if (m_PlayerModel_Cloth)m_PlayerModel_Cloth->ReleaseUploadBuffers();
 	if (m_PlayerModel_Body)m_PlayerModel_Body->ReleaseUploadBuffers();
 	if (m_pMyBOBox)m_pMyBOBox->ReleaseUploadBuffers();
+	if (m_BroomLineEffectRect) m_BroomLineEffectRect->ReleaseUploadBuffers();
+	if (m_BroomEffectRect) m_BroomEffectRect->ReleaseUploadBuffers();
+	if (m_pPlayerMPStatus) m_pPlayerMPStatus->ReleaseUploadBuffers();
+	if (m_pPlayerHPStatus) m_pPlayerHPStatus->ReleaseUploadBuffers();
 }
 
 void Player::Update(float fElapsedTime)

@@ -231,7 +231,7 @@ void Monster::ReleaseMembers()
 void Monster::ReleaseMemberUploadBuffers()
 {
 	if (m_MonsterHPUI) m_MonsterHPUI->ReleaseUploadBuffers();
-
+	if (m_RecognitionRange) m_RecognitionRange->ReleaseUploadBuffers();
 #ifdef _DEBUG
 	if (m_pDebugSpawnMesh) m_pDebugSpawnMesh->ReleaseUploadBuffers();
 #endif // _DEBUG

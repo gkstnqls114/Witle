@@ -96,7 +96,23 @@ void Camera::ReleaseShaderVariables()
 	{
 		m_pd3dcbCamera->Unmap(0, NULL);
 		m_pd3dcbCamera->Release(); 
+		m_pd3dcbCamera = nullptr;
 	}
+
+	if (m_pd3dcbLight)
+	{
+		m_pd3dcbLight->Unmap(0, NULL);
+		m_pd3dcbLight->Release();
+		m_pd3dcbLight = nullptr;
+	}
+
+	if (m_pd3dcbPlayerLight)
+	{
+		m_pd3dcbPlayerLight->Unmap(0, NULL);
+		m_pd3dcbPlayerLight->Release();
+		m_pd3dcbPlayerLight = nullptr;
+	}
+
 }
 
 void Camera::MoveAtOffset(const XMFLOAT3 & Shift)
