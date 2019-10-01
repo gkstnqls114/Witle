@@ -15,6 +15,11 @@ void Broom::PrepareMember()
 	m_pPlayerMovement->m_xmf3Velocity = XMFLOAT3(0.F, 0.F, 0.F);
 }
 
+void Broom::Init()
+{
+	FixedSkill::Init();
+}
+
 void Broom::DoNotUse()
 {
 	m_SkillTime = 0.f;

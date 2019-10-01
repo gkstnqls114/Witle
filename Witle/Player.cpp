@@ -171,6 +171,8 @@ void Player::Init()
 	m_PlayerMovement->RunMode();
 	m_pPlayerMPStatus->SetGuage(100.f);
 	m_pPlayerHPStatus->SetGuage(100.f);
+
+	m_Broom->Init();
 }
 
 void Player::ActiveShield()

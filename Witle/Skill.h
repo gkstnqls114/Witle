@@ -44,6 +44,8 @@ public:
 	FixedSkill(const std::string& entityID) : ISkill(entityID) {};
 	virtual ~FixedSkill();
 
+	void Init();
+
 	virtual void Update(float fTimeElapsed);
 	virtual void DoNotUse() override = 0;
 	virtual void DoUse() override = 0;

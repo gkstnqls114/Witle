@@ -6,6 +6,14 @@ FixedSkill::~FixedSkill()
 {
 }
 
+void FixedSkill::Init()
+{ 
+	 m_isPrepare = false ;   // 스킬을 현재 사용주인
+	 m_isUsing = false ; // 스킬을 현재 사용주인
+	 // m_UsingTime = 0.f ; // 재사용 대기시간
+	 m_SkillTime = 0.f ; // 스킬 사용 중인 시간
+}
+
 void FixedSkill::Update(float fTimeElapsed)
 {
 	if (!m_isUsing) return;

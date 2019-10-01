@@ -22,6 +22,7 @@ public:
 	Broom(PlayerMovement* playerStatus);
 	virtual ~Broom();
 
+	void Init();
 	virtual void DoNotUse() override;
 	virtual void DoUse() override;
 };
