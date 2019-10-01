@@ -803,10 +803,7 @@ void GameFramework::BuildObjects()
 	HRESULT hResult;
 
 	m_CommandList->Reset(m_CommandAllocator.Get(), NULL);
-	
-	//GameInput::ChagneMoveMode();
-	GameInput::ChagneDragMode();
-
+	 
 	///////////////////////////////////////////////////////////////////////////// 리소스 생성
 	// 순서 변경 X /////////////
 

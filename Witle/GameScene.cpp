@@ -617,19 +617,19 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 		}
 		else if (value == ENUM_MONSTER::MONSTER_BOSSMONSTER)
 		{
-//#ifdef _DEBUG
-//			std::cout << instance->Count(DRAGON) << "마리가 최대입니다. 현재 " << boss_count << "마리 " << std::endl;
-//#endif // _DEBUG
-//			if (instance->Count(DRAGON) <= boss_count)continue;
-//			m_TestMonster[i] = new Dragon("Dragon",
-//				instance->GetPosition(boss_count, DRAGON),
-//				pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
-//			boss_count += 1;
-//
-//			if (boss_count == 1)
-//			{
-//				continue;
-//			}
+#ifdef _DEBUG
+			std::cout << instance->Count(DRAGON) << "마리가 최대입니다. 현재 " << boss_count << "마리 " << std::endl;
+#endif // _DEBUG
+			if (instance->Count(DRAGON) <= boss_count)continue;
+			m_TestMonster[i] = new Dragon("Dragon",
+				instance->GetPosition(boss_count, DRAGON),
+				pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
+			boss_count += 1;
+
+			if (boss_count == 1)
+			{
+				continue;
+			}
 		}
 		else
 		{
