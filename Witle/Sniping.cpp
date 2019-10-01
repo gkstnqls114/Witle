@@ -41,22 +41,38 @@ Sniping::Sniping(CameraObject* pCamera, Player* pPlayer, ID3D12Device * pd3dDevi
 
 	// 기본 카메라 컴포넌트 
 	m_pBaseCameraComponent->CreateShaderVariables(pd3dDevice, pd3dCommandList);
-	m_pBaseCameraComponent->SetOffset(XMFLOAT3(0.f, -100.f, 500.f)); 
-	m_pBaseCameraComponent->SetViewport(0, 0, GameScreen::GetWidth(), GameScreen::GetHeight(), 0.0f, 1.0f);
-	m_pBaseCameraComponent->SetScissorRect(0, 0, GameScreen::GetWidth(), GameScreen::GetHeight());
-	m_pBaseCameraComponent->GenerateProjectionMatrix(0.01f, CAMERA_FAR, float(GameScreen::GetWidth()) / float(GameScreen::GetHeight()), 60.0f);
-	 
+	
 	// 스나이핑 카메라 컴포넌트
 	m_pSnipingCameraComponent->CreateShaderVariables(pd3dDevice, pd3dCommandList);
-	m_pSnipingCameraComponent->SetOffset(XMFLOAT3(0, 0, 50.f)); 
-	m_pSnipingCameraComponent->SetViewport(0, 0, GameScreen::GetWidth(), GameScreen::GetHeight(), 0.0f, 1.0f);
-	m_pSnipingCameraComponent->SetScissorRect(0, 0, GameScreen::GetWidth(), GameScreen::GetHeight());
-	m_pSnipingCameraComponent->GenerateProjectionMatrix(0.01f, CAMERA_FAR * 1.5f, float(GameScreen::GetWidth()) / float(GameScreen::GetHeight()), 30.0f);
-	 
+	
+	Init();
 }
 
 Sniping::~Sniping()
 {
+}
+
+void Sniping::Init()
+{ 
+	m_pBaseCameraComponent->Init();
+	m_pBaseCameraComponent->SetAt(XMFLOAT3(15000.f, 0.f, 1500.f));
+	m_pBaseCameraComponent->SetAtOffset(XMFLOAT3( 0.f, 200.f, 0.f ));
+	m_pBaseCameraComponent->SetOffset(XMFLOAT3(0.f, -100.f, 500.f));
+	m_pBaseCameraComponent->SetViewport(0, 0, GameScreen::GetWidth(), GameScreen::GetHeight(), 0.0f, 1.0f);
+	m_pBaseCameraComponent->SetScissorRect(0, 0, GameScreen::GetWidth(), GameScreen::GetHeight());
+	m_pBaseCameraComponent->GenerateProjectionMatrix(0.01f, CAMERA_FAR, float(GameScreen::GetWidth()) / float(GameScreen::GetHeight()), 60.0f);
+	//m_pBaseCameraComponent->GenerateViewMatrix(); 
+	m_pBaseCameraComponent->LastUpdate(0.f);
+
+	m_pSnipingCameraComponent->Init();
+	m_pSnipingCameraComponent->SetAt(XMFLOAT3(15000.f, 0.f, 1500.f));
+	m_pSnipingCameraComponent->SetOffset(XMFLOAT3(0, 0, 50.f));
+	m_pSnipingCameraComponent->SetAtOffset(XMFLOAT3(0.f, 200.f, 0.f));
+	m_pSnipingCameraComponent->SetViewport(0, 0, GameScreen::GetWidth(), GameScreen::GetHeight(), 0.0f, 1.0f);
+	m_pSnipingCameraComponent->SetScissorRect(0, 0, GameScreen::GetWidth(), GameScreen::GetHeight());
+	m_pSnipingCameraComponent->GenerateProjectionMatrix(0.01f, CAMERA_FAR * 1.5f, float(GameScreen::GetWidth()) / float(GameScreen::GetHeight()), 30.0f);
+	m_pSnipingCameraComponent->GenerateViewMatrix(); 
+	m_pBaseCameraComponent->LastUpdate(0.f);
 }
 
 void Sniping::Rotate(float x, float y, float z)

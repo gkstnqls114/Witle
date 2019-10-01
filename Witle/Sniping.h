@@ -41,6 +41,8 @@ public:
 	{ 
 		return m_pSnipingCameraComponent; 
 	}
+
+	void Init() ;
 	
 	void Rotate(float x, float y, float z); 
 	void LastUpdate(float, const XMFLOAT2& ScreenPos);  

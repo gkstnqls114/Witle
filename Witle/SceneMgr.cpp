@@ -113,7 +113,7 @@ void SceneMgr::ChangeSceneToGame()
 	SoundManager::GetInstance()->Play(ENUM_SOUND::GAME_SOUND);
 	// »ç¿îµå ///////////////////////////////////////////////////////////
 
-#ifdef DEBUG
+#ifdef _DEBUG
 	GameInput::ChagneDragMode();
 #else
 	GameInput::ChagneMoveMode();

@@ -500,8 +500,7 @@ bool GameScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM w
 void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList)
 {
 	BuildLightsAndMaterials(pd3dDevice, pd3dCommandList);
-	 
-
+	  
 	m_AimPoint = new AimPoint("AimPoint", pd3dDevice, pd3dCommandList, POINT{ int(GameScreen::GetWidth()) / 2, int(GameScreen::GetHeight()) / 2 }, 100.f, 100.f, L"Image/AimPoint.dds");
 	
 	// 시작 음악 -> 나중에 시작씬으로 옮기기
@@ -1306,16 +1305,14 @@ void GameScene::LastUpdate(float fElapsedTime)
 
 void GameScene::Init()
 {   
-	m_pMainCamera->GetTransform().SetIdentity();
+	//m_pMainCamera->GetCamera()->SetAt(XMFLOAT3(15000.f, 0.f, 1500.f));
+	//m_pMainCamera->GetCamera()->SetOffset(XMFLOAT3(0.f, -100.f, 500.f));
+	//m_pMainCamera->GetCamera()->SetViewport(0, 0, GameScreen::GetWidth(), GameScreen::GetHeight(), 0.0f, 1.0f);
+	//m_pMainCamera->GetCamera()->SetScissorRect(0, 0, GameScreen::GetWidth(), GameScreen::GetHeight());
+	//m_pMainCamera->GetCamera()->GenerateProjectionMatrix(0.01f, CAMERA_FAR, float(GameScreen::GetWidth()) / float(GameScreen::GetHeight()), 60.0f);
 
-	m_pMainCamera->GetCamera()->SetAt(XMFLOAT3(15000.f, 0.f, 1500.f));
-	m_pMainCamera->GetCamera()->SetOffset(XMFLOAT3(0.f, -100.f, 500.f));
-	m_pMainCamera->GetCamera()->SetViewport(0, 0, GameScreen::GetWidth(), GameScreen::GetHeight(), 0.0f, 1.0f);
-	m_pMainCamera->GetCamera()->SetScissorRect(0, 0, GameScreen::GetWidth(), GameScreen::GetHeight());
-	m_pMainCamera->GetCamera()->GenerateProjectionMatrix(0.01f, CAMERA_FAR, float(GameScreen::GetWidth()) / float(GameScreen::GetHeight()), 60.0f);
-
-	m_pMainCamera->GetCamera()->GenerateViewMatrix();
-	m_pMainCamera->GetCamera()->RegenerateViewMatrix();
+	//m_pMainCamera->GetCamera()->GenerateViewMatrix();
+	//m_pMainCamera->GetCamera()->RegenerateViewMatrix();
 
 	for (int x = 0; x < 5; ++x)
 	{
@@ -1324,10 +1321,13 @@ void GameScene::Init()
 		m_AltarSphere[x]->SetGuage(0.f);
 		m_AltarSphere[x]->SetAnimationID(ALTARSPHERE_IDLE.ID);
 	}
-
+	 
 	m_pPlayer->Init();
 	m_Dragon->Init();
-	 
+
+	m_pMainCamera->GetTransform().SetIdentity();
+	m_Sniping->Init();
+
 	for (int i = 0; i < m_TestMonsterCount; ++i)
 	{ 
 		if(m_TestMonster[i]) m_TestMonster[i]->Init();

@@ -89,14 +89,12 @@ public:
 	Camera(GameObject* pOwner, const XMFLOAT3& AtOffset = {0.f, 200.f, 0.f});
 	Camera(GameObject* pOwner,  Camera *pCamera);
 	virtual ~Camera();
-
-	// 하위 클래스에 구현해야하는 순수 가상 함수
-
+	 
 	virtual void LastUpdate(float fTimeElapsed) = 0;
-	
-	// 하위 클래스에 구현해야하는 순수 가상 함수 
 	void CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
 	void UpdateShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList, int parameterIndex);
+
+	void Init();
 
 	// 해당 shift는 정 위치(0, 0, 1을 바라보는 경우)를 기준으로 설정.
 	// shift는 look, up, right 얼마만큼 이동할 것인지를 의미한다.
@@ -131,7 +129,8 @@ public:
 
 	void SetOffset(XMFLOAT3 offset) { m_Offset = offset; } 
 	void SetTimeLag(float fTimeLag) { m_fTimeLag = fTimeLag; }
-	
+	void SetAtOffset(XMFLOAT3 atoffset) { m_AtOffset = atoffset; }
+
 	void SetAt(XMFLOAT3 at) { m_At = at; };
     ///////////////////////////////////////////////////////////////////////// Set
 

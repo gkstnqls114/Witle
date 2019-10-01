@@ -90,6 +90,24 @@ void Camera::UpdateShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList, 
 	pd3dCommandList->SetGraphicsRootConstantBufferView(ROOTPARAMETER_CAMERA, d3dGpuVirtualAddress);
 }
 
+void Camera::Init()
+{
+	m_DebugAtOffset = XMFLOAT3{ 0.0f, 0.0f, 0.0f }; // Real At = At + AtOffset 
+
+	m_AtOffset = XMFLOAT3{ 0.0f, 0.0f, 0.0f }; // Real At = At + AtOffset 
+	m_At = XMFLOAT3{ 0.0f, 0.0f, 1.0f }; // At = Position + Offset 
+	m_Offset = XMFLOAT3{ 0.0f, 0.0f, 1.0f }; // Offset = At - Position
+
+	m_fPitch = 0.0f; // xรเ
+	m_fRoll = 0.f;  // zรเ
+	m_fYaw = 0.f;   // yรเ
+
+	m_fTimeLag = 0.f;
+
+	m_xmf4x4View =  Matrix4x4::Identity();
+	m_xmf4x4Projection = Matrix4x4::Identity();
+}
+
 void Camera::ReleaseShaderVariables()
 {
 	if (m_pd3dcbCamera)
