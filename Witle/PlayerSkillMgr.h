@@ -30,6 +30,8 @@ public:
 		return m_Instance;
 	}
 
+	void Init();
+
 	// 가속도를 설정합니다.
 	void UpdatePhysics(float fElapsedTime);
 

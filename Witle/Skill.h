@@ -89,6 +89,8 @@ public:
 		: ISkill(entityID) , m_UsingMp(mp), m_SelectableSkillType(skilltype), m_CoolTime(cooltime) {};
 	virtual ~SelectableSkill();
 
+	void Init();
+
 	float GetCoolTime() const { return m_CoolTime; }
 	ENUM_SELECTABLESKILL GetSelectableSkillType() const { return m_SelectableSkillType; }
 

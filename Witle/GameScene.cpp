@@ -1304,16 +1304,7 @@ void GameScene::LastUpdate(float fElapsedTime)
 }
 
 void GameScene::Init()
-{   
-	//m_pMainCamera->GetCamera()->SetAt(XMFLOAT3(15000.f, 0.f, 1500.f));
-	//m_pMainCamera->GetCamera()->SetOffset(XMFLOAT3(0.f, -100.f, 500.f));
-	//m_pMainCamera->GetCamera()->SetViewport(0, 0, GameScreen::GetWidth(), GameScreen::GetHeight(), 0.0f, 1.0f);
-	//m_pMainCamera->GetCamera()->SetScissorRect(0, 0, GameScreen::GetWidth(), GameScreen::GetHeight());
-	//m_pMainCamera->GetCamera()->GenerateProjectionMatrix(0.01f, CAMERA_FAR, float(GameScreen::GetWidth()) / float(GameScreen::GetHeight()), 60.0f);
-
-	//m_pMainCamera->GetCamera()->GenerateViewMatrix();
-	//m_pMainCamera->GetCamera()->RegenerateViewMatrix();
-
+{    
 	for (int x = 0; x < 5; ++x)
 	{
 		m_AltarSphere[x]->SetisActive(false);
@@ -1321,6 +1312,8 @@ void GameScene::Init()
 		m_AltarSphere[x]->SetGuage(0.f);
 		m_AltarSphere[x]->SetAnimationID(ALTARSPHERE_IDLE.ID);
 	}
+
+	PlayerSkillMgr::GetInstance()->Init();
 	 
 	m_pPlayer->Init();
 	m_Dragon->Init();

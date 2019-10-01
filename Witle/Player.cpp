@@ -173,6 +173,8 @@ void Player::Init()
 	m_pPlayerHPStatus->SetGuage(100.f);
 
 	m_Broom->Init();
+	blessing = 1.f;
+	shield = 0.f;
 }
 
 void Player::ActiveShield()

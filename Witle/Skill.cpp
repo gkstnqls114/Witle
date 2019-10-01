@@ -72,3 +72,10 @@ void SelectableSkill::Update(float fElapsedTime)
 SelectableSkill::~SelectableSkill()
 {
 }
+
+void SelectableSkill::Init()
+{ 
+	 isActive = false  ; // 활성화 여부
+	 RemainCoolTime = 0.F; // 남은 쿨타임
+	 RemainCoolTimePrecentage = 0.F; // 남은 쿨타임 .. 0이면 스킬 사용가능 1이면 막 스킬 사용함 
+}
