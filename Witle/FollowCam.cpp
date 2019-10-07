@@ -101,23 +101,28 @@ void FollowCam::Rotate(float x, float y, float z)
 	XMFLOAT3 up = m_pTarget->GetTransform().GetUp();
 	XMFLOAT3 look = m_pTarget->GetTransform().GetLook();
 	  
-	m_fPitch += x;
 	m_fYaw += y;
 	m_fRoll += z;
-	 
-	if (x != 0.0f)
-	{
+
+	float afterPitch = m_fPitch + x;
+	if ((x != 0.0f) && ((m_fPitch < MAX_PITCH && m_fPitch > MIN_PITCH) && (afterPitch < MAX_PITCH && afterPitch > MIN_PITCH)))
+	{ 
+		m_fPitch += x;
+		float remand = x;
+
 		if (m_fPitch >= MAX_PITCH)
 		{
+			remand = m_fPitch - MAX_PITCH;
 			m_fPitch = MAX_PITCH;
 		}
 		else if (m_fPitch <= MIN_PITCH)
 		{
+			remand = MIN_PITCH - m_fPitch;
 			m_fPitch = MIN_PITCH;
 		}
 		else
 		{
-			XMMATRIX xmmtxRotate = XMMatrixRotationAxis(XMLoadFloat3(&right), XMConvertToRadians(x));
+			XMMATRIX xmmtxRotate = XMMatrixRotationAxis(XMLoadFloat3(&right), XMConvertToRadians(remand));
 			m_pOwner->GetTransform().SetLook(Vector3::TransformNormal(m_pTarget->GetTransform().GetLook(), xmmtxRotate));
 			m_pOwner->GetTransform().SetUp(Vector3::TransformNormal(m_pTarget->GetTransform().GetUp(), xmmtxRotate));
 

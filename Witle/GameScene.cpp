@@ -658,23 +658,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	m_pSkyCamera->Rotate(90.F, 0.F, 0.F);
 	m_pSkyCamera->SetOffset(XMFLOAT3(0.f, -30000.f, 0.f));
 	m_pSkyCameraObj->ChangeCamera(m_pSkyCamera);
-
-#ifdef CHECK_SUBVIEWS
-	m_lookAboveCamera = new CameraObject("LookAboveCamera");
-
-	D3D12_VIEWPORT	GBuffer_Viewport{ 0, GameScreen::GetHeight(),  GameScreen::GetAnotherWidth(), GameScreen::GetAnotherHeight(), 0.0f, 1.0f };
-	D3D12_RECT		ScissorRect{ 0 , GameScreen::GetHeight(), GameScreen::GetWidth() , GameScreen::GetHeight() + GameScreen::GetAnotherHeight() };
-
-	m_lookAboveCamera->GetCamera()->CreateShaderVariables(pd3dDevice, pd3dCommandList);
-	m_lookAboveCamera->GetCamera()->SetScissorRect(ScissorRect);
-	m_lookAboveCamera->GetCamera()->SetViewport(GBuffer_Viewport);
-	m_lookAboveCamera->GetCamera()->GenerateProjectionMatrix(0.01f, CAMERA_FAR, float(GameScreen::GetWidth()) / float(GameScreen::GetHeight()), 60.0f);
-	//m_lookAboveCamera->GetCamera()->SetAt(XMFLOAT3(xmf3Scale.x * 257 / 2, 0.f, xmf3Scale.y * 257 / 2)); 
-	m_lookAboveCamera->GetCamera()->SetAt(XMFLOAT3(xmf3Scale.x * 257 / 2, 2000.f, xmf3Scale.z * 257 / 2));
-	m_lookAboveCamera->GetCamera()->SetOffset(XMFLOAT3(0.0f, 0.f, 10.f));
-	m_lookAboveCamera->GetCamera()->Rotate(90.f, 0.f, 0.f);
-#endif 
-
+	 
 	// UI 이미지 추가
 	m_TESTGameObject = new EmptyGameObject("Test");
 	 
@@ -1025,16 +1009,19 @@ bool GameScene::ProcessInput(HWND hWnd, float fElapsedTime)
 {
 	// 플레이어 이동에 대한 처리 (정확히는 이동이 아니라 가속도)
 	m_pPlayer->ProcessInput(fElapsedTime);
-
+	
 	// 플레이어 회전에 대한 처리
-	if ((GameInput::GetDeltaX() != 0.0f) || (GameInput::GetDeltaY() != 0.0f))
+	float deltaX = GameInput::GetDeltaX();
+	float deltaY = GameInput::GetDeltaY();
+
+	if ((deltaX != 0.0f) || (deltaY != 0.0f))
 	{
-		if (GameInput::GetDeltaX() || GameInput::GetDeltaY())
+		if (deltaX || deltaY)
 		{
 			// 플레이어와 카메라 똑같이 rotate...
 			// 순서 의존적이므로 변경 금지
-			m_pMainCamera->GetCamera()->Rotate(GameInput::GetDeltaY(), GameInput::GetDeltaX(), 0.0f);
-			m_pPlayer->Rotate(0.0f, GameInput::GetDeltaX(), 0.0f);
+			m_pMainCamera->GetCamera()->Rotate(deltaY, deltaX, 0.0f);
+			m_pPlayer->Rotate(0.0f, deltaX, 0.0f);
 		}
 	}
 
