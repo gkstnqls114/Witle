@@ -1045,8 +1045,7 @@ void GameFramework::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM 
 		break;
 	case WM_RBUTTONUP:
 		break;
-	case WM_MOUSEMOVE: 
-		GameInput::MouseMove(lParam);
+	case WM_MOUSEMOVE:  
 		break;
 
 	default:
@@ -1312,12 +1311,36 @@ LRESULT GameFramework::OnProcessingWindowMessage(HWND hWnd, UINT nMessageID, WPA
 		if (LOWORD(wParam) == WA_INACTIVE)
 		{
 			CGameTimer::GetInstance()->Stop();
+
 			GameInput::Stop();
 		}
 		else
 		{
 			CGameTimer::GetInstance()->Start();
 			GameInput::Start();
+
+			RECT rc;
+			POINT p1, p2;
+
+			GetClientRect(hWnd, &rc);    // 클라이언트 크기
+
+			// 클라이언트 크기를 좌표로 변환
+			p1.x = rc.left;
+			p1.y = rc.top;
+			p2.x = rc.right;
+			p2.y = rc.bottom;
+
+			// 클라이언트 크기를 스크린 크기로 변환
+			ClientToScreen(hWnd, &p1);
+			ClientToScreen(hWnd, &p2);
+
+			rc.left = p1.x;
+			rc.top = p1.y;
+			rc.right = p2.x;
+			rc.bottom = p2.y;
+
+			//해당 좌표를 기준으로 커서를 고정
+			ClipCursor(&rc);
 		}
 		break;
 	}
@@ -1331,13 +1354,13 @@ LRESULT GameFramework::OnProcessingWindowMessage(HWND hWnd, UINT nMessageID, WPA
 		break;
 	}
 
+	case WM_MOUSEMOVE: 
 	case WM_MOUSEWHEEL:
 	case WM_MOUSEHWHEEL:
 	case WM_LBUTTONDOWN:
 	case WM_RBUTTONDOWN:
 	case WM_LBUTTONUP:
 	case WM_RBUTTONUP:
-	case WM_MOUSEMOVE:
 		OnProcessingMouseMessage(hWnd, nMessageID, wParam, lParam);
 		break;
 

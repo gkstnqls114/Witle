@@ -260,6 +260,9 @@ D3D12_GPU_DESCRIPTOR_HANDLE GameScene::CreateConstantBufferViews(ID3D12Device * 
 	return(d3dCbvGPUDescriptorHandle);
 }
 
+static POINT sBeforeCursor{ -1.f, -1.f };
+static POINT sCurrCursor{ -1.f, -1.f };
+
 bool GameScene::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam)
 { 
 	switch (nMessageID)
@@ -314,6 +317,28 @@ bool GameScene::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM wPar
 	case WM_RBUTTONUP:
 		break;
 	case WM_MOUSEMOVE: 
+		if (GameInput::GetGameActive())
+		{ 
+			if (sBeforeCursor.x == -1.f && sBeforeCursor.y == -1.f)
+			{ 
+				::GetCursorPos(&sBeforeCursor);
+			} 
+
+			::GetCursorPos(&sCurrCursor); 
+			// 플레이어 회전에 대한 처리
+			float deltaX = sCurrCursor.x - sBeforeCursor.x;
+			float deltaY = sCurrCursor.y - sBeforeCursor.y;
+
+			sBeforeCursor.x = sCurrCursor.x;
+			sBeforeCursor.y = sCurrCursor.y;
+
+			if ((deltaX != 0.0f) || (deltaY != 0.0f))
+			{ 
+				std::cout << deltaX << " , " << deltaY << std::endl;
+				m_pMainCamera->GetCamera()->Rotate(deltaY / 20.f, deltaX / 20.f, 0.0f);
+				m_pPlayer->Rotate(0.0f, deltaX / 20.f, 0.0f);
+			}
+		}
 		break;
 
 	default:
@@ -1009,21 +1034,21 @@ bool GameScene::ProcessInput(HWND hWnd, float fElapsedTime)
 {
 	// 플레이어 이동에 대한 처리 (정확히는 이동이 아니라 가속도)
 	m_pPlayer->ProcessInput(fElapsedTime);
-	
-	// 플레이어 회전에 대한 처리
-	float deltaX = GameInput::GetDeltaX();
-	float deltaY = GameInput::GetDeltaY();
 
-	if ((deltaX != 0.0f) || (deltaY != 0.0f))
-	{
-		if (deltaX || deltaY)
-		{
-			// 플레이어와 카메라 똑같이 rotate...
-			// 순서 의존적이므로 변경 금지
-			m_pMainCamera->GetCamera()->Rotate(deltaY, deltaX, 0.0f);
-			m_pPlayer->Rotate(0.0f, deltaX, 0.0f);
-		}
-	}
+	//// 플레이어 회전에 대한 처리
+	//float deltaX = GameInput::GetDeltaX();
+	//float deltaY = GameInput::GetDeltaY();
+
+	//if ((deltaX != 0.0f) || (deltaY != 0.0f))
+	//{
+	//	if (deltaX || deltaY)
+	//	{
+	//		// 플레이어와 카메라 똑같이 rotate...
+	//		// 순서 의존적이므로 변경 금지
+	//		m_pMainCamera->GetCamera()->Rotate(deltaY, deltaX, 0.0f);
+	//		m_pPlayer->Rotate(0.0f, deltaX, 0.0f);
+	//	}
+	//}
 
 	return true;
 }

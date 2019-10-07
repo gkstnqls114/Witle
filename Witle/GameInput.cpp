@@ -13,8 +13,8 @@ HWND GameInput::m_hWnd;
 
 UCHAR GameInput::m_pKeyBuffer[256]; 
 bool GameInput::m_DragMode{ false };
-bool GameInput::m_gameActive{ false }; 
-
+bool GameInput::m_gameActive{ false };
+ 
 POINT GameInput::m_moveCursor;        // 한번 클릭했을 때 위치
 POINT GameInput::m_moveOldCursor{ -1, -1};     // 이전 프레임에서의 마우스 위치 
 float GameInput::m_moveDeltaX = 0.0f; // x축으로 움직인 마우스 이동량  
@@ -123,6 +123,8 @@ void GameInput::Stop()
 void GameInput::Start()
 {
 	m_gameActive = true;
+	
+	 
 }
 
 void GameInput::SetHWND(HWND hwnd)

@@ -59,7 +59,7 @@ private:
 	  
 	static UCHAR m_pKeyBuffer[256]; // 키보드의 input(지속)을 위한 멤버 변수
 
-	static bool m_DragMode;
+	static bool m_DragMode; 
 
 	static RAY m_PickingRay;
 	static short m_WheelDelta; // 마우스 휠이 움직인 정도
@@ -109,6 +109,8 @@ public:
 	static void MouseMove(LPARAM lParam);
 	static void SetCapture(HWND hWnd);
 	static void ReleaseCapture();
+
+	static bool GetGameActive() { return m_gameActive; };
 	 
 	//// Keyboard 관련 ///////////////////////////////////////////
 	// 키가 눌렸는지 확인하는 상태
@@ -128,7 +130,7 @@ public:
 	//// Mouse 관련 ///////////////////////////////////////////
 	static bool isNowClick() { return !(m_downClickCursor.x == MOUSE_NONE && m_downClickCursor.y == MOUSE_NONE); };
 	static void RotateWheel(WPARAM wParam);
-
+	 
 	static float GetDeltaX()
 	{
 		if (m_DragMode) return GetdownDeltaX();
