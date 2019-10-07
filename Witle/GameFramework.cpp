@@ -1030,18 +1030,13 @@ void GameFramework::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM 
 	switch (nMessageID)
 	{
 	case WM_MOUSEWHEEL:
-	case WM_MOUSEHWHEEL:
-		GameInput::RotateWheel(wParam);
+	case WM_MOUSEHWHEEL: 
 		break;
-	case WM_LBUTTONDOWN:
-		//마우스 캡쳐를 하고 현재 마우스 위치를 가져온다. 
-		GameInput::SetCapture(hWnd);
+	case WM_LBUTTONDOWN: 
 		break;
 	case WM_RBUTTONDOWN:
 		break;
-	case WM_LBUTTONUP:
-		//마우스 캡쳐를 해제한다.
-		GameInput::ReleaseCapture();
+	case WM_LBUTTONUP: 
 		break;
 	case WM_RBUTTONUP:
 		break;

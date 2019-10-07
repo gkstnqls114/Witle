@@ -268,8 +268,7 @@ bool GameScene::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM wPar
 	switch (nMessageID)
 	{
 	case WM_MOUSEWHEEL:
-	case WM_MOUSEHWHEEL:
-		GameInput::RotateWheel(wParam);
+	case WM_MOUSEHWHEEL: 
 		break;
 	case WM_LBUTTONDOWN:
 		// 플레이어 공격
@@ -317,7 +316,7 @@ bool GameScene::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM wPar
 	case WM_RBUTTONUP:
 		break;
 	case WM_MOUSEMOVE: 
-		if (GameInput::GetGameActive())
+		if (GameInput::GetGameActive() && !GameInput::GetDragMode())
 		{ 
 			if (sBeforeCursor.x == -1.f && sBeforeCursor.y == -1.f)
 			{ 
@@ -333,8 +332,7 @@ bool GameScene::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM wPar
 			sBeforeCursor.y = sCurrCursor.y;
 
 			if ((deltaX != 0.0f) || (deltaY != 0.0f))
-			{ 
-				std::cout << deltaX << " , " << deltaY << std::endl;
+			{  
 				m_pMainCamera->GetCamera()->Rotate(deltaY / 20.f, deltaX / 20.f, 0.0f);
 				m_pPlayer->Rotate(0.0f, deltaX / 20.f, 0.0f);
 			}

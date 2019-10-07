@@ -14,12 +14,7 @@ HWND GameInput::m_hWnd;
 UCHAR GameInput::m_pKeyBuffer[256]; 
 bool GameInput::m_DragMode{ false };
 bool GameInput::m_gameActive{ false };
- 
-POINT GameInput::m_moveCursor;        // 한번 클릭했을 때 위치
-POINT GameInput::m_moveOldCursor{ -1, -1};     // 이전 프레임에서의 마우스 위치 
-float GameInput::m_moveDeltaX = 0.0f; // x축으로 움직인 마우스 이동량  
-float GameInput::m_moveDeltaY = 0.0f; // y축으로 움직인 마우스 이동량
-
+  
 float GameInput::m_downDeltaX = 0.0f; // 마우스를 누른 상태로 x축으로 움직인 마우스 이동량  
 float GameInput::m_downDeltaY = 0.0f; // 마우스를 누른 상태로 y축으로 움직인 마우스 이동량
 POINT GameInput::m_downOldCursor; // 이전 프레임에서의 마우스 위치
@@ -36,14 +31,7 @@ GameInput::GameInput()
 GameInput::~GameInput()
 {
 }
-
-POINT GameInput::GetClickcursor()
-{
-	POINT temp;
-	::GetCursorPos(&temp);
-	return temp;
-}
-
+ 
 bool GameInput::GenerateRayforPicking(const XMFLOAT3& cameraPos, const XMFLOAT4X4 & view, const XMFLOAT4X4 & projection, RAY& ray)
 {
 	if (m_downClickCursor.x < 0 || m_downClickCursor.y < 0 || m_downClickCursor.x > GameScreen::GetWidth() || m_downClickCursor.y > GameScreen::GetHeight())
@@ -104,15 +92,6 @@ void GameInput::Reset()
 {
 	m_downClickCursor.x = MOUSE_NONE;
 	m_downClickCursor.y = MOUSE_NONE;
-	m_moveDeltaX = 0.f;
-	m_moveDeltaY = 0.f; 
-
-	if (!m_DragMode)
-	{ 
-		if (m_moveOldCursor.x == MOUSE_NONE && m_moveOldCursor.y == MOUSE_NONE) return; // 초기값이라면 넘어감.
-		::SetCursorPos(m_moveOldCursor.x, m_moveOldCursor.y);
-		m_moveCursor = m_moveOldCursor;
-	}
 }
 
 void GameInput::Stop()
@@ -131,49 +110,7 @@ void GameInput::SetHWND(HWND hwnd)
 {
 	m_hWnd = hwnd;
 }
-
-void GameInput::MouseMove(LPARAM lParam)
-{     
-	if (!m_gameActive) return;
-
-	if (!m_DragMode)
-	{
-		::GetCursorPos(&m_moveCursor);
-
-		if (m_moveCursor.x == m_moveOldCursor.x && m_moveCursor.y == m_moveOldCursor.y) return;
-
-		if ((m_moveOldCursor.x == MOUSE_NONE && m_moveOldCursor.y == MOUSE_NONE)) // 초기값의 경우
-		{
-			m_moveOldCursor = m_moveCursor;
-		}
-		else
-		{
-			m_moveDeltaX = (float)(m_moveCursor.x - m_moveOldCursor.x) / m_DeltaValueX;
-			m_moveDeltaY = (float)(m_moveCursor.y - m_moveOldCursor.y) / m_DeltaValueY;
-		}
-	}
-}
-
-void GameInput::SetCapture(HWND hWnd)
-{
-	if (!m_gameActive) return;
-
-	::SetCapture(hWnd);
-	::GetCursorPos(&m_downOldCursor);
-	::GetCursorPos(&m_downClickCursor);
-	::ScreenToClient(hWnd, &m_downClickCursor);
-}
-
-void GameInput::RotateWheel(WPARAM wParam)
-{
-	m_WheelDelta = GET_WHEEL_DELTA_WPARAM(wParam);
-}
-
-void GameInput::ReleaseCapture()
-{
-	::ReleaseCapture();
-}
- 
+  
 RAY RAY::GeneratePickingRay(const XMFLOAT3 & cameraPos, const XMFLOAT2 & ScreenPickingPoint, const XMFLOAT4X4 & view, const XMFLOAT4X4 & projection)
 {
 	RAY ray;

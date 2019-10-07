@@ -63,28 +63,21 @@ private:
 
 	static RAY m_PickingRay;
 	static short m_WheelDelta; // 마우스 휠이 움직인 정도
-	static float m_DeltaValueX; // 마우스 이동량 값
-	static float m_DeltaValueY; // 마우스 이동량 값 
+	static float m_DeltaValueX; // 마우스 이동량을 나눈 값
+	static float m_DeltaValueY; // 마우스 이동량을 나눈 값 
 
 	static POINT m_downClickCursor; // 한번 클릭했을 때 위치
 	static POINT m_downOldCursor; // 이전 프레임에서의 마우스 위치 
 	static float m_downDeltaX; // 마우스를 누른 상태로 x축으로 움직인 마우스 이동량  
 	static float m_downDeltaY; // 마우스를 누른 상태로 y축으로 움직인 마우스 이동량
 	 
-	static POINT m_moveCursor; // 한번 클릭했을 때 위치
-	static POINT m_moveOldCursor; // 이전 프레임에서의 마우스 위치 
-	static float m_moveDeltaX; // 마우스를 누르지 않은 상태로 x축으로 움직인 마우스 이동량
-	static float m_moveDeltaY; // 마우스를 누르지 않은 상태로 y축으로 움직인 마우스 이동량
-
 private:
 	static void UpdateMouseDragRotate(HWND hWnd);
 	static void UpdateMouseMoveRotate(HWND hWnd);
 	 
 	static float GetdownDeltaX() { return m_downDeltaX; }
 	static float GetdownDeltaY() { return m_downDeltaY; }
-	static float GetmoveDeltaX() { return m_moveDeltaX; };
-	static float GetmoveDeltaY() { return m_moveDeltaY; };
-
+	 
 public: 
 	static void Update(HWND hWnd); 
 
@@ -106,10 +99,7 @@ public:
 	static void Stop();
 	static void Start();
 	static void SetHWND(HWND hwnd);
-	static void MouseMove(LPARAM lParam);
-	static void SetCapture(HWND hWnd);
-	static void ReleaseCapture();
-
+ 	 
 	static bool GetGameActive() { return m_gameActive; };
 	 
 	//// Keyboard 관련 ///////////////////////////////////////////
@@ -128,27 +118,17 @@ public:
 
 
 	//// Mouse 관련 ///////////////////////////////////////////
-	static bool isNowClick() { return !(m_downClickCursor.x == MOUSE_NONE && m_downClickCursor.y == MOUSE_NONE); };
-	static void RotateWheel(WPARAM wParam);
-	 
 	static float GetDeltaX()
 	{
-		if (m_DragMode) return GetdownDeltaX();
-		else  return GetmoveDeltaX();
+		return GetdownDeltaX();
 	}
 	static float GetDeltaY()
 	{
-		if (m_DragMode) return GetdownDeltaY();
-		else return GetmoveDeltaY();
+		return GetdownDeltaY(); 
 	}
 	static bool GetDragMode() { return m_DragMode; }
-
-	// 왜 설정했는지 모르겠다.
-	static POINT GetdownClickcursor() { return m_downClickCursor; }
-	static POINT GetClickcursor();
-
+	 
 	static bool GenerateRayforPicking(const XMFLOAT3& cameraPos, const XMFLOAT4X4 & view, const XMFLOAT4X4 & projection, RAY& ray);
-
 	//// Mouse 관련 ///////////////////////////////////////////
 
 
