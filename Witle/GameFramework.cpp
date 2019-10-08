@@ -1336,6 +1336,10 @@ LRESULT GameFramework::OnProcessingWindowMessage(HWND hWnd, UINT nMessageID, WPA
 
 			//해당 좌표를 기준으로 커서를 고정
 			ClipCursor(&rc);
+
+			POINT windowCenter{ GameScreen::GetWidth() / 2 , GameScreen::GetHeight() / 2 };
+			ClientToScreen(hWnd, &windowCenter);
+			::SetCursorPos(windowCenter.x, windowCenter.y);
 		}
 		break;
 	}

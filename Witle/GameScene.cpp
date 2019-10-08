@@ -316,25 +316,38 @@ bool GameScene::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM wPar
 	case WM_RBUTTONUP:
 		break;
 	case WM_MOUSEMOVE: 
+		 
 		if (GameInput::GetGameActive() && !GameInput::GetDragMode())
-		{ 
+		{
+			POINT windowCenter{ GameScreen::GetWidth() / 2 , GameScreen::GetHeight() / 2 };
+			ClientToScreen(hWnd, &windowCenter);
+			
+			::GetCursorPos(&sCurrCursor);
 			if (sBeforeCursor.x == -1.f && sBeforeCursor.y == -1.f)
-			{ 
-				::GetCursorPos(&sBeforeCursor);
-			} 
+			{
+				sBeforeCursor.x = windowCenter.x;
+				sBeforeCursor.y = windowCenter.y;
+			}
 
-			::GetCursorPos(&sCurrCursor); 
-			// 플레이어 회전에 대한 처리
-			float deltaX = sCurrCursor.x - sBeforeCursor.x;
-			float deltaY = sCurrCursor.y - sBeforeCursor.y;
+			if (sCurrCursor.x == windowCenter.x && sCurrCursor.y == windowCenter.y)
+			{
+				// 아무것도 안함
+			}
+			else
+			{
 
-			sBeforeCursor.x = sCurrCursor.x;
-			sBeforeCursor.y = sCurrCursor.y;
+				// 플레이어 회전에 대한 처리
+				float deltaX = sCurrCursor.x - sBeforeCursor.x;
+				float deltaY = sCurrCursor.y - sBeforeCursor.y;
+				 
+				bool isCurrWindowCenter = sCurrCursor.x == windowCenter.x && sCurrCursor.y == windowCenter.y;
+				if ((deltaX != 0.0f) || (deltaY != 0.0f) && !isCurrWindowCenter)
+				{
+					m_pMainCamera->GetCamera()->Rotate(deltaY / 20.f, deltaX / 20.f, 0.0f);
+					m_pPlayer->Rotate(0.0f, deltaX / 20.f, 0.0f);
 
-			if ((deltaX != 0.0f) || (deltaY != 0.0f))
-			{  
-				m_pMainCamera->GetCamera()->Rotate(deltaY / 20.f, deltaX / 20.f, 0.0f);
-				m_pPlayer->Rotate(0.0f, deltaX / 20.f, 0.0f);
+					::SetCursorPos(windowCenter.x, windowCenter.y); 
+				}
 			}
 		}
 		break;

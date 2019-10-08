@@ -59,7 +59,9 @@ private:
 	  
 	static UCHAR m_pKeyBuffer[256]; // 키보드의 input(지속)을 위한 멤버 변수
 
-	static bool m_DragMode; 
+	static bool m_DragMode;
+
+	static bool m_Moving;
 
 	static RAY m_PickingRay;
 	static short m_WheelDelta; // 마우스 휠이 움직인 정도
@@ -127,6 +129,12 @@ public:
 		return GetdownDeltaY(); 
 	}
 	static bool GetDragMode() { return m_DragMode; }
+	static bool GetMoving() { return m_Moving; }
+
+	static void ReverseMoving()
+	{
+		m_Moving = !m_Moving;
+	}
 	 
 	static bool GenerateRayforPicking(const XMFLOAT3& cameraPos, const XMFLOAT4X4 & view, const XMFLOAT4X4 & projection, RAY& ray);
 	//// Mouse 관련 ///////////////////////////////////////////

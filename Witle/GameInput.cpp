@@ -14,7 +14,9 @@ HWND GameInput::m_hWnd;
 UCHAR GameInput::m_pKeyBuffer[256]; 
 bool GameInput::m_DragMode{ false };
 bool GameInput::m_gameActive{ false };
-  
+
+bool GameInput::m_Moving{ false };
+ 
 float GameInput::m_downDeltaX = 0.0f; // 마우스를 누른 상태로 x축으로 움직인 마우스 이동량  
 float GameInput::m_downDeltaY = 0.0f; // 마우스를 누른 상태로 y축으로 움직인 마우스 이동량
 POINT GameInput::m_downOldCursor; // 이전 프레임에서의 마우스 위치
@@ -77,15 +79,15 @@ void GameInput::Update(HWND hWnd)
 	// 키보드의 pKeyBuffer를 구한다.
 	::GetKeyboardState(m_pKeyBuffer);
 
-	if (m_DragMode)
-	{ 
-		UpdateMouseDragRotate(hWnd);
-	} 
-	else
-	{
-		//마우스 커서를 화면에서 없앤다(보이지 않게 한다).
-		::SetCursor(NULL);
-	}
+	//if (m_DragMode)
+	//{ 
+	//	UpdateMouseDragRotate(hWnd);
+	//} 
+	//else
+	//{
+	//	//마우스 커서를 화면에서 없앤다(보이지 않게 한다).
+	//	::SetCursor(NULL);
+	//}
 }
  
 void GameInput::Reset()
