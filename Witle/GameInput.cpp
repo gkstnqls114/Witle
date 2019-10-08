@@ -8,8 +8,7 @@
 #include "Camera.h"
 #include "GameInput.h"
 
-
-HWND GameInput::m_hWnd;
+HWND GameInput::m_hWnd{ NULL };
 
 UCHAR GameInput::m_pKeyBuffer[256]; 
 bool GameInput::m_DragMode{ false };
@@ -74,20 +73,90 @@ void GameInput::UpdateMouseMoveRotate(HWND hWnd)
 {
 }
 
+void GameInput::FixMouseInApp(HWND hWnd)
+{
+	RECT rc;
+	POINT p1, p2;
+
+	GetClientRect(hWnd, &rc);    // 클라이언트 크기
+
+	// 클라이언트 크기를 좌표로 변환
+	p1.x = rc.left;
+	p1.y = rc.top;
+	p2.x = rc.right;
+	p2.y = rc.bottom;
+
+	// 클라이언트 크기를 스크린 크기로 변환
+	ClientToScreen(hWnd, &p1);
+	ClientToScreen(hWnd, &p2);
+
+	rc.left = p1.x;
+	rc.top = p1.y;
+	rc.right = p2.x;
+	rc.bottom = p2.y;
+
+	//해당 좌표를 기준으로 커서를 고정
+	ClipCursor(&rc); 
+}
+
+void GameInput::FixMouseInWindows(HWND hWnd)
+{ 
+	//해당 좌표를 기준으로 커서를 고정
+	ClipCursor(NULL);
+}
+
+POINT GameInput::GetAppCenter(HWND hWnd)
+{
+	POINT windowCenter{ GameScreen::GetWidth() / 2 , GameScreen::GetHeight() / 2 };
+	ClientToScreen(hWnd, &windowCenter);
+
+	return windowCenter;
+}
+
+void GameInput::SetCursorAppCenter(HWND hWnd)
+{
+	POINT appCenter = GetAppCenter(hWnd);
+	::SetCursorPos(appCenter.x, appCenter.y);
+}
+
+XMFLOAT2 GameInput::MouseMoveForGameScene(HWND hWnd, const GameScene* const pGameScene)
+{
+	XMFLOAT2 delta{ 0.f, 0.f };
+
+	if (!m_gameActive) return delta;
+	if (m_DragMode) return delta;
+
+	POINT appCenter = GameInput::GetAppCenter(hWnd);
+
+	POINT CurrCursor;
+	::GetCursorPos(&CurrCursor);
+
+	bool SameCurrAppCenter = CurrCursor.x == appCenter.x && CurrCursor.y == appCenter.y;
+	if (SameCurrAppCenter) return delta;
+
+	// 플레이어 회전에 대한 처리
+	delta.x = float(CurrCursor.x - appCenter.x) / m_DeltaValueX;
+	delta.y = float(CurrCursor.y - appCenter.y) / m_DeltaValueY;
+
+	SetCursorAppCenter(hWnd);
+
+	return delta;
+}
+
 void GameInput::Update(HWND hWnd)
 { 
 	// 키보드의 pKeyBuffer를 구한다.
 	::GetKeyboardState(m_pKeyBuffer);
 
-	//if (m_DragMode)
-	//{ 
-	//	UpdateMouseDragRotate(hWnd);
-	//} 
-	//else
-	//{
-	//	//마우스 커서를 화면에서 없앤다(보이지 않게 한다).
-	//	::SetCursor(NULL);
-	//}
+	if (m_DragMode)
+	{ 
+		UpdateMouseDragRotate(hWnd);
+	} 
+	else
+	{
+		//마우스 커서를 화면에서 없앤다(보이지 않게 한다).
+		::SetCursor(NULL);
+	}
 }
  
 void GameInput::Reset()
@@ -96,23 +165,46 @@ void GameInput::Reset()
 	m_downClickCursor.y = MOUSE_NONE;
 }
 
-void GameInput::Stop()
+void GameInput::ChagneDragMode()
+{
+	m_DeltaValueX = 10.f;
+	m_DeltaValueY = 10.f;
+	m_DragMode = true;
+
+	if (m_hWnd != NULL)
+	{
+		FixMouseInWindows(m_hWnd);
+	}
+}
+
+void GameInput::ChagneMoveMode()
+{
+	m_DeltaValueX = 20.f;
+	m_DeltaValueY = 20.f;
+	m_DragMode = false;
+	
+	if (m_hWnd != NULL)
+	{
+		FixMouseInApp(m_hWnd);
+		SetCursorAppCenter(m_hWnd);
+	}
+}
+
+void GameInput::Stop(HWND hwnd)
 {
 	m_gameActive = false;
 }
 
-void GameInput::Start()
+void GameInput::Start(HWND hwnd)
 {
 	m_gameActive = true;
-	
-	 
 }
 
 void GameInput::SetHWND(HWND hwnd)
 {
 	m_hWnd = hwnd;
 }
-  
+ 
 RAY RAY::GeneratePickingRay(const XMFLOAT3 & cameraPos, const XMFLOAT2 & ScreenPickingPoint, const XMFLOAT4X4 & view, const XMFLOAT4X4 & projection)
 {
 	RAY ray;

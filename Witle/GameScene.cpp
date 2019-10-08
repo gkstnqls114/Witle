@@ -260,9 +260,6 @@ D3D12_GPU_DESCRIPTOR_HANDLE GameScene::CreateConstantBufferViews(ID3D12Device * 
 	return(d3dCbvGPUDescriptorHandle);
 }
 
-static POINT sBeforeCursor{ -1.f, -1.f };
-static POINT sCurrCursor{ -1.f, -1.f };
-
 bool GameScene::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam)
 { 
 	switch (nMessageID)
@@ -316,40 +313,14 @@ bool GameScene::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM wPar
 	case WM_RBUTTONUP:
 		break;
 	case WM_MOUSEMOVE: 
-		 
-		if (GameInput::GetGameActive() && !GameInput::GetDragMode())
+	{
+		XMFLOAT2 delta = GameInput::MouseMoveForGameScene(hWnd, this);
+		if ((delta.x != 0.0f) || (delta.y != 0.0f))
 		{
-			POINT windowCenter{ GameScreen::GetWidth() / 2 , GameScreen::GetHeight() / 2 };
-			ClientToScreen(hWnd, &windowCenter);
-			
-			::GetCursorPos(&sCurrCursor);
-			if (sBeforeCursor.x == -1.f && sBeforeCursor.y == -1.f)
-			{
-				sBeforeCursor.x = windowCenter.x;
-				sBeforeCursor.y = windowCenter.y;
-			}
-
-			if (sCurrCursor.x == windowCenter.x && sCurrCursor.y == windowCenter.y)
-			{
-				// 아무것도 안함
-			}
-			else
-			{
-
-				// 플레이어 회전에 대한 처리
-				float deltaX = sCurrCursor.x - sBeforeCursor.x;
-				float deltaY = sCurrCursor.y - sBeforeCursor.y;
-				 
-				bool isCurrWindowCenter = sCurrCursor.x == windowCenter.x && sCurrCursor.y == windowCenter.y;
-				if ((deltaX != 0.0f) || (deltaY != 0.0f) && !isCurrWindowCenter)
-				{
-					m_pMainCamera->GetCamera()->Rotate(deltaY / 20.f, deltaX / 20.f, 0.0f);
-					m_pPlayer->Rotate(0.0f, deltaX / 20.f, 0.0f);
-
-					::SetCursorPos(windowCenter.x, windowCenter.y); 
-				}
-			}
+			m_pMainCamera->GetCamera()->Rotate(delta.y, delta.x, 0.0f);
+			m_pPlayer->Rotate(0.0f, delta.x, 0.0f); 
 		}
+	}
 		break;
 
 	default:

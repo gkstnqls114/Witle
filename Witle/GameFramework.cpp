@@ -1306,40 +1306,12 @@ LRESULT GameFramework::OnProcessingWindowMessage(HWND hWnd, UINT nMessageID, WPA
 		if (LOWORD(wParam) == WA_INACTIVE)
 		{
 			CGameTimer::GetInstance()->Stop();
-
-			GameInput::Stop();
+			GameInput::Stop(hWnd);
 		}
 		else
 		{
 			CGameTimer::GetInstance()->Start();
-			GameInput::Start();
-
-			RECT rc;
-			POINT p1, p2;
-
-			GetClientRect(hWnd, &rc);    // 클라이언트 크기
-
-			// 클라이언트 크기를 좌표로 변환
-			p1.x = rc.left;
-			p1.y = rc.top;
-			p2.x = rc.right;
-			p2.y = rc.bottom;
-
-			// 클라이언트 크기를 스크린 크기로 변환
-			ClientToScreen(hWnd, &p1);
-			ClientToScreen(hWnd, &p2);
-
-			rc.left = p1.x;
-			rc.top = p1.y;
-			rc.right = p2.x;
-			rc.bottom = p2.y;
-
-			//해당 좌표를 기준으로 커서를 고정
-			ClipCursor(&rc);
-
-			POINT windowCenter{ GameScreen::GetWidth() / 2 , GameScreen::GetHeight() / 2 };
-			ClientToScreen(hWnd, &windowCenter);
-			::SetCursorPos(windowCenter.x, windowCenter.y);
+			GameInput::Start(hWnd); 
 		}
 		break;
 	}

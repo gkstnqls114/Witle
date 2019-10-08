@@ -35,6 +35,7 @@
 #define KEYDOWN_PRESSING   129 // 토글키인상태에서 떨어지지않은 상태
 
 class Camera;
+class GameScene;
 
 struct RAY
 {
@@ -46,6 +47,7 @@ struct RAY
 	static XMFLOAT3 GeneratePickingScreenOrigin(const XMFLOAT3& cameraPos, const XMFLOAT2& ScreenPickingPoint, const XMFLOAT4X4 & view, const XMFLOAT4X4 & projection);
 };
 
+
 // 싱글톤 패턴
 class GameInput
 {
@@ -56,7 +58,6 @@ private:
 	static bool m_gameActive;
 
 	static HWND m_hWnd;
-	  
 	static UCHAR m_pKeyBuffer[256]; // 키보드의 input(지속)을 위한 멤버 변수
 
 	static bool m_DragMode;
@@ -72,11 +73,20 @@ private:
 	static POINT m_downOldCursor; // 이전 프레임에서의 마우스 위치 
 	static float m_downDeltaX; // 마우스를 누른 상태로 x축으로 움직인 마우스 이동량  
 	static float m_downDeltaY; // 마우스를 누른 상태로 y축으로 움직인 마우스 이동량
+
+	static POINT m_AppCenterCursor;
+	static POINT m_CurrCursor;
 	 
 private:
 	static void UpdateMouseDragRotate(HWND hWnd);
 	static void UpdateMouseMoveRotate(HWND hWnd);
 	 
+	// 마우스 이동 범위를 해당 어플리케이션 안으로만 하도록 설정
+	static void FixMouseInApp(HWND hWnd);
+
+	// 마우스 이동 범위를 화면 전체로 설정
+	static void FixMouseInWindows(HWND hWnd);
+
 	static float GetdownDeltaX() { return m_downDeltaX; }
 	static float GetdownDeltaY() { return m_downDeltaY; }
 	 
@@ -85,21 +95,11 @@ public:
 
 	static void Reset();
 
-	static void ChagneDragMode() 
-	{
-		m_DeltaValueX = 10.f;
-		m_DeltaValueY = 10.f;
-		m_DragMode = true; 
-	};
-	static void ChagneMoveMode()
-	{
-		m_DeltaValueX = 5.f;
-		m_DeltaValueY = 5.f;
-		m_DragMode = false;
-	};
+	static void ChagneDragMode(); 
+	static void ChagneMoveMode();
 
-	static void Stop();
-	static void Start();
+	static void Stop(HWND hwnd);
+	static void Start(HWND hwnd);
 	static void SetHWND(HWND hwnd);
  	 
 	static bool GetGameActive() { return m_gameActive; };
@@ -119,7 +119,16 @@ public:
 	//// Keyboard 관련 ///////////////////////////////////////////
 
 
-	//// Mouse 관련 ///////////////////////////////////////////
+	//// Mouse 관련 /////////////////////////////////////////// 
+	// 해당 어플리케이션의 중앙 위치를 받아옴
+	static POINT GetAppCenter(HWND hWnd);
+
+	// 현재 마우스 위치 좌표를
+	static void SetCursorAppCenter(HWND hWnd);
+
+	// 마우스 이동 변화량를 일정값으로 나눈 X, Y 반환
+	static XMFLOAT2 MouseMoveForGameScene(HWND hWnd, const GameScene * const pGameScene);
+
 	static float GetDeltaX()
 	{
 		return GetdownDeltaX();
