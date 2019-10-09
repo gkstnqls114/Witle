@@ -1060,17 +1060,12 @@ void GameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPAR
 	case WM_KEYDOWN:  
 
 		if (wParam != VK_F1)
-		{
-
+		{ 
 			// 만약 아무키나 누르면 장면 전환 ///////////////////
 			if (SceneMgr::GetInstance()->IsMainScene())
 			{
 				SceneMgr::GetInstance()->ChangeSceneToSkillSelect();
-			}
-			else if (SceneMgr::GetInstance()->IsSkillSelectScene())
-			{
-				SceneMgr::GetInstance()->ChangeSceneToGame();
-			}
+			} 
 			else if (SceneMgr::GetInstance()->IsWinScene())
 			{
 				SceneMgr::GetInstance()->ChangeSceneToMain();
@@ -1112,6 +1107,7 @@ void GameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPAR
 			break;
 		}
 
+#ifdef _DEBUG 
 		case VK_F5: // Main 으로 전환
 		{
 			isStateChange = true;
@@ -1142,6 +1138,8 @@ void GameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPAR
 			SceneMgr::GetInstance()->ChangeSceneToLose();
 			break;
 		}
+#endif // _DEBUG
+
 		default:
 			break;
 		}
@@ -1177,8 +1175,7 @@ void GameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPAR
 		case VK_F7:  
 		case VK_F8:  
 		case VK_F9:  
-		{
-			isStateChange = true; 
+		{ 
 			break;
 		}
 		default:

@@ -10,6 +10,7 @@
 #include "GraphicsRootSignatureMgr.h"
 #include "MyDescriptorHeap.h"
 #include "PlayerSkillMgr.h"
+#include "SceneMgr.h"
 #include "SkillStg.h"
 #include "SkillSelectScene.h"
 
@@ -17,6 +18,30 @@ MyDescriptorHeap* SkillSelectScene::m_pHeap{ nullptr };
 Texture* SkillSelectScene::m_pTexture{ nullptr };
 int SkillSelectScene::m_SelectedIndex[SKILL_SELECTED]
 { ENUM_SELECTABLESKILL::SELECTABLESKILL_SHIELD, ENUM_SELECTABLESKILL::SELECTABLESKILL_BLESSING, ENUM_SELECTABLESKILL::SELECTABLESKILL_HEALING, ENUM_SELECTABLESKILL::SELECTABLESKILL_FIREBALL }; // 선택된 네 개의 인덱스들. 기본으로 0 1 2 3으로 설정
+
+void SkillSelectScene::CllckGameStartButton(POINT & cursor)
+{
+	bool isReadySkill = true;
+	for (int x = 0; x < SKILL_SELECTED; ++x)
+	{
+		if (m_SelectedIndex[x] == SKILL_TO_CHOOSE)
+		{
+			isReadySkill = false;
+		}
+	}
+	if (isReadySkill)
+	{
+		RECT rect = m_GameStartButton->getRect();
+		bool isInCursor =
+			(rect.left < cursor.x && cursor.x < rect.right) &&
+			(rect.top < cursor.y && cursor.y < rect.bottom);
+
+		if (isInCursor)
+		{
+			SceneMgr::GetInstance()->ChangeSceneToGame();
+		}
+	}
+}
 
 SkillSelectScene::SkillSelectScene()
 {
@@ -37,7 +62,11 @@ bool SkillSelectScene::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPAR
 
 		break;
 	case WM_LBUTTONDOWN:
-		ClickSkillIcon(POINT{ LOWORD(lParam), HIWORD(lParam) });
+	{
+		POINT cursor{ LOWORD(lParam), HIWORD(lParam) };
+		ClickSkillIcon(cursor);
+		CllckGameStartButton(cursor);
+	}
 		break;
 	case WM_RBUTTONDOWN:
 		break;
@@ -283,7 +312,7 @@ void SkillSelectScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool i
 	}
 	if (isReadySkill)
 	{
-		if(m_GameStartButton) m_GameStartButton->Render(pd3dCommandList);
+		if (m_GameStartButton) m_GameStartButton->Render(pd3dCommandList);
 	}
 }
 
@@ -321,7 +350,7 @@ void SkillSelectScene::RenderShadowMap(ID3D12GraphicsCommandList * pd3dCommandLi
 {
 }
 
-void SkillSelectScene::ClickSkillIcon(POINT cursor)
+void SkillSelectScene::ClickSkillIcon(POINT& cursor)
 { 
 	for (int x = 0; x < SKILL_TO_CHOOSE ; ++x)
 	{

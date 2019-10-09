@@ -19,8 +19,9 @@ protected:
 	void RenderShadowMap(ID3D12GraphicsCommandList *pd3dCommandList);
 
 private:
-	void ClickSkillIcon(POINT cursor);
-
+	void ClickSkillIcon(POINT& cursor);
+	void CllckGameStartButton(POINT& cursor);
+	
 public:
 	SkillSelectScene();
 	virtual ~SkillSelectScene();
