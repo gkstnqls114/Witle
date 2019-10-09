@@ -16,6 +16,7 @@ class MyDescriptorHeap;
 class BroomEffectRect;
 class MyRectangle;
 class PlayerActionMgr;
+class UI2DImage;
 
 // CHeightMapTerrain ¿‘¥œ¥Ÿ.
 class Player :
@@ -30,6 +31,10 @@ private:
 	PlayerMovement*    m_PlayerMovement{ nullptr };
 	PlayerStatus*	   m_pPlayerHPStatus{ nullptr };
 	PlayerStatus*	   m_pPlayerMPStatus{ nullptr };
+	
+	UI2DImage*		   m_pHpBarImage{ nullptr };
+	UI2DImage*		   m_pMpBarImage{ nullptr };
+	
 	MyBOBox*		   m_pMyBOBox{ nullptr };
 
 	Texture*			m_pTexture_Cloth{ nullptr };

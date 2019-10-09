@@ -30,8 +30,6 @@ VS_SCREEN_OUTPUT VSUIScreen(VS_SCREEN_INPUT input, uint nVertexID : SV_VertexID)
 float4 PSUIScreen(VS_SCREEN_OUTPUT input) : SV_TARGET
 {
     float4 color = gtxtTexture.Sample(gWrapSamplerState, input.uv);
-    if (color.a < 0.5f)
-        discard;
-    
+     
     return color;
 }

@@ -10,6 +10,7 @@
 
 #include "SoundManager.h"
  
+#include "UI2DImage.h"
 #include "Camera.h"
 #include "Collision.h"
 #include "PlayerMovement.h"
@@ -128,9 +129,13 @@ Player::Player(const std::string & entityID, ID3D12Device * pd3dDevice, ID3D12Gr
 	m_pMyBOBox = new MyBOBox(this, pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 75.F, 0.F }, extents);
 
 	m_pPlayerHPStatus = new PlayerStatus(this, pd3dDevice, pd3dCommandList, 
+		POINT{ int(GameScreen::GetWidth()) - 1100, int(GameScreen::GetHeight()) - 670 }, 295.f, 30.f, IMAGE_RED);
+	m_pHpBarImage = new UI2DImage(this, ENUM_SCENE::SCENE_GAME, pd3dDevice, pd3dCommandList,
 		POINT{ int(GameScreen::GetWidth()) - 1100, int(GameScreen::GetHeight()) - 670 }, 300.f, 30.f, IMAGE_HPBAR);
 
 	m_pPlayerMPStatus = new PlayerStatus(this, pd3dDevice, pd3dCommandList, 
+		POINT{ int(GameScreen::GetWidth()) - 1100, int(GameScreen::GetHeight()) - 620 }, 295.f, 30.f, IMAGE_BLUE);
+	m_pMpBarImage = new UI2DImage(this, ENUM_SCENE::SCENE_GAME, pd3dDevice, pd3dCommandList,
 		POINT{ int(GameScreen::GetWidth()) - 1100, int(GameScreen::GetHeight()) - 620 }, 300.f, 30.f, IMAGE_MPBAR);
 
 	m_PlayerMovement = new PlayerMovement(this);
@@ -313,6 +318,18 @@ void Player::ReleaseMembers()
 		delete m_pPlayerHPStatus;
 		m_pPlayerHPStatus = nullptr;
 	}
+	if (m_pHpBarImage)
+	{
+		m_pHpBarImage->ReleaseObjects();
+		delete m_pHpBarImage;
+		m_pHpBarImage = nullptr;
+	}
+	if (m_pMpBarImage)
+	{
+		m_pMpBarImage->ReleaseObjects();
+		delete m_pMpBarImage;
+		m_pMpBarImage = nullptr;
+	}
 
 	if (m_pPlayerMPStatus)
 	{
@@ -326,6 +343,7 @@ void Player::ReleaseMembers()
 		delete m_PlayerMovement;
 		m_PlayerMovement = nullptr;
 	} 
+
 }
 
 void Player::ReleaseMemberUploadBuffers()
@@ -343,6 +361,8 @@ void Player::ReleaseMemberUploadBuffers()
 	if (m_BroomEffectRect) m_BroomEffectRect->ReleaseUploadBuffers();
 	if (m_pPlayerMPStatus) m_pPlayerMPStatus->ReleaseUploadBuffers();
 	if (m_pPlayerHPStatus) m_pPlayerHPStatus->ReleaseUploadBuffers();
+	if (m_pMpBarImage) m_pMpBarImage->ReleaseUploadBuffers();
+	if (m_pHpBarImage) m_pHpBarImage->ReleaseUploadBuffers();
 }
 
 void Player::Update(float fElapsedTime)
@@ -407,6 +427,10 @@ void Player::RenderStatus(ID3D12GraphicsCommandList * pd3dCommandList, bool isGB
 {
 	m_pPlayerHPStatus->Render(pd3dCommandList);
 	m_pPlayerMPStatus->Render(pd3dCommandList);
+
+	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_UISCREEN, isGBuffers);
+	m_pHpBarImage->Render(pd3dCommandList);
+	m_pMpBarImage->Render(pd3dCommandList);
 }
   
 void Player::Move(const XMFLOAT3 & xmf3Shift)

@@ -1435,6 +1435,11 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 	PlayerSkillMgr::GetInstance()->Render(pd3dCommandList, isGBuffers);
 
 	/// ui map과 스킬 관련 렌더링..
+
+	// map 먼저 렌더링
+	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_UISCREEN, isGBuffers);
+	m_SampleUIMap->Render(pd3dCommandList);
+
 	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_UIMAPFORPLAYER, isGBuffers);
 	XMFLOAT2 playerpos{ m_pPlayer->GetTransform().GetPosition().x,  m_pPlayer->GetTransform().GetPosition().z };
 
@@ -1472,8 +1477,8 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 	m_UIAltar_4->Render(pd3dCommandList);
 	m_UIAltar_5->Render(pd3dCommandList);
 
-	m_SampleUIMap->Render(pd3dCommandList);
 	
+	// skill render
 	SkillSelectScene::m_pHeap->UpdateShaderVariable(pd3dCommandList);
 
 	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_SKILLICON, isGBuffers);

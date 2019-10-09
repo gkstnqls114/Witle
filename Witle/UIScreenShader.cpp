@@ -60,8 +60,7 @@ D3D12_RASTERIZER_DESC UIScreenShader::CreateRasterizerState()
 }
 
 D3D12_BLEND_DESC UIScreenShader::CreateBlendState()
-{
-
+{ 
 	D3D12_BLEND_DESC d3dBlendDesc;
 	::ZeroMemory(&d3dBlendDesc, sizeof(D3D12_BLEND_DESC));
 	d3dBlendDesc.AlphaToCoverageEnable = FALSE;
@@ -86,7 +85,7 @@ D3D12_DEPTH_STENCIL_DESC UIScreenShader::CreateDepthStencilState()
 	::ZeroMemory(&d3dDepthStencilDesc, sizeof(D3D12_DEPTH_STENCIL_DESC));
 	d3dDepthStencilDesc.DepthEnable = TRUE;
 	d3dDepthStencilDesc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;
-	d3dDepthStencilDesc.DepthFunc = D3D12_COMPARISON_FUNC_LESS;
+	d3dDepthStencilDesc.DepthFunc = D3D12_COMPARISON_FUNC_LESS_EQUAL;
 	d3dDepthStencilDesc.StencilEnable = FALSE;
 	d3dDepthStencilDesc.StencilReadMask = 0x00;
 	d3dDepthStencilDesc.StencilWriteMask = 0x00;
