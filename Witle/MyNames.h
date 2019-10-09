@@ -66,6 +66,9 @@
 
 // 사용하는 이미지 텍스쳐 이름들 
 #define IMAGE_RED "Red"
+#define IMAGE_BLUE "Blue"
+#define IMAGE_YELLOW "Yellow"
+
 #define IMAGE_MONSTERATTACKHIT_SPRRITE "MonsterHit_Sprite"
 #define IMAGE_FIREBALLHIT_SPRRITE "FireBall_Sprite"
 #define IMAGE_ICEBALLHIT_SPRRITE "IceBall_Sprite"
@@ -75,5 +78,8 @@
 #define IMAGE_HPBAR "hp_bar"
 #define IMAGE_MPBAR "mp_bar"
 #define IMAGE_MAP "map"
+
+#define IMAGE_AIMPOINT "AimPoint"
+#define IMAGE_EFFECTLINE "EffectLine"
 
 

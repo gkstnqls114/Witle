@@ -21,7 +21,7 @@ public:
 
 public:
 	PlayerStatus(GameObject* pOwner, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList,
-		POINT point, float width, float height, const wchar_t * filepath);
+		POINT point, float width, float height, const char * filepath);
 	virtual ~PlayerStatus();
 
 	virtual void Update(float) override;

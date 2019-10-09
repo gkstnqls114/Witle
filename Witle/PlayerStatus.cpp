@@ -27,7 +27,7 @@ void PlayerStatus::ReleaseUploadBuffers()
 }
 
 PlayerStatus::PlayerStatus(GameObject * pOwner, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, 
-	POINT center, float width, float height, const wchar_t * filepath)
+	POINT center, float width, float height, const char * filepath)
 	: Status(pOwner)
 {
 	m_pGuageBarShader = ShaderManager::GetInstance()->GetShader(SHADER_SCREEN); 

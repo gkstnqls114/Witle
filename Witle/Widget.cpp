@@ -24,14 +24,14 @@ void Widget::ReleaseMemberUploadBuffers()
 	if(m_AimPoint) m_AimPoint->ReleaseUploadBuffers();
 }
 
-Widget::Widget(const std::string& entityID, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, RECT rect, const wchar_t * filepath)
+Widget::Widget(const std::string& entityID, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, RECT rect, const char * filepath)
 	:GameObject(entityID)
 { 
 	m_rect = rect;
 	m_AimPoint = new MyRectangle(this, pd3dDevice, pd3dCommandList, rect, filepath); 
 }
 
-Widget::Widget(const std::string& entityID, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, POINT center, float width, float height, const wchar_t * filepath)
+Widget::Widget(const std::string& entityID, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, POINT center, float width, float height, const char * filepath)
 	:GameObject(entityID)
 { 
 	m_rect.left = static_cast<float>(center.x) - width / 2.f;
@@ -62,7 +62,7 @@ void AimPoint::Render(ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffe
 	m_AimPoint->Render(pd3dCommandList, m_PickingPoint, 0.f);
 }
 
-AimPoint::AimPoint(const std::string & entityID, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, POINT center, float width, float height, const wchar_t * filepath)
+AimPoint::AimPoint(const std::string & entityID, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, POINT center, float width, float height, const char * filepath)
 	: Widget(entityID, pd3dDevice, pd3dCommandList, POINT{0, 0}, width, height, filepath)
 {
 	m_PickingPoint = XMFLOAT2{ GameScreen::GetWidth() / 2 , GameScreen::GetHeight() /2};

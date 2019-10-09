@@ -102,14 +102,18 @@ void TextureStorage::CreateTextures(ID3D12Device * pd3dDevice, ID3D12GraphicsCom
 	CreateImageTexture(IMAGE_ICEBALLHIT_SPRRITE, pd3dDevice, pd3dCommandList);
 	CreateImageTexture(IMAGE_LIGHTNINGBALLHIT_SPRRITE, pd3dDevice, pd3dCommandList);
 	CreateImageTexture(IMAGE_NORMAL_SPRRITE, pd3dDevice, pd3dCommandList);
+
 	CreateImageTexture(IMAGE_RED, pd3dDevice, pd3dCommandList);
-	
+	CreateImageTexture(IMAGE_BLUE, pd3dDevice, pd3dCommandList);
+	CreateImageTexture(IMAGE_YELLOW, pd3dDevice, pd3dCommandList);
+
 	CreateImageTexture(IMAGE_HPBAR, pd3dDevice, pd3dCommandList);
 	CreateImageTexture(IMAGE_MPBAR, pd3dDevice, pd3dCommandList);
 	CreateImageTexture(IMAGE_MAP, pd3dDevice, pd3dCommandList);
+	
+	CreateImageTexture(IMAGE_EFFECTLINE, pd3dDevice, pd3dCommandList);
+	CreateImageTexture(IMAGE_AIMPOINT, pd3dDevice, pd3dCommandList);
 
-	CreateImageTexture("Blue", pd3dDevice, pd3dCommandList);
-	CreateImageTexture("Yellow", pd3dDevice, pd3dCommandList);
 	CreateImageTexture("Lose", pd3dDevice, pd3dCommandList);
 	CreateImageTexture("Win", pd3dDevice, pd3dCommandList);
 	CreateImageTexture("Wittle_1280x720", pd3dDevice, pd3dCommandList);
@@ -120,6 +124,10 @@ Texture * const TextureStorage::GetTexture(const std::string & name)
 {
 	if (m_TextureStorage.find(name) == m_TextureStorage.end())
 	{
+#ifdef _DEBUG
+		std::cout << name << " 파일이 존재하지 않습니다." << std::endl;
+#endif // _DEBUG
+
 		return nullptr;
 	}
 	return m_TextureStorage[name];

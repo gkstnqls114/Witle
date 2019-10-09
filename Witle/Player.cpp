@@ -33,9 +33,7 @@
 #include "Dragon.h"
 
 #include "Player.h"
-
-static bool isHitAni = false;
-
+ 
 void Player::OnPlayerUpdateCallback(float fTimeElapsed)
 {
 	if (!m_pPlayerUpdatedContext) return;
@@ -56,6 +54,7 @@ void Player::OnPlayerUpdateCallback(float fTimeElapsed)
 		m_Transform.SetPosition(xmf3PlayerPosition);
 	}
 }
+
 XMFLOAT3 Player::CalculateAlreadyVelocity(float fTimeElapsed)
 {
 	XMFLOAT3 AlreadyVelocity = Vector3::Add(m_PlayerMovement->m_xmf3Velocity, m_PlayerMovement->m_xmf3Gravity);
@@ -129,10 +128,10 @@ Player::Player(const std::string & entityID, ID3D12Device * pd3dDevice, ID3D12Gr
 	m_pMyBOBox = new MyBOBox(this, pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 75.F, 0.F }, extents);
 
 	m_pPlayerHPStatus = new PlayerStatus(this, pd3dDevice, pd3dCommandList, 
-		POINT{ int(GameScreen::GetWidth()) - 1100, int(GameScreen::GetHeight()) - 670 }, 300.f, 30.f, L"Image/Red.dds");
+		POINT{ int(GameScreen::GetWidth()) - 1100, int(GameScreen::GetHeight()) - 670 }, 300.f, 30.f, IMAGE_HPBAR);
 
 	m_pPlayerMPStatus = new PlayerStatus(this, pd3dDevice, pd3dCommandList, 
-		POINT{ int(GameScreen::GetWidth()) - 1100, int(GameScreen::GetHeight()) - 620 }, 300.f, 30.f, L"Image/Blue.dds");
+		POINT{ int(GameScreen::GetWidth()) - 1100, int(GameScreen::GetHeight()) - 620 }, 300.f, 30.f, IMAGE_MPBAR);
 
 	m_PlayerMovement = new PlayerMovement(this);
 	 
@@ -146,7 +145,7 @@ Player::Player(const std::string & entityID, ID3D12Device * pd3dDevice, ID3D12Gr
 	m_BroomLineEffectRect = new MyRectangle(
 		this, pd3dDevice, pd3dCommandList, 
 		POINT{ int(GameScreen::GetWidth())/2, int(GameScreen::GetHeight()) / 2 }, GameScreen::GetWidth(), GameScreen::GetHeight()
-		, L"Image/EffectLine.dds");
+		, "EffectLine");
 
 	SetUpdatedContext(pContext); 
 

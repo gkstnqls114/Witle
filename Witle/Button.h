@@ -25,8 +25,8 @@ private:
 	virtual void ReleaseMemberUploadBuffers() override;
 
 public:
-	Button(const std::string& entityID, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, RECT rect, const wchar_t * ON_filepath, const wchar_t * OFF_filepath);
-	Button(const std::string& entityID, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, POINT center, float width, float height, const wchar_t * ON_filepath, const wchar_t * OFF_filepath);
+	Button(const std::string& entityID, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, RECT rect, const char * ON_filepath, const char * OFF_filepath);
+	Button(const std::string& entityID, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, POINT center, float width, float height, const char * ON_filepath, const char * OFF_filepath);
 	virtual ~Button();
 
 	virtual void Update(float fElapsedTime) override;

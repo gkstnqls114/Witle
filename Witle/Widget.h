@@ -21,8 +21,8 @@ private:
 	virtual void ReleaseMemberUploadBuffers() override;
 
 public:
-	Widget(const std::string& entityID, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, RECT rect, const wchar_t * filepath);
-	Widget(const std::string& entityID, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, POINT center, float width, float height, const wchar_t * filepath);
+	Widget(const std::string& entityID, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, RECT rect, const char * filepath);
+	Widget(const std::string& entityID, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, POINT center, float width, float height, const char * filepath);
 	virtual ~Widget();
 
 	virtual void Update(float fElapsedTime) override;
@@ -40,7 +40,7 @@ private:
 	XMFLOAT2 m_PickingPoint;
 	
 public:
-	AimPoint(const std::string& entityID, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, POINT center, float width, float height, const wchar_t * filepath);
+	AimPoint(const std::string& entityID, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, POINT center, float width, float height, const char * filepath);
 	virtual ~AimPoint();
 
 	XMFLOAT2 GetPickingPoint() const { return m_PickingPoint; }

@@ -69,7 +69,7 @@ AltarSphere::AltarSphere(const std::string & entityID, const XMFLOAT3& SpawnPoin
 
 	m_ActiveGuageBar = new PlayerStatus(this, pd3dDevice, pd3dCommandList,
 		POINT{ LONG(GameScreen::GetClientWidth() / 2), 100 },
-		400, 30, L"Image/Red.dds"
+		400, 30, "Red"
 	);
 	m_ActiveGuageBar->SetGuage(0.f);
 }

@@ -285,7 +285,7 @@ bool GameScene::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM wPar
 				if (isAttackDragon)
 				{
 					HitEffectMgr::GetInstance()->AddNormalHitEffectPosition(m_Dragon->GetBOBox()->GetBOBox().Center);
-					return false;
+					break;
 				}
 
 				for (int i = 0; i < m_TestMonsterCount; ++i)
@@ -508,7 +508,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 {
 	BuildLightsAndMaterials(pd3dDevice, pd3dCommandList);
 	  
-	m_AimPoint = new AimPoint("AimPoint", pd3dDevice, pd3dCommandList, POINT{ int(GameScreen::GetWidth()) / 2, int(GameScreen::GetHeight()) / 2 }, 100.f, 100.f, L"Image/AimPoint.dds");
+	m_AimPoint = new AimPoint("AimPoint", pd3dDevice, pd3dCommandList, POINT{ int(GameScreen::GetWidth()) / 2, int(GameScreen::GetHeight()) / 2 }, 100.f, 100.f, "AimPoint");
 	
 	// 시작 음악 -> 나중에 시작씬으로 옮기기
 	// SoundManager::GetInstance()->Play(ENUM_SOUND::SATRT);

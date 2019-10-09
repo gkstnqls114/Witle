@@ -7,6 +7,7 @@
 // GameBase////////////////////////
 
 // Manager / Stroage ////////////////////////
+#include "TextureStorage.h"
 #include "ShaderManager.h"
 // Manager / Stroage ////////////////////////
 
@@ -20,32 +21,22 @@
  
 void MyRectangle::ReleaseObjects()
 {
-	Shape::ReleaseObjects();\
-
-	if (m_pTexture)
-	{
-		m_pTexture->ReleaseObjects();
-		delete m_pTexture;
-		m_pTexture = nullptr;
-	} 
+	Shape::ReleaseObjects();
 }
 
 void MyRectangle::ReleaseUploadBuffers()
 {
-	Shape::ReleaseUploadBuffers();
-
-	if(m_pTexture) m_pTexture->ReleaseUploadBuffers();
+	Shape::ReleaseUploadBuffers(); 
 }
 
-MyRectangle::MyRectangle(GameObject * pOwner, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, RECT rect, const wchar_t * filepath)
+MyRectangle::MyRectangle(GameObject * pOwner, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, RECT rect, const char * filepath)
 	:Shape(pOwner) 
 {
 	m_ComponenetID = SHAPE_TYPE_ID::RECTANGLE_SHAPE;
 
 	if (filepath)
-	{ 
-		m_pTexture = new Texture(ENUM_SCENE::SCENE_GAME, ROOTPARAMETER_INDEX(ROOTPARAMETER_TEXTURE), false, 1, RESOURCE_TEXTURE2D);
-		m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, filepath, 0); 
+	{
+		m_pTexture = TextureStorage::GetInstance()->GetTexture(filepath);
 	}
 	
 	m_nVertexBufferViews = 1;
@@ -88,15 +79,14 @@ MyRectangle::MyRectangle(GameObject * pOwner, ID3D12Device * pd3dDevice, ID3D12G
 	m_pVertexBufferViews[0].SizeInBytes = m_nStride * m_vertexCount;
 }
 
-MyRectangle::MyRectangle(GameObject * pOwner, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, POINT center, float width, float height, const wchar_t * filepath)
+MyRectangle::MyRectangle(GameObject * pOwner, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, POINT center, float width, float height, const char * filepath)
 	: Shape(pOwner)
 {
 	m_ComponenetID = SHAPE_TYPE_ID::RECTANGLE_SHAPE;
 
 	if (filepath)
-	{ 
-		m_pTexture = new Texture(ENUM_SCENE::SCENE_GAME, ROOTPARAMETER_INDEX(ROOTPARAMETER_TEXTURE), false, 1, RESOURCE_TEXTURE2D);
-		m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, filepath, 0); 
+	{
+		m_pTexture = TextureStorage::GetInstance()->GetTexture(filepath);
 	}
 
 	m_nVertexBufferViews = 1;
