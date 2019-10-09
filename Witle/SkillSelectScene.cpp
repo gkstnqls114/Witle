@@ -166,6 +166,7 @@ void SkillSelectScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCom
 	} 
 	// 임시로 선택된 스킬 이미지 로드 ///////////////////////
 
+	m_GameStartButton = new UI2DImage(m_TESTGameObject, ENUM_SCENE::SCENE_SKILLSELECT, pd3dDevice, pd3dCommandList, POINT{ int(GameScreen::GetWidth()) - 125, int(GameScreen::GetHeight()) - 75 }, 150, 70, "");
 }
 
 void SkillSelectScene::ReleaseObjects()
@@ -206,6 +207,12 @@ void SkillSelectScene::ReleaseObjects()
 			delete m_UISkillSelected[x];
 			m_UISkillSelected[x] = nullptr;
 		}
+	}
+	if (m_GameStartButton)
+	{
+		m_GameStartButton->ReleaseObjects();
+		delete m_GameStartButton;
+		m_GameStartButton = nullptr;
 	}
 }
 
@@ -253,20 +260,30 @@ void SkillSelectScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool i
 	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_UISCREEN, false);
 	m_pHeap->UpdateShaderVariable(pd3dCommandList);
 
-	for (int i = 0; i < 100; ++i)
+	for (int x = 0; x < SKILL_TO_CHOOSE; ++x)
 	{
+		m_pTexture->UpdateShaderVariable(pd3dCommandList, x);
+		m_UISkillToChoose[x]->Render(pd3dCommandList);
+	}
 
-		for (int x = 0; x < SKILL_TO_CHOOSE; ++x)
-		{
-			m_pTexture->UpdateShaderVariable(pd3dCommandList, x);
-			m_UISkillToChoose[x]->Render(pd3dCommandList);
-		}
+	for (int x = 0; x < SKILL_SELECTED; ++x)
+	{
+		m_pTexture->UpdateShaderVariable(pd3dCommandList, m_SelectedIndex[x]);
+		m_UISkillSelected[x]->Render(pd3dCommandList);
+	}
 
-		for (int x = 0; x < SKILL_SELECTED; ++x)
+
+	bool isReadySkill = true;
+	for (int x = 0; x < SKILL_SELECTED; ++x)
+	{
+		if (m_SelectedIndex[x] == SKILL_TO_CHOOSE)
 		{
-			m_pTexture->UpdateShaderVariable(pd3dCommandList, m_SelectedIndex[x]);
-			m_UISkillSelected[x]->Render(pd3dCommandList);
+			isReadySkill = false;
 		}
+	}
+	if (isReadySkill)
+	{
+		if(m_GameStartButton) m_GameStartButton->Render(pd3dCommandList);
 	}
 }
 
@@ -293,6 +310,7 @@ void SkillSelectScene::ReleaseUploadBuffers()
 			m_UISkillSelected[x]->ReleaseUploadBuffers();
 		}
 	}
+	m_GameStartButton->ReleaseUploadBuffers();
 }
 void SkillSelectScene::BuildLightsAndMaterials(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList)
 {

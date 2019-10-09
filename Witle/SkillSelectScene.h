@@ -75,10 +75,9 @@ private:
 	UI2DImage* m_UISkillToChoose[SKILL_TO_CHOOSE]; // 고를 수 있는 스킬 ui 들
 
 	UI2DImage* m_UISkillSelected[SKILL_SELECTED]; // 고른 스킬들
-	 
+
+	UI2DImage* m_GameStartButton; // 게임 시작 버튼
+
 	POINT choosePoint[SKILL_TO_CHOOSE] ;
 	POINT selectedPoint[SKILL_SELECTED];
-
-	// 텍스쳐 관련 변수들
-	// 텍스쳐 관련 변수들
 };
