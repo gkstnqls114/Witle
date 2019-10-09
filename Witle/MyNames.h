@@ -72,3 +72,8 @@
 #define IMAGE_LIGHTNINGBALLHIT_SPRRITE "LightningBall_Sprite"
 #define IMAGE_NORMAL_SPRRITE "StandardAttack_Sprite"
 
+#define IMAGE_HPBAR "hp_bar"
+#define IMAGE_MPBAR "mp_bar"
+#define IMAGE_MAP "map"
+
+

@@ -673,9 +673,10 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	m_SampleUIMap = new UI2DImage(
 		m_TESTGameObject, ENUM_SCENE::SCENE_GAME, pd3dDevice, pd3dCommandList,
 		POINT{ int(GameScreen::GetWidth()) / 2 + 500, int(GameScreen::GetHeight()) / 2 - 220 },
-		m_UIMapSize.x,
-		m_UIMapSize.y,
-		""
+		m_UIMapSize.x + 10,
+		m_UIMapSize.y + 10,
+		IMAGE_MAP
+		// ""
 	);
 
 	// 스킬 1
@@ -1469,10 +1470,9 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 	m_UIAltar_4->Render(pd3dCommandList);
 	m_UIAltar_5->Render(pd3dCommandList);
 
-	SkillSelectScene::m_pHeap->UpdateShaderVariable(pd3dCommandList);
-
-	SkillSelectScene::m_pTexture->UpdateShaderVariable(pd3dCommandList, SKILL_TO_CHOOSE); // 임시로 검은색으로 렌더링
 	m_SampleUIMap->Render(pd3dCommandList);
+	
+	SkillSelectScene::m_pHeap->UpdateShaderVariable(pd3dCommandList);
 
 	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_SKILLICON, isGBuffers);
 	float cooltime = PlayerSkillMgr::GetInstance()->GetpSelectableSkill(0)->RemainCoolTimePrecentage;
