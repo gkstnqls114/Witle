@@ -47,8 +47,8 @@
 #include "GameFramework.h"
 
 static const bool DefferedRendering = false;
-static bool isBloom = false;
-static bool isToneCurve = false;
+static bool isBloom = true;
+static bool isToneCurve = true;
 
 void GameFramework::Render()
 {

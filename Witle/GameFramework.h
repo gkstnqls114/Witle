@@ -64,7 +64,7 @@ private:
 
 	float	m_clearValueColor[4]
 	{
-		1.f, 0.f, 0.f, 1.f
+		32.f / 255.f, 56.f / 255.f, 100.f / 255.f, 1.f
 	};
 
 	static const UINT m_GBuffersCountForDepth{ 1 };
