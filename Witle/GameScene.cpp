@@ -303,6 +303,8 @@ bool GameScene::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM wPar
 						break;
 					} 
 				}
+
+				m_pPlayer->GetPlayerActionMgr()->ChangeActionToStandardAttack();
 			}
 		}
 		break;

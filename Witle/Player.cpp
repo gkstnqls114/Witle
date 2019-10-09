@@ -486,7 +486,6 @@ bool Player::Attack(Status* status, MyCollider* collider, XMFLOAT2 aimPoint, Cam
 	}
 
 	m_PlayerMovement->m_xmf3Velocity = XMFLOAT3(0.F, 0.F, 0.F); 
-	m_PlayerActionMgr->ChangeActionToStandardAttack();
 	return isAttack;
 }
 
