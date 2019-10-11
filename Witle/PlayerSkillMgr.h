@@ -57,4 +57,8 @@ public:
 	// 해당 스킬이 활성화 되었는지 확인합니다.
 	// 만약 고른 스킬 중에서 해당 스킬이 존재하지 않을 경우 false를 반환합니다.
 	bool isActive(ENUM_SELECTABLESKILL skill);
+
+	// 해당 n 번째 스킬이 활성화 되었는지 확인합니다.
+	// 만약 고른 스킬 중에서 해당 스킬이 존재하지 않을 경우 false를 반환합니다.
+	bool isActive(int index);
 };

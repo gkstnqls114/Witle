@@ -105,3 +105,11 @@ bool PlayerSkillMgr::isActive(ENUM_SELECTABLESKILL type)
 	}
 	return false;
 }
+
+bool PlayerSkillMgr::isActive(int index)
+{
+	if (index < 0 || index >= SKILL_SELECTED) return false;
+	if (m_skill[index] == nullptr) return false;
+
+	return m_skill[index]->isActive; 
+}

@@ -431,9 +431,11 @@ bool GameScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM w
 			break;
 
 		case 'Z':
+#ifdef _DEBUG
 			// 임시로 체력 100씩 닳게 설정
 			m_pPlayer->SubstractHP(100);
 			SoundManager::GetInstance()->Stop(ENUM_SOUND::PLAYER_DAMAGE);
+#endif
 			break;
 
 		case '1': // 스킬 빗자루  
@@ -462,23 +464,55 @@ bool GameScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM w
 			break;
 
 		case MYVK_E: 
-			m_pPlayer->GetPlayerActionMgr()->ChangeActionToStandardAttack(); 
-			PlayerSkillMgr::GetInstance()->Activate(m_pPlayer->GetMPStatus(), 0);
+		{
+			bool isAbleToUseSkill = (!m_pPlayer->GetPlayerActionMgr()->Is_StandardAttackAction()
+				&& !m_pPlayer->GetPlayerActionMgr()->Is_BroomPrepareAction() 
+				&& !m_pPlayer->GetPlayerActionMgr()->isBroomMode());
+			if (isAbleToUseSkill && !PlayerSkillMgr::GetInstance()->isActive(0))
+			{
+				m_pPlayer->GetPlayerActionMgr()->ChangeActionToStandardAttack(); 
+				PlayerSkillMgr::GetInstance()->Activate(m_pPlayer->GetMPStatus(), 0);
+			}
+		}
 			break;
 
-		case MYVK_R:
-			m_pPlayer->GetPlayerActionMgr()->ChangeActionToStandardAttack(); 
-			PlayerSkillMgr::GetInstance()->Activate(m_pPlayer->GetMPStatus(), 1);
+		case MYVK_R: 
+		{
+			bool isAbleToUseSkill = (!m_pPlayer->GetPlayerActionMgr()->Is_StandardAttackAction()
+				&& !m_pPlayer->GetPlayerActionMgr()->Is_BroomPrepareAction()
+				&& !m_pPlayer->GetPlayerActionMgr()->isBroomMode());
+			if (isAbleToUseSkill && !PlayerSkillMgr::GetInstance()->isActive(1))
+			{
+				m_pPlayer->GetPlayerActionMgr()->ChangeActionToStandardAttack();
+				PlayerSkillMgr::GetInstance()->Activate(m_pPlayer->GetMPStatus(), 1);
+			}
+		}
 			break;
 
-		case MYVK_T:
-			m_pPlayer->GetPlayerActionMgr()->ChangeActionToStandardAttack(); 
-			PlayerSkillMgr::GetInstance()->Activate(m_pPlayer->GetMPStatus(), 2);
+		case MYVK_T: 
+		{
+			bool isAbleToUseSkill = (!m_pPlayer->GetPlayerActionMgr()->Is_StandardAttackAction()
+				&& !m_pPlayer->GetPlayerActionMgr()->Is_BroomPrepareAction()
+				&& !m_pPlayer->GetPlayerActionMgr()->isBroomMode());
+			if (isAbleToUseSkill && !PlayerSkillMgr::GetInstance()->isActive(2))
+			{
+				m_pPlayer->GetPlayerActionMgr()->ChangeActionToStandardAttack();
+				PlayerSkillMgr::GetInstance()->Activate(m_pPlayer->GetMPStatus(), 2);
+			}
+		}
 			break;
 
-		case MYVK_Y: 			
-			m_pPlayer->GetPlayerActionMgr()->ChangeActionToStandardAttack(); 
-			PlayerSkillMgr::GetInstance()->Activate(m_pPlayer->GetMPStatus(), 3);
+		case MYVK_Y:
+		{
+			bool isAbleToUseSkill = (!m_pPlayer->GetPlayerActionMgr()->Is_StandardAttackAction()
+				&& !m_pPlayer->GetPlayerActionMgr()->Is_BroomPrepareAction()
+				&& !m_pPlayer->GetPlayerActionMgr()->isBroomMode());
+			if (isAbleToUseSkill && !PlayerSkillMgr::GetInstance()->isActive(3))
+			{
+				m_pPlayer->GetPlayerActionMgr()->ChangeActionToStandardAttack();
+				PlayerSkillMgr::GetInstance()->Activate(m_pPlayer->GetMPStatus(), 3);
+			}
+		}
 			break;
 		case '4':
 			break;
