@@ -37,6 +37,8 @@ static float AltarSphereOffestX = 0.f;
 static float AltarSphereOffestY = 57.f;
 static float AltarSphereOffestZ = 50.f;
 
+float AltarSphere::flowAniTime{ ALTARSPHERE_FLOW.EndTime - ALTARSPHERE_FLOW.StartTime };
+
 bool AltarSphere::RENDER_DEBUG{ true };
   
 
@@ -59,13 +61,15 @@ AltarSphere::AltarSphere(const std::string & entityID, const XMFLOAT3& SpawnPoin
 
 	m_pLoadObject = m_AltarSphereModel->m_pModelRootObject;
 	m_pLoadObject->m_pSkinnedAnimationController = new CAnimationController(pd3dDevice, pd3dCommandList, 1, m_AltarSphereModel);
-	m_pLoadObject->m_pSkinnedAnimationController->SetTrackAnimationSet(0, 0);
+	m_pLoadObject->m_pSkinnedAnimationController->SetTrackAnimationSet(0, ALTARSPHERE_FLOW.ID);
 	 
 	XMFLOAT3 extents{ 550.f, 500.f, 550.f };
 	m_pMyBOBox = new MyBOBox(this, pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 0.F, 0.F }, extents);
 
 	Move(SpawnPoint); 
+	m_isActive = true;
 	Animate(0.f); 
+	m_isActive = false;
 
 	m_ActiveGuageBar = new PlayerStatus(this, pd3dDevice, pd3dCommandList,
 		POINT{ LONG(GameScreen::GetClientWidth() / 2), 100 },
@@ -161,7 +165,9 @@ void AltarSphere::ReleaseMemberUploadBuffers()
 }
  
 void AltarSphere::Animate(float fElapsedTime)
-{ 
+{   
+	if (!m_isActive) return;
+
 	// animate 이전에 현재 설정된 애니메이션 수행하도록 설정
 	SetTrackAnimationSet();
 
@@ -181,7 +187,10 @@ void AltarSphere::Update(float fElapsedTime)
 	}
 
 	if (!m_isActive) return;
-	if (m_isFinishFlow) return;
+	if (m_isFinishFlow)
+	{
+		return;
+	}
 
 	// 만약 flow 가 끝났다면..
 	if (m_pLoadObject->IsTrackAnimationSetFinish(0, ALTARSPHERE_FLOW.ID))
@@ -213,16 +222,19 @@ void AltarSphere::Rotate(float x, float y, float z)
 }
 
 void AltarSphere::AddGuage(float time)
-{
+{ 
+	m_guage = m_guage + add_guage * time;
+
 	if (m_guage >= 100)
 	{
-		m_guage = 100;
-		SetisActive(true);
+		m_guage = 100; 
+		if (!m_isActive)
+		{ 
+			SetisActive(true);
+			SetAnimationID(ALTARSPHERE_FLOW.ID);
+		}
 	}
-
-	if (m_isActive) return;
-
-	m_guage = m_guage + add_guage * time;
+	 
 	m_ActiveGuageBar->SetGuage(m_guage);
 }
 

@@ -13,13 +13,7 @@ class UI3DImage;
 
 class RecognitionRange;
 class MyRectangle;
-
-enum AltarSphere_STATE
-{
-	FLOW,
-	IDLE
-};
-
+ 
 class AltarSphere :
 	public GameObject
 {
@@ -27,6 +21,7 @@ public:
 	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers) override;
 
 private:
+	static float flowAniTime;
 	static bool RENDER_DEBUG;
     const float add_guage{ 10.f };
 protected: 
