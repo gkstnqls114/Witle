@@ -1352,10 +1352,7 @@ void GameScene::Init()
 {    
 	for (int x = 0; x < 5; ++x)
 	{
-		m_AltarSphere[x]->SetisActive(false);
-		m_AltarSphere[x]->SetisEnguaged(false);
-		m_AltarSphere[x]->SetGuage(0.f);
-		m_AltarSphere[x]->SetAnimationID(ALTARSPHERE_IDLE.ID);
+		m_AltarSphere[x]->Init();
 	}
 
 	PlayerSkillMgr::GetInstance()->Init();

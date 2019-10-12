@@ -67,20 +67,30 @@ AltarSphere::AltarSphere(const std::string & entityID, const XMFLOAT3& SpawnPoin
 	m_pMyBOBox = new MyBOBox(this, pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 0.F, 0.F }, extents);
 
 	Move(SpawnPoint); 
-	m_isActive = true;
-	Animate(0.f); 
-	m_isActive = false;
 
 	m_ActiveGuageBar = new PlayerStatus(this, pd3dDevice, pd3dCommandList,
 		POINT{ LONG(GameScreen::GetClientWidth() / 2), 100 },
 		400, 30, "Red"
 	);
-	m_ActiveGuageBar->SetGuage(0.f);
+
+	Init();
 }
 
 AltarSphere::~AltarSphere()
 {
 
+}
+
+void AltarSphere::Init()
+{
+	SetAnimationID(ALTARSPHERE_FLOW.ID);
+	m_isActive = true;
+	Animate(0.f);
+	m_isActive = false;
+	m_isEnguaged = false ;
+	m_isFinishFlow = false ;
+
+	SetGuage(0.f);
 }
 
 void AltarSphere::Render(ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffers)

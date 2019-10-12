@@ -1106,8 +1106,7 @@ void GameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPAR
 			isToneCurve = true;
 			break;
 		}
-
-#ifdef _DEBUG 
+		 
 		case VK_F5: // Main 으로 전환
 		{
 			isStateChange = true;
@@ -1137,8 +1136,7 @@ void GameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPAR
 			isStateChange = true;
 			SceneMgr::GetInstance()->ChangeSceneToLose();
 			break;
-		}
-#endif // _DEBUG
+		} 
 
 		default:
 			break;
