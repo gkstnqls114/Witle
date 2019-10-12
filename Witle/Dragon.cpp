@@ -257,12 +257,14 @@ MyBOBox * Dragon::GetBOBox() const
 
 void Dragon::IsStone()
 {
+	if (m_isStone) return;
 	m_isStone = true;
 	static_cast<BossMonsterActionMgr*>(m_MonsterActionMgr)->ChangeBossStateToStone();
 }
 
 void Dragon::IsNotStone()
 {
+	if (!m_isStone) return;
 	m_isStone = false;
 	static_cast<BossMonsterActionMgr*>(m_MonsterActionMgr)->ChangeBossStateToIdle();
 }

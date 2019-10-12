@@ -183,6 +183,7 @@ void AltarSphere::Update(float fElapsedTime)
 	if (!m_isActive) return;
 	if (m_isFinishFlow) return;
 
+	// 만약 flow 가 끝났다면..
 	if (m_pLoadObject->IsTrackAnimationSetFinish(0, ALTARSPHERE_FLOW.ID))
 	{
 		m_isFinishFlow = true;

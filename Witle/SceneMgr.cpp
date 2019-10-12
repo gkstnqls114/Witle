@@ -114,8 +114,8 @@ void SceneMgr::ChangeSceneToGame()
 	// »ç¿îµå ///////////////////////////////////////////////////////////
 
 #ifdef _DEBUG
-	// GameInput::ChagneMoveMode();
-	GameInput::ChagneDragMode();
+	GameInput::ChagneMoveMode();
+	// GameInput::ChagneDragMode();
 #else
 	GameInput::ChagneMoveMode();
 #endif // DEBUG

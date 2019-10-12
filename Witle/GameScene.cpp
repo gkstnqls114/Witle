@@ -275,17 +275,22 @@ bool GameScene::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM wPar
 			{
 				SoundManager::GetInstance()->Play(ENUM_SOUND::PLAYER_MAGIC_MISIL);
 
-				bool isAttackDragon = m_pPlayer->Attack(
-					static_cast<Status*>(
-						m_Dragon->GetStatus()),
-					m_Dragon->GetBOBox(),
-					m_AimPoint->GetPickingPoint(),
-					m_pMainCamera->GetCamera(), true);
+				// 드래곤이 돌이 아닌 경우에만 공격 적용
+				if (!m_Dragon->GetisStone())
+				{ 
+					bool isAttackDragon = m_pPlayer->Attack(
+						static_cast<Status*>(
+							m_Dragon->GetStatus()),
+						m_Dragon->GetBOBox(),
+						m_AimPoint->GetPickingPoint(),
+						m_pMainCamera->GetCamera(), true);
 
-				if (isAttackDragon)
-				{
-					HitEffectMgr::GetInstance()->AddNormalHitEffectPosition(m_Dragon->GetBOBox()->GetBOBox().Center);
-					break;
+					if (isAttackDragon)
+					{
+						HitEffectMgr::GetInstance()->AddNormalHitEffectPosition(m_Dragon->GetBOBox()->GetBOBox().Center);
+						m_pPlayer->GetPlayerActionMgr()->ChangeActionToStandardAttack();
+						break;
+					}
 				}
 
 				for (int i = 0; i < m_TestMonsterCount; ++i)
@@ -1113,9 +1118,18 @@ void GameScene::Update(float fElapsedTime)
 		}
 	}
 
+	bool isWakeDragon = true;
 	for (int x = 0; x < 5; ++x)
 	{
 		m_AltarSphere[x]->Update(fElapsedTime);
+		if (!m_AltarSphere[x]->GetisActive())
+		{
+			isWakeDragon = false;
+		}
+	}
+	if (isWakeDragon)
+	{ 
+		m_Dragon->IsNotStone();
 	}
 	 
 	//// 순서 변경 X //// 
