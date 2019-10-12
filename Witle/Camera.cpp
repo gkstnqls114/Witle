@@ -256,7 +256,6 @@ void Camera::UpdateLightShaderVariables(ID3D12GraphicsCommandList * pd3dCommandL
 {
 	UpdateLightShaderVariables(pd3dCommandList, light, true);
 	UpdateLightShaderVariables(pd3dCommandList, light, false);
-
 }
  
 void Camera::UpdateLightShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList, const LIGHT* light, bool isPlayer)
@@ -265,20 +264,25 @@ void Camera::UpdateLightShaderVariables(ID3D12GraphicsCommandList * pd3dCommandL
 	BoundingSphere mSceneBounds;
 
 	if (isPlayer)
-	{
+	{ 
 		boundcenter = PlayerManager::GetMainPlayer()->GetTransform().GetPosition();
-		mSceneBounds = BoundingSphere{ boundcenter, 3000.f };
+		 mSceneBounds = BoundingSphere{ boundcenter, 3000.f };
 	}
 	else
 	{ 
 		boundcenter = XMFLOAT3(15000.f, 0.f, 15000.f);
-		mSceneBounds = BoundingSphere{ boundcenter, 17000.f };
+		mSceneBounds = BoundingSphere{ boundcenter, 20000.f };
 	}
 	
-	// Only the first "main" light casts a shadow.
+	// Only the first "main" light casts a shadow. 
 	XMVECTOR lightDir = XMLoadFloat3(&light->Direction);
-	XMVECTOR lightPos = -2.0f* mSceneBounds.Radius*lightDir;
+	
+	XMVECTOR lightPos;
+	XMFLOAT3 xmf3lightPos = Vector3::Subtract(mSceneBounds.Center, Vector3::ScalarProduct(light->Direction, 2.f* mSceneBounds.Radius));
+	lightPos = XMLoadFloat3(&xmf3lightPos);
+
 	XMVECTOR targetPos = XMLoadFloat3(&mSceneBounds.Center);
+
 	XMVECTOR lightUp = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 	XMMATRIX lightView = XMMatrixLookAtLH(lightPos, targetPos, lightUp);
 
@@ -303,7 +307,7 @@ void Camera::UpdateLightShaderVariables(ID3D12GraphicsCommandList * pd3dCommandL
 		0.0f, 0.0f, 1.0f, 0.0f,
 		0.5f, 0.5f, 0.0f, 1.0f);
 
-	XMMATRIX S = lightView * lightProj*T;
+	XMMATRIX S = lightView * lightProj * T;
 
 	XMFLOAT4X4 xmf4x4LightView; 
 	XMStoreFloat4x4(&xmf4x4LightView, XMMatrixTranspose(lightView));

@@ -1684,11 +1684,11 @@ void GameScene::BuildLightsAndMaterials(ID3D12Device *pd3dDevice, ID3D12Graphics
 
 	LightManager::m_pLights->m_pLights[2].bEnable = true;
 	LightManager::m_pLights->m_pLights[2].nType = LIGHT_TYPE::DIRECTIONAL_LIGHT;
-	LightManager::m_pLights->m_pLights[2].Position = XMFLOAT3(15000, 1000.0f, 15000.0f);
+	LightManager::m_pLights->m_pLights[2].Position = XMFLOAT3(15000.f, 1000.0f, 15000.f);
 	LightManager::m_pLights->m_pLights[2].Ambient = XMFLOAT4(1.f, 0.8f, 0.8f, 1.0f);
 	LightManager::m_pLights->m_pLights[2].Diffuse = XMFLOAT4(1.0f, 0.4f, 0.4f, 1.0f);
 	LightManager::m_pLights->m_pLights[2].Specular = XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f);
-	LightManager::m_pLights->m_pLights[2].Direction = Vector3::Normalize(XMFLOAT3(0.0f, -1.0f, 1.f));
+	LightManager::m_pLights->m_pLights[2].Direction = Vector3::Normalize(XMFLOAT3(0.7f, -0.9f, 1.f));
 
 	LightManager::m_pLights->m_pLights[3].bEnable = false;
 	LightManager::m_pLights->m_pLights[3].nType = LIGHT_TYPE::SPOT_LIGHT;

@@ -12,8 +12,7 @@ void CameraObject::ReleaseMembers()
 CameraObject::CameraObject(const std::string & entityID)
 	:GameObject(entityID)
 {
-	// m_pCameraComponent = new BasicCam(this);
-	// m_pFrustum = new MyFrustum(this);
+
 }
 
 CameraObject::~CameraObject()
