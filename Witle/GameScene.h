@@ -28,6 +28,7 @@ class HitEffect;
 
 //// UI ///////////////
 class UI2DImage;
+class UI2DChangedImage;
 class AimPoint;
 //// UI ///////////////
 
@@ -192,11 +193,7 @@ private:
 	POINT m_UIMapSize{ 200, 200 };
 	UI2DImage* m_SampleUIMap{ nullptr }; //맵
 
-	UI2DImage* m_UIAltar_1{ nullptr }; // uimap 에서 제단 위치
-	UI2DImage* m_UIAltar_2{ nullptr }; // uimap 에서 제단 위치
-	UI2DImage* m_UIAltar_3{ nullptr }; // uimap 에서 제단 위치
-	UI2DImage* m_UIAltar_4{ nullptr }; // uimap 에서 제단 위치
-	UI2DImage* m_UIAltar_5{ nullptr }; // uimap 에서 제단 위치
+	UI2DChangedImage* m_UIAltar[5] { nullptr, nullptr, nullptr,nullptr,nullptr }; // uimap 에서 제단 위치 
 	
 	UI2DImage* m_UIPlayer{ nullptr };  // uimap 에서 플레이어 위치
 	UI2DImage* m_UIBossMonster{ nullptr };  // uimap 에서 플레이어 위치

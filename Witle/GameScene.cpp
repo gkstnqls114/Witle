@@ -16,6 +16,7 @@
 
 //// GameObject header //////////////////////////
 #include "SkyBox.h"
+#include "UI2DChangedImage.h"
 #include "Widget.h"
 #include "AltarSphere.h"
 //// GameObject header //////////////////////////
@@ -761,11 +762,12 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	pos.x += m_SampleUIMap->getRect().left;
 	pos.z += m_SampleUIMap->getRect().bottom;
 
-	m_UIAltar_1 = new UI2DImage(
+	m_UIAltar[0] = new UI2DChangedImage(
 		m_TESTGameObject, ENUM_SCENE::SCENE_GAME, pd3dDevice, pd3dCommandList,
 		POINT{ int(pos.x), int(pos.z) },
 		20, 20,
-		"Blue"
+		"Blue",
+		"Pink"
 	);
 
 	tr = StaticObjectStorage::GetInstance()->GetAltarTransform(1, ALTAR_IN);
@@ -776,11 +778,12 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	pos.z = -pos.z * (float(m_UIMapSize.y) / 30000.f);
 	pos.x += m_SampleUIMap->getRect().left;
 	pos.z += m_SampleUIMap->getRect().bottom;
-	m_UIAltar_2 = new UI2DImage(
+	m_UIAltar[1] = new UI2DChangedImage(
 		m_TESTGameObject, ENUM_SCENE::SCENE_GAME, pd3dDevice, pd3dCommandList,
 		POINT{ int(pos.x), int(pos.z) },
 		20, 20,
-		"Blue"
+		"Blue",
+		"Pink"
 	);
 
 	tr = StaticObjectStorage::GetInstance()->GetAltarTransform(2, ALTAR_IN);
@@ -794,11 +797,12 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	// 스크린 좌표계 위치 이동
 	pos.x += m_SampleUIMap->getRect().left;
 	pos.z += m_SampleUIMap->getRect().bottom;
-	m_UIAltar_3 = new UI2DImage(
+	m_UIAltar[2] = new UI2DChangedImage(
 		m_TESTGameObject, ENUM_SCENE::SCENE_GAME, pd3dDevice, pd3dCommandList,
 		POINT{ int(pos.x), int(pos.z) },
 		20, 20,
-		"Blue"
+		"Blue",
+		"Pink"
 	);
 
 	tr = StaticObjectStorage::GetInstance()->GetAltarTransform(3, ALTAR_IN);
@@ -812,11 +816,12 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	// 스크린 좌표계 위치 이동
 	pos.x += m_SampleUIMap->getRect().left;
 	pos.z += m_SampleUIMap->getRect().bottom;
-	m_UIAltar_4 = new UI2DImage(
+	m_UIAltar[3] = new UI2DChangedImage(
 		m_TESTGameObject, ENUM_SCENE::SCENE_GAME, pd3dDevice, pd3dCommandList,
 		POINT{ int(pos.x), int(pos.z) },
 		20, 20,
-		"Blue"
+		"Blue",
+		"Pink"
 	);
 
 	tr = StaticObjectStorage::GetInstance()->GetAltarTransform(4, ALTAR_IN);
@@ -830,11 +835,12 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	// 스크린 좌표계 위치 이동
 	pos.x += m_SampleUIMap->getRect().left;
 	pos.z += m_SampleUIMap->getRect().bottom;
-	m_UIAltar_5 = new UI2DImage(
+	m_UIAltar[4] = new UI2DChangedImage(
 		m_TESTGameObject, ENUM_SCENE::SCENE_GAME, pd3dDevice, pd3dCommandList,
 		POINT{ int(pos.x), int(pos.z) },
 		20, 20,
-		"Blue"
+		"Blue",
+		"Pink"
 	);
 
 	m_UIPlayer = new UI2DImage(
@@ -961,36 +967,15 @@ void GameScene::ReleaseObjects()
 		delete m_SampleUIMap;
 		m_SampleUIMap = nullptr;
 	}
-	if (m_UIAltar_1)
-	{ 
-		m_UIAltar_1->ReleaseObjects();
-		delete m_UIAltar_1;
-		m_UIAltar_1 = nullptr;
+	for (int x = 0; x < 5; ++x)
+	{
+		if (m_UIAltar[x])
+		{
+			m_UIAltar[x]->ReleaseObjects();
+			delete m_UIAltar[x];
+			m_UIAltar[x] = nullptr;
+		}
 	} 
-	if (m_UIAltar_2)
-	{ 
-		m_UIAltar_2->ReleaseObjects();
-		delete m_UIAltar_2;
-		m_UIAltar_2 = nullptr;
-	} 
-	if (m_UIAltar_3)
-	{ 
-		m_UIAltar_3->ReleaseObjects();
-		delete m_UIAltar_3;
-		m_UIAltar_3 = nullptr;
-	} 
-	if (m_UIAltar_4)
-	{ 
-		m_UIAltar_4->ReleaseObjects();
-		delete m_UIAltar_4;
-		m_UIAltar_4 = nullptr;
-	}
-	if (m_UIAltar_5)
-	{ 
-		m_UIAltar_5->ReleaseObjects();
-		delete m_UIAltar_5;
-		m_UIAltar_5 = nullptr;
-	}
 	if (m_UIPlayer)
 	{ 
 		m_UIPlayer->ReleaseObjects();
@@ -1125,6 +1110,10 @@ void GameScene::Update(float fElapsedTime)
 		if (!m_AltarSphere[x]->GetisActive())
 		{
 			isWakeDragon = false;
+		}
+		else
+		{ 
+			m_UIAltar[x]->ChangeTrue();
 		}
 	}
 	if (isWakeDragon)
@@ -1367,6 +1356,11 @@ void GameScene::Init()
 	{ 
 		if(m_TestMonster[i]) m_TestMonster[i]->Init();
 	} 
+
+	for (int x = 0; x < 5; ++x)
+	{
+		m_UIAltar[x]->Init();
+	} 
 }
 
 void GameScene::AnimateObjects(float fTimeElapsed)
@@ -1516,11 +1510,10 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 
 	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_UISCREEN, isGBuffers);
 
-	m_UIAltar_1->Render(pd3dCommandList);
-	m_UIAltar_2->Render(pd3dCommandList);
-	m_UIAltar_3->Render(pd3dCommandList);
-	m_UIAltar_4->Render(pd3dCommandList);
-	m_UIAltar_5->Render(pd3dCommandList);
+	for (int x = 0; x < 5; ++x)
+	{
+		m_UIAltar[x]->Render(pd3dCommandList);
+	}
 
 	
 	// skill render
@@ -1604,11 +1597,10 @@ void GameScene::ReleaseUploadBuffers()
 	if (m_pQuadtreeTerrain) m_pQuadtreeTerrain->ReleaseUploadBuffers();
 	if (m_Dragon) m_Dragon->ReleaseUploadBuffers();
 	if (m_SampleUIMap) m_SampleUIMap->ReleaseUploadBuffers(); 
-	if (m_UIAltar_1) m_UIAltar_1->ReleaseUploadBuffers(); 
-	if (m_UIAltar_2) m_UIAltar_2->ReleaseUploadBuffers(); 
-	if (m_UIAltar_3) m_UIAltar_3->ReleaseUploadBuffers();
-	if (m_UIAltar_4) m_UIAltar_4->ReleaseUploadBuffers(); 
-	if (m_UIAltar_5)  m_UIAltar_5->ReleaseUploadBuffers(); 
+	for (int x = 0; x < 5; ++x)
+	{
+		if(m_UIAltar[x]) m_UIAltar[x]->ReleaseUploadBuffers();
+	} 
 	if (m_UIPlayer) m_UIPlayer->ReleaseUploadBuffers();
 	if (m_UIBossMonster) m_UIBossMonster->ReleaseUploadBuffers(); 
 	if (m_SampleUISkill1) m_SampleUISkill1->ReleaseUploadBuffers();
