@@ -296,18 +296,21 @@ bool GameScene::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM wPar
 
 				for (int i = 0; i < m_TestMonsterCount; ++i)
 				{
-					bool isAttack = m_pPlayer->Attack(
-						static_cast<Status*>(
-							m_TestMonster[i]->GetStatus()),
-						m_TestMonster[i]->GetBOBox(),
-						m_AimPoint->GetPickingPoint(),
-						m_pMainCamera->GetCamera(),false);
-					 
-					if (isAttack)
+					if (m_TestMonster[i]->GetStatus()->GetGuage() > 0.f)
 					{
-						HitEffectMgr::GetInstance()->AddNormalHitEffectPosition(m_TestMonster[i]->GetBOBox()->GetBOBox().Center);
-						break;
-					} 
+						bool isAttack = m_pPlayer->Attack(
+							static_cast<Status*>(
+								m_TestMonster[i]->GetStatus()),
+							m_TestMonster[i]->GetBOBox(),
+							m_AimPoint->GetPickingPoint(),
+							m_pMainCamera->GetCamera(), false);
+
+						if (isAttack)
+						{
+							HitEffectMgr::GetInstance()->AddNormalHitEffectPosition(m_TestMonster[i]->GetBOBox()->GetBOBox().Center);
+							break;
+						}
+					}
 				}
 
 				m_pPlayer->GetPlayerActionMgr()->ChangeActionToStandardAttack();

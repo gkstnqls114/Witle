@@ -468,7 +468,7 @@ bool Player::Attack(Status* status, MyCollider* collider, XMFLOAT2 aimPoint, Cam
 	if (m_PlayerActionMgr->Is_DeadAction()) return false;
 	if (m_PlayerActionMgr->Is_HitAction()) return false;
 	if (m_PlayerActionMgr->Is_StandardAttackAction()) return false;
-
+	
 	// 시행된다면..
 	bool isAttack = false;
 
