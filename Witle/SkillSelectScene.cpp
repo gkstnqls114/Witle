@@ -166,14 +166,15 @@ void SkillSelectScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCom
 	};
 
 	m_pHeap = new MyDescriptorHeap();
-	m_pHeap->CreateCbvSrvUavDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, SKILL_TO_CHOOSE + 1, 0, ENUM_SCENE::SCENE_SKILLSELECT);
+	m_pHeap->CreateCbvSrvUavDescriptorHeaps(pd3dDevice, pd3dCommandList, 0, SKILL_TO_CHOOSE + 2, 0, ENUM_SCENE::SCENE_SKILLSELECT);
 
 	// 선택하지 않은 스킬도 설정하기위해 ...
-	m_pTexture = new Texture(ENUM_SCENE::SCENE_SKILLSELECT, ROOTPARAMETER_INDEX(ROOTPARAMETER_TEXTURE), false, SKILL_TO_CHOOSE + 1, RESOURCE_TEXTURE2D);
+	m_pTexture = new Texture(ENUM_SCENE::SCENE_SKILLSELECT, ROOTPARAMETER_INDEX(ROOTPARAMETER_TEXTURE), false, SKILL_TO_CHOOSE + 2, RESOURCE_TEXTURE2D);
 	for (int x = 0; x < SKILL_TO_CHOOSE + 1; ++x)
 	{
 		m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, filepaths[x], x);
 	}
+	m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Image/Play.dds", SKILL_TO_CHOOSE + 1);
 	m_pHeap->CreateShaderResourceViews(pd3dDevice,  m_pTexture, ROOTPARAMETER_TEXTURE, false);
 	 
 
@@ -195,7 +196,8 @@ void SkillSelectScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCom
 	} 
 	// 임시로 선택된 스킬 이미지 로드 ///////////////////////
 
-	m_GameStartButton = new UI2DImage(m_TESTGameObject, ENUM_SCENE::SCENE_SKILLSELECT, pd3dDevice, pd3dCommandList, POINT{ int(GameScreen::GetWidth()) - 125, int(GameScreen::GetHeight()) - 75 }, 150, 70, "");
+	m_GameStartButton = new UI2DImage(m_TESTGameObject, ENUM_SCENE::SCENE_SKILLSELECT,
+		pd3dDevice, pd3dCommandList, POINT{ int(GameScreen::GetWidth()) - 125, int(GameScreen::GetHeight()) - 75 }, 150, 70, "");
 }
 
 void SkillSelectScene::ReleaseObjects()
@@ -312,6 +314,7 @@ void SkillSelectScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool i
 	}
 	if (isReadySkill)
 	{
+		m_pTexture->UpdateShaderVariable(pd3dCommandList, SKILL_TO_CHOOSE + 1);
 		if (m_GameStartButton) m_GameStartButton->Render(pd3dCommandList);
 	}
 }

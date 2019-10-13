@@ -82,5 +82,6 @@
 
 #define IMAGE_AIMPOINT "AimPoint"
 #define IMAGE_EFFECTLINE "EffectLine"
+#define IMAGE_PLAY "Play"
 
 
