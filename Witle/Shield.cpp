@@ -5,6 +5,12 @@
 #include "Shield.h"
 
 
+void Shield::Deactive()
+{
+	PlayerManager::GetMainPlayer()->DeactiveShield();
+	m_UsingTime = 0.f;
+}
+
 void Shield::Active()
 { 
 	PlayerManager::GetMainPlayer()->ActiveShield();
@@ -15,8 +21,7 @@ bool Shield::IsFinish()
 	bool isfinish = (m_UsingTime >= m_MAXUsingTime);
 	if (isfinish)
 	{
-		PlayerManager::GetMainPlayer()->DeactiveShield();
-		m_UsingTime = 0.f;
+		Deactive();
 	}
 	return isfinish;
 }

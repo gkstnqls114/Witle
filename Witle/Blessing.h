@@ -8,6 +8,7 @@ class Blessing :
 	const float m_MAXUsingTime{ 5.f }; // 스킬 유지 시간
 
 public:
+	virtual void Deactive() override;
 	virtual void Active() override;
 	virtual bool IsFinish() override;
 	virtual void UpdateActive(float fElapsedTime) override;

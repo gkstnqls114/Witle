@@ -29,6 +29,7 @@ void PlayerSkillMgr::Init()
 	for (int x = 0; x < SKILL_SELECTED; ++x)
 	{
 		m_skill[x]->Init();
+		m_skill[x]->Deactive();
 	}
 }
 

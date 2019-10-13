@@ -6,6 +6,10 @@
 #include "Healing.h"
 
 
+void Healing::Deactive()
+{
+}
+
 void Healing::Active()
 {
 	PlayerManager::GetMainPlayer()->GetHPStatus()->AddHP(10.f);

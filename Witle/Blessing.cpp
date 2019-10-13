@@ -7,6 +7,12 @@
 #include "Blessing.h"
 
 
+void Blessing::Deactive()
+{
+	PlayerManager::GetMainPlayer()->DeactiveBlessing();
+	m_UsingTime = 0.f;
+}
+
 void Blessing::Active()
 { 
 	PlayerManager::GetMainPlayer()->ActiveBlessing();
@@ -17,8 +23,7 @@ bool Blessing::IsFinish()
 	bool isfinish =  (m_UsingTime >= m_MAXUsingTime);
 	if (isfinish)
 	{
-		PlayerManager::GetMainPlayer()->DeactiveBlessing();
-		m_UsingTime = 0.f;
+		Deactive();
 	}
 	return isfinish;
 }

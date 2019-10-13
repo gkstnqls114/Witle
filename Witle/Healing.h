@@ -5,6 +5,7 @@ class Healing :
 	public SelectableSkill
 {
 public:
+	virtual void Deactive() override;
 	virtual void Active() override;
 	virtual bool IsFinish() override; // active하자마자 회복되므로 언제나 true 반환
 	virtual void UpdateActive(float fElapsedTime) override;

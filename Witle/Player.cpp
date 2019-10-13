@@ -514,7 +514,7 @@ bool Player::Attack(Status* status, MyCollider* collider, XMFLOAT2 aimPoint, Cam
 }
 
 void Player::UseSkill_Broom()
-{
+{ 
 	if (!m_Broom->GetisUsing() && !m_Broom->GetisPrepare())
 	{
 		m_Broom->Prepare();

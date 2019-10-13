@@ -1344,8 +1344,8 @@ void GameScene::Init()
 		m_AltarSphere[x]->Init();
 	}
 
-	PlayerSkillMgr::GetInstance()->Init();
-	 
+	PlayerSkillMgr::GetInstance()->Init(); 
+
 	m_pPlayer->Init();
 	m_Dragon->Init();
 

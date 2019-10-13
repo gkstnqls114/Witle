@@ -80,6 +80,7 @@ protected:
 	virtual void UpdateActive(float fElapsedTime) = 0;
 
 public:
+	virtual void Deactive() = 0;
 	virtual void Active() = 0;
 	virtual bool IsFinish() override = 0;
 	virtual void Update(float fElapsedTime) override;
