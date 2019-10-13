@@ -7,6 +7,7 @@
 #include "ShaderManager.h" 
 #include "GameObject.h"
 #include "Texture.h"
+#include "SceneMgr.h"
 
 #include "GameScene.h"
 
@@ -40,7 +41,12 @@ bool LoseScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM w
 
 		}
 		break;
-	case WM_KEYDOWN:
+	case WM_KEYDOWN: 
+		if (m_WaitingTime >= m_MAXWaitingTime)
+		{
+			m_WaitingTime = 0.f;
+			SceneMgr::GetInstance()->ChangeSceneToMain();
+		}
 		switch (wParam) {
 		case 'A':
 			break;
@@ -104,6 +110,9 @@ void LoseScene::UpdatePhysics(float ElapsedTime)
 // ProcessInput에 의한 right, up, look, pos 를 월드변환 행렬에 갱신한다.
 void LoseScene::Update(float fElapsedTime)
 {
+	if (m_WaitingTime >= m_MAXWaitingTime) return;
+
+	m_WaitingTime += fElapsedTime;
 }
 
 void LoseScene::LastUpdate(float fElapsedTime)
@@ -125,11 +134,9 @@ void LoseScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 
 	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_UISCREEN, false);
 	 
-	GameScene::SetDescriptorHeap(pd3dCommandList);
-	for (int i = 0; i < 100; ++i)
-	{
-		m_Background->Render(pd3dCommandList);
-	}
+	GameScene::SetDescriptorHeap(pd3dCommandList); 
+	
+	m_Background->Render(pd3dCommandList); 
 }
 
 void LoseScene::RenderForShadow(ID3D12GraphicsCommandList * pd3dCommandList)

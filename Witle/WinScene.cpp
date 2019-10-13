@@ -9,6 +9,8 @@
 #include "Texture.h"
 #include "GameScene.h"
 
+#include "SceneMgr.h"
+
 #include "WinScene.h"
 
 ID3D12DescriptorHeap*		WinScene::m_pd3dCbvSrvDescriptorHeap;
@@ -116,10 +118,16 @@ bool WinScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM wP
 		}
 		break;
 	case WM_KEYDOWN:
-		switch (wParam) {
+		if (m_WaitingTime >= m_MAXWaitingTime)
+		{
+			m_WaitingTime = 0.f;
+			SceneMgr::GetInstance()->ChangeSceneToMain();
+		}
+		switch (wParam) {	
 		case 'A':
 			break;
 		case 'W':
+			break;
 		case 'w':
 			break;
 		case 'S':
@@ -184,6 +192,9 @@ void WinScene::UpdatePhysics(float ElapsedTime)
 // ProcessInput에 의한 right, up, look, pos 를 월드변환 행렬에 갱신한다.
 void WinScene::Update(float fElapsedTime)
 {
+	if (m_WaitingTime >= m_MAXWaitingTime) return; 
+
+	m_WaitingTime += fElapsedTime;
 }
 
 void WinScene::LastUpdate(float fElapsedTime)

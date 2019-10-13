@@ -397,6 +397,7 @@ static bool isBrooming = false;
 void Player::SubstractHP(int sub)
 {  
 	if (isBrooming) return;
+	if (m_pPlayerHPStatus->GetGuage() <= 0.f) return;
 	if (m_PlayerActionMgr->Is_HitAction()) return;
 	
 	float prevDamage = m_pPlayerHPStatus->GetGuage();

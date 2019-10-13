@@ -1065,14 +1065,6 @@ void GameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPAR
 			if (SceneMgr::GetInstance()->IsMainScene())
 			{
 				SceneMgr::GetInstance()->ChangeSceneToSkillSelect();
-			} 
-			else if (SceneMgr::GetInstance()->IsWinScene())
-			{
-				SceneMgr::GetInstance()->ChangeSceneToMain();
-			}
-			else if (SceneMgr::GetInstance()->IsLoseScene())
-			{
-				SceneMgr::GetInstance()->ChangeSceneToMain();
 			}
 		}
 

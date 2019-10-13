@@ -44,6 +44,9 @@ private:
 	D3D12_VIEWPORT	m_d3dViewport;
 	D3D12_RECT		m_d3dScissorRect;
 
+	float m_WaitingTime{ 0.f };
+	float m_MAXWaitingTime{ 3.f };
+
 	GameObject* m_gameobject{ nullptr };
 	UI2DImage* m_Background{ nullptr };
 };
