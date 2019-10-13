@@ -164,7 +164,8 @@ Dragon::~Dragon()
 
 void Dragon::Init()
 {    
-	Monster::Init(true);
+	Monster::Init(true); 
+	m_Transform.SetRotate(0.f, 0.f, 0.f);
 	m_MonsterActionMgr->Init();
 
 	IsStone(); 
