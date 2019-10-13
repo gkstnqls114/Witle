@@ -312,6 +312,7 @@
     <ClInclude Include="QuadtreeTerrain.h" />
     <ClInclude Include="MyRectangle.h" />
     <ClInclude Include="RecognitionRange.h" />
+    <ClInclude Include="UI2DChangedImage.h" />
     <ClInclude Include="WinScene.h" />
     <ClInclude Include="ScreenShader.h" />
     <ClInclude Include="SearchAction.h" />
@@ -510,6 +511,7 @@
     <ClCompile Include="QuadtreeTerrain.cpp" />
     <ClCompile Include="MyRectangle.cpp" />
     <ClCompile Include="RecognitionRange.cpp" />
+    <ClCompile Include="UI2DChangedImage.cpp" />
     <ClCompile Include="WinScene.cpp" />
     <ClCompile Include="ScreenShader.cpp" />
     <ClCompile Include="SearchAction.cpp" />

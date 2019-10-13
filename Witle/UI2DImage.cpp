@@ -14,9 +14,11 @@ UI2DImage::UI2DImage(GameObject * pOwner, ENUM_SCENE Scenetype, ID3D12Device * p
 	:UI2D(pOwner)
 {   
 	m_ComponenetID = SHAPE_TYPE_ID::RECTANGLE_SHAPE;
-
-
-	m_pTexture = TextureStorage::GetInstance()->GetTexture(filepath);
+	 
+	if (strcmp(filepath.c_str(), ""))
+	{
+		m_pTexture = TextureStorage::GetInstance()->GetTexture(filepath);
+	}
 
 	m_nVertexBufferViews = 1;
 	m_pVertexBufferViews = new D3D12_VERTEX_BUFFER_VIEW[m_nVertexBufferViews];

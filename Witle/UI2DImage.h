@@ -26,6 +26,9 @@ private:
 	
 	RECT m_rect;
 	 
+protected:
+	void SetpTexture(Texture* pTexture) { m_pTexture = pTexture; }
+
 public:
 	UI2DImage(GameObject* pOwner, ENUM_SCENE Scenetype, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, RECT rect, const std::string& filepath);
 	UI2DImage(GameObject* pOwner, ENUM_SCENE Scenetype, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, POINT center, float width, float height, const std::string& filepath);
@@ -39,5 +42,5 @@ public:
 	RECT getRect() const { return m_rect; }
 
 	Texture* GetpTexture() const { return m_pTexture; }
-
+	
 };

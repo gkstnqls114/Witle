@@ -607,6 +607,9 @@
     <Filter Include="08.Controller\09.ActionTable">
       <UniqueIdentifier>{1250eaaf-0c68-40e7-9229-4c084354b819}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.GameObject\07.UI2DChangedImage">
+      <UniqueIdentifier>{870f1c15-6217-4bda-9e10-e70afd48da52}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -1221,6 +1224,9 @@
     <ClInclude Include="NoneAction.h">
       <Filter>02.Component\Action</Filter>
     </ClInclude>
+    <ClInclude Include="UI2DChangedImage.h">
+      <Filter>03.GameObject\07.UI2DChangedImage</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1813,6 +1819,9 @@
     </ClCompile>
     <ClCompile Include="NoneAction.cpp">
       <Filter>02.Component\Action</Filter>
+    </ClCompile>
+    <ClCompile Include="UI2DChangedImage.cpp">
+      <Filter>03.GameObject\07.UI2DChangedImage</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

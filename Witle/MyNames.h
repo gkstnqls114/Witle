@@ -68,6 +68,7 @@
 #define IMAGE_RED "Red"
 #define IMAGE_BLUE "Blue"
 #define IMAGE_YELLOW "Yellow"
+#define IMAGE_PINK "Pink"
 
 #define IMAGE_MONSTERATTACKHIT_SPRRITE "MonsterHit_Sprite"
 #define IMAGE_FIREBALLHIT_SPRRITE "FireBall_Sprite"
