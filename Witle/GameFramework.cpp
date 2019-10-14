@@ -1052,8 +1052,12 @@ static BOOL is_fullscreen = FALSE;
 void GameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam)
 {
 	Scene* pCurrScene = SceneMgr::GetInstance()->GetCurrScene();
+	bool isWinScene = SceneMgr::GetInstance()->IsWinScene();
+	bool isLoseScene = SceneMgr::GetInstance()->IsLoseScene();
 	if(pCurrScene) pCurrScene->OnProcessingKeyboardMessage(hWnd, nMessageID, wParam, lParam, 0.f);
-	 
+	
+	if (isWinScene || isLoseScene) return;
+
 	bool isStateChange = false;
 	switch (nMessageID)
 	{

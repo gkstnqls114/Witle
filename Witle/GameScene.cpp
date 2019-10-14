@@ -454,15 +454,15 @@ bool GameScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM w
 			break;
 
 		case '2':
-			// 스나이핑 스킬
-			if (m_Sniping->GetisUsing())
-			{
-				m_Sniping->DoNotUse();
-			}
-			else
-			{
-				m_Sniping->DoUse();
-			}
+			//// 스나이핑 스킬
+			//if (m_Sniping->GetisUsing())
+			//{
+			//	m_Sniping->DoNotUse();
+			//}
+			//else
+			//{
+			//	m_Sniping->DoUse();
+			//}
 			break;
 
 		case '3': // 스킬 광역 공격 
