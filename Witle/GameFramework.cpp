@@ -42,13 +42,10 @@
 #include "Object.h"
 #include "Texture.h"
 #include "MyDescriptorHeap.h"
+#include "PostprocessingSetting.h"
 //// ETC ////////////////////////////
  
 #include "GameFramework.h"
-
-static const bool DefferedRendering = false;
-static bool isBloom = true;
-static bool isToneCurve = true;
 
 void GameFramework::Render()
 {
@@ -59,7 +56,7 @@ void GameFramework::Render()
 
 	m_CommandList->SetComputeRootSignature(GraphicsRootSignatureMgr::GetGraphicsRootSignature());
 
-	if (DefferedRendering)
+	if (PostprocessingSetting::IsDefferedRendering())
 	{
 		// 쉐도우 맵을 그립니다.
 		d3dUtil::SynchronizeResourceTransition(m_CommandList.Get(), m_Shadowmap, D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_DEPTH_WRITE);
@@ -1077,29 +1074,29 @@ void GameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPAR
 
 		case MYVK_U: // 블룸과 톤 커브 모두 비활성화u
 		{
-			isBloom = false;
-			isToneCurve = false;
+			PostprocessingSetting::DeactiveBloom();
+			PostprocessingSetting::DeactiveTonecurve();
 			break;
 		}
 
 		case MYVK_I: // 블룸만 활성화
 		{
-			isBloom = true;
-			isToneCurve = false;
+			PostprocessingSetting::ActiveBloom();
+			PostprocessingSetting::DeactiveTonecurve();
 			break;
 		}
 
 		case MYVK_O: // 톤커브만 활성화
 		{
-			isBloom = false;
-			isToneCurve = true;
+			PostprocessingSetting::DeactiveBloom();
+			PostprocessingSetting::ActiveTonecurve();
 			break;
 		}
 
 		case MYVK_P: // 톤커브와 블룸 활성화
 		{
-			isBloom = true;
-			isToneCurve = true;
+			PostprocessingSetting::ActiveBloom();
+			PostprocessingSetting::ActiveTonecurve();
 			break;
 		}
 		 
@@ -1567,17 +1564,17 @@ void GameFramework::RenderForPlayerShadow()
 }
 
 void GameFramework::ToneCurveAndBloom()
-{
+{ 
 	//////파이프라인 상태를 설정한다.
-	if (isBloom && isToneCurve)
+	if (PostprocessingSetting::IsBloom() && PostprocessingSetting::IsToneCurve())
 	{
 		ShaderManager::GetInstance()->SetPSO(m_CommandList.Get(), SHADER_TONECURVEANDBLOOM, false);
 	}
-	else if (!isBloom && isToneCurve)
+	else if (!PostprocessingSetting::IsBloom() && PostprocessingSetting::IsToneCurve())
 	{
 		ShaderManager::GetInstance()->SetPSO(m_CommandList.Get(), SHADER_TONECURVE, false);
 	}
-	else if (isBloom && !isToneCurve)
+	else if ( PostprocessingSetting::IsBloom() && !PostprocessingSetting::IsToneCurve())
 	{
 		ShaderManager::GetInstance()->SetPSO(m_CommandList.Get(), SHADER_BLOOM, false);
 	}
@@ -1606,7 +1603,7 @@ void GameFramework::ToneCurveAndBloom()
 	m_CommandList->RSSetViewports(1, &Viewport);
 	m_CommandList->RSSetScissorRects(1, &ScissorRect);
 
-	if (!isBloom && !isToneCurve)
+	if (!PostprocessingSetting::IsBloom() && !PostprocessingSetting::IsToneCurve())
 	{
 		m_CommandList->SetGraphicsRootDescriptorTable(ROOTPARAMETER_TEXTUREBASE, m_GBufferHeap->GetGPUSrvDescriptorHandle(0));
 	}
