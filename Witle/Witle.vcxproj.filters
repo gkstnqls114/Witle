@@ -610,6 +610,9 @@
     <Filter Include="03.GameObject\07.UI2DChangedImage">
       <UniqueIdentifier>{870f1c15-6217-4bda-9e10-e70afd48da52}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.GameBase\PostprocessingSetting">
+      <UniqueIdentifier>{9d7e98bc-866a-4589-9a6a-02e3f9621e8b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -1227,6 +1230,9 @@
     <ClInclude Include="UI2DChangedImage.h">
       <Filter>03.GameObject\07.UI2DChangedImage</Filter>
     </ClInclude>
+    <ClInclude Include="PostprocessingSetting.h">
+      <Filter>01.GameBase\PostprocessingSetting</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1822,6 +1828,9 @@
     </ClCompile>
     <ClCompile Include="UI2DChangedImage.cpp">
       <Filter>03.GameObject\07.UI2DChangedImage</Filter>
+    </ClCompile>
+    <ClCompile Include="PostprocessingSetting.cpp">
+      <Filter>01.GameBase\PostprocessingSetting</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
