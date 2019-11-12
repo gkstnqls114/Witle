@@ -2,6 +2,7 @@
 #include "GameScene.h"
 #include "MainScene.h"
 #include "SkillSelectScene.h"
+#include "PostprocessingSetting.h"
 #include "WinScene.h"
 #include "LoseScene.h"
 #include "GameInput.h"
@@ -120,6 +121,9 @@ void SceneMgr::ChangeSceneToGame()
 	GameInput::ChagneMoveMode();
 #endif // DEBUG
 
+	PostprocessingSetting::ActiveBloom();
+	PostprocessingSetting::ActiveTonecurve();
+
 	m_SkillSelectScene->FinishSkillSelect(); // Skill Select에서 설정된 스킬 연결
 	m_pCurrScene = m_GameScene;
 	m_GameScene->Init(); //테스트
@@ -139,6 +143,9 @@ void SceneMgr::ChangeSceneToMain()
 	SoundManager::GetInstance()->Play(ENUM_SOUND::MAIN_SOUND);
 	// 사운드 ///////////////////////////////////////////////////////////
 
+	PostprocessingSetting::DeactiveBloom();
+	PostprocessingSetting::DeactiveTonecurve();
+
 	GameInput::ChagneDragMode();
 	m_pCurrScene = m_MainScene;
 	m_CurrSceneType = ENUM_SCENE::SCENE_MAIN;
@@ -156,6 +163,9 @@ void SceneMgr::ChangeSceneToSkillSelect()
 	SoundManager::GetInstance()->Stop(ENUM_SOUND::MAIN_SOUND);
 	SoundManager::GetInstance()->Play(ENUM_SOUND::SKILLPAGE_SOUND);
 	// 사운드 ///////////////////////////////////////////////////////////
+
+	PostprocessingSetting::DeactiveBloom();
+	PostprocessingSetting::DeactiveTonecurve();
 
 	GameInput::ChagneDragMode();
 	m_pCurrScene = m_SkillSelectScene;
@@ -175,6 +185,9 @@ void SceneMgr::ChangeSceneToWin()
 	SoundManager::GetInstance()->Play(ENUM_SOUND::WIN_SOUND);
 	// 사운드 ///////////////////////////////////////////////////////////
 
+	PostprocessingSetting::DeactiveBloom();
+	PostprocessingSetting::DeactiveTonecurve();
+
 	GameInput::ChagneDragMode();
 	m_pCurrScene = m_WinScene;
 	m_CurrSceneType = ENUM_SCENE::SCENE_WIN;
@@ -192,6 +205,9 @@ void SceneMgr::ChangeSceneToLose()
 	SoundManager::GetInstance()->Stop(ENUM_SOUND::WIN_SOUND);
 	SoundManager::GetInstance()->Play(ENUM_SOUND::LOSE_SOUND);
 	// 사운드 ///////////////////////////////////////////////////////////
+
+	PostprocessingSetting::DeactiveBloom();
+	PostprocessingSetting::DeactiveTonecurve();
 
 	GameInput::ChagneDragMode();
 	m_pCurrScene = m_LoseScene;
