@@ -13,11 +13,14 @@ struct VS_SCREEN_OUTPUT
 }; 
 
 //// 루트 상수
-//cbuffer cbHPpercentage : register(b5)
-//{
-//    float HPpercentage : packoffset(c0);
-//}
-// 여기서는 0~1로 나타내는 남은 퍼센테이지
+
+// 0~1로 정규화된 퍼센테이지
+// (0: 쿨타임이 완료되어 모두 밝음, 1: 쿨타임 시작되어 모두 어두움)
+cbuffer cbPercentage : register(b5)
+{
+    float percentage : packoffset(c0);
+}
+
 
 //pickingPoint.x : 남은 시간
 //pickingPoint.y : 최대 시간
@@ -44,18 +47,27 @@ float4 PSSkillIcon(VS_SCREEN_OUTPUT input) : SV_TARGET
         discard;
      
     //find the angle between the centre and this pixel (between -180 and 180)
-    // 라디안을 디그리로 변환... 
-    float2 center_uv = float2(0.5, 0.5); 
-    float angle = atan2(input.uv.y - center_uv.y, input.uv.x - center_uv.x) * 180.0 / 3.141592; //find the angle between the centre and this pixel (between -180 and 180)
+    //find the angle between the centre and this pixel (between -180 and 180)
+    
+        //if the angle is less than the progress angle blend the overlay colour
 
+    // uv 중심 위치
+    
+    // radian을 degree로 변환한다. ( -180도에서 180도 )
+
+    float2 center_uv = float2(0.5, 0.5); 
+    float angle = atan2(input.uv.y - center_uv.y, input.uv.x - center_uv.x) * 180.0 / 3.141592; 
+    
+    // 0도 이하일 경우 0~360도로 맞춘다.
     if (angle < 0)
     {
-        angle += 360; //change angles to go from 0 to 360
+        angle += 360; 
     }
     
-    if (angle <= (HPpercentage * 360.0))
+    // 만약 현재 위치가 퍼센테이지 보다 작다면..
+
+    if (angle <= (percentage * 360.0))
     { 
-        //if the angle is less than the progress angle blend the overlay colour
         pixColor -= float4(0.5, 0.5, 0.5, 0.5);
     } 
 

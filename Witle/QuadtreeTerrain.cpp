@@ -116,9 +116,10 @@ void QuadtreeTerrain::RecursiveRender(const QUAD_TREE_NODE * node, ID3D12Graphic
 	// 렌더링
 	extern MeshRenderer gMeshRenderer;
 
+	set.insert(node->id);
+
 	if (node->terrainMesh)
 	{
-		set.insert(node->id);
 		gMeshRenderer.Render(pd3dCommandList, node->terrainMesh); 
 	}
 	else
@@ -240,8 +241,7 @@ void QuadtreeTerrain::CalculateIDs(const XMFLOAT3 position, XMINT4& IDs) const
 			else if (num == 2) IDs.z = i;
 			else if (num == 3) IDs.w = i;
 			++num;
-		} 
-		 
+		}  
 	}
 }
 
@@ -276,7 +276,8 @@ void QuadtreeTerrain::CalculateIndex(const XMFLOAT3 position, int * pIndices) co
 	} 
 }
 
-void QuadtreeTerrain::RecursiveCreateTerrain(QUAD_TREE_NODE * node, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList,
+void QuadtreeTerrain::RecursiveCreateTerrain(
+	QUAD_TREE_NODE * node, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList,
 	int xStart, int zStart, int nBlockWidth, int nBlockLength,
 	 HeightMapImage * pContext)
 {
@@ -289,12 +290,11 @@ void QuadtreeTerrain::RecursiveCreateTerrain(QUAD_TREE_NODE * node, ID3D12Device
 		// 마지막 리프 노드는 아이디를 설정한다.
 		node->id = gTreePieceCount++;
 		m_ReafNodeCount += 1;
+		 
 
-		// 현재 테스트로 바운딩박스의 centerY = 128, externY = 256 으로 설정 
-		XMFLOAT3 center{
-			float(xStart) * m_xmf3Scale.x + float(nBlockWidth - 1) / 2.0f * m_xmf3Scale.x ,
-			0.0f,
-			float(zStart) * m_xmf3Scale.z + float(nBlockLength - 1) / 2.0f * m_xmf3Scale.z };
+		float center_x = float(xStart) * m_xmf3Scale.x + float(nBlockWidth - 1) / 2.0f * m_xmf3Scale.x;
+		float center_z =float(zStart) * m_xmf3Scale.z + float(nBlockLength - 1) / 2.0f * m_xmf3Scale.z;
+		XMFLOAT3 center{ center_x ,	0.0f, center_z };
 
 		XMFLOAT3 extents{
 				float(nBlockWidth - 1) / 2.0f * m_xmf3Scale.x,
@@ -322,15 +322,13 @@ void QuadtreeTerrain::RecursiveCreateTerrain(QUAD_TREE_NODE * node, ID3D12Device
 				int New_xStart = xStart + x * (Next_BlockWidth - 1);
 				int New_zStart = zStart + z * (Next_BlockLength - 1);
 
-				XMFLOAT3 center{ 
-					float(xStart) * m_xmf3Scale.x + float(nBlockWidth - 1) / 2.0f * m_xmf3Scale.x ,
-					0.0f,
-					float(zStart) * m_xmf3Scale.z + float(nBlockLength - 1) / 2.0f * m_xmf3Scale.z };
+				float center_x = float(xStart) * m_xmf3Scale.x + float(nBlockWidth - 1) / 2.0f * m_xmf3Scale.x;
+				float center_z = float(zStart) * m_xmf3Scale.z + float(nBlockLength - 1) / 2.0f * m_xmf3Scale.z;
+				XMFLOAT3 center{ center_x , 0.0f,center_z };
 				
-				XMFLOAT3 extents{
-						float(nBlockWidth - 1) / 2.0f * m_xmf3Scale.x,
-						1000.f,
-						float(nBlockLength - 1) / 2.0f* m_xmf3Scale.z  };
+				float extents_x = float(nBlockWidth - 1) / 2.0f * m_xmf3Scale.x;
+				float extents_z = float(nBlockLength - 1) / 2.0f* m_xmf3Scale.z;
+				XMFLOAT3 extents{ extents_x, 1000.f, extents_z };
 
 				node->boundingBox = BoundingBox(center, extents);
 

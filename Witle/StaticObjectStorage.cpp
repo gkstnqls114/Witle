@@ -38,7 +38,6 @@ bool StaticObjectStorage::LoadTransform(char * name, const char * comp_name, con
 			for (int x = 0; x < TerrainPieceCount; ++x)
 			{
 				m_StaticObjectStorage[Cliff][x].TerrainObjectCount += 1;
-
 				m_StaticObjectStorage[Cliff][x].TransformList.emplace_back(TestObject->m_pChild->m_xmf4x4World);
 			}
 
@@ -72,14 +71,17 @@ bool StaticObjectStorage::LoadTransform(char * name, const char * comp_name, con
 				TestObject = nullptr;
 			}
 			else
-			{ 
-				m_StaticObjectStorage[comp_name][terrainIDs].TerrainObjectCount += 1;
-
+			{
 				LoadObject* TestObject = ModelStorage::GetInstance()->GetRootObject(comp_name);
 				TestObject->SetTransform(tr);
 				TestObject->UpdateTransform(NULL);
 
-				m_StaticObjectStorage[comp_name][terrainIDs].TransformList.emplace_back(TestObject->m_pChild->m_xmf4x4World);
+				XMFLOAT4X4 worldTr = TestObject->m_pChild->m_xmf4x4World;
+
+				m_StaticObjectStorage[comp_name][terrainIDs].TerrainObjectCount += 1;
+				m_StaticObjectStorage[comp_name][terrainIDs].TransformList.emplace_back(worldTr);
+
+
 				if (!strcmp(comp_name, ALTAR_IN))
 				{
 					m_AltarTransformStorage.emplace_back(tr);
@@ -380,7 +382,7 @@ void StaticObjectStorage::CreateInfo(ID3D12Device * pd3dDevice, ID3D12GraphicsCo
 	// 위치 정보를 읽어온다.
 	LoadTerrainObjectFromFile(pd3dDevice, pd3dCommandList, "Information/Terrain.bin", pTerrain);
 	
-	// 읽어온 위치 정보의 개수대로 쉐이더 변수를 생성한다.
+	// 읽어온 위치 정보의 개수대로 인스턴싱을 위한 쉐이더 변수를 생성한다.
 	CreateShaderVariables(pd3dDevice, pd3dCommandList);
 	 
 	m_isCreate = true;

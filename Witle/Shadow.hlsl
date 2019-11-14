@@ -35,7 +35,7 @@ struct VS_STANDARD_OUTPUT
 {
     float4 position : SV_POSITION;
     float4 positionW : POSITION;
-    float2 TexC : TEXCOORD;
+    float2 uv : TEXCOORD;
 };
 
 
@@ -49,13 +49,14 @@ VS_STANDARD_OUTPUT VSStandard(VS_STANDARD_INPUT input)
     VS_STANDARD_OUTPUT output;
 
     // 현재 여기에서 view 는 조명 위치에서의 matrix... 
-    output.positionW = mul(float4(input.position, 1.0f), gmtxWorld);
+
+    output.positionW = mul(float4(input.position, 1.0f), gmtxWorld); 
     output.position = mul(mul(output.positionW, gmtxLightView), gmtxLightProjection);
+    output.uv = input.uv;
      
 	// Output vertex attributes for interpolation across triangle.
     //float4 texC = mul(float4(input.uv, 0.0f, 1.0f), gTexTransform);
     //vout.TexC = mul(texC, matData.MatTransform).xy;
-    output.TexC = input.uv;
 	
     return (output);
 }
@@ -66,12 +67,10 @@ VS_STANDARD_OUTPUT VSStandardForPlayer(VS_STANDARD_INPUT input)
     VS_STANDARD_OUTPUT output;
 
     // 현재 여기에서 view 는 조명 위치에서의 matrix... 
+
     output.positionW = mul(float4(input.position, 1.0f), gmtxWorld);
-    output.position = mul(mul(output.positionW, gmtxPlayerLightView), gmtxPlayerLightProjection);
-     
-	// Output vertex attributes for interpolation across triangle.
-    //float4 texC = mul(float4(input.uv, 0.0f, 1.0f), gTexTransform);
-    //vout.TexC = mul(texC, matData.MatTransform).xy;
+
+    output.position = mul(mul(output.positionW, gmtxPlayerLightView), gmtxPlayerLightProjection); 
     output.TexC = input.uv;
 	
     return (output);

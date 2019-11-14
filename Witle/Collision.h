@@ -18,6 +18,11 @@ public:
 		return box.Intersects(XMLoadFloat3(&origin), XMLoadFloat3(&direction), dist);
 	}
 
+	static bool isCollide(BoundingSphere* sphere, const XMFLOAT3& origin, const XMFLOAT3& direction, float& dist)
+	{
+		return sphere->Intersects(XMLoadFloat3(&origin), XMLoadFloat3(&direction), dist);
+	}
+
 	static bool isCollide(const BoundingBox& box, const XMFLOAT3& origin, const XMFLOAT3& direction, float& dist)
 	{
 		return box.Intersects(XMLoadFloat3(&origin), XMLoadFloat3(&direction), dist);

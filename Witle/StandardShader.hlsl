@@ -32,7 +32,7 @@ VS_STANDARD_OUTPUT VSStandard(VS_STANDARD_INPUT input)
 	output.position = mul(mul(float4(output.positionW, 1.0f), gmtxView), gmtxProjection);
 	output.uv = input.uv;
 
-    //포그 계수... 1: 투명하다 ~ 0: 탁하다
+    // Fog 계수... 1: 투명하다 ~ 0: 탁하다
     float fogEnd = 30000;
     float fogStart = 100;
     output.fogFactor = saturate((fogEnd - gvCameraPosition.z) / (fogEnd- fogStart));
@@ -100,7 +100,6 @@ float4 PSStandard(VS_STANDARD_OUTPUT input) : SV_TARGET
     float4 ContrastColor = lerp(TESTColor, cIllumination, 0.5f); // 명암처리된 픽셀 색깔
 
     float4 fogColor = float4(0.0 / 255.0, 34.0 / 255.0, 102.0 / 255.0, 1.0f);
-    
     float4 finalColor = input.fogFactor * ContrastColor + (1.0 - input.fogFactor) * fogColor;
 
     return finalColor;

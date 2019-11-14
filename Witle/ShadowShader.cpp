@@ -24,15 +24,14 @@ void ShadowShader::Update(float ElapsedTime)
 }
  
 D3D12_RASTERIZER_DESC ShadowShader::CreateRasterizerState()
-{
-	//래스터라이저 상태를 설정한다.
+{ 
 	D3D12_RASTERIZER_DESC d3dRasterizerDesc;
 	::ZeroMemory(&d3dRasterizerDesc, sizeof(D3D12_RASTERIZER_DESC));
 	d3dRasterizerDesc.FillMode = D3D12_FILL_MODE_SOLID;
 	d3dRasterizerDesc.CullMode = D3D12_CULL_MODE_BACK;
 	d3dRasterizerDesc.FrontCounterClockwise = FALSE;
-	d3dRasterizerDesc.DepthBias = 0; // 그림자 위해 설정해야함... 각 픽셀에 더해질 깊이 바이어스
-	d3dRasterizerDesc.DepthBiasClamp = 0.0f; // 그림자 위해 설정해야함... 픽셀 깊이 바이어스의 최대값 
+	d3dRasterizerDesc.DepthBias = 0;               // 그림자 위해 설정해야함... 각 픽셀에 더해질 깊이 바이어스
+	d3dRasterizerDesc.DepthBiasClamp = 0.0f;       // 그림자 위해 설정해야함... 픽셀 깊이 바이어스의 최대값 
 	d3dRasterizerDesc.SlopeScaledDepthBias = 0.0f; // 그림자 위해 설정해야함... 픽셀(다각형)의 기울기에 따라 바이어스를 조절
 	d3dRasterizerDesc.DepthClipEnable = TRUE;
 	d3dRasterizerDesc.MultisampleEnable = FALSE;

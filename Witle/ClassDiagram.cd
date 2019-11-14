@@ -1,25 +1,117 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<ClassDiagram MajorVersion="1" MinorVersion="1">
-  <Class Name="GameFramework" Collapsed="true">
-    <Position X="3.25" Y="2" Width="1.5" />
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="FullSignature">
+  <Class Name="BossMonsterAction">
+    <Position X="6.75" Y="2" Width="4" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
     <TypeIdentifier>
-      <HashCode>LT8JtgRgEmESCKyhQACgBGb2giFjA5DJ7BYA1oCiME0=</HashCode>
-      <FileName>GameFramework.h</FileName>
+      <HashCode>AAAEAAAAAAAAAAAAAAAAAEEAAAAAAAAAAAACBAAAAIA=</HashCode>
+      <FileName>MonsterAction.h</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="GameInput" Collapsed="true">
-    <Position X="1.25" Y="0.75" Width="1.5" />
+  <Class Name="GeneralMonsterAction">
+    <Position X="11.25" Y="2" Width="4" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
     <TypeIdentifier>
-      <HashCode>IASIAGoJAiBABIABKAECBgYgRICCkAAQIgiihACQBAQ=</HashCode>
-      <FileName>GameInput.h</FileName>
+      <HashCode>AAAEAAAAACAAAAAAAAAAAAEAAAAAAAAAAQACBAAAAAA=</HashCode>
+      <FileName>MonsterAction.h</FileName>
     </TypeIdentifier>
   </Class>
-  <Struct Name="RAY" Collapsed="true">
-    <Position X="1.25" Y="2" Width="1.5" />
+  <Class Name="IdleAction" Collapsed="true">
+    <Position X="11" Y="5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>CAAAAAAAAAAAIAAAAAAAAAAAAAEAAAAAAAAAAAAAAQA=</HashCode>
-      <FileName>GameInput.h</FileName>
+      <HashCode>AAAEAAAAAAFAAAAAAAAAAAAAAAAAAAAAAAACBAEAAAA=</HashCode>
+      <FileName>IdleAction.h</FileName>
     </TypeIdentifier>
-  </Struct>
+  </Class>
+  <Class Name="SearchAction" Collapsed="true">
+    <Position X="12.75" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEEAAAAAAAAACAAAAAAAAAAAAAAIACAAACBAAAAAA=</HashCode>
+      <FileName>SearchAction.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Action" Collapsed="true">
+    <Position X="10.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAAAAAACAAAAAAAAAAEAAAAACAAACAIAAAAQ=</HashCode>
+      <FileName>Action.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BossIdleAction" Collapsed="true">
+    <Position X="7.25" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAAEBAAAAAAAAAAAAAAAAAAAAAAACBQAAAAA=</HashCode>
+      <FileName>BossIdleAction.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BossSkillTailAttack" Collapsed="true">
+    <Position X="9" Y="5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAAAAAACAAAAAAAAAAAAAAAACAAACRAAgAAA=</HashCode>
+      <FileName>BossSkillTailAttack.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ActionMgr" Collapsed="true">
+    <Position X="17" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACEBAAAEABAAoAAFAAAAAAgAABgAAAAABAGFIAAAAA=</HashCode>
+      <FileName>ActionMgr.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GeneralMonsterActionMgr">
+    <Position X="16" Y="2" Width="2.25" />
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AIApJAIBEAAAgICAAAEAOEABABBAAAYCQoQCBoQBIIA=</HashCode>
+      <FileName>GeneralMonsterActionMgr.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BossMonsterActionMgr">
+    <Position X="18" Y="2" Width="2" />
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>wGQAZAAIEUCAAIiABAUAGABASABIggADAoSKBMAAgCA=</HashCode>
+      <FileName>BossMonsterActionMgr.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MyCollider">
+    <Position X="12" Y="6.75" Width="2.75" />
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAQAKAAAAAAAAACAAAAAAAAAAAAAAAECAAAAAAEAAAA=</HashCode>
+      <FileName>MyCollider.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MyBSphere" Collapsed="true">
+    <Position X="13.5" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAEAIAAABCAIABAAAAAAAAAAAACABAAAAAQAAA=</HashCode>
+      <FileName>MyBSphere.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MyBOBox" Collapsed="true">
+    <Position X="11.75" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAQIAIIEiJCAAIAAAgACEQAQEgACABAgAAAAEAg=</HashCode>
+      <FileName>MyBOBox.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MyFrustum" Collapsed="true">
+    <Position X="16.25" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABSAAAAAgAAAEQCAAAAAAAAAAABEAAASAACAAAAAAQA=</HashCode>
+      <FileName>MyFrustum.h</FileName>
+    </TypeIdentifier>
+  </Class>
   <Font Name="맑은 고딕" Size="9" />
 </ClassDiagram>

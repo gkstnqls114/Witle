@@ -5,6 +5,13 @@ VisualStudioVersion = 15.0.28010.2041
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Witle", "Witle\Witle.vcxproj", "{48AE76AC-A368-4475-BD7D-9DE887ADD417}"
 EndProject
+Project("{E729F059-12D4-455F-A2A4-FDA8DD25E08A}") = "Setup", "Setup\Setup.isproj", "{5199AA8D-184A-40D1-A5D0-3B949D615D92}"
+	ProjectSection(ProjectDependencies) = postProject
+		{48AE76AC-A368-4475-BD7D-9DE887ADD417} = {48AE76AC-A368-4475-BD7D-9DE887ADD417}
+	EndProjectSection
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup1", "Setup1\Setup1.vdproj", "{855C0DDC-3799-4129-8988-62F6AC4DC9CC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -21,6 +28,18 @@ Global
 		{48AE76AC-A368-4475-BD7D-9DE887ADD417}.Release|x64.Build.0 = Release|x64
 		{48AE76AC-A368-4475-BD7D-9DE887ADD417}.Release|x86.ActiveCfg = Release|Win32
 		{48AE76AC-A368-4475-BD7D-9DE887ADD417}.Release|x86.Build.0 = Release|Win32
+		{5199AA8D-184A-40D1-A5D0-3B949D615D92}.Debug|x64.ActiveCfg = Debug
+		{5199AA8D-184A-40D1-A5D0-3B949D615D92}.Debug|x64.Build.0 = Debug
+		{5199AA8D-184A-40D1-A5D0-3B949D615D92}.Debug|x86.ActiveCfg = Debug
+		{5199AA8D-184A-40D1-A5D0-3B949D615D92}.Debug|x86.Build.0 = Debug
+		{5199AA8D-184A-40D1-A5D0-3B949D615D92}.Release|x64.ActiveCfg = Release
+		{5199AA8D-184A-40D1-A5D0-3B949D615D92}.Release|x64.Build.0 = Release
+		{5199AA8D-184A-40D1-A5D0-3B949D615D92}.Release|x86.ActiveCfg = Release
+		{5199AA8D-184A-40D1-A5D0-3B949D615D92}.Release|x86.Build.0 = Release
+		{855C0DDC-3799-4129-8988-62F6AC4DC9CC}.Debug|x64.ActiveCfg = Debug
+		{855C0DDC-3799-4129-8988-62F6AC4DC9CC}.Debug|x86.ActiveCfg = Debug
+		{855C0DDC-3799-4129-8988-62F6AC4DC9CC}.Release|x64.ActiveCfg = Release
+		{855C0DDC-3799-4129-8988-62F6AC4DC9CC}.Release|x86.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

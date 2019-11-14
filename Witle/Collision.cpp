@@ -17,9 +17,11 @@ bool Collision::isCollide(MyCollider* collider, const XMFLOAT3 & origin, const X
 		return isCollide(static_cast<MyBOBox *>(collider)->GetBOBox(), origin, direction, dist);
 		break;
 
-	default:
-		// 경우의 수가 없으므로 경고창을 뱉습니다.
-		assert(false);
+	case COLLIDER_TYPE::BOUNDING_SPHERE:
+		return isCollide(static_cast<MyBSphere *>(collider)->GetBSphere(), origin, direction, dist);
+		break;
+
+	default: 
 		return false;
 		break;
 	}

@@ -291,14 +291,15 @@ void Camera::UpdateLightShaderVariables(ID3D12GraphicsCommandList * pd3dCommandL
 	XMStoreFloat3(&sphereCenterLS, XMVector3TransformCoord(targetPos, lightView));
 
 	// Ortho frustum in light space encloses scene.
-	float l = sphereCenterLS.x - mSceneBounds.Radius;
-	float b = sphereCenterLS.y - mSceneBounds.Radius;
-	float n = sphereCenterLS.z - mSceneBounds.Radius;
-	float r = sphereCenterLS.x + mSceneBounds.Radius;
-	float t = sphereCenterLS.y + mSceneBounds.Radius;
-	float f = sphereCenterLS.z + mSceneBounds.Radius;
 
-	XMMATRIX lightProj = XMMatrixOrthographicOffCenterLH(l, r, b, t, n, f);
+	float ViewLeft = sphereCenterLS.x - mSceneBounds.Radius;
+	float ViewBottom = sphereCenterLS.y - mSceneBounds.Radius; 
+	float NearZ = sphereCenterLS.z - mSceneBounds.Radius;      
+	float ViewRight = sphereCenterLS.x + mSceneBounds.Radius; 
+	float ViewTop = sphereCenterLS.y + mSceneBounds.Radius;   
+	float FarZ = sphereCenterLS.z + mSceneBounds.Radius; 
+
+	XMMATRIX lightProj = XMMatrixOrthographicOffCenterLH(ViewLeft, ViewRight, ViewBottom, ViewTop, NearZ, FarZ);
 
 	// Transform NDC space [-1,+1]^2 to texture space [0,1]^2
 	XMMATRIX T(

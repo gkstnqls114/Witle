@@ -49,9 +49,6 @@
     <Filter Include="11.Event">
       <UniqueIdentifier>{3f9358d8-bf33-46cb-8896-0fad7507622f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="HLSL">
-      <UniqueIdentifier>{8071701e-797b-47cb-9dab-2e0e157a4b18}</UniqueIdentifier>
-    </Filter>
     <Filter Include="99.etc\ID">
       <UniqueIdentifier>{61995b09-dbe4-4501-a127-f71ad8ed4da6}</UniqueIdentifier>
     </Filter>
@@ -612,6 +609,9 @@
     </Filter>
     <Filter Include="01.GameBase\PostprocessingSetting">
       <UniqueIdentifier>{9d7e98bc-866a-4589-9a6a-02e3f9621e8b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="리소스 파일\HLSL">
+      <UniqueIdentifier>{8071701e-797b-47cb-9dab-2e0e157a4b18}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1848,73 +1848,73 @@
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="CubeShader.hlsl">
-      <Filter>HLSL</Filter>
+      <Filter>리소스 파일\HLSL</Filter>
     </FxCompile>
     <FxCompile Include="Light.hlsl">
-      <Filter>HLSL</Filter>
+      <Filter>리소스 파일\HLSL</Filter>
     </FxCompile>
     <FxCompile Include="TerrainShader.hlsl">
-      <Filter>HLSL</Filter>
+      <Filter>리소스 파일\HLSL</Filter>
     </FxCompile>
     <FxCompile Include="ShowTextureShader.hlsl">
-      <Filter>HLSL</Filter>
+      <Filter>리소스 파일\HLSL</Filter>
     </FxCompile>
     <FxCompile Include="BlurShader.hlsl">
-      <Filter>HLSL</Filter>
+      <Filter>리소스 파일\HLSL</Filter>
     </FxCompile>
     <FxCompile Include="SkinnedAnimationShader.hlsl">
-      <Filter>HLSL</Filter>
+      <Filter>리소스 파일\HLSL</Filter>
     </FxCompile>
     <FxCompile Include="StandardShader.hlsl">
-      <Filter>HLSL</Filter>
+      <Filter>리소스 파일\HLSL</Filter>
     </FxCompile>
     <FxCompile Include="Variables.hlsl">
-      <Filter>HLSL</Filter>
+      <Filter>리소스 파일\HLSL</Filter>
     </FxCompile>
     <FxCompile Include="LineShader.hlsl">
-      <Filter>HLSL</Filter>
+      <Filter>리소스 파일\HLSL</Filter>
     </FxCompile>
     <FxCompile Include="ScreenShader.hlsl">
-      <Filter>HLSL</Filter>
+      <Filter>리소스 파일\HLSL</Filter>
     </FxCompile>
     <FxCompile Include="SkyBoxShader.hlsl">
-      <Filter>HLSL</Filter>
+      <Filter>리소스 파일\HLSL</Filter>
     </FxCompile>
     <FxCompile Include="PickingPointShader.hlsl">
-      <Filter>HLSL</Filter>
+      <Filter>리소스 파일\HLSL</Filter>
     </FxCompile>
     <FxCompile Include="BroomEffectShader.hlsl">
-      <Filter>HLSL</Filter>
+      <Filter>리소스 파일\HLSL</Filter>
     </FxCompile>
     <FxCompile Include="UIScreenShader.hlsl">
-      <Filter>HLSL</Filter>
+      <Filter>리소스 파일\HLSL</Filter>
     </FxCompile>
     <FxCompile Include="UIWorldShader.hlsl">
-      <Filter>HLSL</Filter>
+      <Filter>리소스 파일\HLSL</Filter>
     </FxCompile>
     <FxCompile Include="UIMapForPlayerShader.hlsl">
-      <Filter>HLSL</Filter>
+      <Filter>리소스 파일\HLSL</Filter>
     </FxCompile>
     <FxCompile Include="DefferedShader.hlsl">
-      <Filter>HLSL</Filter>
+      <Filter>리소스 파일\HLSL</Filter>
     </FxCompile>
     <FxCompile Include="Shadow.hlsl">
-      <Filter>HLSL</Filter>
+      <Filter>리소스 파일\HLSL</Filter>
     </FxCompile>
     <FxCompile Include="SkillIconShader.hlsl">
-      <Filter>HLSL</Filter>
+      <Filter>리소스 파일\HLSL</Filter>
     </FxCompile>
     <FxCompile Include="TonemappingComputeShader.hlsl">
-      <Filter>HLSL</Filter>
+      <Filter>리소스 파일\HLSL</Filter>
     </FxCompile>
     <FxCompile Include="BloomRevealShader.hlsl">
-      <Filter>HLSL</Filter>
+      <Filter>리소스 파일\HLSL</Filter>
     </FxCompile>
     <FxCompile Include="HitEffectShader.hlsl">
-      <Filter>HLSL</Filter>
+      <Filter>리소스 파일\HLSL</Filter>
     </FxCompile>
     <FxCompile Include="ToneCuveAndBloomShader.hlsl">
-      <Filter>HLSL</Filter>
+      <Filter>리소스 파일\HLSL</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

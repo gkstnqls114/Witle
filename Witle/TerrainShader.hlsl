@@ -75,6 +75,7 @@ float4 PSTerrain(VS_TERRAIN_OUTPUT input) : SV_TARGET
     ////// 그림자 계산 1 ...
       
     float fShadowFactor = CalcShadowFactor(shadowPosition); 
+
     float fPlayerShadowFactor = CalcPlayerShadowFactor(PlayershadowPosition);
     
     
