@@ -619,6 +619,12 @@
     <Filter Include="98.Template\01.Singleton">
       <UniqueIdentifier>{8b71558a-6482-4fb0-9dda-d0bae2645fb0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="13.Storage/Manager\17.QuadtreeMgr">
+      <UniqueIdentifier>{50625648-a497-482a-8c46-6f292db46f87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="13.Storage/Manager\18.MapInfoMgr">
+      <UniqueIdentifier>{31632cf2-2d20-4b23-8496-59b24ad5b3b6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -1242,6 +1248,9 @@
     <ClInclude Include="Singleton.h">
       <Filter>98.Template\01.Singleton</Filter>
     </ClInclude>
+    <ClInclude Include="QuadtreeMgr.h">
+      <Filter>13.Storage/Manager\17.QuadtreeMgr</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1840,6 +1849,9 @@
     </ClCompile>
     <ClCompile Include="PostprocessingSetting.cpp">
       <Filter>01.GameBase\PostprocessingSetting</Filter>
+    </ClCompile>
+    <ClCompile Include="QuadtreeMgr.cpp">
+      <Filter>13.Storage/Manager\17.QuadtreeMgr</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

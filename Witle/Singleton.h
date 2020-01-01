@@ -4,7 +4,7 @@
 template<typename T>
 class Singleton
 {
-	static T* instance{ nullptr };
+	static T* instance  ;
 
 private:
 	Singleton(Singleton const&) = delete;            // º¹»ç ¼û±è
@@ -14,6 +14,7 @@ protected:
 	Singleton()
 	{ 
 	}
+
 	~Singleton()
 	{
 
@@ -39,3 +40,6 @@ public:
 	}
 
 };
+
+
+template<typename T> T* Singleton<T>::instance = nullptr;

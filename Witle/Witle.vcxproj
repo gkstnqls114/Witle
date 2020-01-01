@@ -166,6 +166,7 @@
     <ClInclude Include="BossBuf.h" />
     <ClInclude Include="BossDead.h" />
     <ClInclude Include="NoneAction.h" />
+    <ClInclude Include="QuadtreeMgr.h" />
     <ClInclude Include="PlayerActionMgr.h" />
     <ClInclude Include="PlayerStandardAttackAction.h" />
     <ClInclude Include="PlayerBroomPrepareAction.h" />
@@ -375,6 +376,7 @@
     <ClCompile Include="BossBuf.cpp" />
     <ClCompile Include="BossDead.cpp" />
     <ClCompile Include="NoneAction.cpp" />
+    <ClCompile Include="QuadtreeMgr.cpp" />
     <ClCompile Include="PlayerActionMgr.cpp" />
     <ClCompile Include="PlayerStandardAttackAction.cpp" />
     <ClCompile Include="PlayerBroomPrepareAction.cpp" />
