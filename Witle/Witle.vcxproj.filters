@@ -613,6 +613,12 @@
     <Filter Include="01.GameBase\PostprocessingSetting">
       <UniqueIdentifier>{9d7e98bc-866a-4589-9a6a-02e3f9621e8b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="98.Template">
+      <UniqueIdentifier>{a174728e-4b5a-4be9-b788-99d7a0f04b53}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98.Template\01.Singleton">
+      <UniqueIdentifier>{8b71558a-6482-4fb0-9dda-d0bae2645fb0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -1232,6 +1238,9 @@
     </ClInclude>
     <ClInclude Include="PostprocessingSetting.h">
       <Filter>01.GameBase\PostprocessingSetting</Filter>
+    </ClInclude>
+    <ClInclude Include="Singleton.h">
+      <Filter>98.Template\01.Singleton</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
