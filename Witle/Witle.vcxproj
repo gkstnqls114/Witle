@@ -165,6 +165,7 @@
     <ClInclude Include="BloomRevealShader.h" />
     <ClInclude Include="BossBuf.h" />
     <ClInclude Include="BossDead.h" />
+    <ClInclude Include="MyBBox.h" />
     <ClInclude Include="NoneAction.h" />
     <ClInclude Include="QuadtreeMgr.h" />
     <ClInclude Include="PlayerActionMgr.h" />
@@ -375,6 +376,7 @@
     <ClCompile Include="BloomRevealShader.cpp" />
     <ClCompile Include="BossBuf.cpp" />
     <ClCompile Include="BossDead.cpp" />
+    <ClCompile Include="MyBBox.cpp" />
     <ClCompile Include="NoneAction.cpp" />
     <ClCompile Include="QuadtreeMgr.cpp" />
     <ClCompile Include="PlayerActionMgr.cpp" />

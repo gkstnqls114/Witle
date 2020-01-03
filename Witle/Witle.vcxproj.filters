@@ -625,6 +625,9 @@
     <Filter Include="13.Storage/Manager\18.MapInfoMgr">
       <UniqueIdentifier>{31632cf2-2d20-4b23-8496-59b24ad5b3b6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.Component\05.MyCollider\MyBBox">
+      <UniqueIdentifier>{898956c0-02d6-4267-bd4a-c472a4ceb87e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -1251,6 +1254,9 @@
     <ClInclude Include="QuadtreeMgr.h">
       <Filter>13.Storage/Manager\17.QuadtreeMgr</Filter>
     </ClInclude>
+    <ClInclude Include="MyBBox.h">
+      <Filter>02.Component\05.MyCollider\MyBBox</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1852,6 +1858,9 @@
     </ClCompile>
     <ClCompile Include="QuadtreeMgr.cpp">
       <Filter>13.Storage/Manager\17.QuadtreeMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="MyBBox.cpp">
+      <Filter>02.Component\05.MyCollider\MyBBox</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

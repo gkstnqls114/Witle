@@ -5,10 +5,12 @@ template<typename T>
 class Singleton
 {
 	static T* instance  ;
+	static bool bInitialize;
 
 private:
 	Singleton(Singleton const&) = delete;            // º¹»ç ¼û±è
 	Singleton & operator=(Singleton const&) = delete; // ÇÒ´ç ¼û±è
+
 
 protected:
 	Singleton()
@@ -38,8 +40,8 @@ public:
 			instance = nullptr;
 		}
 	}
-
+	 
 };
 
 
-template<typename T> T* Singleton<T>::instance = nullptr;
+template<typename T> T* Singleton<T>::instance = nullptr; 
