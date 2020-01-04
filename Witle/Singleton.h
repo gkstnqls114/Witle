@@ -45,7 +45,7 @@ public:
 
 	// 초기화 시점을 관리하기 위해 const SingletonMgr* 매개 인자를 갖도록 설정
 	// 실제로 내부에서 해당 포인터를 사용하지는 않음.
-	virtual void Init(const SingletonInitializer* singletonMgr) = 0;
+	virtual void Init(const SingletonInitializer* singletonMgr) = 0; 
 	 
 };
 

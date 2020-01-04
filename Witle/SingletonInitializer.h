@@ -12,5 +12,6 @@ private:
 
 public:
 	static void Init();
+	static void ReleaseInstance();
 	
 };

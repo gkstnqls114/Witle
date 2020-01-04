@@ -68,7 +68,7 @@ public:
 	void Init(XMFLOAT3&& center, XMFLOAT3&& extents, float min_size);
 
 	virtual void Init(const SingletonInitializer* singletonMgr) override;
-
+	
 	void Update(float fElapsedTime) ;
 	void LastUpdate(float fElapsedTime);
 	  

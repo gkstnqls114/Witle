@@ -980,7 +980,8 @@ void GameFramework::ReleaseObjects()
 	SceneMgr::ReleaseInstance();
 	BossSkillMgr::ReleaseInstance();
 	SoundManager::ReleaseInstance();
-
+	
+	SingletonInitializer::ReleaseInstance();
 }
 
 void GameFramework::UpdateGamelogic(float fElapsedTime)

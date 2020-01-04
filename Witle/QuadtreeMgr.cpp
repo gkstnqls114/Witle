@@ -77,28 +77,37 @@ void QuadtreeMgr::CreateRecursiveQuadTree(NODE* pNode, int& leafnodeIndex)
 
 void QuadtreeMgr::ReleaseQuadTree()
 {
-	ReleaseRecursiveQuadTree(m_pRootNode);
+	if (m_pRootNode != nullptr)
+	{ 
+		ReleaseRecursiveQuadTree(m_pRootNode);
+		m_pRootNode = nullptr;
+	}
+
+	if (m_pReafNodes != nullptr)
+	{
+		delete[] m_pReafNodes;
+		m_pReafNodes = nullptr;
+	}
 }
 
 void QuadtreeMgr::ReleaseRecursiveQuadTree(NODE* pNode)
 {
-	bool isHaveChildren = pNode->children[0] != nullptr;
-	 
+	// 자식이 있는 경우 재귀함수를 이용하여 children 내부로 들어간다.
+	bool isHaveChildren = pNode->children[0] != nullptr; 
 	if (isHaveChildren)
 	{
 		for (int x = 0; x < QUAD; ++x)
 		{
 			if (pNode->children[x])
 			{
-				ReleaseRecursiveQuadTree(pNode->children[x]);
+				ReleaseRecursiveQuadTree(pNode->children[x]); 
+				pNode->children[x] = nullptr;
 			}
-		} 
+		}
 	}
-	else
-	{
-		delete pNode;
-		pNode = nullptr;
-	}
+
+	// 자식이 없거나 위 과정이 끝나면 해당 노드를 delete한다.
+	delete pNode;   
 }
     
   
@@ -135,7 +144,7 @@ void QuadtreeMgr::Init(XMFLOAT3&& center, XMFLOAT3&& extents, float min_size)
 void QuadtreeMgr::Init(const SingletonInitializer* singletonMgr)
 {
 }
-
+ 
 void QuadtreeMgr::Update(float fElapsedTime)
 {
 }
