@@ -628,6 +628,9 @@
     <Filter Include="02.Component\05.MyCollider\MyBBox">
       <UniqueIdentifier>{898956c0-02d6-4267-bd4a-c472a4ceb87e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04.Scene\TestScene">
+      <UniqueIdentifier>{c15cde57-abc2-406f-a3a4-9a0bc3aa6f81}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -1257,6 +1260,9 @@
     <ClInclude Include="MyBBox.h">
       <Filter>02.Component\05.MyCollider\MyBBox</Filter>
     </ClInclude>
+    <ClInclude Include="TestScene.h">
+      <Filter>04.Scene\TestScene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1861,6 +1867,9 @@
     </ClCompile>
     <ClCompile Include="MyBBox.cpp">
       <Filter>02.Component\05.MyCollider\MyBBox</Filter>
+    </ClCompile>
+    <ClCompile Include="TestScene.cpp">
+      <Filter>04.Scene\TestScene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
