@@ -68,6 +68,7 @@ public:
 	void ChangeSceneToSkillSelect();
 	void ChangeSceneToWin();
 	void ChangeSceneToLose();
+	void ChangeSceneToTest();
 
 	// 장면을 전환하는 함수들
 
@@ -79,6 +80,7 @@ public:
 	bool IsSkillSelectScene() const;
 	bool IsWinScene() const;
 	bool IsLoseScene() const;
+	bool IsTestScene() const;
 
 	// 현재 장면이 해당 장면이 맞는지 bool 로 확인하는 함수
 

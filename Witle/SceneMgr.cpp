@@ -18,11 +18,11 @@ SceneMgr* SceneMgr::m_Instace{ nullptr };
 SceneMgr::SceneMgr()
 {
 	// 테스트를 위해 주석 처리
-	m_MainScene = new MainScene;
-	m_SkillSelectScene = new SkillSelectScene;
-	m_GameScene = new GameScene;
-	m_WinScene = new WinScene;
-	m_LoseScene = new LoseScene;
+	//m_MainScene = new MainScene;
+	//m_SkillSelectScene = new SkillSelectScene;
+	//m_GameScene = new GameScene;
+	//m_WinScene = new WinScene;
+	//m_LoseScene = new LoseScene;
 
 	m_TestScene = new TestScene;
 
@@ -73,7 +73,9 @@ void SceneMgr::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList
 		}
 	} 
 
-	ChangeSceneToMain();
+	// 테스트를 위해 주석 처리
+	// ChangeSceneToMain();
+	ChangeSceneToTest();
 }
 
 void SceneMgr::BuildHeap(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList)
@@ -231,6 +233,21 @@ void SceneMgr::ChangeSceneToLose()
 	m_CurrSceneType = ENUM_SCENE::SCENE_LOSE;
 }
 
+void SceneMgr::ChangeSceneToTest()
+{
+	if (m_TestScene == nullptr)
+	{
+#ifdef _DEBUG
+		std::cout << "m_TestScene is nullptr" << std::endl;
+#endif // _DEBUG 
+		return;
+	}
+
+	GameInput::ChagneDragMode();
+	m_pCurrScene = m_TestScene;
+	m_CurrSceneType = ENUM_SCENE::SCENE_TEST;
+}
+
 // 장면 //////////////////////////////////////////////////////////////////
 
 bool SceneMgr::IsGameScene() const
@@ -258,4 +275,9 @@ bool SceneMgr::IsLoseScene() const
 {
 	return m_CurrSceneType == ENUM_SCENE::SCENE_LOSE;
 
+}
+
+bool SceneMgr::IsTestScene() const
+{
+	return m_CurrSceneType == ENUM_SCENE::SCENE_TEST;
 }
