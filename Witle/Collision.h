@@ -37,8 +37,8 @@ public:
 	{
 		return a.Intersects(b);
 	}
-
-	static bool isCollide(MyCollider* a, MyCollider* b);
+	 
+	static bool isCollide(const MyCollider& a, const MyCollider& b); 
 
 	static bool isIn(const  BoundingOrientedBox& a, const XMFLOAT3& point)
 	{

@@ -217,38 +217,42 @@ void Collision::ProcessCollideTerrainObject(Monster * monster, const QuadtreeTer
 		}
 	}
 }
- 
-bool Collision::isCollide(MyCollider * a, MyCollider * b)
+  
+
+bool Collision::isCollide(const MyCollider& a, const MyCollider& b)
 {
-	COLLIDER_TYPE A_type = a->GetType();
-	COLLIDER_TYPE B_type = b->GetType();
+	COLLIDER_TYPE A_type = a.GetType();
+	COLLIDER_TYPE B_type = b.GetType();
+
+	auto t = &a;
 
 	if (A_type == COLLIDER_TYPE::BOUNDING_BOX && B_type == COLLIDER_TYPE::BOUNDING_BOX)
 	{
-		BoundingOrientedBox collider1 = static_cast<MyBOBox*>(a)->GetBOBox();
-		BoundingOrientedBox collider2 = static_cast<MyBOBox*>(b)->GetBOBox();
+		BoundingOrientedBox collider1 = static_cast<const MyBOBox*>(&a)->GetBOBox();
+		BoundingOrientedBox collider2 = static_cast<const MyBOBox*>(&b)->GetBOBox();
 		return collider1.Intersects(collider2);
 	}
 
 	if (A_type == COLLIDER_TYPE::BOUNDING_BOX && B_type == COLLIDER_TYPE::BOUNDING_SPHERE)
-	{  
-		BoundingOrientedBox collider1 = static_cast<MyBOBox*>(a)->GetBOBox();
-		BoundingSphere* collider2 = static_cast<MyBSphere*>(b)->GetBSphere();
-		return collider1.Intersects(*collider2);
+	{
+		BoundingOrientedBox collider1 = static_cast<const MyBOBox*>(&a)->GetBOBox();
+		BoundingSphere collider2 = static_cast<const MyBSphere*>(&b)->GetBSphere();
+		return collider1.Intersects(collider2);
 	}
 	if (A_type == COLLIDER_TYPE::BOUNDING_SPHERE && B_type == COLLIDER_TYPE::BOUNDING_BOX)
 	{
-		BoundingSphere* collider1 = static_cast<MyBSphere*>(a)->GetBSphere();
-		BoundingOrientedBox collider2 = static_cast<MyBOBox*>(b)->GetBOBox();
-		return collider1->Intersects(collider2);
+		BoundingSphere collider1 = static_cast<const MyBSphere*>(&a)->GetBSphere();
+		BoundingOrientedBox collider2 = static_cast<const MyBOBox*>(&b)->GetBOBox();
+		return collider1.Intersects(collider2);
 	}
 	if (A_type == COLLIDER_TYPE::BOUNDING_SPHERE && B_type == COLLIDER_TYPE::BOUNDING_SPHERE)
-	{ 
-		BoundingSphere* collider1 = static_cast<MyBSphere*>(a)->GetBSphere();
-		BoundingSphere* collider2 = static_cast<MyBSphere*>(b)->GetBSphere();
-		return collider1->Intersects(*collider2);
-	} 
+	{
+		BoundingSphere collider1 = static_cast<const MyBSphere*>(&a)->GetBSphere();
+		BoundingSphere collider2 = static_cast<const MyBSphere*>(&b)->GetBSphere();
+		return collider1.Intersects(collider2);
+	}
 
 	// 해당 경우의 수가 없으므로 경고창을 뱉습니다.
 	assert(false);
 }
+ 

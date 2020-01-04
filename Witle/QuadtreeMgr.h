@@ -1,4 +1,4 @@
-#pragma once
+#pragma once 
 #include "Singleton.h"
 
 const int MAX_TRIANGLES = 10000;
@@ -6,15 +6,7 @@ const int QUAD = 4;
 
 class MyBOBox;
 class MyBBox;
-
-struct INFO
-{
-	float centerX; // 메쉬의 중심 위치
-	float centerZ; // 메쉬의 중심 위치
-	float meshWidth; //매쉬의 최대 직경
-};
-
-
+ 
 /*
    QuadTree 알고리즘을 사용해 Map(= Terrain)위에 있는 충돌체의 위치(Transform)를 관리하는 클래스
 
@@ -31,7 +23,7 @@ private:
 		int terrainObjCount = -1; // 만약 leafnode일 경우 해당 노드에 존재하는 지형 오브젝트의 충돌체 개수
 		
 		// 만약 leafnode일 경우 해당 노드에 존재하는 지형 오브젝트의 충돌체들 (포인터)
-		std::list<MyBOBox*> terrainObjBoBoxs; 
+		std::list<const MyBOBox*> terrainObjBoBoxs; 
 
 	private: 
 		NODE(NODE const&) = delete;            // 복사 숨김
@@ -43,7 +35,7 @@ private:
 		~NODE();
 	}; 
 
-	NODE* m_pRootNode{ nullptr }; // 루트 노드
+	NODE* m_RootNode{ nullptr }; // 루트 노드
 
 	int m_ReafNodeCount = 0;
 	NODE** m_pReafNodes{ nullptr }; // 리프 노드를 접근할 동적 배열로 컨테이너에 불과함
@@ -59,6 +51,8 @@ private:
 	   
 	void ReleaseQuadTree();
 	void ReleaseRecursiveQuadTree(NODE* node);
+
+	void AddRecursiveCollider(NODE* node, const MyBOBox& collider);
 	  
 public:
 	QuadtreeMgr();
@@ -71,7 +65,10 @@ public:
 	
 	void Update(float fElapsedTime) ;
 	void LastUpdate(float fElapsedTime);
-	  
+
+	// 해당 충돌체와 충돌하는 treePiece에 충돌체를 추가합니다.
+	void AddCollider(const MyBOBox& collider);
+
 	// 리프노드의 개수를 반환합니다.
 	int GetReafNodeCount() { return m_ReafNodeCount; } 
 

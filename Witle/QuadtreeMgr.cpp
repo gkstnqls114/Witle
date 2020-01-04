@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "d3dUtil.h" 
 #include "MyBOBox.h" 
+#include "Collision.h"
 #include "QuadtreeMgr.h"
  
  
@@ -21,8 +22,8 @@ void QuadtreeMgr::CreateQuadTree()
 	assert(!(m_minSize <= 0) && "minSize is less than or equal 0");
 
 	// m_pReafNodes 의 개수를 계산하여 동적 배열 생성한다.
-	int leafnodeX = ceil((m_pRootNode->BoBox->GetBOBox().Extents.x * 2.f) / int(m_minSize)); // x 축에서 나눠지는 수
-	int leafnodeZ = ceil((m_pRootNode->BoBox->GetBOBox().Extents.z * 2.f) / int(m_minSize)); // z 축에서 나눠지는 수
+	int leafnodeX = ceil((m_RootNode->BoBox->GetBOBox().Extents.x * 2.f) / int(m_minSize)); // x 축에서 나눠지는 수
+	int leafnodeZ = ceil((m_RootNode->BoBox->GetBOBox().Extents.z * 2.f) / int(m_minSize)); // z 축에서 나눠지는 수
 
 	// 큰 값을 골라 포인터를 담는 동적 배열 생성
 	m_ReafNodeCount = (leafnodeX > leafnodeZ) ? leafnodeX : leafnodeZ;
@@ -32,7 +33,7 @@ void QuadtreeMgr::CreateQuadTree()
 
 	// 그 후
 	int leafnodeIndex = 0;
-	CreateRecursiveQuadTree(m_pRootNode, leafnodeIndex);
+	CreateRecursiveQuadTree(m_RootNode, leafnodeIndex);
 }
 
 void QuadtreeMgr::CreateRecursiveQuadTree(NODE* pNode, int& leafnodeIndex)
@@ -77,10 +78,10 @@ void QuadtreeMgr::CreateRecursiveQuadTree(NODE* pNode, int& leafnodeIndex)
 
 void QuadtreeMgr::ReleaseQuadTree()
 {
-	if (m_pRootNode != nullptr)
+	if (m_RootNode != nullptr)
 	{ 
-		ReleaseRecursiveQuadTree(m_pRootNode);
-		m_pRootNode = nullptr;
+		ReleaseRecursiveQuadTree(m_RootNode);
+		m_RootNode = nullptr;
 	}
 
 	if (m_pReafNodes != nullptr)
@@ -93,7 +94,7 @@ void QuadtreeMgr::ReleaseQuadTree()
 void QuadtreeMgr::ReleaseRecursiveQuadTree(NODE* pNode)
 {
 	// 자식이 있는 경우 재귀함수를 이용하여 children 내부로 들어간다.
-	bool isHaveChildren = pNode->children[0] != nullptr; 
+	bool isHaveChildren = pNode->children[0] != nullptr;
 	if (isHaveChildren)
 	{
 		for (int x = 0; x < QUAD; ++x)
@@ -109,6 +110,33 @@ void QuadtreeMgr::ReleaseRecursiveQuadTree(NODE* pNode)
 	// 자식이 없거나 위 과정이 끝나면 해당 노드를 delete한다.
 	delete pNode;   
 }
+
+void QuadtreeMgr::AddRecursiveCollider(NODE* pNode, const MyBOBox& collider)
+{
+	// 해당 노드의 충돌체와 부딪히지않으면 넘어간다.
+	bool isCollided = Collision::isCollide(*(pNode->BoBox), collider);
+	if (!isCollided) return;
+
+	bool isHaveChildren = pNode->children[0] != nullptr;
+	if (isHaveChildren)
+	{
+		// 자식이 있는 경우 재귀함수를 이용하여 children 내부로 들어간다.
+		for (int x = 0; x < QUAD; ++x)
+		{
+			if (pNode->children[x])
+			{
+				AddRecursiveCollider(pNode->children[x], collider); 
+			}
+		}
+	}
+	else
+	{
+		// 자식이 없으므로 리프노드라는 뜻이다.
+		// 충돌했으므로 노드 리스트에 추가한다.
+		pNode->terrainObjCount += 1;
+		pNode->terrainObjBoBoxs.push_back(&collider);
+	} 
+}
     
   
 QuadtreeMgr::QuadtreeMgr()  
@@ -117,7 +145,7 @@ QuadtreeMgr::QuadtreeMgr()
 
 QuadtreeMgr::~QuadtreeMgr()
 {
-	if (m_pRootNode)
+	if (m_RootNode)
 	{
 		ReleaseQuadTree();
 	}
@@ -127,10 +155,10 @@ void QuadtreeMgr::Init(const XMFLOAT3& center, const XMFLOAT3& extents, float mi
 {  
 	SetminSize(min_size);
 
-	if (m_pRootNode == nullptr)
+	if (m_RootNode == nullptr)
 	{
 		// 쿼드 트리의 부모 노드를 만듭니다.
-		m_pRootNode = new NODE(center, extents);
+		m_RootNode = new NODE(center, extents);
 	}
 
 	CreateQuadTree();
@@ -151,6 +179,11 @@ void QuadtreeMgr::Update(float fElapsedTime)
 
 void QuadtreeMgr::LastUpdate(float fElapsedTime)
 { 
+}
+
+void QuadtreeMgr::AddCollider(const MyBOBox& collider)
+{
+	AddRecursiveCollider(m_RootNode, collider);
 }
 
 void QuadtreeMgr::PrintInfo()

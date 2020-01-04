@@ -1183,7 +1183,7 @@ void GameScene::LastUpdate(float fElapsedTime)
 			// 체력이 0보다 적으면 검사하지 않는다.
 			if (m_TestMonster[i]->GetStatus()->GetGuage() <= 0.f) continue;
 
-			if (Collision::isCollide(m_TestMonster[i]->GetBOBox(), skill_collider))
+			if (Collision::isCollide(*m_TestMonster[i]->GetBOBox(), *skill_collider))
 			{
 				auto effect = PlayerSkillMgr::GetInstance()->GetpSelectableSkill(index)->m_skillEffect->GetCollier();
 
@@ -1195,7 +1195,7 @@ void GameScene::LastUpdate(float fElapsedTime)
 						pos = static_cast<MyBOBox*>(effect)->GetBOBox().Center;
 						break;
 					case BOUNDING_SPHERE:
-						pos = static_cast<MyBSphere*>(effect)->GetBSphere()->Center;
+						pos = static_cast<MyBSphere*>(effect)->GetBSphere().Center;
 						break;
 					default:
 						break;
@@ -1212,7 +1212,7 @@ void GameScene::LastUpdate(float fElapsedTime)
 		// 체력이 0보다 적으면 검사하지 않는다.
 		if (m_Dragon->GetStatus()->GetGuage() <= 0.f) continue;
 
-		if (Collision::isCollide(m_Dragon->GetBOBox(), skill_collider))
+		if (Collision::isCollide(*m_Dragon->GetBOBox(), *skill_collider))
 		{
 
 #ifdef _DEBUG
@@ -1228,7 +1228,7 @@ void GameScene::LastUpdate(float fElapsedTime)
 				pos = static_cast<MyBOBox*>(effect)->GetBOBox().Center;
 				break;
 			case BOUNDING_SPHERE:
-				pos = static_cast<MyBSphere*>(effect)->GetBSphere()->Center;
+				pos = static_cast<MyBSphere*>(effect)->GetBSphere().Center;
 				break;
 			default:
 				break;
@@ -1256,7 +1256,7 @@ void GameScene::LastUpdate(float fElapsedTime)
 
 		MyCollider* skill_collider = BossSkillMgr::GetInstance()->GetpSelectableSkill(index)->m_skillEffect->GetCollier();
 
-		if (Collision::isCollide(m_pPlayer->GetBOBox(), skill_collider))
+		if (Collision::isCollide(*m_pPlayer->GetBOBox(), *skill_collider))
 		{
 			auto effect = BossSkillMgr::GetInstance()->GetpSelectableSkill(index)->m_skillEffect->GetCollier();
 
@@ -1268,7 +1268,7 @@ void GameScene::LastUpdate(float fElapsedTime)
 					pos = static_cast<MyBOBox*>(effect)->GetBOBox().Center;
 					break;
 				case BOUNDING_SPHERE:
-					pos = static_cast<MyBSphere*>(effect)->GetBSphere()->Center;
+					pos = static_cast<MyBSphere*>(effect)->GetBSphere().Center;
 					break;
 				default:
 					break;
@@ -1304,7 +1304,7 @@ void GameScene::LastUpdate(float fElapsedTime)
 	}
 	 
 	// 보스와 플레이 부딪힘
-	if (Collision::isCollide(m_pPlayer->GetBOBox() , m_Dragon->GetBOBox()) 
+	if (Collision::isCollide(*m_pPlayer->GetBOBox() , *m_Dragon->GetBOBox()) 
 		&& m_Dragon->GetisAttacking()
 		&& !m_Dragon->GetisFinishAttack())
 	{ 

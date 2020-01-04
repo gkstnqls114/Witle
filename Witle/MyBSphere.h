@@ -25,5 +25,5 @@ public:
 	// center를 shift만큼 이동시킵니다.
 	void Move(const XMFLOAT3& xmf3Shift);
 
-	BoundingSphere* GetBSphere() { return &m_BSphere; }
+	BoundingSphere GetBSphere() const { return m_BSphere; }
 };
