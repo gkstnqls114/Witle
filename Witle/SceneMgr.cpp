@@ -1,4 +1,7 @@
 #include "stdafx.h"
+
+#include "SoundManager.h"
+
 #include "GameScene.h"
 #include "MainScene.h"
 #include "SkillSelectScene.h"
@@ -6,19 +9,30 @@
 #include "WinScene.h"
 #include "LoseScene.h"
 #include "GameInput.h"
-#include "SceneMgr.h"
+#include "TestScene.h"
 
-#include "SoundManager.h"
+#include "SceneMgr.h"
 
 SceneMgr* SceneMgr::m_Instace{ nullptr };
 
 SceneMgr::SceneMgr()
 {
+	// 테스트를 위해 주석 처리
 	m_MainScene = new MainScene;
 	m_SkillSelectScene = new SkillSelectScene;
 	m_GameScene = new GameScene;
 	m_WinScene = new WinScene;
 	m_LoseScene = new LoseScene;
+
+	m_TestScene = new TestScene;
+
+	// 복사, 붙여넣기하지않고 한번에 Build, Release 하기위해 list에 넣습니다.
+	m_SceneList.push_back(m_MainScene);
+	m_SceneList.push_back(m_SkillSelectScene);
+	m_SceneList.push_back(m_GameScene);
+	m_SceneList.push_back(m_WinScene);
+	m_SceneList.push_back(m_LoseScene);
+	m_SceneList.push_back(m_TestScene);
 }
 
 SceneMgr::~SceneMgr()
@@ -27,58 +41,37 @@ SceneMgr::~SceneMgr()
 
 void SceneMgr::ReleaseObjects()
 {
-	if (m_GameScene)
+	for (auto& scene : m_SceneList)
 	{
-		m_GameScene->ReleaseObjects();
-		delete m_GameScene;
-		m_GameScene = nullptr;
-	}
-
-	if (m_MainScene)
-	{
-		m_MainScene->ReleaseObjects();
-		delete m_MainScene;
-		m_MainScene = nullptr;
-	}
-
-	if (m_SkillSelectScene)
-	{
-		m_SkillSelectScene->ReleaseObjects();
-		delete m_SkillSelectScene;
-		m_SkillSelectScene = nullptr;
-	}
-
-	if (m_WinScene)
-	{
-		m_WinScene->ReleaseObjects();
-		delete m_WinScene;
-		m_WinScene = nullptr;
-	}
-
-	if (m_LoseScene)
-	{
-		m_LoseScene->ReleaseObjects();
-		delete m_LoseScene;
-		m_LoseScene = nullptr;
-	}
+		if (scene != nullptr)
+		{
+			scene->ReleaseObjects();
+			delete scene;
+			scene = nullptr;
+		}
+	} 
 }
 
 void SceneMgr::ReleaseUploadBuffers()
 {
-	if (m_GameScene) m_GameScene->ReleaseUploadBuffers();
-	if (m_MainScene) m_MainScene->ReleaseUploadBuffers();
-	if (m_SkillSelectScene) m_SkillSelectScene->ReleaseUploadBuffers();
-	if (m_WinScene) m_WinScene->ReleaseUploadBuffers();
-	if (m_LoseScene) m_LoseScene->ReleaseUploadBuffers();
+	for (auto& scene : m_SceneList)
+	{
+		if (scene != nullptr)
+		{
+			scene->ReleaseUploadBuffers(); 
+		}
+	} 
 }
 
 void SceneMgr::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList)
 {
-	if (m_GameScene) m_GameScene->BuildObjects(pd3dDevice, pd3dCommandList);
-	if (m_MainScene) m_MainScene->BuildObjects(pd3dDevice, pd3dCommandList);
-	if (m_SkillSelectScene) m_SkillSelectScene->BuildObjects(pd3dDevice, pd3dCommandList);
-	if (m_WinScene) m_WinScene->BuildObjects(pd3dDevice, pd3dCommandList);
-	if (m_LoseScene) m_LoseScene->BuildObjects(pd3dDevice, pd3dCommandList);
+	for (auto& scene : m_SceneList)
+	{
+		if (scene != nullptr)
+		{
+			scene->BuildObjects(pd3dDevice, pd3dCommandList);
+		}
+	} 
 
 	ChangeSceneToMain();
 }
@@ -93,7 +86,13 @@ void SceneMgr::BuildHeap(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * 
 // 게임
 void SceneMgr::ChangeSceneToGame()
 {
-	if (!m_GameScene) return;
+	if (m_GameScene == nullptr)
+	{
+#ifdef _DEBUG
+		std::cout << "m_GameScene is nullptr" << std::endl;
+#endif // _DEBUG 
+		return;
+	} 
 
 	bool isNot = false;
 	for (int i = 0; i < 4; ++i)
@@ -133,7 +132,13 @@ void SceneMgr::ChangeSceneToGame()
 // 메인
 void SceneMgr::ChangeSceneToMain()
 {
-	if (!m_MainScene) return;
+	if (m_MainScene == nullptr)
+	{
+#ifdef _DEBUG
+		std::cout << "m_MainScene is nullptr" << std::endl;
+#endif // _DEBUG 
+		return;
+	} 
 
 	// 사운드 ///////////////////////////////////////////////////////////
 	SoundManager::GetInstance()->Stop(ENUM_SOUND::WIN_SOUND);
@@ -154,7 +159,13 @@ void SceneMgr::ChangeSceneToMain()
 // 스킬 선택
 void SceneMgr::ChangeSceneToSkillSelect()
 {
-	if (!m_SkillSelectScene) return;
+	if (m_SkillSelectScene == nullptr)
+	{
+#ifdef _DEBUG
+		std::cout << "m_SkillSelectScene is nullptr" << std::endl;
+#endif // _DEBUG 
+		return;
+	}
 
 	// 사운드 ///////////////////////////////////////////////////////////
 	SoundManager::GetInstance()->Stop(ENUM_SOUND::WIN_SOUND);
@@ -196,7 +207,13 @@ void SceneMgr::ChangeSceneToWin()
 // 짐
 void SceneMgr::ChangeSceneToLose()
 {
-	if (!m_LoseScene) return;
+	if (m_LoseScene == nullptr)
+	{
+#ifdef _DEBUG
+		std::cout << "m_LoseScene is nullptr" << std::endl;
+#endif // _DEBUG 
+		return;
+	}
 
 	// 사운드 ///////////////////////////////////////////////////////////
 	SoundManager::GetInstance()->Stop(ENUM_SOUND::GAME_SOUND);

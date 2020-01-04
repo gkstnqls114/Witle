@@ -6,11 +6,14 @@ class MainScene;
 class SkillSelectScene;
 class LoseScene;
 class WinScene;
+class TestScene;
 
 class SceneMgr
 {
 	static SceneMgr* m_Instace;
 	
+	std::list<Scene*> m_SceneList;
+
 	Scene* m_pCurrScene{ nullptr };
 	ENUM_SCENE m_CurrSceneType{ ENUM_SCENE::SCENE_NONE };
 
@@ -23,6 +26,10 @@ class SceneMgr
 	WinScene* m_WinScene { nullptr };
 
 	// 사용하는 장면 목록들 //////////////////
+
+
+	// 테스트를 위해 사용할 장면
+	TestScene* m_TestScene{ nullptr };
 
 	SceneMgr();
 	~SceneMgr();

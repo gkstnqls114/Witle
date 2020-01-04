@@ -7,7 +7,7 @@
 void QuadtreeMgr::SetminSize(float min_size)
 {
 	// 이미 minSize가 설정된 경우
-	assert(!(min != 0) && "minSize is already seted");
+	assert(!(m_minSize != 0) && "minSize is already seted");
 
 	// 함수 ㅇ인자가 0과 작거나 같은 경우
 	assert(!(min_size <= 0) && "min_size is less than or equal 0");
