@@ -631,6 +631,9 @@
     <Filter Include="04.Scene\TestScene">
       <UniqueIdentifier>{c15cde57-abc2-406f-a3a4-9a0bc3aa6f81}</UniqueIdentifier>
     </Filter>
+    <Filter Include="13.Storage/Manager\19.SingletonMgr">
+      <UniqueIdentifier>{e4884912-8782-4122-9b19-6ae1ed032d32}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -1263,6 +1266,12 @@
     <ClInclude Include="TestScene.h">
       <Filter>04.Scene\TestScene</Filter>
     </ClInclude>
+    <ClInclude Include="MapInfoMgr.h">
+      <Filter>13.Storage/Manager\18.MapInfoMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="SingletonInitializer.h">
+      <Filter>13.Storage/Manager\19.SingletonMgr</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1870,6 +1879,12 @@
     </ClCompile>
     <ClCompile Include="TestScene.cpp">
       <Filter>04.Scene\TestScene</Filter>
+    </ClCompile>
+    <ClCompile Include="MapInfoMgr.cpp">
+      <Filter>13.Storage/Manager\18.MapInfoMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="SingletonInitializer.cpp">
+      <Filter>13.Storage/Manager\19.SingletonMgr</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

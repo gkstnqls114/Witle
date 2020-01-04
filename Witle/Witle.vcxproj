@@ -165,6 +165,7 @@
     <ClInclude Include="BloomRevealShader.h" />
     <ClInclude Include="BossBuf.h" />
     <ClInclude Include="BossDead.h" />
+    <ClInclude Include="MapInfoMgr.h" />
     <ClInclude Include="MyBBox.h" />
     <ClInclude Include="NoneAction.h" />
     <ClInclude Include="QuadtreeMgr.h" />
@@ -197,6 +198,7 @@
     <ClInclude Include="PlayerAction.h" />
     <ClInclude Include="PostprocessingSetting.h" />
     <ClInclude Include="Singleton.h" />
+    <ClInclude Include="SingletonInitializer.h" />
     <ClInclude Include="TestScene.h" />
     <ClInclude Include="ToneCuveShader.h" />
     <ClInclude Include="BloomShader.h" />
@@ -377,6 +379,7 @@
     <ClCompile Include="BloomRevealShader.cpp" />
     <ClCompile Include="BossBuf.cpp" />
     <ClCompile Include="BossDead.cpp" />
+    <ClCompile Include="MapInfoMgr.cpp" />
     <ClCompile Include="MyBBox.cpp" />
     <ClCompile Include="NoneAction.cpp" />
     <ClCompile Include="QuadtreeMgr.cpp" />
@@ -409,6 +412,7 @@
     <ClCompile Include="Mushroom.cpp" />
     <ClCompile Include="PlayerAction.cpp" />
     <ClCompile Include="PostprocessingSetting.cpp" />
+    <ClCompile Include="SingletonInitializer.cpp" />
     <ClCompile Include="TestScene.cpp" />
     <ClCompile Include="ToneCuveShader.cpp" />
     <ClCompile Include="BloomShader.cpp" />

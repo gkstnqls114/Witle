@@ -20,7 +20,7 @@ struct INFO
 
    LeafNode(= TreePiece) : 더 이상 나누어질수 없는 Quadtree Node를 의미함
 */
-class QuadtreeMgr : Singleton<QuadtreeMgr>
+class QuadtreeMgr : public Singleton<QuadtreeMgr>
 {  
 private: 
 	struct NODE
@@ -59,17 +59,18 @@ private:
 	   
 	void ReleaseQuadTree();
 	void ReleaseRecursiveQuadTree(NODE* node);
-	 
+	  
 public:
 	QuadtreeMgr();
 	virtual ~QuadtreeMgr();
 
 	void Init(const XMFLOAT3& center, const XMFLOAT3& extents, float min_size);
 
+	virtual void Init(const SingletonInitializer* singletonMgr) override;
+
 	void Update(float fElapsedTime) ;
 	void LastUpdate(float fElapsedTime);
-	 
-	 
+	  
 	// 리프노드의 개수를 반환합니다.
 	int GetReafNodeCount() { return m_ReafNodeCount; } 
 private:

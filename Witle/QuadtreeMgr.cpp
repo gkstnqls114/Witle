@@ -125,6 +125,10 @@ void QuadtreeMgr::Init(const XMFLOAT3& center, const XMFLOAT3& extents, float mi
 	CreateQuadTree();
 }
 
+void QuadtreeMgr::Init(const SingletonInitializer* singletonMgr)
+{
+}
+
 void QuadtreeMgr::Update(float fElapsedTime)
 {
 }
