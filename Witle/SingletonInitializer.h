@@ -14,6 +14,3 @@ public:
 	static void Init();
 	
 };
-
-
-const SingletonInitializer* SingletonInitializer::m_pSingletonInitializer{ nullptr };

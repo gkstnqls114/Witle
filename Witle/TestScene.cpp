@@ -9,11 +9,13 @@
 #include "Texture.h" 
 #include "SceneMgr.h"
 
+#include "QuadtreeMgr.h"
+
 #include "TestScene.h"
  
 TestScene::TestScene()
 {
-
+	
 }
 
 TestScene::~TestScene()
@@ -62,7 +64,7 @@ bool TestScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM w
 
 void TestScene::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList)
 {
-
+	QuadtreeMgr::GetInstance();
 }
 
 void TestScene::ReleaseObjects()

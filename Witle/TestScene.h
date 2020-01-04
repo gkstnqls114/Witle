@@ -5,7 +5,10 @@
 class TestScene
 	: public Scene
 {
-private: 
+private:
+	D3D12_VIEWPORT	m_d3dViewport;
+	D3D12_RECT		m_d3dScissorRect;
+
 
 protected: 
 	 
@@ -38,8 +41,5 @@ public:
 
 protected:
 
-private:
-	D3D12_VIEWPORT	m_d3dViewport;
-	D3D12_RECT		m_d3dScissorRect;
 	 
 };

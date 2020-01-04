@@ -136,6 +136,23 @@ void QuadtreeMgr::Update(float fElapsedTime)
 void QuadtreeMgr::LastUpdate(float fElapsedTime)
 { 
 }
+
+void QuadtreeMgr::PrintInfo()
+{
+#ifdef _DEBUG
+	std::cout << "Quadtree Leaf Node Info ... " << std::endl;
+	for (int x = 0; x < m_ReafNodeCount; ++x)
+	{
+		auto bobox = m_pReafNodes[x]->BoBox->GetBOBox();
+		std::cout << "Index ... " << x <<std::endl;
+		std::cout << "Center ... (" << bobox.Center.x << " , "<< bobox.Center.y << " , "<< bobox.Center.z << ")" << std::endl;
+		std::cout << "Size ... (" << bobox.Extents.x * 2 << " , " << bobox.Extents.y * 2 << " , " << bobox.Extents.z * 2<< ")" << std::endl;
+
+		if (x != 0 && x % 4 == 0) std::cout << std::endl;
+	}
+#endif // _DEBUG
+
+}
  
  
 QuadtreeMgr::NODE::NODE(XMFLOAT3&& center, XMFLOAT3&& extents)

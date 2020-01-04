@@ -73,6 +73,9 @@ public:
 	  
 	// 리프노드의 개수를 반환합니다.
 	int GetReafNodeCount() { return m_ReafNodeCount; } 
+
+	// QuadtreeMgr의 리프노드에 대한 정보를 확인합니다. 디버그모드인 경우에만 콘솔에 출력합니다.
+	void PrintInfo();
 private:
 
 };

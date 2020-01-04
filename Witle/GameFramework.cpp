@@ -21,6 +21,7 @@
 #include "SkillStg.h"
 #include "HitEffectMgr.h"
 #include "SoundManager.h"
+#include "SingletonInitializer.h"
 //// Manager ////////////////////////// 
 
 //// Scene //////////////////////////  
@@ -801,6 +802,8 @@ void GameFramework::BuildObjects()
 
 	m_CommandList->Reset(m_CommandAllocator.Get(), NULL);
 	 
+	SingletonInitializer::Init();
+
 	///////////////////////////////////////////////////////////////////////////// 리소스 생성
 	// 순서 변경 X /////////////
 
