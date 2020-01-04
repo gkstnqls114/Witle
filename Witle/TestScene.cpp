@@ -64,7 +64,7 @@ bool TestScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM w
 
 void TestScene::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList)
 {
-	QuadtreeMgr::GetInstance();
+	QuadtreeMgr::GetInstance()->PrintInfo();
 }
 
 void TestScene::ReleaseObjects()

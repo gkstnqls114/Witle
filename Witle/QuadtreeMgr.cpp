@@ -21,11 +21,13 @@ void QuadtreeMgr::CreateQuadTree()
 	assert(!(m_minSize <= 0) && "minSize is less than or equal 0");
 
 	// m_pReafNodes 의 개수를 계산하여 동적 배열 생성한다.
-	int leafnodeX = ceil(m_pRootNode->BoBox->GetBOBox().Extents.x / int(m_minSize));
-	int leafnodeZ = ceil(m_pRootNode->BoBox->GetBOBox().Extents.z / int(m_minSize));
+	int leafnodeX = ceil((m_pRootNode->BoBox->GetBOBox().Extents.x * 2.f) / int(m_minSize)); // x 축에서 나눠지는 수
+	int leafnodeZ = ceil((m_pRootNode->BoBox->GetBOBox().Extents.z * 2.f) / int(m_minSize)); // z 축에서 나눠지는 수
 
 	// 큰 값을 골라 포인터를 담는 동적 배열 생성
 	m_ReafNodeCount = (leafnodeX > leafnodeZ) ? leafnodeX : leafnodeZ;
+	m_ReafNodeCount = m_ReafNodeCount * m_ReafNodeCount; // 사각형이므로 N^2
+
 	m_pReafNodes = new NODE*[m_ReafNodeCount];
 
 	// 그 후
@@ -125,6 +127,11 @@ void QuadtreeMgr::Init(const XMFLOAT3& center, const XMFLOAT3& extents, float mi
 	CreateQuadTree();
 }
 
+void QuadtreeMgr::Init(XMFLOAT3&& center, XMFLOAT3&& extents, float min_size)
+{
+	Init(center, extents, min_size);
+}
+
 void QuadtreeMgr::Init(const SingletonInitializer* singletonMgr)
 {
 }
@@ -141,14 +148,17 @@ void QuadtreeMgr::PrintInfo()
 {
 #ifdef _DEBUG
 	std::cout << "Quadtree Leaf Node Info ... " << std::endl;
+	int n = 0;
 	for (int x = 0; x < m_ReafNodeCount; ++x)
 	{
+		n += 1;
+
 		auto bobox = m_pReafNodes[x]->BoBox->GetBOBox();
 		std::cout << "Index ... " << x <<std::endl;
 		std::cout << "Center ... (" << bobox.Center.x << " , "<< bobox.Center.y << " , "<< bobox.Center.z << ")" << std::endl;
 		std::cout << "Size ... (" << bobox.Extents.x * 2 << " , " << bobox.Extents.y * 2 << " , " << bobox.Extents.z * 2<< ")" << std::endl;
 
-		if (x != 0 && x % 4 == 0) std::cout << std::endl;
+		if (n % 4 == 0) std::cout << std::endl;
 	}
 #endif // _DEBUG
 

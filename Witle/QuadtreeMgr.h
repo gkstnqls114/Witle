@@ -37,7 +37,7 @@ private:
 		NODE(NODE const&) = delete;            // º¹»ç ¼û±è
 		NODE& operator=(NODE const&) = delete; // ÇÒ´ç ¼û±è
 
-	public:
+	public: 
 		NODE(XMFLOAT3&& center, XMFLOAT3&& extents); 
 		NODE(const XMFLOAT3& center, const XMFLOAT3& extents);
 		~NODE();
@@ -65,6 +65,7 @@ public:
 	virtual ~QuadtreeMgr();
 
 	void Init(const XMFLOAT3& center, const XMFLOAT3& extents, float min_size);
+	void Init(XMFLOAT3&& center, XMFLOAT3&& extents, float min_size);
 
 	virtual void Init(const SingletonInitializer* singletonMgr) override;
 
