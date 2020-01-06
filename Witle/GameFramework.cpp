@@ -802,8 +802,6 @@ void GameFramework::BuildObjects()
 
 	m_CommandList->Reset(m_CommandAllocator.Get(), NULL);
 	 
-	SingletonInitializer::Init();
-
 	///////////////////////////////////////////////////////////////////////////// 리소스 생성
 	// 순서 변경 X /////////////
 
@@ -819,6 +817,10 @@ void GameFramework::BuildObjects()
 	HitEffectMgr::GetInstance()->BuildObjects(m_d3dDevice.Get(), m_CommandList.Get());
 	SkillStg::GetInstance()->BuildObjects(m_d3dDevice.Get(), m_CommandList.Get()); // 스킬 이펙트 생성
 	BossSkillMgr::GetInstance()->BuildObjects(m_d3dDevice.Get(), m_CommandList.Get()); // 스킬 이펙트 생성
+
+    // Model Stg 생성후 호출해야한다.
+	SingletonInitializer::Init();
+
 
 	// 모든 씬의 오브젝트 및 텍스쳐들을 빌드합니다.
 	SceneMgr::GetInstance()->BuildObjects(m_d3dDevice.Get(), m_CommandList.Get());

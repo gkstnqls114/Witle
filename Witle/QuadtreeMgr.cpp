@@ -228,19 +228,22 @@ void QuadtreeMgr::CreateTerrainObj(FILE* pInFile)
 					strncpy(name, "Cliff", 64); // Object001을 Cliff로 취급하도록 이름을 바꾼다.
 				}
 				
-#ifdef DEBUG
+ 
+				// 모든 모델은 충돌체를 지니고있지 않다. 한번 확인해준다.
+				MyBOBox* pBoBox = ModelStorage::GetInstance()->GetBOBox(modelname);
+				if (pBoBox == nullptr) continue;
+
+#ifdef _DEBUG
 				std::cout << name << " ... Quaddtree Add" << std::endl;
 #endif // DEBUG
-
 
 				// 모델 오브젝트에 대한 월드 행렬을 재계산한다. 필수과정!
 				LoadObject* TestObject = ModelStorage::GetInstance()->GetRootObject(name);
 				TestObject->SetTransform(transform);
 				TestObject->UpdateTransform(NULL);
-				 
-				// 충돌체를 월드행렬에 맞추어 계산한다.  
-				MyBOBox mybobox = *ModelStorage::GetInstance()->GetBOBox(modelname);
 
+				// 충돌체를 월드행렬에 맞추어 계산한다. 
+				MyBOBox mybobox = *pBoBox;
 				mybobox.Move(XMFLOAT3(TestObject->m_pChild->m_xmf4x4World._41, 0, TestObject->m_pChild->m_xmf4x4World._43));
 
 				AddCollider(mybobox, TestObject->m_pChild->m_xmf4x4World);
