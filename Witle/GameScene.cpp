@@ -1640,10 +1640,10 @@ void GameScene::UpdateCollision(float fElapsedTime)
 	Collision::ProcessCollideEdge(m_pPlayer, 4, outside_box, fElapsedTime);
 
 	// 플레이어와 지형지물 충돌을 확인한다. 
-	Collision::ProcessCollideTerrainObject(m_pPlayer, m_pQuadtreeTerrain, fElapsedTime);
+	//Collision::ProcessCollideTerrainObject(m_pPlayer, m_pQuadtreeTerrain, fElapsedTime);
 	 
 	// 보스와 지형지물 충돌을 확인한다. 
-	Collision::ProcessCollideTerrainObject(m_Dragon, m_pQuadtreeTerrain, fElapsedTime);
+	//Collision::ProcessCollideTerrainObject(m_Dragon, m_pQuadtreeTerrain, fElapsedTime);
 	  
 	// 몬스터 충돌체크 ///////////////////////// 
 	for (int x = 0; x < m_TestMonsterCount; ++x)
