@@ -4,7 +4,7 @@
 #include "LineCube.h"
 #include "MyBOBox.h"
 #ifdef _DEBUG
-bool MyBOBox::RENDER_BBOX = true;
+bool MyBOBox::RENDER_BBOX = false;
 #endif // _DEBUG
 
 void MyBOBox::CHANGEMODE()

@@ -73,7 +73,7 @@ void SceneMgr::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList
 	} 
 
 	// 테스트를 위해 주석 처리
-	ChangeSceneToGame();
+	ChangeSceneToMain();
 	// ChangeSceneToTest();
 }
 

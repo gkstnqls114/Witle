@@ -811,16 +811,14 @@ void GameFramework::BuildObjects()
 	BuildShaders(); // 생성된 루트 시그니처를 사용하는 쉐이더 생성
 	CreateRWBuffer(); // CommandList Reset된 이후에 해야함
 	 
-	// test위해 임시로 주석처리
-	//// 터레인 오브젝트에서 사용될 모든 텍스쳐과 모델을 가져온다.
-	// TextureStorage::GetInstance()->CreateTextures(m_d3dDevice.Get(), m_CommandList.Get());
+	// 터레인 오브젝트에서 사용될 모든 텍스쳐과 모델을 가져온다.
+	 TextureStorage::GetInstance()->CreateTextures(m_d3dDevice.Get(), m_CommandList.Get());
 
-	////// 반드시 텍스쳐를 생성하고 나서 호출해야한다.
-	//ModelStorage::GetInstance()->CreateModels(m_d3dDevice.Get(), m_CommandList.Get(), GraphicsRootSignatureMgr::GetGraphicsRootSignature());
-	//HitEffectMgr::GetInstance()->BuildObjects(m_d3dDevice.Get(), m_CommandList.Get());
-	//SkillStg::GetInstance()->BuildObjects(m_d3dDevice.Get(), m_CommandList.Get()); // 스킬 이펙트 생성
-	//BossSkillMgr::GetInstance()->BuildObjects(m_d3dDevice.Get(), m_CommandList.Get()); // 스킬 이펙트 생성
-	// test위해 임시로 주석처리
+	//// 반드시 텍스쳐를 생성하고 나서 호출해야한다.
+	ModelStorage::GetInstance()->CreateModels(m_d3dDevice.Get(), m_CommandList.Get(), GraphicsRootSignatureMgr::GetGraphicsRootSignature());
+	HitEffectMgr::GetInstance()->BuildObjects(m_d3dDevice.Get(), m_CommandList.Get());
+	SkillStg::GetInstance()->BuildObjects(m_d3dDevice.Get(), m_CommandList.Get()); // 스킬 이펙트 생성
+	BossSkillMgr::GetInstance()->BuildObjects(m_d3dDevice.Get(), m_CommandList.Get()); // 스킬 이펙트 생성
 
 	// 모든 씬의 오브젝트 및 텍스쳐들을 빌드합니다.
 	SceneMgr::GetInstance()->BuildObjects(m_d3dDevice.Get(), m_CommandList.Get());

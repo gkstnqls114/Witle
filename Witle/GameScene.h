@@ -147,7 +147,7 @@ public:
 #ifdef _DEBUG
 	int						m_TestMonsterCount{ 0 }; //원래 107마리..
 #else
-	int						m_TestMonsterCount{ 100 }; //원래 107마리..
+	int						m_TestMonsterCount{ 0 }; //원래 107마리..
 #endif // DEBUG
 
 	Monster**				m_TestMonster{ nullptr };
