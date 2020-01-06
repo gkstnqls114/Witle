@@ -8,10 +8,14 @@
 void QuadtreeMgr::SetminSize(float min_size)
 {
 	// 이미 minSize가 설정된 경우
-	assert(!(m_minSize != 0) && "minSize is already seted");
+	bool isAlreadySeted = m_minSize != 0;
+	assert(!(isAlreadySeted) && "minSize is already seted");
+	if (isAlreadySeted) return;
 
-	// 함수 ㅇ인자가 0과 작거나 같은 경우
-	assert(!(min_size <= 0) && "min_size is less than or equal 0");
+	// 함수 인자가 0과 작거나 같은 경우
+	bool isLessEqualZero = min_size <= 0;
+	assert(!(isLessEqualZero) && "min_size is less than or equal 0");
+	if (isLessEqualZero) return;
 
 	m_minSize = min_size;
 }
@@ -19,7 +23,9 @@ void QuadtreeMgr::SetminSize(float min_size)
 void QuadtreeMgr::CreateQuadTree()
 {
 	// 제일 작은 쿼드트리 사이즈가 0보다 같거나 작습니다.
-	assert(!(m_minSize <= 0) && "minSize is less than or equal 0");
+	bool isLessEqualZero = m_minSize <= 0;
+	assert(!(isLessEqualZero) && "minSize is less than or equal 0");
+	if (isLessEqualZero) return;
 
 	// m_pReafNodes 의 개수를 계산하여 동적 배열 생성한다.
 	int leafnodeX = ceil((m_RootNode->BoBox->GetBOBox().Extents.x * 2.f) / int(m_minSize)); // x 축에서 나눠지는 수
