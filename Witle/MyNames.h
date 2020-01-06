@@ -1,5 +1,7 @@
 #pragma once
 
+#define TERRAIN_OBJS_INFO_PATH "Information/Terrain.bin"
+
 // 해당 프로젝트에 존재하는 모델 이름들
 
 // 모델 이름 정의 

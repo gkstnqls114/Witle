@@ -1,4 +1,5 @@
 #pragma once 
+#include "MyBOBox.h"
 #include "Singleton.h"
 
 const int MAX_TRIANGLES = 10000;
@@ -18,9 +19,10 @@ class QuadtreeMgr : public Singleton<QuadtreeMgr>
 private: 
 	struct TerrainObj // Terrain 위에 존재하는 지형 오브젝트
 	{
-		const Model* const pModel{ nullptr }; // ModelStg에서 갖고올 모델 포인터
-		const MyBOBox* const BoBox{ nullptr };      // ModelStg에서 갖고올 모델의 충돌박스
-		XMFLOAT4X4 world;				// 월드행렬
+		MyBOBox BoBox;      // ModelStg에서 갖고올 모델의 충돌박스
+		XMFLOAT4X4 World;				// 월드행렬
+
+		TerrainObj(MyBOBox bobox, XMFLOAT4X4 world) : BoBox(bobox), World(world) {}
 	};
 	 
 	struct NODE
@@ -60,7 +62,10 @@ private:
 	void ReleaseQuadTree();
 	void ReleaseRecursiveQuadTree(NODE* node);
 
-	void AddRecursiveCollider(NODE* node, const Model* const pModel, const MyBOBox* const collider, const XMFLOAT4X4& world);
+	void CreateTerrainObj(const char* terrain_info_path);
+	void CreateTerrainObj(FILE* pInFile);
+
+	void AddRecursiveCollider(NODE* node, const MyBOBox& collider, const XMFLOAT4X4& world);
 	
 public:
 	QuadtreeMgr();
@@ -75,9 +80,8 @@ public:
 	void LastUpdate(float fElapsedTime);
 
 	// 해당 충돌체와 충돌하는 treePiece에 충돌체를 추가합니다.
-	void AddCollider(const Model* const pModel, const MyBOBox* const collider, const XMFLOAT4X4& world);
-	void AddCollider(const Model* const pModel, const MyBOBox* const collider, XMFLOAT4X4&& world);
-
+	void AddCollider(const MyBOBox& BoBox, const XMFLOAT4X4& world);
+	
 	// 리프노드의 개수를 반환합니다.
 	int GetReafNodeCount() { return m_ReafNodeCount; } 
 
