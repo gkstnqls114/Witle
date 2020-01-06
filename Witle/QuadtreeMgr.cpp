@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "d3dUtil.h" 
-#include "MyBOBox.h" 
+#include "MyBOBox.h"
+#include "ModelStorage.h"
 #include "Collision.h"
 #include "QuadtreeMgr.h"
  
@@ -117,10 +118,10 @@ void QuadtreeMgr::ReleaseRecursiveQuadTree(NODE* pNode)
 	delete pNode;   
 }
 
-void QuadtreeMgr::AddRecursiveCollider(NODE* pNode, const MyBOBox& collider)
+void QuadtreeMgr::AddRecursiveCollider(NODE* pNode, const Model* const pModel, const MyBOBox* const BoBox, const XMFLOAT4X4& world)
 {
 	// 해당 노드의 충돌체와 부딪히지않으면 넘어간다.
-	bool isCollided = Collision::isCollide(*(pNode->BoBox), collider);
+	bool isCollided = Collision::isCollide(*(pNode->BoBox), *BoBox);
 	if (!isCollided) return;
 
 	bool isHaveChildren = pNode->children[0] != nullptr;
@@ -131,7 +132,7 @@ void QuadtreeMgr::AddRecursiveCollider(NODE* pNode, const MyBOBox& collider)
 		{
 			if (pNode->children[x])
 			{
-				AddRecursiveCollider(pNode->children[x], collider); 
+				AddRecursiveCollider(pNode->children[x], pModel, BoBox, world);
 			}
 		}
 	}
@@ -140,11 +141,10 @@ void QuadtreeMgr::AddRecursiveCollider(NODE* pNode, const MyBOBox& collider)
 		// 자식이 없으므로 리프노드라는 뜻이다.
 		// 충돌했으므로 노드 리스트에 추가한다.
 		pNode->terrainObjCount += 1;
-		pNode->terrainObjBoBoxs.push_back(&collider);
-	} 
+		pNode->terrainObjBoBoxs.push_back(TerrainObj{ pModel, BoBox, world });
+	}
 }
-    
-  
+ 
 QuadtreeMgr::QuadtreeMgr()  
 {
 }
@@ -187,11 +187,16 @@ void QuadtreeMgr::LastUpdate(float fElapsedTime)
 { 
 }
 
-void QuadtreeMgr::AddCollider(const MyBOBox& collider)
+void QuadtreeMgr::AddCollider(const Model* const pModel, const MyBOBox* const collider, const XMFLOAT4X4& world)
 {
-	AddRecursiveCollider(m_RootNode, collider);
+	AddRecursiveCollider(m_RootNode, pModel, collider, world);
 }
 
+void QuadtreeMgr::AddCollider(const Model* const pModel, const MyBOBox* const collider, XMFLOAT4X4&& world)
+{
+	AddRecursiveCollider(m_RootNode, pModel, collider, world);
+}
+ 
 void QuadtreeMgr::PrintInfo()
 {
 #ifdef _DEBUG

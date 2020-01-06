@@ -6,6 +6,7 @@ const int QUAD = 4;
 
 class MyBOBox;
 class MyBBox;
+class Model;
  
 /*
    QuadTree 알고리즘을 사용해 Map(= Terrain)위에 있는 충돌체의 위치(Transform)를 관리하는 클래스
@@ -15,15 +16,22 @@ class MyBBox;
 class QuadtreeMgr : public Singleton<QuadtreeMgr>
 {  
 private: 
+	struct TerrainObj // Terrain 위에 존재하는 지형 오브젝트
+	{
+		const Model* const pModel{ nullptr }; // ModelStg에서 갖고올 모델 포인터
+		const MyBOBox* const BoBox{ nullptr };      // ModelStg에서 갖고올 모델의 충돌박스
+		XMFLOAT4X4 world;				// 월드행렬
+	};
+	 
 	struct NODE
 	{
-		MyBOBox* BoBox{ nullptr };  // 해당 노드의 충돌체 
+		MyBOBox* BoBox{ nullptr };  // 해당 노드(맵)의 충돌체 
 		NODE* children[QUAD]{ nullptr,  nullptr , nullptr , nullptr }; // 자식 노드들
 		
 		int terrainObjCount = -1; // 만약 leafnode일 경우 해당 노드에 존재하는 지형 오브젝트의 충돌체 개수
 		
 		// 만약 leafnode일 경우 해당 노드에 존재하는 지형 오브젝트의 충돌체들 (포인터)
-		std::list<const MyBOBox*> terrainObjBoBoxs; 
+		std::list<TerrainObj> terrainObjBoBoxs;
 
 	private: 
 		NODE(NODE const&) = delete;            // 복사 숨김
@@ -52,8 +60,8 @@ private:
 	void ReleaseQuadTree();
 	void ReleaseRecursiveQuadTree(NODE* node);
 
-	void AddRecursiveCollider(NODE* node, const MyBOBox& collider);
-	  
+	void AddRecursiveCollider(NODE* node, const Model* const pModel, const MyBOBox* const collider, const XMFLOAT4X4& world);
+	
 public:
 	QuadtreeMgr();
 	virtual ~QuadtreeMgr();
@@ -67,7 +75,8 @@ public:
 	void LastUpdate(float fElapsedTime);
 
 	// 해당 충돌체와 충돌하는 treePiece에 충돌체를 추가합니다.
-	void AddCollider(const MyBOBox& collider);
+	void AddCollider(const Model* const pModel, const MyBOBox* const collider, const XMFLOAT4X4& world);
+	void AddCollider(const Model* const pModel, const MyBOBox* const collider, XMFLOAT4X4&& world);
 
 	// 리프노드의 개수를 반환합니다.
 	int GetReafNodeCount() { return m_ReafNodeCount; } 

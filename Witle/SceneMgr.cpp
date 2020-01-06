@@ -16,13 +16,12 @@
 SceneMgr* SceneMgr::m_Instace{ nullptr };
 
 SceneMgr::SceneMgr()
-{
-	// 테스트를 위해 주석 처리
-	//m_MainScene = new MainScene;
-	//m_SkillSelectScene = new SkillSelectScene;
-	//m_GameScene = new GameScene;
-	//m_WinScene = new WinScene;
-	//m_LoseScene = new LoseScene;
+{ 
+	m_MainScene = new MainScene;
+	m_SkillSelectScene = new SkillSelectScene;
+	m_GameScene = new GameScene;
+	m_WinScene = new WinScene;
+	m_LoseScene = new LoseScene;
 
 	m_TestScene = new TestScene;
 
@@ -74,8 +73,8 @@ void SceneMgr::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList
 	} 
 
 	// 테스트를 위해 주석 처리
-	// ChangeSceneToMain();
-	ChangeSceneToTest();
+	ChangeSceneToGame();
+	// ChangeSceneToTest();
 }
 
 void SceneMgr::BuildHeap(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList)
