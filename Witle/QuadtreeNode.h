@@ -16,6 +16,9 @@ namespace quadtree
 		MyBOBox* BoBox{ nullptr };  // 해당 노드(맵)의 충돌체 
 		NODE* children[4]{ nullptr,  nullptr , nullptr , nullptr }; // 자식 노드들
 
+#if defined(DEBUG) | defined(_DEBUG)
+		int reafIndex = -1; // 자식노드일때만 설정하는 디버그용 변수
+#endif  
 		int terrainObjCount = -1; // 만약 leafnode일 경우 해당 노드에 존재하는 지형 오브젝트의 충돌체 개수
 
 		// 만약 leafnode일 경우 해당 노드에 존재하는 지형 오브젝트의 충돌체들 (포인터)

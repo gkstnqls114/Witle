@@ -54,6 +54,10 @@ void QuadtreeMgr::CreateRecursiveQuadTree(quadtree::NODE* pNode, int& leafnodeIn
 	if (isLeafNode)
 	{
 		assert(!(m_ReafNodeCount <= leafnodeIndex) && "index is greater than leaf node count");
+
+#if defined(DEBUG) | defined(_DEBUG)
+		pNode->reafIndex = leafnodeIndex;
+#endif   
 		m_pReafNodes[leafnodeIndex] = pNode;
 		leafnodeIndex += 1;
 	}
@@ -295,11 +299,7 @@ void QuadtreeMgr::ProcessRecursiveCollide(const quadtree::NODE& node, const MyBO
 		}
 	}
 	else
-	{
-		// 충돌체크 
-#ifdef _DEBUG
-		std::cout << "Collided" << std::endl;
-#endif // _DEBUG
+	{ 
 
 	}
 }
