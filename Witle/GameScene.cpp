@@ -1637,9 +1637,10 @@ void GameScene::UpdateCollision(float fElapsedTime)
 	};
 
 	// 외곽 4 부분과 충돌처리 확인한다.
-	Collision::ProcessCollideEdge(m_pPlayer, 4, outside_box, fElapsedTime);
+	//Collision::ProcessCollideEdge(m_pPlayer, 4, outside_box, fElapsedTime);
 
-	// 플레이어와 지형지물 충돌을 확인한다. 
+	// 플레이어와 지형지물 충돌을 확인한다.  
+	QuadtreeMgr::GetInstance()->ProcessCollide(*m_pPlayer->GetBOBox());
 	//Collision::ProcessCollideTerrainObject(m_pPlayer, m_pQuadtreeTerrain, fElapsedTime);
 	 
 	// 보스와 지형지물 충돌을 확인한다. 

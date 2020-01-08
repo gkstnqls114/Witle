@@ -1,13 +1,7 @@
 #pragma once 
-#include "MyBOBox.h"
+#include "QuadtreeNode.h"
 #include "Singleton.h"
-
-const int MAX_TRIANGLES = 10000;
-const int QUAD = 4;
-
-class MyBOBox;
-class MyBBox;
-class Model;
+  
  
 /*
    QuadTree 알고리즘을 사용해 Map(= Terrain)위에 있는 충돌체의 위치(Transform)를 관리하는 클래스
@@ -17,38 +11,10 @@ class Model;
 class QuadtreeMgr : public Singleton<QuadtreeMgr>
 {  
 private: 
-	struct TerrainObj // Terrain 위에 존재하는 지형 오브젝트
-	{
-		MyBOBox BoBox;      // ModelStg에서 갖고올 모델의 충돌박스
-		XMFLOAT4X4 World;				// 월드행렬
-
-		TerrainObj(MyBOBox bobox, XMFLOAT4X4 world) : BoBox(bobox), World(world) {}
-	};
-	 
-	struct NODE
-	{
-		MyBOBox* BoBox{ nullptr };  // 해당 노드(맵)의 충돌체 
-		NODE* children[QUAD]{ nullptr,  nullptr , nullptr , nullptr }; // 자식 노드들
-		
-		int terrainObjCount = -1; // 만약 leafnode일 경우 해당 노드에 존재하는 지형 오브젝트의 충돌체 개수
-		
-		// 만약 leafnode일 경우 해당 노드에 존재하는 지형 오브젝트의 충돌체들 (포인터)
-		std::list<TerrainObj> terrainObjBoBoxs;
-
-	private: 
-		NODE(NODE const&) = delete;            // 복사 숨김
-		NODE& operator=(NODE const&) = delete; // 할당 숨김
-
-	public: 
-		NODE(XMFLOAT3&& center, XMFLOAT3&& extents); 
-		NODE(const XMFLOAT3& center, const XMFLOAT3& extents);
-		~NODE();
-	}; 
-
-	NODE* m_RootNode{ nullptr }; // 루트 노드
+	quadtree::NODE* m_RootNode{ nullptr }; // 루트 노드
 
 	int m_ReafNodeCount = 0;
-	NODE** m_pReafNodes{ nullptr }; // 리프 노드를 접근할 동적 배열로 컨테이너에 불과함
+	quadtree::NODE** m_pReafNodes{ nullptr }; // 리프 노드를 접근할 동적 배열로 컨테이너에 불과함
 
 	float m_minSize{ 0 }; // 제일 작은 width or height의 조건. 둘 중 하나가 minSize라면 더이상 노드를 만들지 않는다.
 
@@ -57,15 +23,17 @@ private:
 	void SetminSize(float min_size);
 
 	void CreateQuadTree();
-	void CreateRecursiveQuadTree(NODE* node, int& leafnodeIndex);
+	void CreateRecursiveQuadTree(quadtree::NODE* node, int& leafnodeIndex);
 	   
 	void ReleaseQuadTree();
-	void ReleaseRecursiveQuadTree(NODE* node);
+	void ReleaseRecursiveQuadTree(quadtree::NODE* node);
 
 	void CreateTerrainObj(const char* terrain_info_path);
 	void CreateTerrainObj(FILE* pInFile);
 
-	void AddRecursiveCollider(NODE* node, const MyBOBox& collider, const XMFLOAT4X4& world);
+	void ProcessRecursiveCollide(const quadtree::NODE& node, const MyBOBox& BoBox);
+
+	void AddRecursiveCollider(quadtree::NODE* node, const MyBOBox& collider, const XMFLOAT4X4& world);
 	
 public:
 	QuadtreeMgr();
@@ -81,9 +49,14 @@ public:
 
 	// 해당 충돌체와 충돌하는 treePiece에 충돌체를 추가합니다.
 	void AddCollider(const MyBOBox& BoBox, const XMFLOAT4X4& world);
-	
+	 
+	// bobox 와 충돌체크합니다.
+	void ProcessCollide(const MyBOBox& BoBox);
+
 	// 리프노드의 개수를 반환합니다.
 	int GetReafNodeCount() { return m_ReafNodeCount; } 
+
+	const quadtree::NODE& GetRoot() const { return *m_RootNode; }
 
 	// QuadtreeMgr의 리프노드에 대한 정보를 확인합니다. 디버그모드인 경우에만 콘솔에 출력합니다.
 	void PrintInfo();

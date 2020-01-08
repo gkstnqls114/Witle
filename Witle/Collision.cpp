@@ -78,7 +78,7 @@ bool Collision::ProcessCollision(const BoundingOrientedBox & moveObject,
 	}
 	return false;
 }
-
+ 
 void Collision::ProcessCollideEdge(Player * player, int TerrainObjectCount, const MyBOBox * terrainObject, float fElapsedTime)
 {
 	BoundingOrientedBox AlreadyPlayerBBox = player->CalculateAlreadyBoundingBox(fElapsedTime);
@@ -218,7 +218,7 @@ void Collision::ProcessCollideTerrainObject(Monster * monster, const QuadtreeTer
 	}
 }
   
-
+ 
 bool Collision::isCollide(const MyCollider& a, const MyCollider& b)
 {
 	COLLIDER_TYPE A_type = a.GetType();

@@ -38,14 +38,14 @@ void QuadtreeMgr::CreateQuadTree()
 	m_ReafNodeCount = (leafnodeX > leafnodeZ) ? leafnodeX : leafnodeZ;
 	m_ReafNodeCount = m_ReafNodeCount * m_ReafNodeCount; // 사각형이므로 N^2
 
-	m_pReafNodes = new NODE*[m_ReafNodeCount];
+	m_pReafNodes = new quadtree::NODE*[m_ReafNodeCount];
 
 	// 그 후
 	int leafnodeIndex = 0;
 	CreateRecursiveQuadTree(m_RootNode, leafnodeIndex);
 }
 
-void QuadtreeMgr::CreateRecursiveQuadTree(NODE* pNode, int& leafnodeIndex)
+void QuadtreeMgr::CreateRecursiveQuadTree(quadtree::NODE* pNode, int& leafnodeIndex)
 {
 	// Extents 의 x, z 의 *2 중 하나라도 minSize보다 작거나 같으면 더 이상 노드를 만들지 않는다.
 	XMFLOAT3 nodeExents = pNode->BoBox->GetBOBox().Extents;
@@ -69,7 +69,7 @@ void QuadtreeMgr::CreateRecursiveQuadTree(NODE* pNode, int& leafnodeIndex)
 		// │ 0 │ 1 │
 		// └───┴───┘ ▶ x
 		// 위와 같은 형식과 순서로 생성합니다. y는 그대로입니다.
-		XMFLOAT3 center[QUAD]
+		XMFLOAT3 center[4]
 		{
 			XMFLOAT3(nodeCenter.x - extents.x, nodeCenter.y, nodeCenter.z - extents.z), // 0
 			XMFLOAT3(nodeCenter.x + extents.x, nodeCenter.y, nodeCenter.z - extents.z), // 1
@@ -77,9 +77,9 @@ void QuadtreeMgr::CreateRecursiveQuadTree(NODE* pNode, int& leafnodeIndex)
 			XMFLOAT3(nodeCenter.x + extents.x, nodeCenter.y, nodeCenter.z + extents.z)  // 3
 		};
 		 
-		for (int x = 0; x < QUAD; ++x)
+		for (int x = 0; x < 4; ++x)
 		{
-			pNode->children[x] = new NODE(center[x], extents);
+			pNode->children[x] = new quadtree::NODE(center[x], extents);
 			CreateRecursiveQuadTree(pNode->children[x], leafnodeIndex);
 		} 
 	}
@@ -100,13 +100,13 @@ void QuadtreeMgr::ReleaseQuadTree()
 	}
 }
 
-void QuadtreeMgr::ReleaseRecursiveQuadTree(NODE* pNode)
+void QuadtreeMgr::ReleaseRecursiveQuadTree(quadtree::NODE* pNode)
 {
 	// 자식이 있는 경우 재귀함수를 이용하여 children 내부로 들어간다.
 	bool isHaveChildren = pNode->children[0] != nullptr;
 	if (isHaveChildren)
 	{
-		for (int x = 0; x < QUAD; ++x)
+		for (int x = 0; x < 4; ++x)
 		{
 			if (pNode->children[x])
 			{
@@ -281,7 +281,30 @@ void QuadtreeMgr::CreateTerrainObj(FILE* pInFile)
 	}
 }
 
-void QuadtreeMgr::AddRecursiveCollider(NODE* pNode, const MyBOBox& BoBox, const XMFLOAT4X4& world)
+void QuadtreeMgr::ProcessRecursiveCollide(const quadtree::NODE& node, const MyBOBox& collider)
+{
+	bool isCollided = Collision::isCollide(*node.BoBox, collider);
+	if (!isCollided) return;
+
+	bool isHaveChildren = node.children[0] != nullptr; // 자식이 있는 경우
+	if (isHaveChildren)
+	{
+		for (int x = 0; x < 4; ++x)
+		{
+			ProcessRecursiveCollide(*node.children[x], collider);
+		}
+	}
+	else
+	{
+		// 충돌체크 
+#ifdef _DEBUG
+		std::cout << "Collided" << std::endl;
+#endif // _DEBUG
+
+	}
+}
+
+void QuadtreeMgr::AddRecursiveCollider(quadtree::NODE* pNode, const MyBOBox& BoBox, const XMFLOAT4X4& world)
 {
 	// 해당 노드의 충돌체와 부딪히지않으면 넘어간다.
 	bool isCollided = Collision::isCollide(*(pNode->BoBox), BoBox);
@@ -291,7 +314,7 @@ void QuadtreeMgr::AddRecursiveCollider(NODE* pNode, const MyBOBox& BoBox, const 
 	if (isHaveChildren)
 	{
 		// 자식이 있는 경우 재귀함수를 이용하여 children 내부로 들어간다.
-		for (int x = 0; x < QUAD; ++x)
+		for (int x = 0; x < 4; ++x)
 		{
 			if (pNode->children[x])
 			{
@@ -328,7 +351,7 @@ void QuadtreeMgr::Init(const XMFLOAT3& center, const XMFLOAT3& extents, float mi
 	if (m_RootNode == nullptr)
 	{
 		// 쿼드 트리의 부모 노드를 만듭니다.
-		m_RootNode = new NODE(center, extents);
+		m_RootNode = new quadtree::NODE(center, extents);
 	}
 
 	// Quadtree를 구성한다.
@@ -359,6 +382,11 @@ void QuadtreeMgr::AddCollider(const MyBOBox& collider, const XMFLOAT4X4& world)
 {
 	AddRecursiveCollider(m_RootNode, collider, world);
 }
+
+void QuadtreeMgr::ProcessCollide(const MyBOBox& collider)
+{
+	ProcessRecursiveCollide(*m_RootNode, collider);
+}
  
 void QuadtreeMgr::PrintInfo()
 {
@@ -380,32 +408,3 @@ void QuadtreeMgr::PrintInfo()
 
 }
  
- 
-QuadtreeMgr::NODE::NODE(XMFLOAT3&& center, XMFLOAT3&& extents)
-{
-	NODE(center, extents);
-}
- 
-
-QuadtreeMgr::NODE::NODE(const XMFLOAT3& center, const XMFLOAT3& extents)
-{
-	BoBox = new MyBOBox(center, extents); 
-}
-
-QuadtreeMgr::NODE::~NODE()
-{
-	if (BoBox)
-	{
-		delete BoBox;
-		BoBox = nullptr;
-	}
-
-	for (int x = 0; x < QUAD; ++x)
-	{
-		if (children[x])
-		{
-			delete children[x];
-			children[x] = nullptr;
-		}
-	}
-}

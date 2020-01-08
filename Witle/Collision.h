@@ -1,5 +1,6 @@
 #pragma once
-
+#include "QuadtreeMgr.h"
+ 
 struct RAY;
 
 class Player;
@@ -10,7 +11,6 @@ class QuadtreeTerrain;
 
 class Collision
 {
-private: 
 
 public:
 	static bool isCollide(const BoundingOrientedBox& box, const XMFLOAT3& origin, const XMFLOAT3& direction, float& dist)
@@ -60,7 +60,7 @@ public:
 		float fElapsedTime,
 		bool StaticObjIsMove,
 		/*out*/XMFLOAT3& SlideVector);
-	
+	\
 	static void ProcessCollideEdge(Player* player, int TerrainObjectCount, const MyBOBox* terrainObject, float fElapsedTime);
 	
 	static void ProcessCollideTerrainObject(Player* player, const QuadtreeTerrain* quadTerrain, float fElapsedTime);

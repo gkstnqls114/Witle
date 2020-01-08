@@ -1272,6 +1272,9 @@
     <ClInclude Include="SingletonInitializer.h">
       <Filter>13.Storage/Manager\19.SingletonMgr</Filter>
     </ClInclude>
+    <ClInclude Include="QuadtreeNode.h">
+      <Filter>13.Storage/Manager\17.QuadtreeMgr</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1885,6 +1888,9 @@
     </ClCompile>
     <ClCompile Include="SingletonInitializer.cpp">
       <Filter>13.Storage/Manager\19.SingletonMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="QuadtreeNode.cpp">
+      <Filter>13.Storage/Manager\17.QuadtreeMgr</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
