@@ -1654,13 +1654,14 @@ void GameScene::UpdateCollision()
 	QuadtreeMgr::GetInstance()->ProcessCollide(*m_pPlayer->GetpMovement(), AlreadyPlayerBBox, *m_pPlayer->GetBOBox());
 	 
 	// 보스와 지형지물 충돌을 확인한다.
-	//QuadtreeMgr::GetInstance()->ProcessCollide(m_Dragon, *m_pPlayer->GetBOBox());
-	//Collision::ProcessCollideTerrainObject(m_Dragon, m_pQuadtreeTerrain, fElapsedTime);
-	  
+	BoundingOrientedBox AlreadyDragonBBox = m_Dragon->CalculateAlreadyBoundingBox(fElapsedTime);
+	QuadtreeMgr::GetInstance()->ProcessCollide(*m_Dragon->GetpMovement(), AlreadyDragonBBox,*m_Dragon->GetBOBox());
+	
 	// 몬스터 충돌체크 ///////////////////////// 
 	for (int x = 0; x < m_TestMonsterCount; ++x)
 	{
-		Collision::ProcessCollideTerrainObject(m_TestMonster[x], m_pQuadtreeTerrain);
+		BoundingOrientedBox AlreadMonsterBBox = m_TestMonster[x]->CalculateAlreadyBoundingBox(fElapsedTime);
+		QuadtreeMgr::GetInstance()->ProcessCollide(*m_TestMonster[x]->GetpMovement(), AlreadMonsterBBox, *m_TestMonster[x]->GetBOBox());
 	} 
 	// 몬스터 충돌체크 ///////////////////////// 
 }
