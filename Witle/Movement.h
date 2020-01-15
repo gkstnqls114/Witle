@@ -6,8 +6,10 @@
 class Movement
 	: public ComponentBase
 {
-public:  
+protected:
 	XMFLOAT3 m_xmf3Velocity = XMFLOAT3(0.0f, 0.0f, 0.0f); // 가속도
+
+public:  
 	XMFLOAT3 m_xmf3Gravity = XMFLOAT3(0.0f, 0.0f, 0.0f);  // 중력가속도
 	float m_fMaxVelocityY{ 400.0f };					  // 최대 y축 가속도
 	float m_fMaxVelocityXZ{ 2000.0f };					  // 최대 x축과 z축 가속도
@@ -34,4 +36,8 @@ public:
 
 	// 해당 프레임의 가속도를 계산한 값을 리턴합니다.
 	XMFLOAT3 AlreadyUpdate(float);
+
+	const XMFLOAT3& GetVelocity() const { return m_xmf3Velocity; }
+	void SetVelocity(const XMFLOAT3& velocity) { m_xmf3Velocity = velocity; }
+	void SetVelocity(XMFLOAT3&& velocity) { m_xmf3Velocity = velocity; }
 };

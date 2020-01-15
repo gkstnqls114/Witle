@@ -23,7 +23,7 @@ void BossSkillBreath::UpdateVelocity(float fElpasedTime, Movement * movement)
 	//SoundManager::GetInstance()->Stop(ENUM_SOUND::BOSS_DEAD_SOUND);
 	//SoundManager::GetInstance()->Stop(ENUM_SOUND::BOSS_DOWNSTROKE_SOUND);
 
-	movement->m_xmf3Velocity = XMFLOAT3(0.f, 0.f, 0.f);
+	movement->SetVelocity( XMFLOAT3(0.f, 0.f, 0.f));
 }
 
 void BossSkillBreath::UpdateState(float fElpasedTime, BossMonsterActionMgr * actionMgr)

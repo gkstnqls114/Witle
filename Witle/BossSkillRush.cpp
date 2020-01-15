@@ -12,7 +12,7 @@
 
 void BossSkillRush::UpdateVelocity(float fElpasedTime, Movement * movement)
 {
-	movement->m_xmf3Velocity = XMFLOAT3(0, 0, 0);
+	movement->SetVelocity( XMFLOAT3(0, 0, 0));
 }
 
 void BossSkillRush::Init()

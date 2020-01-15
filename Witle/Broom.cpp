@@ -12,7 +12,7 @@ void Broom::ReleaseMemberUploadBuffers()
 
 void Broom::PrepareMember()
 {
-	m_pPlayerMovement->m_xmf3Velocity = XMFLOAT3(0.F, 0.F, 0.F);
+	m_pPlayerMovement->SetVelocity( XMFLOAT3(0.F, 0.F, 0.F));
 }
 
 void Broom::Init()

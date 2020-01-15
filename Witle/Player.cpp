@@ -50,7 +50,7 @@ void Player::OnPlayerUpdateCallback(float fTimeElapsed)
 	{
 		XMFLOAT3 xmf3PlayerVelocity = GetVelocity();
 		xmf3PlayerVelocity.y = 0.0f;
-		m_PlayerMovement->m_xmf3Velocity = xmf3PlayerVelocity;
+		m_PlayerMovement->SetVelocity(xmf3PlayerVelocity);
 		xmf3PlayerPosition.y = fHeight;
 		m_Transform.SetPosition(xmf3PlayerPosition);
 	}
@@ -58,7 +58,7 @@ void Player::OnPlayerUpdateCallback(float fTimeElapsed)
 
 XMFLOAT3 Player::CalculateAlreadyVelocity(float fTimeElapsed)
 {
-	XMFLOAT3 AlreadyVelocity = Vector3::Add(m_PlayerMovement->m_xmf3Velocity, m_PlayerMovement->m_xmf3Gravity);
+	XMFLOAT3 AlreadyVelocity = Vector3::Add(m_PlayerMovement->GetVelocity(), m_PlayerMovement->m_xmf3Gravity);
 	float fLength = sqrtf(AlreadyVelocity.x * AlreadyVelocity.x + AlreadyVelocity.z * AlreadyVelocity.z);
 	float fMaxVelocityXZ = m_PlayerMovement->m_fMaxVelocityXZ;
 	if (fLength > m_PlayerMovement->m_fMaxVelocityXZ)
@@ -382,7 +382,7 @@ void Player::Update(float fElapsedTime)
 	m_PlayerMovement->Update(fElapsedTime);
 	
 	// 이동량만큼 움직인다. 
-	Move(Vector3::ScalarProduct(m_PlayerMovement->m_xmf3Velocity, fElapsedTime, false));
+	Move(Vector3::ScalarProduct(m_PlayerMovement->GetVelocity(), fElapsedTime, false));
 
 	m_pMyBOBox->SetPosition(
 		XMFLOAT3(
@@ -510,7 +510,7 @@ bool Player::Attack(Status* status, MyCollider* collider, XMFLOAT2 aimPoint, Cam
 
 	}
 
-	m_PlayerMovement->m_xmf3Velocity = XMFLOAT3(0.F, 0.F, 0.F); 
+	m_PlayerMovement->SetVelocity( XMFLOAT3(0.F, 0.F, 0.F)); 
 	return isAttack;
 }
 
@@ -530,7 +530,7 @@ Movement* const Player::GetpMovement() const
 
 XMFLOAT3 Player::GetVelocity() const
 {
-	return m_PlayerMovement->m_xmf3Velocity;
+	return m_PlayerMovement->GetVelocity();
 }
 
 bool Player::IsTrackAnimationSetFinish(ENUM_ANIMATIONID id) const
@@ -546,5 +546,5 @@ void Player::SetTrackAnimationSet(ENUM_ANIMATIONID animeID)
 
 void Player::SetVelocity(const XMFLOAT3 & velocity)
 {
-	m_PlayerMovement->m_xmf3Velocity = velocity;
+	m_PlayerMovement->SetVelocity(velocity);
 }

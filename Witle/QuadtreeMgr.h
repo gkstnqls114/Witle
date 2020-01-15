@@ -3,6 +3,7 @@
 #include "Singleton.h"
 
 class Player;
+class Movement;
 
 /*
    QuadTree 알고리즘을 사용해 Map(= Terrain)위에 있는 충돌체의 위치(Transform)를 관리하는 클래스
@@ -32,7 +33,7 @@ private:
 	void CreateTerrainObj(const char* terrain_info_path);
 	void CreateTerrainObj(FILE* pInFile);
 
-	void ProcessRecursiveCollide(const quadtree::NODE& node, Player& player, const MyBOBox& BoBox);
+	void ProcessRecursiveCollide(const quadtree::NODE& node, Movement& movement, const BoundingOrientedBox& nextFrameBoBox, const MyBOBox& BoBox);
 
 	void AddRecursiveCollider(quadtree::NODE* node, const MyBOBox& collider, const XMFLOAT4X4& world);
 	
@@ -52,7 +53,7 @@ public:
 	void AddCollider(const MyBOBox& BoBox, const XMFLOAT4X4& world);
 	 
 	// bobox 와 충돌체크합니다.
-	void ProcessCollide(Player& player, const MyBOBox& BoBox);
+	void ProcessCollide(Movement& movement, const BoundingOrientedBox& nextFrameBoBox, const MyBOBox& BoBox);
 
 	// 리프노드의 개수를 반환합니다.
 	int GetReafNodeCount() { return m_ReafNodeCount; } 

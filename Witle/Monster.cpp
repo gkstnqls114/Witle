@@ -45,7 +45,7 @@ bool Monster::RENDER_DEBUG{ true };
 
 XMFLOAT3 Monster::CalculateAlreadyVelocity(float fTimeElapsed)
 {
-	XMFLOAT3 AlreadyVelocity = Vector3::Add(m_MonsterMovement->m_xmf3Velocity, m_MonsterMovement->m_xmf3Gravity);
+	XMFLOAT3 AlreadyVelocity = Vector3::Add(m_MonsterMovement->GetVelocity(), m_MonsterMovement->m_xmf3Gravity);
 	float fLength = sqrtf(AlreadyVelocity.x * AlreadyVelocity.x + AlreadyVelocity.z * AlreadyVelocity.z);
 	float fMaxVelocityXZ = m_MonsterMovement->m_fMaxVelocityXZ;
 	if (fLength > m_MonsterMovement->m_fMaxVelocityXZ)
@@ -312,12 +312,12 @@ Movement* const Monster::GetpMovement() const
 
 XMFLOAT3 Monster::GetVelocity() const
 {
-	return m_MonsterMovement->m_xmf3Velocity;
+	return m_MonsterMovement->GetVelocity();
 }
 
 void Monster::SetVelocity(const XMFLOAT3 & velocity)
 {
-	m_MonsterMovement->m_xmf3Velocity = velocity;
+	m_MonsterMovement->SetVelocity(velocity);
 }
 
 void Monster::SetAnimationID(ENUM_ANIMATIONID state)

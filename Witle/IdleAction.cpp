@@ -16,7 +16,7 @@ void IdleAction::UpdateVelocity(float fElpasedTime, Movement * movement)
 	// 사운드 ///////////////////////////////////////////////////////////
 
 	// 움직이지 않도록 고정
-	movement->m_xmf3Velocity = XMFLOAT3(0.f, 0.f, 0.f);
+	movement->SetVelocity( XMFLOAT3(0.f, 0.f, 0.f));
 }
 
 void IdleAction::UpdateState(float fElpasedTime, GeneralMonsterActionMgr * actionMgr)

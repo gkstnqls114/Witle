@@ -22,7 +22,7 @@ void PlayerBroomPrepareAction::UpdateVelocity(float fElpasedTime, Movement * mov
 	//SoundManager::GetInstance()->Stop(ENUM_SOUND::BOSS_DOWNSTROKE_SOUND);
 
 	// 움직이지 않도록 고정
-	movement->m_xmf3Velocity = XMFLOAT3(0.f, 0.f, 0.f);
+	movement->SetVelocity(XMFLOAT3(0.f, 0.f, 0.f));
 }
 
 void PlayerBroomPrepareAction::UpdateState(float fElpasedTime, PlayerActionMgr * actionMgr)

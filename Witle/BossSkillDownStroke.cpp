@@ -19,7 +19,7 @@ void BossSkillDownStroke::UpdateVelocity(float fElpasedTime, Movement * movement
 	//SoundManager::GetInstance()->Stop(ENUM_SOUND::BOSS_DEAD_SOUND);
 	//SoundManager::GetInstance()->Play(ENUM_SOUND::BOSS_DOWNSTROKE_SOUND);
 
-	movement->m_xmf3Velocity = XMFLOAT3(0.f, 0.f, 0.f);
+	movement->SetVelocity (XMFLOAT3(0.f, 0.f, 0.f));
 }
 
 

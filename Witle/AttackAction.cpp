@@ -9,7 +9,7 @@
 
 void AttackAction::UpdateVelocity(float fElpasedTime, Movement * movement)
 {
-	movement->m_xmf3Velocity = XMFLOAT3(0.f, 0.f, 0.f);
+	movement->SetVelocity(XMFLOAT3(0.f, 0.f, 0.f));
 }
 
 void AttackAction::UpdateState(float fElpasedTime, GeneralMonsterActionMgr * actionMgr)

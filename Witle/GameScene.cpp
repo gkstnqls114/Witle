@@ -1648,8 +1648,10 @@ void GameScene::UpdateCollision()
 	// 외곽 4 부분과 충돌처리 확인한다.
 	Collision::ProcessCollideEdge(m_pPlayer, 4, outside_box);
 
+	float fElapsedTime = CGameTimer::GetInstance()->GetTimeElapsed();
+	BoundingOrientedBox AlreadyPlayerBBox = m_pPlayer->CalculateAlreadyBoundingBox(fElapsedTime);
 	// 플레이어와 지형지물 충돌을 확인한다.  
-	QuadtreeMgr::GetInstance()->ProcessCollide(*m_pPlayer, *m_pPlayer->GetBOBox()); 
+	QuadtreeMgr::GetInstance()->ProcessCollide(*m_pPlayer->GetpMovement(), AlreadyPlayerBBox, *m_pPlayer->GetBOBox());
 	 
 	// 보스와 지형지물 충돌을 확인한다.
 	//QuadtreeMgr::GetInstance()->ProcessCollide(m_Dragon, *m_pPlayer->GetBOBox());

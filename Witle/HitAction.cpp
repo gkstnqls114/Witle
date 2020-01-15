@@ -13,7 +13,7 @@ void HitAction::UpdateVelocity(float fElpasedTime, Movement * movement)
 	// SoundManager::GetInstance()->Play(ENUM_SOUND::MONSTER_DAMAGE_SOUND);
 	// »ç¿îµå ///////////////////////////////////////////////////////////
 
-	movement->m_xmf3Velocity = XMFLOAT3(0.f, 0.f, 0.f);
+	movement->SetVelocity( XMFLOAT3(0.f, 0.f, 0.f));
 }
 
 void HitAction::UpdateState(float fElpasedTime, GeneralMonsterActionMgr * actionMgr)

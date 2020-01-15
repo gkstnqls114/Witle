@@ -4,8 +4,10 @@
 #include "Object.h"
 #include "MyBOBox.h"
 #include "ModelStorage.h"
-#include "Collision.h" 
-#include "Player.h"
+#include "Collision.h"  
+#include "Movement.h"
+#include "Transform.h"
+#include "GameObject.h"
 #include "GameTimer.h"
 
 #include "QuadtreeMgr.h"
@@ -288,8 +290,9 @@ void QuadtreeMgr::CreateTerrainObj(FILE* pInFile)
 	}
 }
 
-void QuadtreeMgr::ProcessRecursiveCollide(const quadtree::NODE& node, Player& player, const MyBOBox& collider)
+void QuadtreeMgr::ProcessRecursiveCollide(const quadtree::NODE& node, Movement& movement, const BoundingOrientedBox& nextFrameBoBox, const MyBOBox& collider)
 {
+	// 현재 프레임 위치에서 node와 부딪히는지 확인.
 	bool isCollided = Collision::isCollide(*node.BoBox, collider);
 	if (!isCollided) return;
 
@@ -298,30 +301,29 @@ void QuadtreeMgr::ProcessRecursiveCollide(const quadtree::NODE& node, Player& pl
 	{
 		for (int x = 0; x < 4; ++x)
 		{
-			ProcessRecursiveCollide(*node.children[x], player, collider);
+			ProcessRecursiveCollide(*node.children[x], movement, nextFrameBoBox, collider);
 		}
 	}
 	else
 	{
 		float fElapsedTime = CGameTimer::GetInstance()->GetTimeElapsed();
-		BoundingOrientedBox AlreadyPlayerBBox = player.CalculateAlreadyBoundingBox(fElapsedTime);
-		
 		for (const auto& tobj : node.terrainObjBoBoxs)
 		{
 			XMFLOAT3 slideVector{ 0.f, 0.f, 0.f };
 
+			// 다음 프레임에서 터레인 오브젝트와 부딪히는 지 확인한다.
 			bool isSlide = Collision::ProcessCollision(
-				AlreadyPlayerBBox,
+				nextFrameBoBox,
 				tobj.BoBox,
-				player.GetTransform().GetPosition(),
-				player.GetVelocity(),
+				movement.GetpOwner()->GetTransform().GetPosition(),
+				movement.GetVelocity(),
 				fElapsedTime,
 				true,
 				slideVector);
 
 			if (isSlide)
 			{
-				player.SetVelocity(slideVector);
+				movement.SetVelocity(slideVector);
 			} 
 		} 
 	}
@@ -406,9 +408,9 @@ void QuadtreeMgr::AddCollider(const MyBOBox& collider, const XMFLOAT4X4& world)
 	AddRecursiveCollider(m_RootNode, collider, world);
 }
 
-void QuadtreeMgr::ProcessCollide(Player& player, const MyBOBox& collider)
+void QuadtreeMgr::ProcessCollide(Movement& movement, const BoundingOrientedBox& nextFrameBoBox, const MyBOBox& collider)
 {
-	ProcessRecursiveCollide(*m_RootNode, player, collider);
+	ProcessRecursiveCollide(*m_RootNode, movement, nextFrameBoBox, collider);
 }
  
 void QuadtreeMgr::PrintInfo()

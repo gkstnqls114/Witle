@@ -18,7 +18,8 @@ void BossMoveAction::UpdateVelocity(float fElpasedTime, Movement * movement)
 		)
 	);
 
-	movement->m_xmf3Velocity = Vector3::ScalarProduct(toPlayer, movement->m_fDistance, false);
+	movement->SetVelocity(
+		Vector3::ScalarProduct(toPlayer, movement->m_fDistance, false));
 
 	XMFLOAT3 look(0.f, 0.f, 1.f);
 	float value = Vector3::AngleToRadian(look, toPlayer) * 180.f / 3.141592;

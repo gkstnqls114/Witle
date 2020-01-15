@@ -10,7 +10,7 @@ void DeadAction::UpdateVelocity(float fElpasedTime, Movement * movement)
 	SoundManager::GetInstance()->Stop(ENUM_SOUND::MONSTER_MOVE_SOUND);
 	SoundManager::GetInstance()->Play(ENUM_SOUND::MONSTER_DEAD_SOUND);
 
-	movement->m_xmf3Velocity = XMFLOAT3(0.f, 0.f, 0.f);
+	movement->SetVelocity(XMFLOAT3(0.f, 0.f, 0.f));
 }
 
 void DeadAction::UpdateState(float fElpasedTime, GeneralMonsterActionMgr * actionMgr)
