@@ -109,6 +109,8 @@ public:
 	virtual void Rotate(float x, float y, float z);
 
 	//// Get /////////////////// 
+	virtual Movement* const GetpMovement() const override;
+
 	virtual MyBOBox* GetBOBox() const { return m_pMyBOBox; }
 	ActionMgr* GetActionMgr() const { return m_MonsterActionMgr; }
 	MonsterMovement* GetMovement() { return m_MonsterMovement; }

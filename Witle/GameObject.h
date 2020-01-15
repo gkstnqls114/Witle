@@ -2,6 +2,7 @@
 #include "Transform.h"
 class ComponentBase;
 class ResourceBase;
+class Movement;
 
 class IGameObject
 {
@@ -60,9 +61,12 @@ public:
 		assert(id != "");
 		return static_cast<T *>(GetComponent(id));
 	}
+	
+	virtual Movement *const GetpMovement() const { return nullptr; }
 
 	const Transform& GetTransform() const { return m_Transform; }
 	Transform& GetTransform() { return m_Transform; }
+
 	const std::string& GetName() const 
 	{ 
 #ifdef _DEBUG

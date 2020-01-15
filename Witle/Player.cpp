@@ -521,6 +521,11 @@ void Player::UseSkill_Broom()
 		m_Broom->Prepare();
 	}
 }
+
+Movement* const Player::GetpMovement() const
+{
+	return static_cast<Movement* const>(m_PlayerMovement);
+}
  
 
 XMFLOAT3 Player::GetVelocity() const

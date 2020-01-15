@@ -117,6 +117,8 @@ public:
 	/////////////////////// Skill
 
 	/////////////////////// Get
+	virtual Movement* const GetpMovement() const override;
+
 	const Broom* GetpBroom() { return m_Broom; }
 	PlayerStatus* GetHPStatus() { return m_pPlayerHPStatus; };
 	PlayerStatus* GetMPStatus() { return m_pPlayerMPStatus; };
