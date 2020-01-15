@@ -6,6 +6,7 @@
 #include "ModelStorage.h"
 #include "Collision.h" 
 #include "Player.h"
+#include "GameTimer.h"
 
 #include "QuadtreeMgr.h"
  
@@ -287,7 +288,7 @@ void QuadtreeMgr::CreateTerrainObj(FILE* pInFile)
 	}
 }
 
-void QuadtreeMgr::ProcessRecursiveCollide(const quadtree::NODE& node, Player& player, const MyBOBox& collider, float fElapsedTime)
+void QuadtreeMgr::ProcessRecursiveCollide(const quadtree::NODE& node, Player& player, const MyBOBox& collider)
 {
 	bool isCollided = Collision::isCollide(*node.BoBox, collider);
 	if (!isCollided) return;
@@ -297,14 +298,14 @@ void QuadtreeMgr::ProcessRecursiveCollide(const quadtree::NODE& node, Player& pl
 	{
 		for (int x = 0; x < 4; ++x)
 		{
-			ProcessRecursiveCollide(*node.children[x], player, collider, fElapsedTime);
+			ProcessRecursiveCollide(*node.children[x], player, collider);
 		}
 	}
 	else
 	{
+		float fElapsedTime = CGameTimer::GetInstance()->GetTimeElapsed();
 		BoundingOrientedBox AlreadyPlayerBBox = player.CalculateAlreadyBoundingBox(fElapsedTime);
-		XMFLOAT3 AlreadyPositon{ AlreadyPlayerBBox.Center.x, AlreadyPlayerBBox.Center.y, AlreadyPlayerBBox.Center.z };
-
+		
 		for (const auto& tobj : node.terrainObjBoBoxs)
 		{
 			XMFLOAT3 slideVector{ 0.f, 0.f, 0.f };
@@ -405,9 +406,9 @@ void QuadtreeMgr::AddCollider(const MyBOBox& collider, const XMFLOAT4X4& world)
 	AddRecursiveCollider(m_RootNode, collider, world);
 }
 
-void QuadtreeMgr::ProcessCollide(Player& player, const MyBOBox& collider, float fElapsedTime)
+void QuadtreeMgr::ProcessCollide(Player& player, const MyBOBox& collider)
 {
-	ProcessRecursiveCollide(*m_RootNode, player, collider, fElapsedTime);
+	ProcessRecursiveCollide(*m_RootNode, player, collider);
 }
  
 void QuadtreeMgr::PrintInfo()

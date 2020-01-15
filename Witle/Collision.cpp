@@ -7,6 +7,7 @@
 #include "ModelStorage.h"
 #include "StaticObjectStorage.h"
 #include "QuadtreeTerrain.h"
+#include "GameTimer.h"
 #include "Collision.h"
 
 bool Collision::isCollide(MyCollider* collider, const XMFLOAT3 & origin, const XMFLOAT3 & direction, float & dist)
@@ -77,10 +78,11 @@ bool Collision::ProcessCollision(const BoundingOrientedBox& moveObject,
 	return false;
 }
  
-void Collision::ProcessCollideEdge(Player * player, int TerrainObjectCount, const MyBOBox * terrainObject, float fElapsedTime)
+void Collision::ProcessCollideEdge(Player * player, int TerrainObjectCount, const MyBOBox * terrainObject)
 {
+	float fElapsedTime = CGameTimer::GetInstance()->GetTimeElapsed();
 	BoundingOrientedBox AlreadyPlayerBBox = player->CalculateAlreadyBoundingBox(fElapsedTime);
-	XMFLOAT3 AlreadyPositon{ AlreadyPlayerBBox.Center.x, AlreadyPlayerBBox.Center.y, AlreadyPlayerBBox.Center.z };
+	
 	XMFLOAT3 slideVector{ 0.f, 0.f, 0.f };
 	bool isSlide = false;
 	for (int i = 0; i < TerrainObjectCount; ++i)
@@ -102,8 +104,9 @@ void Collision::ProcessCollideEdge(Player * player, int TerrainObjectCount, cons
 	  
 }
 
-void Collision::ProcessCollideTerrainObject(Player * player, const QuadtreeTerrain * quadTerrain, float fElapsedTime)
-{ 
+void Collision::ProcessCollideTerrainObject(Player * player, const QuadtreeTerrain * quadTerrain)
+{
+	float fElapsedTime = CGameTimer::GetInstance()->GetTimeElapsed();
 	BoundingOrientedBox AlreadyPlayerBBox = player->CalculateAlreadyBoundingBox(fElapsedTime);
 	XMFLOAT3 AlreadyPositon{ AlreadyPlayerBBox.Center.x, AlreadyPlayerBBox.Center.y, AlreadyPlayerBBox.Center.z };
 
@@ -159,8 +162,9 @@ void Collision::ProcessCollideTerrainObject(Player * player, const QuadtreeTerra
 	} 
 }
 
-void Collision::ProcessCollideTerrainObject(Monster * monster, const QuadtreeTerrain * quadTerrain, float fElapsedTime)
+void Collision::ProcessCollideTerrainObject(Monster * monster, const QuadtreeTerrain * quadTerrain)
 {
+	float fElapsedTime = CGameTimer::GetInstance()->GetTimeElapsed();
 	BoundingOrientedBox AlreadyPlayerBBox = monster->CalculateAlreadyBoundingBox(fElapsedTime);
 	XMFLOAT3 AlreadyPositon{ AlreadyPlayerBBox.Center.x, AlreadyPlayerBBox.Center.y, AlreadyPlayerBBox.Center.z };
 

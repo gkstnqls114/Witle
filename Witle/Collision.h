@@ -61,9 +61,9 @@ public:
 		bool StaticObjIsMove,
 		/*out*/XMFLOAT3& SlideVector);
 	\
-	static void ProcessCollideEdge(Player* player, int TerrainObjectCount, const MyBOBox* terrainObject, float fElapsedTime);
+	static void ProcessCollideEdge(Player* player, int TerrainObjectCount, const MyBOBox* terrainObject);
 	
-	static void ProcessCollideTerrainObject(Player* player, const QuadtreeTerrain* quadTerrain, float fElapsedTime);
-	static void ProcessCollideTerrainObject(Monster* player, const QuadtreeTerrain* quadTerrain, float fElapsedTime);
+	static void ProcessCollideTerrainObject(Player* player, const QuadtreeTerrain* quadTerrain);
+	static void ProcessCollideTerrainObject(Monster* player, const QuadtreeTerrain* quadTerrain);
 	
 };

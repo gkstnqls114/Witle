@@ -103,7 +103,7 @@ protected:
 	D3D12_GPU_DESCRIPTOR_HANDLE GetGPUSrvDescriptorNextHandle() { return(m_SrvGPUDescriptorNextHandle); }
 
 protected:
-	void UpdateCollision(float fElapsedTime);
+	void UpdateCollision();
 	void BuildLightsAndMaterials(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList);
 	
 public:

@@ -32,7 +32,7 @@ private:
 	void CreateTerrainObj(const char* terrain_info_path);
 	void CreateTerrainObj(FILE* pInFile);
 
-	void ProcessRecursiveCollide(const quadtree::NODE& node, Player& player, const MyBOBox& BoBox, float fElapsedTime);
+	void ProcessRecursiveCollide(const quadtree::NODE& node, Player& player, const MyBOBox& BoBox);
 
 	void AddRecursiveCollider(quadtree::NODE* node, const MyBOBox& collider, const XMFLOAT4X4& world);
 	
@@ -52,7 +52,7 @@ public:
 	void AddCollider(const MyBOBox& BoBox, const XMFLOAT4X4& world);
 	 
 	// bobox 와 충돌체크합니다.
-	void ProcessCollide(Player& player, const MyBOBox& BoBox, float fElapsedTime);
+	void ProcessCollide(Player& player, const MyBOBox& BoBox);
 
 	// 리프노드의 개수를 반환합니다.
 	int GetReafNodeCount() { return m_ReafNodeCount; } 

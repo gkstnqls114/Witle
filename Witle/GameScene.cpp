@@ -1084,7 +1084,7 @@ void GameScene::UpdatePhysics( )
 
 	// 반드시 UpdatePhysics 마지막에 충돌 처리를 해야함.
 	// 그래야 충돌된 것에 따라 슬라이딩 벡터의 가속도 처리를 할 수 있음.
-	UpdateCollision(fElapsedTime);
+	UpdateCollision();
 }
 
 // ProcessInput에 의한 right, up, look, pos 를 월드변환 행렬에 갱신한다.
@@ -1635,7 +1635,7 @@ void GameScene::ReleaseUploadBuffers()
 	 
 }
 
-void GameScene::UpdateCollision(float fElapsedTime)
+void GameScene::UpdateCollision()
 {
 	// 외곽처리
 	MyBOBox outside_box[4]{
@@ -1646,19 +1646,19 @@ void GameScene::UpdateCollision(float fElapsedTime)
 	};
 
 	// 외곽 4 부분과 충돌처리 확인한다.
-	Collision::ProcessCollideEdge(m_pPlayer, 4, outside_box, fElapsedTime);
+	Collision::ProcessCollideEdge(m_pPlayer, 4, outside_box);
 
 	// 플레이어와 지형지물 충돌을 확인한다.  
-	QuadtreeMgr::GetInstance()->ProcessCollide(*m_pPlayer, *m_pPlayer->GetBOBox(), fElapsedTime); 
+	QuadtreeMgr::GetInstance()->ProcessCollide(*m_pPlayer, *m_pPlayer->GetBOBox()); 
 	 
 	// 보스와 지형지물 충돌을 확인한다.
-	//QuadtreeMgr::GetInstance()->ProcessCollide(*m_pPlayer, *m_pPlayer->GetBOBox(), fElapsedTime); 
+	//QuadtreeMgr::GetInstance()->ProcessCollide(m_Dragon, *m_pPlayer->GetBOBox());
 	//Collision::ProcessCollideTerrainObject(m_Dragon, m_pQuadtreeTerrain, fElapsedTime);
 	  
 	// 몬스터 충돌체크 ///////////////////////// 
 	for (int x = 0; x < m_TestMonsterCount; ++x)
 	{
-		Collision::ProcessCollideTerrainObject(m_TestMonster[x], m_pQuadtreeTerrain, fElapsedTime);
+		Collision::ProcessCollideTerrainObject(m_TestMonster[x], m_pQuadtreeTerrain);
 	} 
 	// 몬스터 충돌체크 ///////////////////////// 
 }
