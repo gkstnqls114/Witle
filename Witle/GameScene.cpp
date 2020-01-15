@@ -341,7 +341,7 @@ bool GameScene::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM wPar
 	return false;
 }
 
-bool GameScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam, float ElapsedTime)
+bool GameScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam)
 {
 	switch (nMessageID)
 	{
@@ -1042,8 +1042,10 @@ void GameScene::ReleaseObjects()
 	}
 }
 
-bool GameScene::ProcessInput(HWND hWnd, float fElapsedTime)
+bool GameScene::ProcessInput(HWND hWnd)
 {
+	float fElapsedTime = CGameTimer::GetInstance()->GetTimeElapsed();
+
 	// 플레이어 이동에 대한 처리 (정확히는 이동이 아니라 가속도)
 	m_pPlayer->ProcessInput(fElapsedTime);
 
@@ -1065,8 +1067,10 @@ bool GameScene::ProcessInput(HWND hWnd, float fElapsedTime)
 	return true;
 }
 
-void GameScene::UpdatePhysics(float fElapsedTime)
+void GameScene::UpdatePhysics( )
 {
+	float fElapsedTime = CGameTimer::GetInstance()->GetTimeElapsed();
+
 	m_Dragon->UpdateState(fElapsedTime);
 
 	// 스킬 이펙트 가속도 처리
@@ -1084,8 +1088,10 @@ void GameScene::UpdatePhysics(float fElapsedTime)
 }
 
 // ProcessInput에 의한 right, up, look, pos 를 월드변환 행렬에 갱신한다.
-void GameScene::Update(float fElapsedTime)
+void GameScene::Update( )
 {
+	float fElapsedTime = CGameTimer::GetInstance()->GetTimeElapsed();
+
 	HitEffectMgr::GetInstance()->Update(fElapsedTime);
 	 
 	if (GameInput::IsKeydownSpace())
@@ -1152,8 +1158,9 @@ void GameScene::Update(float fElapsedTime)
 	if (m_pcbMappedMaterials) ::memcpy(m_pcbMappedMaterials, m_pMaterials, sizeof(MATERIAL));
 }
 
-void GameScene::LastUpdate(float fElapsedTime)
+void GameScene::LastUpdate( )
 {
+	float fElapsedTime = CGameTimer::GetInstance()->GetTimeElapsed();
 #ifdef CHECK_SUBVIEWS
 	if (m_lookAboveCamera)
 	{
@@ -1366,23 +1373,25 @@ void GameScene::Init()
 	} 
 }
 
-void GameScene::AnimateObjects(float fTimeElapsed)
+void GameScene::AnimateObjects( )
 {
-	if (m_pPlayer) m_pPlayer->Animate(fTimeElapsed);
+	float fElapsedTime = CGameTimer::GetInstance()->GetTimeElapsed();
+
+	if (m_pPlayer) m_pPlayer->Animate(fElapsedTime);
 
 	for (int x = 0; x < 5; ++x)
 	{
 		if (m_AltarSphere[x])
 		{
-			if (m_AltarSphere[x]->GetisActive()) m_AltarSphere[x]->Animate(fTimeElapsed);
+			if (m_AltarSphere[x]->GetisActive()) m_AltarSphere[x]->Animate(fElapsedTime);
 		}
 	}
 
-	m_Dragon->Animate(fTimeElapsed);
+	m_Dragon->Animate(fElapsedTime);
 
 	for (int i = 0; i < m_TestMonsterCount; ++i)
 	{
-		if (m_TestMonster[i]) m_TestMonster[i]->Animate(fTimeElapsed);
+		if (m_TestMonster[i]) m_TestMonster[i]->Animate(fElapsedTime);
 	}
 }
 
@@ -1642,7 +1651,8 @@ void GameScene::UpdateCollision(float fElapsedTime)
 	// 플레이어와 지형지물 충돌을 확인한다.  
 	QuadtreeMgr::GetInstance()->ProcessCollide(*m_pPlayer, *m_pPlayer->GetBOBox(), fElapsedTime); 
 	 
-	// 보스와 지형지물 충돌을 확인한다. 
+	// 보스와 지형지물 충돌을 확인한다.
+	//QuadtreeMgr::GetInstance()->ProcessCollide(*m_pPlayer, *m_pPlayer->GetBOBox(), fElapsedTime); 
 	//Collision::ProcessCollideTerrainObject(m_Dragon, m_pQuadtreeTerrain, fElapsedTime);
 	  
 	// 몬스터 충돌체크 ///////////////////////// 

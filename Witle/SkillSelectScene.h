@@ -30,7 +30,7 @@ public:
 	virtual bool OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam) override;
 
 	// 키보드 메시지를 처리합니다.
-	virtual bool OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam, float ElapsedTime) override;
+	virtual bool OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam) override;
 
 	// 필요한 오브젝트들을 빌드합니다.
 	virtual void BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList) override;
@@ -46,20 +46,20 @@ public:
 	//// UpdateGamelogic ///////////////////////////////////
 
 	// GameFramework의 UpdateGamelogic 함수 내부에서 UpdatePhysics, AnimateObjects, LastUpdate 순으로 호출되는 함수. 
-	virtual bool ProcessInput(HWND hWnd, float ElapsedTime) override;
+	virtual bool ProcessInput(HWND hWnd) override;
 
 	// GameFramework의 UpdateGamelogic 함수 내부에서 UpdatePhysics, AnimateObjects, LastUpdate 순으로 호출되는 함수. 
-	virtual void UpdatePhysics(float ElapsedTime) override;
+	virtual void UpdatePhysics() override;
 
 	// GameFramework의 UpdateGamelogic 함수 내부에서 UpdatePhysics, AnimateObjects, LastUpdate 순으로 호출되는 함수. 
-	virtual void Update(float ElapsedTime) override;
+	virtual void Update() override;
 
 	// GameFramework의 UpdateGamelogic 함수 내부에서 UpdatePhysics, AnimateObjects, LastUpdate 순으로 호출되는 함수. 
-	virtual void AnimateObjects(float fTimeElapsed) override;
+	virtual void AnimateObjects() override;
 
 	// GameFramework의 UpdateGamelogic 함수 내부에서 UpdatePhysics, AnimateObjects, LastUpdate 순으로 호출되는 함수. 
 
-	virtual void LastUpdate(float ElapsedTime) override;
+	virtual void LastUpdate() override;
 	//// UpdateGamelogic ///////////////////////////////////
 
 	// SkillStg에서 스킬을 꺼내 PlayerSkillMgr에서 사용할 스킬을 설정합니다.

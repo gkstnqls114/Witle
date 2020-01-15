@@ -86,7 +86,7 @@ bool SkillSelectScene::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPAR
 	return true;
 }
 
-bool SkillSelectScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam, float ElapsedTime)
+bool SkillSelectScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam)
 {
 	switch (nMessageID)
 	{
@@ -247,23 +247,23 @@ void SkillSelectScene::ReleaseObjects()
 	}
 }
 
-bool SkillSelectScene::ProcessInput(HWND hWnd, float ElapsedTime)
+bool SkillSelectScene::ProcessInput(HWND hWnd)
 {
 
 	return true;
 }
 
-void SkillSelectScene::UpdatePhysics(float ElapsedTime)
+void SkillSelectScene::UpdatePhysics()
 {
 }
 
 // ProcessInput에 의한 right, up, look, pos 를 월드변환 행렬에 갱신한다.
-void SkillSelectScene::Update(float fElapsedTime)
+void SkillSelectScene::Update()
 {
 
 }
 
-void SkillSelectScene::LastUpdate(float fElapsedTime)
+void SkillSelectScene::LastUpdate()
 {
 
 }
@@ -276,7 +276,7 @@ void SkillSelectScene::FinishSkillSelect()
 	}
 }
 
-void SkillSelectScene::AnimateObjects(float fTimeElapsed)
+void SkillSelectScene::AnimateObjects()
 {
 }
 

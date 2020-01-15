@@ -984,17 +984,17 @@ void GameFramework::ReleaseObjects()
 	SingletonInitializer::ReleaseInstance();
 }
 
-void GameFramework::UpdateGamelogic(float fElapsedTime)
+void GameFramework::UpdateGamelogic()
 {
-	GameInput::Update(m_hWnd);
+	GameInput::Update(m_hWnd); 
 	Scene* pCurrScene = SceneMgr::GetInstance()->GetCurrScene();
 	if (pCurrScene)
 	{
-		pCurrScene->ProcessInput(m_hWnd, fElapsedTime);
-		pCurrScene->UpdatePhysics(fElapsedTime);
-		pCurrScene->Update(fElapsedTime);
-		pCurrScene->AnimateObjects(fElapsedTime);
-		pCurrScene->LastUpdate(fElapsedTime);
+		pCurrScene->ProcessInput(m_hWnd);
+		pCurrScene->UpdatePhysics();
+		pCurrScene->Update();
+		pCurrScene->AnimateObjects();
+		pCurrScene->LastUpdate();
 	}
 	GameInput::Reset();
 }
@@ -1057,7 +1057,7 @@ void GameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPAR
 	Scene* pCurrScene = SceneMgr::GetInstance()->GetCurrScene();
 	bool isWinScene = SceneMgr::GetInstance()->IsWinScene();
 	bool isLoseScene = SceneMgr::GetInstance()->IsLoseScene();
-	if(pCurrScene) pCurrScene->OnProcessingKeyboardMessage(hWnd, nMessageID, wParam, lParam, 0.f);
+	if(pCurrScene) pCurrScene->OnProcessingKeyboardMessage(hWnd, nMessageID, wParam, lParam);
 	
 	if (isWinScene || isLoseScene) return;
 

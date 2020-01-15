@@ -271,7 +271,7 @@ SoundManager::~SoundManager()
 	pSystem->close();
 }
 
-void SoundManager::Update(float fElapsedTime)
+void SoundManager::Update()
 {
 	pSystem->update();
 }

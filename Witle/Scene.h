@@ -7,7 +7,7 @@ public:
 	virtual bool OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam) = 0;
 
 	// 키보드 메시지를 처리합니다.
-	virtual bool OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam, float ElapsedTime) = 0;
+	virtual bool OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam) = 0;
 
 	// 필요한 오브젝트들을 빌드합니다.
 	virtual void BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList) = 0;
@@ -29,20 +29,20 @@ public:
 	//// UpdateGamelogic ///////////////////////////////////
 
 	// GameFramework의 UpdateGamelogic 함수 내부에서 UpdatePhysics, AnimateObjects, LastUpdate 순으로 호출되는 함수. 
-	virtual bool ProcessInput(HWND hWnd, float ElapsedTime) = 0;
+	virtual bool ProcessInput(HWND hWnd) = 0;
 
 	// GameFramework의 UpdateGamelogic 함수 내부에서 UpdatePhysics, AnimateObjects, LastUpdate 순으로 호출되는 함수. 
-	virtual void UpdatePhysics(float ElapsedTime) = 0;
+	virtual void UpdatePhysics() = 0;
 
 	// GameFramework의 UpdateGamelogic 함수 내부에서 UpdatePhysics, AnimateObjects, LastUpdate 순으로 호출되는 함수. 
-	virtual void Update(float ElapsedTime) = 0;
+	virtual void Update() = 0;
 
 	// GameFramework의 UpdateGamelogic 함수 내부에서 UpdatePhysics, AnimateObjects, LastUpdate 순으로 호출되는 함수. 
-	virtual void AnimateObjects(float fTimeElapsed) = 0;
+	virtual void AnimateObjects() = 0;
 
 	// GameFramework의 UpdateGamelogic 함수 내부에서 UpdatePhysics, AnimateObjects, LastUpdate 순으로 호출되는 함수. 
 
-	virtual void LastUpdate(float ElapsedTime) = 0;
+	virtual void LastUpdate() = 0;
 	//// UpdateGamelogic ///////////////////////////////////
 
 public:

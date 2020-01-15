@@ -47,7 +47,7 @@ public:
 	int Dropper; // 진동수. 얼마나 멀리가나!
 	int Distance; // 진동세기.
 
-	void Update(float fElapsedTime);
+	void Update();
 	void Play(int type);
 	void Stop(int type);
 	void UpdateListenerPos(const Player* p);

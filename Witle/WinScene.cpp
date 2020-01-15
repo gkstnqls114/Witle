@@ -8,6 +8,7 @@
 #include "GameObject.h"
 #include "Texture.h"
 #include "GameScene.h"
+#include "GameTimer.h"
 
 #include "SceneMgr.h"
 
@@ -103,7 +104,7 @@ bool WinScene::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM wPara
 	return false;
 }
 
-bool WinScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam, float ElapsedTime)
+bool WinScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam)
 {
 	switch (nMessageID)
 	{
@@ -180,29 +181,29 @@ void WinScene::ReleaseObjects()
 	}
 }
 
-bool WinScene::ProcessInput(HWND hWnd, float ElapsedTime)
+bool WinScene::ProcessInput(HWND hWnd)
 {
 	return true;
 }
 
-void WinScene::UpdatePhysics(float ElapsedTime)
+void WinScene::UpdatePhysics()
 {
 }
 
 // ProcessInput에 의한 right, up, look, pos 를 월드변환 행렬에 갱신한다.
-void WinScene::Update(float fElapsedTime)
+void WinScene::Update()
 {
 	if (m_WaitingTime >= m_MAXWaitingTime) return; 
-
+	float fElapsedTime = CGameTimer::GetInstance()->GetTimeElapsed();
 	m_WaitingTime += fElapsedTime;
 }
 
-void WinScene::LastUpdate(float fElapsedTime)
+void WinScene::LastUpdate()
 {
 
 }
 
-void WinScene::AnimateObjects(float fTimeElapsed)
+void WinScene::AnimateObjects()
 {
 }
 

@@ -8,6 +8,7 @@
 #include "GameObject.h"
 #include "Texture.h"
 #include "SceneMgr.h"
+#include "GameTimer.h"
 
 #include "GameScene.h"
 
@@ -27,7 +28,7 @@ bool LoseScene::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM wPar
 	return false;
 }
 
-bool LoseScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam, float ElapsedTime)
+bool LoseScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam)
 {
 	switch (nMessageID)
 	{
@@ -98,29 +99,29 @@ void LoseScene::ReleaseObjects()
 	} 
 }
 
-bool LoseScene::ProcessInput(HWND hWnd, float ElapsedTime)
+bool LoseScene::ProcessInput(HWND hWnd)
 {
 	return true;
 }
 
-void LoseScene::UpdatePhysics(float ElapsedTime)
+void LoseScene::UpdatePhysics()
 {
 }
 
 // ProcessInput에 의한 right, up, look, pos 를 월드변환 행렬에 갱신한다.
-void LoseScene::Update(float fElapsedTime)
+void LoseScene::Update()
 {
 	if (m_WaitingTime >= m_MAXWaitingTime) return;
-
+	float fElapsedTime = CGameTimer::GetInstance()->GetTimeElapsed();
 	m_WaitingTime += fElapsedTime;
 }
 
-void LoseScene::LastUpdate(float fElapsedTime)
+void LoseScene::LastUpdate()
 {
 
 }
 
-void LoseScene::AnimateObjects(float fTimeElapsed)
+void LoseScene::AnimateObjects()
 {
 }
 

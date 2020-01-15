@@ -28,7 +28,7 @@ bool TestScene::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM wPar
 	return false;
 }
 
-bool TestScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam, float ElapsedTime)
+bool TestScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam )
 {
 	switch (nMessageID)
 	{
@@ -72,27 +72,27 @@ void TestScene::ReleaseObjects()
 
 }
 
-bool TestScene::ProcessInput(HWND hWnd, float ElapsedTime)
+bool TestScene::ProcessInput(HWND hWnd )
 {
 	return true;
 }
 
-void TestScene::UpdatePhysics(float ElapsedTime)
+void TestScene::UpdatePhysics( )
 {
 }
 
 // ProcessInput에 의한 right, up, look, pos 를 월드변환 행렬에 갱신한다.
-void TestScene::Update(float fElapsedTime)
+void TestScene::Update( )
 {
 
 }
 
-void TestScene::LastUpdate(float fElapsedTime)
+void TestScene::LastUpdate( )
 {
 
 }
 
-void TestScene::AnimateObjects(float fTimeElapsed)
+void TestScene::AnimateObjects( )
 {
 }
 
