@@ -6,7 +6,7 @@
 #include "Monster.h"
 #include "ModelStorage.h"
 #include "StaticObjectStorage.h"
-#include "QuadtreeTerrain.h"
+#include "QtTerrainInstancingDrawer.h"
 #include "GameTimer.h"
 #include "Collision.h"
 

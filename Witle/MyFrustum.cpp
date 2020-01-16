@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "QuadTreeTerrain.h"
+#include "QtTerrainInstancingDrawer.h"
 #include "MyFrustum.h"
 
 MyFrustum::MyFrustum(GameObject * pOwner)

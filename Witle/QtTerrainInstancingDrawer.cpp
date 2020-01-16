@@ -12,7 +12,7 @@
 #include "Collision.h"
 #include "Terrain.h"
 #include "MyDescriptorHeap.h"
-#include "QuadTreeTerrain.h"
+#include "QtTerrainInstancingDrawer.h"
 
 // 처음 아이디는 0으로 시작한다.
 // 리프 노드만 아이디를 설정한다.

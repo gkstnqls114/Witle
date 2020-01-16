@@ -75,7 +75,7 @@
 #include "GameInput.h"
 #include "GameScreen.h"
 #include "CameraObject.h"
-#include "QuadTreeTerrain.h"
+#include "QtTerrainInstancingDrawer.h"
 #include"MyDescriptorHeap.h"
 #include "BasicCam.h" 
 

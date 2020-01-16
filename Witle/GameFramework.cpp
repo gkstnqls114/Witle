@@ -35,7 +35,7 @@
 #include "DownScaleFirstPassShader.h"
 #include "DownScaleSecondPassShader.h"
 #include "BloomRevealShader.h"
-#include "QuadtreeTerrain.h"
+#include "QtTerrainInstancingDrawer.h"
 #include "ComputeShader.h"
 #include "CameraObject.h"
 #include "Camera.h"

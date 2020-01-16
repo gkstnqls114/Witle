@@ -8,7 +8,7 @@
 #include "ShaderManager.h"
 #include "Shader.h"
  
-#include "QuadTreeTerrain.h" 
+#include "QtTerrainInstancingDrawer.h" 
 #include "Object.h" 
 #include "StaticObjectStorage.h"
 

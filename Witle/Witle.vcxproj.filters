@@ -834,9 +834,6 @@
     <ClInclude Include="TerrainObjectID.h">
       <Filter>99.etc\ID\TerrainObjectID</Filter>
     </ClInclude>
-    <ClInclude Include="QuadtreeTerrain.h">
-      <Filter>03.GameObject\Terrain</Filter>
-    </ClInclude>
     <ClInclude Include="Shape.h">
       <Filter>02.Component\04.Shape</Filter>
     </ClInclude>
@@ -1275,6 +1272,9 @@
     <ClInclude Include="QuadtreeNode.h">
       <Filter>13.Storage/Manager\17.QuadtreeMgr</Filter>
     </ClInclude>
+    <ClInclude Include="QtTerrainInstancingDrawer.h">
+      <Filter>03.GameObject\Terrain</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1456,9 +1456,6 @@
     </ClCompile>
     <ClCompile Include="TerrainObjectID.cpp">
       <Filter>99.etc\ID\TerrainObjectID</Filter>
-    </ClCompile>
-    <ClCompile Include="QuadtreeTerrain.cpp">
-      <Filter>03.GameObject\Terrain</Filter>
     </ClCompile>
     <ClCompile Include="Shape.cpp">
       <Filter>02.Component\04.Shape</Filter>
@@ -1891,6 +1888,9 @@
     </ClCompile>
     <ClCompile Include="QuadtreeNode.cpp">
       <Filter>13.Storage/Manager\17.QuadtreeMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="QtTerrainInstancingDrawer.cpp">
+      <Filter>03.GameObject\Terrain</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

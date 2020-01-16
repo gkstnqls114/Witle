@@ -317,7 +317,7 @@
     <ClInclude Include="PlayerMovement.h" />
     <ClInclude Include="PlayerStatus.h" />
     <ClInclude Include="PointLight.h" />
-    <ClInclude Include="QuadtreeTerrain.h" />
+    <ClInclude Include="QtTerrainInstancingDrawer.h" />
     <ClInclude Include="MyRectangle.h" />
     <ClInclude Include="RecognitionRange.h" />
     <ClInclude Include="UI2DChangedImage.h" />
@@ -523,7 +523,7 @@
     <ClCompile Include="Status.cpp" />
     <ClCompile Include="PlayerStatus.cpp" />
     <ClCompile Include="PointLight.cpp" />
-    <ClCompile Include="QuadtreeTerrain.cpp" />
+    <ClCompile Include="QtTerrainInstancingDrawer.cpp" />
     <ClCompile Include="MyRectangle.cpp" />
     <ClCompile Include="RecognitionRange.cpp" />
     <ClCompile Include="UI2DChangedImage.cpp" />
