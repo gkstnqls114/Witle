@@ -1,7 +1,7 @@
 #pragma once
 #include "ComponentBase.h"
 
-class QuadtreeTerrain;
+class QtTerrainInstancingDrawer;
 struct QUAD_TREE_NODE;
 
 class MyFrustum

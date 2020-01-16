@@ -1,6 +1,6 @@
 #pragma once
  
-class QuadtreeTerrain;
+class QtTerrainInstancingDrawer;
 class LoadObject;
 class Texture;
 
@@ -39,8 +39,8 @@ private:
 
 private: 
 	// 터레인 초기 위치 정보
-	void LoadTerrainObjectFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, const char *pstrFileName, const QuadtreeTerrain const * pTerrain);
-	void LoadNameAndPositionFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, FILE *pInFile, const QuadtreeTerrain const * pTerrain);
+	void LoadTerrainObjectFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, const char *pstrFileName, const QtTerrainInstancingDrawer const * pTerrain);
+	void LoadNameAndPositionFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, FILE *pInFile, const QtTerrainInstancingDrawer const * pTerrain);
 	bool LoadTransform(char* name, const char* comp_name, const XMINT4&, const XMFLOAT4X4& tr);
 	// 터레인 초기 위치 정보 로드
 	 
@@ -50,7 +50,7 @@ public:
 	static StaticObjectStorage* m_Instance;
 
 public:
-	static StaticObjectStorage* GetInstance(const QuadtreeTerrain const * pTerrain);
+	static StaticObjectStorage* GetInstance(const QtTerrainInstancingDrawer const * pTerrain);
 	static StaticObjectStorage* GetInstance( );
 	static void ReleaseInstance();
 
@@ -61,7 +61,7 @@ public:
 	XMFLOAT4X4* GetWorldMatrix(int index, const std::string& name);
 	XMFLOAT4X4 GetAltarTransform(int index, const std::string& name);
 
-	void CreateInfo(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, const QuadtreeTerrain const * pTerrain);
+	void CreateInfo(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, const QtTerrainInstancingDrawer const * pTerrain);
 	
 	// 인스턴싱을 통해 렌더합니다.
 	void RenderAll(ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffers);

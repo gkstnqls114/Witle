@@ -14,7 +14,7 @@ class Monster;
 class SkyBox;
 class CameraObject;
 class Terrain;
-class QuadtreeTerrain;
+class QtTerrainInstancingDrawer;
 class AltarSphere;
 class Dragon;
 //// Objects ///////////////
@@ -131,7 +131,7 @@ public:
 
 	void Init();
 
-	QuadtreeTerrain* GetQuadtreeTerrain() const { return m_pQuadtreeTerrain; }
+	QtTerrainInstancingDrawer* GetQuadtreeTerrain() const { return m_pQuadtreeTerrain; }
 
 public: 
 	// 플레이어 관련 ////////////////////////////
@@ -185,7 +185,7 @@ public:
 	MATERIAL					*m_pcbMappedMaterials{ nullptr };
 	//////////////////////////////////////  조명
 
-	QuadtreeTerrain			    *m_pQuadtreeTerrain{ nullptr };
+	QtTerrainInstancingDrawer			    *m_pQuadtreeTerrain{ nullptr };
 
 private:
 	GameObject* m_TESTGameObject{ nullptr };

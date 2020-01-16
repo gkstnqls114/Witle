@@ -7,7 +7,7 @@ class Player;
 class Monster;
 class MyCollider;
 class MyBOBox;
-class QuadtreeTerrain;
+class QtTerrainInstancingDrawer;
 
 class Collision
 {

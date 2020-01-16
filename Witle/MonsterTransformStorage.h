@@ -1,6 +1,6 @@
 #pragma once
  
-class QuadtreeTerrain;
+class QtTerrainInstancingDrawer;
 class LoadObject;
 class Texture;
 
@@ -46,7 +46,7 @@ public:
 	static MonsterTransformStorage* m_Instance;
 
 public:
-	static MonsterTransformStorage* GetInstance(const QuadtreeTerrain const * pTerrain);
+	static MonsterTransformStorage* GetInstance(const QtTerrainInstancingDrawer const * pTerrain);
 	static MonsterTransformStorage* GetInstance( );
 	static void ReleaseInstance();
 

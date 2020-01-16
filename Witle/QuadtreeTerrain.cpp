@@ -17,27 +17,27 @@
 // 처음 아이디는 0으로 시작한다.
 // 리프 노드만 아이디를 설정한다.
 // 따라서 아이디는 0부터 시작한다.
-int QuadtreeTerrain::gTreePieceCount{ 0 }; 
+int QtTerrainInstancingDrawer::gTreePieceCount{ 0 }; 
 
-UINT QuadtreeTerrain::CalculateTriangles(UINT widthPixel, UINT lengthPixel)
+UINT QtTerrainInstancingDrawer::CalculateTriangles(UINT widthPixel, UINT lengthPixel)
 {
 	assert(!(widthPixel != lengthPixel));
 	
 	return (widthPixel - 1) * (lengthPixel -1) * 2;
 }
  
-void QuadtreeTerrain::ReleaseMembers()
+void QtTerrainInstancingDrawer::ReleaseMembers()
 {
 	delete[] m_pReafNodes; 
 }
 
-void QuadtreeTerrain::ReleaseMemberUploadBuffers()
+void QtTerrainInstancingDrawer::ReleaseMemberUploadBuffers()
 { 
 	RecursiveReleaseUploadBuffers(m_pRootNode);
 }
 
 
-void QuadtreeTerrain::RecursiveRenderTerrainObjects_BOBox(const QUAD_TREE_NODE * node, ID3D12GraphicsCommandList * pd3dCommandList)
+void QtTerrainInstancingDrawer::RecursiveRenderTerrainObjects_BOBox(const QUAD_TREE_NODE * node, ID3D12GraphicsCommandList * pd3dCommandList)
 {
 	if (node->isRendering)
 	{
@@ -58,7 +58,7 @@ void QuadtreeTerrain::RecursiveRenderTerrainObjects_BOBox(const QUAD_TREE_NODE *
 }
 
 
-void QuadtreeTerrain::RenderTerrainObjects(ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffers)
+void QtTerrainInstancingDrawer::RenderTerrainObjects(ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffers)
 {
 	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, "InstancingStandardShader", isGBuffers);
 	
@@ -68,7 +68,7 @@ void QuadtreeTerrain::RenderTerrainObjects(ID3D12GraphicsCommandList * pd3dComma
 	RecursiveRenderTerrainObjects_BOBox(m_pRootNode, pd3dCommandList); 
 }
 
-void QuadtreeTerrain::RecursiveRenderTerrainObjects(const QUAD_TREE_NODE * node, ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffers)
+void QtTerrainInstancingDrawer::RecursiveRenderTerrainObjects(const QUAD_TREE_NODE * node, ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffers)
 { 
 	if (node->isRendering)
 	{
@@ -90,7 +90,7 @@ void QuadtreeTerrain::RecursiveRenderTerrainObjects(const QUAD_TREE_NODE * node,
 }
 
 
-void QuadtreeTerrain::RecursiveRenderTerrainObjectsForShadow(const QUAD_TREE_NODE * node, ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffers)
+void QtTerrainInstancingDrawer::RecursiveRenderTerrainObjectsForShadow(const QUAD_TREE_NODE * node, ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffers)
 {
 	if (node->isRendering)
 	{
@@ -111,7 +111,7 @@ void QuadtreeTerrain::RecursiveRenderTerrainObjectsForShadow(const QUAD_TREE_NOD
 
 static std::unordered_set<int> set;
 
-void QuadtreeTerrain::RecursiveRender(const QUAD_TREE_NODE * node, ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffers)
+void QtTerrainInstancingDrawer::RecursiveRender(const QUAD_TREE_NODE * node, ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffers)
 {
 	// 렌더링
 	extern MeshRenderer gMeshRenderer;
@@ -130,7 +130,7 @@ void QuadtreeTerrain::RecursiveRender(const QUAD_TREE_NODE * node, ID3D12Graphic
 	}
 }
 
-void QuadtreeTerrain::RecursiveInitReafNodes(QUAD_TREE_NODE * node)
+void QtTerrainInstancingDrawer::RecursiveInitReafNodes(QUAD_TREE_NODE * node)
 { 
 	if (node->terrainMesh)
 	{
@@ -145,7 +145,7 @@ void QuadtreeTerrain::RecursiveInitReafNodes(QUAD_TREE_NODE * node)
 	}
 }
 
-void QuadtreeTerrain::RecursiveReleaseUploadBuffers(QUAD_TREE_NODE * node)
+void QtTerrainInstancingDrawer::RecursiveReleaseUploadBuffers(QUAD_TREE_NODE * node)
 {
 	if (node->terrainMesh)
 	{
@@ -160,7 +160,7 @@ void QuadtreeTerrain::RecursiveReleaseUploadBuffers(QUAD_TREE_NODE * node)
 	}
 }
 
-void QuadtreeTerrain::RecursiveReleaseObjects(QUAD_TREE_NODE * node)
+void QtTerrainInstancingDrawer::RecursiveReleaseObjects(QUAD_TREE_NODE * node)
 {
 	if (node->terrainMesh)
 	{
@@ -187,7 +187,7 @@ void QuadtreeTerrain::RecursiveReleaseObjects(QUAD_TREE_NODE * node)
 	}
 }
 
-void QuadtreeTerrain::RecursiveCalculateIDs(QUAD_TREE_NODE * node, const XMFLOAT3 position, int* pIDs) const
+void QtTerrainInstancingDrawer::RecursiveCalculateIDs(QUAD_TREE_NODE * node, const XMFLOAT3 position, int* pIDs) const
 {
 	if (node->terrainMesh)
 	{
@@ -225,7 +225,7 @@ void QuadtreeTerrain::RecursiveCalculateIDs(QUAD_TREE_NODE * node, const XMFLOAT
 	}
 }
 
-void QuadtreeTerrain::CalculateIDs(const XMFLOAT3 position, XMINT4& IDs) const
+void QtTerrainInstancingDrawer::CalculateIDs(const XMFLOAT3 position, XMINT4& IDs) const
 {
 	int num = 0;
 
@@ -245,7 +245,7 @@ void QuadtreeTerrain::CalculateIDs(const XMFLOAT3 position, XMINT4& IDs) const
 	}
 }
 
-void QuadtreeTerrain::CalculateIndex(const XMFLOAT3 position, int * pIndices) const
+void QtTerrainInstancingDrawer::CalculateIndex(const XMFLOAT3 position, int * pIndices) const
 {
 	for (int i = 0; i < m_ReafNodeCount; ++i)
 	{
@@ -276,7 +276,7 @@ void QuadtreeTerrain::CalculateIndex(const XMFLOAT3 position, int * pIndices) co
 	} 
 }
 
-void QuadtreeTerrain::RecursiveCreateTerrain(QUAD_TREE_NODE * node, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList,
+void QtTerrainInstancingDrawer::RecursiveCreateTerrain(QUAD_TREE_NODE * node, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList,
 	int xStart, int zStart, int nBlockWidth, int nBlockLength,
 	 HeightMapImage * pContext)
 {
@@ -342,12 +342,12 @@ void QuadtreeTerrain::RecursiveCreateTerrain(QUAD_TREE_NODE * node, ID3D12Device
 	}
 }
 
-UINT QuadtreeTerrain::CalculateVertex(UINT widht, UINT length)
+UINT QtTerrainInstancingDrawer::CalculateVertex(UINT widht, UINT length)
 {
 	return (widht* length);
 }
 
-QuadtreeTerrain::QuadtreeTerrain(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, int nWidth, int nLength, XMFLOAT3 xmf3Scale, XMFLOAT4 xmf4Color, HeightMapImage * pContext)
+QtTerrainInstancingDrawer::QtTerrainInstancingDrawer(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, int nWidth, int nLength, XMFLOAT3 xmf3Scale, XMFLOAT4 xmf4Color, HeightMapImage * pContext)
 	: GameObject("QuadTreeTerrain")
 { 
 	m_widthTotal = nWidth;
@@ -374,7 +374,7 @@ QuadtreeTerrain::QuadtreeTerrain(ID3D12Device * pd3dDevice, ID3D12GraphicsComman
 	 
 }
 
-QuadtreeTerrain::~QuadtreeTerrain()
+QtTerrainInstancingDrawer::~QtTerrainInstancingDrawer()
 {
 	if (m_pRootNode)
 	{
@@ -384,17 +384,17 @@ QuadtreeTerrain::~QuadtreeTerrain()
 	}
 }
 
-void QuadtreeTerrain::Update(float fElapsedTime)
+void QtTerrainInstancingDrawer::Update(float fElapsedTime)
 {
 }
 
-void QuadtreeTerrain::LastUpdate(float fElapsedTime)
+void QtTerrainInstancingDrawer::LastUpdate(float fElapsedTime)
 {
 	// 그려야하는 렌더링 인덱스 초기화
 
 }
 
-XMINT4 const  QuadtreeTerrain::GetIDs(const XMFLOAT3 & position) const
+XMINT4 const  QtTerrainInstancingDrawer::GetIDs(const XMFLOAT3 & position) const
 {
 	XMINT4 IDs{ -1, -1, -1, -1 };
 
@@ -403,7 +403,7 @@ XMINT4 const  QuadtreeTerrain::GetIDs(const XMFLOAT3 & position) const
 	return IDs;
 }
 
-int * const QuadtreeTerrain::GetIndex(const XMFLOAT3 & position) const
+int * const QtTerrainInstancingDrawer::GetIndex(const XMFLOAT3 & position) const
 {
 	int* pIndeics = new int[QUAD];
 	for (int x = 0; x < QUAD; ++x)
@@ -416,7 +416,7 @@ int * const QuadtreeTerrain::GetIndex(const XMFLOAT3 & position) const
 	return pIndeics;
 }
 
-void QuadtreeTerrain::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers)
+void QtTerrainInstancingDrawer::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers)
 { 
 	RenderTerrainObjects(pd3dCommandList, isGBuffers); // 지형 오브젝트 렌더
 
@@ -424,7 +424,7 @@ void QuadtreeTerrain::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool is
 	RecursiveRender(m_pRootNode, pd3dCommandList, isGBuffers); // 지형 렌더	 
 }
 
-void QuadtreeTerrain::RenderTerrainForShadow(ID3D12GraphicsCommandList * pd3dCommandList, Terrain * pTerrain, ID3D12DescriptorHeap* pHeap)
+void QtTerrainInstancingDrawer::RenderTerrainForShadow(ID3D12GraphicsCommandList * pd3dCommandList, Terrain * pTerrain, ID3D12DescriptorHeap* pHeap)
 { 
 	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_TERRAIN_FORSHADOW, false);
 
@@ -435,7 +435,7 @@ void QuadtreeTerrain::RenderTerrainForShadow(ID3D12GraphicsCommandList * pd3dCom
 	RecursiveRender(m_pRootNode, pd3dCommandList, false); // 지형 렌더	 
 }
 
-void QuadtreeTerrain::RenderInstancingObjectsForShadow(ID3D12GraphicsCommandList * pd3dCommandList)
+void QtTerrainInstancingDrawer::RenderInstancingObjectsForShadow(ID3D12GraphicsCommandList * pd3dCommandList)
 {
 	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_INSTACINGSTANDARDFORSHADOW, false);
 
@@ -443,7 +443,7 @@ void QuadtreeTerrain::RenderInstancingObjectsForShadow(ID3D12GraphicsCommandList
 	RecursiveRenderTerrainObjectsForShadow(m_pRootNode, pd3dCommandList, false);
 }
 
-void QuadtreeTerrain::Render(ID3D12GraphicsCommandList * pd3dCommandList, Terrain * pTerrain, ID3D12DescriptorHeap* pHeap, bool isGBuffers)
+void QtTerrainInstancingDrawer::Render(ID3D12GraphicsCommandList * pd3dCommandList, Terrain * pTerrain, ID3D12DescriptorHeap* pHeap, bool isGBuffers)
 {
 	// 지형 렌더
 	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_TERRAIN, isGBuffers);
@@ -459,7 +459,7 @@ void QuadtreeTerrain::Render(ID3D12GraphicsCommandList * pd3dCommandList, Terrai
 
 }
 
-void QuadtreeTerrain::Render(int index, ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffers)
+void QtTerrainInstancingDrawer::Render(int index, ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffers)
 {
 	// 렌더링
 	extern MeshRenderer gMeshRenderer; 
@@ -469,7 +469,7 @@ void QuadtreeTerrain::Render(int index, ID3D12GraphicsCommandList * pd3dCommandL
 	StaticObjectStorage::GetInstance(this)->Render(pd3dCommandList, index, isGBuffers);
 }
 
-QUAD_TREE_NODE * QuadtreeTerrain::GetReafNodeByID(int id)
+QUAD_TREE_NODE * QtTerrainInstancingDrawer::GetReafNodeByID(int id)
 {
 	return nullptr;
 }

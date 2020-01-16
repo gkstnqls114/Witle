@@ -27,7 +27,10 @@ struct QUAD_TREE_NODE
 	QUAD_TREE_NODE* children[QUAD]{ nullptr,  nullptr , nullptr , nullptr };
 };
 
-class QuadtreeTerrain
+/*
+    쿼드트리를 이용하여 
+*/
+class QtTerrainInstancingDrawer
 	: public GameObject
 {
 public:
@@ -82,8 +85,8 @@ private:
 	UINT CalculateTriangles(UINT widthPixel, UINT lengthPixel);
 
 public:
-	QuadtreeTerrain(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, int nWidth, int nLength, XMFLOAT3 xmf3Scale = XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT4 xmf4Color = XMFLOAT4(1.0f, 1.0f, 0.0f, 0.0f), HeightMapImage *pContext = NULL);
-	virtual ~QuadtreeTerrain();
+	QtTerrainInstancingDrawer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, int nWidth, int nLength, XMFLOAT3 xmf3Scale = XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT4 xmf4Color = XMFLOAT4(1.0f, 1.0f, 0.0f, 0.0f), HeightMapImage *pContext = NULL);
+	virtual ~QtTerrainInstancingDrawer();
 	 
 	virtual void Update(float fElapsedTime) override;
 	void LastUpdate(float fElapsedTime);

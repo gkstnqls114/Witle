@@ -95,7 +95,7 @@ bool StaticObjectStorage::LoadTransform(char * name, const char * comp_name, con
 	return result;
 }
 
-void StaticObjectStorage::LoadTerrainObjectFromFile(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, const char * pstrFileName, const QuadtreeTerrain const * pTerrain)
+void StaticObjectStorage::LoadTerrainObjectFromFile(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, const char * pstrFileName, const QtTerrainInstancingDrawer const * pTerrain)
 {
 	FILE *pInFile = NULL;
 	::fopen_s(&pInFile, pstrFileName, "rb");
@@ -160,7 +160,7 @@ void StaticObjectStorage::LoadTerrainObjectFromFile(ID3D12Device * pd3dDevice, I
 	::fclose(pInFile);
 }
  
-void StaticObjectStorage::LoadNameAndPositionFromFile(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, FILE * pInFile, const QuadtreeTerrain const * pTerrain)
+void StaticObjectStorage::LoadNameAndPositionFromFile(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, FILE * pInFile, const QtTerrainInstancingDrawer const * pTerrain)
 {
 	char pstrToken[64] = { '\0' };
 	UINT nReads = 0;
@@ -278,7 +278,7 @@ void StaticObjectStorage::CreateShaderVariables(ID3D12Device * pd3dDevice, ID3D1
 	}
 }
 
-StaticObjectStorage * StaticObjectStorage::GetInstance(const QuadtreeTerrain const * pTerrain)
+StaticObjectStorage * StaticObjectStorage::GetInstance(const QtTerrainInstancingDrawer const * pTerrain)
 {
 	if (!m_Instance)
 	{
@@ -373,7 +373,7 @@ XMFLOAT4X4 StaticObjectStorage::GetAltarTransform(int index, const std::string &
 	return m_AltarTransformStorage[index];
 }
 
-void StaticObjectStorage::CreateInfo(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, const QuadtreeTerrain const * pTerrain)
+void StaticObjectStorage::CreateInfo(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, const QtTerrainInstancingDrawer const * pTerrain)
 {
 	if (m_isCreate) return;
 

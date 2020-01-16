@@ -201,7 +201,7 @@ void MonsterTransformStorage::CreateShaderVariables(ID3D12Device * pd3dDevice, I
 	 
 }
 
-MonsterTransformStorage * MonsterTransformStorage::GetInstance(const QuadtreeTerrain const * pTerrain)
+MonsterTransformStorage * MonsterTransformStorage::GetInstance(const QtTerrainInstancingDrawer const * pTerrain)
 {
 	if (!m_Instance)
 	{
