@@ -9,7 +9,7 @@
 #include "Texture.h" 
 #include "SceneMgr.h"
 
-#include "QuadtreeMgr.h"
+#include "QtTerrainCalculator.h"
 
 #include "TestScene.h"
  

@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "QuadtreeMgr.h"
+#include "QtTerrainCalculator.h"
 #include "MapInfoMgr.h"
 #include "SingletonInitializer.h"
 

@@ -1,13 +1,11 @@
-#pragma once
-#include "QuadtreeMgr.h"
+#pragma once 
  
 struct RAY;
 
 class Player;
 class Monster;
 class MyCollider;
-class MyBOBox;
-class QtTerrainInstancingDrawer;
+class MyBOBox; 
 
 class Collision
 {

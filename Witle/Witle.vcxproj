@@ -168,7 +168,7 @@
     <ClInclude Include="MapInfoMgr.h" />
     <ClInclude Include="MyBBox.h" />
     <ClInclude Include="NoneAction.h" />
-    <ClInclude Include="QuadtreeMgr.h" />
+    <ClInclude Include="QtTerrainCalculator.h" />
     <ClInclude Include="PlayerActionMgr.h" />
     <ClInclude Include="PlayerStandardAttackAction.h" />
     <ClInclude Include="PlayerBroomPrepareAction.h" />
@@ -383,7 +383,7 @@
     <ClCompile Include="MapInfoMgr.cpp" />
     <ClCompile Include="MyBBox.cpp" />
     <ClCompile Include="NoneAction.cpp" />
-    <ClCompile Include="QuadtreeMgr.cpp" />
+    <ClCompile Include="QtTerrainCalculator.cpp" />
     <ClCompile Include="PlayerActionMgr.cpp" />
     <ClCompile Include="PlayerStandardAttackAction.cpp" />
     <ClCompile Include="PlayerBroomPrepareAction.cpp" />

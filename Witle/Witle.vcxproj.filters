@@ -1254,9 +1254,6 @@
     <ClInclude Include="Singleton.h">
       <Filter>98.Template\01.Singleton</Filter>
     </ClInclude>
-    <ClInclude Include="QuadtreeMgr.h">
-      <Filter>13.Storage/Manager\17.QuadtreeMgr</Filter>
-    </ClInclude>
     <ClInclude Include="MyBBox.h">
       <Filter>02.Component\05.MyCollider\MyBBox</Filter>
     </ClInclude>
@@ -1274,6 +1271,9 @@
     </ClInclude>
     <ClInclude Include="QtTerrainInstancingDrawer.h">
       <Filter>03.GameObject\Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="QtTerrainCalculator.h">
+      <Filter>13.Storage/Manager\17.QuadtreeMgr</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1871,9 +1871,6 @@
     <ClCompile Include="PostprocessingSetting.cpp">
       <Filter>01.GameBase\PostprocessingSetting</Filter>
     </ClCompile>
-    <ClCompile Include="QuadtreeMgr.cpp">
-      <Filter>13.Storage/Manager\17.QuadtreeMgr</Filter>
-    </ClCompile>
     <ClCompile Include="MyBBox.cpp">
       <Filter>02.Component\05.MyCollider\MyBBox</Filter>
     </ClCompile>
@@ -1891,6 +1888,9 @@
     </ClCompile>
     <ClCompile Include="QtTerrainInstancingDrawer.cpp">
       <Filter>03.GameObject\Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="QtTerrainCalculator.cpp">
+      <Filter>13.Storage/Manager\17.QuadtreeMgr</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -10,7 +10,7 @@
 #include "GameObject.h"
 #include "GameTimer.h"
 
-#include "QuadtreeMgr.h"
+#include "QtTerrainCalculator.h"
  
  
 void QtTerrainCalculator::SetminSize(float min_size)
