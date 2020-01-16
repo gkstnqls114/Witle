@@ -1,8 +1,11 @@
-#pragma once
+#pragma once 
 #include "ComponentBase.h"
 
-class QtTerrainInstancingDrawer;
-struct QUAD_TREE_NODE;
+class QtTerrainInstancingDrawer;  
+namespace quadtree
+{
+	struct QUAD_TREE_NODE;
+}
 
 class MyFrustum
 	: ComponentBase
@@ -32,8 +35,8 @@ public:
 	bool IsIntersect(const XMFLOAT3& pos) const;
 	bool IsIntersect(const BoundingBox& pos) const;
 
-	void CheckRendering(QUAD_TREE_NODE* node);
-	void CheckRenderingAllTRUE(QUAD_TREE_NODE* node);
-	void CheckRenderingAllFALSE(QUAD_TREE_NODE* node);
+	void CheckRendering(quadtree::QUAD_TREE_NODE* node);
+	void CheckRenderingAllTRUE(quadtree::QUAD_TREE_NODE* node);
+	void CheckRenderingAllFALSE(quadtree::QUAD_TREE_NODE* node);
 	BoundingFrustum GetBoundingFrustum() const { return m_frustum; }
 };

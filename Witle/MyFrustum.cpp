@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "stdafx.h" 
 #include "QtTerrainInstancingDrawer.h"
 #include "MyFrustum.h"
 
@@ -49,7 +49,7 @@ bool MyFrustum::IsIntersect(const BoundingBox & box) const
 	return m_frustum.Intersects(box);
 }
 
-void MyFrustum::CheckRendering(QUAD_TREE_NODE* node)
+void MyFrustum::CheckRendering(quadtree::QUAD_TREE_NODE* node)
 {
 	if (IsIntersect(node->boundingBox))
 	{
@@ -72,7 +72,7 @@ void MyFrustum::CheckRendering(QUAD_TREE_NODE* node)
 	}
 }
 
-void MyFrustum::CheckRenderingAllTRUE(QUAD_TREE_NODE * node)
+void MyFrustum::CheckRenderingAllTRUE(quadtree::QUAD_TREE_NODE * node)
 {
 	if (IsIntersect(node->boundingBox))
 	{
@@ -95,7 +95,7 @@ void MyFrustum::CheckRenderingAllTRUE(QUAD_TREE_NODE * node)
 	}
 }
 
-void MyFrustum::CheckRenderingAllFALSE(QUAD_TREE_NODE * node)
+void MyFrustum::CheckRenderingAllFALSE(quadtree::QUAD_TREE_NODE * node)
 {
 	if (IsIntersect(node->boundingBox))
 	{
