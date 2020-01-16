@@ -13,7 +13,7 @@
 #include "QuadtreeMgr.h"
  
  
-void QuadtreeMgr::SetminSize(float min_size)
+void QtTerrainCalculator::SetminSize(float min_size)
 {
 	// 이미 minSize가 설정된 경우
 	bool isAlreadySeted = m_minSize != 0;
@@ -28,7 +28,7 @@ void QuadtreeMgr::SetminSize(float min_size)
 	m_minSize = min_size;
 }
 
-void QuadtreeMgr::CreateQuadTree()
+void QtTerrainCalculator::CreateQuadTree()
 {
 	// 제일 작은 쿼드트리 사이즈가 0보다 같거나 작습니다.
 	bool isLessEqualZero = m_minSize <= 0;
@@ -50,7 +50,7 @@ void QuadtreeMgr::CreateQuadTree()
 	CreateRecursiveQuadTree(m_RootNode, leafnodeIndex);
 }
 
-void QuadtreeMgr::CreateRecursiveQuadTree(quadtree::NODE* pNode, int& leafnodeIndex)
+void QtTerrainCalculator::CreateRecursiveQuadTree(quadtree::NODE* pNode, int& leafnodeIndex)
 {
 	// Extents 의 x, z 의 *2 중 하나라도 minSize보다 작거나 같으면 더 이상 노드를 만들지 않는다.
 	XMFLOAT3 nodeExents = pNode->BoBox->GetBOBox().Extents;
@@ -94,7 +94,7 @@ void QuadtreeMgr::CreateRecursiveQuadTree(quadtree::NODE* pNode, int& leafnodeIn
 	}
 }
 
-void QuadtreeMgr::ReleaseQuadTree()
+void QtTerrainCalculator::ReleaseQuadTree()
 {
 	if (m_RootNode != nullptr)
 	{ 
@@ -109,7 +109,7 @@ void QuadtreeMgr::ReleaseQuadTree()
 	}
 }
 
-void QuadtreeMgr::ReleaseRecursiveQuadTree(quadtree::NODE* pNode)
+void QtTerrainCalculator::ReleaseRecursiveQuadTree(quadtree::NODE* pNode)
 {
 	// 자식이 있는 경우 재귀함수를 이용하여 children 내부로 들어간다.
 	bool isHaveChildren = pNode->children[0] != nullptr;
@@ -129,7 +129,7 @@ void QuadtreeMgr::ReleaseRecursiveQuadTree(quadtree::NODE* pNode)
 	delete pNode;   
 }
 
-void QuadtreeMgr::CreateTerrainObj(const char* terrain_info_path)
+void QtTerrainCalculator::CreateTerrainObj(const char* terrain_info_path)
 {
 	FILE* pInFile = NULL;
 	::fopen_s(&pInFile, terrain_info_path, "rb");
@@ -186,7 +186,7 @@ void QuadtreeMgr::CreateTerrainObj(const char* terrain_info_path)
 	::fclose(pInFile);
 }
 
-void QuadtreeMgr::CreateTerrainObj(FILE* pInFile)
+void QtTerrainCalculator::CreateTerrainObj(FILE* pInFile)
 {
 	char pstrToken[64] = { '\0' };
 	UINT nReads = 0;
@@ -290,7 +290,7 @@ void QuadtreeMgr::CreateTerrainObj(FILE* pInFile)
 	}
 }
 
-void QuadtreeMgr::ProcessRecursiveCollide(const quadtree::NODE& node, Movement& movement, const BoundingOrientedBox& nextFrameBoBox, const MyBOBox& collider)
+void QtTerrainCalculator::ProcessRecursiveCollide(const quadtree::NODE& node, Movement& movement, const BoundingOrientedBox& nextFrameBoBox, const MyBOBox& collider)
 {
 	// 현재 프레임 위치에서 node와 부딪히는지 확인.
 	bool isCollided = Collision::isCollide(*node.BoBox, collider);
@@ -329,7 +329,7 @@ void QuadtreeMgr::ProcessRecursiveCollide(const quadtree::NODE& node, Movement& 
 	}
 }
 
-void QuadtreeMgr::AddRecursiveCollider(quadtree::NODE* pNode, const MyBOBox& BoBox, const XMFLOAT4X4& world)
+void QtTerrainCalculator::AddRecursiveCollider(quadtree::NODE* pNode, const MyBOBox& BoBox, const XMFLOAT4X4& world)
 {
 	// 해당 노드의 충돌체와 부딪히지않으면 넘어간다.
 	bool isCollided = Collision::isCollide(*(pNode->BoBox), BoBox);
@@ -357,11 +357,11 @@ void QuadtreeMgr::AddRecursiveCollider(quadtree::NODE* pNode, const MyBOBox& BoB
 	}
 }
  
-QuadtreeMgr::QuadtreeMgr()  
+QtTerrainCalculator::QtTerrainCalculator()  
 {
 }
 
-QuadtreeMgr::~QuadtreeMgr()
+QtTerrainCalculator::~QtTerrainCalculator()
 {
 	if (m_RootNode)
 	{
@@ -369,7 +369,7 @@ QuadtreeMgr::~QuadtreeMgr()
 	}
 }
 
-void QuadtreeMgr::Init(const XMFLOAT3& center, const XMFLOAT3& extents, float min_size)
+void QtTerrainCalculator::Init(const XMFLOAT3& center, const XMFLOAT3& extents, float min_size)
 {  
 	SetminSize(min_size);
 
@@ -386,34 +386,34 @@ void QuadtreeMgr::Init(const XMFLOAT3& center, const XMFLOAT3& extents, float mi
 	CreateTerrainObj(TERRAIN_OBJS_INFO_PATH);
 }
 
-void QuadtreeMgr::Init(XMFLOAT3&& center, XMFLOAT3&& extents, float min_size)
+void QtTerrainCalculator::Init(XMFLOAT3&& center, XMFLOAT3&& extents, float min_size)
 {
 	Init(center, extents, min_size);
 }
 
-void QuadtreeMgr::Init(const SingletonInitializer* singletonMgr)
+void QtTerrainCalculator::Init(const SingletonInitializer* singletonMgr)
 {
 }
  
-void QuadtreeMgr::Update(float fElapsedTime)
+void QtTerrainCalculator::Update(float fElapsedTime)
 {
 }
 
-void QuadtreeMgr::LastUpdate(float fElapsedTime)
+void QtTerrainCalculator::LastUpdate(float fElapsedTime)
 { 
 }
 
-void QuadtreeMgr::AddCollider(const MyBOBox& collider, const XMFLOAT4X4& world)
+void QtTerrainCalculator::AddCollider(const MyBOBox& collider, const XMFLOAT4X4& world)
 {
 	AddRecursiveCollider(m_RootNode, collider, world);
 }
 
-void QuadtreeMgr::ProcessCollide(Movement& movement, const BoundingOrientedBox& nextFrameBoBox, const MyBOBox& collider)
+void QtTerrainCalculator::ProcessCollide(Movement& movement, const BoundingOrientedBox& nextFrameBoBox, const MyBOBox& collider)
 {
 	ProcessRecursiveCollide(*m_RootNode, movement, nextFrameBoBox, collider);
 }
  
-void QuadtreeMgr::PrintInfo()
+void QtTerrainCalculator::PrintInfo()
 {
 #ifdef _DEBUG
 	std::cout << "Quadtree Leaf Node Info ... " << std::endl;

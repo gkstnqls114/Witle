@@ -1651,17 +1651,17 @@ void GameScene::UpdateCollision()
 	float fElapsedTime = CGameTimer::GetInstance()->GetTimeElapsed();
 	BoundingOrientedBox AlreadyPlayerBBox = m_pPlayer->CalculateAlreadyBoundingBox(fElapsedTime);
 	// 플레이어와 지형지물 충돌을 확인한다.  
-	QuadtreeMgr::GetInstance()->ProcessCollide(*m_pPlayer->GetpMovement(), AlreadyPlayerBBox, *m_pPlayer->GetBOBox());
+	QtTerrainCalculator::GetInstance()->ProcessCollide(*m_pPlayer->GetpMovement(), AlreadyPlayerBBox, *m_pPlayer->GetBOBox());
 	 
 	// 보스와 지형지물 충돌을 확인한다.
 	BoundingOrientedBox AlreadyDragonBBox = m_Dragon->CalculateAlreadyBoundingBox(fElapsedTime);
-	QuadtreeMgr::GetInstance()->ProcessCollide(*m_Dragon->GetpMovement(), AlreadyDragonBBox,*m_Dragon->GetBOBox());
+	QtTerrainCalculator::GetInstance()->ProcessCollide(*m_Dragon->GetpMovement(), AlreadyDragonBBox,*m_Dragon->GetBOBox());
 	
 	// 몬스터 충돌체크 ///////////////////////// 
 	for (int x = 0; x < m_TestMonsterCount; ++x)
 	{
 		BoundingOrientedBox AlreadMonsterBBox = m_TestMonster[x]->CalculateAlreadyBoundingBox(fElapsedTime);
-		QuadtreeMgr::GetInstance()->ProcessCollide(*m_TestMonster[x]->GetpMovement(), AlreadMonsterBBox, *m_TestMonster[x]->GetBOBox());
+		QtTerrainCalculator::GetInstance()->ProcessCollide(*m_TestMonster[x]->GetpMovement(), AlreadMonsterBBox, *m_TestMonster[x]->GetBOBox());
 	} 
 	// 몬스터 충돌체크 ///////////////////////// 
 }

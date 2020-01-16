@@ -8,11 +8,11 @@ const SingletonInitializer* SingletonInitializer::m_pSingletonInitializer{ nullp
 
 void SingletonInitializer::Init()
 { 
-	QuadtreeMgr::GetInstance()->Init(m_pSingletonInitializer);
-	QuadtreeMgr::GetInstance()->Init(MapInfoMgr::GetMapCenter(), XMFLOAT3{ MapInfoMgr::GetMapExtentsX(), 10000.f, MapInfoMgr::GetMapExtentsZ() }, MapInfoMgr::GetMapSizeX() / 4.f);
+	QtTerrainCalculator::GetInstance()->Init(m_pSingletonInitializer);
+	QtTerrainCalculator::GetInstance()->Init(MapInfoMgr::GetMapCenter(), XMFLOAT3{ MapInfoMgr::GetMapExtentsX(), 10000.f, MapInfoMgr::GetMapExtentsZ() }, MapInfoMgr::GetMapSizeX() / 4.f);
 }
 
 void SingletonInitializer::ReleaseInstance()
 {
-	QuadtreeMgr::ReleaseInstance();
+	QtTerrainCalculator::ReleaseInstance();
 }
