@@ -20,8 +20,4 @@ public:
 	virtual ~StaticObject() {};
 };
   
-struct VS_SRV_INSTANCEINFO
-{
-	XMFLOAT4X4 m_xmf4x4Transform;
-};
  

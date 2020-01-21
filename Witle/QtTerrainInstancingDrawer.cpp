@@ -11,7 +11,9 @@
 #include "MyFrustum.h"
 #include "Collision.h"
 #include "Terrain.h"
+#include "ModelStorage.h"
 #include "MyDescriptorHeap.h"
+#include "Object.h"
 #include "QtTerrainInstancingDrawer.h"
 
 // 처음 아이디는 0으로 시작한다.
@@ -29,6 +31,225 @@ void QtTerrainInstancingDrawer::ReleaseMemberUploadBuffers()
 	RecursiveReleaseUploadBuffers(m_pRootNode);
 }
 
+
+void QtTerrainInstancingDrawer::LoadTerrainObjectFromFile(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, const char* pstrFileName, const QtTerrainInstancingDrawer const* pTerrain)
+{
+	FILE* pInFile = NULL;
+	::fopen_s(&pInFile, pstrFileName, "rb");
+	::rewind(pInFile);
+
+	char pstrToken[64] = { '\0' };
+
+	// 먼저 시작하기 전에 터레인 개수 조각에 맞추어 인포를 구성한다.
+	// 이름에 맞추어 구성해야하므로 하드코딩을 해야한다.
+	TerrainPieceCount = pTerrain->GetTerrainPieceCount();
+
+	for (const auto& name : ModelStorage::GetInstance()->m_NameList)
+	{
+		m_StaticObjectStorage[name] = new TerrainObjectInfo[TerrainPieceCount];
+	}
+
+	for (; ; )
+	{
+		if (FileRead::ReadStringFromFile(pInFile, pstrToken))
+		{
+			if (!strcmp(pstrToken, "<Hierarchy>:"))
+			{
+				int nRootChild = FileRead::ReadIntegerFromFile(pInFile); // 모든 오브젝트 개수
+
+				FileRead::ReadStringFromFile(pInFile, pstrToken); //<ObjectCount>: 
+				int nObjects = FileRead::ReadIntegerFromFile(pInFile);
+				for (int i = 0; i < nObjects; ++i)
+				{
+					FileRead::ReadStringFromFile(pInFile, pstrToken); // Object Name
+					FileRead::ReadIntegerFromFile(pInFile); // Object Count
+				}
+
+				for (int i = 0; i < nRootChild; ++i)
+				{
+					FileRead::ReadStringFromFile(pInFile, pstrToken);
+					if (!strcmp(pstrToken, "<Frame>:"))
+					{
+						LoadNameAndPositionFromFile(pd3dDevice, pd3dCommandList, pInFile, pTerrain);
+					}
+
+				}
+			}
+			else if (!strcmp(pstrToken, "</Hierarchy>"))
+			{
+				break;
+			}
+		}
+		else
+		{
+			break;
+		}
+	}
+
+#ifdef _WITH_DEBUG_FRAME_HIERARCHY
+	TCHAR pstrDebug[256] = { 0 };
+	_stprintf_s(pstrDebug, 256, _T("Frame Hierarchy\n"));
+	OutputDebugString(pstrDebug);
+
+	LoadObject::PrintFrameInfo(pLoadedModel->m_pModelRootObject, NULL);
+#endif
+
+	::fclose(pInFile);
+}
+
+void QtTerrainInstancingDrawer::LoadNameAndPositionFromFile(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, FILE* pInFile, const QtTerrainInstancingDrawer const* pTerrain)
+{
+	char pstrToken[64] = { '\0' };
+	UINT nReads = 0;
+
+	char name[64];
+
+	int nFrame = FileRead::ReadIntegerFromFile(pInFile);
+	FileRead::ReadStringFromFile(pInFile, name);
+
+	for (; ; )
+	{
+		FileRead::ReadStringFromFile(pInFile, pstrToken);
+		if (!strcmp(pstrToken, "<GlobalTransform>:"))
+		{
+			TerrainObjectAllCount += 1;
+
+			XMFLOAT4X4 temp;
+			nReads = (UINT)::fread(&temp, sizeof(XMFLOAT4X4), 1, pInFile);
+
+			FileRead::ReadStringFromFile(pInFile, pstrToken); // <GlobalRotation>:
+			XMFLOAT4 rotationXYZ;
+			nReads = (UINT)::fread(&rotationXYZ, sizeof(XMFLOAT4), 1, pInFile);
+			XMFLOAT4X4 rotate180Y = Matrix4x4::RotateMatrix(0.f, 0.f, 0.f);
+			XMFLOAT4X4 rotateInfo = Matrix4x4::RotateMatrix(0.f, rotationXYZ.z, 0.f);
+
+			// XMFLOAT4X4 transform = Matrix4x4::Multiply(rotate180Y, rotateInfo);
+			XMFLOAT4X4 transform = Matrix4x4::Identity();
+
+			// XMFLOAT4X4 transform = Matrix4x4::Identity();
+			transform._41 = -(temp._41);
+			transform._42 = 0;
+			if (!strcmp(name, Flower)) transform._42 = temp._42;
+			transform._43 = -(temp._43);
+
+			assert(!(temp._41 >= 40000));
+			assert(!(temp._43 >= 40000));
+
+			// 계산을 통해 몇번째 아이디인지 즉 어디의 리프노드에 존재하는 위치인지 알아낸다...
+			// fbx sdk 에서 꺼내올때 무슨 문제가 있는지 x, z좌표에 -부호 붙여야함 ...
+			// 그리고 위치 차이때문에 
+
+			XMFLOAT3 position{ transform._41, transform._42, transform._43 };
+			XMINT4 terrainIDs = pTerrain->GetIDs(position);
+
+			for (const auto& modelname : ModelStorage::GetInstance()->m_NameList)
+			{
+				bool isLocated = LoadTransform(name, modelname.c_str(), terrainIDs, transform);
+				if (isLocated) break;
+			}
+
+		}
+		else if (!strcmp(pstrToken, "<Children>:"))
+		{
+			int nChilds = FileRead::ReadIntegerFromFile(pInFile);
+			if (nChilds > 0)
+			{
+				for (int i = 0; i < nChilds; i++)
+				{
+					FileRead::ReadStringFromFile(pInFile, pstrToken);
+					if (!strcmp(pstrToken, "<Frame>:"))
+					{
+						LoadNameAndPositionFromFile(pd3dDevice, pd3dCommandList, pInFile, pTerrain);
+#ifdef _WITH_DEBUG_FRAME_HIERARCHY
+						TCHAR pstrDebug[256] = { 0 };
+						_stprintf_s(pstrDebug, 256, _T("(Frame: %p) (Parent: %p)\n"), pChild, pGameObject);
+						OutputDebugString(pstrDebug);
+#endif
+					}
+				}
+			}
+		}
+		else if (!strcmp(pstrToken, "</Frame>"))
+		{
+			break;
+		}
+	}
+}
+
+bool QtTerrainInstancingDrawer::LoadTransform(char* name, const char* comp_name, const XMINT4& IDs, const XMFLOAT4X4& tr)
+{
+	bool result = false;
+
+	if (!strcmp(name, comp_name) || !strcmp(name, "Cylinder001") /*Floor때문에 하드코딩*/ || !strcmp(name, "Object001"))
+	{
+		// 만약 name이 절벽인 경우...
+		if (!strcmp(name, "Object001"))
+		{
+			XMFLOAT4X4 newXMFLOAT4X4 = tr;
+			newXMFLOAT4X4._42 = 50;
+			LoadObject* TestObject = ModelStorage::GetInstance()->GetRootObject(Cliff);
+			TestObject->SetTransform(newXMFLOAT4X4); // 여기서 Scale 과 다이렉트 X축에 대한 회전 일어나므로 절대 빼먹으면 안됨..
+			TestObject->UpdateTransform(NULL);
+
+			for (int x = 0; x < TerrainPieceCount; ++x)
+			{
+				m_StaticObjectStorage[Cliff][x].TerrainObjectCount += 1;
+
+				m_StaticObjectStorage[Cliff][x].TransformList.emplace_back(TestObject->m_pChild->m_xmf4x4World);
+			}
+
+			delete TestObject;
+			TestObject = nullptr;
+
+			return true; // 절벽인 경우 만 예외 처리
+		}
+
+		for (int Ti = 0; Ti < 4; ++Ti)
+		{
+			int terrainIDs = -1;
+			if (Ti == 0) terrainIDs = IDs.x;
+			else if (Ti == 1) terrainIDs = IDs.y;
+			else if (Ti == 2) terrainIDs = IDs.z;
+			else if (Ti == 3) terrainIDs = IDs.w;
+
+			if (terrainIDs == -1) continue;
+
+			if (!strcmp(name, "Cylinder001"))
+			{
+				m_StaticObjectStorage[RUIN_FLOOR][terrainIDs].TerrainObjectCount += 1;
+
+				LoadObject* TestObject = ModelStorage::GetInstance()->GetRootObject(RUIN_FLOOR);
+				TestObject->SetTransform(tr);
+				TestObject->UpdateTransform(NULL);
+
+				m_StaticObjectStorage[RUIN_FLOOR][terrainIDs].TransformList.emplace_back(TestObject->m_pChild->m_xmf4x4World);
+
+				delete TestObject;
+				TestObject = nullptr;
+			}
+			else
+			{
+				m_StaticObjectStorage[comp_name][terrainIDs].TerrainObjectCount += 1;
+
+				LoadObject* TestObject = ModelStorage::GetInstance()->GetRootObject(comp_name);
+				TestObject->SetTransform(tr);
+				TestObject->UpdateTransform(NULL);
+
+				m_StaticObjectStorage[comp_name][terrainIDs].TransformList.emplace_back(TestObject->m_pChild->m_xmf4x4World);
+				if (!strcmp(comp_name, ALTAR_IN))
+				{
+					m_AltarTransformStorage.emplace_back(tr);
+				}
+
+				delete TestObject;
+				TestObject = nullptr;
+			}
+
+			result = true;
+		}
+	}
+	return result;
+}
 
 void QtTerrainInstancingDrawer::RecursiveRenderTerrainObjects_BOBox(const quadtree::QUAD_TREE_NODE * node, ID3D12GraphicsCommandList * pd3dCommandList)
 {
@@ -358,8 +579,15 @@ QtTerrainInstancingDrawer::QtTerrainInstancingDrawer(ID3D12Device * pd3dDevice, 
 	// 순서변경X
 
 	// 재귀함수로 모든 터레인 조각 로드 완료후...
+	// 1. 기존에 사용하던것.
 	StaticObjectStorage::GetInstance(this)->CreateInfo(pd3dDevice, pd3dCommandList, this);
-	 
+
+	// 2. StaticObjectStorage 에서 옮겨온것
+	// 위치 정보를 읽어온다.
+	// LoadTerrainObjectFromFile(pd3dDevice, pd3dCommandList, "Information/Terrain.bin", this);
+
+	// 읽어온 위치 정보의 개수대로 쉐이더 변수를 생성한다.
+	// CreateShaderVariables(pd3dDevice, pd3dCommandList); 
 }
 
 QtTerrainInstancingDrawer::~QtTerrainInstancingDrawer()

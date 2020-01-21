@@ -11,21 +11,38 @@ class MyFrustum;
 class Mesh;
 class Terrain;
 class MyDescriptorHeap;
-
-struct INFO
-{
-	float centerX; // 메쉬의 중심 위치
-	float centerZ; // 메쉬의 중심 위치
-	float meshWidth; //매쉬의 최대 직경
-};
-
+class LoadObject;
+class Texture;
 
 /*
-    쿼드트리를 이용하여 
+    쿼드트리와 인스턴싱을 이용하여 지형과 지형 오브젝트를 렌더링을 하는 클래스
 */
 class QtTerrainInstancingDrawer
 	: public GameObject
 {
+	// StaticObjectStorage 에서 가져옴 //////////////////////
+	int TerrainPieceCount = 0; // 터레인 제일 작은 조각이 몇개 있는가?
+	int TerrainObjectAllCount = 0; //모든 터레인 오브젝트는 몇개가 있는가?
+
+	struct TerrainObjectInfo
+	{
+		ID3D12Resource* m_pd3dcbGameObjects{ nullptr };         // 인스턴싱을 위해 사용되는 정보
+		VS_SRV_INSTANCEINFO* m_pcbMappedGameObjects{ nullptr }; // 인스턴싱을 위해 사용되는 정보
+		int         TerrainObjectCount{ 0 };					// 터레인 조각 위에 배치되는 오브젝트의 개수
+		std::vector<XMFLOAT4X4> TransformList;                  // 터레인 조각 위에 배치되는 오브젝트의 월드 행렬
+	};
+
+	struct RenderInfo // 그림을 그리기 위해 필요한 모델/텍스쳐정보
+	{
+		LoadObject* pLoadObject{ nullptr };
+		Texture* pTexture{ nullptr };
+	};
+
+	std::map<std::string, RenderInfo> m_StaticObjectModelsStorage; // 모델 이름은 반드시 클래스에 맞춘다.
+	std::map<std::string, TerrainObjectInfo*> m_StaticObjectStorage; // 모델 이름은 반드시 클래스에 맞춘다.
+	std::vector<XMFLOAT4X4> m_AltarTransformStorage; // Altar transform 위치 저장하는 곳
+	// StaticObjectStorage 에서 가져옴 //////////////////////
+
 public:
 	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers) override;
 
@@ -53,9 +70,13 @@ private:
 	quadtree::QUAD_TREE_NODE** m_pReafNodes{ nullptr };
 	 
  
-private: 
-
-
+private:  
+	// 터레인 초기 위치 정보
+	void LoadTerrainObjectFromFile(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, const char* pstrFileName, const QtTerrainInstancingDrawer const* pTerrain);
+	void LoadNameAndPositionFromFile(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, FILE* pInFile, const QtTerrainInstancingDrawer const* pTerrain);
+	bool LoadTransform(char* name, const char* comp_name, const XMINT4&, const XMFLOAT4X4& tr);
+	// 터레인 초기 위치 정보 로드
+	 
 	void RecursiveRenderTerrainObjects_BOBox(const quadtree::QUAD_TREE_NODE* node, ID3D12GraphicsCommandList *pd3dCommandList);
 	 
 	void RenderTerrainObjects(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers);

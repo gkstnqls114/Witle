@@ -11,6 +11,11 @@ struct ROOTPARAMETER_INDEX
 	}
 };
 
+struct VS_SRV_INSTANCEINFO
+{
+	XMFLOAT4X4 m_xmf4x4Transform;
+};
+
 struct MATERIAL
 {
 	XMFLOAT4						m_xmf4Ambient;
