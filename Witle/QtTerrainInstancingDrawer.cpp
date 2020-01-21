@@ -18,13 +18,6 @@
 // 리프 노드만 아이디를 설정한다.
 // 따라서 아이디는 0부터 시작한다.
 int QtTerrainInstancingDrawer::gTreePieceCount{ 0 }; 
-
-UINT QtTerrainInstancingDrawer::CalculateTriangles(UINT widthPixel, UINT lengthPixel)
-{
-	assert(!(widthPixel != lengthPixel));
-	
-	return (widthPixel - 1) * (lengthPixel -1) * 2;
-}
  
 void QtTerrainInstancingDrawer::ReleaseMembers()
 {
@@ -341,12 +334,7 @@ void QtTerrainInstancingDrawer::RecursiveCreateTerrain(quadtree::QUAD_TREE_NODE 
 		} 
 	}
 }
-
-UINT QtTerrainInstancingDrawer::CalculateVertex(UINT widht, UINT length)
-{
-	return (widht* length);
-}
-
+ 
 QtTerrainInstancingDrawer::QtTerrainInstancingDrawer(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, int nWidth, int nLength, XMFLOAT3 xmf3Scale, XMFLOAT4 xmf4Color, HeightMapImage * pContext)
 	: GameObject("QuadTreeTerrain")
 { 

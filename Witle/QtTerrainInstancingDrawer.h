@@ -73,10 +73,7 @@ private:
 	void RecursiveCreateTerrain(quadtree::QUAD_TREE_NODE* node, ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, 
 		int xStart, int zStart, int nBlockWidth, int nBlockLength,
 		HeightMapImage *pContext = NULL);
-
-	UINT CalculateVertex(UINT widht, UINT length);
-	UINT CalculateTriangles(UINT widthPixel, UINT lengthPixel);
-
+	 
 public:
 	QtTerrainInstancingDrawer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, int nWidth, int nLength, XMFLOAT3 xmf3Scale = XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT4 xmf4Color = XMFLOAT4(1.0f, 1.0f, 0.0f, 0.0f), HeightMapImage *pContext = NULL);
 	virtual ~QtTerrainInstancingDrawer();
