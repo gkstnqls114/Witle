@@ -43,6 +43,14 @@ class QtTerrainInstancingDrawer
 	std::vector<XMFLOAT4X4> m_AltarTransformStorage; // Altar transform 위치 저장하는 곳
 	// StaticObjectStorage 에서 가져옴 //////////////////////
 
+
+	// 인스턴싱을 통해 렌더합니다.
+	void RenderObjAll(ID3D12GraphicsCommandList* pd3dCommandList, bool isGBuffers);
+	void RenderObj(ID3D12GraphicsCommandList* pd3dCommandList, int index, bool isGBuffers);
+	void RenderObjForShadow(ID3D12GraphicsCommandList* pd3dCommandList, int index, bool isGBuffers);
+	void RenderObjBOBox(ID3D12GraphicsCommandList* pd3dCommandList, int index);
+
+
 public:
 	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers) override;
 

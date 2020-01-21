@@ -14,6 +14,7 @@
 #include "ModelStorage.h"
 #include "MyDescriptorHeap.h"
 #include "Object.h"
+#include "Texture.h"
 #include "QtTerrainInstancingDrawer.h"
 
 // 처음 아이디는 0으로 시작한다.
@@ -630,6 +631,64 @@ int * const QtTerrainInstancingDrawer::GetIndex(const XMFLOAT3 & position) const
 	CalculateIndex(position, pIndeics);
 
 	return pIndeics;
+}
+
+void QtTerrainInstancingDrawer::RenderObjAll(ID3D12GraphicsCommandList* pd3dCommandList, bool isGBuffers)
+{
+	for (int i = 0; i < TerrainPieceCount; ++i)
+	{
+		RenderObj(pd3dCommandList, i, isGBuffers);
+	}
+}
+
+void QtTerrainInstancingDrawer::RenderObj(ID3D12GraphicsCommandList* pd3dCommandList, int index, bool isGBuffers)
+{
+	// info.first = 모델 이름
+// info.second = TerrainObjectInfo라는 모델 정보
+
+	for (auto& info : m_StaticObjectStorage)
+	{
+		if (info.second[index].TerrainObjectCount == 0) continue;
+		if (!strcmp(info.first.c_str(), Flower)) continue;
+		if (!strcmp(info.first.c_str(), RUIN_FLOOR)) continue;
+
+		pd3dCommandList->SetGraphicsRootShaderResourceView(ROOTPARAMETER_INSTANCING, info.second[index].m_pd3dcbGameObjects->GetGPUVirtualAddress()); // 인스턴싱 쉐이더 리소스 뷰
+
+		m_StaticObjectModelsStorage[info.first].pTexture->UpdateShaderVariables(pd3dCommandList);
+
+		m_StaticObjectModelsStorage[info.first].pLoadObject->RenderInstancing(pd3dCommandList, info.second[index].TerrainObjectCount, isGBuffers);
+	}
+}
+
+void QtTerrainInstancingDrawer::RenderObjForShadow(ID3D12GraphicsCommandList* pd3dCommandList, int index, bool isGBuffers)
+{// info.first = 모델 이름
+	// info.second = TerrainObjectInfo라는 모델 정보
+
+	for (auto& info : m_StaticObjectStorage)
+	{
+		if (info.second[index].TerrainObjectCount == 0) continue;
+		if (!strcmp(info.first.c_str(), Flower)) continue;
+		if (!strcmp(info.first.c_str(), RUIN_FLOOR)) continue;
+
+		pd3dCommandList->SetGraphicsRootShaderResourceView(ROOTPARAMETER_INSTANCING, info.second[index].m_pd3dcbGameObjects->GetGPUVirtualAddress()); // 인스턴싱 쉐이더 리소스 뷰
+
+		m_StaticObjectModelsStorage[info.first].pLoadObject->RenderInstancing(pd3dCommandList, info.second[index].TerrainObjectCount, isGBuffers);
+	}
+}
+
+void QtTerrainInstancingDrawer::RenderObjBOBox(ID3D12GraphicsCommandList* pd3dCommandList, int index)
+{
+	// info.first = 모델 이름
+	// info.second = TerrainObjectInfo라는 모델 정보
+
+	for (auto& info : m_StaticObjectStorage)
+	{
+		if (info.second[index].TerrainObjectCount == 0) continue;
+
+		pd3dCommandList->SetGraphicsRootShaderResourceView(ROOTPARAMETER_INSTANCING, info.second[index].m_pd3dcbGameObjects->GetGPUVirtualAddress()); // 인스턴싱 쉐이더 리소스 뷰
+
+		ModelStorage::GetInstance()->RenderBOBoxInstancing(pd3dCommandList, info.first, info.second[index].TerrainObjectCount);
+	}
 }
 
 void QtTerrainInstancingDrawer::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers)
