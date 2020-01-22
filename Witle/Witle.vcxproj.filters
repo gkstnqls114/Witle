@@ -631,6 +631,9 @@
     <Filter Include="13.Storage/Manager\19.SingletonMgr">
       <UniqueIdentifier>{e4884912-8782-4122-9b19-6ae1ed032d32}</UniqueIdentifier>
     </Filter>
+    <Filter Include="98.Template\02.Quadtree">
+      <UniqueIdentifier>{68409a07-6ff2-47ee-830f-ef722ba1a667}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">

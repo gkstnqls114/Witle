@@ -83,10 +83,10 @@ private:
 	XMFLOAT3 m_xmf3Scale{ 0.f, 0.f, 0.f };
 	XMFLOAT4 m_xmf4Color{ 1.f, 0.f, 0.f , 1.f};
 
-	quadtree::QUAD_TREE_NODE* m_pRootNode{ nullptr };
+	quadtree::QT_DRAWER_NODE* m_pRootNode{ nullptr };
 
 	int m_ReafNodeCount = 0;
-	quadtree::QUAD_TREE_NODE** m_pReafNodes{ nullptr };
+	quadtree::QT_DRAWER_NODE** m_pReafNodes{ nullptr };
 	 
  
 private:  
@@ -96,21 +96,21 @@ private:
 	bool LoadTransform(char* name, const char* comp_name, const XMINT4&, const XMFLOAT4X4& tr);
 	// 터레인 초기 위치 정보 로드
 	 
-	void RecursiveRenderTerrainObjects_BOBox(const quadtree::QUAD_TREE_NODE* node, ID3D12GraphicsCommandList *pd3dCommandList);
+	void RecursiveRenderTerrainObjects_BOBox(const quadtree::QT_DRAWER_NODE* node, ID3D12GraphicsCommandList *pd3dCommandList);
 	 
 	void RenderTerrainObjects(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers);
-	void RecursiveRenderTerrainObjects(const quadtree::QUAD_TREE_NODE* node, ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers);
-	void RecursiveRenderTerrainObjectsForShadow(const quadtree::QUAD_TREE_NODE* node, ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers);
-	void RecursiveRender(const quadtree::QUAD_TREE_NODE* node, ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers);
-	void RecursiveInitReafNodes(quadtree::QUAD_TREE_NODE* node);
-	void RecursiveReleaseUploadBuffers(quadtree::QUAD_TREE_NODE* node);
-	void RecursiveReleaseObjects(quadtree::QUAD_TREE_NODE* node);
-	void RecursiveCalculateIDs(quadtree::QUAD_TREE_NODE* node, const XMFLOAT3 position, int* pIDs) const;
+	void RecursiveRenderTerrainObjects(const quadtree::QT_DRAWER_NODE* node, ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers);
+	void RecursiveRenderTerrainObjectsForShadow(const quadtree::QT_DRAWER_NODE* node, ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers);
+	void RecursiveRender(const quadtree::QT_DRAWER_NODE* node, ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers);
+	void RecursiveInitReafNodes(quadtree::QT_DRAWER_NODE* node);
+	void RecursiveReleaseUploadBuffers(quadtree::QT_DRAWER_NODE* node);
+	void RecursiveReleaseObjects(quadtree::QT_DRAWER_NODE* node);
+	void RecursiveCalculateIDs(quadtree::QT_DRAWER_NODE* node, const XMFLOAT3 position, int* pIDs) const;
 	void CalculateIDs(const XMFLOAT3 position, XMINT4& pIDs) const;
 	void CalculateIndex(const XMFLOAT3 position, int* pIDs) const;
 
 	// 해당 함수를 재귀적으로 호출하며 터레인을 생성하는 함수입니다.
-	void RecursiveCreateTerrain(quadtree::QUAD_TREE_NODE* node, ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, 
+	void RecursiveCreateTerrain(quadtree::QT_DRAWER_NODE* node, ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, 
 		int xStart, int zStart, int nBlockWidth, int nBlockLength,
 		HeightMapImage *pContext = NULL);
 	 
@@ -121,7 +121,7 @@ public:
 	virtual void Update(float fElapsedTime) override;
 	void LastUpdate(float fElapsedTime);
 
-	quadtree::QUAD_TREE_NODE* const GetRootNode() const { return m_pRootNode; }
+	quadtree::QT_DRAWER_NODE* const GetRootNode() const { return m_pRootNode; }
 	// 해당 포지션에 속하는 리프노드의 아이디들을 리턴한다. 쿼드트리이므로 최대 4개가 존재한다.
 	XMINT4 const GetIDs(const XMFLOAT3& position) const;
 	int * const GetIndex(const XMFLOAT3& position) const;
@@ -131,8 +131,8 @@ public:
 	void Render(ID3D12GraphicsCommandList *pd3dCommandList, Terrain* pTerrain, ID3D12DescriptorHeap* pHeap, bool isGBuffers);
 	void Render(int index, ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers);
 	static int GetTerrainPieceCount() { return gTreePieceCount; }
-	quadtree::QUAD_TREE_NODE* GetReafNode(int index) { return m_pReafNodes[index]; }
-	quadtree::QUAD_TREE_NODE* GetReafNodeByID(int id);
+	quadtree::QT_DRAWER_NODE* GetReafNode(int index) { return m_pReafNodes[index]; }
+	quadtree::QT_DRAWER_NODE* GetReafNodeByID(int id);
 private:
 
 };

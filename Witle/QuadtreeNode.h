@@ -36,12 +36,12 @@ namespace quadtree
 		~NODE();
 	};
 
-	struct QUAD_TREE_NODE
+	struct QT_DRAWER_NODE
 	{
 		BoundingBox boundingBox; // 해당 터레인에 속하는가 확인을 해주는 바운딩박스
 		bool isRendering{ false }; // 렌더링 할 것인가, 말 것인가. 
 		int id{ -1 }; // 터레인 아이디 넘버
 		Mesh* terrainMesh{ nullptr }; // 렌더할 터레인 메쉬
-		QUAD_TREE_NODE* children[4]{ nullptr,  nullptr , nullptr , nullptr };
+		QT_DRAWER_NODE* children[4]{ nullptr,  nullptr , nullptr , nullptr };
 	};
 }
