@@ -754,7 +754,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	);
 
 	XMFLOAT4X4 tr;
-	tr = StaticObjectStorage::GetInstance()->GetAltarTransform(0, ALTAR_IN);
+	tr = m_pQuadtreeTerrain->GetAltarTransform(0, ALTAR_IN);
 	XMFLOAT3 pos{ tr._41, 0 , tr._43 }; // 월드 포지션
 	m_AltarSphere[0] = new AltarSphere("AltarSphere0", pos, pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
 
@@ -774,7 +774,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 		"Pink"
 	);
 
-	tr = StaticObjectStorage::GetInstance()->GetAltarTransform(1, ALTAR_IN);
+	tr = m_pQuadtreeTerrain->GetAltarTransform(1, ALTAR_IN);
 	pos = XMFLOAT3{ tr._41, 0 , tr._43 };
 	m_AltarSphere[1] = new AltarSphere("AltarSphere0", pos, pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
 
@@ -790,7 +790,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 		"Pink"
 	);
 
-	tr = StaticObjectStorage::GetInstance()->GetAltarTransform(2, ALTAR_IN);
+	tr = m_pQuadtreeTerrain->GetAltarTransform(2, ALTAR_IN);
 	pos = XMFLOAT3{ tr._41,0 , tr._43 };
 	m_AltarSphere[2] = new AltarSphere("AltarSphere0", pos, pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
 
@@ -809,7 +809,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 		"Pink"
 	);
 
-	tr = StaticObjectStorage::GetInstance()->GetAltarTransform(3, ALTAR_IN);
+	tr = m_pQuadtreeTerrain->GetAltarTransform(3, ALTAR_IN);
 	pos = XMFLOAT3{ tr._41, 0 , tr._43 };
 	m_AltarSphere[3] = new AltarSphere("AltarSphere0", pos, pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
 
@@ -828,7 +828,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 		"Pink"
 	);
 
-	tr = StaticObjectStorage::GetInstance()->GetAltarTransform(4, ALTAR_IN);
+	tr = m_pQuadtreeTerrain->GetAltarTransform(4, ALTAR_IN);
 	pos = XMFLOAT3{ tr._41, 0 , tr._43 };
 	m_AltarSphere[4] = new AltarSphere("AltarSphere0", pos, pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
 

@@ -345,46 +345,6 @@ void StaticObjectStorage::ReleaseObjects()
 
 	m_StaticObjectStorage.clear();
 }
-
-int StaticObjectStorage::GetObjectCount(int index, const std::string & name)
-{
-	return m_StaticObjectStorage[name][index].TerrainObjectCount;
-}
-
-int StaticObjectStorage::GetObjectAllCount(int index)
-{
-	int result = 0;
-
-	for (auto& info : m_StaticObjectStorage)
-	{
-		result += info.second[index].TerrainObjectCount;
-	} 
-
-	return result;
-}
-
-XMFLOAT4X4* StaticObjectStorage::GetWorldMatrix(int index, const std::string & name)
-{ 
-	return m_StaticObjectStorage[name][index].TransformList.begin()._Ptr; 
-}
-
-XMFLOAT4X4 StaticObjectStorage::GetAltarTransform(int index, const std::string & name)
-{
-	return m_AltarTransformStorage[index];
-}
-
-void StaticObjectStorage::CreateInfo(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, const QtTerrainInstancingDrawer const * pTerrain)
-{
-	if (m_isCreate) return;
-
-	// 위치 정보를 읽어온다.
-	LoadTerrainObjectFromFile(pd3dDevice, pd3dCommandList, "Information/Terrain.bin", pTerrain);
-	
-	// 읽어온 위치 정보의 개수대로 쉐이더 변수를 생성한다.
-	CreateShaderVariables(pd3dDevice, pd3dCommandList);
-	 
-	m_isCreate = true;
-}
  
 void StaticObjectStorage::RenderAll(ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffers)
 {

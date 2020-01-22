@@ -581,14 +581,14 @@ QtTerrainInstancingDrawer::QtTerrainInstancingDrawer(ID3D12Device * pd3dDevice, 
 
 	// 재귀함수로 모든 터레인 조각 로드 완료후...
 	// 1. 기존에 사용하던것.
-	StaticObjectStorage::GetInstance(this)->CreateInfo(pd3dDevice, pd3dCommandList, this);
+	// StaticObjectStorage::GetInstance(this)->CreateInfo(pd3dDevice, pd3dCommandList, this);
 
 	// 2. StaticObjectStorage 에서 옮겨온것
 	// 위치 정보를 읽어온다.
-	// LoadTerrainObjectFromFile(pd3dDevice, pd3dCommandList, "Information/Terrain.bin", this);
+	LoadTerrainObjectFromFile(pd3dDevice, pd3dCommandList, "Information/Terrain.bin", this);
 
 	// 읽어온 위치 정보의 개수대로 쉐이더 변수를 생성한다.
-	// CreateShaderVariables(pd3dDevice, pd3dCommandList); 
+	CreateShaderVariables(pd3dDevice, pd3dCommandList); 
 }
 
 QtTerrainInstancingDrawer::~QtTerrainInstancingDrawer()
@@ -688,6 +688,71 @@ void QtTerrainInstancingDrawer::RenderObjBOBox(ID3D12GraphicsCommandList* pd3dCo
 		pd3dCommandList->SetGraphicsRootShaderResourceView(ROOTPARAMETER_INSTANCING, info.second[index].m_pd3dcbGameObjects->GetGPUVirtualAddress()); // 인스턴싱 쉐이더 리소스 뷰
 
 		ModelStorage::GetInstance()->RenderBOBoxInstancing(pd3dCommandList, info.first, info.second[index].TerrainObjectCount);
+	}
+}
+
+int QtTerrainInstancingDrawer::GetObjectCount(int index, const std::string& name)
+{
+	return m_StaticObjectStorage[name][index].TerrainObjectCount; 
+}
+
+int QtTerrainInstancingDrawer::GetObjectAllCount(int index)
+{
+	int result = 0;
+
+	for (auto& info : m_StaticObjectStorage)
+	{
+		result += info.second[index].TerrainObjectCount;
+	}
+
+	return result;
+}
+
+XMFLOAT4X4* QtTerrainInstancingDrawer::GetWorldMatrix(int index, const std::string& name)
+{
+	return m_StaticObjectStorage[name][index].TransformList.begin()._Ptr; 
+}
+
+XMFLOAT4X4 QtTerrainInstancingDrawer::GetAltarTransform(int index, const std::string& name)
+{
+	return m_AltarTransformStorage[index];
+}
+
+void QtTerrainInstancingDrawer::CreateShaderVariables(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList)
+{//인스턴스 정보를 저장할 정점 버퍼를 업로드 힙 유형으로 생성한다. 
+	for (auto& info : m_StaticObjectStorage)
+	{
+		m_StaticObjectModelsStorage[info.first].pLoadObject = ModelStorage::GetInstance()->GetRootObject(info.first);
+		m_StaticObjectModelsStorage[info.first].pTexture = TextureStorage::GetInstance()->GetTexture(info.first);
+
+		for (int iTerrainPiece = 0; iTerrainPiece < TerrainPieceCount; ++iTerrainPiece)
+		{
+			if (info.second[iTerrainPiece].TerrainObjectCount == 0) continue;
+
+			// 쉐이더 변수 생성
+			info.second[iTerrainPiece].m_pd3dcbGameObjects =
+				d3dUtil::CreateBufferResource(pd3dDevice, pd3dCommandList, NULL,
+					sizeof(VS_SRV_INSTANCEINFO) * info.second[iTerrainPiece].TerrainObjectCount, D3D12_HEAP_TYPE_UPLOAD,
+					D3D12_RESOURCE_STATE_GENERIC_READ, NULL);
+
+			info.second[iTerrainPiece].m_pd3dcbGameObjects->Map(0, NULL, (void**)&info.second[iTerrainPiece].m_pcbMappedGameObjects);
+		}
+	}
+
+	// 정보 저장 
+	for (auto& info : m_StaticObjectStorage)
+	{
+		for (int iTerrainPiece = 0; iTerrainPiece < TerrainPieceCount; ++iTerrainPiece)
+		{
+			if (info.second[iTerrainPiece].TerrainObjectCount == 0) continue;
+			for (int i = 0; i < info.second[iTerrainPiece].TerrainObjectCount; ++i)
+			{
+				XMStoreFloat4x4(
+					&info.second[iTerrainPiece].m_pcbMappedGameObjects[i].m_xmf4x4Transform,
+					XMMatrixTranspose(XMLoadFloat4x4(&info.second[iTerrainPiece].TransformList[i]
+					)));
+			}
+		}
 	}
 }
 

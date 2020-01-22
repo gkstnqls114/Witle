@@ -55,13 +55,6 @@ public:
 	static void ReleaseInstance();
 
 	void ReleaseObjects();
-	int GetObjectCount(int index, const std::string& name);
-	int GetObjectAllCount(int index);
-
-	XMFLOAT4X4* GetWorldMatrix(int index, const std::string& name);
-	XMFLOAT4X4 GetAltarTransform(int index, const std::string& name);
-
-	void CreateInfo(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, const QtTerrainInstancingDrawer const * pTerrain);
 	
 	// 인스턴싱을 통해 렌더합니다.
 	void RenderAll(ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffers);

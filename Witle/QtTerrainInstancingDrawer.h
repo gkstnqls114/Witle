@@ -41,7 +41,6 @@ class QtTerrainInstancingDrawer
 	std::map<std::string, RenderInfo> m_StaticObjectModelsStorage; // 모델 이름은 반드시 클래스에 맞춘다.
 	std::map<std::string, TerrainObjectInfo*> m_StaticObjectStorage; // 모델 이름은 반드시 클래스에 맞춘다.
 	std::vector<XMFLOAT4X4> m_AltarTransformStorage; // Altar transform 위치 저장하는 곳
-	// StaticObjectStorage 에서 가져옴 //////////////////////
 
 
 	// 인스턴싱을 통해 렌더합니다.
@@ -49,6 +48,18 @@ class QtTerrainInstancingDrawer
 	void RenderObj(ID3D12GraphicsCommandList* pd3dCommandList, int index, bool isGBuffers);
 	void RenderObjForShadow(ID3D12GraphicsCommandList* pd3dCommandList, int index, bool isGBuffers);
 	void RenderObjBOBox(ID3D12GraphicsCommandList* pd3dCommandList, int index);
+
+	void CreateShaderVariables(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList);
+	
+public:
+
+	int GetObjectCount(int index, const std::string& name);
+	int GetObjectAllCount(int index);
+
+	XMFLOAT4X4* GetWorldMatrix(int index, const std::string& name);
+	XMFLOAT4X4 GetAltarTransform(int index, const std::string& name);
+
+	// StaticObjectStorage 에서 가져옴 //////////////////////
 
 
 public:
