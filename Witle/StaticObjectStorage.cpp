@@ -277,74 +277,74 @@ void StaticObjectStorage::CreateShaderVariables(ID3D12Device * pd3dDevice, ID3D1
 		}
 	}
 }
-
-StaticObjectStorage * StaticObjectStorage::GetInstance(const QtTerrainInstancingDrawer const * pTerrain)
-{
-	if (!m_Instance)
-	{
-		m_Instance = new StaticObjectStorage();
-	}
-
-	return m_Instance;
-}
-
-StaticObjectStorage * StaticObjectStorage::GetInstance()
-{ 
-	if (!m_Instance)
-	{
-		m_Instance = new StaticObjectStorage();
-	}
-
-	return m_Instance;
-}
-
-void StaticObjectStorage::ReleaseInstance()
-{
-	if (m_Instance)
-	{ 
-		m_Instance->ReleaseObjects();
-		delete m_Instance;
-		m_Instance = nullptr;
-	}
-}
-
-void StaticObjectStorage::ReleaseObjects()
-{
-	for (auto& model : m_StaticObjectModelsStorage)
-	{
-		delete model.second.pLoadObject;
-		model.second.pLoadObject = nullptr;
-	}
-	m_StaticObjectModelsStorage.clear();
-	 
-	for (auto& loadobj : m_StaticObjectStorage)
-	{ 
-		// loadobj.first는 이름입니다. 
-
-		if (loadobj.second->m_pd3dcbGameObjects)
-		{ 
-			loadobj.second->m_pd3dcbGameObjects->Release();
-			loadobj.second->m_pd3dcbGameObjects = nullptr;
-		}
-		 
-		loadobj.second->TransformList.clear();
-
-		if (loadobj.second)
-		{  
-			delete[] loadobj.second;
-			loadobj.second = nullptr;
-		}
-		 
-	}
-
-	for (const auto& name : ModelStorage::GetInstance()->m_NameList)
-	{ 
-		delete[] m_StaticObjectStorage[name];
-		m_StaticObjectStorage[name] = nullptr;
-	}
-
-	m_StaticObjectStorage.clear();
-}
+//
+//StaticObjectStorage * StaticObjectStorage::GetInstance(const QtTerrainInstancingDrawer const * pTerrain)
+//{
+//	if (!m_Instance)
+//	{
+//		m_Instance = new StaticObjectStorage();
+//	}
+//
+//	return m_Instance;
+//}
+//
+//StaticObjectStorage * StaticObjectStorage::GetInstance()
+//{ 
+//	if (!m_Instance)
+//	{
+//		m_Instance = new StaticObjectStorage();
+//	}
+//
+//	return m_Instance;
+//}
+//
+//void StaticObjectStorage::ReleaseInstance()
+//{
+//	if (m_Instance)
+//	{ 
+//		m_Instance->ReleaseObjects();
+//		delete m_Instance;
+//		m_Instance = nullptr;
+//	}
+//}
+//
+//void StaticObjectStorage::ReleaseObjects()
+//{
+//	for (auto& model : m_StaticObjectModelsStorage)
+//	{
+//		delete model.second.pLoadObject;
+//		model.second.pLoadObject = nullptr;
+//	}
+//	m_StaticObjectModelsStorage.clear();
+//	 
+//	for (auto& loadobj : m_StaticObjectStorage)
+//	{ 
+//		// loadobj.first는 이름입니다. 
+//
+//		if (loadobj.second->m_pd3dcbGameObjects)
+//		{ 
+//			loadobj.second->m_pd3dcbGameObjects->Release();
+//			loadobj.second->m_pd3dcbGameObjects = nullptr;
+//		}
+//		 
+//		loadobj.second->TransformList.clear();
+//
+//		if (loadobj.second)
+//		{  
+//			delete[] loadobj.second;
+//			loadobj.second = nullptr;
+//		}
+//		 
+//	}
+//
+//	for (const auto& name : ModelStorage::GetInstance()->m_NameList)
+//	{ 
+//		delete[] m_StaticObjectStorage[name];
+//		m_StaticObjectStorage[name] = nullptr;
+//	}
+//
+//	m_StaticObjectStorage.clear();
+//}
 // 
 //void StaticObjectStorage::RenderAll(ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffers)
 //{

@@ -963,16 +963,14 @@ void GameFramework::ReleaseObjects()
 	  
 	CMaterial::ReleaseShaders(); 
 
-	SkillStg::GetInstance()->ReleaseObjects();
-	StaticObjectStorage::GetInstance()->ReleaseObjects();
+	SkillStg::GetInstance()->ReleaseObjects(); 
 	TextureStorage::GetInstance()->ReleaseObjects();
 	ModelStorage::GetInstance()->ReleaseObjects();
 	ShaderManager::GetInstance()->ReleaseObjects();
 	HitEffectMgr::GetInstance()->ReleaseObjects();
 	SceneMgr::GetInstance()->ReleaseObjects(); 
 	
-	SkillStg::ReleaseInstance();
-	StaticObjectStorage::ReleaseInstance();
+	SkillStg::ReleaseInstance(); 
 	ShaderManager::ReleaseInstance();
 	TextureStorage::ReleaseInstance();
 	ModelStorage::ReleaseInstance();

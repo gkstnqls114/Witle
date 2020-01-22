@@ -50,12 +50,12 @@ public:
 	static StaticObjectStorage* m_Instance;
 
 public:
-	static StaticObjectStorage* GetInstance(const QtTerrainInstancingDrawer const * pTerrain);
+	/*static StaticObjectStorage* GetInstance(const QtTerrainInstancingDrawer const * pTerrain);
 	static StaticObjectStorage* GetInstance( );
 	static void ReleaseInstance();
 
 	void ReleaseObjects();
-	
+	*/
 	//// 인스턴싱을 통해 렌더합니다.
 	//void RenderAll(ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffers);
 	//void Render(ID3D12GraphicsCommandList * pd3dCommandList, int index, bool isGBuffers);
