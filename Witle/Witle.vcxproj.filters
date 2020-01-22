@@ -199,9 +199,6 @@
     <Filter Include="13.Storage/Manager\06.SoundManager">
       <UniqueIdentifier>{6e5565ad-e180-4212-b1e8-f920bfb6effd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="13.Storage/Manager\07.StaticObjectStorage">
-      <UniqueIdentifier>{d8ca9f62-bada-44fd-a0d4-807e00dae610}</UniqueIdentifier>
-    </Filter>
     <Filter Include="13.Storage/Manager\08.TextureStorage">
       <UniqueIdentifier>{336fca6f-fc21-4c05-a804-c9e60309ed49}</UniqueIdentifier>
     </Filter>
@@ -825,9 +822,6 @@
     <ClInclude Include="InstancingStandardShader.h">
       <Filter>05.Shader\02.GraphicsShader\InstancingStandardShader</Filter>
     </ClInclude>
-    <ClInclude Include="StaticObjectStorage.h">
-      <Filter>13.Storage/Manager\07.StaticObjectStorage</Filter>
-    </ClInclude>
     <ClInclude Include="FamilyID.h">
       <Filter>99.etc\ID\FamilyID</Filter>
     </ClInclude>
@@ -1447,9 +1441,6 @@
     </ClCompile>
     <ClCompile Include="InstancingStandardShader.cpp">
       <Filter>05.Shader\02.GraphicsShader\InstancingStandardShader</Filter>
-    </ClCompile>
-    <ClCompile Include="StaticObjectStorage.cpp">
-      <Filter>13.Storage/Manager\07.StaticObjectStorage</Filter>
     </ClCompile>
     <ClCompile Include="FamilyID.cpp">
       <Filter>99.etc\ID\FamilyID</Filter>

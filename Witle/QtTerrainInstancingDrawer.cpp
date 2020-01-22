@@ -4,8 +4,7 @@
 #include "ShaderManager.h"
 #include "Shader.h"
 #include "MeshRenderer.h"
-#include "TextureStorage.h"
-#include "StaticObjectStorage.h"
+#include "TextureStorage.h" 
 #include "HeightMapImage.h"
 #include <unordered_set>
 #include "MyFrustum.h"
