@@ -345,63 +345,63 @@ void StaticObjectStorage::ReleaseObjects()
 
 	m_StaticObjectStorage.clear();
 }
- 
-void StaticObjectStorage::RenderAll(ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffers)
-{
-	for (int i = 0; i < TerrainPieceCount; ++i)
-	{
-		Render(pd3dCommandList, i, isGBuffers);
-	}
-}
-
-void StaticObjectStorage::Render(ID3D12GraphicsCommandList * pd3dCommandList, int index, bool isGBuffers)
-{  
-	// info.first = ¸ðµ¨ ÀÌ¸§
-	// info.second = TerrainObjectInfo¶ó´Â ¸ðµ¨ Á¤º¸
-	 
-	for (auto& info : m_StaticObjectStorage)
-	{ 
-		if (info.second[index].TerrainObjectCount == 0) continue;
-		if (!strcmp(info.first.c_str(), Flower)) continue;
-		if (!strcmp(info.first.c_str(), RUIN_FLOOR)) continue;
-
-		pd3dCommandList->SetGraphicsRootShaderResourceView(ROOTPARAMETER_INSTANCING, info.second[index].m_pd3dcbGameObjects->GetGPUVirtualAddress()); // ÀÎ½ºÅÏ½Ì ½¦ÀÌ´õ ¸®¼Ò½º ºä
-		  
-		m_StaticObjectModelsStorage[info.first].pTexture->UpdateShaderVariables(pd3dCommandList);
-		
-		m_StaticObjectModelsStorage[info.first].pLoadObject->RenderInstancing(pd3dCommandList, info.second[index].TerrainObjectCount, isGBuffers);
-	}  
-}
-
-void StaticObjectStorage::RenderForShadow(ID3D12GraphicsCommandList * pd3dCommandList, int index, bool isGBuffers)
-{
-	// info.first = ¸ðµ¨ ÀÌ¸§
-	// info.second = TerrainObjectInfo¶ó´Â ¸ðµ¨ Á¤º¸
-
-	for (auto& info : m_StaticObjectStorage)
-	{
-		if (info.second[index].TerrainObjectCount == 0) continue;
-		if (!strcmp(info.first.c_str(), Flower)) continue;
-		if (!strcmp(info.first.c_str(), RUIN_FLOOR)) continue;
-
-		pd3dCommandList->SetGraphicsRootShaderResourceView(ROOTPARAMETER_INSTANCING, info.second[index].m_pd3dcbGameObjects->GetGPUVirtualAddress()); // ÀÎ½ºÅÏ½Ì ½¦ÀÌ´õ ¸®¼Ò½º ºä
-
-		m_StaticObjectModelsStorage[info.first].pLoadObject->RenderInstancing(pd3dCommandList, info.second[index].TerrainObjectCount, isGBuffers);
-	}
-}
-
-void StaticObjectStorage::RenderBOBox(ID3D12GraphicsCommandList * pd3dCommandList, int index)
-{
-	// info.first = ¸ðµ¨ ÀÌ¸§
-	// info.second = TerrainObjectInfo¶ó´Â ¸ðµ¨ Á¤º¸
-
-	for (auto& info : m_StaticObjectStorage)
-	{
-		if (info.second[index].TerrainObjectCount == 0) continue;
-
-		pd3dCommandList->SetGraphicsRootShaderResourceView(ROOTPARAMETER_INSTANCING, info.second[index].m_pd3dcbGameObjects->GetGPUVirtualAddress()); // ÀÎ½ºÅÏ½Ì ½¦ÀÌ´õ ¸®¼Ò½º ºä
-		 
-		ModelStorage::GetInstance()->RenderBOBoxInstancing(pd3dCommandList, info.first, info.second[index].TerrainObjectCount);
-	}
-}
-
+// 
+//void StaticObjectStorage::RenderAll(ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffers)
+//{
+//	for (int i = 0; i < TerrainPieceCount; ++i)
+//	{
+//		Render(pd3dCommandList, i, isGBuffers);
+//	}
+//}
+//
+//void StaticObjectStorage::Render(ID3D12GraphicsCommandList * pd3dCommandList, int index, bool isGBuffers)
+//{  
+//	// info.first = ¸ðµ¨ ÀÌ¸§
+//	// info.second = TerrainObjectInfo¶ó´Â ¸ðµ¨ Á¤º¸
+//	 
+//	for (auto& info : m_StaticObjectStorage)
+//	{ 
+//		if (info.second[index].TerrainObjectCount == 0) continue;
+//		if (!strcmp(info.first.c_str(), Flower)) continue;
+//		if (!strcmp(info.first.c_str(), RUIN_FLOOR)) continue;
+//
+//		pd3dCommandList->SetGraphicsRootShaderResourceView(ROOTPARAMETER_INSTANCING, info.second[index].m_pd3dcbGameObjects->GetGPUVirtualAddress()); // ÀÎ½ºÅÏ½Ì ½¦ÀÌ´õ ¸®¼Ò½º ºä
+//		  
+//		m_StaticObjectModelsStorage[info.first].pTexture->UpdateShaderVariables(pd3dCommandList);
+//		
+//		m_StaticObjectModelsStorage[info.first].pLoadObject->RenderInstancing(pd3dCommandList, info.second[index].TerrainObjectCount, isGBuffers);
+//	}  
+//}
+//
+//void StaticObjectStorage::RenderForShadow(ID3D12GraphicsCommandList * pd3dCommandList, int index, bool isGBuffers)
+//{
+//	// info.first = ¸ðµ¨ ÀÌ¸§
+//	// info.second = TerrainObjectInfo¶ó´Â ¸ðµ¨ Á¤º¸
+//
+//	for (auto& info : m_StaticObjectStorage)
+//	{
+//		if (info.second[index].TerrainObjectCount == 0) continue;
+//		if (!strcmp(info.first.c_str(), Flower)) continue;
+//		if (!strcmp(info.first.c_str(), RUIN_FLOOR)) continue;
+//
+//		pd3dCommandList->SetGraphicsRootShaderResourceView(ROOTPARAMETER_INSTANCING, info.second[index].m_pd3dcbGameObjects->GetGPUVirtualAddress()); // ÀÎ½ºÅÏ½Ì ½¦ÀÌ´õ ¸®¼Ò½º ºä
+//
+//		m_StaticObjectModelsStorage[info.first].pLoadObject->RenderInstancing(pd3dCommandList, info.second[index].TerrainObjectCount, isGBuffers);
+//	}
+//}
+//
+//void StaticObjectStorage::RenderBOBox(ID3D12GraphicsCommandList * pd3dCommandList, int index)
+//{
+//	// info.first = ¸ðµ¨ ÀÌ¸§
+//	// info.second = TerrainObjectInfo¶ó´Â ¸ðµ¨ Á¤º¸
+//
+//	for (auto& info : m_StaticObjectStorage)
+//	{
+//		if (info.second[index].TerrainObjectCount == 0) continue;
+//
+//		pd3dCommandList->SetGraphicsRootShaderResourceView(ROOTPARAMETER_INSTANCING, info.second[index].m_pd3dcbGameObjects->GetGPUVirtualAddress()); // ÀÎ½ºÅÏ½Ì ½¦ÀÌ´õ ¸®¼Ò½º ºä
+//		 
+//		ModelStorage::GetInstance()->RenderBOBoxInstancing(pd3dCommandList, info.first, info.second[index].TerrainObjectCount);
+//	}
+//}
+//

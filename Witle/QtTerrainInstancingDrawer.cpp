@@ -258,7 +258,7 @@ void QtTerrainInstancingDrawer::RecursiveRenderTerrainObjects_BOBox(const quadtr
 	{
 		if (node->terrainMesh)
 		{
-			StaticObjectStorage::GetInstance(this)->RenderBOBox(pd3dCommandList, node->id);
+			RenderObjBOBox(pd3dCommandList, node->id);
 		}
 		else
 		{
@@ -289,8 +289,7 @@ void QtTerrainInstancingDrawer::RecursiveRenderTerrainObjects(const quadtree::QU
 	{
 		if (node->terrainMesh)
 		{
-			StaticObjectStorage::GetInstance(this)->Render(pd3dCommandList, node->id, isGBuffers);
-
+			RenderObj(pd3dCommandList, node->id, isGBuffers); 
 		}
 		else
 		{
@@ -311,8 +310,7 @@ void QtTerrainInstancingDrawer::RecursiveRenderTerrainObjectsForShadow(const qua
 	{
 		if (node->terrainMesh)
 		{
-			StaticObjectStorage::GetInstance(this)->RenderForShadow(pd3dCommandList, node->id, isGBuffers);
-
+			RenderObjForShadow(pd3dCommandList, node->id, isGBuffers); 
 		}
 		else
 		{ 
@@ -806,7 +804,7 @@ void QtTerrainInstancingDrawer::Render(int index, ID3D12GraphicsCommandList * pd
 	if (index < 0 || index >= m_ReafNodeCount) return;
 	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_TERRAIN, isGBuffers);
 	gMeshRenderer.Render(pd3dCommandList, m_pReafNodes[index]->terrainMesh);
-	StaticObjectStorage::GetInstance(this)->Render(pd3dCommandList, index, isGBuffers);
+	RenderObj(pd3dCommandList, index, isGBuffers);
 }
 
 quadtree::QUAD_TREE_NODE * QtTerrainInstancingDrawer::GetReafNodeByID(int id)
