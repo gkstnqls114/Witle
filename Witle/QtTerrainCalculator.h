@@ -1,6 +1,6 @@
 #pragma once 
 #include "QuadtreeNode.h"
-#include "Singleton.h"
+#include "Quadtree.h"
 
 class Player;
 class Movement;
@@ -10,7 +10,7 @@ class Movement;
 
    LeafNode(= TreePiece) : 더 이상 나누어질수 없는 Quadtree Node를 의미함
 */
-class QtTerrainCalculator : public Singleton<QtTerrainCalculator>
+class QtTerrainCalculator : public Quadtree<QtTerrainCalculator>
 {  
 private: 
 	quadtree::NODE* m_RootNode{ nullptr }; // 루트 노드
@@ -41,14 +41,8 @@ public:
 	QtTerrainCalculator();
 	virtual ~QtTerrainCalculator();
 
-	void Init(const XMFLOAT3& center, const XMFLOAT3& extents, float min_size);
-	void Init(XMFLOAT3&& center, XMFLOAT3&& extents, float min_size);
-
-	virtual void Init(const SingletonInitializer* singletonMgr) override;
-	
-	void Update(float fElapsedTime) ;
-	void LastUpdate(float fElapsedTime);
-
+	void Init(const XMFLOAT3& center, const XMFLOAT3& extents, float min_size); 
+	  
 	// 해당 충돌체와 충돌하는 treePiece에 충돌체를 추가합니다.
 	void AddCollider(const MyBOBox& BoBox, const XMFLOAT4X4& world);
 	 

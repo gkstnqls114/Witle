@@ -15,6 +15,7 @@ class SkyBox;
 class CameraObject;
 class Terrain;
 class QtTerrainInstancingDrawer;
+class QtTerrainCalculator;
 class AltarSphere;
 class Dragon;
 //// Objects ///////////////
@@ -176,16 +177,17 @@ public:
 #endif
 	//
    //////////////////////////////////////  조명
-	ID3D12Resource				*m_pd3dcbLights{ nullptr };
-	LIGHTS						*m_pcbMappedLights{ nullptr };
+	ID3D12Resource*              m_pd3dcbLights{ nullptr };
+	LIGHTS*                      m_pcbMappedLights{ nullptr };
 
-	MATERIAL					*m_pMaterials{ nullptr };
+	MATERIAL*                    m_pMaterials{ nullptr };
 
-	ID3D12Resource				*m_pd3dcbMaterials{ nullptr };
-	MATERIAL					*m_pcbMappedMaterials{ nullptr };
+	ID3D12Resource*              m_pd3dcbMaterials{ nullptr };
+	MATERIAL*                    m_pcbMappedMaterials{ nullptr };
 	//////////////////////////////////////  조명
 
-	QtTerrainInstancingDrawer			    *m_pQuadtreeTerrain{ nullptr };
+	QtTerrainCalculator*         m_QtTerrainCalculator{ nullptr };
+	QtTerrainInstancingDrawer*   m_pQuadtreeTerrain{ nullptr };
 
 private:
 	GameObject* m_TESTGameObject{ nullptr };

@@ -1,5 +1,8 @@
 #pragma once
 #include "stdafx.h"
+ 
+#ifndef SINGLETON
+#define SINGLETON
 
 class SingletonInitializer;
 
@@ -51,3 +54,5 @@ public:
 
 
 template<typename T> T* Singleton<T>::instance = nullptr; 
+
+#endif

@@ -1,5 +1,4 @@
-#include "stdafx.h"
-#include "QtTerrainCalculator.h"
+#include "stdafx.h" 
 #include "MapInfoMgr.h"
 #include "SingletonInitializer.h"
 
@@ -8,11 +7,10 @@ const SingletonInitializer* SingletonInitializer::m_pSingletonInitializer{ nullp
 
 void SingletonInitializer::Init()
 { 
-	QtTerrainCalculator::GetInstance()->Init(m_pSingletonInitializer);
-	QtTerrainCalculator::GetInstance()->Init(MapInfoMgr::GetMapCenter(), XMFLOAT3{ MapInfoMgr::GetMapExtentsX(), 10000.f, MapInfoMgr::GetMapExtentsZ() }, MapInfoMgr::GetMapSizeX() / 4.f);
+ 
 }
 
 void SingletonInitializer::ReleaseInstance()
 {
-	QtTerrainCalculator::ReleaseInstance();
+
 }

@@ -199,6 +199,7 @@
     <ClInclude Include="Mushroom.h" />
     <ClInclude Include="PlayerAction.h" />
     <ClInclude Include="PostprocessingSetting.h" />
+    <ClInclude Include="Quadtree.h" />
     <ClInclude Include="QuadtreeNode.h" />
     <ClInclude Include="Singleton.h" />
     <ClInclude Include="SingletonInitializer.h" />

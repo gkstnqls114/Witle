@@ -1272,6 +1272,9 @@
     <ClInclude Include="QtTerrainCalculator.h">
       <Filter>13.Storage/Manager\17.QuadtreeMgr</Filter>
     </ClInclude>
+    <ClInclude Include="Quadtree.h">
+      <Filter>98.Template\02.Quadtree</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

@@ -385,24 +385,7 @@ void QtTerrainCalculator::Init(const XMFLOAT3& center, const XMFLOAT3& extents, 
 	// 나누어진 Quadtree를 통해 지형 오브젝트의 정보를 넣는다.
 	CreateTerrainObj(TERRAIN_OBJS_INFO_PATH);
 }
-
-void QtTerrainCalculator::Init(XMFLOAT3&& center, XMFLOAT3&& extents, float min_size)
-{
-	Init(center, extents, min_size);
-}
-
-void QtTerrainCalculator::Init(const SingletonInitializer* singletonMgr)
-{
-}
- 
-void QtTerrainCalculator::Update(float fElapsedTime)
-{
-}
-
-void QtTerrainCalculator::LastUpdate(float fElapsedTime)
-{ 
-}
-
+  
 void QtTerrainCalculator::AddCollider(const MyBOBox& collider, const XMFLOAT4X4& world)
 {
 	AddRecursiveCollider(m_RootNode, collider, world);

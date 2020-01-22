@@ -22,6 +22,7 @@
 //// GameObject header //////////////////////////
 
 //// 매니저 관련 헤더 //////////////////////////
+#include "MapInfoMgr.h"
 #include "BossSkillMgr.h"
 #include "MainCameraMgr.h"
 #include "GraphicsRootSignatureMgr.h"
@@ -690,9 +691,12 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 		i += 1;
 	}
 	 
-	//// 테스트 쿼드트리 터레인 생성 
+	//// 쿼드트리 터레인 생성 
 	m_pQuadtreeTerrain = new QtTerrainInstancingDrawer(pd3dDevice, pd3dCommandList, 257, 257, xmf3Scale, xmf4Color, m_Terrain->GetHeightMapImage());
 	
+	m_QtTerrainCalculator = new QtTerrainCalculator(); 
+	m_QtTerrainCalculator->Init(MapInfoMgr::GetMapCenter(), XMFLOAT3{ MapInfoMgr::GetMapExtentsX(), 10000.f, MapInfoMgr::GetMapExtentsZ() }, MapInfoMgr::GetMapSizeX() / 4.f);
+
 	// 카메라
 	m_pMainCamera = new CameraObject("Camera");
 	m_Sniping = new Sniping(m_pMainCamera, m_pPlayer, pd3dDevice, pd3dCommandList);
@@ -1651,17 +1655,17 @@ void GameScene::UpdateCollision()
 	float fElapsedTime = CGameTimer::GetInstance()->GetTimeElapsed();
 	BoundingOrientedBox AlreadyPlayerBBox = m_pPlayer->CalculateAlreadyBoundingBox(fElapsedTime);
 	// 플레이어와 지형지물 충돌을 확인한다.  
-	QtTerrainCalculator::GetInstance()->ProcessCollide(*m_pPlayer->GetpMovement(), AlreadyPlayerBBox, *m_pPlayer->GetBOBox());
+	m_QtTerrainCalculator->ProcessCollide(*m_pPlayer->GetpMovement(), AlreadyPlayerBBox, *m_pPlayer->GetBOBox());
 	 
 	// 보스와 지형지물 충돌을 확인한다.
 	BoundingOrientedBox AlreadyDragonBBox = m_Dragon->CalculateAlreadyBoundingBox(fElapsedTime);
-	QtTerrainCalculator::GetInstance()->ProcessCollide(*m_Dragon->GetpMovement(), AlreadyDragonBBox,*m_Dragon->GetBOBox());
+	m_QtTerrainCalculator->ProcessCollide(*m_Dragon->GetpMovement(), AlreadyDragonBBox,*m_Dragon->GetBOBox());
 	
 	// 몬스터 충돌체크 ///////////////////////// 
 	for (int x = 0; x < m_TestMonsterCount; ++x)
 	{
 		BoundingOrientedBox AlreadMonsterBBox = m_TestMonster[x]->CalculateAlreadyBoundingBox(fElapsedTime);
-		QtTerrainCalculator::GetInstance()->ProcessCollide(*m_TestMonster[x]->GetpMovement(), AlreadMonsterBBox, *m_TestMonster[x]->GetBOBox());
+		m_QtTerrainCalculator->ProcessCollide(*m_TestMonster[x]->GetpMovement(), AlreadMonsterBBox, *m_TestMonster[x]->GetBOBox());
 	} 
 	// 몬스터 충돌체크 ///////////////////////// 
 }

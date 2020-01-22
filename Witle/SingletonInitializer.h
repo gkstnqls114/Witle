@@ -1,5 +1,4 @@
 #pragma once
-#include "Singleton.h"
 
 // Singleton 생성 시점을 관리하기 위해 사용하는 클래스
 // static 전역 변수로 관리한다.
