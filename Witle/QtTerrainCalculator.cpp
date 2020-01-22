@@ -12,111 +12,7 @@
 
 #include "QtTerrainCalculator.h"
  
-  
-void QtTerrainCalculator::CreateQuadTree()
-{
-	// 제일 작은 쿼드트리 사이즈가 0보다 같거나 작습니다.
-	float minSize = GetminSize();
-	bool isLessEqualZero = minSize <= 0;
-	assert(!(isLessEqualZero) && "minSize is less than or equal 0");
-	if (isLessEqualZero) return;
-
-	// m_pReafNodes 의 개수를 계산하여 동적 배열 생성한다.
-	int leafnodeX = ceil((m_RootNode->BoBox->GetBOBox().Extents.x * 2.f) / int(minSize)); // x 축에서 나눠지는 수
-	int leafnodeZ = ceil((m_RootNode->BoBox->GetBOBox().Extents.z * 2.f) / int(minSize)); // z 축에서 나눠지는 수
-
-	// 큰 값을 골라 포인터를 담는 동적 배열 생성
-	m_ReafNodeCount = (leafnodeX > leafnodeZ) ? leafnodeX : leafnodeZ;
-	m_ReafNodeCount = m_ReafNodeCount * m_ReafNodeCount; // 사각형이므로 N^2
-
-	m_pReafNodes = new quadtree::NODE*[m_ReafNodeCount];
-
-	// 그 후
-	int leafnodeIndex = 0;
-	CreateRecursiveQuadTree(m_RootNode, leafnodeIndex);
-}
-
-void QtTerrainCalculator::CreateRecursiveQuadTree(quadtree::NODE* pNode, int& leafnodeIndex)
-{
-	float minSize = GetminSize();
-
-	// Extents 의 x, z 의 *2 중 하나라도 minSize보다 작거나 같으면 더 이상 노드를 만들지 않는다.
-	XMFLOAT3 nodeExents = pNode->BoBox->GetBOBox().Extents;
-	XMFLOAT3 nodeCenter = pNode->BoBox->GetBOBox().Center;
-	bool isLeafNode = ((nodeExents.x * 2) <= minSize) | ((nodeExents.z * 2) <= minSize);
-	if (isLeafNode)
-	{
-		assert(!(m_ReafNodeCount <= leafnodeIndex) && "index is greater than leaf node count");
-
-#if defined(DEBUG) | defined(_DEBUG)
-		pNode->reafIndex = leafnodeIndex;
-#endif   
-		m_pReafNodes[leafnodeIndex] = pNode;
-		leafnodeIndex += 1;
-	}
-	else
-	{
-		// y 값은 변화하지 않습니다.
-		XMFLOAT3 extents{ nodeExents.x / 2.f, nodeExents.y, nodeExents.z / 2.f };
-
-		// ▲ Z
-		// ┌───┬───┐
-		// │ 2 │ 3 │
-		// ├───┼───┤
-		// │ 0 │ 1 │
-		// └───┴───┘ ▶ x
-		// 위와 같은 형식과 순서로 생성합니다. y는 그대로입니다.
-		XMFLOAT3 center[4]
-		{
-			XMFLOAT3(nodeCenter.x - extents.x, nodeCenter.y, nodeCenter.z - extents.z), // 0
-			XMFLOAT3(nodeCenter.x + extents.x, nodeCenter.y, nodeCenter.z - extents.z), // 1
-			XMFLOAT3(nodeCenter.x - extents.x, nodeCenter.y, nodeCenter.z + extents.z), // 2
-			XMFLOAT3(nodeCenter.x + extents.x, nodeCenter.y, nodeCenter.z + extents.z)  // 3
-		};
-		 
-		for (int x = 0; x < 4; ++x)
-		{
-			pNode->children[x] = new quadtree::NODE(center[x], extents);
-			CreateRecursiveQuadTree(pNode->children[x], leafnodeIndex);
-		} 
-	}
-}
-
-void QtTerrainCalculator::ReleaseQuadTree()
-{
-	if (m_RootNode != nullptr)
-	{ 
-		ReleaseRecursiveQuadTree(m_RootNode);
-		m_RootNode = nullptr;
-	}
-
-	if (m_pReafNodes != nullptr)
-	{
-		delete[] m_pReafNodes;
-		m_pReafNodes = nullptr;
-	}
-}
-
-void QtTerrainCalculator::ReleaseRecursiveQuadTree(quadtree::NODE* pNode)
-{
-	// 자식이 있는 경우 재귀함수를 이용하여 children 내부로 들어간다.
-	bool isHaveChildren = pNode->children[0] != nullptr;
-	if (isHaveChildren)
-	{
-		for (int x = 0; x < 4; ++x)
-		{
-			if (pNode->children[x])
-			{
-				ReleaseRecursiveQuadTree(pNode->children[x]); 
-				pNode->children[x] = nullptr;
-			}
-		}
-	}
-
-	// 자식이 없거나 위 과정이 끝나면 해당 노드를 delete한다.
-	delete pNode;   
-}
-
+    
 void QtTerrainCalculator::CreateTerrainObj(const char* terrain_info_path)
 {
 	FILE* pInFile = NULL;
@@ -350,21 +246,18 @@ QtTerrainCalculator::QtTerrainCalculator()
 }
 
 QtTerrainCalculator::~QtTerrainCalculator()
-{
-	if (m_RootNode)
-	{
-		ReleaseQuadTree();
-	}
+{ 
 }
 
 void QtTerrainCalculator::Init(const XMFLOAT3& center, const XMFLOAT3& extents, float min_size)
 {  
 	SetminSize(min_size);
 
-	if (m_RootNode == nullptr)
+	if (GetpRoot() == nullptr)
 	{
 		// 쿼드 트리의 부모 노드를 만듭니다.
-		m_RootNode = new quadtree::NODE(center, extents);
+		quadtree::NODE* temp = new quadtree::NODE(center, extents);
+		SetpRoot(temp);
 	}
 
 	// Quadtree를 구성한다.
@@ -376,12 +269,12 @@ void QtTerrainCalculator::Init(const XMFLOAT3& center, const XMFLOAT3& extents, 
   
 void QtTerrainCalculator::AddCollider(const MyBOBox& collider, const XMFLOAT4X4& world)
 {
-	AddRecursiveCollider(m_RootNode, collider, world);
+	AddRecursiveCollider(GetpRoot(), collider, world);
 }
 
 void QtTerrainCalculator::ProcessCollide(Movement& movement, const BoundingOrientedBox& nextFrameBoBox, const MyBOBox& collider)
 {
-	ProcessRecursiveCollide(*m_RootNode, movement, nextFrameBoBox, collider);
+	ProcessRecursiveCollide(*GetpRoot(), movement, nextFrameBoBox, collider);
 }
  
 void QtTerrainCalculator::PrintInfo()
@@ -389,11 +282,11 @@ void QtTerrainCalculator::PrintInfo()
 #ifdef _DEBUG
 	std::cout << "Quadtree Leaf Node Info ... " << std::endl;
 	int n = 0;
-	for (int x = 0; x < m_ReafNodeCount; ++x)
+	for (int x = 0; x < GetReafNodeCount(); ++x)
 	{
 		n += 1;
 
-		auto bobox = m_pReafNodes[x]->BoBox->GetBOBox();
+		auto bobox = GetReaf(x).BoBox->GetBOBox();
 		std::cout << "Index ... " << x <<std::endl;
 		std::cout << "Center ... (" << bobox.Center.x << " , "<< bobox.Center.y << " , "<< bobox.Center.z << ")" << std::endl;
 		std::cout << "Size ... (" << bobox.Extents.x * 2 << " , " << bobox.Extents.y * 2 << " , " << bobox.Extents.z * 2<< ")" << std::endl;
