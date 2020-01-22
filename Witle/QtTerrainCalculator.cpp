@@ -12,32 +12,18 @@
 
 #include "QtTerrainCalculator.h"
  
- 
-void QtTerrainCalculator::SetminSize(float min_size)
-{
-	// 이미 minSize가 설정된 경우
-	bool isAlreadySeted = m_minSize != 0;
-	assert(!(isAlreadySeted) && "minSize is already seted");
-	if (isAlreadySeted) return;
-
-	// 함수 인자가 0과 작거나 같은 경우
-	bool isLessEqualZero = min_size <= 0;
-	assert(!(isLessEqualZero) && "min_size is less than or equal 0");
-	if (isLessEqualZero) return;
-
-	m_minSize = min_size;
-}
-
+  
 void QtTerrainCalculator::CreateQuadTree()
 {
 	// 제일 작은 쿼드트리 사이즈가 0보다 같거나 작습니다.
-	bool isLessEqualZero = m_minSize <= 0;
+	float minSize = GetminSize();
+	bool isLessEqualZero = minSize <= 0;
 	assert(!(isLessEqualZero) && "minSize is less than or equal 0");
 	if (isLessEqualZero) return;
 
 	// m_pReafNodes 의 개수를 계산하여 동적 배열 생성한다.
-	int leafnodeX = ceil((m_RootNode->BoBox->GetBOBox().Extents.x * 2.f) / int(m_minSize)); // x 축에서 나눠지는 수
-	int leafnodeZ = ceil((m_RootNode->BoBox->GetBOBox().Extents.z * 2.f) / int(m_minSize)); // z 축에서 나눠지는 수
+	int leafnodeX = ceil((m_RootNode->BoBox->GetBOBox().Extents.x * 2.f) / int(minSize)); // x 축에서 나눠지는 수
+	int leafnodeZ = ceil((m_RootNode->BoBox->GetBOBox().Extents.z * 2.f) / int(minSize)); // z 축에서 나눠지는 수
 
 	// 큰 값을 골라 포인터를 담는 동적 배열 생성
 	m_ReafNodeCount = (leafnodeX > leafnodeZ) ? leafnodeX : leafnodeZ;
@@ -52,10 +38,12 @@ void QtTerrainCalculator::CreateQuadTree()
 
 void QtTerrainCalculator::CreateRecursiveQuadTree(quadtree::NODE* pNode, int& leafnodeIndex)
 {
+	float minSize = GetminSize();
+
 	// Extents 의 x, z 의 *2 중 하나라도 minSize보다 작거나 같으면 더 이상 노드를 만들지 않는다.
 	XMFLOAT3 nodeExents = pNode->BoBox->GetBOBox().Extents;
 	XMFLOAT3 nodeCenter = pNode->BoBox->GetBOBox().Center;
-	bool isLeafNode = ((nodeExents.x * 2) <= m_minSize) | ((nodeExents.z * 2) <= m_minSize);
+	bool isLeafNode = ((nodeExents.x * 2) <= minSize) | ((nodeExents.z * 2) <= minSize);
 	if (isLeafNode)
 	{
 		assert(!(m_ReafNodeCount <= leafnodeIndex) && "index is greater than leaf node count");

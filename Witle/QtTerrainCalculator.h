@@ -17,12 +17,8 @@ private:
 
 	int m_ReafNodeCount = 0;
 	quadtree::NODE** m_pReafNodes{ nullptr }; // 리프 노드를 접근할 동적 배열로 컨테이너에 불과함
-
-	float m_minSize{ 0 }; // 제일 작은 width or height의 조건. 둘 중 하나가 minSize라면 더이상 노드를 만들지 않는다.
-
-
-private:
-	void SetminSize(float min_size);
+	 
+private: 
 
 	void CreateQuadTree();
 	void CreateRecursiveQuadTree(quadtree::NODE* node, int& leafnodeIndex);

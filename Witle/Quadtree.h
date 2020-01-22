@@ -12,29 +12,32 @@ private:
 	Quadtree(Quadtree const&) = delete;            // 복사 숨김
 	Quadtree& operator=(Quadtree const&) = delete; // 할당 숨김
 	  
-protected:
+private:
 	//T* m_RootNode{ nullptr }; // 루트 노드
 
 	//int m_ReafNodeCount{ 0 };
 	//T** m_pReafNodes{ nullptr }; // 리프 노드를 접근할 동적 배열로 컨테이너에 불과함
 
-	//float m_minSize{ 0 }; // 제일 작은 width or height의 조건. 둘 중 하나가 minSize라면 더이상 노드를 만들지 않는다.
+	float m_minSize{ 0 }; // 제일 작은 width or height의 조건. 둘 중 하나가 minSize라면 더이상 노드를 만들지 않는다.
 	 
-private:
-//	void SetminSize(float min_size)
-//	{
-//		// 이미 minSize가 설정된 경우
-//		bool isAlreadySeted = m_minSize != 0;
-//		assert(!(isAlreadySeted) && "minSize is already seted");
-//		if (isAlreadySeted) return;
-//
-//		// 함수 인자가 0과 작거나 같은 경우
-//		bool isLessEqualZero = min_size <= 0;
-//		assert(!(isLessEqualZero) && "min_size is less than or equal 0");
-//		if (isLessEqualZero) return;
-//
-//		m_minSize = min_size;
-//	}
+protected:
+	void SetminSize(float min_size)
+	{ 
+		// 이미 minSize가 설정된 경우
+		bool isAlreadySeted = m_minSize != 0;
+		assert(!(isAlreadySeted) && "minSize is already seted");
+		if (isAlreadySeted) return;
+
+		// 함수 인자가 0과 작거나 같은 경우
+		bool isLessEqualZero = min_size <= 0;
+		assert(!(isLessEqualZero) && "min_size is less than or equal 0");
+		if (isLessEqualZero) return;
+
+		m_minSize = min_size;
+	}
+
+	float GetminSize() { return m_minSize; }
+
 //
 //	void CreateQuadTree()
 //	{
@@ -419,3 +422,5 @@ public:
 }; 
 
 #endif
+
+
