@@ -5,12 +5,12 @@ class Mesh;
 
 namespace quadtree
 { 
-	struct COLLISION // Terrain 위에 존재하는 지형 오브젝트
+	struct COLLIDER // Terrain 위에 존재하는 지형 오브젝트
 	{
 		MyBOBox BoBox;      // ModelStg에서 갖고올 모델의 충돌박스
 		XMFLOAT4X4 World;				// 월드행렬
 
-		COLLISION(MyBOBox bobox, XMFLOAT4X4 world) : BoBox(bobox), World(world) {}
+		COLLIDER(MyBOBox bobox, XMFLOAT4X4 world) : BoBox(bobox), World(world) {}
 	};
 
 	struct BASE_NODE
@@ -37,7 +37,7 @@ namespace quadtree
 		COLLISION_NODE* children[4]{ nullptr,  nullptr , nullptr , nullptr }; // 자식 노드들
 
 		// 만약 leafnode일 경우 해당 노드에 존재하는 지형 오브젝트의 충돌체들 (포인터)
-		std::list<COLLISION> terrainObjBoBoxs;
+		std::list<COLLIDER> terrainObjBoBoxs;
 
 	public:
 		COLLISION_NODE(XMFLOAT3&& center, XMFLOAT3&& extents);
