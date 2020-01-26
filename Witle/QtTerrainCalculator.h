@@ -19,6 +19,7 @@ private:
 	void ProcessRecursiveCollide(const quadtree::COLLISION_NODE& node, Movement& movement, const BoundingOrientedBox& nextFrameBoBox, const MyBOBox& BoBox);
 
 	virtual void AddDataListOfNode(quadtree::COLLISION_NODE& node, const quadtree::COLLIDER& collider) override;
+	virtual void ProcessDataOfNode(quadtree::COLLISION_NODE& node, GameObject& gameobj) override;
 
 public:
 	QtTerrainCalculator(const XMFLOAT3& center, const XMFLOAT3& extents, float min_size);
@@ -31,6 +32,7 @@ public:
 	 
 	// bobox 와 충돌체크합니다.
 	void ProcessCollide(Movement& movement, const BoundingOrientedBox& nextFrameBoBox, const MyBOBox& BoBox);
+	void ProcessCollide(const MyBOBox& collider, GameObject& gameobj);
 
 	// QuadtreeMgr의 리프노드에 대한 정보를 확인합니다. 디버그모드인 경우에만 콘솔에 출력합니다.
 	void PrintInfo();

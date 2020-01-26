@@ -142,45 +142,26 @@ protected:
 		}
 	}
 
-	//   
-	//void ProcessRecursiveCollide(const T& node, Movement& movement, const BoundingOrientedBox& nextFrameBoBox, const MyBOBox& collider)
-	//{
-	//	// 현재 프레임 위치에서 node와 부딪히는지 확인.
-	//	bool isCollided = Collision::isCollide(*node.BoBox, collider);
-	//	if (!isCollided) return;
+	// node 와 gameobj 바뀔 수 있으므로 &로 설정
+	void ProcessRecursiveDataOfNode(T& node, const MyBOBox& collider, GameObject& gameobj)
+	{
+		// 현재 프레임 위치에서 node와 부딪히는지 확인.
+		bool isCollided = Collision::isCollide(*node.BoBox, collider);
+		if (!isCollided) return;
 
-	//	bool isHaveChildren = node.children[0] != nullptr; // 자식이 있는 경우
-	//	if (isHaveChildren)
-	//	{
-	//		for (int x = 0; x < 4; ++x)
-	//		{
-	//			ProcessRecursiveCollide(*node.children[x], movement, nextFrameBoBox, collider);
-	//		}
-	//	}
-	//	else
-	//	{
-	//		float fElapsedTime = CGameTimer::GetInstance()->GetTimeElapsed();
-	//		for (const auto& tobj : node.terrainObjBoBoxs)
-	//		{
-	//			XMFLOAT3 slideVector{ 0.f, 0.f, 0.f };
-
-	//			// 다음 프레임에서 터레인 오브젝트와 부딪히는 지 확인한다.
-	//			bool isSlide = Collision::ProcessCollision(
-	//				nextFrameBoBox,
-	//				tobj.BoBox,
-	//				movement.GetpOwner()->GetTransform().GetPosition(),
-	//				movement.GetVelocity(),
-	//				fElapsedTime,
-	//				true,
-	//				slideVector);
-
-	//			if (isSlide)
-	//			{
-	//				movement.SetVelocity(slideVector);
-	//			}
-	//		}
-	//	}
-	//} 
+		bool isHaveChildren = node.children[0] != nullptr; // 자식이 있는 경우
+		if (isHaveChildren)
+		{
+			for (int x = 0; x < 4; ++x)
+			{
+				ProcessRecursiveDataOfNode(*node.children[x], collider, gameobj);
+			}
+		}
+		else
+		{
+			ProcessDataOfNode(node, gameobj);
+		}
+	} 
 	 
 	void AddRecursiveDataOfNode(T& node, const MyBOBox& collider, const S& data)
 	{
@@ -202,12 +183,12 @@ protected:
 		}
 		else
 		{
-			AddDataListOfNode(node, data);
-			return;
+			AddDataListOfNode(node, data); 
 		}
 	}
 
 	virtual void AddDataListOfNode(T& node, const S& world) = 0; 
+	virtual void ProcessDataOfNode(T& node, GameObject& gameobj) = 0;
 
 public: 
 	Quadtree(const XMFLOAT3& center, const XMFLOAT3& extents, float min_size)
@@ -234,18 +215,10 @@ public:
 			ReleaseQuadTree();
 		}
 	}
-
-	void Release()
-	{
-
-	}
-
-
+	  
 	virtual void Init() = 0;
 	virtual void PrintInfo() = 0;
-
-
-public: 
+	 
 	// 리프노드의 개수를 반환합니다.
 	int GetReafNodeCount()   { return m_ReafNodeCount; } 
 

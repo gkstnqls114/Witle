@@ -1658,7 +1658,8 @@ void GameScene::UpdateCollision()
 	float fElapsedTime = CGameTimer::GetInstance()->GetTimeElapsed();
 	BoundingOrientedBox AlreadyPlayerBBox = m_pPlayer->CalculateAlreadyBoundingBox(fElapsedTime);
 	// 플레이어와 지형지물 충돌을 확인한다.  
-	m_QtTerrainCalculator->ProcessCollide(*m_pPlayer->GetpMovement(), AlreadyPlayerBBox, *m_pPlayer->GetBOBox());
+	// m_QtTerrainCalculator->ProcessCollide(*m_pPlayer->GetpMovement(), AlreadyPlayerBBox, *m_pPlayer->GetBOBox());
+	m_QtTerrainCalculator->ProcessCollide(*m_pPlayer->GetBOBox(), *m_pPlayer);
 	 
 	// 보스와 지형지물 충돌을 확인한다.
 	BoundingOrientedBox AlreadyDragonBBox = m_Dragon->CalculateAlreadyBoundingBox(fElapsedTime);

@@ -9,6 +9,8 @@
 #include "Transform.h"
 #include "GameObject.h"
 #include "GameTimer.h"
+#include "Monster.h"
+#include "Player.h"
 
 #include "QtTerrainCalculator.h"
  
@@ -221,6 +223,53 @@ void QtTerrainCalculator::AddDataListOfNode(quadtree::COLLISION_NODE& node, cons
 	node.terrainObjBoBoxs.push_back(collider);
 
 }
+
+void QtTerrainCalculator::ProcessDataOfNode(quadtree::COLLISION_NODE& node, GameObject& gameobj)
+{
+	if (gameobj.GetpMovement() == nullptr) return;
+	bool isNotMonster = dynamic_cast<Monster*>(&gameobj) == nullptr;
+	bool isNotPlayer = dynamic_cast<Player*>(&gameobj) == nullptr;
+	if (isNotMonster && isNotPlayer)
+	{
+		assert(!(isNotMonster && isNotPlayer) && "is not player or monster class");
+	}
+	else if (!isNotMonster && !isNotPlayer)
+	{
+		assert(!(!isNotMonster && !isNotPlayer) && "is player and monster class, why? i don't know..."); 
+	}
+
+	float fElapsedTime = CGameTimer::GetInstance()->GetTimeElapsed();
+	Movement* movement = gameobj.GetpMovement();
+	BoundingOrientedBox nextFrameBoBox;
+	if (!isNotMonster)
+	{ 
+		nextFrameBoBox = dynamic_cast<Monster*>(&gameobj)->CalculateAlreadyBoundingBox(fElapsedTime);
+	}
+	else if (!isNotPlayer)
+	{ 
+		nextFrameBoBox = dynamic_cast<Player*>(&gameobj)->CalculateAlreadyBoundingBox(fElapsedTime);
+	}
+
+	for (const auto& tobj : node.terrainObjBoBoxs)
+	{
+		XMFLOAT3 slideVector{ 0.f, 0.f, 0.f };
+
+		// 다음 프레임에서 터레인 오브젝트와 부딪히는 지 확인한다.
+		bool isSlide = Collision::ProcessCollision(
+			nextFrameBoBox,
+			tobj.BoBox,
+			movement->GetpOwner()->GetTransform().GetPosition(),
+			movement->GetVelocity(),
+			fElapsedTime,
+			true,
+			slideVector);
+
+		if (isSlide)
+		{
+			movement->SetVelocity(slideVector);
+		}
+	}
+}
   
 QtTerrainCalculator::QtTerrainCalculator(const XMFLOAT3& center, const XMFLOAT3& extents, float min_size)
 	: Quadtree<quadtree::COLLISION_NODE, quadtree::COLLIDER>(center, extents, min_size)
@@ -246,6 +295,11 @@ void QtTerrainCalculator::AddCollider(const MyBOBox& collider, const XMFLOAT4X4&
 void QtTerrainCalculator::ProcessCollide(Movement& movement, const BoundingOrientedBox& nextFrameBoBox, const MyBOBox& collider)
 {
 	ProcessRecursiveCollide(*GetpRoot(), movement, nextFrameBoBox, collider);
+}
+
+void QtTerrainCalculator::ProcessCollide(const MyBOBox& collider, GameObject& gameobj)
+{
+	ProcessRecursiveDataOfNode(*GetpRoot(), collider, gameobj);
 }
  
 void QtTerrainCalculator::PrintInfo()
