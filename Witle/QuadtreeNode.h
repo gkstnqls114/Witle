@@ -2,6 +2,8 @@
 #include "MyBOBox.h"
 
 class Mesh;
+class LoadObject;
+class Texture;
 
 namespace quadtree
 { 
@@ -17,6 +19,17 @@ namespace quadtree
 		COLLIDER(COLLIDER const& other);      
 
 		COLLIDER(MyBOBox bobox, XMFLOAT4X4 world) : BoBox(bobox), World(world) {}
+	};
+
+	struct DRAWER_INFO
+	{
+		LoadObject* pLoadObject{ nullptr }; // 지형 오브젝트(ex: 나무) 하나를 그리기위한 모델 정보
+		Texture* pTexture{ nullptr };       // 마찬가지로 그리기 위한 텍스쳐 정보
+
+		ID3D12Resource* m_pd3dcbGameObjects         { nullptr }; // 인스턴싱을 위해 사용되는 정보
+		VS_SRV_INSTANCEINFO* m_pcbMappedGameObjects { nullptr }; // 인스턴싱을 위해 사용되는 정보
+		int         TerrainObjectCount              { 0 };		 // 해당 모델이 몇개나 배치되는 지, 개수 의미
+		std::vector<XMFLOAT4X4> TransformList;                   // 해당 모델이 배치되는 오브젝트의 월드 행렬들
 	};
 
 	struct BASE_NODE
@@ -58,9 +71,12 @@ namespace quadtree
 	struct QT_DRAWER_NODE
 	{
 		BoundingBox boundingBox; // 해당 터레인에 속하는가 확인을 해주는 바운딩박스
-		bool isRendering{ false }; // 렌더링 할 것인가, 말 것인가. 
-		int id{ -1 }; // 터레인 아이디 넘버
-		Mesh* terrainMesh{ nullptr }; // 렌더할 터레인 메쉬
+		bool isRendering{ false }; // 렌더링 할 것인가, 말 것인가.  
 		QT_DRAWER_NODE* children[4]{ nullptr,  nullptr , nullptr , nullptr };
+		int id = -1;
+		Mesh* terrainMesh{ nullptr };       // 렌더할 터레인 메쉬
+
+		// 만약 leafnode일 경우 해당 노드에 존재하는 지형 오브젝트의 충돌체들 (포인터)
+		std::map<std::string, DRAWER_INFO> terrainObjBoBoxs;
 	};
 }

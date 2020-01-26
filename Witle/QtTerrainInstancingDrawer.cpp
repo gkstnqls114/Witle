@@ -31,6 +31,7 @@ void QtTerrainInstancingDrawer::ReleaseMemberUploadBuffers()
 	RecursiveReleaseUploadBuffers(m_pRootNode);
 }
 
+ 
 
 void QtTerrainInstancingDrawer::LoadTerrainObjectFromFile(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, const char* pstrFileName, const QtTerrainInstancingDrawer const* pTerrain)
 {
@@ -192,7 +193,7 @@ bool QtTerrainInstancingDrawer::LoadTransform(char* name, const char* comp_name,
 			TestObject->UpdateTransform(NULL);
 
 			for (int x = 0; x < TerrainPieceCount; ++x)
-			{
+			{ 
 				m_StaticObjectStorage[Cliff][x].TerrainObjectCount += 1;
 
 				m_StaticObjectStorage[Cliff][x].TransformList.emplace_back(TestObject->m_pChild->m_xmf4x4World);
