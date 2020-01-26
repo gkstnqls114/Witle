@@ -1,18 +1,18 @@
 #include "stdafx.h"
 #include "QuadtreeNode.h"
  
-quadtree::NODE::NODE(XMFLOAT3&& center, XMFLOAT3&& extents)
+quadtree::BASE_NODE::BASE_NODE(XMFLOAT3&& center, XMFLOAT3&& extents)
 {
-	quadtree::NODE(center, extents);
+	quadtree::BASE_NODE(center, extents);
 }
 
 
-quadtree::NODE::NODE(const XMFLOAT3& center, const XMFLOAT3& extents)
+quadtree::BASE_NODE::BASE_NODE(const XMFLOAT3& center, const XMFLOAT3& extents)
 {
 	BoBox = new MyBOBox(center, extents);
 }
 
-quadtree::NODE::~NODE()
+quadtree::BASE_NODE::~BASE_NODE()
 {
 	if (BoBox)
 	{

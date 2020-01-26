@@ -5,7 +5,7 @@ class Mesh;
 
 namespace quadtree
 {
-	struct NODE
+	struct BASE_NODE
 	{
 		struct TerrainObj // Terrain 위에 존재하는 지형 오브젝트
 		{
@@ -16,7 +16,7 @@ namespace quadtree
 		};
 
 		MyBOBox* BoBox{ nullptr };  // 해당 노드(맵)의 충돌체 
-		NODE* children[4]{ nullptr,  nullptr , nullptr , nullptr }; // 자식 노드들
+		BASE_NODE* children[4]{ nullptr,  nullptr , nullptr , nullptr }; // 자식 노드들
 
 #if defined(DEBUG) | defined(_DEBUG)
 		int reafIndex = -1; // 자식노드일때만 설정하는 디버그용 변수
@@ -27,13 +27,13 @@ namespace quadtree
 		std::list<TerrainObj> terrainObjBoBoxs;
 
 	private:
-		NODE(NODE const&) = delete;            // 복사 숨김
-		NODE& operator=(NODE const&) = delete; // 할당 숨김
+		BASE_NODE(BASE_NODE const&) = delete;            // 복사 숨김
+		BASE_NODE& operator=(BASE_NODE const&) = delete; // 할당 숨김
 
 	public:
-		NODE(XMFLOAT3&& center, XMFLOAT3&& extents);
-		NODE(const XMFLOAT3& center, const XMFLOAT3& extents);
-		~NODE();
+		BASE_NODE(XMFLOAT3&& center, XMFLOAT3&& extents);
+		BASE_NODE(const XMFLOAT3& center, const XMFLOAT3& extents);
+		~BASE_NODE();
 	};
 
 	struct QT_DRAWER_NODE
