@@ -218,11 +218,12 @@ void QtTerrainCalculator::AddDataListOfNode(quadtree::COLLISION_NODE& node, cons
 	// 자식이 없으므로 리프노드라는 뜻이다.
 			// 충돌했으므로 노드 리스트에 추가한다.
 	node.terrainObjCount += 1;
-	node.terrainObjBoBoxs.emplace_back(std::move(collider));
+	node.terrainObjBoBoxs.push_back(collider);
 
 }
- 
-QtTerrainCalculator::QtTerrainCalculator()  
+  
+QtTerrainCalculator::QtTerrainCalculator(const XMFLOAT3& center, const XMFLOAT3& extents, float min_size)
+	: Quadtree<quadtree::COLLISION_NODE, quadtree::COLLIDER>(center, extents, min_size)
 {
 }
 
@@ -230,20 +231,8 @@ QtTerrainCalculator::~QtTerrainCalculator()
 { 
 }
 
-void QtTerrainCalculator::Init(const XMFLOAT3& center, const XMFLOAT3& extents, float min_size)
-{  
-	SetminSize(min_size);
-
-	if (GetpRoot() == nullptr)
-	{
-		// 쿼드 트리의 부모 노드를 만듭니다.
-		quadtree::COLLISION_NODE* temp = new quadtree::COLLISION_NODE(center, extents);
-		SetpRoot(temp);
-	}
-
-	// Quadtree를 구성한다.
-	CreateQuadTree();
-
+void QtTerrainCalculator::Init()
+{   
 	// 나누어진 Quadtree를 통해 지형 오브젝트의 정보를 넣는다.
 	CreateTerrainObj(TERRAIN_OBJS_INFO_PATH);
 }

@@ -2,8 +2,8 @@
 
 #ifndef QUADTREE
 #define QUADTREE
-
-class Movement;
+ 
+class GameObject;
 
 template<typename T, typename S>
 class Quadtree
@@ -141,45 +141,46 @@ protected:
 			m_pReafNodes = nullptr;
 		}
 	}
-	   
-	void ProcessRecursiveCollide(const T& node, Movement& movement, const BoundingOrientedBox& nextFrameBoBox, const MyBOBox& BoBox)
-	{
-		// 현재 프레임 위치에서 node와 부딪히는지 확인.
-		bool isCollided = Collision::isCollide(*node.BoBox, collider);
-		if (!isCollided) return;
 
-		bool isHaveChildren = node.children[0] != nullptr; // 자식이 있는 경우
-		if (isHaveChildren)
-		{
-			for (int x = 0; x < 4; ++x)
-			{
-				ProcessRecursiveCollide(*node.children[x], movement, nextFrameBoBox, collider);
-			}
-		}
-		else
-		{
-			float fElapsedTime = CGameTimer::GetInstance()->GetTimeElapsed();
-			for (const auto& tobj : node.terrainObjBoBoxs)
-			{
-				XMFLOAT3 slideVector{ 0.f, 0.f, 0.f };
+	//   
+	//void ProcessRecursiveCollide(const T& node, Movement& movement, const BoundingOrientedBox& nextFrameBoBox, const MyBOBox& collider)
+	//{
+	//	// 현재 프레임 위치에서 node와 부딪히는지 확인.
+	//	bool isCollided = Collision::isCollide(*node.BoBox, collider);
+	//	if (!isCollided) return;
 
-				// 다음 프레임에서 터레인 오브젝트와 부딪히는 지 확인한다.
-				bool isSlide = Collision::ProcessCollision(
-					nextFrameBoBox,
-					tobj.BoBox,
-					movement.GetpOwner()->GetTransform().GetPosition(),
-					movement.GetVelocity(),
-					fElapsedTime,
-					true,
-					slideVector);
+	//	bool isHaveChildren = node.children[0] != nullptr; // 자식이 있는 경우
+	//	if (isHaveChildren)
+	//	{
+	//		for (int x = 0; x < 4; ++x)
+	//		{
+	//			ProcessRecursiveCollide(*node.children[x], movement, nextFrameBoBox, collider);
+	//		}
+	//	}
+	//	else
+	//	{
+	//		float fElapsedTime = CGameTimer::GetInstance()->GetTimeElapsed();
+	//		for (const auto& tobj : node.terrainObjBoBoxs)
+	//		{
+	//			XMFLOAT3 slideVector{ 0.f, 0.f, 0.f };
 
-				if (isSlide)
-				{
-					movement.SetVelocity(slideVector);
-				}
-			}
-		}
-	} 
+	//			// 다음 프레임에서 터레인 오브젝트와 부딪히는 지 확인한다.
+	//			bool isSlide = Collision::ProcessCollision(
+	//				nextFrameBoBox,
+	//				tobj.BoBox,
+	//				movement.GetpOwner()->GetTransform().GetPosition(),
+	//				movement.GetVelocity(),
+	//				fElapsedTime,
+	//				true,
+	//				slideVector);
+
+	//			if (isSlide)
+	//			{
+	//				movement.SetVelocity(slideVector);
+	//			}
+	//		}
+	//	}
+	//} 
 	 
 	void AddRecursiveDataOfNode(T& node, const MyBOBox& collider, const S& data)
 	{
@@ -206,13 +207,24 @@ protected:
 		}
 	}
 
-	virtual void AddDataListOfNode(T& node, const S& world) = 0;
+	virtual void AddDataListOfNode(T& node, const S& world) = 0; 
 
 public: 
-	Quadtree()
+	Quadtree(const XMFLOAT3& center, const XMFLOAT3& extents, float min_size)
 	{
 		bool isNotAppropriateParent = dynamic_cast<quadtree::BASE_NODE*>(m_RootNode) == nullptr;
 		assert(isNotAppropriateParent && "template T class is not approriate parent struct. you have to inherit quadtree::BASE_NODE.");
+		 
+		SetminSize(min_size);
+
+		if (m_RootNode == nullptr)
+		{
+			// 쿼드 트리의 부모 노드를 만듭니다.
+			m_RootNode = new T(center, extents); 
+		}
+
+		// Quadtree를 구성한다.
+		CreateQuadTree();
 	}
 
 	virtual ~Quadtree()
@@ -229,40 +241,8 @@ public:
 	}
 
 
-	//void Init(const XMFLOAT3& center, const XMFLOAT3& extents, float min_size)
-	//{ 
-	//	SetminSize(min_size);
-
-	//	if (m_RootNode == nullptr)
-	//	{
-	//		// 쿼드 트리의 부모 노드를 만듭니다.
-	//		m_RootNode = new T(center, extents) // 여기 문제네..
-	//	}
-
-	//	// Quadtree를 구성한다.
-	//	CreateQuadTree();
-
-	//	// 나누어진 Quadtree를 통해 지형 오브젝트의 정보를 넣는다.
-	//	CreateTerrainObj(TERRAIN_OBJS_INFO_PATH);
-	//}
-	// 
-	//// 해당 충돌체와 충돌하는 treePiece에 충돌체를 추가합니다.
-	//void AddCollider(const MyBOBox& BoBox, const XMFLOAT4X4& world)
-	//{ 
-	//	AddRecursiveCollider(m_RootNode, collider, world);
-	//}
-
-	//// bobox 와 충돌체크합니다.
-	//void ProcessCollide(Movement& movement, const BoundingOrientedBox& nextFrameBoBox, const MyBOBox& BoBox)
-	//{ 
-	//	ProcessRecursiveCollide(*m_RootNode, movement, nextFrameBoBox, collider);
-	//}
-
-	//// 리프노드의 개수를 반환합니다.
-	//int GetReafNodeCount() { return m_ReafNodeCount; }
-	//const T& GetRoot() const { return *m_RootNode; }
-	// 
-	//virtual void PrintInfo() = 0;
+	virtual void Init() = 0;
+	virtual void PrintInfo() = 0;
 
 
 public: 

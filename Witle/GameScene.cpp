@@ -694,8 +694,11 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	//// 쿼드트리 터레인 생성 
 	m_pQuadtreeTerrain = new QtTerrainInstancingDrawer(pd3dDevice, pd3dCommandList, 257, 257, xmf3Scale, xmf4Color, m_Terrain->GetHeightMapImage());
 	
-	m_QtTerrainCalculator = new QtTerrainCalculator(); 
-	m_QtTerrainCalculator->Init(MapInfoMgr::GetMapCenter(), XMFLOAT3{ MapInfoMgr::GetMapExtentsX(), 10000.f, MapInfoMgr::GetMapExtentsZ() }, MapInfoMgr::GetMapSizeX() / 4.f);
+	m_QtTerrainCalculator = new QtTerrainCalculator(
+		MapInfoMgr::GetMapCenter(), 
+		XMFLOAT3{ MapInfoMgr::GetMapExtentsX(), 10000.f, MapInfoMgr::GetMapExtentsZ() },
+		MapInfoMgr::GetMapSizeX() / 4.f);
+	m_QtTerrainCalculator->Init();
 
 	// 카메라
 	m_pMainCamera = new CameraObject("Camera");
