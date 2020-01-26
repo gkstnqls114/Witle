@@ -15,9 +15,7 @@ class QtTerrainCalculator : public Quadtree<quadtree::COLLISION_NODE, quadtree::
 private:  
 	void CreateTerrainObj(const char* terrain_info_path);
 	void CreateTerrainObj(FILE* pInFile);
-
-	void ProcessRecursiveCollide(const quadtree::COLLISION_NODE& node, Movement& movement, const BoundingOrientedBox& nextFrameBoBox, const MyBOBox& BoBox);
-
+	 
 	virtual void AddDataListOfNode(quadtree::COLLISION_NODE& node, const quadtree::COLLIDER& collider) override;
 	virtual void ProcessDataOfNode(quadtree::COLLISION_NODE& node, GameObject& gameobj) override;
 
@@ -30,12 +28,11 @@ public:
 	// 해당 충돌체와 충돌하는 treePiece에 충돌체를 추가합니다.
 	void AddCollider(const MyBOBox& BoBox, const XMFLOAT4X4& world);
 	 
-	// bobox 와 충돌체크합니다.
-	void ProcessCollide(Movement& movement, const BoundingOrientedBox& nextFrameBoBox, const MyBOBox& BoBox);
+	// 해당 충돌체에 해당하는 mybobox와 충돌체크를 확인하여 가속도를 설정합니다. 
 	void ProcessCollide(const MyBOBox& collider, GameObject& gameobj);
 
 	// QuadtreeMgr의 리프노드에 대한 정보를 확인합니다. 디버그모드인 경우에만 콘솔에 출력합니다.
-	void PrintInfo();
+	virtual void PrintInfo() override;
 private:
 
 };
