@@ -45,3 +45,9 @@ quadtree::COLLISION_NODE::~COLLISION_NODE()
 		}
 	}
 }
+
+quadtree::COLLIDER::COLLIDER(COLLIDER const& other)
+	: BoBox(other.BoBox), World(other.World) 
+{
+
+}

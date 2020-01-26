@@ -7,9 +7,14 @@ namespace quadtree
 { 
 	struct COLLIDER // Terrain 위에 존재하는 지형 오브젝트
 	{ 
+	private:
+		COLLIDER& operator=(COLLIDER const&) = delete; // 할당 숨김
+
 	public: 
 		MyBOBox BoBox;      // ModelStg에서 갖고올 모델의 충돌박스
 		XMFLOAT4X4 World;				// 월드행렬
+
+		COLLIDER(COLLIDER const& other);      
 
 		COLLIDER(MyBOBox bobox, XMFLOAT4X4 world) : BoBox(bobox), World(world) {}
 	};

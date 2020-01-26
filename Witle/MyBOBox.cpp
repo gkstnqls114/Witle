@@ -36,11 +36,12 @@ MyBOBox::MyBOBox(GameObject* pOwner, ID3D12Device * pd3dDevice, ID3D12GraphicsCo
 }
 
 MyBOBox::MyBOBox(const MyBOBox & other) 
-	:MyCollider(m_pOwner, COLLIDER_TYPE::BOUNDING_BOX)
+	:MyCollider(other.m_pOwner, COLLIDER_TYPE::BOUNDING_BOX)
 {
-#ifdef _DEBUG
+#if defined(DEBUG) | defined(_DEBUG)
 	m_pLineCube = nullptr;
-#endif // _DEBUG
+#endif // DEBUG OR _DEBUG 
+
 	m_BOBox = other.m_BOBox;
 	for (int i = 0; i < 4; ++i)
 	{

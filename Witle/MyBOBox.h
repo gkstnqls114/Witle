@@ -27,7 +27,7 @@ protected:
 
 	BoundingOrientedBox m_BOBox;
 	XMFLOAT4 m_BoBoxPlane[4]; // 0: +X, 1: -X, 2: +Z, 3: -Z
-	 
+	  
 public:
 	static void CHANGEMODE();
 	
@@ -48,7 +48,7 @@ public:
 	BoundingOrientedBox GetBOBox() const { return m_BOBox; } 
 
 	// 0: +X 면, 1: -X면, 2: +Z면, 3: -Z면
-	const XMFLOAT4 GetPlane(int index) const
+	XMFLOAT4 GetPlane(int index) const
 	{ 
 		assert(!(index < 0 && index >= 4));
 		return m_BoBoxPlane[index]; 
@@ -89,10 +89,10 @@ public:
 
 	// LineCube는 그리지 않는다.
 	MyBOBox operator=(const MyBOBox& other)
-	{  
-#ifdef USING_DEBUGMESH
+	{
+#if defined(DEBUG) | defined(_DEBUG)
 		m_pLineCube = nullptr;
-#endif // USING_DEBUGMESH
+#endif // DEBUG OR _DEBUG
 
 		m_BOBox = other.m_BOBox;
 		for (int i = 0; i < 4; ++i)

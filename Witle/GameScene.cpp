@@ -466,7 +466,7 @@ bool GameScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM w
 			//}
 			break;
 
-		case '3': // 스킬 광역 공격 
+		case '3': 
 			break;
 
 		case VK_SPACE:
