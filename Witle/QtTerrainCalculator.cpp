@@ -174,7 +174,7 @@ void QtTerrainCalculator::CreateTerrainObj(FILE* pInFile)
 	}
 }
 
-void QtTerrainCalculator::ProcessRecursiveCollide(const quadtree::BASE_NODE& node, Movement& movement, const BoundingOrientedBox& nextFrameBoBox, const MyBOBox& collider)
+void QtTerrainCalculator::ProcessRecursiveCollide(const quadtree::COLLISION_NODE& node, Movement& movement, const BoundingOrientedBox& nextFrameBoBox, const MyBOBox& collider)
 {
 	// 현재 프레임 위치에서 node와 부딪히는지 확인.
 	bool isCollided = Collision::isCollide(*node.BoBox, collider);
@@ -213,7 +213,7 @@ void QtTerrainCalculator::ProcessRecursiveCollide(const quadtree::BASE_NODE& nod
 	}
 }
 
-void QtTerrainCalculator::AddRecursiveCollider(quadtree::BASE_NODE* pNode, const MyBOBox& BoBox, const XMFLOAT4X4& world)
+void QtTerrainCalculator::AddRecursiveCollider(quadtree::COLLISION_NODE* pNode, const MyBOBox& BoBox, const XMFLOAT4X4& world)
 {
 	// 해당 노드의 충돌체와 부딪히지않으면 넘어간다.
 	bool isCollided = Collision::isCollide(*(pNode->BoBox), BoBox);
@@ -256,7 +256,7 @@ void QtTerrainCalculator::Init(const XMFLOAT3& center, const XMFLOAT3& extents, 
 	if (GetpRoot() == nullptr)
 	{
 		// 쿼드 트리의 부모 노드를 만듭니다.
-		quadtree::BASE_NODE* temp = new quadtree::BASE_NODE(center, extents);
+		quadtree::COLLISION_NODE* temp = new quadtree::COLLISION_NODE(center, extents);
 		SetpRoot(temp);
 	}
 
