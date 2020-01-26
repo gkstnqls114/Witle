@@ -6,7 +6,8 @@ class Mesh;
 namespace quadtree
 { 
 	struct COLLIDER // Terrain 위에 존재하는 지형 오브젝트
-	{
+	{ 
+	public: 
 		MyBOBox BoBox;      // ModelStg에서 갖고올 모델의 충돌박스
 		XMFLOAT4X4 World;				// 월드행렬
 
@@ -38,6 +39,10 @@ namespace quadtree
 
 		// 만약 leafnode일 경우 해당 노드에 존재하는 지형 오브젝트의 충돌체들 (포인터)
 		std::list<COLLIDER> terrainObjBoBoxs;
+
+	private:
+		COLLISION_NODE(COLLISION_NODE const&) = delete;            // 복사 숨김
+		COLLISION_NODE& operator=(COLLISION_NODE const&) = delete; // 할당 숨김
 
 	public:
 		COLLISION_NODE(XMFLOAT3&& center, XMFLOAT3&& extents);

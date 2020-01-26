@@ -339,7 +339,6 @@
     <ClInclude Include="SkinnedShader.h" />
     <ClInclude Include="SkyBox.h" />
     <ClInclude Include="SkyBoxShader.h" />
-    <ClInclude Include="SkyPlane.h" />
     <ClInclude Include="SpaceCat.h" />
     <ClInclude Include="Sniping.h" />
     <ClInclude Include="SoundManager.h" />
@@ -578,7 +577,6 @@
     <ClCompile Include="Witle.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TerrainShader.cpp" />
-    <ClCompile Include="SkyPlane.cpp" />
     <ClCompile Include="ModelStorage.cpp" />
   </ItemGroup>
   <ItemGroup>

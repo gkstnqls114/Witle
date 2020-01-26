@@ -212,33 +212,14 @@ void QtTerrainCalculator::ProcessRecursiveCollide(const quadtree::COLLISION_NODE
 		} 
 	}
 }
-
-void QtTerrainCalculator::AddRecursiveCollider(quadtree::COLLISION_NODE* pNode, const MyBOBox& BoBox, const XMFLOAT4X4& world)
+ 
+void QtTerrainCalculator::AddDataListOfNode(quadtree::COLLISION_NODE& node, const quadtree::COLLIDER& collider)
 {
-	// 해당 노드의 충돌체와 부딪히지않으면 넘어간다.
-	bool isCollided = Collision::isCollide(*(pNode->BoBox), BoBox);
-	if (!isCollided) return;
+	// 자식이 없으므로 리프노드라는 뜻이다.
+			// 충돌했으므로 노드 리스트에 추가한다.
+	node.terrainObjCount += 1;
+	node.terrainObjBoBoxs.emplace_back(std::move(collider));
 
-	bool isHaveChildren = pNode->children[0] != nullptr;
-	if (isHaveChildren)
-	{
-		// 자식이 있는 경우 재귀함수를 이용하여 children 내부로 들어간다.
-		for (int x = 0; x < 4; ++x)
-		{
-			if (pNode->children[x])
-			{
-				AddRecursiveCollider(pNode->children[x], BoBox, world);
-			}
-		}
-	}
-	else
-	{
-		// 자식이 없으므로 리프노드라는 뜻이다.
-		// 충돌했으므로 노드 리스트에 추가한다.
-		pNode->terrainObjCount += 1; 
-		pNode->terrainObjBoBoxs.emplace_back(BoBox, world);
-		return;
-	}
 }
  
 QtTerrainCalculator::QtTerrainCalculator()  
@@ -269,7 +250,8 @@ void QtTerrainCalculator::Init(const XMFLOAT3& center, const XMFLOAT3& extents, 
   
 void QtTerrainCalculator::AddCollider(const MyBOBox& collider, const XMFLOAT4X4& world)
 {
-	AddRecursiveCollider(GetpRoot(), collider, world);
+	quadtree::COLLIDER add_data(collider, world);
+	AddRecursiveDataOfNode(*(GetpRoot()), collider, add_data);
 }
 
 void QtTerrainCalculator::ProcessCollide(Movement& movement, const BoundingOrientedBox& nextFrameBoBox, const MyBOBox& collider)
