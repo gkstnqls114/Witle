@@ -51,3 +51,8 @@ quadtree::COLLIDER::COLLIDER(COLLIDER const& other)
 {
 
 }
+ 
+quadtree::QT_DRAWER_NODE::QT_DRAWER_NODE(const XMFLOAT3& center, const XMFLOAT3& extents)
+	: quadtree::BASE_NODE::BASE_NODE(center, extents)
+{
+}

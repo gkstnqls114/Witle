@@ -187,10 +187,13 @@ protected:
 		}
 	}
 
-	virtual void AddDataListOfNode(T& node, const S& world) = 0; 
+	virtual void AddDataListOfNode(T& node, const S& data) = 0; 
 	virtual void ProcessDataOfNode(T& node, GameObject& gameobj) = 0;
 
 public: 
+	// center: 전체 지형의 중심 위치
+	// extents: 전체 지형의 충돌체 크기 (예: x,z가 10x10의 지형일 경우, extents 5x5, y값은 원하는 대로)
+	// min_size : 제일 작게 쪼개질 지형의 크기
 	Quadtree(const XMFLOAT3& center, const XMFLOAT3& extents, float min_size)
 	{
 		bool isNotAppropriateParent = dynamic_cast<quadtree::BASE_NODE*>(m_RootNode) == nullptr;
@@ -216,9 +219,6 @@ public:
 		}
 	}
 	  
-	virtual void Init() = 0;
-	virtual void PrintInfo() = 0;
-	 
 	// 리프노드의 개수를 반환합니다.
 	int GetReafNodeCount()   { return m_ReafNodeCount; } 
 
@@ -230,6 +230,9 @@ public:
 		assert(!(index < 0 || index >= m_minSize) && "range over index");
 		return *(m_pReafNodes[index]);
 	}
+
+	virtual void Init() = 0;
+	virtual void PrintInfo() = 0;
 
 }; 
 

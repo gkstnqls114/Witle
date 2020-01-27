@@ -69,6 +69,7 @@ namespace quadtree
 	};
 
 	struct QT_DRAWER_NODE
+		: public BASE_NODE
 	{
 		BoundingBox boundingBox; // 해당 터레인에 속하는가 확인을 해주는 바운딩박스
 		bool isRendering{ false }; // 렌더링 할 것인가, 말 것인가.  
@@ -78,5 +79,7 @@ namespace quadtree
 
 		// 만약 leafnode일 경우 해당 노드에 존재하는 지형 오브젝트의 충돌체들 (포인터)
 		std::map<std::string, DRAWER_INFO> terrainObjBoBoxs;
+		 
+		QT_DRAWER_NODE(const XMFLOAT3& center, const XMFLOAT3& extents);
 	};
 }

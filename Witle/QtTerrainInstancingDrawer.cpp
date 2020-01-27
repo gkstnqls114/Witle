@@ -21,6 +21,14 @@
 // 따라서 아이디는 0부터 시작한다.
 int QtTerrainInstancingDrawer::gTreePieceCount{ 0 }; 
  
+void QtTerrainInstancingDrawer::AddDataListOfNode(quadtree::QT_DRAWER_NODE& node, const quadtree::DRAWER_INFO& world)
+{
+}
+
+void QtTerrainInstancingDrawer::ProcessDataOfNode(quadtree::QT_DRAWER_NODE& node, GameObject& gameobj)
+{
+}
+
 void QtTerrainInstancingDrawer::ReleaseMembers()
 {
 	delete[] m_pReafNodes; 
@@ -516,7 +524,7 @@ void QtTerrainInstancingDrawer::RecursiveCreateTerrain(quadtree::QT_DRAWER_NODE 
 		 
 
 		node->boundingBox = BoundingBox( center, extents); 
-		node->terrainMesh = new TerrainMesh(this, pd3dDevice, pd3dCommandList, xStart, zStart, m_widthMin, m_lengthMin, m_xmf3Scale, m_xmf4Color, pContext);
+		node->terrainMesh = new TerrainMesh(m_EmptyObj, pd3dDevice, pd3dCommandList, xStart, zStart, m_widthMin, m_lengthMin, m_xmf3Scale, m_xmf4Color, pContext);
 	}
 	else
 	{ 
@@ -547,7 +555,7 @@ void QtTerrainInstancingDrawer::RecursiveCreateTerrain(quadtree::QT_DRAWER_NODE 
 
 				node->boundingBox = BoundingBox(center, extents);
 
-				node->children[index] = new quadtree::QT_DRAWER_NODE(); 
+				node->children[index] = new quadtree::QT_DRAWER_NODE(center, extents); 
 				RecursiveCreateTerrain(node->children[index], pd3dDevice, pd3dCommandList, New_xStart, New_zStart, Next_BlockWidth, Next_BlockLength, pContext);
 				index += 1;
 			}
@@ -555,8 +563,10 @@ void QtTerrainInstancingDrawer::RecursiveCreateTerrain(quadtree::QT_DRAWER_NODE 
 	}
 }
  
-QtTerrainInstancingDrawer::QtTerrainInstancingDrawer(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, int nWidth, int nLength, XMFLOAT3 xmf3Scale, XMFLOAT4 xmf4Color, HeightMapImage * pContext)
-	: GameObject("QuadTreeTerrain")
+QtTerrainInstancingDrawer::QtTerrainInstancingDrawer(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, 
+	const XMFLOAT3& center, const XMFLOAT3& extents, float min_size,
+	int nWidth, int nLength, XMFLOAT3 xmf3Scale, XMFLOAT4 xmf4Color, HeightMapImage * pContext)
+	: Quadtree<quadtree::QT_DRAWER_NODE, quadtree::DRAWER_INFO>(center, extents, min_size)
 { 
 	m_widthTotal = nWidth;
 	m_lengthTotal = nLength;
@@ -567,8 +577,10 @@ QtTerrainInstancingDrawer::QtTerrainInstancingDrawer(ID3D12Device * pd3dDevice, 
 	int cxHeightMap = pHeightMapImage->GetHeightMapWidth();
 	int czHeightMap = pHeightMapImage->GetHeightMapLength();
 
+	m_EmptyObj = new EmptyGameObject("QtTerrainInstancingDrawer");
+
 	// 쿼드 트리의 부모 노드를 만듭니다.
-	m_pRootNode = new quadtree::QT_DRAWER_NODE;
+	m_pRootNode = new quadtree::QT_DRAWER_NODE(center, extents);
 	 
 	// 리프노드의 개수를 구하고, 바운딩박스및 터레인 조각을 생성한다.
 	// 순서변경X
@@ -762,6 +774,14 @@ void QtTerrainInstancingDrawer::Render(ID3D12GraphicsCommandList *pd3dCommandLis
 	RecursiveRender(m_pRootNode, pd3dCommandList, isGBuffers); // 지형 렌더	 
 }
 
+void QtTerrainInstancingDrawer::Init()
+{
+}
+
+void QtTerrainInstancingDrawer::PrintInfo()
+{
+}
+
 void QtTerrainInstancingDrawer::RenderTerrainForShadow(ID3D12GraphicsCommandList * pd3dCommandList, Terrain * pTerrain, ID3D12DescriptorHeap* pHeap)
 { 
 	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_TERRAIN_FORSHADOW, false);
@@ -810,4 +830,14 @@ void QtTerrainInstancingDrawer::Render(int index, ID3D12GraphicsCommandList * pd
 quadtree::QT_DRAWER_NODE * QtTerrainInstancingDrawer::GetReafNodeByID(int id)
 {
 	return nullptr;
+}
+
+void QtTerrainInstancingDrawer::ReleaseObjects()
+{
+	ReleaseMembers();
+}
+
+void QtTerrainInstancingDrawer::ReleaseUploadBuffers()
+{
+	ReleaseMemberUploadBuffers();
 }
