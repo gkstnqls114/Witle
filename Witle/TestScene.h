@@ -39,6 +39,8 @@ public:
 	virtual void Update() override;
 	virtual void LastUpdate() override;
 
+	virtual void AfterRender() override {};
+
 protected:
 
 	 

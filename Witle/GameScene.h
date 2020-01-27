@@ -130,6 +130,8 @@ public:
 	virtual void AnimateObjects() override;
 	virtual void LastUpdate() override;
 
+	virtual void AfterRender() override ;
+
 	void Init();
 
 	QtTerrainInstancingDrawer* GetQuadtreeTerrain() const { return m_pQuadtreeTerrain; }

@@ -118,6 +118,15 @@ void GameFramework::Render()
 	MoveToNextFrame();
 }
 
+void GameFramework::AfterRender()
+{ 
+	Scene* pCurrScene = SceneMgr::GetInstance()->GetCurrScene();
+	if (pCurrScene)
+	{
+		pCurrScene->AfterRender();
+	} 
+}
+
 void GameFramework::Debug()
 {
 #if _DEBUG

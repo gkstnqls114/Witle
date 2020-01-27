@@ -128,10 +128,7 @@ public:
 		const XMFLOAT3& center, const XMFLOAT3& extents, float min_size,
 		int nWidth, int nLength, XMFLOAT3 xmf3Scale = XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT4 xmf4Color = XMFLOAT4(1.0f, 1.0f, 0.0f, 0.0f), HeightMapImage *pContext = NULL);
 	virtual ~QtTerrainInstancingDrawer();
-	 
-	void Update(float fElapsedTime);
-	void LastUpdate(float fElapsedTime);
-
+	  
 	quadtree::QT_DRAWER_NODE* const GetRootNode() const { return m_pRootNode; }
 	// 해당 포지션에 속하는 리프노드의 아이디들을 리턴한다. 쿼드트리이므로 최대 4개가 존재한다.
 	XMINT4 const GetIDs(const XMFLOAT3& position) const;

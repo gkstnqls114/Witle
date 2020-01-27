@@ -58,9 +58,10 @@ public:
 	virtual void AnimateObjects() override;
 
 	// GameFramework의 UpdateGamelogic 함수 내부에서 UpdatePhysics, AnimateObjects, LastUpdate 순으로 호출되는 함수. 
-
 	virtual void LastUpdate() override;
 	//// UpdateGamelogic ///////////////////////////////////
+
+	virtual void AfterRender() override {};
 
 	// SkillStg에서 스킬을 꺼내 PlayerSkillMgr에서 사용할 스킬을 설정합니다.
 	void FinishSkillSelect();

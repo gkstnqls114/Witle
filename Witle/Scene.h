@@ -26,8 +26,7 @@ public:
 	// 플레이어 그림자를 렌더링하기 위한 함수입니다.
 	virtual void RenderForPlayerShadow(ID3D12GraphicsCommandList *pd3dCommandList) = 0;
 
-	//// UpdateGamelogic ///////////////////////////////////
-
+	//// UpdateGamelogic /////////////////////////////////// 
 	// GameFramework의 UpdateGamelogic 함수 내부에서 UpdatePhysics, AnimateObjects, LastUpdate 순으로 호출되는 함수. 
 	virtual bool ProcessInput(HWND hWnd) = 0;
 
@@ -40,10 +39,12 @@ public:
 	// GameFramework의 UpdateGamelogic 함수 내부에서 UpdatePhysics, AnimateObjects, LastUpdate 순으로 호출되는 함수. 
 	virtual void AnimateObjects() = 0;
 
-	// GameFramework의 UpdateGamelogic 함수 내부에서 UpdatePhysics, AnimateObjects, LastUpdate 순으로 호출되는 함수. 
-
-	virtual void LastUpdate() = 0;
+	// GameFramework의 UpdateGamelogic 함수 내부에서 UpdatePhysics, AnimateObjects, LastUpdate 순으로 호출되는 함수.  
+	virtual void LastUpdate() = 0; 
 	//// UpdateGamelogic ///////////////////////////////////
+
+	// Render 이후 업데이트 해야할 경우 호출되는 함수
+	virtual void AfterRender() = 0;
 
 public:
 	Scene();

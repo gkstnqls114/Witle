@@ -1353,9 +1353,12 @@ void GameScene::LastUpdate( )
 	if (m_pMainCamera && m_pQuadtreeTerrain)
 	{
 		m_pMainCamera->GetCamera()->GetFrustum()->CheckRendering(m_pQuadtreeTerrain->GetRootNode());
-	}
-	if (m_pQuadtreeTerrain) m_pQuadtreeTerrain->LastUpdate(fElapsedTime);
+	} 
 	// 순서변경X  
+}
+
+void GameScene::AfterRender()
+{
 }
 
 void GameScene::Init()

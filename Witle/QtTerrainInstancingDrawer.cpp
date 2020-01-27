@@ -9,12 +9,16 @@
 #include <unordered_set>
 #include "MyFrustum.h"
 #include "Collision.h"
+#include "CameraObject.h"
 #include "Terrain.h"
 #include "ModelStorage.h"
 #include "MyDescriptorHeap.h"
 #include "Object.h"
 #include "Texture.h"
 #include "MapInfoMgr.h"
+#include "CameraObject.h"
+#include "Camera.h"
+#include "MyFrustum.h"
 #include "QtTerrainInstancingDrawer.h"
 
 // 처음 아이디는 0으로 시작한다.
@@ -30,7 +34,10 @@ void QtTerrainInstancingDrawer::AddDataListOfNode(quadtree::QT_DRAWER_NODE& node
 
 void QtTerrainInstancingDrawer::ProcessDataOfNode(quadtree::QT_DRAWER_NODE& node, GameObject& gameobj)
 {
+	CameraObject* pCameraObject = dynamic_cast<CameraObject*>(&gameobj);
+	if (pCameraObject == nullptr) return;
 
+	pCameraObject->GetCamera()->GetFrustum();
 }
 
 void QtTerrainInstancingDrawer::ReleaseMembers()
@@ -635,17 +642,7 @@ QtTerrainInstancingDrawer::~QtTerrainInstancingDrawer()
 		m_pRootNode = nullptr;
 	}
 }
-
-void QtTerrainInstancingDrawer::Update(float fElapsedTime)
-{
-}
-
-void QtTerrainInstancingDrawer::LastUpdate(float fElapsedTime)
-{
-	// 그려야하는 렌더링 인덱스 초기화
-
-}
-
+ 
 XMINT4 const  QtTerrainInstancingDrawer::GetIDs(const XMFLOAT3 & position) const
 {
 	XMINT4 IDs{ -1, -1, -1, -1 };

@@ -247,6 +247,9 @@ public:
 	// 렌더링을 처리하는 함수입니다.
 	void Render();
 
+	// 렌더링 이후 업데이트해야 할 경우
+	void AfterRender();
+
 	// 렌더링 이후 디버그하는 함수
 	void Debug();
 
