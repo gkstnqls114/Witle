@@ -695,7 +695,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	m_pQuadtreeTerrain = new QtTerrainInstancingDrawer(pd3dDevice, pd3dCommandList, 
 		MapInfoMgr::GetMapCenter(),
 		XMFLOAT3{ MapInfoMgr::GetMapExtentsX(), 10000.f, MapInfoMgr::GetMapExtentsZ() },
-		MapInfoMgr::GetMapSizeX() / 4.f,
+		MapInfoMgr::GetMapSizeX() ,
 		257, 257, xmf3Scale, xmf4Color, m_Terrain->GetHeightMapImage());
 	
 	m_QtTerrainCalculator = new QtTerrainCalculator(
