@@ -1493,7 +1493,8 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 	// 터레인
 	if (m_Terrain)
 	{
-		m_pQuadtreeTerrain->Render(pd3dCommandList, m_Terrain, nullptr /*딱히 의미없음*/, isGBuffers);
+		m_pQuadtreeTerrain->RenderObjAll(pd3dCommandList, /*딱히 의미없음*/isGBuffers);
+		//m_pQuadtreeTerrain->Render(pd3dCommandList, m_Terrain, nullptr /*딱히 의미없음*/, isGBuffers);
 	}
 
 	BossSkillMgr::GetInstance()->Render(pd3dCommandList, isGBuffers); // 스킬 이펙트 생성

@@ -618,16 +618,33 @@ XMINT4 const  QtTerrainInstancingDrawer::GetIDs(const XMFLOAT3 & position) const
  
 void QtTerrainInstancingDrawer::RenderObjAll(ID3D12GraphicsCommandList* pd3dCommandList, bool isGBuffers)
 {
-	for (int i = 0; i < TerrainPieceCount; ++i)
-	{
-		RenderObj(pd3dCommandList, i, isGBuffers);
+	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, "InstancingStandardShader", isGBuffers);
+
+	for (int index = 0; index < GetReafNodeCount(); ++index)
+	{ 
+		quadtree::QT_DRAWER_NODE* const pReaf = GetpReaf(index);
+
+		// key : std::string으로 이름을 의미합니다.
+		// 모든 리프노드를 순회하면서 각 리프노드에 대한 변수를 만듭니다.
+		for (auto& info : pReaf->ModelInfoList)
+		{ 
+			if (info.second.TerrainObjectCount == 0) continue;
+			if (!strcmp(info.first.c_str(), Flower)) continue;
+			if (!strcmp(info.first.c_str(), RUIN_FLOOR)) continue;
+
+			pd3dCommandList->SetGraphicsRootShaderResourceView(ROOTPARAMETER_INSTANCING, info.second.m_pd3dcbGameObjects->GetGPUVirtualAddress()); // 인스턴싱 쉐이더 리소스 뷰
+
+			info.second.pTexture->UpdateShaderVariables(pd3dCommandList);
+
+			info.second.pLoadObject->RenderInstancing(pd3dCommandList, info.second.TerrainObjectCount, isGBuffers); 
+		}
 	}
 }
 
 void QtTerrainInstancingDrawer::RenderObj(ID3D12GraphicsCommandList* pd3dCommandList, int index, bool isGBuffers)
 {
 	// info.first = 모델 이름
-// info.second = TerrainObjectInfo라는 모델 정보
+    // info.second = TerrainObjectInfo라는 모델 정보
 
 	for (auto& info : m_StaticObjectStorage)
 	{
