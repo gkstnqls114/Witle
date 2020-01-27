@@ -497,38 +497,7 @@ void QtTerrainInstancingDrawer::CalculateIDs(const XMFLOAT3 position, XMINT4& ID
 		 
 	}
 }
-
-void QtTerrainInstancingDrawer::CalculateIndex(const XMFLOAT3 position, int * pIndices) const
-{
-	for (int i = 0; i < m_ReafNodeCount; ++i)
-	{
-		quadtree::QT_DRAWER_NODE* node = m_pReafNodes[i];
-		// 포지션이 해당 메쉬에 맞는지 확인한다. 
-		// x, z 사이에 있는지 검사한다.
-		float minX = node->boundingBox.Center.x - node->boundingBox.Extents.x;
-		float maxX = node->boundingBox.Center.x + node->boundingBox.Extents.x;
-		bool isIntervenedX = (minX <= position.x) && (position.x <= maxX);
-
-		float minZ = node->boundingBox.Center.z - node->boundingBox.Extents.z;
-		float maxZ = node->boundingBox.Center.z + node->boundingBox.Extents.z;
-		bool isIntervenedZ = (minZ <= position.z) && (position.z <= maxZ);
-
-		if (isIntervenedX && isIntervenedZ)
-		{
-			// 만약 속한다면 해당 ID를 채운다.
-			assert(!(pIndices[QUAD - 1] != -1)); // 만약 마지막이 채워져 있다면 오류이다.
-			for (int x = 0; x < QUAD; ++x)
-			{
-				if (pIndices[x] == -1)
-				{
-					pIndices[x] = i;
-					break;
-				}
-			}
-		}
-	} 
-}
-
+ 
 void QtTerrainInstancingDrawer::RecursiveCreateTerrain(quadtree::QT_DRAWER_NODE * node, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList,
 	int xStart, int zStart, int nBlockWidth, int nBlockLength,
 	 HeightMapImage * pContext)
@@ -619,13 +588,8 @@ QtTerrainInstancingDrawer::QtTerrainInstancingDrawer(ID3D12Device * pd3dDevice, 
 	RecursiveCreateTerrain(m_pRootNode, pd3dDevice, pd3dCommandList, 0, 0, m_widthTotal, m_lengthTotal, pContext);
 	m_pReafNodes = new quadtree::QT_DRAWER_NODE*[m_ReafNodeCount]; //리프노드를 가리킬 포인터 배열을 생성
 	RecursiveInitReafNodes(m_pRootNode);
-	// 순서변경X
+	// 순서변경X 
 
-	// 재귀함수로 모든 터레인 조각 로드 완료후...
-	// 1. 기존에 사용하던것.
-	// StaticObjectStorage::GetInstance(this)->CreateInfo(pd3dDevice, pd3dCommandList, this);
-
-	// 2. StaticObjectStorage 에서 옮겨온것
 	// 위치 정보를 읽어온다.
 	LoadTerrainObjectFromFile(pd3dDevice, pd3dCommandList, "Information/Terrain.bin", this);
 
@@ -651,20 +615,7 @@ XMINT4 const  QtTerrainInstancingDrawer::GetIDs(const XMFLOAT3 & position) const
 
 	return IDs;
 }
-
-int * const QtTerrainInstancingDrawer::GetIndex(const XMFLOAT3 & position) const
-{
-	int* pIndeics = new int[QUAD];
-	for (int x = 0; x < QUAD; ++x)
-	{
-		pIndeics[x] = -1; // -1로 리셋. -1이라면 존재하지 않는 것.
-	}
-
-	CalculateIndex(position, pIndeics);
-
-	return pIndeics;
-}
-
+ 
 void QtTerrainInstancingDrawer::RenderObjAll(ID3D12GraphicsCommandList* pd3dCommandList, bool isGBuffers)
 {
 	for (int i = 0; i < TerrainPieceCount; ++i)
@@ -722,24 +673,7 @@ void QtTerrainInstancingDrawer::RenderObjBOBox(ID3D12GraphicsCommandList* pd3dCo
 		ModelStorage::GetInstance()->RenderBOBoxInstancing(pd3dCommandList, info.first, info.second[index].TerrainObjectCount);
 	}
 }
-
-int QtTerrainInstancingDrawer::GetObjectCount(int index, const std::string& name)
-{
-	return m_StaticObjectStorage[name][index].TerrainObjectCount; 
-}
-
-int QtTerrainInstancingDrawer::GetObjectAllCount(int index)
-{
-	int result = 0;
-
-	for (auto& info : m_StaticObjectStorage)
-	{
-		result += info.second[index].TerrainObjectCount;
-	}
-
-	return result;
-}
-
+ 
 XMFLOAT4X4* QtTerrainInstancingDrawer::GetWorldMatrix(int index, const std::string& name)
 {
 	return m_StaticObjectStorage[name][index].TransformList.begin()._Ptr; 
@@ -882,8 +816,7 @@ void QtTerrainInstancingDrawer::Render(ID3D12GraphicsCommandList * pd3dCommandLi
 	RecursiveRender(m_pRootNode, pd3dCommandList, isGBuffers); // 지형 렌더	 
 
 	// 지형 오브젝트 렌더
-	RenderTerrainObjects(pd3dCommandList, isGBuffers);
-
+	RenderTerrainObjects(pd3dCommandList, isGBuffers); 
 }
 
 void QtTerrainInstancingDrawer::Render(int index, ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffers)
@@ -895,12 +828,7 @@ void QtTerrainInstancingDrawer::Render(int index, ID3D12GraphicsCommandList * pd
 	gMeshRenderer.Render(pd3dCommandList, m_pReafNodes[index]->terrainMesh);
 	RenderObj(pd3dCommandList, index, isGBuffers);
 }
-
-quadtree::QT_DRAWER_NODE * QtTerrainInstancingDrawer::GetReafNodeByID(int id)
-{
-	return nullptr;
-}
-
+ 
 void QtTerrainInstancingDrawer::AddWorldMatrix(const MyBOBox& collider, const std::string& model_name, const XMFLOAT4X4& world)
 {
 	quadtree::QT_DRAWER_ADDER add_data(model_name, world); 

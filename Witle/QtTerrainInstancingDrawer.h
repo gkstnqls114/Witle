@@ -54,10 +54,7 @@ class QtTerrainInstancingDrawer
 	void CreateShaderVariables(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList);
 	
 public:
-
-	int GetObjectCount(int index, const std::string& name);
-	int GetObjectAllCount(int index);
-
+	 
 	XMFLOAT4X4* GetWorldMatrix(int index, const std::string& name);
 	XMFLOAT4X4 GetAltarTransform(int index, const std::string& name);
 
@@ -116,7 +113,7 @@ private:
 	void RecursiveReleaseObjects(quadtree::QT_DRAWER_NODE* node);
 	void RecursiveCalculateIDs(quadtree::QT_DRAWER_NODE* node, const XMFLOAT3 position, int* pIDs) const;
 	void CalculateIDs(const XMFLOAT3 position, XMINT4& pIDs) const;
-	void CalculateIndex(const XMFLOAT3 position, int* pIDs) const;
+	
 
 	// 해당 함수를 재귀적으로 호출하며 터레인을 생성하는 함수입니다.
 	void RecursiveCreateTerrain(quadtree::QT_DRAWER_NODE* node, ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, 
@@ -132,19 +129,16 @@ public:
 	quadtree::QT_DRAWER_NODE* const GetRootNode() const { return m_pRootNode; }
 	// 해당 포지션에 속하는 리프노드의 아이디들을 리턴한다. 쿼드트리이므로 최대 4개가 존재한다.
 	XMINT4 const GetIDs(const XMFLOAT3& position) const;
-	int * const GetIndex(const XMFLOAT3& position) const;
-	
+	 
 	void RenderTerrainForShadow(ID3D12GraphicsCommandList *pd3dCommandList, Terrain * pTerrain, ID3D12DescriptorHeap* pHeap);
 	void RenderInstancingObjectsForShadow(ID3D12GraphicsCommandList *pd3dCommandList);
 	void Render(ID3D12GraphicsCommandList *pd3dCommandList, Terrain* pTerrain, ID3D12DescriptorHeap* pHeap, bool isGBuffers);
 	void Render(int index, ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers);
 	static int GetTerrainPieceCount() { return gTreePieceCount; }
 	quadtree::QT_DRAWER_NODE* GetReafNode(int index) { return m_pReafNodes[index]; }
-	quadtree::QT_DRAWER_NODE* GetReafNodeByID(int id);
-
+	 
 	void AddWorldMatrix(const MyBOBox& collider, const std::string& model_name, const XMFLOAT4X4& world);
-	void AddWorldMatrix(const std::string& model_name, const XMFLOAT4X4& world);
-
+	 
 	// delete 이전에 반드시 호출
 	void ReleaseObjects();
 	void ReleaseUploadBuffers();
