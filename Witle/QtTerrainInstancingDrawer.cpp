@@ -62,10 +62,6 @@ void QtTerrainInstancingDrawer::LoadTerrainObjectFromFile(ID3D12Device* pd3dDevi
 	// 이름에 맞추어 구성해야하므로 하드코딩을 해야한다.
 	TerrainPieceCount = pTerrain->GetTerrainPieceCount();
 
-	for (const auto& name : ModelStorage::GetInstance()->m_NameList)
-	{
-		m_StaticObjectStorage[name] = new TerrainObjectInfo[TerrainPieceCount];
-	}
 
 	for (; ; )
 	{
@@ -215,9 +211,7 @@ bool QtTerrainInstancingDrawer::LoadTransform(char* name, const char* comp_name,
 				MyBOBox temp(MapInfoMgr::GetMapCenter(),
 					XMFLOAT3{ MapInfoMgr::GetMapExtentsX(), 10000.f, MapInfoMgr::GetMapExtentsZ() });
 
-				AddWorldMatrix(temp, Cliff, TestObject->m_pChild->m_xmf4x4World);
-				m_StaticObjectStorage[Cliff][x].TerrainObjectCount += 1; 
-				m_StaticObjectStorage[Cliff][x].TransformList.emplace_back(TestObject->m_pChild->m_xmf4x4World);
+				AddWorldMatrix(temp, Cliff, TestObject->m_pChild->m_xmf4x4World); 
 			}
 
 			delete TestObject;
@@ -238,22 +232,18 @@ bool QtTerrainInstancingDrawer::LoadTransform(char* name, const char* comp_name,
 
 			if (!strcmp(name, "Cylinder001"))
 			{
-				m_StaticObjectStorage[RUIN_FLOOR][terrainIDs].TerrainObjectCount += 1;
+				// RUIN_FLOOR 예외처리
+				// 현재 사용안함 
 
-				LoadObject* TestObject = ModelStorage::GetInstance()->GetRootObject(RUIN_FLOOR);
-				TestObject->SetTransform(tr);
-				TestObject->UpdateTransform(NULL);
-				 
-
-				m_StaticObjectStorage[RUIN_FLOOR][terrainIDs].TransformList.emplace_back(TestObject->m_pChild->m_xmf4x4World);
-
-				delete TestObject;
-				TestObject = nullptr;
+				//LoadObject* TestObject = ModelStorage::GetInstance()->GetRootObject(RUIN_FLOOR);
+				//TestObject->SetTransform(tr);
+				//TestObject->UpdateTransform(NULL);
+				
+				//delete TestObject;
+				//TestObject = nullptr;
 			}
 			else
-			{
-				m_StaticObjectStorage[comp_name][terrainIDs].TerrainObjectCount += 1;
-
+			{ 
 				LoadObject* TestObject = ModelStorage::GetInstance()->GetRootObject(comp_name);
 				TestObject->SetTransform(tr);
 				TestObject->UpdateTransform(NULL);
@@ -262,7 +252,7 @@ bool QtTerrainInstancingDrawer::LoadTransform(char* name, const char* comp_name,
 				MyBOBox* pBoBox = ModelStorage::GetInstance()->GetBOBox(comp_name);
 				if (pBoBox == nullptr)
 				{
-					// 충돌체를 지니고 있지 않은 경우 임시뢰 만든다.
+					// 충돌체를 지니고 있지 않은 경우 임시로 만든다.
 					MyBOBox tempbobox(XMFLOAT3(0, 0, 0), XMFLOAT3(1, 1, 1));
 					tempbobox.Move(XMFLOAT3(TestObject->m_pChild->m_xmf4x4World._41, 0, TestObject->m_pChild->m_xmf4x4World._43));
 
@@ -276,7 +266,6 @@ bool QtTerrainInstancingDrawer::LoadTransform(char* name, const char* comp_name,
 					AddWorldMatrix(mybobox, comp_name, TestObject->m_pChild->m_xmf4x4World);
 				}
 
-				m_StaticObjectStorage[comp_name][terrainIDs].TransformList.emplace_back(TestObject->m_pChild->m_xmf4x4World);
 				if (!strcmp(comp_name, ALTAR_IN))
 				{
 					m_AltarTransformStorage.emplace_back(tr);
@@ -643,37 +632,24 @@ void QtTerrainInstancingDrawer::RenderObjAll(ID3D12GraphicsCommandList* pd3dComm
 
 void QtTerrainInstancingDrawer::RenderObj(ID3D12GraphicsCommandList* pd3dCommandList, int index, bool isGBuffers)
 {
-	// info.first = 모델 이름
-    // info.second = TerrainObjectInfo라는 모델 정보
 
-	for (auto& info : m_StaticObjectStorage)
-	{
-		if (info.second[index].TerrainObjectCount == 0) continue;
-		if (!strcmp(info.first.c_str(), Flower)) continue;
-		if (!strcmp(info.first.c_str(), RUIN_FLOOR)) continue;
-
-		pd3dCommandList->SetGraphicsRootShaderResourceView(ROOTPARAMETER_INSTANCING, info.second[index].m_pd3dcbGameObjects->GetGPUVirtualAddress()); // 인스턴싱 쉐이더 리소스 뷰
-
-		m_StaticObjectModelsStorage[info.first].pTexture->UpdateShaderVariables(pd3dCommandList);
-
-		m_StaticObjectModelsStorage[info.first].pLoadObject->RenderInstancing(pd3dCommandList, info.second[index].TerrainObjectCount, isGBuffers);
-	}
 }
 
 void QtTerrainInstancingDrawer::RenderObjForShadow(ID3D12GraphicsCommandList* pd3dCommandList, int index, bool isGBuffers)
-{// info.first = 모델 이름
+{
+	// info.first = 모델 이름
 	// info.second = TerrainObjectInfo라는 모델 정보
 
-	for (auto& info : m_StaticObjectStorage)
-	{
-		if (info.second[index].TerrainObjectCount == 0) continue;
-		if (!strcmp(info.first.c_str(), Flower)) continue;
-		if (!strcmp(info.first.c_str(), RUIN_FLOOR)) continue;
+	//for (auto& info : m_StaticObjectStorage)
+	//{
+	//	if (info.second[index].TerrainObjectCount == 0) continue;
+	//	if (!strcmp(info.first.c_str(), Flower)) continue;
+	//	if (!strcmp(info.first.c_str(), RUIN_FLOOR)) continue;
 
-		pd3dCommandList->SetGraphicsRootShaderResourceView(ROOTPARAMETER_INSTANCING, info.second[index].m_pd3dcbGameObjects->GetGPUVirtualAddress()); // 인스턴싱 쉐이더 리소스 뷰
+	//	pd3dCommandList->SetGraphicsRootShaderResourceView(ROOTPARAMETER_INSTANCING, info.second[index].m_pd3dcbGameObjects->GetGPUVirtualAddress()); // 인스턴싱 쉐이더 리소스 뷰
 
-		m_StaticObjectModelsStorage[info.first].pLoadObject->RenderInstancing(pd3dCommandList, info.second[index].TerrainObjectCount, isGBuffers);
-	}
+	//	m_StaticObjectModelsStorage[info.first].pLoadObject->RenderInstancing(pd3dCommandList, info.second[index].TerrainObjectCount, isGBuffers);
+	//}
 }
 
 void QtTerrainInstancingDrawer::RenderObjBOBox(ID3D12GraphicsCommandList* pd3dCommandList, int index)
@@ -681,20 +657,16 @@ void QtTerrainInstancingDrawer::RenderObjBOBox(ID3D12GraphicsCommandList* pd3dCo
 	// info.first = 모델 이름
 	// info.second = TerrainObjectInfo라는 모델 정보
 
-	for (auto& info : m_StaticObjectStorage)
-	{
-		if (info.second[index].TerrainObjectCount == 0) continue;
+	//for (auto& info : m_StaticObjectStorage)
+	//{
+	//	if (info.second[index].TerrainObjectCount == 0) continue;
 
-		pd3dCommandList->SetGraphicsRootShaderResourceView(ROOTPARAMETER_INSTANCING, info.second[index].m_pd3dcbGameObjects->GetGPUVirtualAddress()); // 인스턴싱 쉐이더 리소스 뷰
+	//	pd3dCommandList->SetGraphicsRootShaderResourceView(ROOTPARAMETER_INSTANCING, info.second[index].m_pd3dcbGameObjects->GetGPUVirtualAddress()); // 인스턴싱 쉐이더 리소스 뷰
 
-		ModelStorage::GetInstance()->RenderBOBoxInstancing(pd3dCommandList, info.first, info.second[index].TerrainObjectCount);
-	}
+	//	ModelStorage::GetInstance()->RenderBOBoxInstancing(pd3dCommandList, info.first, info.second[index].TerrainObjectCount);
+	//}
 }
- 
-XMFLOAT4X4* QtTerrainInstancingDrawer::GetWorldMatrix(int index, const std::string& name)
-{
-	return m_StaticObjectStorage[name][index].TransformList.begin()._Ptr; 
-}
+  
 
 XMFLOAT4X4 QtTerrainInstancingDrawer::GetAltarTransform(int index, const std::string& name)
 {
@@ -702,47 +674,7 @@ XMFLOAT4X4 QtTerrainInstancingDrawer::GetAltarTransform(int index, const std::st
 }
 
 void QtTerrainInstancingDrawer::CreateShaderVariables(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList)
-{
-	//인스턴스 정보를 저장할 정점 버퍼를 업로드 힙 유형으로 생성한다. 
-	for (auto& info : m_StaticObjectStorage)
-	{
-		m_StaticObjectModelsStorage[info.first].pLoadObject = ModelStorage::GetInstance()->GetRootObject(info.first);
-		m_StaticObjectModelsStorage[info.first].pTexture = TextureStorage::GetInstance()->GetTexture(info.first);
-
-		for (int iTerrainPiece = 0; iTerrainPiece < TerrainPieceCount; ++iTerrainPiece)
-		{
-			if (info.second[iTerrainPiece].TerrainObjectCount == 0) continue;
-
-			// 쉐이더 변수 생성
-			info.second[iTerrainPiece].m_pd3dcbGameObjects =
-				d3dUtil::CreateBufferResource(pd3dDevice, pd3dCommandList, NULL,
-					sizeof(VS_SRV_INSTANCEINFO) * info.second[iTerrainPiece].TerrainObjectCount, D3D12_HEAP_TYPE_UPLOAD,
-					D3D12_RESOURCE_STATE_GENERIC_READ, NULL);
-
-			info.second[iTerrainPiece].m_pd3dcbGameObjects->Map(0, NULL, (void**)&info.second[iTerrainPiece].m_pcbMappedGameObjects);
-		}
-	}
-
-	// 정보 저장 
-	for (auto& info : m_StaticObjectStorage)
-	{
-		for (int iTerrainPiece = 0; iTerrainPiece < TerrainPieceCount; ++iTerrainPiece)
-		{
-			if (info.second[iTerrainPiece].TerrainObjectCount == 0) continue;
-			for (int i = 0; i < info.second[iTerrainPiece].TerrainObjectCount; ++i)
-			{
-				XMStoreFloat4x4(
-					&info.second[iTerrainPiece].m_pcbMappedGameObjects[i].m_xmf4x4Transform,
-					XMMatrixTranspose(XMLoadFloat4x4(&info.second[iTerrainPiece].TransformList[i]
-					)));
-
-			}
-
-			// 이제 더 이상 쓰지 않으므로 제거
-			info.second[iTerrainPiece].TransformList.clear();
-		}
-	}
-
+{ 
 	////////////// / Quadtree...
 	//인스턴스 정보를 저장할 정점 버퍼를 업로드 힙 유형으로 생성한다. 
 	for (int index = 0; index < GetReafNodeCount(); ++index)

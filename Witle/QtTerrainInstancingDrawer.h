@@ -26,22 +26,7 @@ class QtTerrainInstancingDrawer
 	int TerrainPieceCount = 0; // 터레인 제일 작은 조각이 몇개 있는가?
 	int TerrainObjectAllCount = 0; //모든 터레인 오브젝트는 몇개가 있는가?
 
-	struct TerrainObjectInfo
-	{
-		ID3D12Resource* m_pd3dcbGameObjects{ nullptr };         // 인스턴싱을 위해 사용되는 정보
-		VS_SRV_INSTANCEINFO* m_pcbMappedGameObjects{ nullptr }; // 인스턴싱을 위해 사용되는 정보
-		int         TerrainObjectCount{ 0 };					// 터레인 조각 위에 배치되는 오브젝트의 개수
-		std::vector<XMFLOAT4X4> TransformList;                  // 터레인 조각 위에 배치되는 오브젝트의 월드 행렬
-	};
 
-	struct RenderInfo // 그림을 그리기 위해 필요한 모델/텍스쳐정보
-	{
-		LoadObject* pLoadObject{ nullptr };
-		Texture* pTexture{ nullptr };
-	};
-
-	std::map<std::string, RenderInfo> m_StaticObjectModelsStorage; // 모델 이름은 반드시 클래스에 맞춘다.
-	std::map<std::string, TerrainObjectInfo*> m_StaticObjectStorage; // 모델 이름은 반드시 클래스에 맞춘다.
 	std::vector<XMFLOAT4X4> m_AltarTransformStorage; // Altar transform 위치 저장하는 곳
 
 
@@ -53,8 +38,7 @@ class QtTerrainInstancingDrawer
 	void CreateShaderVariables(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList);
 	
 public:
-	 
-	XMFLOAT4X4* GetWorldMatrix(int index, const std::string& name);
+	  
 	XMFLOAT4X4 GetAltarTransform(int index, const std::string& name);
 
 	// StaticObjectStorage 에서 가져옴 //////////////////////
