@@ -196,8 +196,8 @@ public:
 	// min_size : 제일 작게 쪼개질 지형의 크기
 	Quadtree(const XMFLOAT3& center, const XMFLOAT3& extents, float min_size)
 	{
-		bool isNotAppropriateParent = dynamic_cast<quadtree::BASE_NODE*>(m_RootNode) == nullptr;
-		assert(isNotAppropriateParent && "template T class is not approriate parent struct. you have to inherit quadtree::BASE_NODE.");
+		bool isNotAppropriateParent = dynamic_cast<quadtree::QT_BASE_NODE*>(m_RootNode) == nullptr;
+		assert(isNotAppropriateParent && "template T class is not approriate parent struct. you have to inherit quadtree::QT_BASE_NODE.");
 		 
 		SetminSize(min_size);
 

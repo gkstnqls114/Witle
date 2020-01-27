@@ -10,14 +10,14 @@ class Movement;
 
    LeafNode(= TreePiece) : 더 이상 나누어질수 없는 Quadtree Node를 의미함
 */
-class QtTerrainCalculator : public Quadtree<quadtree::COLLISION_NODE, quadtree::COLLIDER>
+class QtTerrainCalculator : public Quadtree<quadtree::QT_COLLISION_NODE, quadtree::QT_COLLIDER_ADDER>
 {   
 private:  
 	void CreateTerrainObj(const char* terrain_info_path);
 	void CreateTerrainObj(FILE* pInFile);
 	 
-	virtual void AddDataListOfNode(quadtree::COLLISION_NODE& node, const quadtree::COLLIDER& collider) override;
-	virtual void ProcessDataOfNode(quadtree::COLLISION_NODE& node, GameObject& gameobj) override;
+	virtual void AddDataListOfNode(quadtree::QT_COLLISION_NODE& node, const quadtree::QT_COLLIDER_ADDER& collider) override;
+	virtual void ProcessDataOfNode(quadtree::QT_COLLISION_NODE& node, GameObject& gameobj) override;
 
 public:
 	QtTerrainCalculator(const XMFLOAT3& center, const XMFLOAT3& extents, float min_size);

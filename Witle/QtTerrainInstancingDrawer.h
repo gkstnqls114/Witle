@@ -20,7 +20,7 @@ class GameObject;
     쿼드트리와 인스턴싱을 이용하여 지형과 지형 오브젝트를 렌더링을 하는 클래스
 */
 class QtTerrainInstancingDrawer
-	: public Quadtree<quadtree::QT_DRAWER_NODE, quadtree::DRAWER_INFO>
+	: public Quadtree<quadtree::QT_DRAWER_NODE, quadtree::QT_DRAWER_ADDER>
 {
 	// StaticObjectStorage 에서 가져옴 //////////////////////
 	int TerrainPieceCount = 0; // 터레인 제일 작은 조각이 몇개 있는가?
@@ -74,7 +74,7 @@ public:
 private:
 	static int gTreePieceCount;
 
-	virtual void AddDataListOfNode(quadtree::QT_DRAWER_NODE& node, const quadtree::DRAWER_INFO& world) override;
+	virtual void AddDataListOfNode(quadtree::QT_DRAWER_NODE& node, const quadtree::QT_DRAWER_ADDER& world) override;
 	virtual void ProcessDataOfNode(quadtree::QT_DRAWER_NODE& node, GameObject& gameobj) override;
 
 	// 컴포넌트가 아닌, 게임오브젝트 내에서 동적할당된 멤버변수를 해제한다.
@@ -144,6 +144,9 @@ public:
 	static int GetTerrainPieceCount() { return gTreePieceCount; }
 	quadtree::QT_DRAWER_NODE* GetReafNode(int index) { return m_pReafNodes[index]; }
 	quadtree::QT_DRAWER_NODE* GetReafNodeByID(int id);
+
+	void AddWorldMatrix(const MyBOBox& collider, const std::string& model_name, const XMFLOAT4X4& world);
+	void AddWorldMatrix(const std::string& model_name, const XMFLOAT4X4& world);
 
 	// delete 이전에 반드시 호출
 	void ReleaseObjects();

@@ -176,7 +176,7 @@ void QtTerrainCalculator::CreateTerrainObj(FILE* pInFile)
 	}
 }
  
-void QtTerrainCalculator::AddDataListOfNode(quadtree::COLLISION_NODE& node, const quadtree::COLLIDER& collider)
+void QtTerrainCalculator::AddDataListOfNode(quadtree::QT_COLLISION_NODE& node, const quadtree::QT_COLLIDER_ADDER& collider)
 {
 	// 자식이 없으므로 리프노드라는 뜻이다.
 			// 충돌했으므로 노드 리스트에 추가한다.
@@ -185,7 +185,7 @@ void QtTerrainCalculator::AddDataListOfNode(quadtree::COLLISION_NODE& node, cons
 
 }
 
-void QtTerrainCalculator::ProcessDataOfNode(quadtree::COLLISION_NODE& node, GameObject& gameobj)
+void QtTerrainCalculator::ProcessDataOfNode(quadtree::QT_COLLISION_NODE& node, GameObject& gameobj)
 {
 	// 예외처리 
 	if (gameobj.GetpMovement() == nullptr) return;
@@ -236,7 +236,7 @@ void QtTerrainCalculator::ProcessDataOfNode(quadtree::COLLISION_NODE& node, Game
 }
   
 QtTerrainCalculator::QtTerrainCalculator(const XMFLOAT3& center, const XMFLOAT3& extents, float min_size)
-	: Quadtree<quadtree::COLLISION_NODE, quadtree::COLLIDER>(center, extents, min_size)
+	: Quadtree<quadtree::QT_COLLISION_NODE, quadtree::QT_COLLIDER_ADDER>(center, extents, min_size)
 {
 }
 
@@ -252,7 +252,7 @@ void QtTerrainCalculator::Init()
   
 void QtTerrainCalculator::AddCollider(const MyBOBox& collider, const XMFLOAT4X4& world)
 {
-	quadtree::COLLIDER add_data(collider, world);
+	quadtree::QT_COLLIDER_ADDER add_data(collider, world);
 	AddRecursiveDataOfNode(*(GetpRoot()), collider, add_data);
 }
  

@@ -14,6 +14,7 @@
 #include "MyDescriptorHeap.h"
 #include "Object.h"
 #include "Texture.h"
+#include "MapInfoMgr.h"
 #include "QtTerrainInstancingDrawer.h"
 
 // 처음 아이디는 0으로 시작한다.
@@ -21,8 +22,10 @@
 // 따라서 아이디는 0부터 시작한다.
 int QtTerrainInstancingDrawer::gTreePieceCount{ 0 }; 
  
-void QtTerrainInstancingDrawer::AddDataListOfNode(quadtree::QT_DRAWER_NODE& node, const quadtree::DRAWER_INFO& world)
+void QtTerrainInstancingDrawer::AddDataListOfNode(quadtree::QT_DRAWER_NODE& node, const quadtree::QT_DRAWER_ADDER& model_info)
 {
+
+
 }
 
 void QtTerrainInstancingDrawer::ProcessDataOfNode(quadtree::QT_DRAWER_NODE& node, GameObject& gameobj)
@@ -200,10 +203,14 @@ bool QtTerrainInstancingDrawer::LoadTransform(char* name, const char* comp_name,
 			TestObject->SetTransform(newXMFLOAT4X4); // 여기서 Scale 과 다이렉트 X축에 대한 회전 일어나므로 절대 빼먹으면 안됨..
 			TestObject->UpdateTransform(NULL);
 
+			// 절벽 오브젝트는 어차피 모든 터레인 조각에 넣을거니까 충돌체 처리 X 
 			for (int x = 0; x < TerrainPieceCount; ++x)
-			{ 
-				m_StaticObjectStorage[Cliff][x].TerrainObjectCount += 1;
+			{
+				MyBOBox temp(MapInfoMgr::GetMapCenter(),
+					XMFLOAT3{ MapInfoMgr::GetMapExtentsX(), 10000.f, MapInfoMgr::GetMapExtentsZ() });
 
+				AddWorldMatrix(temp, Cliff, TestObject->m_pChild->m_xmf4x4World);
+				m_StaticObjectStorage[Cliff][x].TerrainObjectCount += 1; 
 				m_StaticObjectStorage[Cliff][x].TransformList.emplace_back(TestObject->m_pChild->m_xmf4x4World);
 			}
 
@@ -230,6 +237,7 @@ bool QtTerrainInstancingDrawer::LoadTransform(char* name, const char* comp_name,
 				LoadObject* TestObject = ModelStorage::GetInstance()->GetRootObject(RUIN_FLOOR);
 				TestObject->SetTransform(tr);
 				TestObject->UpdateTransform(NULL);
+				 
 
 				m_StaticObjectStorage[RUIN_FLOOR][terrainIDs].TransformList.emplace_back(TestObject->m_pChild->m_xmf4x4World);
 
@@ -243,6 +251,24 @@ bool QtTerrainInstancingDrawer::LoadTransform(char* name, const char* comp_name,
 				LoadObject* TestObject = ModelStorage::GetInstance()->GetRootObject(comp_name);
 				TestObject->SetTransform(tr);
 				TestObject->UpdateTransform(NULL);
+
+				// 모든 모델은 충돌체를 지니고있지 않다. 한번 확인해준다.
+				MyBOBox* pBoBox = ModelStorage::GetInstance()->GetBOBox(comp_name);
+				if (pBoBox == nullptr)
+				{
+					// 충돌체를 지니고 있지 않은 경우 임시뢰 만든다.
+					MyBOBox tempbobox(XMFLOAT3(0, 0, 0), XMFLOAT3(1, 1, 1));
+					tempbobox.Move(XMFLOAT3(TestObject->m_pChild->m_xmf4x4World._41, 0, TestObject->m_pChild->m_xmf4x4World._43));
+
+					AddWorldMatrix(tempbobox, comp_name, TestObject->m_pChild->m_xmf4x4World);
+				}
+				else
+				{
+					// 충돌체를 갖고 있는 경우 
+					MyBOBox mybobox = *pBoBox;
+					mybobox.Move(XMFLOAT3(TestObject->m_pChild->m_xmf4x4World._41, 0, TestObject->m_pChild->m_xmf4x4World._43));
+					AddWorldMatrix(mybobox, comp_name, TestObject->m_pChild->m_xmf4x4World);
+				}
 
 				m_StaticObjectStorage[comp_name][terrainIDs].TransformList.emplace_back(TestObject->m_pChild->m_xmf4x4World);
 				if (!strcmp(comp_name, ALTAR_IN))
@@ -566,7 +592,7 @@ void QtTerrainInstancingDrawer::RecursiveCreateTerrain(quadtree::QT_DRAWER_NODE 
 QtTerrainInstancingDrawer::QtTerrainInstancingDrawer(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, 
 	const XMFLOAT3& center, const XMFLOAT3& extents, float min_size,
 	int nWidth, int nLength, XMFLOAT3 xmf3Scale, XMFLOAT4 xmf4Color, HeightMapImage * pContext)
-	: Quadtree<quadtree::QT_DRAWER_NODE, quadtree::DRAWER_INFO>(center, extents, min_size)
+	: Quadtree<quadtree::QT_DRAWER_NODE, quadtree::QT_DRAWER_ADDER>(center, extents, min_size)
 { 
 	m_widthTotal = nWidth;
 	m_lengthTotal = nLength;
@@ -832,6 +858,12 @@ quadtree::QT_DRAWER_NODE * QtTerrainInstancingDrawer::GetReafNodeByID(int id)
 	return nullptr;
 }
 
+void QtTerrainInstancingDrawer::AddWorldMatrix(const MyBOBox& collider, const std::string& model_name, const XMFLOAT4X4& world)
+{
+	quadtree::QT_DRAWER_ADDER add_data(model_name, world); 
+	AddRecursiveDataOfNode(*GetpRoot(), collider, add_data);
+}
+ 
 void QtTerrainInstancingDrawer::ReleaseObjects()
 {
 	ReleaseMembers();
