@@ -270,7 +270,7 @@ void QtTerrainCalculator::PrintInfo()
 	{
 		n += 1;
 
-		auto bobox = GetReaf(x).BoBox->GetBOBox();
+		auto bobox = GetpReaf(x)->BoBox->GetBOBox();
 		std::cout << "Index ... " << x <<std::endl;
 		std::cout << "Center ... (" << bobox.Center.x << " , "<< bobox.Center.y << " , "<< bobox.Center.z << ")" << std::endl;
 		std::cout << "Size ... (" << bobox.Extents.x * 2 << " , " << bobox.Extents.y * 2 << " , " << bobox.Extents.z * 2<< ")" << std::endl;

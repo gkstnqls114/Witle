@@ -58,7 +58,13 @@ namespace quadtree
 		VS_SRV_INSTANCEINFO* m_pcbMappedGameObjects { nullptr }; // 인스턴싱을 위해 사용되는 정보
 		
 		int         TerrainObjectCount              { 0 };		 // 해당 모델이 몇개나 배치되는 지, 개수 의미
-		std::vector<XMFLOAT4X4> TransformList;                   // 해당 모델이 배치되는 오브젝트의 월드 행렬들
+		
+		// 해당 모델이 배치되는 오브젝트의 월드 행렬들
+		// m_pcbMappedGameObjects 를 통해 Map으로 올려지고 나면, clear하여 삭제됩니다.
+		std::vector<XMFLOAT4X4> TransformList;                 
+
+	public:
+		QT_DRAWER_INFO() = default;
 	};
 
 	struct QT_DRAWER_ADDER : public QT_BASE_ADDER

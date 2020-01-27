@@ -162,7 +162,7 @@ protected:
 			ProcessDataOfNode(node, gameobj);
 		}
 	} 
-	 
+	  
 	void AddRecursiveDataOfNode(T& node, const MyBOBox& collider, const S& data)
 	{
 		// 해당 노드의 충돌체와 부딪히지않으면 넘어간다.
@@ -225,10 +225,10 @@ public:
 	// Root 포인터를 반환합니다.
 	T* const GetpRoot() const { return m_RootNode;     }
 	void SetpRoot(T* root) { m_RootNode = root; }
-	const T& GetReaf(int index) const 
+	T * const GetpReaf(int index) const 
 	{ 
 		assert(!(index < 0 || index >= m_minSize) && "range over index");
-		return *(m_pReafNodes[index]);
+		return (m_pReafNodes[index]);
 	}
 
 	virtual void Init() = 0;

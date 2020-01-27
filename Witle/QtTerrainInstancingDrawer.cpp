@@ -22,14 +22,15 @@
 // 따라서 아이디는 0부터 시작한다.
 int QtTerrainInstancingDrawer::gTreePieceCount{ 0 }; 
  
-void QtTerrainInstancingDrawer::AddDataListOfNode(quadtree::QT_DRAWER_NODE& node, const quadtree::QT_DRAWER_ADDER& model_info)
+void QtTerrainInstancingDrawer::AddDataListOfNode(quadtree::QT_DRAWER_NODE& node, const quadtree::QT_DRAWER_ADDER& adder)
 {
-
-
+	node.ModelInfoList[adder.model_name].TerrainObjectCount += 1;
+	node.ModelInfoList[adder.model_name].TransformList.push_back(adder.world);
 }
 
 void QtTerrainInstancingDrawer::ProcessDataOfNode(quadtree::QT_DRAWER_NODE& node, GameObject& gameobj)
 {
+
 }
 
 void QtTerrainInstancingDrawer::ReleaseMembers()
@@ -41,9 +42,7 @@ void QtTerrainInstancingDrawer::ReleaseMemberUploadBuffers()
 { 
 	RecursiveReleaseUploadBuffers(m_pRootNode);
 }
-
  
-
 void QtTerrainInstancingDrawer::LoadTerrainObjectFromFile(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, const char* pstrFileName, const QtTerrainInstancingDrawer const* pTerrain)
 {
 	FILE* pInFile = NULL;
@@ -755,7 +754,8 @@ XMFLOAT4X4 QtTerrainInstancingDrawer::GetAltarTransform(int index, const std::st
 }
 
 void QtTerrainInstancingDrawer::CreateShaderVariables(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList)
-{//인스턴스 정보를 저장할 정점 버퍼를 업로드 힙 유형으로 생성한다. 
+{
+	//인스턴스 정보를 저장할 정점 버퍼를 업로드 힙 유형으로 생성한다. 
 	for (auto& info : m_StaticObjectStorage)
 	{
 		m_StaticObjectModelsStorage[info.first].pLoadObject = ModelStorage::GetInstance()->GetRootObject(info.first);
@@ -787,8 +787,54 @@ void QtTerrainInstancingDrawer::CreateShaderVariables(ID3D12Device* pd3dDevice, 
 					&info.second[iTerrainPiece].m_pcbMappedGameObjects[i].m_xmf4x4Transform,
 					XMMatrixTranspose(XMLoadFloat4x4(&info.second[iTerrainPiece].TransformList[i]
 					)));
+
 			}
+
+			// 이제 더 이상 쓰지 않으므로 제거
+			info.second[iTerrainPiece].TransformList.clear();
 		}
+	}
+
+	////////////// / Quadtree...
+	//인스턴스 정보를 저장할 정점 버퍼를 업로드 힙 유형으로 생성한다. 
+	for (int index = 0; index < GetReafNodeCount(); ++index)
+	{
+		quadtree::QT_DRAWER_NODE* const pReaf = GetpReaf(index);
+
+		// key : std::string으로 이름을 의미합니다.
+		// 모든 리프노드를 순회하면서 각 리프노드에 대한 변수를 만듭니다.
+		for (auto& info : pReaf->ModelInfoList)
+		{
+			// 모델 데이티와 텍스쳐 데이터 불러옴
+			info.second.pLoadObject = ModelStorage::GetInstance()->GetRootObject(info.first);
+			info.second.pTexture = TextureStorage::GetInstance()->GetTexture(info.first);
+
+			// 터레인 오브젝트가 없다면 넘어간다.
+			if (info.second.TerrainObjectCount == 0) continue;
+
+			// 쉐이더 변수 생성
+			info.second.m_pd3dcbGameObjects =
+				d3dUtil::CreateBufferResource(pd3dDevice, pd3dCommandList, NULL,
+					sizeof(VS_SRV_INSTANCEINFO) * info.second.TerrainObjectCount, D3D12_HEAP_TYPE_UPLOAD,
+					D3D12_RESOURCE_STATE_GENERIC_READ, NULL);
+
+			info.second.m_pd3dcbGameObjects->Map(0, NULL, (void**)&info.second.m_pcbMappedGameObjects);
+
+			// 쉐이더 변수 안에 정보 저장
+			// vector 안에 들어있는 모든 정보를 XMMatrixTranspose, 즉 전치행렬도 뒤집어서 하나씩 저장한다.
+			for (int i = 0; i < info.second.TerrainObjectCount; ++i)
+			{
+				XMStoreFloat4x4(
+					&info.second.m_pcbMappedGameObjects[i].m_xmf4x4Transform,
+					XMMatrixTranspose(XMLoadFloat4x4(&info.second.TransformList[i]
+					)));
+			} 
+
+			// 이제 info.second.TransformList 은 저장되었으므로 더 이상 쓰지 않는다.
+			// 메모리를 비운다.
+			info.second.TransformList.clear();
+		}
+		 
 	}
 }
 
