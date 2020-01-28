@@ -22,10 +22,6 @@ class GameObject;
 class QtTerrainInstancingDrawer
 	: public Quadtree<quadtree::QT_DRAWER_NODE, quadtree::QT_DRAWER_ADDER>
 {
-	// StaticObjectStorage 에서 가져옴 //////////////////////
-	int TerrainPieceCount = 0; // 터레인 제일 작은 조각이 몇개 있는가?
-	int TerrainObjectAllCount = 0; //모든 터레인 오브젝트는 몇개가 있는가?
-
 
 	std::vector<XMFLOAT4X4> m_AltarTransformStorage; // Altar transform 위치 저장하는 곳
 
@@ -51,8 +47,7 @@ public:
 	virtual void Init();
 	virtual void PrintInfo();
 
-private:
-	static int gTreePieceCount;
+private: 
 
 	virtual void AddDataListOfNode(quadtree::QT_DRAWER_NODE& node, const quadtree::QT_DRAWER_ADDER& world) override;
 	virtual void ProcessDataOfNode(quadtree::QT_DRAWER_NODE& node, GameObject& gameobj) override;
@@ -82,7 +77,7 @@ private:
 	// 터레인 초기 위치 정보
 	void LoadTerrainObjectFromFile(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, const char* pstrFileName, const QtTerrainInstancingDrawer const* pTerrain);
 	void LoadNameAndPositionFromFile(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, FILE* pInFile, const QtTerrainInstancingDrawer const* pTerrain);
-	bool LoadTransform(char* name, const char* comp_name, const XMINT4&, const XMFLOAT4X4& tr);
+	bool LoadTransform(char* name, const char* comp_name, const XMFLOAT4X4& tr);
 	// 터레인 초기 위치 정보 로드
 	 
 	void RecursiveRenderTerrainObjects_BOBox(const quadtree::QT_DRAWER_NODE* node, ID3D12GraphicsCommandList *pd3dCommandList);
@@ -95,9 +90,7 @@ private:
 	void RecursiveReleaseUploadBuffers(quadtree::QT_DRAWER_NODE* node);
 	void RecursiveReleaseObjects(quadtree::QT_DRAWER_NODE* node);
 	void RecursiveCalculateIDs(quadtree::QT_DRAWER_NODE* node, const XMFLOAT3 position, int* pIDs) const;
-	void CalculateIDs(const XMFLOAT3 position, XMINT4& pIDs) const;
-	
-
+	  
 	// 해당 함수를 재귀적으로 호출하며 터레인을 생성하는 함수입니다.
 	void RecursiveCreateTerrain(quadtree::QT_DRAWER_NODE* node, ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, 
 		int xStart, int zStart, int nBlockWidth, int nBlockLength,
@@ -110,16 +103,13 @@ public:
 	virtual ~QtTerrainInstancingDrawer();
 	  
 	quadtree::QT_DRAWER_NODE* const GetRootNode() const { return m_pRootNode; }
-	// 해당 포지션에 속하는 리프노드의 아이디들을 리턴한다. 쿼드트리이므로 최대 4개가 존재한다.
-	XMINT4 const GetIDs(const XMFLOAT3& position) const;
-
+	
 	void RenderObjAll(ID3D12GraphicsCommandList* pd3dCommandList, bool isGBuffers);
 
 	void RenderTerrainForShadow(ID3D12GraphicsCommandList *pd3dCommandList, Terrain * pTerrain, ID3D12DescriptorHeap* pHeap);
 	void RenderInstancingObjectsForShadow(ID3D12GraphicsCommandList *pd3dCommandList);
 	void Render(ID3D12GraphicsCommandList *pd3dCommandList, Terrain* pTerrain, ID3D12DescriptorHeap* pHeap, bool isGBuffers);
 	void Render(int index, ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers);
-	static int GetTerrainPieceCount() { return gTreePieceCount; }
 	quadtree::QT_DRAWER_NODE* GetReafNode(int index) { return m_pReafNodes[index]; }
 	 
 	void AddWorldMatrix(const MyBOBox& collider, const std::string& model_name, const XMFLOAT4X4& world);

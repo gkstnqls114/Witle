@@ -48,7 +48,7 @@ private:
 			// ├───┼───┤
 			// │ 0 │ 1 │
 			// └───┴───┘ ▶ x
-			// 위와 같은 형식과 순서로 생성합니다. y는 그대로입니다.
+			// 위와 같은 형식과 순서로 자식을 생성합니다. y는 그대로입니다.
 			XMFLOAT3 center[4]
 			{
 				XMFLOAT3(nodeCenter.x - extents.x, nodeCenter.y, nodeCenter.z - extents.z), // 0

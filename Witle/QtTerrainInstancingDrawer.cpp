@@ -16,15 +16,12 @@
 #include "Object.h"
 #include "Texture.h"
 #include "MapInfoMgr.h"
+#include "MyFrustum.h"
 #include "CameraObject.h"
 #include "Camera.h"
 #include "MyFrustum.h"
 #include "QtTerrainInstancingDrawer.h"
-
-// 처음 아이디는 0으로 시작한다.
-// 리프 노드만 아이디를 설정한다.
-// 따라서 아이디는 0부터 시작한다.
-int QtTerrainInstancingDrawer::gTreePieceCount{ 0 }; 
+ 
  
 void QtTerrainInstancingDrawer::AddDataListOfNode(quadtree::QT_DRAWER_NODE& node, const quadtree::QT_DRAWER_ADDER& adder)
 {
@@ -37,7 +34,7 @@ void QtTerrainInstancingDrawer::ProcessDataOfNode(quadtree::QT_DRAWER_NODE& node
 	CameraObject* pCameraObject = dynamic_cast<CameraObject*>(&gameobj);
 	if (pCameraObject == nullptr) return;
 
-	pCameraObject->GetCamera()->GetFrustum();
+	// bool isIntersect = pCameraObject->GetCamera()->GetFrustum()->IsIntersect(); 
 }
 
 void QtTerrainInstancingDrawer::ReleaseMembers()
@@ -57,10 +54,6 @@ void QtTerrainInstancingDrawer::LoadTerrainObjectFromFile(ID3D12Device* pd3dDevi
 	::rewind(pInFile);
 
 	char pstrToken[64] = { '\0' };
-
-	// 먼저 시작하기 전에 터레인 개수 조각에 맞추어 인포를 구성한다.
-	// 이름에 맞추어 구성해야하므로 하드코딩을 해야한다.
-	TerrainPieceCount = pTerrain->GetTerrainPieceCount();
 
 
 	for (; ; )
@@ -125,9 +118,7 @@ void QtTerrainInstancingDrawer::LoadNameAndPositionFromFile(ID3D12Device* pd3dDe
 	{
 		FileRead::ReadStringFromFile(pInFile, pstrToken);
 		if (!strcmp(pstrToken, "<GlobalTransform>:"))
-		{
-			TerrainObjectAllCount += 1;
-
+		{ 
 			XMFLOAT4X4 temp;
 			nReads = (UINT)::fread(&temp, sizeof(XMFLOAT4X4), 1, pInFile);
 
@@ -153,12 +144,11 @@ void QtTerrainInstancingDrawer::LoadNameAndPositionFromFile(ID3D12Device* pd3dDe
 			// fbx sdk 에서 꺼내올때 무슨 문제가 있는지 x, z좌표에 -부호 붙여야함 ...
 			// 그리고 위치 차이때문에 
 
-			XMFLOAT3 position{ transform._41, transform._42, transform._43 };
-			XMINT4 terrainIDs = pTerrain->GetIDs(position);
+			XMFLOAT3 position{ transform._41, transform._42, transform._43 }; 
 
 			for (const auto& modelname : ModelStorage::GetInstance()->m_NameList)
 			{
-				bool isLocated = LoadTransform(name, modelname.c_str(), terrainIDs, transform);
+				bool isLocated = LoadTransform(name, modelname.c_str(), transform);
 				if (isLocated) break;
 			}
 
@@ -190,7 +180,7 @@ void QtTerrainInstancingDrawer::LoadNameAndPositionFromFile(ID3D12Device* pd3dDe
 	}
 }
 
-bool QtTerrainInstancingDrawer::LoadTransform(char* name, const char* comp_name, const XMINT4& IDs, const XMFLOAT4X4& tr)
+bool QtTerrainInstancingDrawer::LoadTransform(char* name, const char* comp_name, const XMFLOAT4X4& tr)
 {
 	bool result = false;
 
@@ -205,15 +195,12 @@ bool QtTerrainInstancingDrawer::LoadTransform(char* name, const char* comp_name,
 			TestObject->SetTransform(newXMFLOAT4X4); // 여기서 Scale 과 다이렉트 X축에 대한 회전 일어나므로 절대 빼먹으면 안됨..
 			TestObject->UpdateTransform(NULL);
 
-			// 절벽 오브젝트는 어차피 모든 터레인 조각에 넣을거니까 충돌체 처리 X 
-			for (int x = 0; x < TerrainPieceCount; ++x)
-			{
-				MyBOBox temp(MapInfoMgr::GetMapCenter(),
-					XMFLOAT3{ MapInfoMgr::GetMapExtentsX(), 10000.f, MapInfoMgr::GetMapExtentsZ() });
+			// 절벽 오브젝트는 어차피 모든 터레인 조각에 넣을거니까 충돌체 처리 X  
+			MyBOBox temp(MapInfoMgr::GetMapCenter(),
+			             XMFLOAT3{ MapInfoMgr::GetMapExtentsX(), 10000.f, MapInfoMgr::GetMapExtentsZ() });
 
-				AddWorldMatrix(temp, Cliff, TestObject->m_pChild->m_xmf4x4World); 
-			}
-
+			AddWorldMatrix(temp, Cliff, TestObject->m_pChild->m_xmf4x4World); 
+			 
 			delete TestObject;
 			TestObject = nullptr;
 
@@ -221,15 +208,7 @@ bool QtTerrainInstancingDrawer::LoadTransform(char* name, const char* comp_name,
 		}
 
 		for (int Ti = 0; Ti < 4; ++Ti)
-		{
-			int terrainIDs = -1;
-			if (Ti == 0) terrainIDs = IDs.x;
-			else if (Ti == 1) terrainIDs = IDs.y;
-			else if (Ti == 2) terrainIDs = IDs.z;
-			else if (Ti == 3) terrainIDs = IDs.w;
-
-			if (terrainIDs == -1) continue;
-
+		{ 
 			if (!strcmp(name, "Cylinder001"))
 			{
 				// RUIN_FLOOR 예외처리
@@ -466,26 +445,6 @@ void QtTerrainInstancingDrawer::RecursiveCalculateIDs(quadtree::QT_DRAWER_NODE *
 		RecursiveCalculateIDs(node->children[3], position, pIDs);
 	}
 }
-
-void QtTerrainInstancingDrawer::CalculateIDs(const XMFLOAT3 position, XMINT4& IDs) const
-{
-	int num = 0;
-
-	for (int i = 0; i < m_ReafNodeCount; ++i)
-	{
-		quadtree::QT_DRAWER_NODE* node = m_pReafNodes[i];
-
-		if (Collision::isIn(node->boundingBox, position))
-		{
-			if (num == 0) IDs.x = i;
-			else if (num == 1) IDs.y = i;
-			else if (num == 2) IDs.z = i;
-			else if (num == 3) IDs.w = i;
-			++num;
-		} 
-		 
-	}
-}
  
 void QtTerrainInstancingDrawer::RecursiveCreateTerrain(quadtree::QT_DRAWER_NODE * node, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList,
 	int xStart, int zStart, int nBlockWidth, int nBlockLength,
@@ -497,8 +456,7 @@ void QtTerrainInstancingDrawer::RecursiveCreateTerrain(quadtree::QT_DRAWER_NODE 
 
 	if (nBlockWidth == m_widthMin || nBlockLength == m_lengthMin) // 마지막 리프 노드라면..
 	{ 
-		// 마지막 리프 노드는 아이디를 설정한다.
-		node->id = gTreePieceCount++;
+		// 마지막 리프 노드는 아이디를 설정한다. 
 		m_ReafNodeCount += 1;
 
 		// 현재 테스트로 바운딩박스의 centerY = 128, externY = 256 으로 설정 
@@ -595,16 +553,7 @@ QtTerrainInstancingDrawer::~QtTerrainInstancingDrawer()
 		m_pRootNode = nullptr;
 	}
 }
- 
-XMINT4 const  QtTerrainInstancingDrawer::GetIDs(const XMFLOAT3 & position) const
-{
-	XMINT4 IDs{ -1, -1, -1, -1 };
-
-	CalculateIDs(position, IDs);
-
-	return IDs;
-}
- 
+  
 void QtTerrainInstancingDrawer::RenderObjAll(ID3D12GraphicsCommandList* pd3dCommandList, bool isGBuffers)
 {
 	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, "InstancingStandardShader", isGBuffers);
@@ -734,6 +683,7 @@ void QtTerrainInstancingDrawer::PrintInfo()
 {
 }
 
+// 그림자 렌더링을 위한 지형 오브젝트를 렌더합니다.
 void QtTerrainInstancingDrawer::RenderTerrainForShadow(ID3D12GraphicsCommandList * pd3dCommandList, Terrain * pTerrain, ID3D12DescriptorHeap* pHeap)
 { 
 	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_TERRAIN_FORSHADOW, false);
@@ -745,6 +695,8 @@ void QtTerrainInstancingDrawer::RenderTerrainForShadow(ID3D12GraphicsCommandList
 	RecursiveRender(m_pRootNode, pd3dCommandList, false); // 지형 렌더	 
 }
 
+
+// 그림자 렌더링을 위한 지형 오브젝트만 렌더링합니다.
 void QtTerrainInstancingDrawer::RenderInstancingObjectsForShadow(ID3D12GraphicsCommandList * pd3dCommandList)
 {
 	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_INSTACINGSTANDARDFORSHADOW, false);
