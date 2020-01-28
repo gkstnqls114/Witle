@@ -61,8 +61,8 @@ private:
 	UINT m_widthTotal{ 0 };
 	UINT m_lengthTotal{ 0 };
 
-	const UINT m_lengthMin{ 256 + 1 }; // 나누어지는 픽셀 크기
-	const UINT m_widthMin{ 256 + 1 }; // 나누어지는 픽셀 크기
+	const UINT m_lengthMin{ 64 + 1 }; // 나누어지는 픽셀 크기
+	const UINT m_widthMin{ 64 + 1 }; // 나누어지는 픽셀 크기
 
 	XMFLOAT3 m_xmf3Scale{ 0.f, 0.f, 0.f };
 	XMFLOAT4 m_xmf4Color{ 1.f, 0.f, 0.f , 1.f};
@@ -96,6 +96,9 @@ private:
 		int xStart, int zStart, int nBlockWidth, int nBlockLength,
 		HeightMapImage *pContext = NULL);
 	 
+	void CreateReafNode(quadtree::QT_DRAWER_NODE* node, ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList,
+		 HeightMapImage* pContext = NULL);
+
 public:
 	QtTerrainInstancingDrawer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, 
 		const XMFLOAT3& center, const XMFLOAT3& extents, float min_size,
@@ -104,7 +107,7 @@ public:
 	  
 	quadtree::QT_DRAWER_NODE* const GetRootNode() const { return m_pRootNode; }
 	
-	void RenderObjAll(ID3D12GraphicsCommandList* pd3dCommandList, bool isGBuffers);
+	void RenderObjAll(ID3D12GraphicsCommandList* pd3dCommandList, Terrain* pTerrain, bool isGBuffers);
 
 	void RenderTerrainForShadow(ID3D12GraphicsCommandList *pd3dCommandList, Terrain * pTerrain, ID3D12DescriptorHeap* pHeap);
 	void RenderInstancingObjectsForShadow(ID3D12GraphicsCommandList *pd3dCommandList);

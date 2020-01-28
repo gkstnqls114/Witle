@@ -695,7 +695,7 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	m_pQuadtreeTerrain = new QtTerrainInstancingDrawer(pd3dDevice, pd3dCommandList, 
 		MapInfoMgr::GetMapCenter(),
 		XMFLOAT3{ MapInfoMgr::GetMapExtentsX(), 10000.f, MapInfoMgr::GetMapExtentsZ() },
-		MapInfoMgr::GetMapSizeX() ,
+		MapInfoMgr::GetMapSizeX() / 4.f ,
 		257, 257, xmf3Scale, xmf4Color, m_Terrain->GetHeightMapImage());
 	
 	m_QtTerrainCalculator = new QtTerrainCalculator(
@@ -1493,7 +1493,7 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 	// 터레인
 	if (m_Terrain)
 	{
-		m_pQuadtreeTerrain->RenderObjAll(pd3dCommandList, /*딱히 의미없음*/isGBuffers);
+		m_pQuadtreeTerrain->RenderObjAll(pd3dCommandList, m_Terrain, isGBuffers);
 		//m_pQuadtreeTerrain->Render(pd3dCommandList, m_Terrain, nullptr /*딱히 의미없음*/, isGBuffers);
 	}
 

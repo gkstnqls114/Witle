@@ -39,7 +39,7 @@ void QtTerrainInstancingDrawer::ProcessDataOfNode(quadtree::QT_DRAWER_NODE& node
 
 void QtTerrainInstancingDrawer::ReleaseMembers()
 {
-	delete[] m_pReafNodes; 
+	
 }
 
 void QtTerrainInstancingDrawer::ReleaseMemberUploadBuffers()
@@ -329,17 +329,14 @@ void QtTerrainInstancingDrawer::RecursiveRenderTerrainObjectsForShadow(const qua
 		}
 	}
 }
-
-static std::unordered_set<int> set;
-
+ 
 void QtTerrainInstancingDrawer::RecursiveRender(const quadtree::QT_DRAWER_NODE * node, ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffers)
 {
 	// 렌더링
 	extern MeshRenderer gMeshRenderer;
 
 	if (node->terrainMesh)
-	{
-		set.insert(node->id);
+	{ 
 		gMeshRenderer.Render(pd3dCommandList, node->terrainMesh); 
 	}
 	else
@@ -469,8 +466,7 @@ void QtTerrainInstancingDrawer::RecursiveCreateTerrain(quadtree::QT_DRAWER_NODE 
 				float(nBlockWidth - 1) / 2.0f * m_xmf3Scale.x,
 				1000.f,
 				float(nBlockLength - 1) / 2.0f* m_xmf3Scale.z };
-		 
-
+		  
 		node->boundingBox = BoundingBox( center, extents); 
 		node->terrainMesh = new TerrainMesh(m_EmptyObj, pd3dDevice, pd3dCommandList, xStart, zStart, m_widthMin, m_lengthMin, m_xmf3Scale, m_xmf4Color, pContext);
 	}
@@ -510,6 +506,17 @@ void QtTerrainInstancingDrawer::RecursiveCreateTerrain(quadtree::QT_DRAWER_NODE 
 		} 
 	}
 }
+
+void QtTerrainInstancingDrawer::CreateReafNode(quadtree::QT_DRAWER_NODE* node, ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, HeightMapImage* pContext)
+{  
+	// 만약 자식이 있다면, 즉 리프노드가 아니라면 경고창을 내뱉는다.
+	assert(!(node->children[0] != nullptr) && "is not reaf node");
+
+	int xStart = (node->BoBox->GetBOBox().Center.x - float(m_widthMin - 1) / 2.0f * m_xmf3Scale.x) / m_xmf3Scale.x;
+	int zStart = (node->BoBox->GetBOBox().Center.z - float(m_lengthMin - 1) / 2.0f * m_xmf3Scale.z) / m_xmf3Scale.z;
+	 
+	node->terrainMesh = new TerrainMesh(m_EmptyObj, pd3dDevice, pd3dCommandList, xStart, zStart, m_widthMin, m_lengthMin, m_xmf3Scale, m_xmf4Color, pContext);
+}
  
 QtTerrainInstancingDrawer::QtTerrainInstancingDrawer(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, 
 	const XMFLOAT3& center, const XMFLOAT3& extents, float min_size,
@@ -526,6 +533,11 @@ QtTerrainInstancingDrawer::QtTerrainInstancingDrawer(ID3D12Device * pd3dDevice, 
 	int czHeightMap = pHeightMapImage->GetHeightMapLength();
 
 	m_EmptyObj = new EmptyGameObject("QtTerrainInstancingDrawer");
+
+	for (int index = 0; index < GetReafNodeCount(); ++index)
+	{
+		CreateReafNode(GetpReaf(index), pd3dDevice, pd3dCommandList, pContext);
+	}
 
 	// 쿼드 트리의 부모 노드를 만듭니다.
 	m_pRootNode = new quadtree::QT_DRAWER_NODE(center, extents);
@@ -554,8 +566,28 @@ QtTerrainInstancingDrawer::~QtTerrainInstancingDrawer()
 	}
 }
   
-void QtTerrainInstancingDrawer::RenderObjAll(ID3D12GraphicsCommandList* pd3dCommandList, bool isGBuffers)
-{
+void QtTerrainInstancingDrawer::RenderObjAll(ID3D12GraphicsCommandList* pd3dCommandList, Terrain* pTerrain, bool isGBuffers)
+{ 
+	// 지형 렌더
+	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_TERRAIN, isGBuffers);
+
+	pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_WORLD, 16, &Matrix4x4::Identity(), 0);
+
+	pTerrain->UpdateShaderVariables(pd3dCommandList);
+
+	extern MeshRenderer gMeshRenderer;
+
+	for (int index = 0; index < GetReafNodeCount(); ++index)
+	{
+		quadtree::QT_DRAWER_NODE* const pReaf = GetpReaf(index);
+
+		if (pReaf->terrainMesh)
+		{
+			gMeshRenderer.Render(pd3dCommandList, pReaf->terrainMesh);
+		}
+	} 
+
+	// 지형 오브젝트 렌더링
 	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, "InstancingStandardShader", isGBuffers);
 
 	for (int index = 0; index < GetReafNodeCount(); ++index)
@@ -623,8 +655,7 @@ XMFLOAT4X4 QtTerrainInstancingDrawer::GetAltarTransform(int index, const std::st
 }
 
 void QtTerrainInstancingDrawer::CreateShaderVariables(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList)
-{ 
-	////////////// / Quadtree...
+{  
 	//인스턴스 정보를 저장할 정점 버퍼를 업로드 힙 유형으로 생성한다. 
 	for (int index = 0; index < GetReafNodeCount(); ++index)
 	{
