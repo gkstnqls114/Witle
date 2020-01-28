@@ -617,20 +617,24 @@ void QtTerrainInstancingDrawer::RenderObj(ID3D12GraphicsCommandList* pd3dCommand
 }
 
 void QtTerrainInstancingDrawer::RenderObjForShadow(ID3D12GraphicsCommandList* pd3dCommandList, int index, bool isGBuffers)
-{
-	// info.first = 모델 이름
-	// info.second = TerrainObjectInfo라는 모델 정보
+{  
+	for (int index = 0; index < GetReafNodeCount(); ++index)
+	{
+		quadtree::QT_DRAWER_NODE* const pReaf = GetpReaf(index);
 
-	//for (auto& info : m_StaticObjectStorage)
-	//{
-	//	if (info.second[index].TerrainObjectCount == 0) continue;
-	//	if (!strcmp(info.first.c_str(), Flower)) continue;
-	//	if (!strcmp(info.first.c_str(), RUIN_FLOOR)) continue;
+		// key : std::string으로 이름을 의미합니다.
+		// 모든 리프노드를 순회하면서 각 리프노드에 대한 변수를 만듭니다.
+		for (auto& info : pReaf->ModelInfoList)
+		{
+			if (info.second.TerrainObjectCount == 0) continue;
+			if (!strcmp(info.first.c_str(), Flower)) continue;
+			if (!strcmp(info.first.c_str(), RUIN_FLOOR)) continue;
 
-	//	pd3dCommandList->SetGraphicsRootShaderResourceView(ROOTPARAMETER_INSTANCING, info.second[index].m_pd3dcbGameObjects->GetGPUVirtualAddress()); // 인스턴싱 쉐이더 리소스 뷰
-
-	//	m_StaticObjectModelsStorage[info.first].pLoadObject->RenderInstancing(pd3dCommandList, info.second[index].TerrainObjectCount, isGBuffers);
-	//}
+			pd3dCommandList->SetGraphicsRootShaderResourceView(ROOTPARAMETER_INSTANCING, info.second.m_pd3dcbGameObjects->GetGPUVirtualAddress()); // 인스턴싱 쉐이더 리소스 뷰
+			 
+			info.second.pLoadObject->RenderInstancing(pd3dCommandList, info.second.TerrainObjectCount, isGBuffers);
+		}
+	} 
 }
 
 void QtTerrainInstancingDrawer::RenderObjBOBox(ID3D12GraphicsCommandList* pd3dCommandList, int index)
