@@ -180,14 +180,14 @@ void QtTerrainInstancingDrawer::LoadNameAndPositionFromFile(ID3D12Device* pd3dDe
 	}
 }
 
-bool QtTerrainInstancingDrawer::LoadTransform(char* name, const char* comp_name, const XMFLOAT4X4& tr)
+bool QtTerrainInstancingDrawer::LoadTransform(char* filein_name, const char* comp_name, const XMFLOAT4X4& tr)
 {
 	bool result = false;
 
-	if (!strcmp(name, comp_name) || !strcmp(name, "Cylinder001") /*Floor때문에 하드코딩*/ || !strcmp(name, "Object001"))
+	if (!strcmp(filein_name, comp_name) || !strcmp(filein_name, "Cylinder001") /*Floor때문에 하드코딩*/ || !strcmp(filein_name, "Object001"))
 	{
 		// 만약 name이 절벽인 경우...
-		if (!strcmp(name, "Object001"))
+		if (!strcmp(filein_name, "Object001"))
 		{
 			XMFLOAT4X4 newXMFLOAT4X4 = tr;
 			newXMFLOAT4X4._42 = 50;
@@ -197,72 +197,72 @@ bool QtTerrainInstancingDrawer::LoadTransform(char* name, const char* comp_name,
 
 			// 절벽 오브젝트는 어차피 모든 터레인 조각에 넣을거니까 충돌체 처리 X  
 			MyBOBox temp(MapInfoMgr::GetMapCenter(),
-			             XMFLOAT3{ MapInfoMgr::GetMapExtentsX(), 10000.f, MapInfoMgr::GetMapExtentsZ() });
+				XMFLOAT3{ MapInfoMgr::GetMapExtentsX(), 10000.f, MapInfoMgr::GetMapExtentsZ() });
 
-			AddWorldMatrix(temp, Cliff, TestObject->m_pChild->m_xmf4x4World); 
-			 
+			AddWorldMatrix(temp, Cliff, TestObject->m_pChild->m_xmf4x4World);
+
 			delete TestObject;
 			TestObject = nullptr;
 
 			return true; // 절벽인 경우 만 예외 처리
 		}
 
-		for (int Ti = 0; Ti < 4; ++Ti)
-		{ 
-			if (!strcmp(name, "Cylinder001"))
-			{
-				// RUIN_FLOOR 예외처리
-				// 현재 사용안함 
+		if (!strcmp(filein_name, "Cylinder001"))
+		{
+			// RUIN_FLOOR 예외처리
+			// 현재 사용안함 
 
-				//LoadObject* TestObject = ModelStorage::GetInstance()->GetRootObject(RUIN_FLOOR);
-				//TestObject->SetTransform(tr);
-				//TestObject->UpdateTransform(NULL);
-				
-				//delete TestObject;
-				//TestObject = nullptr;
+			//LoadObject* TestObject = ModelStorage::GetInstance()->GetRootObject(RUIN_FLOOR);
+			//TestObject->SetTransform(tr);
+			//TestObject->UpdateTransform(NULL);
+
+			//delete TestObject;
+			//TestObject = nullptr;
+		}
+		else
+		{
+			LoadObject* TestObject = ModelStorage::GetInstance()->GetRootObject(comp_name);
+			TestObject->SetTransform(tr);
+			TestObject->UpdateTransform(NULL);
+
+			// 모든 모델은 충돌체를 지니고있지 않다. 한번 확인해준다.
+			MyBOBox* pBoBox = ModelStorage::GetInstance()->GetBOBox(comp_name);
+			if (pBoBox == nullptr)
+			{
+				// 충돌체를 지니고 있지 않은 경우 임시로 만든다.
+				MyBOBox tempbobox(XMFLOAT3(0, 0, 0), XMFLOAT3(1, 1, 1));
+				tempbobox.Move(XMFLOAT3(TestObject->m_pChild->m_xmf4x4World._41, 0, TestObject->m_pChild->m_xmf4x4World._43));
+
+				AddWorldMatrix(tempbobox, comp_name, TestObject->m_pChild->m_xmf4x4World);
 			}
 			else
-			{ 
-				LoadObject* TestObject = ModelStorage::GetInstance()->GetRootObject(comp_name);
-				TestObject->SetTransform(tr);
-				TestObject->UpdateTransform(NULL);
-
-				// 모든 모델은 충돌체를 지니고있지 않다. 한번 확인해준다.
-				MyBOBox* pBoBox = ModelStorage::GetInstance()->GetBOBox(comp_name);
-				if (pBoBox == nullptr)
-				{
-					// 충돌체를 지니고 있지 않은 경우 임시로 만든다.
-					MyBOBox tempbobox(XMFLOAT3(0, 0, 0), XMFLOAT3(1, 1, 1));
-					tempbobox.Move(XMFLOAT3(TestObject->m_pChild->m_xmf4x4World._41, 0, TestObject->m_pChild->m_xmf4x4World._43));
-
-					AddWorldMatrix(tempbobox, comp_name, TestObject->m_pChild->m_xmf4x4World);
-				}
-				else
-				{
-					// 충돌체를 갖고 있는 경우 
-					MyBOBox mybobox = *pBoBox;
-					mybobox.Move(XMFLOAT3(TestObject->m_pChild->m_xmf4x4World._41, 0, TestObject->m_pChild->m_xmf4x4World._43));
-					AddWorldMatrix(mybobox, comp_name, TestObject->m_pChild->m_xmf4x4World);
-				}
-
-				if (!strcmp(comp_name, ALTAR_IN.c_str()))
-				{
-					m_AltarTransformStorage.emplace_back(tr);
-				}
-
-				delete TestObject;
-				TestObject = nullptr;
+			{
+				// 충돌체를 갖고 있는 경우 
+				MyBOBox mybobox = *pBoBox;
+				mybobox.Move(XMFLOAT3(TestObject->m_pChild->m_xmf4x4World._41, 0, TestObject->m_pChild->m_xmf4x4World._43));
+				AddWorldMatrix(mybobox, comp_name, TestObject->m_pChild->m_xmf4x4World);
 			}
 
-			result = true;
+			if (!strcmp(filein_name, ALTAR_IN.c_str()))
+			{
+				m_AltarTransformStorage.emplace_back(TestObject->m_pChild->m_xmf4x4World);
+			}
+
+			delete TestObject;
+			TestObject = nullptr;
 		}
+
+		result = true;
 	}
 	return result;
 }
 
 void QtTerrainInstancingDrawer::RecursiveRenderTerrainObjects_BOBox(const quadtree::QT_DRAWER_NODE* node, ID3D12GraphicsCommandList* pd3dCommandList)
 {
-	if (node->terrainMesh)
+	if (!node->isRendering) return;
+
+	bool isHaveChild = node->children[0] != nullptr;
+	if (!isHaveChild)
 	{
 		RenderObjBOBox(pd3dCommandList, *node);
 	}
@@ -276,71 +276,67 @@ void QtTerrainInstancingDrawer::RecursiveRenderTerrainObjects_BOBox(const quadtr
 
 	}
 }
-
-
-void QtTerrainInstancingDrawer::RenderTerrainObjects(ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffers)
+ 
+void QtTerrainInstancingDrawer::RecursiveRenderTerrainObjs(const quadtree::QT_DRAWER_NODE* node, ID3D12GraphicsCommandList* pd3dCommandList, bool isGBuffers)
 {
-	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, "InstancingStandardShader", isGBuffers);
-	
-	RecursiveRenderTerrainObjects(GetpRoot(), pd3dCommandList, isGBuffers);
-	  
-	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, "InstancingLine", isGBuffers);
-	RecursiveRenderTerrainObjects_BOBox(GetpRoot(), pd3dCommandList);
-}
+	if (!node->isRendering) return;
 
-void QtTerrainInstancingDrawer::RecursiveRenderTerrainObjects(const quadtree::QT_DRAWER_NODE* node, ID3D12GraphicsCommandList* pd3dCommandList, bool isGBuffers)
-{ 
-	if (node->terrainMesh)
+	bool isHaveChild = node->children[0] != nullptr;
+	if (!isHaveChild)
 	{
-		RenderObj(pd3dCommandList, *node, isGBuffers);
+		RenderTerrainObjs(pd3dCommandList, *node, isGBuffers);
 	}
 	else
 	{ 
-		if (node->children[0]->isRendering) RecursiveRenderTerrainObjects(node->children[0], pd3dCommandList, isGBuffers);
-		if (node->children[1]->isRendering) RecursiveRenderTerrainObjects(node->children[1], pd3dCommandList, isGBuffers);
-		if (node->children[2]->isRendering) RecursiveRenderTerrainObjects(node->children[2], pd3dCommandList, isGBuffers);
-		if (node->children[3]->isRendering) RecursiveRenderTerrainObjects(node->children[3], pd3dCommandList, isGBuffers);
+		if (node->children[0]->isRendering) RecursiveRenderTerrainObjs(node->children[0], pd3dCommandList, isGBuffers);
+		if (node->children[1]->isRendering) RecursiveRenderTerrainObjs(node->children[1], pd3dCommandList, isGBuffers);
+		if (node->children[2]->isRendering) RecursiveRenderTerrainObjs(node->children[2], pd3dCommandList, isGBuffers);
+		if (node->children[3]->isRendering) RecursiveRenderTerrainObjs(node->children[3], pd3dCommandList, isGBuffers);
 	}
 }
 
 
 void QtTerrainInstancingDrawer::RecursiveRenderTerrainObjectsForShadow(const quadtree::QT_DRAWER_NODE* node, ID3D12GraphicsCommandList* pd3dCommandList, bool isGBuffers)
 { 
-	if (node->terrainMesh)
+	if (!node->isRendering) return;
+
+	bool isHaveChild = node->children[0] != nullptr;
+	if (!isHaveChild)
 	{
-		RenderObjForShadow(pd3dCommandList, *node, isGBuffers);
+		RenderTerrainObjsForShadow(pd3dCommandList, *node, isGBuffers);
 	}
 	else
 	{
-		if (node->children[0]->isRendering) RecursiveRenderTerrainObjects(node->children[0], pd3dCommandList, isGBuffers);
-		if (node->children[1]->isRendering) RecursiveRenderTerrainObjects(node->children[1], pd3dCommandList, isGBuffers);
-		if (node->children[2]->isRendering) RecursiveRenderTerrainObjects(node->children[2], pd3dCommandList, isGBuffers);
-		if (node->children[3]->isRendering) RecursiveRenderTerrainObjects(node->children[3], pd3dCommandList, isGBuffers);
+		if (node->children[0]->isRendering) RecursiveRenderTerrainObjs(node->children[0], pd3dCommandList, isGBuffers);
+		if (node->children[1]->isRendering) RecursiveRenderTerrainObjs(node->children[1], pd3dCommandList, isGBuffers);
+		if (node->children[2]->isRendering) RecursiveRenderTerrainObjs(node->children[2], pd3dCommandList, isGBuffers);
+		if (node->children[3]->isRendering) RecursiveRenderTerrainObjs(node->children[3], pd3dCommandList, isGBuffers);
 	}
 
 }
  
-void QtTerrainInstancingDrawer::RecursiveRender(const quadtree::QT_DRAWER_NODE * node, ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffers)
+void QtTerrainInstancingDrawer::RecursiveRenderTerrain(const quadtree::QT_DRAWER_NODE * node, ID3D12GraphicsCommandList * pd3dCommandList, const Terrain* pTerrain, bool isGBuffers)
 {
-	// 렌더링
-	extern MeshRenderer gMeshRenderer;
-
-	if (node->terrainMesh)
+	if (!node->isRendering) return;
+	 
+	bool isHaveChild = node->children[0] != nullptr;
+	if (!isHaveChild)
 	{ 
-		gMeshRenderer.Render(pd3dCommandList, node->terrainMesh); 
+		RenderTerrain(pd3dCommandList, *node, pTerrain, isGBuffers);
 	}
 	else
 	{
-		if (node->children[0]->isRendering) RecursiveRender(node->children[0], pd3dCommandList, isGBuffers);
-		if (node->children[1]->isRendering) RecursiveRender(node->children[1], pd3dCommandList, isGBuffers);
-		if (node->children[2]->isRendering) RecursiveRender(node->children[2], pd3dCommandList, isGBuffers);
-		if (node->children[3]->isRendering) RecursiveRender(node->children[3], pd3dCommandList, isGBuffers);
+		if (node->children[0]->isRendering) RecursiveRenderTerrain(node->children[0], pd3dCommandList, pTerrain, isGBuffers);
+		if (node->children[1]->isRendering) RecursiveRenderTerrain(node->children[1], pd3dCommandList, pTerrain, isGBuffers);
+		if (node->children[2]->isRendering) RecursiveRenderTerrain(node->children[2], pd3dCommandList, pTerrain, isGBuffers);
+		if (node->children[3]->isRendering) RecursiveRenderTerrain(node->children[3], pd3dCommandList, pTerrain, isGBuffers);
 	}
 }
  
 void QtTerrainInstancingDrawer::RecursiveReleaseUploadBuffers(quadtree::QT_DRAWER_NODE * node)
 {
-	if (node->terrainMesh)
+	bool isHaveChild = node->children[0] != nullptr;
+	if (!isHaveChild)
 	{
 		node->terrainMesh->ReleaseUploadBuffers();
 	}
@@ -355,7 +351,8 @@ void QtTerrainInstancingDrawer::RecursiveReleaseUploadBuffers(quadtree::QT_DRAWE
 
 void QtTerrainInstancingDrawer::RecursiveReleaseObjects(quadtree::QT_DRAWER_NODE * node)
 {
-	if (node->terrainMesh)
+	bool isHaveChild = node->children[0] != nullptr;
+	if (!isHaveChild)
 	{
 		node->terrainMesh->ReleaseObjects();
 		delete node->terrainMesh;
@@ -421,21 +418,14 @@ void QtTerrainInstancingDrawer::RenderObjAll(ID3D12GraphicsCommandList* pd3dComm
 	extern MeshRenderer gMeshRenderer;
 
 	// 지형 렌더
-	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_TERRAIN, isGBuffers); 
-	pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_WORLD, 16, &Matrix4x4::Identity(), 0); 
-	pTerrain->UpdateShaderVariables(pd3dCommandList);  
 	for (int index = 0; index < GetReafNodeCount(); ++index)
 	{
 		quadtree::QT_DRAWER_NODE* const pReaf = GetpReaf(index);
-
-		if (pReaf->terrainMesh)
-		{
-			gMeshRenderer.Render(pd3dCommandList, pReaf->terrainMesh);
-		}
+		RenderTerrain(pd3dCommandList, *pReaf, pTerrain, isGBuffers); 
 	} 
 
 	// 지형 오브젝트 렌더링
-	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, "InstancingStandardShader", isGBuffers); 
+	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_INSTANCING_STANDARD, isGBuffers);
 	for (int index = 0; index < GetReafNodeCount(); ++index)
 	{ 
 		quadtree::QT_DRAWER_NODE* const pReaf = GetpReaf(index);
@@ -456,34 +446,60 @@ void QtTerrainInstancingDrawer::RenderObjAll(ID3D12GraphicsCommandList* pd3dComm
 		}
 	}
 }
- 
-void QtTerrainInstancingDrawer::RenderObj(ID3D12GraphicsCommandList* pd3dCommandList, const quadtree::QT_DRAWER_NODE& node, bool isGBuffers)
+  
+void QtTerrainInstancingDrawer::RenderTerrain(ID3D12GraphicsCommandList* pd3dCommandList, const quadtree::QT_DRAWER_NODE& node, const Terrain* pTerrain, bool isGBuffers)
 {
+	assert(!(node.terrainMesh == nullptr) && "terrainMesh is nullptr");
+	// 렌더링
+	extern MeshRenderer gMeshRenderer;
+
+	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_TERRAIN, isGBuffers);
+	pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_WORLD, 16, &Matrix4x4::Identity(), 0);
+	pTerrain->UpdateShaderVariables(pd3dCommandList);
+	gMeshRenderer.Render(pd3dCommandList, node.terrainMesh);
 }
 
-void QtTerrainInstancingDrawer::RenderObjForShadow(ID3D12GraphicsCommandList* pd3dCommandList, const quadtree::QT_DRAWER_NODE& node, bool isGBuffers)
-{  
-	for (int index = 0; index < GetReafNodeCount(); ++index)
+void QtTerrainInstancingDrawer::RenderTerrainObjs(ID3D12GraphicsCommandList* pd3dCommandList, const quadtree::QT_DRAWER_NODE& node, bool isGBuffers) const
+{
+	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_INSTANCING_STANDARD, isGBuffers);
+
+	// key : std::string으로 이름을 의미합니다.
+	// 모든 리프노드를 순회하면서 각 리프노드에 대한 변수를 만듭니다.
+	for (const auto& info : node.ModelInfoList)
 	{
-		quadtree::QT_DRAWER_NODE* const pReaf = GetpReaf(index);
+		if (info.second.TerrainObjectCount == 0) continue;
+		if (!strcmp(info.first.c_str(), Flower.c_str())) continue;
+		if (!strcmp(info.first.c_str(), RUIN_FLOOR.c_str())) continue;
 
-		// key : std::string으로 이름을 의미합니다.
-		// 모든 리프노드를 순회하면서 각 리프노드에 대한 변수를 만듭니다.
-		for (const auto& info : pReaf->ModelInfoList)
-		{
-			if (info.second.TerrainObjectCount == 0) continue;
-			if (!strcmp(info.first.c_str(), Flower.c_str())) continue;
-			if (!strcmp(info.first.c_str(), RUIN_FLOOR.c_str())) continue;
+		// 인스턴싱 쉐이더 리소스 뷰
+		pd3dCommandList->SetGraphicsRootShaderResourceView(ROOTPARAMETER_INSTANCING, info.second.m_pd3dcbGameObjects->GetGPUVirtualAddress()); 
+		info.second.pTexture->UpdateShaderVariables(pd3dCommandList);
+		info.second.pLoadObject->RenderInstancing(pd3dCommandList, info.second.TerrainObjectCount, isGBuffers);
+	}
+}
 
-			pd3dCommandList->SetGraphicsRootShaderResourceView(ROOTPARAMETER_INSTANCING, info.second.m_pd3dcbGameObjects->GetGPUVirtualAddress()); // 인스턴싱 쉐이더 리소스 뷰
-			 
-			info.second.pLoadObject->RenderInstancing(pd3dCommandList, info.second.TerrainObjectCount, isGBuffers);
-		}
-	} 
+void QtTerrainInstancingDrawer::RenderTerrainObjsForShadow(ID3D12GraphicsCommandList* pd3dCommandList, const quadtree::QT_DRAWER_NODE& node, bool isGBuffers)
+{
+	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_INSTACINGSTANDARDFORSHADOW, isGBuffers);
+
+	// key : std::string으로 이름을 의미합니다.
+	// 모든 리프노드를 순회하면서 각 리프노드에 대한 변수를 만듭니다.
+	for (const auto& info : node.ModelInfoList)
+	{
+		if (info.second.TerrainObjectCount == 0) continue;
+		if (!strcmp(info.first.c_str(), Flower.c_str())) continue;
+		if (!strcmp(info.first.c_str(), RUIN_FLOOR.c_str())) continue;
+
+		pd3dCommandList->SetGraphicsRootShaderResourceView(ROOTPARAMETER_INSTANCING, info.second.m_pd3dcbGameObjects->GetGPUVirtualAddress()); // 인스턴싱 쉐이더 리소스 뷰
+
+		info.second.pLoadObject->RenderInstancing(pd3dCommandList, info.second.TerrainObjectCount, isGBuffers);
+	}
 }
 
 void QtTerrainInstancingDrawer::RenderObjBOBox(ID3D12GraphicsCommandList* pd3dCommandList, const quadtree::QT_DRAWER_NODE& node)
 {
+	// ShaderManager::GetInstance()->SetPSO(pd3dCommandList, "InstancingLine", isGBuffers);
+
 	// info.first = 모델 이름
 	// info.second = TerrainObjectInfo라는 모델 정보
 
@@ -559,26 +575,15 @@ void QtTerrainInstancingDrawer::PrintInfo()
  
 // 그림자 렌더링을 위한 지형 오브젝트만 렌더링합니다.
 void QtTerrainInstancingDrawer::RenderInstancingObjectsForShadow(ID3D12GraphicsCommandList * pd3dCommandList)
-{
-	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_INSTACINGSTANDARDFORSHADOW, false);
-
-	// 설명자 힙 설정 
+{ 
 	RecursiveRenderTerrainObjectsForShadow(GetpRoot(), pd3dCommandList, false);
 }
 
 void QtTerrainInstancingDrawer::Render(ID3D12GraphicsCommandList * pd3dCommandList, Terrain * pTerrain, ID3D12DescriptorHeap* pHeap, bool isGBuffers)
 {
-	// 지형 렌더
-	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_TERRAIN, isGBuffers);
+	RecursiveRenderTerrain(GetpRoot(), pd3dCommandList, pTerrain, isGBuffers); // 지형 렌더
 
-	pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_WORLD, 16, &Matrix4x4::Identity(), 0); 
-	
-	pTerrain->UpdateShaderVariables(pd3dCommandList);
-
-	RecursiveRender(GetpRoot(), pd3dCommandList, isGBuffers); // 지형 렌더	 
-
-	// 지형 오브젝트 렌더
-	RenderTerrainObjects(pd3dCommandList, isGBuffers); 
+	RecursiveRenderTerrainObjs(GetpRoot(), pd3dCommandList, isGBuffers); // 지형 오브젝트 렌더링
 }
  
 void QtTerrainInstancingDrawer::AddWorldMatrix(const MyBOBox& collider, const std::string& model_name, const XMFLOAT4X4& world)

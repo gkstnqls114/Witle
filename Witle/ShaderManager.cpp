@@ -89,7 +89,7 @@ void ShaderManager::BuildShaders(ID3D12Device * pd3dDevice, ID3D12RootSignature 
 
 	Shader* pInstancingStandardShader = new InstancingStandardShader();
 	pInstancingStandardShader->CreateShader(pd3dDevice, pd3dGraphicsRootSignature);
-	InsertShader("InstancingStandardShader", pInstancingStandardShader);
+	InsertShader(SHADER_INSTANCING_STANDARD, pInstancingStandardShader);
 
 	Shader* pSkinnedShader = new SkinnedShader();
 	pSkinnedShader->CreateShader(pd3dDevice, pd3dGraphicsRootSignature);

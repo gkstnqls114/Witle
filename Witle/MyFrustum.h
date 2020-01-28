@@ -34,9 +34,6 @@ public:
 	
 	bool IsIntersect(const XMFLOAT3& pos) const;
 	bool IsIntersect(const BoundingBox& pos) const;
-
-	void CheckRendering(quadtree::QT_DRAWER_NODE* node);
-	void CheckRenderingAllTRUE(quadtree::QT_DRAWER_NODE* node);
-	void CheckRenderingAllFALSE(quadtree::QT_DRAWER_NODE* node);
+	 
 	BoundingFrustum GetBoundingFrustum() const { return m_frustum; }
 };

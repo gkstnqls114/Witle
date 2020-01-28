@@ -73,7 +73,7 @@ Terrain::~Terrain()
 	ReleaseMembers();
 }
 
-void Terrain::UpdateShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList)
+void Terrain::UpdateShaderVariables(ID3D12GraphicsCommandList * pd3dCommandList) const
 { 
 	static_cast<Texture *>(m_ResourceBase)->UpdateShaderVariables(pd3dCommandList);
 }

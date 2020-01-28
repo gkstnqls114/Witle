@@ -15,6 +15,7 @@ class MyDescriptorHeap;
 class LoadObject;
 class Texture;
 class GameObject;
+class Shader;
 
 /*
     쿼드트리와 인스턴싱을 이용하여 지형과 지형 오브젝트를 렌더링을 하는 클래스
@@ -23,14 +24,7 @@ class QtTerrainInstancingDrawer
 	: public Quadtree<quadtree::QT_DRAWER_NODE, quadtree::QT_DRAWER_ADDER>
 { 
 	std::vector<XMFLOAT4X4> m_AltarTransformStorage; // Altar transform 위치 저장하는 곳
-	 
-	// 인스턴싱을 통해 렌더합니다.
-	void RenderObj(ID3D12GraphicsCommandList* pd3dCommandList, const quadtree::QT_DRAWER_NODE& node, bool isGBuffers);
-	void RenderObjForShadow(ID3D12GraphicsCommandList* pd3dCommandList, const quadtree::QT_DRAWER_NODE& node, bool isGBuffers);
-	void RenderObjBOBox(ID3D12GraphicsCommandList* pd3dCommandList, const quadtree::QT_DRAWER_NODE& node);
-
-	void CreateShaderVariables(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList);
-	
+	  
 public:
 	  
 	XMFLOAT4X4 GetAltarTransform(int index, const std::string& name);
@@ -55,29 +49,42 @@ private:
 
 private: 
 	const UINT m_lengthMin{ 256 + 1 }; // 나누어지는 픽셀 크기
-	const UINT m_widthMin{ 256+ 1 }; // 나누어지는 픽셀 크기
+	const UINT m_widthMin{ 256 + 1 }; // 나누어지는 픽셀 크기
 
 	XMFLOAT3 m_xmf3Scale{ 0.f, 0.f, 0.f };
 	XMFLOAT4 m_xmf4Color{ 1.f, 0.f, 0.f , 1.f};
 	 
 private:  
-	// 터레인 초기 위치 정보
+	//// 터레인 오브젝트들의 초기 위치 정보 로드 //////////////
 	void LoadTerrainObjectFromFile(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, const char* pstrFileName, const QtTerrainInstancingDrawer const* pTerrain);
 	void LoadNameAndPositionFromFile(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, FILE* pInFile, const QtTerrainInstancingDrawer const* pTerrain);
 	bool LoadTransform(char* name, const char* comp_name, const XMFLOAT4X4& tr);
-	// 터레인 초기 위치 정보 로드
+	//// 터레인 오브젝트들의 초기 위치 정보 로드 //////////////
 	 
-	void RecursiveRenderTerrainObjects_BOBox(const quadtree::QT_DRAWER_NODE* node, ID3D12GraphicsCommandList *pd3dCommandList);
+	// node 에 해당하는 터레인를 렌더링합니다.
+	void RenderTerrain(ID3D12GraphicsCommandList* pd3dCommandList, const quadtree::QT_DRAWER_NODE& node, const Terrain* pTerrain, bool isGBuffers);
 	 
-	void RenderTerrainObjects(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers);
-	void RecursiveRenderTerrainObjects(const quadtree::QT_DRAWER_NODE* node, ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers);
+	// node 에 위치하는 터레인 오브젝트들을 렌더링합니다.
+	void RenderTerrainObjs(ID3D12GraphicsCommandList* pd3dCommandList, const quadtree::QT_DRAWER_NODE& node, bool isGBuffers) const;
+	
+	// node 에 위치하는 터레인 오브젝트들을 렌더링합니다. 그림자용으로 텍스쳐 설정 안합니다.
+	void RenderTerrainObjsForShadow(ID3D12GraphicsCommandList* pd3dCommandList, const quadtree::QT_DRAWER_NODE& node, bool isGBuffers);
+
+    // node 에 위치하는 터레인 오브젝트들의 바운딩 박스를 렌더링합니다.
+	void RenderObjBOBox(ID3D12GraphicsCommandList* pd3dCommandList, const quadtree::QT_DRAWER_NODE& node);
+
+	// 각 node 의 인스턴싱 쉐이더 변수를 생성합니다.
+	void CreateShaderVariables(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList);
+ 
+	void RecursiveRenderTerrainObjs(const quadtree::QT_DRAWER_NODE* node, ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers);
 	void RecursiveRenderTerrainObjectsForShadow(const quadtree::QT_DRAWER_NODE* node, ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers);
-	void RecursiveRender(const quadtree::QT_DRAWER_NODE* node, ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers);
+	void RecursiveRenderTerrain(const quadtree::QT_DRAWER_NODE* node, ID3D12GraphicsCommandList *pd3dCommandList, const Terrain* pTerrain, bool isGBuffers);
+	void RecursiveRenderTerrainObjects_BOBox(const quadtree::QT_DRAWER_NODE* node, ID3D12GraphicsCommandList *pd3dCommandList);
+	
 	void RecursiveReleaseUploadBuffers(quadtree::QT_DRAWER_NODE* node);
 	void RecursiveReleaseObjects(quadtree::QT_DRAWER_NODE* node);
 	   
-	void CreateReafNode(quadtree::QT_DRAWER_NODE* node, ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList,
-		 HeightMapImage* pContext = NULL);
+	void CreateReafNode(quadtree::QT_DRAWER_NODE* node, ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, HeightMapImage* pContext = NULL);
 
 public:
 	QtTerrainInstancingDrawer(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, 

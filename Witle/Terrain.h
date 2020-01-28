@@ -32,7 +32,7 @@ public:
 	virtual ~Terrain();
 
 	virtual void Update(float fElapsedTime) override {};
-	void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList);
+	void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList) const;
 
 	float GetHeight(float x, float z, bool bReverseQuad = false);
 	XMFLOAT3 GetNormal(float x, float z); 
