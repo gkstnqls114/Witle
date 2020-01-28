@@ -1351,8 +1351,8 @@ void GameScene::LastUpdate( )
 
 	// 카메라 프러스텀과 쿼드트리 지형 렌더링 체크
 	if (m_pMainCamera && m_pQuadtreeTerrain)
-	{
-		m_pMainCamera->GetCamera()->GetFrustum()->CheckRendering(m_pQuadtreeTerrain->GetRootNode());
+	{ 
+		//m_pMainCamera->GetCamera()->GetFrustum()->CheckRendering(m_pQuadtreeTerrain->GetRootNode());
 	} 
 	// 순서변경X  
 }

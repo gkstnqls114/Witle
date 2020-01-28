@@ -100,7 +100,7 @@ namespace quadtree
 	struct QT_DRAWER_NODE : public QT_BASE_NODE
 	{
 		BoundingBox boundingBox; // 해당 터레인에 속하는가 확인을 해주는 바운딩박스
-		bool isRendering{ false }; // 렌더링 할 것인가, 말 것인가.  
+		bool isRendering{ true }; // 렌더링 할 것인가, 말 것인가.  
 		QT_DRAWER_NODE* children[4]{ nullptr,  nullptr , nullptr , nullptr }; 
 		Mesh* terrainMesh{ nullptr };       // 렌더할 터레인 메쉬
 
