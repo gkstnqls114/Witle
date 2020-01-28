@@ -134,7 +134,7 @@ void QtTerrainInstancingDrawer::LoadNameAndPositionFromFile(ID3D12Device* pd3dDe
 			// XMFLOAT4X4 transform = Matrix4x4::Identity();
 			transform._41 = -(temp._41);
 			transform._42 = 0;
-			if (!strcmp(name, Flower)) transform._42 = temp._42;
+			if (!strcmp(name, Flower.c_str())) transform._42 = temp._42;
 			transform._43 = -(temp._43);
 
 			assert(!(temp._41 >= 40000));
@@ -245,7 +245,7 @@ bool QtTerrainInstancingDrawer::LoadTransform(char* name, const char* comp_name,
 					AddWorldMatrix(mybobox, comp_name, TestObject->m_pChild->m_xmf4x4World);
 				}
 
-				if (!strcmp(comp_name, ALTAR_IN))
+				if (!strcmp(comp_name, ALTAR_IN.c_str()))
 				{
 					m_AltarTransformStorage.emplace_back(tr);
 				}
@@ -450,11 +450,11 @@ void QtTerrainInstancingDrawer::RenderObjAll(ID3D12GraphicsCommandList* pd3dComm
 
 		// key : std::string으로 이름을 의미합니다.
 		// 모든 리프노드를 순회하면서 각 리프노드에 대한 변수를 만듭니다.
-		for (auto& info : pReaf->ModelInfoList)
+		for (const auto& info : pReaf->ModelInfoList)
 		{ 
 			if (info.second.TerrainObjectCount == 0) continue;
-			if (!strcmp(info.first.c_str(), Flower)) continue;
-			if (!strcmp(info.first.c_str(), RUIN_FLOOR)) continue;
+			if (!strcmp(info.first.c_str(), Flower.c_str())) continue;
+			if (!strcmp(info.first.c_str(), RUIN_FLOOR.c_str())) continue;
 
 			pd3dCommandList->SetGraphicsRootShaderResourceView(ROOTPARAMETER_INSTANCING, info.second.m_pd3dcbGameObjects->GetGPUVirtualAddress()); // 인스턴싱 쉐이더 리소스 뷰
 
@@ -477,11 +477,11 @@ void QtTerrainInstancingDrawer::RenderObjForShadow(ID3D12GraphicsCommandList* pd
 
 		// key : std::string으로 이름을 의미합니다.
 		// 모든 리프노드를 순회하면서 각 리프노드에 대한 변수를 만듭니다.
-		for (auto& info : pReaf->ModelInfoList)
+		for (const auto& info : pReaf->ModelInfoList)
 		{
 			if (info.second.TerrainObjectCount == 0) continue;
-			if (!strcmp(info.first.c_str(), Flower)) continue;
-			if (!strcmp(info.first.c_str(), RUIN_FLOOR)) continue;
+			if (!strcmp(info.first.c_str(), Flower.c_str())) continue;
+			if (!strcmp(info.first.c_str(), RUIN_FLOOR.c_str())) continue;
 
 			pd3dCommandList->SetGraphicsRootShaderResourceView(ROOTPARAMETER_INSTANCING, info.second.m_pd3dcbGameObjects->GetGPUVirtualAddress()); // 인스턴싱 쉐이더 리소스 뷰
 			 

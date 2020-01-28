@@ -102,7 +102,7 @@ void QtTerrainCalculator::CreateTerrainObj(FILE* pInFile)
 			// fbx sdk 에서 꺼내올때 x, z좌표에 -부호 붙여야함 ...
 			transform._41 = -(temp._41);
 			transform._42 = 0; // y좌표는 0으로 고정
-			if (!strcmp(name, Flower)) transform._42 = temp._42;
+			if (!strcmp(name, Flower.c_str())) transform._42 = temp._42;
 			transform._43 = -(temp._43);
 
 			assert(!(temp._41 >= 40000));
@@ -247,7 +247,7 @@ QtTerrainCalculator::~QtTerrainCalculator()
 void QtTerrainCalculator::Init()
 {   
 	// 나누어진 Quadtree를 통해 지형 오브젝트의 정보를 넣는다.
-	CreateTerrainObj(TERRAIN_OBJS_INFO_PATH);
+	CreateTerrainObj(TERRAIN_OBJS_INFO_PATH.c_str());
 }
   
 void QtTerrainCalculator::AddCollider(const MyBOBox& collider, const XMFLOAT4X4& world)

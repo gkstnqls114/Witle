@@ -130,7 +130,7 @@ void MonsterTransformStorage::LoadNameAndPositionFromFile(ID3D12Device * pd3dDev
 			// XMFLOAT4X4 transform = Matrix4x4::Identity();
 			transform._41 =  -(temp._41);
 			transform._42 = 0;
-			if (!strcmp(name, Flower)) transform._42 = temp._42;
+			if (!strcmp(name, Flower.c_str())) transform._42 = temp._42;
 			transform._43 =  -(temp._43);
 			 
 			assert(!(temp._41 >= 40000));
@@ -143,29 +143,29 @@ void MonsterTransformStorage::LoadNameAndPositionFromFile(ID3D12Device * pd3dDev
 			XMFLOAT3 position{ transform._41, transform._42, transform._43 };  
 
 			// 몬스터는 개별로 모델저장소에 저장하여 존재하지 않아서 일단 이렇게 만들어야함 ..
-			if (!strcmp(name, SPACECAT_BLUE))
+			if (!strcmp(name, SPACECAT_BLUE.c_str()))
 			{ 
-				LoadTransform(name, SPACECAT_BLUE, transform);
+				LoadTransform(name, SPACECAT_BLUE.c_str(), transform);
 			}
-			else if (!strcmp(name, SPACECAT_PINK))
+			else if (!strcmp(name, SPACECAT_PINK.c_str()))
 			{
-				LoadTransform(name, SPACECAT_PINK, transform);
+				LoadTransform(name, SPACECAT_PINK.c_str(), transform);
 			}
-			else if (!strcmp(name, SPACECAT_GREEN))
+			else if (!strcmp(name, SPACECAT_GREEN.c_str()))
 			{
-				LoadTransform(name, SPACECAT_GREEN, transform);
+				LoadTransform(name, SPACECAT_GREEN.c_str(), transform);
 			}
-			else if (!strcmp(name, CREEPYMONSTER))
+			else if (!strcmp(name, CREEPYMONSTER.c_str()))
 			{
-				LoadTransform(name, CREEPYMONSTER, transform);
+				LoadTransform(name, CREEPYMONSTER.c_str(), transform);
 			} 
-			else if (!strcmp(name, MUSHROOM))
+			else if (!strcmp(name, MUSHROOM.c_str()))
 			{
-				LoadTransform(name, MUSHROOM, transform);
+				LoadTransform(name, MUSHROOM.c_str(), transform);
 			}
-			else if (!strcmp(name, DRAGON))
+			else if (!strcmp(name, DRAGON.c_str()))
 			{
-				LoadTransform(name, DRAGON, transform);
+				LoadTransform(name, DRAGON.c_str(), transform);
 			}
 			 
 		}

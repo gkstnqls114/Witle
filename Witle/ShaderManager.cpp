@@ -183,6 +183,17 @@ bool ShaderManager::InsertShader(std::string&& s, Shader * pso)
 	}
 }
 
+bool ShaderManager::InsertShader(const std::string& s, Shader* pso)
+{ 
+	auto pair = m_Shaders.insert(std::pair<std::string, Shader*>(s, pso));
+	if (pair.second) {
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
 Shader * ShaderManager::GetShader(const std::string& s) const
 {
 	return (*(m_Shaders.find(s))).second;
@@ -194,6 +205,12 @@ Shader * ShaderManager::GetShader(std::string && s) const
 }
 
 void ShaderManager::SetPSO(ID3D12GraphicsCommandList * pd3dCommandList, std::string&& name, bool isGBuffers) const
+{
+	if (isGBuffers) SetPSOForGBuffers(pd3dCommandList, name);
+	else SetPSOForSwapChain(pd3dCommandList, name);
+}
+
+void ShaderManager::SetPSO(ID3D12GraphicsCommandList* pd3dCommandList, const std::string& name, bool isGBuffers) const
 {
 	if (isGBuffers) SetPSOForGBuffers(pd3dCommandList, name);
 	else SetPSOForSwapChain(pd3dCommandList, name);

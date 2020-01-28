@@ -129,14 +129,14 @@ Player::Player(const std::string & entityID, ID3D12Device * pd3dDevice, ID3D12Gr
 	m_pMyBOBox = new MyBOBox(this, pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 75.F, 0.F }, extents);
 
 	m_pPlayerHPStatus = new PlayerStatus(this, pd3dDevice, pd3dCommandList, 
-		POINT{ int(GameScreen::GetWidth()) - 1100, int(GameScreen::GetHeight()) - 670 }, 295.f, 30.f, IMAGE_RED);
+		POINT{ int(GameScreen::GetWidth()) - 1100, int(GameScreen::GetHeight()) - 670 }, 295.f, 30.f, IMAGE_RED.c_str());
 	m_pHpBarImage = new UI2DImage(this, ENUM_SCENE::SCENE_GAME, pd3dDevice, pd3dCommandList,
-		POINT{ int(GameScreen::GetWidth()) - 1100, int(GameScreen::GetHeight()) - 670 }, 300.f, 30.f, IMAGE_HPBAR);
+		POINT{ int(GameScreen::GetWidth()) - 1100, int(GameScreen::GetHeight()) - 670 }, 300.f, 30.f, IMAGE_HPBAR.c_str());
 
 	m_pPlayerMPStatus = new PlayerStatus(this, pd3dDevice, pd3dCommandList, 
-		POINT{ int(GameScreen::GetWidth()) - 1100, int(GameScreen::GetHeight()) - 620 }, 295.f, 30.f, IMAGE_BLUE);
+		POINT{ int(GameScreen::GetWidth()) - 1100, int(GameScreen::GetHeight()) - 620 }, 295.f, 30.f, IMAGE_BLUE.c_str());
 	m_pMpBarImage = new UI2DImage(this, ENUM_SCENE::SCENE_GAME, pd3dDevice, pd3dCommandList,
-		POINT{ int(GameScreen::GetWidth()) - 1100, int(GameScreen::GetHeight()) - 620 }, 300.f, 30.f, IMAGE_MPBAR);
+		POINT{ int(GameScreen::GetWidth()) - 1100, int(GameScreen::GetHeight()) - 620 }, 300.f, 30.f, IMAGE_MPBAR.c_str());
 
 	m_PlayerMovement = new PlayerMovement(this);
 	 
