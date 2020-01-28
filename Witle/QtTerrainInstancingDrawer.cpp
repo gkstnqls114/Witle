@@ -394,17 +394,9 @@ void QtTerrainInstancingDrawer::CreateReafNode(quadtree::QT_DRAWER_NODE* node, I
 QtTerrainInstancingDrawer::QtTerrainInstancingDrawer(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, 
 	const XMFLOAT3& center, const XMFLOAT3& extents, float min_size,
 	int nWidth, int nLength, XMFLOAT3 xmf3Scale, XMFLOAT4 xmf4Color, HeightMapImage * pContext)
-	: Quadtree<quadtree::QT_DRAWER_NODE, quadtree::QT_DRAWER_ADDER>(center, extents, min_size)
-{ 
-	m_widthTotal = nWidth;
-	m_lengthTotal = nLength;
-	m_xmf3Scale = xmf3Scale;
-	m_xmf4Color = xmf4Color;
-
-	HeightMapImage *pHeightMapImage = (HeightMapImage *)pContext;
-	int cxHeightMap = pHeightMapImage->GetHeightMapWidth();
-	int czHeightMap = pHeightMapImage->GetHeightMapLength();
-
+	: Quadtree<quadtree::QT_DRAWER_NODE, quadtree::QT_DRAWER_ADDER>(center, extents, min_size),
+	  m_xmf3Scale(xmf3Scale), m_xmf4Color(xmf4Color)
+{    
 	m_EmptyObj = new EmptyGameObject("QtTerrainInstancingDrawer");
 
 	for (int index = 0; index < GetReafNodeCount(); ++index)
@@ -558,6 +550,7 @@ void QtTerrainInstancingDrawer::CreateShaderVariables(ID3D12Device* pd3dDevice, 
 
 void QtTerrainInstancingDrawer::Init()
 {
+
 }
 
 void QtTerrainInstancingDrawer::PrintInfo()

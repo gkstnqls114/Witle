@@ -40,8 +40,8 @@ public:
 	GameObject* m_EmptyObj{ nullptr };
 
 public:
-	virtual void Init();
-	virtual void PrintInfo();
+	virtual void Init() override;
+	virtual void PrintInfo() override;
 
 private: 
 
@@ -53,10 +53,7 @@ private:
 	// 컴포넌트가 아닌, 게임오브젝트 내에서 동적할당된 업로드 힙을 해제한다.
 	void ReleaseMemberUploadBuffers();
 
-private:
-	UINT m_widthTotal{ 0 };
-	UINT m_lengthTotal{ 0 };
-
+private: 
 	const UINT m_lengthMin{ 256 + 1 }; // 나누어지는 픽셀 크기
 	const UINT m_widthMin{ 256+ 1 }; // 나누어지는 픽셀 크기
 
