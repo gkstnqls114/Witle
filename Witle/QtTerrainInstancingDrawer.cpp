@@ -266,7 +266,7 @@ void QtTerrainInstancingDrawer::RecursiveRenderTerrainObjects_BOBox(const quadtr
 	{
 		if (node->terrainMesh)
 		{
-			RenderObjBOBox(pd3dCommandList, node->id);
+			RenderObjBOBox(pd3dCommandList, *node);
 		}
 		else
 		{
@@ -297,7 +297,7 @@ void QtTerrainInstancingDrawer::RecursiveRenderTerrainObjects(const quadtree::QT
 	{
 		if (node->terrainMesh)
 		{
-			RenderObj(pd3dCommandList, node->id, isGBuffers); 
+			RenderObj(pd3dCommandList, *node, isGBuffers); 
 		}
 		else
 		{
@@ -318,7 +318,7 @@ void QtTerrainInstancingDrawer::RecursiveRenderTerrainObjectsForShadow(const qua
 	{
 		if (node->terrainMesh)
 		{
-			RenderObjForShadow(pd3dCommandList, node->id, isGBuffers); 
+			RenderObjForShadow(pd3dCommandList, *node, isGBuffers); 
 		}
 		else
 		{ 
@@ -347,22 +347,7 @@ void QtTerrainInstancingDrawer::RecursiveRender(const quadtree::QT_DRAWER_NODE *
 		if (node->children[3]->isRendering) RecursiveRender(node->children[3], pd3dCommandList, isGBuffers);
 	}
 }
-
-void QtTerrainInstancingDrawer::RecursiveInitReafNodes(quadtree::QT_DRAWER_NODE * node)
-{ 
-	if (node->terrainMesh)
-	{
-		m_pReafNodes[node->id] = node;
-	}
-	else
-	{
-		RecursiveInitReafNodes(node->children[0]);
-		RecursiveInitReafNodes(node->children[1]);
-		RecursiveInitReafNodes(node->children[2]);
-		RecursiveInitReafNodes(node->children[3]);
-	}
-}
-
+ 
 void QtTerrainInstancingDrawer::RecursiveReleaseUploadBuffers(quadtree::QT_DRAWER_NODE * node)
 {
 	if (node->terrainMesh)
@@ -404,44 +389,6 @@ void QtTerrainInstancingDrawer::RecursiveReleaseObjects(quadtree::QT_DRAWER_NODE
 		node->children[3] = nullptr;
 	}
 }
-
-void QtTerrainInstancingDrawer::RecursiveCalculateIDs(quadtree::QT_DRAWER_NODE * node, const XMFLOAT3 position, int* pIDs) const
-{
-	if (node->terrainMesh)
-	{
-		assert(!(node->id == -1));
-		// 포지션이 해당 메쉬에 맞는지 확인한다. 
-		// x, z 사이에 있는지 검사한다.
-		float minX = node->boundingBox.Center.x - node->boundingBox.Extents.x;
-		float maxX = node->boundingBox.Center.x + node->boundingBox.Extents.x;
-		bool isIntervenedX = (minX <= position.x) && (position.x <= maxX);
-
-		float minZ = node->boundingBox.Center.z - node->boundingBox.Extents.z;
-		float maxZ = node->boundingBox.Center.z + node->boundingBox.Extents.z;
-		bool isIntervenedZ = (minZ <= position.z)  && (position.z <= maxZ);
-		 
-		if (isIntervenedX && isIntervenedZ)
-		{  
-			// 만약 속한다면 해당 ID를 채운다.
-			assert(!(pIDs[QUAD - 1] != -1)); // 만약 마지막이 채워져 있다면 오류이다.
-			for (int x = 0; x < QUAD; ++x)
-			{
-				if (pIDs[x] == -1)
-				{
-					pIDs[x] = node->id; 
-					break;
-				}
-			} 
-		}
-	}
-	else
-	{
-		RecursiveCalculateIDs(node->children[0], position, pIDs);
-		RecursiveCalculateIDs(node->children[1], position, pIDs);
-		RecursiveCalculateIDs(node->children[2], position, pIDs);
-		RecursiveCalculateIDs(node->children[3], position, pIDs);
-	}
-}
  
 void QtTerrainInstancingDrawer::RecursiveCreateTerrain(quadtree::QT_DRAWER_NODE * node, ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList,
 	int xStart, int zStart, int nBlockWidth, int nBlockLength,
@@ -452,10 +399,7 @@ void QtTerrainInstancingDrawer::RecursiveCreateTerrain(quadtree::QT_DRAWER_NODE 
 	assert(!(m_lengthMin != m_widthMin));
 
 	if (nBlockWidth == m_widthMin || nBlockLength == m_lengthMin) // 마지막 리프 노드라면..
-	{ 
-		// 마지막 리프 노드는 아이디를 설정한다. 
-		m_ReafNodeCount += 1;
-
+	{  
 		// 현재 테스트로 바운딩박스의 centerY = 128, externY = 256 으로 설정 
 		XMFLOAT3 center{
 			float(xStart) * m_xmf3Scale.x + float(nBlockWidth - 1) / 2.0f * m_xmf3Scale.x ,
@@ -545,8 +489,7 @@ QtTerrainInstancingDrawer::QtTerrainInstancingDrawer(ID3D12Device * pd3dDevice, 
 	// 리프노드의 개수를 구하고, 바운딩박스및 터레인 조각을 생성한다.
 	// 순서변경X
 	RecursiveCreateTerrain(m_pRootNode, pd3dDevice, pd3dCommandList, 0, 0, m_widthTotal, m_lengthTotal, pContext);
-	m_pReafNodes = new quadtree::QT_DRAWER_NODE*[m_ReafNodeCount]; //리프노드를 가리킬 포인터 배열을 생성
-	RecursiveInitReafNodes(m_pRootNode);
+	
 	// 순서변경X 
 
 	// 위치 정보를 읽어온다.
@@ -568,15 +511,12 @@ QtTerrainInstancingDrawer::~QtTerrainInstancingDrawer()
   
 void QtTerrainInstancingDrawer::RenderObjAll(ID3D12GraphicsCommandList* pd3dCommandList, Terrain* pTerrain, bool isGBuffers)
 { 
-	// 지형 렌더
-	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_TERRAIN, isGBuffers);
-
-	pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_WORLD, 16, &Matrix4x4::Identity(), 0);
-
-	pTerrain->UpdateShaderVariables(pd3dCommandList);
-
 	extern MeshRenderer gMeshRenderer;
 
+	// 지형 렌더
+	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_TERRAIN, isGBuffers); 
+	pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_WORLD, 16, &Matrix4x4::Identity(), 0); 
+	pTerrain->UpdateShaderVariables(pd3dCommandList);  
 	for (int index = 0; index < GetReafNodeCount(); ++index)
 	{
 		quadtree::QT_DRAWER_NODE* const pReaf = GetpReaf(index);
@@ -588,8 +528,7 @@ void QtTerrainInstancingDrawer::RenderObjAll(ID3D12GraphicsCommandList* pd3dComm
 	} 
 
 	// 지형 오브젝트 렌더링
-	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, "InstancingStandardShader", isGBuffers);
-
+	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, "InstancingStandardShader", isGBuffers); 
 	for (int index = 0; index < GetReafNodeCount(); ++index)
 	{ 
 		quadtree::QT_DRAWER_NODE* const pReaf = GetpReaf(index);
@@ -610,13 +549,12 @@ void QtTerrainInstancingDrawer::RenderObjAll(ID3D12GraphicsCommandList* pd3dComm
 		}
 	}
 }
-
-void QtTerrainInstancingDrawer::RenderObj(ID3D12GraphicsCommandList* pd3dCommandList, int index, bool isGBuffers)
+ 
+void QtTerrainInstancingDrawer::RenderObj(ID3D12GraphicsCommandList* pd3dCommandList, const quadtree::QT_DRAWER_NODE& node, bool isGBuffers)
 {
-
 }
 
-void QtTerrainInstancingDrawer::RenderObjForShadow(ID3D12GraphicsCommandList* pd3dCommandList, int index, bool isGBuffers)
+void QtTerrainInstancingDrawer::RenderObjForShadow(ID3D12GraphicsCommandList* pd3dCommandList, const quadtree::QT_DRAWER_NODE& node, bool isGBuffers)
 {  
 	for (int index = 0; index < GetReafNodeCount(); ++index)
 	{
@@ -637,7 +575,7 @@ void QtTerrainInstancingDrawer::RenderObjForShadow(ID3D12GraphicsCommandList* pd
 	} 
 }
 
-void QtTerrainInstancingDrawer::RenderObjBOBox(ID3D12GraphicsCommandList* pd3dCommandList, int index)
+void QtTerrainInstancingDrawer::RenderObjBOBox(ID3D12GraphicsCommandList* pd3dCommandList, const quadtree::QT_DRAWER_NODE& node)
 {
 	// info.first = 모델 이름
 	// info.second = TerrainObjectInfo라는 모델 정보
@@ -753,16 +691,6 @@ void QtTerrainInstancingDrawer::Render(ID3D12GraphicsCommandList * pd3dCommandLi
 
 	// 지형 오브젝트 렌더
 	RenderTerrainObjects(pd3dCommandList, isGBuffers); 
-}
-
-void QtTerrainInstancingDrawer::Render(int index, ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffers)
-{
-	// 렌더링
-	extern MeshRenderer gMeshRenderer; 
-	if (index < 0 || index >= m_ReafNodeCount) return;
-	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_TERRAIN, isGBuffers);
-	gMeshRenderer.Render(pd3dCommandList, m_pReafNodes[index]->terrainMesh);
-	RenderObj(pd3dCommandList, index, isGBuffers);
 }
  
 void QtTerrainInstancingDrawer::AddWorldMatrix(const MyBOBox& collider, const std::string& model_name, const XMFLOAT4X4& world)

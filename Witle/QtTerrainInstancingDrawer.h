@@ -21,15 +21,13 @@ class GameObject;
 */
 class QtTerrainInstancingDrawer
 	: public Quadtree<quadtree::QT_DRAWER_NODE, quadtree::QT_DRAWER_ADDER>
-{
-
+{ 
 	std::vector<XMFLOAT4X4> m_AltarTransformStorage; // Altar transform 위치 저장하는 곳
-
-
+	 
 	// 인스턴싱을 통해 렌더합니다.
-	void RenderObj(ID3D12GraphicsCommandList* pd3dCommandList, int index, bool isGBuffers);
-	void RenderObjForShadow(ID3D12GraphicsCommandList* pd3dCommandList, int index, bool isGBuffers);
-	void RenderObjBOBox(ID3D12GraphicsCommandList* pd3dCommandList, int index);
+	void RenderObj(ID3D12GraphicsCommandList* pd3dCommandList, const quadtree::QT_DRAWER_NODE& node, bool isGBuffers);
+	void RenderObjForShadow(ID3D12GraphicsCommandList* pd3dCommandList, const quadtree::QT_DRAWER_NODE& node, bool isGBuffers);
+	void RenderObjBOBox(ID3D12GraphicsCommandList* pd3dCommandList, const quadtree::QT_DRAWER_NODE& node);
 
 	void CreateShaderVariables(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList);
 	
@@ -68,11 +66,7 @@ private:
 	XMFLOAT4 m_xmf4Color{ 1.f, 0.f, 0.f , 1.f};
 
 	quadtree::QT_DRAWER_NODE* m_pRootNode{ nullptr };
-
-	int m_ReafNodeCount = 0;
-	quadtree::QT_DRAWER_NODE** m_pReafNodes{ nullptr };
 	 
- 
 private:  
 	// 터레인 초기 위치 정보
 	void LoadTerrainObjectFromFile(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, const char* pstrFileName, const QtTerrainInstancingDrawer const* pTerrain);
@@ -86,10 +80,8 @@ private:
 	void RecursiveRenderTerrainObjects(const quadtree::QT_DRAWER_NODE* node, ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers);
 	void RecursiveRenderTerrainObjectsForShadow(const quadtree::QT_DRAWER_NODE* node, ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers);
 	void RecursiveRender(const quadtree::QT_DRAWER_NODE* node, ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers);
-	void RecursiveInitReafNodes(quadtree::QT_DRAWER_NODE* node);
 	void RecursiveReleaseUploadBuffers(quadtree::QT_DRAWER_NODE* node);
 	void RecursiveReleaseObjects(quadtree::QT_DRAWER_NODE* node);
-	void RecursiveCalculateIDs(quadtree::QT_DRAWER_NODE* node, const XMFLOAT3 position, int* pIDs) const;
 	  
 	// 해당 함수를 재귀적으로 호출하며 터레인을 생성하는 함수입니다.
 	void RecursiveCreateTerrain(quadtree::QT_DRAWER_NODE* node, ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, 
@@ -112,9 +104,7 @@ public:
 	void RenderTerrainForShadow(ID3D12GraphicsCommandList *pd3dCommandList, Terrain * pTerrain, ID3D12DescriptorHeap* pHeap);
 	void RenderInstancingObjectsForShadow(ID3D12GraphicsCommandList *pd3dCommandList);
 	void Render(ID3D12GraphicsCommandList *pd3dCommandList, Terrain* pTerrain, ID3D12DescriptorHeap* pHeap, bool isGBuffers);
-	void Render(int index, ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers);
-	quadtree::QT_DRAWER_NODE* GetReafNode(int index) { return m_pReafNodes[index]; }
-	 
+	
 	void AddWorldMatrix(const MyBOBox& collider, const std::string& model_name, const XMFLOAT4X4& world);
 	 
 	// delete 이전에 반드시 호출
