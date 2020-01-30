@@ -698,11 +698,11 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 		MapInfoMgr::GetMapSizeX() ,
 		257, 257, xmf3Scale, xmf4Color, m_Terrain->GetHeightMapImage());
 	
-	//m_QtTerrainCalculator = new QtTerrainCalculator(
-	//	MapInfoMgr::GetMapCenter(), 
-	//	XMFLOAT3{ MapInfoMgr::GetMapExtentsX(), 10000.f, MapInfoMgr::GetMapExtentsZ() },
-	//	MapInfoMgr::GetMapSizeX() / 4.f);
-	//m_QtTerrainCalculator->Init();
+	m_QtTerrainCalculator = new QtTerrainCalculator(
+		MapInfoMgr::GetMapCenter(), 
+		XMFLOAT3{ MapInfoMgr::GetMapExtentsX(), 10000.f, MapInfoMgr::GetMapExtentsZ() },
+		MapInfoMgr::GetMapSizeX() / 4.f);
+	m_QtTerrainCalculator->Init();
 
 	// Ä«¸Þ¶ó
 	m_pMainCamera = new CameraObject("Camera");
@@ -962,6 +962,11 @@ void GameScene::ReleaseObjects()
 		m_Terrain->ReleaseObjects();
 		delete m_Terrain;
 		m_Terrain = nullptr;
+	}
+	if (m_QtTerrainCalculator)
+	{
+		delete m_QtTerrainCalculator;
+		m_QtTerrainCalculator = nullptr;
 	}
 	if (m_pQuadtreeTerrain)
 	{
