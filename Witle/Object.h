@@ -499,7 +499,7 @@ public:
 	
 	static void PrintFrameInfo(LoadObject *pGameObject, LoadObject *pParent);
 
-	static void CopyWorldMatrix(LoadObject* copy, LoadObject* copyed)
+	static void CopyWorldMatrix(LoadObject* copy, const LoadObject* copyed)
 	{
 		strcpy(copy->m_pstrFrameName, copyed->m_pstrFrameName);
 

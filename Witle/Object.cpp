@@ -749,9 +749,7 @@ LoadObject::LoadObject(int nMaterials) : LoadObject()
 }
 
 LoadObject::~LoadObject()
-{
-	if (m_pMesh) m_pMesh->Release();
-
+{ 
 	if (m_nMaterials > 0)
 	{
 		for (int i = 0; i < m_nMaterials; i++)
@@ -774,12 +772,12 @@ LoadObject::~LoadObject()
 	if (m_pChild)
 	{
 		delete m_pChild;
-		m_pChild = nullptr;
+		m_pChild = NULL;
 	}
 	if (m_pSibling)
 	{
 		delete m_pSibling;
-		m_pSibling = nullptr;
+		m_pSibling = NULL;
 	}
 }
 

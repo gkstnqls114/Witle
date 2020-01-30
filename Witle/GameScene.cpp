@@ -698,11 +698,11 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 		MapInfoMgr::GetMapSizeX() ,
 		257, 257, xmf3Scale, xmf4Color, m_Terrain->GetHeightMapImage());
 	
-	m_QtTerrainCalculator = new QtTerrainCalculator(
-		MapInfoMgr::GetMapCenter(), 
-		XMFLOAT3{ MapInfoMgr::GetMapExtentsX(), 10000.f, MapInfoMgr::GetMapExtentsZ() },
-		MapInfoMgr::GetMapSizeX() / 4.f);
-	m_QtTerrainCalculator->Init();
+	//m_QtTerrainCalculator = new QtTerrainCalculator(
+	//	MapInfoMgr::GetMapCenter(), 
+	//	XMFLOAT3{ MapInfoMgr::GetMapExtentsX(), 10000.f, MapInfoMgr::GetMapExtentsZ() },
+	//	MapInfoMgr::GetMapSizeX() / 4.f);
+	//m_QtTerrainCalculator->Init();
 
 	// 카메라
 	m_pMainCamera = new CameraObject("Camera");
@@ -1663,17 +1663,20 @@ void GameScene::UpdateCollision()
 	// 외곽 4 부분과 충돌처리 확인한다.
 	Collision::ProcessCollideEdge(m_pPlayer, 4, outside_box);
 	 
-	// 플레이어와 지형지물 충돌을 확인한다.   
-	m_QtTerrainCalculator->ProcessCollide(*m_pPlayer->GetBOBox(), *m_pPlayer);
-	 
-	// 보스와 지형지물 충돌을 확인한다.
-	m_QtTerrainCalculator->ProcessCollide(*m_Dragon->GetBOBox(), *m_Dragon);
-	 
-	// 몬스터 충돌체크 ///////////////////////// 
-	for (int x = 0; x < m_TestMonsterCount; ++x)
+	if (m_QtTerrainCalculator)
 	{
-		m_QtTerrainCalculator->ProcessCollide(*m_TestMonster[x]->GetBOBox(), *m_TestMonster[x]);
-	} 
+		// 플레이어와 지형지물 충돌을 확인한다.   
+		m_QtTerrainCalculator->ProcessCollide(*m_pPlayer->GetBOBox(), *m_pPlayer);
+
+		// 보스와 지형지물 충돌을 확인한다.
+		m_QtTerrainCalculator->ProcessCollide(*m_Dragon->GetBOBox(), *m_Dragon);
+
+		// 몬스터 충돌체크 ///////////////////////// 
+		for (int x = 0; x < m_TestMonsterCount; ++x)
+		{
+			m_QtTerrainCalculator->ProcessCollide(*m_TestMonster[x]->GetBOBox(), *m_TestMonster[x]);
+		}
+	}
 	// 몬스터 충돌체크 ///////////////////////// 
 }
 

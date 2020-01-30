@@ -65,6 +65,7 @@ namespace quadtree
 
 	public:
 		QT_DRAWER_INFO() = default;
+		void ReleaseObject();
 	};
 
 	struct QT_DRAWER_ADDER : public QT_BASE_ADDER

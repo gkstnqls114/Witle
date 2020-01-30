@@ -33,7 +33,7 @@ public:
 	void ReleaseUploadBuffers();
 	void ReleaseObjects();
 
-	LoadObject * GetRootObject(std::string name);
+	LoadObject* GetRootObject(std::string name); 
 	MyBOBox * GetBOBox(std::string name);
 	CLoadedModelInfo * GetModelInfo(std::string name);
 

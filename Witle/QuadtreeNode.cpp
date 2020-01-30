@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "Object.h"
 #include "QuadtreeNode.h"
  
 quadtree::QT_BASE_NODE::QT_BASE_NODE(XMFLOAT3&& center, XMFLOAT3&& extents)
@@ -55,4 +56,19 @@ quadtree::QT_COLLIDER_ADDER::QT_COLLIDER_ADDER(QT_COLLIDER_ADDER const& other)
 quadtree::QT_DRAWER_NODE::QT_DRAWER_NODE(const XMFLOAT3& center, const XMFLOAT3& extents)
 	: quadtree::QT_BASE_NODE::QT_BASE_NODE(center, extents)
 {
+}
+
+void quadtree::QT_DRAWER_INFO::ReleaseObject()
+{
+	TransformList.clear(); 
+	if (m_pd3dcbGameObjects)
+	{
+		m_pd3dcbGameObjects->Release();
+		m_pd3dcbGameObjects = nullptr;
+	} 
+	if (pLoadObject)
+	{
+		delete pLoadObject;
+		pLoadObject = nullptr;
+	}
 }

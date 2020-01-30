@@ -39,7 +39,7 @@ void QtTerrainInstancingDrawer::ProcessDataOfNode(quadtree::QT_DRAWER_NODE& node
 
 void QtTerrainInstancingDrawer::ReleaseMembers()
 {
-	
+	RecursiveReleaseObjects(GetpRoot());
 }
 
 void QtTerrainInstancingDrawer::ReleaseMemberUploadBuffers()
@@ -201,6 +201,7 @@ bool QtTerrainInstancingDrawer::LoadTransform(char* filein_name, const char* com
 
 			AddWorldMatrix(temp, Cliff, TestObject->m_pChild->m_xmf4x4World);
 
+			// TestObject->ReleaseObjects();
 			delete TestObject;
 			TestObject = nullptr;
 
@@ -216,6 +217,7 @@ bool QtTerrainInstancingDrawer::LoadTransform(char* filein_name, const char* com
 			//TestObject->SetTransform(tr);
 			//TestObject->UpdateTransform(NULL);
 
+			// TestObject->ReleaseObjects();
 			//delete TestObject;
 			//TestObject = nullptr;
 		}
@@ -248,6 +250,7 @@ bool QtTerrainInstancingDrawer::LoadTransform(char* filein_name, const char* com
 				m_AltarTransformStorage.emplace_back(TestObject->m_pChild->m_xmf4x4World);
 			}
 
+			// TestObject->ReleaseObjects();
 			delete TestObject;
 			TestObject = nullptr;
 		}
@@ -357,6 +360,12 @@ void QtTerrainInstancingDrawer::RecursiveReleaseObjects(quadtree::QT_DRAWER_NODE
 		node->terrainMesh->ReleaseObjects();
 		delete node->terrainMesh;
 		node->terrainMesh = nullptr;
+
+		for (auto& info : node->ModelInfoList)
+		{
+			info.second.ReleaseObject(); 
+		} 
+		node->ModelInfoList.clear();
 	}
 	else
 	{
@@ -410,7 +419,12 @@ QtTerrainInstancingDrawer::QtTerrainInstancingDrawer(ID3D12Device * pd3dDevice, 
 
 QtTerrainInstancingDrawer::~QtTerrainInstancingDrawer()
 {
-
+	if (m_EmptyObj)
+	{
+		m_EmptyObj->ReleaseObjects();
+		delete m_EmptyObj;
+		m_EmptyObj = nullptr;
+	}
 }
   
 void QtTerrainInstancingDrawer::RenderObjAll(ID3D12GraphicsCommandList* pd3dCommandList, Terrain* pTerrain, bool isGBuffers)
@@ -599,5 +613,17 @@ void QtTerrainInstancingDrawer::ReleaseObjects()
 
 void QtTerrainInstancingDrawer::ReleaseUploadBuffers()
 {
+	for (int index = 0; index < GetReafNodeCount(); ++index)
+	{ 
+		quadtree::QT_DRAWER_NODE* const pReaf = GetpReaf(index);
+		if (pReaf->terrainMesh)
+		{
+			pReaf->terrainMesh->ReleaseUploadBuffers();
+		}
+		else
+		{
+			assert("Reaf Node have no terrain mesh");
+		}
+	}
 	ReleaseMemberUploadBuffers();
 }
