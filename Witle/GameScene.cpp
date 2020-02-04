@@ -1064,22 +1064,7 @@ bool GameScene::ProcessInput(HWND hWnd)
 
 	// 플레이어 이동에 대한 처리 (정확히는 이동이 아니라 가속도)
 	m_pPlayer->ProcessInput(fElapsedTime);
-
-	//// 플레이어 회전에 대한 처리
-	//float deltaX = GameInput::GetDeltaX();
-	//float deltaY = GameInput::GetDeltaY();
-
-	//if ((deltaX != 0.0f) || (deltaY != 0.0f))
-	//{
-	//	if (deltaX || deltaY)
-	//	{
-	//		// 플레이어와 카메라 똑같이 rotate...
-	//		// 순서 의존적이므로 변경 금지
-	//		m_pMainCamera->GetCamera()->Rotate(deltaY, deltaX, 0.0f);
-	//		m_pPlayer->Rotate(0.0f, deltaX, 0.0f);
-	//	}
-	//}
-
+	 
 	return true;
 }
 

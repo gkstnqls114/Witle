@@ -10,11 +10,7 @@
 #include "SoundManager.h"
 
 void IdleAction::UpdateVelocity(float fElpasedTime, Movement * movement)
-{
-	// 사운드 ///////////////////////////////////////////////////////////
-	// SoundManager::GetInstance()->Stop(ENUM_SOUND::MONSTER_MOVE_SOUND);
-	// 사운드 ///////////////////////////////////////////////////////////
-
+{ 
 	// 움직이지 않도록 고정
 	movement->SetVelocity( XMFLOAT3(0.f, 0.f, 0.f));
 }
@@ -26,7 +22,7 @@ void IdleAction::UpdateState(float fElpasedTime, GeneralMonsterActionMgr * actio
 	bool isNearPlayer = PlayerManager::IsNearPlayer(m_pOwner->GetTransform().GetPosition(), pMonsterOwner->GetRecognitionRange()->m_RecognitionRange);
 	if (isNearPlayer)
 	{
-		actionMgr->SetZeroTotalTime(); // 이거 왜 한거지.. ?
+		actionMgr->SetZeroTotalTime();
 
 		pMonsterOwner->GetRecognitionRange()->m_TotalTime += fElpasedTime;
 
@@ -46,7 +42,7 @@ void IdleAction::UpdateState(float fElpasedTime, GeneralMonsterActionMgr * actio
 
 	if (actionMgr->GetTotalTime() > m_IdleTime)
 	{
-		actionMgr->SetZeroTotalTime(); // 이거 왜 한거지.. ?
+		actionMgr->SetZeroTotalTime(); 
 		actionMgr->ChangeStateToMove();
 	}
 }

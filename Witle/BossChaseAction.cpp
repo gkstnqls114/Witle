@@ -31,17 +31,20 @@ ENUM_BOSSSKILL BossChaseAction::GetRandomSkill()
 	}
 	else if (hp > 40.f)  // second phase
 	{
+		// 0과 1 중 랜덤으로 스킬 설정
+		// 0은 내려찍기 1은 브레스 
 		std::uniform_int_distribution<> monstertype(0, 1);
 
 		result = ENUM_BOSSSKILL(monstertype(mersenne)); // 브레스 혹은 내려찍기
 	}
 	else  // last phase
 	{
-		std::uniform_int_distribution<> monstertype(1, 4);
+		std::uniform_int_distribution<> monstertype(1, 3);
 		/*
-	BOSSSKILL_BREATH, 1
-	BOSSSKILL_TAILATTACK, 2
-	BOSSSKILL_RUSH 3
+		    마찬가지로 1~4중 랜덤으로 나오도록 설정.
+	        BOSSSKILL_BREATH, 1
+	        BOSSSKILL_TAILATTACK, 2
+	        BOSSSKILL_RUSH 3
 		*/
 
 		// 브레스, 러쉬 번갈아 나오도록 설정
@@ -64,7 +67,7 @@ ENUM_BOSSSKILL BossChaseAction::GetRandomSkill()
 				val = 3;
 			}
 		}
-		result = ENUM_BOSSSKILL(val); // 내려찍기를 제외한 전부
+		result = ENUM_BOSSSKILL(val); 
 	}
 
 	return result;
@@ -98,17 +101,7 @@ float BossChaseAction::GetDistance(ENUM_BOSSSKILL skill)
 }
  
 void BossChaseAction::UpdateVelocity(float fElpasedTime, Movement * movement)
-{
-	//SoundManager::GetInstance()->Play(ENUM_SOUND::BOSS_MOVE_SOUND);
-	//SoundManager::GetInstance()->Stop(ENUM_SOUND::BOSS_DAMAGE_SOUND);
-	//SoundManager::GetInstance()->Stop(ENUM_SOUND::BOSS_DASH_SOUND);
-	//SoundManager::GetInstance()->Stop(ENUM_SOUND::BOSS_TAILATTACK_SOUND);
-	//SoundManager::GetInstance()->Stop(ENUM_SOUND::BOSS_BREATH_SOUND);
-	//SoundManager::GetInstance()->Stop(ENUM_SOUND::BOSS_DEAD_SOUND);
-	//SoundManager::GetInstance()->Stop(ENUM_SOUND::BOSS_DOWNSTROKE_SOUND);
-
-	// SoundManager::GetInstance()->Play(ENUM_SOUND::PLAYER_MOVE);
-
+{ 
 	XMFLOAT3 toPlayer = Vector3::Normalize(
 		Vector3::Subtract(PlayerManager::GetMainPlayer()->GetTransform().GetPosition(), m_pOwner->GetTransform().GetPosition())
 	);
@@ -130,6 +123,7 @@ void BossChaseAction::UpdateVelocity(float fElpasedTime, Movement * movement)
 void BossChaseAction::UpdateState(float fElpasedTime, BossMonsterActionMgr * actionMgr)
 {
 	ENUM_BOSSSKILL skill = GetRandomSkill(); 
+
 	// 플레이어 스킬에 따른 이동 거리를 가져옵니다. 
 	// 만약 플레이어와 해당 거리 이하면 상태를 전환하지 않습니다.
 	if (!PlayerManager::IsNearPlayer(m_pOwner->GetTransform().GetPosition(), GetDistance(skill))) return;

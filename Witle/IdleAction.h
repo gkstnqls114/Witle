@@ -3,8 +3,9 @@
 
 class MonsterMovement;
 
-// MonsterMovement를 인자로 받아 가속도를 처리해주는 클래스.
-// 움직이지 않게 처리를 한다.
+// 기본 몬스터용 대기 액션
+// 움직이지 않습니다. 일정 시간이 지나면 Move로 전환합니다.
+// 플레이어와 일정 거리안에 일정시간동안 있다면 Chase로 전환합니다.
 class IdleAction
 	: public GeneralMonsterAction
 {

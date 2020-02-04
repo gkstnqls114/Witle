@@ -10,15 +10,7 @@
 #include "SoundManager.h"
 
 void BossIdleAction::UpdateVelocity(float fElpasedTime, Movement * movement)
-{
-	//SoundManager::GetInstance()->Stop(ENUM_SOUND::BOSS_MOVE_SOUND);
-	//SoundManager::GetInstance()->Stop(ENUM_SOUND::BOSS_DAMAGE_SOUND);
-	//SoundManager::GetInstance()->Stop(ENUM_SOUND::BOSS_DASH_SOUND);
-	//SoundManager::GetInstance()->Stop(ENUM_SOUND::BOSS_TAILATTACK_SOUND);
-	//SoundManager::GetInstance()->Stop(ENUM_SOUND::BOSS_BREATH_SOUND);
-	//SoundManager::GetInstance()->Stop(ENUM_SOUND::BOSS_DEAD_SOUND);
-	//SoundManager::GetInstance()->Stop(ENUM_SOUND::BOSS_DOWNSTROKE_SOUND);
-
+{ 
 	// 움직이지 않도록 고정
 	movement->SetVelocity(XMFLOAT3(0.f, 0.f, 0.f));
 }
@@ -32,7 +24,7 @@ void BossIdleAction::UpdateState(float fElpasedTime, BossMonsterActionMgr * acti
 
 	if (isNearPlayer)
 	{
-		actionMgr->SetZeroTotalTime(); // 이거 왜 한거지.. ?
+		actionMgr->SetZeroTotalTime(); 
 
 		pMonsterOwner->GetRecognitionRange()->m_TotalTime += fElpasedTime;
 
@@ -51,7 +43,7 @@ void BossIdleAction::UpdateState(float fElpasedTime, BossMonsterActionMgr * acti
 
 	if (actionMgr->GetTotalTime() > m_IdleTime)
 	{
-		actionMgr->SetZeroTotalTime(); // 이거 왜 한거지.. ?
+		actionMgr->SetZeroTotalTime(); 
 		actionMgr->ChangeBossStateToMove();
 	}
 }

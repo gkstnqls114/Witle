@@ -4,9 +4,9 @@
 class Movement;
 class PlayerActionMgr;
 
-// 보스몬스터용 대기 액션
-// 움직이지 않습니다.
-// 만약 UpdateState 시 , 플레이어와 거리가 500 안으로 들어오면 플레이어에게 따라갑니다.
+// 플레이어 대기 액션 
+// 현재 해당 클래스의  UpdateVelocity 함수가 아닌
+// PlayerActionMgr 클래스의 함수인 UpdateVelocity 에서 가속도 변환을 하고있습니다.
 class PlayerIdleAction
 	: public PlayerAction
 {

@@ -4,9 +4,9 @@
 class MonsterMovement;
 class PlayerActionMgr;
 
-// 보스몬스터용 대기 액션
-// 움직이지 않습니다.
-// 만약 UpdateState 시 , 플레이어와 거리가 500 안으로 들어오면 플레이어에게 따라갑니다.
+// 플레이어 빗자루 준비 액션 
+// 현재 액션의 애니메이션이 끝날 때까지 움직일 수 없습니다.
+// 액션이 끝난후(= 애니메이션이 끝난 후) BroomIdle 액션으로 전환합니다.
 class PlayerBroomPrepareAction
 	: public PlayerAction
 {

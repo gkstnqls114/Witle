@@ -4,8 +4,9 @@
 
 class MonsterMovement;
 
-// MonsterMovement를 인자로 받아 가속도를 처리해주는 클래스.
-// 필드를 랜덤한 방향으로 돌아다닌다.
+// 보스몬스터용 쫓아다니기 액션 
+// 플레이어를 쫓아다닙니다.
+// 쫓아다니는 중 거리가 일정 안으로 들어오면 스킬 액션으로 전환합니다.
 class BossChaseAction
 	: public BossMonsterAction
 {

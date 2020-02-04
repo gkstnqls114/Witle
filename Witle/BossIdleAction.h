@@ -5,7 +5,7 @@ class MonsterMovement;
 
 // 보스몬스터용 대기 액션
 // 움직이지 않습니다.
-// 만약 UpdateState 시 , 플레이어와 거리가 500 안으로 들어오면 플레이어에게 따라갑니다.
+// 만약 플레이어와 거리가 일정 안으로 들어와 시간이 지나면 Chase 액션으로 전환합니다.
 class BossIdleAction
 	: public BossMonsterAction
 {

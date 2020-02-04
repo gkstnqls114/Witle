@@ -3,8 +3,9 @@
 
 class MonsterMovement;
 
-// MonsterMovement를 인자로 받아 가속도를 처리해주는 클래스.
-// 필드를 랜덤한 방향으로 돌아다닌다.
+// 보스몬스터용 브레스 스킬 액션 
+// 움직이지 않고 애니메이션을 수행합니다.
+// 애니메이션이 끝나기 전까지 입의 위치에서 불공(fireball)을 활성화합니다.
 class BossSkillBreath
 	: public BossMonsterAction
 {

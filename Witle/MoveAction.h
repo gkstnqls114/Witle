@@ -3,8 +3,9 @@
 
 class MonsterMovement;
 
-// MonsterMovement를 인자로 받아 가속도를 처리해주는 클래스.
-// 필드를 랜덤한 방향으로 돌아다닌다.
+// 기본 몬스터용 이동 액션
+// 필드를 랜덤한 방향으로 돌아다닙니다. 일정 시간이 지나면 Idle로 전환합니다.
+// 플레이어와 일정 거리안에 일정시간동안 있다면 Chase로 전환합니다. 
 class MoveAction
 	: public GeneralMonsterAction
 {

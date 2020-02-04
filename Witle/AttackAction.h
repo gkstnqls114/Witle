@@ -3,8 +3,9 @@
 
 class Movement;
 
-// MonsterMovement를 인자로 받아 가속도를 처리해주는 클래스.
-// 필드를 랜덤한 방향으로 돌아다닌다.
+// 기본 몬스터용 공격 액션
+// 애니메이션이 끝날 때까지 움직이지 않습니다.
+// 애니메이션이 끝난 후 Chase 액션으로 전환합니다.
 class AttackAction
 	: public GeneralMonsterAction
 {

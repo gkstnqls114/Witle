@@ -3,8 +3,8 @@
 
 class MonsterMovement;
 
-// MonsterMovement를 인자로 받아 가속도를 처리해주는 클래스.
-// 필드를 랜덤한 방향으로 돌아다닌다.
+// 보스몬스터용 러쉬 스킬 액션 
+// 플레이어의 방향으로 돌진 공격을 합니다.
 class BossSkillRush
 	: public BossMonsterAction
 {

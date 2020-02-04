@@ -41,21 +41,13 @@ void BossMoveAction::UpdateState(float fElpasedTime, BossMonsterActionMgr * acti
 
 	if (!isNearPlayer)
 	{
-		actionMgr->SetZeroTotalTime(); // 이거 왜 한거지.. ?
+		actionMgr->SetZeroTotalTime();
 
 		pMonsterOwner->GetRecognitionRange()->m_TotalTime += fElpasedTime;
 
 		// 만약 인식시간이 되었을 경우...
 		if (pMonsterOwner->GetRecognitionRange()->m_TotalTime >= pMonsterOwner->GetRecognitionRange()->m_RecognitionTime)
-		{
-			//SoundManager::GetInstance()->Play(ENUM_SOUND::BOSS_MOVE_SOUND);
-			//SoundManager::GetInstance()->Stop(ENUM_SOUND::BOSS_DAMAGE_SOUND);
-			//SoundManager::GetInstance()->Stop(ENUM_SOUND::BOSS_DASH_SOUND);
-			//SoundManager::GetInstance()->Stop(ENUM_SOUND::BOSS_TAILATTACK_SOUND);
-			//SoundManager::GetInstance()->Stop(ENUM_SOUND::BOSS_BREATH_SOUND);
-			//SoundManager::GetInstance()->Stop(ENUM_SOUND::BOSS_DEAD_SOUND);
-			//SoundManager::GetInstance()->Stop(ENUM_SOUND::BOSS_DOWNSTROKE_SOUND);
-
+		{ 
 			pMonsterOwner->GetRecognitionRange()->m_TotalTime = 0;
 			actionMgr->ChangeBossStateToChase();
 		}

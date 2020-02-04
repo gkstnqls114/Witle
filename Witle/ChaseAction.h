@@ -2,7 +2,9 @@
 #include "MonsterAction.h"
 
 class MonsterMovement;
- 
+
+// 기본 몬스터용 플레이어 쫓아다니기 액션
+// 플레이어를 쫓아다닙니다. 
 class ChaseAction
 	: public GeneralMonsterAction
 {

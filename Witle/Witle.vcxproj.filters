@@ -508,9 +508,6 @@
     <Filter Include="02.Component\Action\01.MonsterAction\BossMonsterAction">
       <UniqueIdentifier>{06c78cfb-4cf2-43da-9b15-e83cf878fb82}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.Component\Action\01.MonsterAction\BossMonsterAction\BossSkillAction4">
-      <UniqueIdentifier>{862d0e47-01df-45d9-b57f-2f8e60cecb4d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.Component\Action\01.MonsterAction\BossMonsterAction\01.BossIdleAction">
       <UniqueIdentifier>{a90053a0-522f-4be7-b32e-01fa81133963}</UniqueIdentifier>
     </Filter>

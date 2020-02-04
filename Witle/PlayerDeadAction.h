@@ -4,9 +4,9 @@
 class MonsterMovement;
 class PlayerActionMgr;
 
-// 보스몬스터용 대기 액션
-// 움직이지 않습니다.
-// 만약 UpdateState 시 , 플레이어와 거리가 500 안으로 들어오면 플레이어에게 따라갑니다.
+// 플레이어 죽음 액션  
+// 이동하지 않습니다.
+// UpdateState 함수내에서 애니메이션이 끝난 것을 확인 한 후 Lose Scene으로 이동합니다.
 class PlayerDeadAction
 	: public PlayerAction
 {

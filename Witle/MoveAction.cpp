@@ -14,6 +14,7 @@ void MoveAction::UpdateVelocity(float fElpasedTime, Movement * movement)
 {
 	movement->SetVelocity(Vector3::ScalarProduct(m_Direction, movement->m_fDistance, false));
 
+	// 오른쪽 회전과 왼쪽 회전 구분을 위해 계산.
 	XMFLOAT3 look(0.f, 0.f, 1.f);
 	float value = Vector3::AngleToRadian(look, m_Direction) * 180.f / 3.141592;
 	if (Vector3::CrossProduct(look, m_Direction).y >= 0)
@@ -51,7 +52,7 @@ void MoveAction::UpdateState(float fElpasedTime, GeneralMonsterActionMgr * actio
 
 	if (isNearPlayer)
 	{
-		actionMgr->SetZeroTotalTime(); // 이거 왜 한거지.. ?
+		actionMgr->SetZeroTotalTime();
 
 		pMonsterOwner->GetRecognitionRange()->m_TotalTime += fElpasedTime;
 

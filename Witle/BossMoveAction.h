@@ -2,9 +2,10 @@
 #include "MonsterAction.h"
 
 class MonsterMovement;
-
-// 플레이어를 따라갑니다.
-// 만약 UpdateState 시 , 플레이어와 거리가 500 밖으로 넘어가면 플레이어에게 따라갑니다.
+ 
+// 보스몬스터용 움직이기 액션 
+// 랜덤한 방향으로 움직입니다.
+// 만약 플레이어와의 거리가 일정 안으로 들어와 일정 시간이 지나면 Chase 액션으로 전환합니다.
 class BossMoveAction
 	: public BossMonsterAction
 {

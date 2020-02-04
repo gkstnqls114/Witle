@@ -3,8 +3,8 @@
 
 class MonsterMovement;
 
-// MonsterMovement를 인자로 받아 가속도를 처리해주는 클래스.
-// 필드를 랜덤한 방향으로 돌아다닌다.
+// 보스몬스터용 내려치기 스킬 액션 
+// 움직이지 않고 애니메이션을 수행합니다.
 class BossSkillDownStroke
 	: public BossMonsterAction
 {

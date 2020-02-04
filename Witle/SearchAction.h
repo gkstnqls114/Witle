@@ -3,8 +3,8 @@
 
 class MonsterMovement;
 
-// MonsterMovement를 인자로 받아 가속도를 처리해주는 클래스.
-// 필드를 랜덤한 방향으로 돌아다닌다.
+// 기본 몬스터용 플레이어 찾기 액션
+// 현재 사용하지 않습니다.
 class SearchAction
 	: public GeneralMonsterAction
 {

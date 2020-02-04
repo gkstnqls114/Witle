@@ -7,17 +7,13 @@
 #include "SoundManager.h"
 
 void HitAction::UpdateVelocity(float fElpasedTime, Movement * movement)
-{
-	// 사운드 ///////////////////////////////////////////////////////////
-	// SoundManager::GetInstance()->Stop(ENUM_SOUND::MONSTER_MOVE_SOUND);
-	// SoundManager::GetInstance()->Play(ENUM_SOUND::MONSTER_DAMAGE_SOUND);
-	// 사운드 ///////////////////////////////////////////////////////////
-
+{ 
 	movement->SetVelocity( XMFLOAT3(0.f, 0.f, 0.f));
 }
 
 void HitAction::UpdateState(float fElpasedTime, GeneralMonsterActionMgr * actionMgr)
 { 
+	// 만약 몬스터의 히트 액션이 끝났다면...
 	if (static_cast<Monster*>(m_pOwner)->GetpLoadObject()->IsTrackAnimationSetFinish(0, SPACECAT_HIT.ID))
 	{
 		actionMgr->ChangeStateBefore();

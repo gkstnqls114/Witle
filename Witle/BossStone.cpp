@@ -22,7 +22,7 @@ void BossStone::UpdateState(float fElpasedTime, BossMonsterActionMgr * actionMgr
 
 	if (isNearPlayer)
 	{
-		actionMgr->SetZeroTotalTime(); // 이거 왜 한거지.. ?
+		actionMgr->SetZeroTotalTime();  
 
 		pMonsterOwner->GetRecognitionRange()->m_TotalTime += fElpasedTime;
 

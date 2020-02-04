@@ -4,9 +4,9 @@
 class MonsterMovement;
 class PlayerActionMgr;
 
-// 보스몬스터용 대기 액션
-// 움직이지 않습니다.
-// 만약 UpdateState 시 , 플레이어와 거리가 500 안으로 들어오면 플레이어에게 따라갑니다.
+// 플레이어 빗자루 이동(+z축/-z축) 액션  
+// 현재 해당 클래스의  UpdateState, UpdateVelocity 함수가 아닌
+// PlayerActionMgr 클래스의 함수인 UpdateState, UpdateVelocity 에서 가속도와 상태 변환을 하고있습니다.
 class PlayerBroomForwardAction
 	: public PlayerAction
 {
