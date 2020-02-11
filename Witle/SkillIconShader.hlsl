@@ -41,14 +41,12 @@ float4 PSSkillIcon(VS_SCREEN_OUTPUT input) : SV_TARGET
 {
     float4 pixColor = gtxtTexture.Sample(gWrapSamplerState, input.uv);
     if (pixColor.a < 0.5f) discard;
-     
-    //find the angle between the centre and this pixel (between -180 and 180)
-    // 라디안을 디그리로 변환... 
-    float2 center_uv = float2(0.5, 0.5);  
+      
+    float2 center_uv = float2(0.5, 0.5);   
+	float2 new_uv = float2(1 - input.uv.y - center_uv.y, 1- input.uv.x - center_uv.x);
 
-	// atan2 ( y, x)
-	float2 new_uv = float2(1 - input.uv.y - center_uv.y, input.uv.x - center_uv.x);
-    float angle = atan2(new_uv.y , new_uv.x) * 180.0 / 3.141592; // - 180 ~ 180 으로 변경. 시계방향이 양의 방향임을 고려
+
+    float angle = atan2(new_uv.y , new_uv.x) * 180.0 / 3.141592; // 라디안을 디그리로, - 180 ~ 180 으로 변경. 시계방향이 양의 방향임을 고려
 
 	if (angle < 0)
 	{
