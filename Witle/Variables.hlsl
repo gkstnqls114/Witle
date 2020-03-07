@@ -190,17 +190,20 @@ struct PS_OUTPUT_FOR_GBUFFERS
 float CalcShadowFactor(float4 shadowPosH)
 {
     // Complete projection by doing division by w.
+	// w를 통해 완벽한 투영을 한다.
     shadowPosH.xyz /= shadowPosH.w;
 
-    // Depth in NDC space.
+    // ndc공간에서의 깊이값
     float depth = shadowPosH.z;
 
+	// 텍스쳐의 widht, height 가져온다.
     uint width, height, numMips;
     gtxtShadow.GetDimensions(0, width, height, numMips);
 
     // Texel size.
     float dx = 1.0f / (float) width;
 
+	// 현재 주위 픽셀의 위치를 갖고온다.
     float percentLit = 0.0f;
     const float2 offsets[9] =
     {
@@ -209,11 +212,11 @@ float CalcShadowFactor(float4 shadowPosH)
         float2(-dx, +dx), float2(0.0f, +dx), float2(dx, +dx)
     };
 
+	// 주위 픽셀의 깊이값을 더한다.
     [unroll]
     for (int i = 0; i < 9; ++i)
     {
-        percentLit += gtxtShadow.SampleCmpLevelZero(gssPCFSampler,
-            shadowPosH.xy + offsets[i], depth).r;
+        percentLit += gtxtShadow.SampleCmpLevelZero(gssPCFSampler, shadowPosH.xy + offsets[i], depth).r;
     }
     
     return percentLit / 9.0f;

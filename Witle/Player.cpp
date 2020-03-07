@@ -372,8 +372,8 @@ void Player::Update(float fElapsedTime)
 	// 초당 hp, mp회복
 	if (!m_PlayerActionMgr->Is_DeadAction())
 	{ 
-	m_pPlayerHPStatus->AddHP(5 * fElapsedTime);
-	m_pPlayerMPStatus->AddHP(10 * fElapsedTime);
+		m_pPlayerHPStatus->AddHP(1 * fElapsedTime);
+		m_pPlayerMPStatus->AddHP(1 * fElapsedTime);
 	}
 
 	m_Broom->Update(fElapsedTime);
