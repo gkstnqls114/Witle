@@ -729,10 +729,9 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	m_SampleUIMap = new UI2DImage(
 		m_TESTGameObject, ENUM_SCENE::SCENE_GAME, pd3dDevice, pd3dCommandList,
 		POINT{ int(GameScreen::GetWidth()) / 2 + 500, int(GameScreen::GetHeight()) / 2 - 220 },
-		m_UIMapSize.x + 10,
-		m_UIMapSize.y + 10,
+		m_UIMapSize.x + 20.f,
+		m_UIMapSize.y + 20.f,
 		IMAGE_MAP
-		// ""
 	);
 
 	// 스킬 1
@@ -773,8 +772,8 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	pos.z = -pos.z * (float(m_UIMapSize.y) / 30000.f); // 스크린 좌표계로 이동하기 위해
 
 	// 스크린 좌표계 위치 이동
-	pos.x += m_SampleUIMap->getRect().left;
-	pos.z += m_SampleUIMap->getRect().bottom;
+	pos.x = pos.x + m_SampleUIMap->getRect().left + 10.f;
+	pos.z = pos.z + m_SampleUIMap->getRect().bottom - 10.f;
 
 	m_UIAltar[0] = new UI2DChangedImage(
 		m_TESTGameObject, ENUM_SCENE::SCENE_GAME, pd3dDevice, pd3dCommandList,
@@ -790,8 +789,8 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 
 	pos.x = pos.x * (float(m_UIMapSize.x) / 30000.f);
 	pos.z = -pos.z * (float(m_UIMapSize.y) / 30000.f);
-	pos.x += m_SampleUIMap->getRect().left;
-	pos.z += m_SampleUIMap->getRect().bottom;
+	pos.x = pos.x + m_SampleUIMap->getRect().left + 10.f;
+	pos.z = pos.z + m_SampleUIMap->getRect().bottom - 10.f;
 	m_UIAltar[1] = new UI2DChangedImage(
 		m_TESTGameObject, ENUM_SCENE::SCENE_GAME, pd3dDevice, pd3dCommandList,
 		POINT{ int(pos.x), int(pos.z) },
@@ -803,14 +802,12 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	tr = m_pQuadtreeTerrain->GetAltarTransform(2, ALTAR_IN);
 	pos = XMFLOAT3{ tr._41,0 , tr._43 };
 	m_AltarSphere[2] = new AltarSphere("AltarSphere0", pos, pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
-
-	// ui map 포지션으로 변경하기 위해 크기 축소
+	 
 	pos.x = pos.x * (float(m_UIMapSize.x) / 30000.f);
-	pos.z = -pos.z * (float(m_UIMapSize.y) / 30000.f); // 스크린 좌표계로 이동하기 위해
+	pos.z = -pos.z * (float(m_UIMapSize.y) / 30000.f);  
+	pos.x = pos.x + m_SampleUIMap->getRect().left + 10.f;
+	pos.z = pos.z + m_SampleUIMap->getRect().bottom - 10.f;
 
-	// 스크린 좌표계 위치 이동
-	pos.x += m_SampleUIMap->getRect().left;
-	pos.z += m_SampleUIMap->getRect().bottom;
 	m_UIAltar[2] = new UI2DChangedImage(
 		m_TESTGameObject, ENUM_SCENE::SCENE_GAME, pd3dDevice, pd3dCommandList,
 		POINT{ int(pos.x), int(pos.z) },
@@ -822,14 +819,12 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	tr = m_pQuadtreeTerrain->GetAltarTransform(3, ALTAR_IN);
 	pos = XMFLOAT3{ tr._41, 0 , tr._43 };
 	m_AltarSphere[3] = new AltarSphere("AltarSphere0", pos, pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
-
-	// ui map 포지션으로 변경하기 위해 크기 축소
+	 
 	pos.x = pos.x * (float(m_UIMapSize.x) / 30000.f);
-	pos.z = -pos.z * (float(m_UIMapSize.y) / 30000.f); // 스크린 좌표계로 이동하기 위해
+	pos.z = -pos.z * (float(m_UIMapSize.y) / 30000.f);  
+	pos.x = pos.x + m_SampleUIMap->getRect().left + 10.f;
+	pos.z = pos.z + m_SampleUIMap->getRect().bottom - 10.f;
 
-	// 스크린 좌표계 위치 이동
-	pos.x += m_SampleUIMap->getRect().left;
-	pos.z += m_SampleUIMap->getRect().bottom;
 	m_UIAltar[3] = new UI2DChangedImage(
 		m_TESTGameObject, ENUM_SCENE::SCENE_GAME, pd3dDevice, pd3dCommandList,
 		POINT{ int(pos.x), int(pos.z) },
@@ -841,14 +836,12 @@ void GameScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandLis
 	tr = m_pQuadtreeTerrain->GetAltarTransform(4, ALTAR_IN);
 	pos = XMFLOAT3{ tr._41, 0 , tr._43 };
 	m_AltarSphere[4] = new AltarSphere("AltarSphere0", pos, pd3dDevice, pd3dCommandList, GraphicsRootSignatureMgr::GetGraphicsRootSignature());
-
-	// ui map 포지션으로 변경하기 위해 크기 축소
+	 
 	pos.x = pos.x * (float(m_UIMapSize.x) / 30000.f);
-	pos.z = -pos.z * (float(m_UIMapSize.y) / 30000.f); // 스크린 좌표계로 이동하기 위해
+	pos.z = -pos.z * (float(m_UIMapSize.y) / 30000.f);   
+	pos.x = pos.x + m_SampleUIMap->getRect().left + 10.f;
+	pos.z = pos.z + m_SampleUIMap->getRect().bottom - 10.f;
 
-	// 스크린 좌표계 위치 이동
-	pos.x += m_SampleUIMap->getRect().left;
-	pos.z += m_SampleUIMap->getRect().bottom;
 	m_UIAltar[4] = new UI2DChangedImage(
 		m_TESTGameObject, ENUM_SCENE::SCENE_GAME, pd3dDevice, pd3dCommandList,
 		POINT{ int(pos.x), int(pos.z) },
@@ -1496,6 +1489,11 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_UISCREEN, isGBuffers);
 	m_SampleUIMap->Render(pd3dCommandList);
 
+	for (int x = 0; x < 5; ++x)
+	{
+		m_UIAltar[x]->Render(pd3dCommandList);
+	}
+
 	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_UIMAPFORPLAYER, isGBuffers);
 	XMFLOAT2 playerpos{ m_pPlayer->GetTransform().GetPosition().x,  m_pPlayer->GetTransform().GetPosition().z };
 
@@ -1503,9 +1501,9 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 	playerpos.x = playerpos.x * (float(m_UIMapSize.x) / 30000.f);
 	playerpos.y = -playerpos.y * (float(m_UIMapSize.y) / 30000.f); // 스크린 좌표계로 이동하기 위해
 
-	// 스크린 좌표계 위치 이동
-	playerpos.x += m_SampleUIMap->getRect().left;
-	playerpos.y += m_SampleUIMap->getRect().bottom;
+	// 스크린 좌표계 위치 이동 
+	playerpos.x = playerpos.x + m_SampleUIMap->getRect().left + 10.f;
+	playerpos.y = playerpos.y + m_SampleUIMap->getRect().bottom - 10.f;
 
 	pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_PICKINGPOINT, 2, &playerpos, 0);
 	m_UIPlayer->Render(pd3dCommandList);
@@ -1525,14 +1523,9 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 		m_UIBossMonster->Render(pd3dCommandList);
 	}
 
+	// 아래 해당 함수 선언하지않으면 aim point render 안됨
 	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_UISCREEN, isGBuffers);
 
-	for (int x = 0; x < 5; ++x)
-	{
-		m_UIAltar[x]->Render(pd3dCommandList);
-	}
-
-	
 	// skill render
 	SkillSelectScene::m_pHeap->UpdateShaderVariable(pd3dCommandList);
 
