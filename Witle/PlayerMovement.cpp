@@ -34,10 +34,7 @@ void PlayerMovement::MoveVelocity(DWORD dwDirection, float fTimeElapsed)
 	float fDistance = m_fDistance * fTimeElapsed; // 1초당 최대 속력 20m으로 가정, 현재 1 = 1cm
 
 	if (m_isBroomMode) // 만약 빗자루 모드일 경우...
-	{
-		SoundManager::GetInstance()->Stop(ENUM_SOUND::PLAYER_MOVE);
-		SoundManager::GetInstance()->Play(ENUM_SOUND::PLAYER_BROOM);
-
+	{ 
 		if (dwDirection & DIR_FORWARD) xmf3Shift = Vector3::Add(xmf3Shift, axis.look, fDistance);
 		if (dwDirection & DIR_BACKWARD) xmf3Shift = Vector3::Add(xmf3Shift, axis.look, -fDistance);
 		if (dwDirection & DIR_RIGHT) xmf3Shift = Vector3::Add(xmf3Shift, axis.right, fDistance);
@@ -46,10 +43,7 @@ void PlayerMovement::MoveVelocity(DWORD dwDirection, float fTimeElapsed)
 		MoveVelocity(xmf3Shift);
 	}
 	else
-	{
-		SoundManager::GetInstance()->Play(ENUM_SOUND::PLAYER_MOVE);
-		SoundManager::GetInstance()->Stop(ENUM_SOUND::PLAYER_BROOM);
-
+	{ 
 		if (dwDirection & DIR_FORWARD) xmf3Shift = Vector3::Add(xmf3Shift, axis.look, m_fMaxVelocityXZ - 500);
 		if (dwDirection & DIR_BACKWARD) xmf3Shift = Vector3::Add(xmf3Shift, axis.look, -m_fMaxVelocityXZ + 500);
 		if (dwDirection & DIR_RIGHT) xmf3Shift = Vector3::Add(xmf3Shift, axis.right, m_fMaxVelocityXZ - 500);
