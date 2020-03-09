@@ -18,13 +18,10 @@
 
 
 void Dragon::Render(ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffers)
-{ 
-#ifdef _DEBUG 
+{  
 	RenderDebug(pd3dCommandList, isGBuffers);
-	m_BOBoxForTailAttack->Render(pd3dCommandList);
-#endif // _DEBUG
-
-
+	m_BOBoxForTailAttack->Render(pd3dCommandList); 
+	 
 	if (m_isStone)
 	{
 		m_pStoneTexture->UpdateShaderVariable(pd3dCommandList, 0); 
@@ -34,9 +31,8 @@ void Dragon::Render(ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffers
 		m_pTexture->UpdateShaderVariable(pd3dCommandList, 0);
 	}
 
-	m_pLoadObject->Render(pd3dCommandList, isGBuffers);
-
-
+	if(m_pLoadObject) m_pLoadObject->Render(pd3dCommandList, isGBuffers);
+	 
 	if (!m_isStone) 
 	{
 		RenderHpStatus(pd3dCommandList, isGBuffers);
