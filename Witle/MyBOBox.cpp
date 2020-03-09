@@ -10,8 +10,7 @@ MyBOBox::MyBOBox(GameObject* pOwner, ID3D12Device * pd3dDevice, ID3D12GraphicsCo
 {
 	m_BOBox = BoundingOrientedBox(center, extents, quaternion);
 
-	m_world = Matrix4x4::Identity();
-	m_Pivot = center;
+	m_world = Matrix4x4::Identity(); 
 	m_world._41 = center.x;
 	m_world._42 = center.y;
 	m_world._43 = center.z;
@@ -152,9 +151,9 @@ void MyBOBox::SetPosition(const XMFLOAT3 & pos)
 {
 	m_BOBox.Center = pos;
 	 
-	m_world._41 = m_BOBox.Center.x + m_Pivot.x;
-	m_world._42 = m_BOBox.Center.y + m_Pivot.y;
-	m_world._43 = m_BOBox.Center.z + m_Pivot.z;
+	m_world._41 = m_BOBox.Center.x;
+	m_world._42 = m_BOBox.Center.y;
+	m_world._43 = m_BOBox.Center.z;
 }
 
 bool MyBOBox::IsIn(int index, const XMFLOAT3 & intersectionPoint)

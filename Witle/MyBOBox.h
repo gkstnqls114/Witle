@@ -15,8 +15,7 @@ private:
 	XMFLOAT4X4 SetRotate(float x, float y, float z);
 
 protected: 
-	XMFLOAT4X4 m_world;
-	XMFLOAT3 m_Pivot; // 회전중심
+	XMFLOAT4X4 m_world; 
 
 #ifdef SHOW_DEBUGMESH   
 	LineCube* m_pLineCube{ nullptr }; 

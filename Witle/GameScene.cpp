@@ -1277,8 +1277,8 @@ void GameScene::LastUpdate( )
 
 		if (Collision::isCollide(m_pPlayer->GetBOBox()->GetBOBox(), m_TestMonster[i]->GetBOBox()->GetBOBox()))
 		{
-			auto playercenterpos = m_pPlayer->GetBOBox()->GetBOBox().Center;
-			auto monstercenterpos = m_TestMonster[i]->GetBOBox()->GetBOBox().Center;
+			auto playercenterpos = Vector3::Add(m_pPlayer->GetBOBox()->GetBOBox().Center, XMFLOAT3(0, m_pPlayer->GetBOBox()->GetBOBox().Extents.y, 0));
+			auto monstercenterpos = Vector3::Add(m_TestMonster[i]->GetBOBox()->GetBOBox().Center, XMFLOAT3(0, m_TestMonster[i]->GetBOBox()->GetBOBox().Extents.y, 0));
 			auto effectpos = Vector3::Add(playercenterpos, Vector3::ScalarProduct(Vector3::Subtract(playercenterpos, monstercenterpos), 0.5, false));
 
 			HitEffectMgr::GetInstance()->AddMonsterHitEffectPosition(effectpos);

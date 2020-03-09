@@ -227,6 +227,8 @@ void Player::Render(ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffers
 	m_pLoadObject_Cloth->Render(pd3dCommandList, isGBuffers);
 	m_pTexture_Body->UpdateShaderVariable(pd3dCommandList, 0);
 	m_pLoadObject_Body->Render(pd3dCommandList, isGBuffers);
+	
+	if (m_pMyBOBox) m_pMyBOBox->Render(pd3dCommandList);
 
 	bool isMoving = GameInput::IsKeydownW() || GameInput::IsKeydownA() || GameInput::IsKeydownS() || GameInput::IsKeydownD();
 	if (m_Broom->GetisUsing() && isMoving)
@@ -384,13 +386,7 @@ void Player::Update(float fElapsedTime)
 	// 이동량만큼 움직인다. 
 	Move(Vector3::ScalarProduct(m_PlayerMovement->GetVelocity(), fElapsedTime, false));
 
-	m_pMyBOBox->SetPosition(
-		XMFLOAT3(
-		m_Transform.GetPosition().x, 
-		75.f,
-		m_Transform.GetPosition().z)
-	);
-	
+	if(m_pMyBOBox) m_pMyBOBox->SetPosition(XMFLOAT3( m_Transform.GetPosition().x, 0.f, m_Transform.GetPosition().z));
 }
  
 static bool isBrooming = false;
@@ -442,7 +438,7 @@ void Player::Move(const XMFLOAT3 & xmf3Shift)
 void Player::Rotate(float x, float y, float z) 
 { 
 	m_Transform.Rotate(x, y, z); 
-	m_pMyBOBox->Rotate(m_PlayerMovement->m_fRoll, m_PlayerMovement->m_fYaw, m_PlayerMovement->m_fPitch);
+	if(m_pMyBOBox) m_pMyBOBox->Rotate(m_PlayerMovement->m_fRoll, m_PlayerMovement->m_fYaw, m_PlayerMovement->m_fPitch);
 }
   
 void Player::ProcessInput(float fTimeElapsed)
