@@ -8,7 +8,9 @@ class LineSphere;
 class RecognitionRange
 	: ComponentBase
 { 
-	LineSphere* m_DebugMesh;
+#ifdef SHOW_DEBUGMESH
+	LineSphere* m_DebugMesh{ nullptr };
+#endif // SHOW_DEBUGMESH
 
 public:
 	const float m_RecognitionTime{ 0.f }; // 플레이어를 인식할 때까지 걸리는 시간
@@ -28,6 +30,5 @@ public:
 	
 	virtual void Update(float) override;
 
-	void Render(ID3D12GraphicsCommandList *pd3dCommandList);
-	void RenderDebug(ID3D12GraphicsCommandList *pd3dCommandList);
+	void Render(ID3D12GraphicsCommandList *pd3dCommandList); 
 };

@@ -8,7 +8,9 @@ class MyBSphere
 {
 protected:
 
+#ifdef SHOW_DEBUGMESH
 	LineCube* m_pLineCube{ nullptr };
+#endif // SHOW_DEBUGMESH
 
 	BoundingSphere m_BSphere; 
 

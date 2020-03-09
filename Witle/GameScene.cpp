@@ -355,7 +355,7 @@ bool GameScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM w
 		case VK_F2:
 			// 플레이어 2으로 변경
 			break;
-		case VK_F3:
+		case VK_F4:
 			m_isSkyMode = !m_isSkyMode;
 			break;
 

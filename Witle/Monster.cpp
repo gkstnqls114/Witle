@@ -260,8 +260,8 @@ void Monster::RenderDebug(ID3D12GraphicsCommandList * pd3dCommandList, bool isGB
 {
 #ifdef SHOW_DEBUGMESH 
 	m_pMyBOBox->Render(pd3dCommandList);
-	m_pDebugSpawnMesh->Render(pd3dCommandList, isGBuffers);
-	m_RecognitionRange->RenderDebug(pd3dCommandList);
+	// m_pDebugSpawnMesh->Render(pd3dCommandList, isGBuffers);
+	m_RecognitionRange->Render(pd3dCommandList);
 #endif // SHOW_DEBUGMESH 
 }
 

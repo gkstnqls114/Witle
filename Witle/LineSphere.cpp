@@ -8,7 +8,7 @@
 
 void LineSphere::Render(ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffers)
 { 
-	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, "Line", isGBuffers);
+	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_LINE, isGBuffers);
 	 
 	XMFLOAT4X4 xmf4x4World;
 	XMStoreFloat4x4(&xmf4x4World, XMMatrixTranspose(XMLoadFloat4x4(&m_pOwner->GetTransform().GetWorldMatrix())));

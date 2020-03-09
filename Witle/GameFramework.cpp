@@ -1150,6 +1150,11 @@ void GameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPAR
 			break;
 		}
 
+		case VK_F3: // Bounding Box 보이도록/안보이도록 전환 
+		{
+			DebugOption::ChangeisShowSphere();
+			break;
+		}
 		default:
 			break;
 		}

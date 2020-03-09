@@ -8,7 +8,7 @@ class DebugOption
 {
 public:
 	static bool GetisShowBoundingBox() { return isShowBoundingBox; };
-	static bool GetisShowSphere() { return GetisShowSphere; };
+	static bool GetisShowSphere() { return isShowSphere; };
 
 	static void ChangeisShowBoundingBox() { isShowBoundingBox = !isShowBoundingBox; }
 	static void ChangeisShowSphere() { isShowSphere = !isShowSphere; }
