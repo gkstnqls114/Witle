@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "MyCollider.h"
 #include "MyBOBox.h"
+#include "MyBBox.h"
 #include "MyBSphere.h"
 #include "Player.h"
 #include "Monster.h"
@@ -75,6 +76,23 @@ bool Collision::ProcessCollision(const BoundingOrientedBox& moveObject,
 		}
 	}
 	return false;
+}
+
+XMFLOAT3 Collision::GetCenter(const MyCollider& collider)
+{  
+	XMFLOAT3 center;
+	switch (collider.GetType())
+	{
+	case BOUNDING_BOX:
+		center = static_cast<const MyBOBox*>(&collider)->GetBOBox().Center;
+		break;
+	case BOUNDING_SPHERE:
+		center = static_cast<const MyBSphere*>(&collider)->GetBSphere().Center;
+		break;
+	default:
+		break;
+	} 
+	return center;
 }
  
 void Collision::ProcessCollideEdge(Player * player, int TerrainObjectCount, const MyBOBox * terrainObject)

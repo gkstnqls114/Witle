@@ -362,78 +362,7 @@ bool GameScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM w
 		}
 		break;
 	case WM_KEYDOWN:
-		switch (wParam) { 
-		case MYVK_Q: 
-			// 플레이어 공격
-			if (GameInput::GetDragMode())
-			{ 
-				if (!m_pPlayer->GetPlayerActionMgr()->Is_StandardAttackAction() && !m_pPlayer->GetPlayerActionMgr()->isBroomMode() && !m_pPlayer->GetPlayerActionMgr()->Is_BroomPrepareAction())
-				{
-					SoundManager::GetInstance()->Play(ENUM_SOUND::PLAYER_MAGIC_MISIL);
-
-					bool isAttackDragon = m_pPlayer->Attack(
-						static_cast<Status*>(
-							m_Dragon->GetStatus()),
-						m_Dragon->GetBOBox(),
-						m_AimPoint->GetPickingPoint(),
-						m_pMainCamera->GetCamera(), true);
-
-					if (isAttackDragon)
-					{
-						HitEffectMgr::GetInstance()->AddNormalHitEffectPosition(m_Dragon->GetBOBox()->GetBOBox().Center);
-						return false;
-					}
-
-					for (int i = 0; i < m_TestMonsterCount; ++i)
-					{
-						bool isAttack = m_pPlayer->Attack(
-							static_cast<Status*>(
-								m_TestMonster[i]->GetStatus()),
-							m_TestMonster[i]->GetBOBox(),
-							m_AimPoint->GetPickingPoint(),
-							m_pMainCamera->GetCamera(), false);
-
-						if (isAttack)
-						{
-							HitEffectMgr::GetInstance()->AddNormalHitEffectPosition(m_TestMonster[i]->GetBOBox()->GetBOBox().Center);
-							break;
-						}
-					}
-				}
-/*
-				bool isAttackDragon = m_pPlayer->Attack(
-					static_cast<Status*>(
-						m_Dragon->GetStatus()),
-					m_Dragon->GetBOBox(),
-					m_AimPoint->GetPickingPoint(),
-					m_pMainCamera->GetCamera(), true);
-				if (isAttackDragon)
-				{
-					HitEffectMgr::GetInstance()->AddNormalHitEffectPosition(m_Dragon->GetBOBox()->GetBOBox().Center);
-					return false;
-				}
-
-				if (!m_pPlayer->GetPlayerActionMgr()->Is_StandardAttackAction() && !m_pPlayer->GetpBroom()->GetisUsing())
-				{
-					for (int i = 0; i < m_TestMonsterCount; ++i)
-					{
-						bool isAttack = m_pPlayer->Attack(
-							static_cast<Status*>(
-								m_TestMonster[i]->GetStatus()),
-							m_TestMonster[i]->GetBOBox(),
-							m_AimPoint->GetPickingPoint(),
-							m_pMainCamera->GetCamera(), false);
-
-						if (isAttack)
-						{
-							HitEffectMgr::GetInstance()->AddNormalHitEffectPosition(m_TestMonster[i]->GetBOBox()->GetBOBox().Center);
-							break;
-						}
-					} 
-				}*/
-			}
-			break;
-
+		switch (wParam) {   
 		case 'Z':
 #ifdef _DEBUG
 			// 임시로 체력 100씩 닳게 설정
@@ -1159,7 +1088,7 @@ void GameScene::LastUpdate( )
 		
 		// 만약 스킬이 ATTACK 타입이 아니라면 넘어간다.
 		if (PlayerSkillMgr::GetInstance()->GetpSelectableSkill(index)->m_skillEffect->m_Skilltype != SKILLTYPE_ATTACK) continue;
-		 
+
 		MyCollider* skill_collider = PlayerSkillMgr::GetInstance()->GetpSelectableSkill(index)->m_skillEffect->GetCollier();
 
 		// 모든 몬스터 끼리 충돌체크
@@ -1172,25 +1101,12 @@ void GameScene::LastUpdate( )
 			{
 				auto effect = PlayerSkillMgr::GetInstance()->GetpSelectableSkill(index)->m_skillEffect->GetCollier();
 
-				XMFLOAT3 pos{ -100, -100, -100 };
-				switch (effect->GetType())
-				{
-					case
-					BOUNDING_BOX:
-						pos = static_cast<MyBOBox*>(effect)->GetBOBox().Center;
-						break;
-					case BOUNDING_SPHERE:
-						pos = static_cast<MyBSphere*>(effect)->GetBSphere().Center;
-						break;
-					default:
-						break;
-				}
-
+				XMFLOAT3 pos = Collision::GetCenter(*effect);
+				
 				HitEffectMgr::GetInstance()->AddPlayerSkillHitEffectPosition(PlayerSkillMgr::GetInstance()->GetpSelectableSkill(index)->GetSelectableSkillType(), pos);
 				m_TestMonster[i]->SubstractHP(5);
 				PlayerSkillMgr::GetInstance()->Deactive(index);
-			}
-
+			} 
 		}
 
 		//////////////////////////////////////////////////////// BOSS를 때림
@@ -1198,11 +1114,7 @@ void GameScene::LastUpdate( )
 		if (m_Dragon->GetStatus()->GetGuage() <= 0.f) continue;
 
 		if (Collision::isCollide(*m_Dragon->GetBOBox(), *skill_collider))
-		{
-
-#ifdef _DEBUG
-			std::cout << "보스가 스킬에 맞음" << std::endl;
-#endif // _DEBUG
+		{ 
 			auto effect = PlayerSkillMgr::GetInstance()->GetpSelectableSkill(index)->m_skillEffect->GetCollier();
 			
 			XMFLOAT3 pos{ -100, -100, -100 };

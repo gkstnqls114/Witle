@@ -58,7 +58,8 @@ public:
 		float fElapsedTime,
 		bool StaticObjIsMove,
 		/*out*/XMFLOAT3& SlideVector);
-	\
+	
+	static XMFLOAT3 GetCenter(const MyCollider& collider);
 
 	static void ProcessCollideEdge(Player* player, int TerrainObjectCount, const MyBOBox* terrainObject);
 	  
