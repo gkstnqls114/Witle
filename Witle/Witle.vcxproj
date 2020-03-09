@@ -167,6 +167,7 @@
     <ClInclude Include="BloomRevealShader.h" />
     <ClInclude Include="BossBuf.h" />
     <ClInclude Include="BossDead.h" />
+    <ClInclude Include="DebugOption.h" />
     <ClInclude Include="MapInfoMgr.h" />
     <ClInclude Include="MyBBox.h" />
     <ClInclude Include="NoneAction.h" />
@@ -379,6 +380,7 @@
     <ClCompile Include="BloomRevealShader.cpp" />
     <ClCompile Include="BossBuf.cpp" />
     <ClCompile Include="BossDead.cpp" />
+    <ClCompile Include="DebugOption.cpp" />
     <ClCompile Include="MapInfoMgr.cpp" />
     <ClCompile Include="MyBBox.cpp" />
     <ClCompile Include="NoneAction.cpp" />

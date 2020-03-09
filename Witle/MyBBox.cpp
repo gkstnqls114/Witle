@@ -2,17 +2,8 @@
 #include "Shader.h"
 #include "ShaderManager.h"
 #include "LineCube.h"
+#include "DebugOption.h"
 #include "MyBBox.h"
-#ifdef _DEBUG
-bool MyBBox::RENDER_BBOX = true;
-#endif // _DEBUG
-
-void MyBBox::CHANGEMODE()
-{
-#ifdef _DEBUG
-	RENDER_BBOX = !RENDER_BBOX;
-#endif // _DEBUG
-}
 
 MyBBox::MyBBox(GameObject* pOwner, ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, XMFLOAT3 center, XMFLOAT3 extents, XMFLOAT4 quaternion)
 	: MyCollider(pOwner, COLLIDER_TYPE::BOUNDING_BOX)
@@ -25,9 +16,9 @@ MyBBox::MyBBox(GameObject* pOwner, ID3D12Device* pd3dDevice, ID3D12GraphicsComma
 	m_world._42 = center.y;
 	m_world._43 = center.z;
 
-#ifdef _DEBUG
+#ifdef SHOW_DEBUGMESH
 	m_pLineCube = new LineCube(pOwner, pd3dDevice, pd3dCommandList, m_BOBox.Center, m_BOBox.Extents);
-#endif // _DEBUG
+#endif // SHOW_DEBUGMESH
 
 	m_BoBoxPlane[0] = Plane::Plane(Vector3::Add(center, XMFLOAT3(extents.x, 0.f, 0.f)), XMFLOAT3(1.f, 0.f, 0.f)); // +x¸é normal (1, 0, 0) 
 	m_BoBoxPlane[1] = Plane::Plane(Vector3::Add(center, XMFLOAT3(-extents.x, 0.f, 0.f)), XMFLOAT3(-1.f, 0.f, 0.f)); // -x¸é normal (-1, 0, 0)
@@ -38,9 +29,10 @@ MyBBox::MyBBox(GameObject* pOwner, ID3D12Device* pd3dDevice, ID3D12GraphicsComma
 MyBBox::MyBBox(const MyBBox& other)
 	:MyCollider(m_pOwner, COLLIDER_TYPE::BOUNDING_BOX)
 {
-#ifdef _DEBUG
+#ifdef SHOW_DEBUGMESH 
 	m_pLineCube = nullptr;
-#endif // _DEBUG
+#endif // SHOW_DEBUGMESH
+
 	m_BOBox = other.m_BOBox;
 	for (int i = 0; i < 4; ++i)
 	{
@@ -61,27 +53,26 @@ MyBBox::MyBBox(XMFLOAT3 center, XMFLOAT3 extents)
 
 MyBBox::~MyBBox()
 {
-
-#ifdef _DEBUG
+#ifdef SHOW_DEBUGMESH  
 	if (m_pLineCube)
 	{
 		delete m_pLineCube;
 		m_pLineCube = nullptr;
-	}
-#endif // _DEBUG
+	} 
+#endif // SHOW_DEBUGMESH
 }
 
 void MyBBox::ReleaseObjects()
 {
-#ifdef _DEBUG
-	if (m_pLineCube) m_pLineCube->ReleaseObjects();
-#endif // _DEBUG
+#ifdef SHOW_DEBUGMESH  
+	if (m_pLineCube) m_pLineCube->ReleaseObjects(); 
+#endif // SHOW_DEBUGMESH
 }
 void MyBBox::ReleaseUploadBuffers()
 {
-#ifdef _DEBUG
-	if (m_pLineCube) m_pLineCube->ReleaseUploadBuffers();
-#endif // _DEBUG
+#ifdef SHOW_DEBUGMESH  
+	if (m_pLineCube) m_pLineCube->ReleaseUploadBuffers(); 
+#endif // SHOW_DEBUGMESH
 }
 
 XMFLOAT4X4 MyBBox::SetRotate(float x, float y, float z)
@@ -120,22 +111,23 @@ XMFLOAT4X4 MyBBox::SetRotate(float x, float y, float z)
 
 void MyBBox::Render(ID3D12GraphicsCommandList* pd3dCommandList)
 {
+	if (!DebugOption::GetisShowBoundingBox()) return;
 
-#ifdef _DEBUG
-	if (!RENDER_BBOX) return;
+#ifdef SHOW_DEBUGMESH  
 	if (m_pLineCube)
 	{
 		pd3dCommandList->SetPipelineState(ShaderManager::GetInstance()->GetShader("Line")->GetPSO());
 		m_pLineCube->Render(pd3dCommandList, m_world, true);
-	}
-#endif // _DEBUG
+	} 
+#endif // SHOW_DEBUGMESH
 }
 void MyBBox::RenderInstancing(ID3D12GraphicsCommandList* pd3dCommandList, int InstancingCount)
 {
-#ifdef _DEBUG 
-	if (!RENDER_BBOX) return;
-	if (m_pLineCube) m_pLineCube->RenderInstancing(pd3dCommandList, InstancingCount);
-#endif // _DEBUG
+	if (!DebugOption::GetisShowBoundingBox()) return;
+
+#ifdef SHOW_DEBUGMESH  
+	if (m_pLineCube) m_pLineCube->RenderInstancing(pd3dCommandList, InstancingCount); 
+#endif // SHOW_DEBUGMESH
 }
  
 void MyBBox::Move(const XMFLOAT3& xmf3Shift)

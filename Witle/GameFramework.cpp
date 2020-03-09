@@ -9,6 +9,7 @@
 //// GameBase ////////////////////////// 
 
 //// Manager ////////////////////////// 
+#include "DebugOption.h"
 #include "BossSkillMgr.h"
 #include "MainCameraMgr.h"
 #include "GraphicsRootSignatureMgr.h"
@@ -1142,6 +1143,12 @@ void GameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPAR
 			SceneMgr::GetInstance()->ChangeSceneToLose();
 			break;
 		} 
+
+		case VK_F2: // Bounding Box 보이도록/안보이도록 전환 
+		{ 
+			DebugOption::ChangeisShowBoundingBox();
+			break;
+		}
 
 		default:
 			break;

@@ -66,6 +66,7 @@ const std::string SHADER_BLOOM{ "Bloom"};
 const std::string SHADER_TONECURVE{ "ToneCurve"};
 const std::string SHADER_ALTARSPHERE{ "AltarSphere" };
 const std::string SHADER_INSTANCING_STANDARD{ "InstancingStandardShader"};
+const std::string SHADER_LINE{ "Line" };
 
 // 사용하는 이미지 텍스쳐 이름들 
 const std::string IMAGE_RED{ "Red"};

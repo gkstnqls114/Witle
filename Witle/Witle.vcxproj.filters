@@ -622,6 +622,9 @@
     <Filter Include="10.Storage/Manager\19.SingletonMgr">
       <UniqueIdentifier>{e4884912-8782-4122-9b19-6ae1ed032d32}</UniqueIdentifier>
     </Filter>
+    <Filter Include="10.Storage/Manager\20.DebugOption">
+      <UniqueIdentifier>{6a76aa96-d317-40f5-9555-3f163c312c20}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -1254,6 +1257,9 @@
     <ClInclude Include="Quadtree.h">
       <Filter>98.Template\02.Quadtree</Filter>
     </ClInclude>
+    <ClInclude Include="DebugOption.h">
+      <Filter>10.Storage/Manager\20.DebugOption</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1858,6 +1864,9 @@
     </ClCompile>
     <ClCompile Include="QtTerrainCalculator.cpp">
       <Filter>10.Storage/Manager\17.QuadtreeMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugOption.cpp">
+      <Filter>10.Storage/Manager\20.DebugOption</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
