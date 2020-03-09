@@ -362,11 +362,7 @@ bool GameScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM w
 		}
 		break;
 	case WM_KEYDOWN:
-		switch (wParam) {
-		case VK_F2: 
-			Monster::CHANGEMODE();
-			break;
-
+		switch (wParam) { 
 		case MYVK_Q: 
 			// 플레이어 공격
 			if (GameInput::GetDragMode())

@@ -33,10 +33,7 @@ public:
 	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers) override;
 	virtual void RenderForShadow(ID3D12GraphicsCommandList *pd3dCommandList);
 	virtual int GetAnimationHitID() = 0;
-
-private:
-	static bool RENDER_DEBUG;
-
+	 
 public:
 	virtual void Update(float fElapsedTime);
 	virtual void UpdateState(float fElapsedTime);
@@ -59,8 +56,10 @@ protected:
 
 	// 플레이어와 공격이 충돌되면 true 함
 	bool m_isFinishAttack{ false };
+
 	// 해당 아래 변수 시간이 되면 m_isFinishAttack = false가 됨
 	const float m_FinishAttackUnlockTime{ 3.f };
+
 	// 해당 아래 변수 시간을 통해 관리한다.
 	float m_TotalTime{ 0.f };
 
@@ -68,23 +67,19 @@ protected:
 	const float    m_SpawnRange{ 500.f };
 	const float m_HpBarY{ 200.f }; 
 	 
-#ifdef _DEBUG 
+#ifdef SHOW_DEBUGMESH
 	GameObject * m_pDebugObject{ nullptr };
+
 	// Spawn Point 주위로 Range를 확인하기 위해 임시로 설정
-	LineMesh* m_pDebugSpawnMesh{ nullptr };
-#endif
+	LineMesh* m_pDebugSpawnMesh{ nullptr }; 
+#endif // SHOW_DEBUGMESH
 
 protected:
 	virtual void ReleaseMembers() override;
 	virtual void ReleaseMemberUploadBuffers() override; 
 	void Init(bool isBoss);
 
-public:
-	static void CHANGEMODE()
-	{
-		RENDER_DEBUG = !RENDER_DEBUG;
-	}
-
+public:  
 	// float HpBarY: HP Bar UI의 Y 값 위치
 	Monster(const std::string& entityID, float spawnRange, const XMFLOAT3& SpwanPoint, ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, ID3D12RootSignature *pd3dGraphicsRootSignature, float attackanimeTime,float HpBarY = 200.f);
 	virtual ~Monster();

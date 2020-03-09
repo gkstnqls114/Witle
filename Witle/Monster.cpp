@@ -40,9 +40,7 @@
 static float MonsterOffestX = 0.f;
 static float MonsterOffestY = 57.f;
 static float MonsterOffestZ = 50.f;
-
-bool Monster::RENDER_DEBUG{ true };
-
+ 
 XMFLOAT3 Monster::CalculateAlreadyVelocity(float fTimeElapsed)
 {
 	XMFLOAT3 AlreadyVelocity = Vector3::Add(m_MonsterMovement->GetVelocity(), m_MonsterMovement->m_xmf3Gravity);
@@ -85,14 +83,13 @@ Monster::Monster(const std::string & entityID, float spawnRange, const XMFLOAT3&
 		30.f,
 		IMAGE_RED
 	);
-	 
-	// 디버그용
-#ifdef _DEBUG 
+	  
+#ifdef SHOW_DEBUGMESH 
 	m_pDebugObject = new EmptyGameObject("SpawnPosition");
 	m_pDebugObject->GetTransform().SetPosition(SpawnPoint);
 	m_pDebugObject->GetTransform().Update(0.f); // position update위해...
 	m_pDebugSpawnMesh = new LineSphere(m_pDebugObject, pd3dDevice, pd3dCommandList, XMFLOAT4(0, 0, 1, 0), m_SpawnRange, m_SpawnRange);
-#endif // _DEBUG 
+#endif // SHOW_DEBUGMESH 
 
 }
 
@@ -164,6 +161,21 @@ void Monster::UpdateState(float fElapsedTime)
 
 void Monster::ReleaseMembers()
 {
+#ifdef SHOW_DEBUGMESH
+	if (m_pDebugObject)
+	{
+		m_pDebugObject->ReleaseObjects();
+		delete m_pDebugObject;
+		m_pDebugObject = nullptr;
+	}
+	if (m_pDebugSpawnMesh)
+	{
+		m_pDebugSpawnMesh->ReleaseObjects();
+		delete m_pDebugSpawnMesh;
+		m_pDebugSpawnMesh = nullptr;
+	}
+#endif // SHOW_DEBUGMESH 
+
 	if (m_MonsterHPUI)
 	{
 		m_MonsterHPUI->ReleaseObjects();
@@ -182,20 +194,6 @@ void Monster::ReleaseMembers()
 		delete m_RecognitionRange;
 		m_RecognitionRange = nullptr;
 	}
-#ifdef _DEBUG
-	if (m_pDebugObject)
-	{
-		m_pDebugObject->ReleaseObjects();
-		delete m_pDebugObject;
-		m_pDebugObject = nullptr;
-	}
-	if (m_pDebugSpawnMesh)
-	{
-		m_pDebugSpawnMesh->ReleaseObjects();
-		delete m_pDebugSpawnMesh;
-		m_pDebugSpawnMesh = nullptr;
-	}
-#endif // _DEBUG 
 	if (m_pLoadObject)
 	{
 		m_pLoadObject->ReleaseObjects();
@@ -230,12 +228,12 @@ void Monster::ReleaseMembers()
 
 void Monster::ReleaseMemberUploadBuffers()
 {
+#ifdef SHOW_DEBUGMESH
+	if (m_pDebugSpawnMesh) m_pDebugSpawnMesh->ReleaseUploadBuffers();
+#endif // SHOW_DEBUGMESH
+
 	if (m_MonsterHPUI) m_MonsterHPUI->ReleaseUploadBuffers();
 	if (m_RecognitionRange) m_RecognitionRange->ReleaseUploadBuffers();
-#ifdef _DEBUG
-	if (m_pDebugSpawnMesh) m_pDebugSpawnMesh->ReleaseUploadBuffers();
-#endif // _DEBUG
-
 	if (m_pLoadObject) m_pLoadObject->ReleaseUploadBuffers();
 	if (m_MonsterModel)m_MonsterModel->ReleaseUploadBuffers();
 	if (m_pMyBOBox)m_pMyBOBox->ReleaseUploadBuffers();
@@ -261,14 +259,11 @@ void Monster::Animate(float fElapsedTime)
 
 void Monster::RenderDebug(ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffers)
 {
-#ifdef _DEBUG
-	if (RENDER_DEBUG)
-	{
-		m_pMyBOBox->Render(pd3dCommandList);
-		m_pDebugSpawnMesh->Render(pd3dCommandList, isGBuffers);
-		m_RecognitionRange->RenderDebug(pd3dCommandList);
-	}
-#endif // _DEBUG 
+#ifdef SHOW_DEBUGMESH 
+	m_pMyBOBox->Render(pd3dCommandList);
+	m_pDebugSpawnMesh->Render(pd3dCommandList, isGBuffers);
+	m_RecognitionRange->RenderDebug(pd3dCommandList);
+#endif // SHOW_DEBUGMESH 
 }
 
 void Monster::RenderHpStatus(ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuffers)
