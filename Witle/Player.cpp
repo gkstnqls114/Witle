@@ -126,7 +126,7 @@ Player::Player(const std::string & entityID, ID3D12Device * pd3dDevice, ID3D12Gr
 	m_pLoadObject_Body->m_pSkinnedAnimationController->SetTrackAnimationSet(0, 0);
 
 	XMFLOAT3 extents{ 25.f, 75.f, 25.f };
-	m_pMyBOBox = new MyBOBox(this, pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 75.F, 0.F }, extents);
+	m_pMyBOBox = new MyBOBox(this, pd3dDevice, pd3dCommandList, XMFLOAT3{ 0.F, 0.F, 0.F }, extents);
 
 	m_pPlayerHPStatus = new PlayerStatus(this, pd3dDevice, pd3dCommandList, 
 		POINT{ int(GameScreen::GetWidth()) - 1100, int(GameScreen::GetHeight()) - 670 }, 295.f, 30.f, IMAGE_RED.c_str());
@@ -386,7 +386,7 @@ void Player::Update(float fElapsedTime)
 	// 이동량만큼 움직인다. 
 	Move(Vector3::ScalarProduct(m_PlayerMovement->GetVelocity(), fElapsedTime, false));
 
-	if(m_pMyBOBox) m_pMyBOBox->SetPosition(XMFLOAT3( m_Transform.GetPosition().x, 0.f, m_Transform.GetPosition().z));
+	if(m_pMyBOBox) m_pMyBOBox->SetPosition(XMFLOAT3( m_Transform.GetPosition().x, 75.f, m_Transform.GetPosition().z));
 }
  
 static bool isBrooming = false;
