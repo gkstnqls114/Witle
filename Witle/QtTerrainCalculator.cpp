@@ -122,16 +122,11 @@ void QtTerrainCalculator::CreateTerrainObj(FILE* pInFile)
 				{
 					strncpy(name, "Cliff", 64); // Object001을 Cliff로 취급하도록 이름을 바꾼다.
 				}
-				
- 
+				 
 				// 모든 모델은 충돌체를 지니고있지 않다. 한번 확인해준다.
-				MyBOBox* pBoBox = ModelStorage::GetInstance()->GetBOBox(modelname);
-				if (pBoBox == nullptr) continue;
-
-#ifdef _DEBUG
-				std::cout << name << " ... Quaddtree Add" << std::endl;
-#endif // DEBUG
-
+				MyBOBox* pBoBox = ModelStorage::GetInstance()->GetBOBox(name);
+				if (pBoBox == nullptr) continue; // 없으면 넘어간다.
+				 
 				// 모델 오브젝트에 대한 월드 행렬을 재계산한다. 필수과정!
 				LoadObject* TestObject = ModelStorage::GetInstance()->GetRootObject(name);
 				TestObject->SetTransform(transform);
@@ -143,6 +138,10 @@ void QtTerrainCalculator::CreateTerrainObj(FILE* pInFile)
 
 				AddCollider(mybobox, TestObject->m_pChild->m_xmf4x4World);
 				 
+#ifdef _DEBUG 
+				std::cout << name << "... add position... " << TestObject->m_pChild->m_xmf4x4World._41 << " , " << TestObject->m_pChild->m_xmf4x4World._43 << std::endl;
+#endif // DEBUG 
+
 				delete TestObject;
 				TestObject = nullptr;
 

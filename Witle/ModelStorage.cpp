@@ -74,9 +74,7 @@ void ModelStorage::CreateModels(ID3D12Device * pd3dDevice, ID3D12GraphicsCommand
 	infos[4] = SPACECAT_HIT;
 
 	m_NameList.push_back(SPACECAT); 
-	m_ModelStorage[SPACECAT].loadmodelInfo = LoadObject::LoadGeometryAndAnimationFromFile_forMonster(
-		pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/SpaceCat.bin", NULL,
-		SPACECAT_ANIMATIONE, infos);
+	m_ModelStorage[SPACECAT].loadmodelInfo = LoadObject::LoadGeometryAndAnimationFromFile_forMonster(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, "Model/SpaceCat.bin", NULL, SPACECAT_ANIMATIONE, infos);
 
 	// 충돌박스 목록
 	test = new EmptyGameObject("Empty");
