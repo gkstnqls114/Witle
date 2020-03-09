@@ -89,8 +89,7 @@ Monster::Monster(const std::string & entityID, float spawnRange, const XMFLOAT3&
 	m_pDebugObject->GetTransform().SetPosition(SpawnPoint);
 	m_pDebugObject->GetTransform().Update(0.f); // position update¿ß«ÿ...
 	m_pDebugSpawnMesh = new LineSphere(m_pDebugObject, pd3dDevice, pd3dCommandList, XMFLOAT4(0, 0, 1, 0), m_SpawnRange, m_SpawnRange);
-#endif // SHOW_DEBUGMESH 
-
+#endif // SHOW_DEBUGMESH  
 }
 
 Monster::~Monster()

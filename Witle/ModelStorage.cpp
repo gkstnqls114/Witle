@@ -133,7 +133,7 @@ void ModelStorage::ReleaseObjects()
 
 LoadObject * ModelStorage::GetRootObject(std::string name)
 {
-	if (!m_ModelStorage[name].loadmodelInfo) return nullptr;
+	if (m_ModelStorage[name].loadmodelInfo == nullptr) return nullptr;
 
 	LoadObject* newRootObject = new LoadObject(0);
 	LoadObject::CopyWorldMatrix(newRootObject, m_ModelStorage[name].loadmodelInfo->m_pModelRootObject);
@@ -143,20 +143,20 @@ LoadObject * ModelStorage::GetRootObject(std::string name)
  
 CLoadedModelInfo * ModelStorage::GetModelInfo(std::string name)
 {
-	if (!m_ModelStorage[name].loadmodelInfo) return nullptr;
+	if (m_ModelStorage[name].loadmodelInfo == nullptr) return nullptr;
 	return m_ModelStorage[name].loadmodelInfo;
 }
 
 MyBOBox * ModelStorage::GetBOBox(std::string name)
 { 
-	if (!m_ModelStorage[name].modelBOBox) return nullptr;
+	if (m_ModelStorage[name].modelBOBox == nullptr) return nullptr;
 
 	return m_ModelStorage[name].modelBOBox;
 }
 
 void ModelStorage::RenderBOBoxInstancing(ID3D12GraphicsCommandList * pd3dCommandList, const std::string& name, int InstancingCount)
 { 
-	if (!m_ModelStorage[name].modelBOBox) return;
+	if (m_ModelStorage[name].modelBOBox == nullptr) return;
 
 	m_ModelStorage[name].modelBOBox->RenderInstancing(pd3dCommandList, InstancingCount);
 }

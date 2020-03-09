@@ -439,26 +439,29 @@ void QtTerrainInstancingDrawer::RenderObjAll(ID3D12GraphicsCommandList* pd3dComm
 	} 
 
 	// 지형 오브젝트 렌더링
-	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_INSTANCING_STANDARD, isGBuffers);
 	for (int index = 0; index < GetReafNodeCount(); ++index)
 	{ 
 		quadtree::QT_DRAWER_NODE* const pReaf = GetpReaf(index);
 
 		// key : std::string으로 이름을 의미합니다.
 		// 모든 리프노드를 순회하면서 각 리프노드에 대한 변수를 만듭니다.
+
+		ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_INSTANCING_STANDARD, isGBuffers);
 		for (const auto& info : pReaf->ModelInfoList)
 		{ 
+			// info.first = 지형오브젝트이름, info.second = 해당 지형오브젝트를 그리기 위한 정보
 			if (info.second.TerrainObjectCount == 0) continue;
 			if (!strcmp(info.first.c_str(), Flower.c_str())) continue;
 			if (!strcmp(info.first.c_str(), RUIN_FLOOR.c_str())) continue;
 
 			pd3dCommandList->SetGraphicsRootShaderResourceView(ROOTPARAMETER_INSTANCING, info.second.m_pd3dcbGameObjects->GetGPUVirtualAddress()); // 인스턴싱 쉐이더 리소스 뷰
-
-			info.second.pTexture->UpdateShaderVariables(pd3dCommandList);
-
+			info.second.pTexture->UpdateShaderVariables(pd3dCommandList); 
 			info.second.pLoadObject->RenderInstancing(pd3dCommandList, info.second.TerrainObjectCount, isGBuffers); 
-		}
-	}
+		} 
+		 
+		// 지형 오브젝트 충돌 박스 렌더링, 안의 함수에서 shader 설정함
+		RenderObjBOBox(pd3dCommandList, *pReaf);
+	} 
 }
   
 void QtTerrainInstancingDrawer::RenderTerrain(ID3D12GraphicsCommandList* pd3dCommandList, const quadtree::QT_DRAWER_NODE& node, const Terrain* pTerrain, bool isGBuffers)
@@ -511,20 +514,18 @@ void QtTerrainInstancingDrawer::RenderTerrainObjsForShadow(ID3D12GraphicsCommand
 }
 
 void QtTerrainInstancingDrawer::RenderObjBOBox(ID3D12GraphicsCommandList* pd3dCommandList, const quadtree::QT_DRAWER_NODE& node)
-{
-	// ShaderManager::GetInstance()->SetPSO(pd3dCommandList, "InstancingLine", isGBuffers);
+{  
+	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_INSTANCING_LINE, false);
+	for (const auto& info : node.ModelInfoList)
+	{
+		// info.first = 지형오브젝트이름, info.second = 해당 지형오브젝트를 그리기 위한 정보
+		if (info.second.TerrainObjectCount == 0) continue;
+		if (!strcmp(info.first.c_str(), Flower.c_str())) continue;
+		if (!strcmp(info.first.c_str(), RUIN_FLOOR.c_str())) continue;
 
-	// info.first = 모델 이름
-	// info.second = TerrainObjectInfo라는 모델 정보
-
-	//for (auto& info : m_StaticObjectStorage)
-	//{
-	//	if (info.second[index].TerrainObjectCount == 0) continue;
-
-	//	pd3dCommandList->SetGraphicsRootShaderResourceView(ROOTPARAMETER_INSTANCING, info.second[index].m_pd3dcbGameObjects->GetGPUVirtualAddress()); // 인스턴싱 쉐이더 리소스 뷰
-
-	//	ModelStorage::GetInstance()->RenderBOBoxInstancing(pd3dCommandList, info.first, info.second[index].TerrainObjectCount);
-	//}
+		pd3dCommandList->SetGraphicsRootShaderResourceView(ROOTPARAMETER_INSTANCING, info.second.m_pd3dcbGameObjects->GetGPUVirtualAddress()); // 인스턴싱 쉐이더 리소스 뷰
+		ModelStorage::GetInstance()->RenderBOBoxInstancing(pd3dCommandList, info.first, info.second.TerrainObjectCount);
+	}
 }
   
 

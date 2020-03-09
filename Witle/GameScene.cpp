@@ -366,8 +366,7 @@ bool GameScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM w
 		case MYVK_Q: 
 			// 플레이어 공격
 			if (GameInput::GetDragMode())
-			{
-				 
+			{ 
 				if (!m_pPlayer->GetPlayerActionMgr()->Is_StandardAttackAction() && !m_pPlayer->GetPlayerActionMgr()->isBroomMode() && !m_pPlayer->GetPlayerActionMgr()->Is_BroomPrepareAction())
 				{
 					SoundManager::GetInstance()->Play(ENUM_SOUND::PLAYER_MAGIC_MISIL);
@@ -449,23 +448,13 @@ bool GameScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM w
 			// SoundManager::GetInstance()->Play(ENUM_SOUND::PLAYER_BROOM);
 			break;
 
-		case '2':
-			//// 스나이핑 스킬
-			//if (m_Sniping->GetisUsing())
-			//{
-			//	m_Sniping->DoNotUse();
-			//}
-			//else
-			//{
-			//	m_Sniping->DoUse();
-			//}
+		case '2': 
 			break;
 
 		case '3': 
 			break;
 
-		case VK_SPACE:
-			// 
+		case VK_SPACE: 
 			break;
 
 		case MYVK_E: 
@@ -1422,17 +1411,8 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 	if (m_SkyBox) m_SkyBox->Render(pd3dCommandList, isGBuffers);
 
 	if (m_pPlayer) m_pPlayer->Render(pd3dCommandList, isGBuffers);
-	 
-
-#ifdef CHECK_SUBVIEWS
-	m_lookAboveCamera->SetViewportsAndScissorRects(pd3dCommandList);
-	m_lookAboveCamera->GetCamera()->UpdateShaderVariables(pd3dCommandList, ROOTPARAMETER_CAMERA);
-
-	m_pQuadtreeTerrain->Render(m_pQuadtreeTerrain->GetRootNode(), pd3dCommandList);
-#endif
-
-	////////////////////////////// Model Render
-	// PSO 설정
+	  
+	////////////////////////////// Model Render 
 
 
 	//// Aim point Render 
@@ -1471,8 +1451,7 @@ void GameScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffe
 	// 터레인
 	if (m_Terrain)
 	{
-		m_pQuadtreeTerrain->RenderObjAll(pd3dCommandList, m_Terrain, isGBuffers);
-		//m_pQuadtreeTerrain->Render(pd3dCommandList, m_Terrain, nullptr /*딱히 의미없음*/, isGBuffers);
+		m_pQuadtreeTerrain->RenderObjAll(pd3dCommandList, m_Terrain, isGBuffers); 
 	}
 
 	BossSkillMgr::GetInstance()->Render(pd3dCommandList, isGBuffers); // 스킬 이펙트 생성
