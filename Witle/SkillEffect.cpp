@@ -50,8 +50,10 @@ void SkillEffect::Update(float fElapsedTime)
 	// 이동량을 계산한다.
 	m_Movement->Update(fElapsedTime); 
 
+	XMFLOAT3 shift = Vector3::ScalarProduct(m_Movement->GetVelocity(), fElapsedTime, false);
+
 	// 이동량만큼 움직인다. 
-	Move(Vector3::ScalarProduct(m_Movement->GetVelocity(), fElapsedTime, false));
+	Move(shift);
 
 	// 업데이트된 포지션에 맞추어 Collider 위치를 수정한다.
 	UpdateCollider();
@@ -68,9 +70,8 @@ void SkillEffect::SetVelocity(const XMFLOAT3 & position, const float OffsetY, co
 	m_Transform.SetIdentity();
 	m_Transform.SetPosition(Vector3::Add(position, Vector3::ScalarProduct(XMFLOAT3(0, 1, 0), OffsetY, false)));
 	m_Transform.Update(0.f);
-	m_Movement->SetVelocity(
-		Vector3::ScalarProduct(Vector3::Normalize(direction), m_Movement->m_fDistance, false)
-	);
+	m_Movement->SetVelocity(Vector3::ScalarProduct(Vector3::Normalize(direction), m_Movement->m_fDistance, false));
+	 
 }
 
  

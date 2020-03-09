@@ -19,7 +19,7 @@ void BallEffect::Render(ID3D12GraphicsCommandList * pd3dCommandList, bool isGBuf
 
 void BallEffect::UpdateCollider()
 {
-	static_cast<MyBSphere*>(m_MyCollider)->GetBSphere().Center = m_Transform.GetPosition();
+	static_cast<MyBSphere*>(m_MyCollider)->SetCenter(m_Transform.GetPosition());
 }
 
 void BallEffect::ReleaseMembers()

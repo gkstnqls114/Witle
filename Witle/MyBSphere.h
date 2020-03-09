@@ -27,5 +27,8 @@ public:
 	// center를 shift만큼 이동시킵니다.
 	void Move(const XMFLOAT3& xmf3Shift);
 
+	// center를 해당 위치로 설정합니다.
+	void SetCenter(const XMFLOAT3& pos) { m_BSphere.Center = pos; };
+	
 	BoundingSphere GetBSphere() const { return m_BSphere; }
 };
