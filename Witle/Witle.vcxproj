@@ -23,7 +23,7 @@
     <ProjectGuid>{48AE76AC-A368-4475-BD7D-9DE887ADD417}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>Witle</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -42,7 +42,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
@@ -164,10 +164,13 @@
     <ClInclude Include="BasicCam.h" />
     <ClInclude Include="BlendMeshShader.h" />
     <ClInclude Include="Blessing.h" />
+    <ClInclude Include="BlessingEffect.h" />
     <ClInclude Include="BloomRevealShader.h" />
     <ClInclude Include="BossBuf.h" />
     <ClInclude Include="BossDead.h" />
     <ClInclude Include="DebugOption.h" />
+    <ClInclude Include="HealingEffect.h" />
+    <ClInclude Include="HealingSpriteEffect.h" />
     <ClInclude Include="MapInfoMgr.h" />
     <ClInclude Include="MyBBox.h" />
     <ClInclude Include="NoneAction.h" />
@@ -209,8 +212,6 @@
     <ClInclude Include="BloomShader.h" />
     <ClInclude Include="ToneCuveAndBloomShader.h" />
     <ClInclude Include="Healing.h" />
-    <ClInclude Include="HealingEffect.h" />
-    <ClInclude Include="BlessingEffect.h" />
     <ClInclude Include="BossChaseAction.h" />
     <ClInclude Include="BossIdleAction.h" />
     <ClInclude Include="BossMoveAction.h" />
@@ -377,10 +378,13 @@
     <ClCompile Include="BasicCam.cpp" />
     <ClCompile Include="BlendMeshShader.cpp" />
     <ClCompile Include="Blessing.cpp" />
+    <ClCompile Include="BlessingEffect.cpp" />
     <ClCompile Include="BloomRevealShader.cpp" />
     <ClCompile Include="BossBuf.cpp" />
     <ClCompile Include="BossDead.cpp" />
     <ClCompile Include="DebugOption.cpp" />
+    <ClCompile Include="HealingEffect.cpp" />
+    <ClCompile Include="HealingSpriteEffect.cpp" />
     <ClCompile Include="MapInfoMgr.cpp" />
     <ClCompile Include="MyBBox.cpp" />
     <ClCompile Include="NoneAction.cpp" />
@@ -421,8 +425,6 @@
     <ClCompile Include="BloomShader.cpp" />
     <ClCompile Include="ToneCuveAndBloomShader.cpp" />
     <ClCompile Include="Healing.cpp" />
-    <ClCompile Include="HealingEffect.cpp" />
-    <ClCompile Include="BlessingEffect.cpp" />
     <ClCompile Include="BossChaseAction.cpp" />
     <ClCompile Include="BossIdleAction.cpp" />
     <ClCompile Include="BossMoveAction.cpp" />

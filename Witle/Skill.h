@@ -68,14 +68,13 @@ class SelectableSkill
 	: public ISkill
 {  
 protected:
-	virtual void ReleaseMembers();
-	virtual void ReleaseMemberUploadBuffers();
+	virtual void ReleaseMembers() override;
+	virtual void ReleaseMemberUploadBuffers() override;
 
 	virtual void PrepareMember() {};
 
-	virtual void DoNotUse() {};
-	virtual void DoUse() {};
-	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, bool isGBuffers) override {};
+	virtual void DoNotUse() override {};
+	virtual void DoUse() override {};
 	
 	virtual void UpdateActive(float fElapsedTime) = 0;
 
@@ -91,6 +90,7 @@ public:
 	virtual ~SelectableSkill();
 
 	void Init();
+	virtual void Render(ID3D12GraphicsCommandList* pd3dCommandList, bool isGBuffers) override {};
 
 	float GetCoolTime() const { return m_CoolTime; }
 	ENUM_SELECTABLESKILL GetSelectableSkillType() const { return m_SelectableSkillType; }

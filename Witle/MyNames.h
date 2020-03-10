@@ -79,7 +79,8 @@ const std::string IMAGE_MONSTERATTACKHIT_SPRRITE{ "MonsterHit_Sprite"};
 const std::string IMAGE_FIREBALLHIT_SPRRITE{ "FireBall_Sprite"};
 const std::string IMAGE_ICEBALLHIT_SPRRITE{ "IceBall_Sprite"};
 const std::string IMAGE_LIGHTNINGBALLHIT_SPRRITE{ "LightningBall_Sprite"};
-const std::string IMAGE_NORMAL_SPRRITE{ "StandardAttack_Sprite"};
+const std::string IMAGE_NORMAL_SPRRITE{ "StandardAttack_Sprite" };
+const std::string IMAGE_HEALING_SPRRITE{ "Healing_Sprite"};
 
 const std::string IMAGE_HPBAR{ "hp_bar"};
 const std::string IMAGE_MPBAR{ "mp_bar"};

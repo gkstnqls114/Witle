@@ -304,12 +304,6 @@
     <Filter Include="03.GameObject\06.SkillEffect\ShieldEffect">
       <UniqueIdentifier>{6977ff69-7c83-456e-9374-8e832b2bc239}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03.GameObject\06.SkillEffect\BlessingEffect">
-      <UniqueIdentifier>{3475d845-c517-475d-9ce5-d4a809e3936a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03.GameObject\06.SkillEffect\HealingEffect">
-      <UniqueIdentifier>{3c185763-7633-4d13-83d3-4c3657aadc60}</UniqueIdentifier>
-    </Filter>
     <Filter Include="99.etc\NewFilter1">
       <UniqueIdentifier>{c0fba754-fa84-4091-8706-3db3ed6bc4b0}</UniqueIdentifier>
     </Filter>
@@ -624,6 +618,15 @@
     </Filter>
     <Filter Include="10.Storage/Manager\20.DebugOption">
       <UniqueIdentifier>{6a76aa96-d317-40f5-9555-3f163c312c20}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Component\10.HitEffect\HealingSpriteEffect">
+      <UniqueIdentifier>{fffcba52-eef3-4cc9-9d27-d8acb04e182d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameObject\06.SkillEffect\HealingEffect">
+      <UniqueIdentifier>{c4f9bf48-8a48-4d5d-967c-b3b97def16d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameObject\06.SkillEffect\BlessingEffect">
+      <UniqueIdentifier>{1077fa97-807f-42e7-8cc9-81f4e8a7b216}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1044,12 +1047,6 @@
     <ClInclude Include="ShieldEffect.h">
       <Filter>03.GameObject\06.SkillEffect\ShieldEffect</Filter>
     </ClInclude>
-    <ClInclude Include="BlessingEffect.h">
-      <Filter>03.GameObject\06.SkillEffect\BlessingEffect</Filter>
-    </ClInclude>
-    <ClInclude Include="HealingEffect.h">
-      <Filter>03.GameObject\06.SkillEffect\HealingEffect</Filter>
-    </ClInclude>
     <ClInclude Include="EffectMesh.h">
       <Filter>02.Component\03.Mesh\03.EffectMesh</Filter>
     </ClInclude>
@@ -1259,6 +1256,15 @@
     </ClInclude>
     <ClInclude Include="DebugOption.h">
       <Filter>10.Storage/Manager\20.DebugOption</Filter>
+    </ClInclude>
+    <ClInclude Include="HealingSpriteEffect.h">
+      <Filter>02.Component\10.HitEffect\HealingSpriteEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="HealingEffect.h">
+      <Filter>03.GameObject\06.SkillEffect\HealingEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="BlessingEffect.h">
+      <Filter>03.GameObject\06.SkillEffect\BlessingEffect</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1655,12 +1661,6 @@
     <ClCompile Include="ShieldEffect.cpp">
       <Filter>03.GameObject\06.SkillEffect\ShieldEffect</Filter>
     </ClCompile>
-    <ClCompile Include="BlessingEffect.cpp">
-      <Filter>03.GameObject\06.SkillEffect\BlessingEffect</Filter>
-    </ClCompile>
-    <ClCompile Include="HealingEffect.cpp">
-      <Filter>03.GameObject\06.SkillEffect\HealingEffect</Filter>
-    </ClCompile>
     <ClCompile Include="EffectMesh.cpp">
       <Filter>02.Component\03.Mesh\03.EffectMesh</Filter>
     </ClCompile>
@@ -1867,6 +1867,15 @@
     </ClCompile>
     <ClCompile Include="DebugOption.cpp">
       <Filter>10.Storage/Manager\20.DebugOption</Filter>
+    </ClCompile>
+    <ClCompile Include="HealingSpriteEffect.cpp">
+      <Filter>02.Component\10.HitEffect\HealingSpriteEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="HealingEffect.cpp">
+      <Filter>03.GameObject\06.SkillEffect\HealingEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="BlessingEffect.cpp">
+      <Filter>03.GameObject\06.SkillEffect\BlessingEffect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

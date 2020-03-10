@@ -56,6 +56,9 @@ void PlayerSkillMgr::Render(ID3D12GraphicsCommandList * pd3dCommandList, bool is
 		XMStoreFloat4x4(&xmf4x4World, XMMatrixTranspose(XMLoadFloat4x4(&m_skill[x]->m_skillEffect->GetTransform().GetWorldMatrix()))); 
 		pd3dCommandList->SetGraphicsRoot32BitConstants(ROOTPARAMETER_WORLD, 16, &xmf4x4World, 0);
 		m_skill[x]->m_skillEffect->Render(pd3dCommandList, isGBuffers);
+
+		// skill render ...
+		m_skill[x]->Render(pd3dCommandList, isGBuffers);
 	}
 }
 

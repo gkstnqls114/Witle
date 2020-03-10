@@ -38,8 +38,6 @@ HealingEffect::HealingEffect(const std::string & entityID, ID3D12Device * pd3dDe
 	:SkillEffect(entityID, 5.f, ENUM_SKILLTYPE::SKILLTYPE_RECOVERY)
 {
 	m_HealingEffectMesh = new EffectMesh(this, pd3dDevice, pd3dCommandList, 30);	 
-
-	// SoundManager::GetInstance()->Play(ENUM_SOUND::PLAYER_HEALING_SOUND);
 }
 
 HealingEffect::~HealingEffect()
