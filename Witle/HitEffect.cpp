@@ -60,17 +60,30 @@ void HitEffect::Render(ID3D12GraphicsCommandList * pd3dCommandList, const XMFLOA
 
 	ShaderManager::GetInstance()->SetPSO(pd3dCommandList, SHADER_HITEFFECT, false);
 
-	// set look at.... 빌보드 처리...  
-	XMFLOAT4X4 mtxLookAt = Matrix4x4::LookAtLH(pos, MainCameraMgr::GetMainCamera()->GetTransform().GetPosition(), XMFLOAT3(0, 1.f, 0));
 	XMFLOAT4X4 uiWorld = Matrix4x4::Identity();
-
-	uiWorld._11 = mtxLookAt._11; uiWorld._12 = mtxLookAt._21; uiWorld._13 = mtxLookAt._31;
-	uiWorld._21 = mtxLookAt._12; uiWorld._22 = mtxLookAt._22; uiWorld._23 = mtxLookAt._32;
-	uiWorld._31 = mtxLookAt._13; uiWorld._32 = mtxLookAt._23; uiWorld._33 = mtxLookAt._33; 
-	uiWorld._41 = pos.x;
-	uiWorld._42 = pos.y;
-	uiWorld._43 = pos.z;
-	// set look at....  
+	if (isBillBoard)
+	{
+		// set look at.... 빌보드 처리...  
+		XMFLOAT4X4 mtxLookAt = Matrix4x4::LookAtLH(pos, MainCameraMgr::GetMainCamera()->GetTransform().GetPosition(), XMFLOAT3(0, 1.f, 0));
+	
+		uiWorld._11 = mtxLookAt._11; uiWorld._12 = mtxLookAt._21; uiWorld._13 = mtxLookAt._31;
+		uiWorld._21 = mtxLookAt._12; uiWorld._22 = mtxLookAt._22; uiWorld._23 = mtxLookAt._32;
+		uiWorld._31 = mtxLookAt._13; uiWorld._32 = mtxLookAt._23; uiWorld._33 = mtxLookAt._33;
+		uiWorld._41 = pos.x;
+		uiWorld._42 = pos.y;
+		uiWorld._43 = pos.z;
+		// set look at....   
+	}
+	else
+	{ 
+		// 위를 바라보도록 설정
+		uiWorld._11 = 1.f; uiWorld._12 = 0.f; uiWorld._13 = 0.f;
+		uiWorld._21 = 0.f; uiWorld._22 = 0.f; uiWorld._23 = -1.f;
+		uiWorld._31 = 0.f; uiWorld._32 = 1.f; uiWorld._33 = 0.f;
+		uiWorld._41 = pos.x;
+		uiWorld._42 = pos.y;
+		uiWorld._43 = pos.z;
+	}
 
 	XMFLOAT2 Resol{ m_ResolX, m_ResolY };
 

@@ -20,6 +20,8 @@ class HitEffect
 	// 해당 스프라이트가 세로로 몇개가 있는지
 	float m_ResolY { 1 };
 	
+	bool isBillBoard{ true };
+	
 protected: 
 	UI3DImage*			m_HitEffect{ nullptr }; 
 	  
@@ -41,4 +43,6 @@ public:
 
 	void Active() { isActive = true; }
 	void Deactive() { isActive = false; }
+
+	void DontBillboard() { isBillBoard = false; }
 };
