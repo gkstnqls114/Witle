@@ -52,7 +52,7 @@ void Healing::Active()
 	if (m_HealingEffect)
 	{
 		XMFLOAT3 effectPos = PlayerManager::GetMainPlayer()->GetTransform().GetPosition();
-		effectPos.y += 200.f;
+		effectPos.y += 75.f;
 
 		m_EffectPos = effectPos;
 		m_HealingEffect->Active();
