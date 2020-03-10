@@ -56,7 +56,7 @@ void SelectableSkill::Update(float fElapsedTime)
 	// 만약 끝나는 조건이 된다면 Active 를 false로 설정
 	bool isFinish = IsFinish();
 	if (isActive && isFinish)
-	{
+	{ 
 		isActive = false;
 	}
 	 

@@ -26,9 +26,8 @@ void Healing::ReleaseMemberUploadBuffers()
 }
 
 void Healing::Update(float fElapsedTime)
-{
+{ 
 	SelectableSkill::Update(fElapsedTime);
-
 	m_HealingEffect->Update(fElapsedTime);
 }
 
@@ -59,7 +58,7 @@ void Healing::Active()
 
 bool Healing::IsFinish()
 {
-	return true;
+	return RemainCoolTime <= 0.f;
 }
 
 void Healing::UpdateActive(float fElapsedTime)
