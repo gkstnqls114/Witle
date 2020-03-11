@@ -8,6 +8,8 @@ class MonsterMovement;
 class ChaseAction
 	: public GeneralMonsterAction
 {
+	float m_CognizeTime{ 0.f }; // 인식범위 벗어나는 시간 
+	const float m_MaxCognizeTime{ 3.f };
 
 public:
 	// Update 수행 이전 반드시 호출
