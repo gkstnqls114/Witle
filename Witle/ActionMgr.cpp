@@ -53,7 +53,6 @@ void ActionMgr::ProcessActions()
 
 	// 이전 상태와 현재상태가 다른 경우에만 호출한다.
 	if(m_BeforeAction != m_CurrAction) m_BeforeAction = m_CurrAction;
-
-	m_CurrAction = m_AfterAction; 
-	m_CurrAction->Init(); 
+	 
+	m_CurrAction = m_AfterAction;  
 }
