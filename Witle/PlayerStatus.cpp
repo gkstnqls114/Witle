@@ -53,6 +53,6 @@ void PlayerStatus::Render(ID3D12GraphicsCommandList * pd3dCommandList)
 
 void PlayerStatus::SubstractHP(float damage)
 {
-	m_Guage -= (damage - static_cast<Player*>(m_pOwner)->shield);
+	m_Guage = m_Guage - (damage - static_cast<Player*>(m_pOwner)->shield);
 	if (m_Guage < 0.f) { m_Guage = 0.f; };
 }

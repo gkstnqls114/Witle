@@ -378,3 +378,8 @@ const UINT ROOTPARAMETER_MIDDLEAVGLUM = 27; // 중간 휘도값
 
 //정점의 색상을 무작위로(Random) 설정하기 위해 사용한다. 각 정점의 색상은 난수(Random Number)를 생성하여 지정한다.
 #define RANDOM_COLOR XMFLOAT4{rand() / float(RAND_MAX), rand() / float(RAND_MAX), rand() / float(RAND_MAX), rand() / float(RAND_MAX)}
+
+// 데미지값
+
+const float MONSTER_DAMAGE{ 10.f };
+const float PLAYER_BALLSKILL_DAMAGE{ 20.f };

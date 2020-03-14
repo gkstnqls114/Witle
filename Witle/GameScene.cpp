@@ -1104,7 +1104,7 @@ void GameScene::LastUpdate( )
 				XMFLOAT3 pos = Collision::GetCenter(*effect);
 				
 				HitEffectMgr::GetInstance()->AddPlayerSkillHitEffectPosition(PlayerSkillMgr::GetInstance()->GetpSelectableSkill(index)->GetSelectableSkillType(), pos);
-				m_TestMonster[i]->SubstractHP(5);
+				m_TestMonster[i]->SubstractHP(PLAYER_BALLSKILL_DAMAGE);
 				PlayerSkillMgr::GetInstance()->Deactive(index);
 			} 
 		}
@@ -1196,7 +1196,7 @@ void GameScene::LastUpdate( )
 			HitEffectMgr::GetInstance()->AddMonsterHitEffectPosition(effectpos);
 
 			m_TestMonster[i]->FinishAttack();
-			m_pPlayer->SubstractHP(5);
+			m_pPlayer->SubstractHP(MONSTER_DAMAGE);
 		} 
 	}
 	 

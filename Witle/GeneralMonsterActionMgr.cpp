@@ -21,17 +21,7 @@ void GeneralMonsterActionMgr::UpdateState(float fElpasedTime)
 		ChangeStateToDead();
 	}
 
-	static_cast<GeneralMonsterAction*>(m_AfterAction)->UpdateState(fElpasedTime, this);
-
-	// CHASE¿¡¼­ IDLE·Î...
-	//if (m_AfterAction == &m_ChaseAction
-	//	&& !IsNearPlayer(PlayerManager::GetMainPlayer(), pMonsterOwner->GetRecognitionRange()->m_RecognitionRange))
-	//{
-	//	static_cast<Monster*>(m_pOwner)->SetAnimationID(SPACECAT_IDLE.ID); 
-	//	m_TotalTime = 0.f;
-	//	m_AfterAction = &m_IdleAction;
-	//	return;
-	//} 
+	static_cast<GeneralMonsterAction*>(m_AfterAction)->UpdateState(fElpasedTime, this); 
 }
  
 bool GeneralMonsterActionMgr::isDifferAfterAndCurrent() const
